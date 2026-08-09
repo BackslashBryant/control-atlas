@@ -1,0 +1,1746 @@
+{
+  "schema_version": "1.0",
+  "olir_id": 149,
+  "source_artifact": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-37r2-Cybersecurity_Framework_v2-0_Concept_Crosswalk.xlsx",
+  "sha256": "sha256:065547e1b58de527ea06a28db205f9b64e015244ab257bd97e23a306355c633d",
+  "byte_length": 27256,
+  "parser": "olir-xlsx",
+  "relationships": [
+    {
+      "focal_id": "GV.OC",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-3"
+    },
+    {
+      "focal_id": "GV.OC",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-4"
+    },
+    {
+      "focal_id": "GV.OC",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-8 Mission or Business Focus",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-5"
+    },
+    {
+      "focal_id": "GV.OC",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-9 System Stakeholders",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-6"
+    },
+    {
+      "focal_id": "GV.OC",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-7"
+    },
+    {
+      "focal_id": "GV.OC",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-15 Requirements Definition",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-8"
+    },
+    {
+      "focal_id": "GV.OC-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-9"
+    },
+    {
+      "focal_id": "GV.OC-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-10"
+    },
+    {
+      "focal_id": "GV.OC-01",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-8 Mission or Business Focus",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-11"
+    },
+    {
+      "focal_id": "GV.OC-02",
+      "reference_id": "RMF Prepare Step - Organization and Mission/Business  Level -  Task P-1: Risk Management Roles",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-12"
+    },
+    {
+      "focal_id": "GV.OC-02",
+      "reference_id": "RMF Prepare Step - Organization and Mission/Business  Level -  Task P-3: Risk Assessment - Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-13"
+    },
+    {
+      "focal_id": "GV.OC-02",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-9 System Stakeholders",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-14"
+    },
+    {
+      "focal_id": "GV.OC-02",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-15 Requirements Definition",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-15"
+    },
+    {
+      "focal_id": "GV.OC-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-16"
+    },
+    {
+      "focal_id": "GV.OC-03",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-15 Requirements Definition",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-17"
+    },
+    {
+      "focal_id": "GV.OC-03",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-17 Requirements Allocation",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-18"
+    },
+    {
+      "focal_id": "GV.OC-04",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-19"
+    },
+    {
+      "focal_id": "GV.OC-04",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-8 Mission or Business Focus",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-20"
+    },
+    {
+      "focal_id": "GV.OC-04",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-9 System Stakeholders",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-21"
+    },
+    {
+      "focal_id": "GV.OC-05",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-8 Mission or Business Focus",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-22"
+    },
+    {
+      "focal_id": "GV.OC-05",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-10 Asset Identification",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-23"
+    },
+    {
+      "focal_id": "GV.RM",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-24"
+    },
+    {
+      "focal_id": "GV.RM-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-25"
+    },
+    {
+      "focal_id": "GV.RM-02",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-26"
+    },
+    {
+      "focal_id": "GV.RM-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-27"
+    },
+    {
+      "focal_id": "GV.RM-04",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-28"
+    },
+    {
+      "focal_id": "GV.RM-04",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-29"
+    },
+    {
+      "focal_id": "GV.RM-05",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-1 Risk Management Roles",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-30"
+    },
+    {
+      "focal_id": "GV.RM-05",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-31"
+    },
+    {
+      "focal_id": "GV.RM-05",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-32"
+    },
+    {
+      "focal_id": "GV.RM-05",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-9 System Stakeholders",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-33"
+    },
+    {
+      "focal_id": "GV.RM-06",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-34"
+    },
+    {
+      "focal_id": "GV.RM-06",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-35"
+    },
+    {
+      "focal_id": "GV.RM-06",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-36"
+    },
+    {
+      "focal_id": "GV.RM-07",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-37"
+    },
+    {
+      "focal_id": "GV.RR",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-1 Risk Management Roles",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-38"
+    },
+    {
+      "focal_id": "GV.RR",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-9 System Stakeholders",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-39"
+    },
+    {
+      "focal_id": "GV.RR-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-1 Risk Management Roles",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-40"
+    },
+    {
+      "focal_id": "GV.RR-02",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-1 Risk Management Roles",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-41"
+    },
+    {
+      "focal_id": "GV.RR-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-1 Risk Management Roles",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-42"
+    },
+    {
+      "focal_id": "GV.RR-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-43"
+    },
+    {
+      "focal_id": "GV.RR-04",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-1 Risk Management Roles",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-44"
+    },
+    {
+      "focal_id": "GV.RR-04",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-45"
+    },
+    {
+      "focal_id": "GV.PO",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-46"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-47"
+    },
+    {
+      "focal_id": "GV.PO-02",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-48"
+    },
+    {
+      "focal_id": "GV.OV",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-49"
+    },
+    {
+      "focal_id": "GV.OV",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-50"
+    },
+    {
+      "focal_id": "GV.OV",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-51"
+    },
+    {
+      "focal_id": "GV.OV",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-52"
+    },
+    {
+      "focal_id": "GV.OV",
+      "reference_id": "RMF Select Step: TASK S-5 Continuous Monitoring Strategy— System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-53"
+    },
+    {
+      "focal_id": "GV.OV",
+      "reference_id": "RMF Authorize Step: TASK R-3 Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-54"
+    },
+    {
+      "focal_id": "GV.OV",
+      "reference_id": "RMF Monitor Step: TASK M-2 Ongoing Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-55"
+    },
+    {
+      "focal_id": "GV.OV",
+      "reference_id": "RMF Monitor Step: TASK M-3 Ongoing Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-56"
+    },
+    {
+      "focal_id": "GV.OV-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-57"
+    },
+    {
+      "focal_id": "GV.OV-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-58"
+    },
+    {
+      "focal_id": "GV.OV-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-59"
+    },
+    {
+      "focal_id": "GV.OV-01",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-60"
+    },
+    {
+      "focal_id": "GV.OV-01",
+      "reference_id": "RMF Select Step: TASK S-5 Continuous Monitoring Strategy— System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-61"
+    },
+    {
+      "focal_id": "GV.OV-01",
+      "reference_id": "RMF Authorize Step: TASK R-3 Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-62"
+    },
+    {
+      "focal_id": "GV.OV-01",
+      "reference_id": "RMF Monitor Step: TASK M-2 Ongoing Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-63"
+    },
+    {
+      "focal_id": "GV.OV-01",
+      "reference_id": "RMF Monitor Step: TASK M-3 Ongoing Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-64"
+    },
+    {
+      "focal_id": "GV.OV-02",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-65"
+    },
+    {
+      "focal_id": "GV.OV-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-66"
+    },
+    {
+      "focal_id": "GV.OV-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-67"
+    },
+    {
+      "focal_id": "GV.OV-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-68"
+    },
+    {
+      "focal_id": "GV.OV-03",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-69"
+    },
+    {
+      "focal_id": "GV.OV-03",
+      "reference_id": "RMF Authorize Step: TASK R-3 Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-70"
+    },
+    {
+      "focal_id": "GV.OV-03",
+      "reference_id": "RMF Monitor Step: TASK M-2 Ongoing Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-71"
+    },
+    {
+      "focal_id": "GV.OV-03",
+      "reference_id": "RMF Monitor Step: TASK M-3 Ongoing Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-72"
+    },
+    {
+      "focal_id": "GV.SC",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-73"
+    },
+    {
+      "focal_id": "GV.SC-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-1 Risk Management Roles",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-74"
+    },
+    {
+      "focal_id": "GV.SC-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-75"
+    },
+    {
+      "focal_id": "GV.SC-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-76"
+    },
+    {
+      "focal_id": "GV.SC-01",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-9 System Stakeholders",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-77"
+    },
+    {
+      "focal_id": "GV.SC-02",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-1 Risk Management Roles",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-78"
+    },
+    {
+      "focal_id": "GV.SC-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-79"
+    },
+    {
+      "focal_id": "GV.SC-04",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-80"
+    },
+    {
+      "focal_id": "GV.SC-04",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-10 Asset Identification",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-81"
+    },
+    {
+      "focal_id": "GV.SC-04",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-82"
+    },
+    {
+      "focal_id": "GV.SC-05",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-83"
+    },
+    {
+      "focal_id": "GV.SC-06",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-84"
+    },
+    {
+      "focal_id": "GV.SC-06",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-85"
+    },
+    {
+      "focal_id": "GV.SC-06",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-86"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-87"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-88"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-89"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-90"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Select Step: TASK S-5 Continuous Monitoring Strategy— System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-91"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Assess Step: TASK A-3 Control Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-92"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Assess Step: TASK A-5 Remediation Actions",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-93"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Assess Step: TASK A-6 Plan of Action and Milestones",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-94"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Authorize Step: TASK R-2 Risk Analysis and Determination",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-95"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Authorize Step: TASK R-3 Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-96"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Monitor Step: TASK M-1 System and Environment Changes",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-97"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Monitor Step: TASK M-2 Ongoing Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-98"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "RMF Monitor Step: TASK M-3 Ongoing Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-99"
+    },
+    {
+      "focal_id": "GV.SC-08",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-9 System Stakeholders",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-100"
+    },
+    {
+      "focal_id": "GV.SC-08",
+      "reference_id": "RMF Monitor Step: TASK M-1 System and Environment Changes",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-101"
+    },
+    {
+      "focal_id": "GV.SC-08",
+      "reference_id": "RMF Monitor Step: TASK M-3 Ongoing Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-102"
+    },
+    {
+      "focal_id": "GV.SC-09",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-103"
+    },
+    {
+      "focal_id": "GV.SC-09",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-104"
+    },
+    {
+      "focal_id": "GV.SC-10",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-15 Requirements Definition",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-105"
+    },
+    {
+      "focal_id": "GV.SC-10",
+      "reference_id": "RMF Monitor Step: TASK M-7 System Disposal",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-106"
+    },
+    {
+      "focal_id": "ID.AM",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-10 Asset Identification",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-108"
+    },
+    {
+      "focal_id": "ID.AM-01",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-10 Asset Identification",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-109"
+    },
+    {
+      "focal_id": "ID.AM-02",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-10 Asset Identification",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-110"
+    },
+    {
+      "focal_id": "ID.AM-03",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-11 Authorization Boundary",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-111"
+    },
+    {
+      "focal_id": "ID.AM-03",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-13 Information Life Cycle",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-112"
+    },
+    {
+      "focal_id": "ID.AM-03",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-16 Enterprise Architecture",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-113"
+    },
+    {
+      "focal_id": "ID.AM-04",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-10 Asset Identification",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-114"
+    },
+    {
+      "focal_id": "ID.AM-05",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-115"
+    },
+    {
+      "focal_id": "ID.AM-05",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-6 Impact-Level Prioritization (Optional)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-116"
+    },
+    {
+      "focal_id": "ID.AM-05",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-8 Mission or Business Focus",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-117"
+    },
+    {
+      "focal_id": "ID.AM-05",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-10 Asset Identification",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-118"
+    },
+    {
+      "focal_id": "ID.AM-05",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-119"
+    },
+    {
+      "focal_id": "ID.AM-07",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-12 Information Types",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-120"
+    },
+    {
+      "focal_id": "ID.AM-07",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-13 Information Life Cycle",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-121"
+    },
+    {
+      "focal_id": "ID.AM-08",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-10 Asset Identification",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-122"
+    },
+    {
+      "focal_id": "ID.AM-08",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-12 Information Types",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-123"
+    },
+    {
+      "focal_id": "ID.AM-08",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-13 Information Life Cycle",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-124"
+    },
+    {
+      "focal_id": "ID.AM-08",
+      "reference_id": "RMF Monitor Step: TASK M-7 System Disposal",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-125"
+    },
+    {
+      "focal_id": "ID.RA",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-126"
+    },
+    {
+      "focal_id": "ID.RA",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-127"
+    },
+    {
+      "focal_id": "ID.RA",
+      "reference_id": "RMF Categorize Step: TASK C-2 Security Categorization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-128"
+    },
+    {
+      "focal_id": "ID.RA",
+      "reference_id": "RMF Categorize Step: TASK C-3 Security Categorization Review and Approval",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-129"
+    },
+    {
+      "focal_id": "ID.RA",
+      "reference_id": "RMF Authorize Step: TASK R-2 Risk Analysis and Determination",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-130"
+    },
+    {
+      "focal_id": "ID.RA",
+      "reference_id": "RMF Authorize Step: TASK R-4 Authorization Decision",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-131"
+    },
+    {
+      "focal_id": "ID.RA",
+      "reference_id": "RMF Authorize Step: TASK R-5 Authorization Reporting",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-132"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-133"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-134"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "RMF Assess Step: TASK A-3 Control Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-135"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "RMF Monitor Step: TASK M-1 System and Environment Changes",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-136"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "RMF Monitor Step: TASK M-2 Ongoing Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-137"
+    },
+    {
+      "focal_id": "ID.RA-02",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-138"
+    },
+    {
+      "focal_id": "ID.RA-02",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-139"
+    },
+    {
+      "focal_id": "ID.RA-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-140"
+    },
+    {
+      "focal_id": "ID.RA-03",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-141"
+    },
+    {
+      "focal_id": "ID.RA-03",
+      "reference_id": "RMF Assess Step: TASK A-3 Control Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-142"
+    },
+    {
+      "focal_id": "ID.RA-03",
+      "reference_id": "RMF Monitor Step: TASK M-1 System and Environment Changes",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-143"
+    },
+    {
+      "focal_id": "ID.RA-03",
+      "reference_id": "RMF Monitor Step: TASK M-2 Ongoing Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-144"
+    },
+    {
+      "focal_id": "ID.RA-04",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-145"
+    },
+    {
+      "focal_id": "ID.RA-04",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-146"
+    },
+    {
+      "focal_id": "ID.RA-05",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-147"
+    },
+    {
+      "focal_id": "ID.RA-05",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-148"
+    },
+    {
+      "focal_id": "ID.RA-05",
+      "reference_id": "RMF Authorize Step: TASK R-2 Risk Analysis and Determination",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-149"
+    },
+    {
+      "focal_id": "ID.RA-05",
+      "reference_id": "RMF Authorize Step: TASK R-3 Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-150"
+    },
+    {
+      "focal_id": "ID.RA-06",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-151"
+    },
+    {
+      "focal_id": "ID.RA-06",
+      "reference_id": "RMF Assess Step: TASK A-5 Remediation Actions",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-152"
+    },
+    {
+      "focal_id": "ID.RA-06",
+      "reference_id": "RMF Assess Step: TASK A-6 Plan of Action and Milestones",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-153"
+    },
+    {
+      "focal_id": "ID.RA-06",
+      "reference_id": "RMF Authorize Step: TASK R-3 Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-154"
+    },
+    {
+      "focal_id": "ID.RA-06",
+      "reference_id": "RMF Monitor Step: TASK M-3 Ongoing Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-155"
+    },
+    {
+      "focal_id": "ID.RA-06",
+      "reference_id": "RMF Monitor Step: TASK M-6 Ongoing Authorization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-156"
+    },
+    {
+      "focal_id": "ID.RA-07",
+      "reference_id": "RMF Select Step: TASK S-4 Documentation of Planned Control Implementations",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-157"
+    },
+    {
+      "focal_id": "ID.RA-07",
+      "reference_id": "RMF Implement Step: TASK I-2 Update Control Implementation Information",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-158"
+    },
+    {
+      "focal_id": "ID.RA-07",
+      "reference_id": "RMF Assess Step: TASK A-6 Plan of Action and Milestones",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-159"
+    },
+    {
+      "focal_id": "ID.RA-08",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-160"
+    },
+    {
+      "focal_id": "ID.RA-08",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-15 Requirements Definition",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-161"
+    },
+    {
+      "focal_id": "ID.RA-08",
+      "reference_id": "RMF Authorize Step: TASK R-3 Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-162"
+    },
+    {
+      "focal_id": "ID.RA-08",
+      "reference_id": "RMF Monitor Step: TASK M-2 Ongoing Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-163"
+    },
+    {
+      "focal_id": "ID.RA-08",
+      "reference_id": "RMF Monitor Step: TASK M-3 Ongoing Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-164"
+    },
+    {
+      "focal_id": "ID.RA-09",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-10 Asset Identification",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-165"
+    },
+    {
+      "focal_id": "ID.RA-09",
+      "reference_id": "RMF Assess Step: TASK A-3 Control Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-166"
+    },
+    {
+      "focal_id": "ID.RA-10",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-167"
+    },
+    {
+      "focal_id": "ID.RA-10",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-10 Asset Identification",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-168"
+    },
+    {
+      "focal_id": "ID.RA-10",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-169"
+    },
+    {
+      "focal_id": "ID.IM",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-170"
+    },
+    {
+      "focal_id": "ID.IM-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-171"
+    },
+    {
+      "focal_id": "ID.IM-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-172"
+    },
+    {
+      "focal_id": "ID.IM-01",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-173"
+    },
+    {
+      "focal_id": "ID.IM-01",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-174"
+    },
+    {
+      "focal_id": "ID.IM-01",
+      "reference_id": "RMF Assess Step: TASK A-3 Control Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-175"
+    },
+    {
+      "focal_id": "ID.IM-01",
+      "reference_id": "RMF Assess Step: TASK A-4 Assessment Reports",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-176"
+    },
+    {
+      "focal_id": "ID.IM-01",
+      "reference_id": "RMF Assess Step: TASK A-5 Remediation Actions",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-177"
+    },
+    {
+      "focal_id": "ID.IM-01",
+      "reference_id": "RMF Assess Step: TASK A-6 Plan of Action and Milestones",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-178"
+    },
+    {
+      "focal_id": "ID.IM-01",
+      "reference_id": "RMF Monitor Step: TASK M-2 Ongoing Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-179"
+    },
+    {
+      "focal_id": "ID.IM-02",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-180"
+    },
+    {
+      "focal_id": "ID.IM-02",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-181"
+    },
+    {
+      "focal_id": "ID.IM-02",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-182"
+    },
+    {
+      "focal_id": "ID.IM-02",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-183"
+    },
+    {
+      "focal_id": "ID.IM-02",
+      "reference_id": "RMF Assess Step: TASK A-3 Control Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-184"
+    },
+    {
+      "focal_id": "ID.IM-02",
+      "reference_id": "RMF Assess Step: TASK A-4 Assessment Reports",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-185"
+    },
+    {
+      "focal_id": "ID.IM-02",
+      "reference_id": "RMF Assess Step: TASK A-5 Remediation Actions",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-186"
+    },
+    {
+      "focal_id": "ID.IM-02",
+      "reference_id": "RMF Assess Step: TASK A-6 Plan of Action and Milestones",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-187"
+    },
+    {
+      "focal_id": "ID.IM-02",
+      "reference_id": "RMF Monitor Step: TASK M-2 Ongoing Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-188"
+    },
+    {
+      "focal_id": "ID.IM-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-189"
+    },
+    {
+      "focal_id": "ID.IM-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-3 Risk Assessment—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-190"
+    },
+    {
+      "focal_id": "ID.IM-03",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-7 Continuous Monitoring Strategy—Organization",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-191"
+    },
+    {
+      "focal_id": "ID.IM-03",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-14 Risk Assessment—System",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-192"
+    },
+    {
+      "focal_id": "ID.IM-03",
+      "reference_id": "RMF Assess Step: TASK A-3 Control Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-193"
+    },
+    {
+      "focal_id": "ID.IM-03",
+      "reference_id": "RMF Assess Step: TASK A-4 Assessment Reports",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-194"
+    },
+    {
+      "focal_id": "ID.IM-03",
+      "reference_id": "RMF Assess Step: TASK A-5 Remediation Actions",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-195"
+    },
+    {
+      "focal_id": "ID.IM-03",
+      "reference_id": "RMF Assess Step: TASK A-6 Plan of Action and Milestones",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-196"
+    },
+    {
+      "focal_id": "ID.IM-03",
+      "reference_id": "RMF Monitor Step: TASK M-2 Ongoing Assessments",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-197"
+    },
+    {
+      "focal_id": "PR.AT",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-1 Risk Management Roles",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-207"
+    },
+    {
+      "focal_id": "PR.AT",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-208"
+    },
+    {
+      "focal_id": "PR.AT",
+      "reference_id": "RMF Select Step",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-209"
+    },
+    {
+      "focal_id": "PR.AT",
+      "reference_id": "RMF Implement Step",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-210"
+    },
+    {
+      "focal_id": "PR.DS",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-213"
+    },
+    {
+      "focal_id": "PR.DS",
+      "reference_id": "RMF Select Step",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-214"
+    },
+    {
+      "focal_id": "PR.DS",
+      "reference_id": "RMF Implement Step",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-215"
+    },
+    {
+      "focal_id": "PR.DS",
+      "reference_id": "RMF Monitor Step",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-216"
+    },
+    {
+      "focal_id": "PR.PS",
+      "reference_id": "RMF Select Step",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-221"
+    },
+    {
+      "focal_id": "PR.PS",
+      "reference_id": "RMF Implement Step",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-222"
+    },
+    {
+      "focal_id": "PR.PS",
+      "reference_id": "RMF Monitor Step",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-223"
+    },
+    {
+      "focal_id": "PR.IR",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-230"
+    },
+    {
+      "focal_id": "PR.IR",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-15 Requirements Definition",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-231"
+    },
+    {
+      "focal_id": "PR.IR",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-16 Enterprise Architecture",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-232"
+    },
+    {
+      "focal_id": "PR.IR",
+      "reference_id": "RMF Prepare Step (System Level): TASK P-17 Requirements Allocation",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-233"
+    },
+    {
+      "focal_id": "PR.IR",
+      "reference_id": "RMF Select Step",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-234"
+    },
+    {
+      "focal_id": "PR.IR",
+      "reference_id": "RMF Implement Step",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-235"
+    },
+    {
+      "focal_id": "DE.CM",
+      "reference_id": "RMF Monitor Step",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-248"
+    },
+    {
+      "focal_id": "RS.AN",
+      "reference_id": "RMF Monitor Step: TASK M-3 Ongoing Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-261"
+    },
+    {
+      "focal_id": "RS.CO",
+      "reference_id": "RMF Monitor Step: TASK M-3 Ongoing Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-266"
+    },
+    {
+      "focal_id": "RS.MI",
+      "reference_id": "RMF Monitor Step: TASK M-3 Ongoing Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-269"
+    },
+    {
+      "focal_id": "RC.CO",
+      "reference_id": "RMF Prepare Step (Organization & Mission/Business Levels): TASK P-2 Risk Management Strategy",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-280"
+    },
+    {
+      "focal_id": "RC.CO",
+      "reference_id": "RMF Monitor Step: TASK M-3 Ongoing Risk Response",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships#row-281"
+    }
+  ]
+}

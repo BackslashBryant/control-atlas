@@ -1,0 +1,330 @@
+{
+  "schema_version": "1.0",
+  "olir_id": 107,
+  "source_artifact": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-53_SecurityRule_Crosswalk_2024.xlsx",
+  "sha256": "sha256:80ee1b51d5b48f394e35311a9a93006d2f9e530e35266c6f1f00eb212b776b95",
+  "byte_length": 179055,
+  "parser": "olir-xlsx",
+  "relationships": [
+    {
+      "focal_id": "AC-01",
+      "reference_id": "164.308(a)(3)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-2"
+    },
+    {
+      "focal_id": "AC-01",
+      "reference_id": "164.308(a)(3)(ii)(A)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-3"
+    },
+    {
+      "focal_id": "AC-01",
+      "reference_id": "164.308(a)(4)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-4"
+    },
+    {
+      "focal_id": "AC-01",
+      "reference_id": "164.308(a)(4)(ii)(B)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-5"
+    },
+    {
+      "focal_id": "AC-01",
+      "reference_id": "164.308(a)(4)(ii)(C)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-6"
+    },
+    {
+      "focal_id": "AC-01",
+      "reference_id": "164.312(a)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-7"
+    },
+    {
+      "focal_id": "AC-01",
+      "reference_id": "164.316(b)(2)(ii)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-8"
+    },
+    {
+      "focal_id": "AC-01",
+      "reference_id": "164.316(b)(2)(iii)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-9"
+    },
+    {
+      "focal_id": "AC-02",
+      "reference_id": "164.308(a)(3)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-10"
+    },
+    {
+      "focal_id": "AC-02",
+      "reference_id": "164.308(a)(3)(ii)(A)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-11"
+    },
+    {
+      "focal_id": "AC-02",
+      "reference_id": "164.308(a)(3)(ii)(B)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-12"
+    },
+    {
+      "focal_id": "AC-02",
+      "reference_id": "164.308(a)(4)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-13"
+    },
+    {
+      "focal_id": "AC-02",
+      "reference_id": "164.308(a)(4)(ii)(B)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-14"
+    },
+    {
+      "focal_id": "AC-02",
+      "reference_id": "164.308(a)(4)(ii)(C)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-15"
+    },
+    {
+      "focal_id": "AC-02",
+      "reference_id": "164.312(a)(2)(i)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-16"
+    },
+    {
+      "focal_id": "AC-02",
+      "reference_id": "164.312(a)(2)(ii)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-17"
+    },
+    {
+      "focal_id": "AC-03",
+      "reference_id": "164.308(a)(3)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-31"
+    },
+    {
+      "focal_id": "AC-03",
+      "reference_id": "164.308(a)(3)(ii)(A)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-32"
+    },
+    {
+      "focal_id": "AC-03",
+      "reference_id": "164.308(a)(4)(ii)(B)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-33"
+    },
+    {
+      "focal_id": "AC-03",
+      "reference_id": "164.310(b)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-34"
+    },
+    {
+      "focal_id": "AC-03",
+      "reference_id": "164.312(a)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-35"
+    },
+    {
+      "focal_id": "AC-03",
+      "reference_id": "164.312(a)(2)(i)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-36"
+    },
+    {
+      "focal_id": "AC-03",
+      "reference_id": "164.312(a)(2)(ii)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-37"
+    },
+    {
+      "focal_id": "AC-04",
+      "reference_id": "164.308(a)(3)(ii)(A)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-53"
+    },
+    {
+      "focal_id": "AC-04",
+      "reference_id": "164.308(a)(4)(ii)(B)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-54"
+    },
+    {
+      "focal_id": "AC-04",
+      "reference_id": "164.310(b)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-55"
+    },
+    {
+      "focal_id": "AC-05",
+      "reference_id": "164.308(a)(3)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-88"
+    },
+    {
+      "focal_id": "AC-05",
+      "reference_id": "164.308(a)(4)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-89"
+    },
+    {
+      "focal_id": "AC-05",
+      "reference_id": "164.308(a)(4)(ii)(A)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-90"
+    },
+    {
+      "focal_id": "AC-05",
+      "reference_id": "164.312(a)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-91"
+    },
+    {
+      "focal_id": "AC-06",
+      "reference_id": "164.308(a)(3)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-92"
+    },
+    {
+      "focal_id": "AC-06",
+      "reference_id": "164.308(a)(4)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-93"
+    },
+    {
+      "focal_id": "AC-06",
+      "reference_id": "164.308(a)(4)(ii)(A)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-94"
+    },
+    {
+      "focal_id": "AC-06",
+      "reference_id": "164.312(a)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-95"
+    },
+    {
+      "focal_id": "AC-11",
+      "reference_id": "164.310(b)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-118"
+    },
+    {
+      "focal_id": "AC-12",
+      "reference_id": "164.310(b)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-120"
+    },
+    {
+      "focal_id": "AC-12",
+      "reference_id": "164.312(a)(2)(iii)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-121"
+    },
+    {
+      "focal_id": "AC-16",
+      "reference_id": "164.310(b)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-129"
+    },
+    {
+      "focal_id": "AC-17",
+      "reference_id": "164.310(b)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-140"
+    },
+    {
+      "focal_id": "AC-19",
+      "reference_id": "164.310(b)",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": null,
+      "source_locator": "Relationships-AC#row-157"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-08T22:19:25.203Z",
+  "generated_at": "2026-08-09T01:23:55.681Z",
   "hydrated": 37,
   "removed_orphans": [],
   "results": [
@@ -238,10 +238,10 @@
       "status": "OK",
       "http": 200,
       "url": "https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/",
-      "sha256": "sha256:bd6a03a07c90f593ff4a6905a01ce5cdd7644351fcd1c7d06074d4048cddb9fb",
+      "sha256": "sha256:08291350010897d9750fe7e8056c249b7ec3c027db395d5c1f95dbae4d3be1ab",
       "byte_length": 154957,
       "record_count": null,
-      "retrieved_at": "2026-08-08"
+      "retrieved_at": "2026-08-09"
     },
     {
       "id": "artifact-isoo-cui-regulation",
@@ -278,10 +278,10 @@
       "status": "OK",
       "http": 200,
       "url": "https://csrc.nist.gov/extensions/nudp/services/json/csf/download?olirids=all",
-      "sha256": "sha256:1407844d11e32be7c128723810b595ba5d8a64d1f78a1a8045667b9170a3b732",
-      "byte_length": 144519,
+      "sha256": "sha256:7ab019528aa97127ecbd287d70463fa37c48a513f0a0590179b5d0c04f8da204",
+      "byte_length": 144518,
       "record_count": null,
-      "retrieved_at": "2026-08-08"
+      "retrieved_at": "2026-08-09"
     },
     {
       "id": "artifact-nist-fips-199",
@@ -321,7 +321,7 @@
       "sha256": "sha256:df371dc0ebb163e1a0434b141bc2f16b56c97b2062622d6811191fbe4f093c01",
       "byte_length": 368971055,
       "record_count": 0,
-      "retrieved_at": "2026-08-08",
+      "retrieved_at": "2026-08-09",
       "attestation": "fresh DISA compilation range download and parse"
     },
     {
@@ -359,10 +359,10 @@
       "status": "OK",
       "http": "local",
       "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json",
-      "sha256": "sha256:9d25f3d1d0d3fd0222da2a2fc72958e88ec4733bcecb84b0586f732409310810",
+      "sha256": "sha256:4c3f9ecee2fe2eb4dac56a205e64e5d8eb9738c25f4d38edf01a5da13247f074",
       "byte_length": 1865,
       "record_count": null,
-      "retrieved_at": "2026-08-08"
+      "retrieved_at": "2026-08-09"
     },
     {
       "id": "artifact-control-atlas-structure",

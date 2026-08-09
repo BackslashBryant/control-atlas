@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-08T22:20:31.806Z",
+  "generated_at": "2026-08-09T01:24:31.935Z",
   "atlas_neighborhood_manifest": {
     "shard_count": 128,
     "hash_algorithm": "fnv1a-32",
-    "records": 29350,
+    "records": 29349,
     "shards": [
       {
         "shard_id": "00",
@@ -242,9 +242,9 @@
       },
       {
         "shard_id": "27",
-        "record_count": 240,
+        "record_count": 239,
         "path": "atlas-neighborhood/27.json",
-        "bytes": 1725222
+        "bytes": 1721794
       },
       {
         "shard_id": "28",
@@ -724,7 +724,7 @@
         "shard_id": "77",
         "record_count": 213,
         "path": "atlas-neighborhood/77.json",
-        "bytes": 1392667
+        "bytes": 1391714
       },
       {
         "shard_id": "78",

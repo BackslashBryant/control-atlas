@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-08-08T22:14:50.025Z",
+  "generated_at": "2026-08-09T01:19:49.800Z",
   "source": "https://csrc.nist.gov/projects/olir/informative-reference-catalog",
   "api_endpoint": "https://csrc.nist.gov/extensions/nudp/services/json/olir/informative-reference-catalog",
   "total_entries": 101,
   "final_count": 88,
   "applicable_final_count": 48,
-  "ingested_count": 2,
-  "quarantined_count": 99,
-  "unresolved_count": 46,
+  "ingested_count": 26,
+  "quarantined_count": 75,
+  "unresolved_count": 22,
   "processed_items": [
     {
       "id": 225,
@@ -26,11 +26,25 @@
       "submission_artifact_url": "https://github.com/greerfam2020-rgb/IPAC-AI-Framework-Review/blob/main/IPACS_AI_NIST_Submission_Final-1.pdf",
       "authority_tier": 4,
       "authority_tier_label": "Validated third-party Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "10, 2, 5, 8",
+      "ingested": true,
+      "map_file": "maps/olir/225.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/225.json",
+        "artifact_url": "https://raw.githubusercontent.com/greerfam2020-rgb/IPAC-AI-Framework-Review/main/IPACS_AI_RMF_Crosswalk_v3-5.xlsx",
+        "checksum": "sha256:cfc6f33534b26e5e6ccc89481500a92eb79e708132f671a5ac50d85aa6c21da6",
+        "byte_length": 33225,
+        "parser": "olir-xlsx",
+        "relationship_count": 153,
+        "relationship_semantics": [
+          "10",
+          "2",
+          "5",
+          "8"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -45,28 +59,20 @@
           "mapping_comment": "<p>IPACS-AI is an independent, open-source framework submission. All 72 AI RMF 1.0 subcategories are addressed in the crosswalk. Documented gaps (DEI team documentation, formal TEVV testing) are transparently disclosed with planned remediation through a mandatory independent security audit prior to production deployment. The framework is licensed MIT/Apache 2.0 with no commercial restrictions. Local FIDO2/TPM attestation enables zero per-transaction cost and full offline resilience. Scope is explicitly bounded to API-connected AI services; fully air-gapped local inference is acknowledged as out of scope.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "GitHub Contents API",
           "url": "https://github.com/greerfam2020-rgb/IPAC-AI-Framework-Review/blob/main/IPACS_AI_RMF_Crosswalk_v3-5.xlsx",
           "status": 200,
-          "final_url": "https://github.com/greerfam2020-rgb/IPAC-AI-Framework-Review/blob/main/IPACS_AI_RMF_Crosswalk_v3-5.xlsx",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "resolved_urls": [
+            "https://raw.githubusercontent.com/greerfam2020-rgb/IPAC-AI-Framework-Review/main/IPACS_AI_RMF_Crosswalk_v3-5.xlsx"
+          ]
         },
         {
-          "kind": "NIST detail reference URL",
-          "url": "https://github.com/greerfam2020-rgb/IPAC-AI-Framework-Review/blob/main/IPACS_AI_NIST_Submission_Final-1.pdf",
+          "kind": "artifact download",
+          "url": "https://raw.githubusercontent.com/greerfam2020-rgb/IPAC-AI-Framework-Review/main/IPACS_AI_RMF_Crosswalk_v3-5.xlsx",
           "status": 200,
-          "final_url": "https://github.com/greerfam2020-rgb/IPAC-AI-Framework-Review/blob/main/IPACS_AI_NIST_Submission_Final-1.pdf",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://github.com/greerfam2020-rgb/IPAC-AI-Framework-Review/blob/main/IPACS_AI_NIST_Submission_Final-1.pdf",
-          "status": 200,
-          "final_url": "https://github.com/greerfam2020-rgb/IPAC-AI-Framework-Review/blob/main/IPACS_AI_NIST_Submission_Final-1.pdf",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "final_url": "https://raw.githubusercontent.com/greerfam2020-rgb/IPAC-AI-Framework-Review/main/IPACS_AI_RMF_Crosswalk_v3-5.xlsx",
+          "content_type": "application/octet-stream",
+          "byte_length": 33225
         }
       ]
     },
@@ -91,7 +97,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -106,28 +113,12 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://drive.google.com/drive/folders/1uqUpwlj7NeP-TDSPR2sHaVXHOQlabCCG?usp=sharing",
           "status": 200,
           "final_url": "https://drive.google.com/drive/folders/1uqUpwlj7NeP-TDSPR2sHaVXHOQlabCCG?usp=sharing",
           "content_type": "text/html; charset=utf-8",
-          "content_length": "0"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://drive.google.com/drive/folders/1uqUpwlj7NeP-TDSPR2sHaVXHOQlabCCG?usp=sharing",
-          "status": 200,
-          "final_url": "https://drive.google.com/drive/folders/1uqUpwlj7NeP-TDSPR2sHaVXHOQlabCCG?usp=sharing",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": "0"
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://drive.google.com/drive/folders/1uqUpwlj7NeP-TDSPR2sHaVXHOQlabCCG?usp=sharing",
-          "status": 200,
-          "final_url": "https://drive.google.com/drive/folders/1uqUpwlj7NeP-TDSPR2sHaVXHOQlabCCG?usp=sharing",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": "0"
+          "byte_length": 308361
         }
       ]
     },
@@ -152,6 +143,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "OLIR status is \"Draft\", not Final — held out of the published graph pending NIST finalization",
       "retrieval_attempts": []
     },
@@ -176,6 +168,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Workforce Framework for Cybersecurity (NICE Framework) (NIST SP 800-181 Rev 1)\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -200,6 +193,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "OLIR status is \"Draft\", not Final — held out of the published graph pending NIST finalization",
       "retrieval_attempts": []
     },
@@ -224,6 +218,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "OLIR status is \"Draft\", not Final — held out of the published graph pending NIST finalization",
       "retrieval_attempts": []
     },
@@ -244,11 +239,22 @@
       "submission_artifact_url": "https://www.iso.org/obp/ui/#iso:std:iso-iec:27001:ed-3:v1:en",
       "authority_tier": 7,
       "authority_tier_label": "Community candidate Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/218.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 403; catalog listed reference URL 403",
+      "artifact": {
+        "map_file": "maps/olir/218.json",
+        "artifact_url": "https://raw.githubusercontent.com/JoergPauloweit/ISO27001-NIST-Mapping/main/Cybersecurity%20Framework%20v2.0_Concept%20Crosswalk_Template_Version%202_Pauloweit.xlsx",
+        "checksum": "sha256:7ba6a8c3fa5207f84b1a72480fa5bfacc6326ab97bf6e28aab631bd3cf626848",
+        "byte_length": 21824,
+        "parser": "olir-xlsx",
+        "relationship_count": 93,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -263,28 +269,20 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "GitHub Contents API",
           "url": "https://github.com/JoergPauloweit/ISO27001-NIST-Mapping",
           "status": 200,
-          "final_url": "https://github.com/JoergPauloweit/ISO27001-NIST-Mapping",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "resolved_urls": [
+            "https://raw.githubusercontent.com/JoergPauloweit/ISO27001-NIST-Mapping/main/Cybersecurity%20Framework%20v2.0_Concept%20Crosswalk_Template_Version%202_Pauloweit.xlsx"
+          ]
         },
         {
-          "kind": "NIST detail reference URL",
-          "url": "https://www.iso.org/obp/ui/#iso:std:iso-iec:27001:ed-3:v1:en",
-          "status": 403,
-          "final_url": "https://www.iso.org/obp/ui/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://www.iso.org/obp/ui/#iso:std:iso-iec:27001:ed-3:v1:en",
-          "status": 403,
-          "final_url": "https://www.iso.org/obp/ui/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": null
+          "kind": "artifact download",
+          "url": "https://raw.githubusercontent.com/JoergPauloweit/ISO27001-NIST-Mapping/main/Cybersecurity%20Framework%20v2.0_Concept%20Crosswalk_Template_Version%202_Pauloweit.xlsx",
+          "status": 200,
+          "final_url": "https://raw.githubusercontent.com/JoergPauloweit/ISO27001-NIST-Mapping/main/Cybersecurity%20Framework%20v2.0_Concept%20Crosswalk_Template_Version%202_Pauloweit.xlsx",
+          "content_type": "application/octet-stream",
+          "byte_length": 21824
         }
       ]
     },
@@ -309,7 +307,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -324,28 +323,20 @@
           "mapping_comment": "<p>Relationship type: Supportive. The SDOS framework operates at the dispatch and enforcement layer below model alignment, providing structural controls that support CSF 2.0 subcategory intent without claiming equivalence. 76 of 106 subcategories across GV, ID, PR, DE, RS, and RC are mapped; subcategories outside the runtime AI governance scope (e.g., physical security, personnel training, public communications, supplier contract lifecycle, hardware lifecycle) are intentionally not mapped. The Strength of Relationship column is left blank for all 17 rows where the relationship is \"intersects with\"; the nature of those relationships is noted in the per-row Comments column. Remaining mappings also leave the optional Strength column blank, consistent with the SDOS-to-AI-RMF-1.0 reference (v1.8) accepted into the NIST OLIR Catalog.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://aamcyber.com/sdos/reference/csf-2-0/",
           "status": 200,
           "final_url": "https://aamcyber.com/sdos/reference/csf-2-0/",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 119259
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://aamcyber.com/sdos/reference/v1/",
           "status": 200,
           "final_url": "https://aamcyber.com/sdos/reference/v1/",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://aamcyber.com/sdos/reference/v1/",
-          "status": 200,
-          "final_url": "https://aamcyber.com/sdos/reference/v1/",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 131955
         }
       ]
     },
@@ -370,7 +361,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -385,28 +377,20 @@
           "mapping_comment": "<p>Relationship type: Supportive. The SDOS framework operates at the AI agent dispatch and enforcement layer below the human-defined policy layer; this submission identifies SP 800-53 controls that SDOS supports as an Informative Reference. The mapping uses 20 of 24 SDOS catalog identifiers (the four absent &mdash; SDOS-GV-03, SDOS-GV-05, SDOS-RM-02, SDOS-RM-03 &mdash; are semantic variants of SDOS-GV-01 and SDOS-RM-01 that did not surface as distinct mapping targets in the federal control catalog). Strength of Relationship \"intersects with\" is applied conservatively (5.6% of mapped rows) only where SDOS is the runtime embodiment of the control's enforcement clause within the governance-relevant scope. Where SP 800-53 controls extend beyond the SDOS dispatch boundary (firmware, network, full key lifecycle, organizational documentation), the per-row Comments column explicitly declares the scope-bounded relationship.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://aamcyber.com/sdos/reference/sp-800-53/",
           "status": 200,
           "final_url": "https://aamcyber.com/sdos/reference/sp-800-53/",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 124275
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://aamcyber.com/sdos/reference/v1/",
           "status": 200,
           "final_url": "https://aamcyber.com/sdos/reference/v1/",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://aamcyber.com/sdos/reference/v1/",
-          "status": 200,
-          "final_url": "https://aamcyber.com/sdos/reference/v1/",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 131955
         }
       ]
     },
@@ -427,11 +411,24 @@
       "submission_artifact_url": "https://github.com/OraclesTech/guardian-sdk",
       "authority_tier": 4,
       "authority_tier_label": "Validated third-party Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Intersects with, Set Theory: Subset, Set Theory: Superset",
+      "ingested": true,
+      "map_file": "maps/olir/209.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/209.json",
+        "artifact_url": "https://raw.githubusercontent.com/OraclesTech/guardian-sdk/main/docs/compliance/olir/csf20/GuardianSDK_CSF20_OLIR_Submission_v2.xlsx",
+        "checksum": "sha256:ac9cac551f90a3251c572a528b33a6c39e967877f6cf48c4fd70091a75068f02",
+        "byte_length": 23832,
+        "parser": "olir-xlsx",
+        "relationship_count": 40,
+        "relationship_semantics": [
+          "Intersects with",
+          "Set Theory: Subset",
+          "Set Theory: Superset"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -446,28 +443,20 @@
           "mapping_comment": "<p>Mapping covers Guardian SDK v2.1.0. Tier availability is noted in the Comments column of each mapping row (All tiers / API tiers). The Relationship Type field (semantic / syntactic / functional, per IR 8278Ar1 &sect;3.2.7) is included in the Comments column of the Relationships sheet.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "GitHub Contents API",
           "url": "https://github.com/OraclesTech/guardian-sdk/tree/main/docs/compliance/olir/csf20",
           "status": 200,
-          "final_url": "https://github.com/OraclesTech/guardian-sdk/tree/main/docs/compliance/olir/csf20",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "resolved_urls": [
+            "https://raw.githubusercontent.com/OraclesTech/guardian-sdk/main/docs/compliance/olir/csf20/GuardianSDK_CSF20_OLIR_Submission_v2.xlsx"
+          ]
         },
         {
-          "kind": "NIST detail reference URL",
-          "url": "https://github.com/OraclesTech/guardian-sdk",
+          "kind": "artifact download",
+          "url": "https://raw.githubusercontent.com/OraclesTech/guardian-sdk/main/docs/compliance/olir/csf20/GuardianSDK_CSF20_OLIR_Submission_v2.xlsx",
           "status": 200,
-          "final_url": "https://github.com/OraclesTech/guardian-sdk",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://github.com/OraclesTech/guardian-sdk",
-          "status": 200,
-          "final_url": "https://github.com/OraclesTech/guardian-sdk",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "final_url": "https://raw.githubusercontent.com/OraclesTech/guardian-sdk/main/docs/compliance/olir/csf20/GuardianSDK_CSF20_OLIR_Submission_v2.xlsx",
+          "content_type": "application/octet-stream",
+          "byte_length": 23832
         }
       ]
     },
@@ -492,7 +481,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -507,28 +497,20 @@
           "mapping_comment": "<p>This OLIR uses a functional relationship mapping approach to align operational AI-driven cybersecurity controls with NIST CSF 2.0 outcomes. The public repository includes the OLIR-style mapping workbook, CSV export, standalone reference document, methodology, relationship definitions, usage guidance, citations, and submission metadata. Repository root: https://github.com/cyberoon/ai-soc-nist-csf-mapping</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://cyberoon.com/research/ai-soc-v10-to-nist-csf-20-informative-reference-mapping",
           "status": 200,
           "final_url": "https://cyberoon.com/research/ai-soc-v10-to-nist-csf-20-informative-reference-mapping",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 2093622
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://github.com/cyberoon/ai-soc-nist-csf-mapping/blob/main/docs/AI_SOC_Controls_Catalog_v1_0.pdf",
           "status": 200,
           "final_url": "https://github.com/cyberoon/ai-soc-nist-csf-mapping/blob/main/docs/AI_SOC_Controls_Catalog_v1_0.pdf",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://github.com/cyberoon/ai-soc-nist-csf-mapping/blob/main/docs/AI_SOC_Controls_Catalog_v1_0.pdf",
-          "status": 200,
-          "final_url": "https://github.com/cyberoon/ai-soc-nist-csf-mapping/blob/main/docs/AI_SOC_Controls_Catalog_v1_0.pdf",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 241624
         }
       ]
     },
@@ -553,7 +535,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -568,28 +551,12 @@
           "mapping_comment": "<p>Relationship type: Supportive. The SDOS framework operates at the dispatch and enforcement layer below model alignment, providing structural controls that support AI RMF subcategory intent without claiming equivalence. 49 subcategories across GOVERN, MAP, MEASURE, and MANAGE are mapped; subcategories outside the dispatch/enforcement scope (e.g., training, governance program organization, human-only processes) are intentionally not mapped.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://aamcyber.com/sdos/reference/v1/",
           "status": 200,
           "final_url": "https://aamcyber.com/sdos/reference/v1/",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://aamcyber.com/sdos/reference/v1/",
-          "status": 200,
-          "final_url": "https://aamcyber.com/sdos/reference/v1/",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://aamcyber.com/sdos/reference/v1/",
-          "status": 200,
-          "final_url": "https://aamcyber.com/sdos/reference/v1/",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 131955
         }
       ]
     },
@@ -610,11 +577,23 @@
       "submission_artifact_url": "https://github.com/OraclesTech/guardian-sdk",
       "authority_tier": 4,
       "authority_tier_label": "Validated third-party Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Intersects with, Set Theory: Superset",
+      "ingested": true,
+      "map_file": "maps/olir/223.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/223.json",
+        "artifact_url": "https://raw.githubusercontent.com/OraclesTech/guardian-sdk/main/docs/compliance/olir/AI_RMF/GuardianSDK_AIRMF_OLIR_Submission.xlsx",
+        "checksum": "sha256:0f90f37091e6296ecce00e0d07d97a46f9a00cc24c049487b2ccf232a5020848",
+        "byte_length": 19302,
+        "parser": "olir-xlsx",
+        "relationship_count": 19,
+        "relationship_semantics": [
+          "Intersects with",
+          "Set Theory: Superset"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -629,28 +608,20 @@
           "mapping_comment": "<p>Mapping covers Guardian SDK v2.1.0, which introduced multimodal threat detection (image, video, QR code, cross-modal attacks). Tier availability is noted in the Comments column of each mapping row (All tiers / API tiers). Relationship type (Functional/Semantic/Syntactic per IR 8278Ar1 &sect;3.2.7) is noted in Column C (Rationale) and elaborated in Column G (Comments) of the Relationships sheet. A separate CSF 2.0 OLIR submission (GuardianSDK-CSF20) has also been submitted concurrently.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "GitHub Contents API",
           "url": "https://github.com/OraclesTech/guardian-sdk/tree/main/docs/compliance/olir/AI_RMF",
           "status": 200,
-          "final_url": "https://github.com/OraclesTech/guardian-sdk/tree/main/docs/compliance/olir/AI_RMF",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "resolved_urls": [
+            "https://raw.githubusercontent.com/OraclesTech/guardian-sdk/main/docs/compliance/olir/AI_RMF/GuardianSDK_AIRMF_OLIR_Submission.xlsx"
+          ]
         },
         {
-          "kind": "NIST detail reference URL",
-          "url": "https://github.com/OraclesTech/guardian-sdk",
+          "kind": "artifact download",
+          "url": "https://raw.githubusercontent.com/OraclesTech/guardian-sdk/main/docs/compliance/olir/AI_RMF/GuardianSDK_AIRMF_OLIR_Submission.xlsx",
           "status": 200,
-          "final_url": "https://github.com/OraclesTech/guardian-sdk",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://github.com/OraclesTech/guardian-sdk",
-          "status": 200,
-          "final_url": "https://github.com/OraclesTech/guardian-sdk",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "final_url": "https://raw.githubusercontent.com/OraclesTech/guardian-sdk/main/docs/compliance/olir/AI_RMF/GuardianSDK_AIRMF_OLIR_Submission.xlsx",
+          "content_type": "application/octet-stream",
+          "byte_length": 19302
         }
       ]
     },
@@ -671,11 +642,24 @@
       "submission_artifact_url": "https://drive.google.com/file/d/1tak27m9Un8RdwSkzqBqSyXhMcp2LnVJG/view",
       "authority_tier": 4,
       "authority_tier_label": "Validated third-party Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "7, 8, 9",
+      "ingested": true,
+      "map_file": "maps/olir/221.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/221.json",
+        "artifact_url": "https://doc-0c-98-sheets.googleusercontent.com/export/54bogvaave6cua4cdnls17ksc4/n9u28u4r8s32rg71g9pa2b1m80/1786238380000/100790643046296837536/*/1HnbzkMSaUVcqj4hqaDFxTTfcyc5RyOeP?format=xlsx",
+        "checksum": "sha256:b05442d4a1ef91debc5673f3b3344ef94dc1e1381ddc33c300d0a6891aed3847",
+        "byte_length": 21218,
+        "parser": "olir-xlsx",
+        "relationship_count": 25,
+        "relationship_semantics": [
+          "7",
+          "8",
+          "9"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -690,28 +674,20 @@
           "mapping_comment": "<p>GATE complements existing governance and risk management frameworks by providing an operational execution and traceability layer. It is not intended to provide full coverage of all AI RMF functions.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "Google Drive export",
           "url": "https://docs.google.com/spreadsheets/d/1HnbzkMSaUVcqj4hqaDFxTTfcyc5RyOeP/edit?usp=sharing&ouid=100790643046296837536&rtpof=true&sd=true",
           "status": 200,
-          "final_url": "https://docs.google.com/spreadsheets/d/1HnbzkMSaUVcqj4hqaDFxTTfcyc5RyOeP/edit?usp=sharing&ouid=100790643046296837536&rtpof=true&sd=true",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": "0"
+          "resolved_urls": [
+            "https://docs.google.com/spreadsheets/d/1HnbzkMSaUVcqj4hqaDFxTTfcyc5RyOeP/export?format=xlsx"
+          ]
         },
         {
-          "kind": "NIST detail reference URL",
-          "url": "https://drive.google.com/file/d/1tak27m9Un8RdwSkzqBqSyXhMcp2LnVJG/view",
+          "kind": "artifact download",
+          "url": "https://docs.google.com/spreadsheets/d/1HnbzkMSaUVcqj4hqaDFxTTfcyc5RyOeP/export?format=xlsx",
           "status": 200,
-          "final_url": "https://drive.google.com/file/d/1tak27m9Un8RdwSkzqBqSyXhMcp2LnVJG/view",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": "79280"
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://drive.google.com/file/d/1tak27m9Un8RdwSkzqBqSyXhMcp2LnVJG/view",
-          "status": 200,
-          "final_url": "https://drive.google.com/file/d/1tak27m9Un8RdwSkzqBqSyXhMcp2LnVJG/view",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": "79454"
+          "final_url": "https://doc-0c-98-sheets.googleusercontent.com/export/54bogvaave6cua4cdnls17ksc4/n9u28u4r8s32rg71g9pa2b1m80/1786238380000/100790643046296837536/*/1HnbzkMSaUVcqj4hqaDFxTTfcyc5RyOeP?format=xlsx",
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "byte_length": 21218
         }
       ]
     },
@@ -736,7 +712,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 202; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 202; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -751,28 +728,20 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://bxaios.com/nist-alignment/",
           "status": 202,
           "final_url": "https://bxaios.com/nist-alignment/",
           "content_type": "text/html",
-          "content_length": "186"
+          "byte_length": 186
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://www.amazon.com/dp/B0FWBSDMVR",
           "status": 200,
           "final_url": "https://www.amazon.com/dp/B0FWBSDMVR",
-          "content_type": "text/html",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://www.amazon.com/dp/B0FWBSDMVR",
-          "status": 200,
-          "final_url": "https://www.amazon.com/dp/B0FWBSDMVR",
-          "content_type": "text/html",
-          "content_length": null
+          "content_type": "text/html;charset=UTF-8",
+          "byte_length": 1499811
         }
       ]
     },
@@ -797,7 +766,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 202; NIST detail reference URL 405; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 202; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -812,28 +782,20 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://bxaios.com/nist-alignment/",
           "status": 202,
           "final_url": "https://bxaios.com/nist-alignment/",
           "content_type": "text/html",
-          "content_length": "186"
+          "byte_length": 186
         },
         {
-          "kind": "NIST detail reference URL",
-          "url": "https://www.amazon.com/dp/B0FWBSDMVR",
-          "status": 405,
-          "final_url": "https://www.amazon.com/dp/B0FWBSDMVR",
-          "content_type": "text/html;charset=UTF-8",
-          "content_length": "0"
-        },
-        {
-          "kind": "catalog listed reference URL",
+          "kind": "artifact download",
           "url": "https://www.amazon.com/dp/B0FWBSDMVR",
           "status": 200,
           "final_url": "https://www.amazon.com/dp/B0FWBSDMVR",
-          "content_type": "text/html",
-          "content_length": null
+          "content_type": "text/html;charset=UTF-8",
+          "byte_length": 1494929
         }
       ]
     },
@@ -858,7 +820,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 404; catalog listed reference URL 404",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -873,28 +836,20 @@
           "mapping_comment": "<p>This OLIR uses a supportive relationship mapping style. SP 800-81r3 is the first revision of the Secure DNS Deployment Guide since 2013 and introduces guidance on protective DNS, encrypted DNS (DoT/DoH), DNS support for zero trust architecture, and OT/IoT DNS considerations. The mapping covers recommendations across all three pillars of the document: Protective DNS, Protecting the DNS Protocol, and Protecting DNS Services and Infrastructure.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://www.infoblox.com/solutions/compliance/",
           "status": 200,
           "final_url": "https://www.infoblox.com/solutions/compliance/",
           "content_type": "text/html; charset=UTF-8",
-          "content_length": "86685"
+          "byte_length": 427632
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-81r3.pdf",
-          "status": 404,
+          "status": 200,
           "final_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-81r3.pdf",
-          "content_type": "text/html",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-81r3.pdf",
-          "status": 404,
-          "final_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-81r3.pdf",
-          "content_type": "text/html",
-          "content_length": null
+          "content_type": "application/pdf",
+          "byte_length": 1057246
         }
       ]
     },
@@ -915,11 +870,23 @@
       "submission_artifact_url": "https://genai.owasp.org",
       "authority_tier": 7,
       "authority_tier_label": "Community candidate Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Set Theory: Superset, intersects with",
+      "ingested": true,
+      "map_file": "maps/olir/198.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/198.json",
+        "artifact_url": "https://raw.githubusercontent.com/Aviral2642/nist-olir-owasp-llm-top10-csf2/main/NIST_CSF2.0_to_OWASP_LLM_Top10_v2.0_OLIR.xlsx",
+        "checksum": "sha256:bb9aba0749a3bbcec9e2f6ac46c3b4ee6d23f2e1d84e61c17ae6ffb148a83309",
+        "byte_length": 35913,
+        "parser": "olir-xlsx",
+        "relationship_count": 169,
+        "relationship_semantics": [
+          "Set Theory: Superset",
+          "intersects with"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -934,28 +901,20 @@
           "mapping_comment": "<p>To the developer's knowledge, this is the first OLIR submission mapping an AI security framework to CSF 2.0.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "GitHub Contents API",
           "url": "https://github.com/Aviral2642/nist-olir-owasp-llm-top10-csf2/raw/main/NIST_CSF2.0_to_OWASP_LLM_Top10_v2.0_OLIR.xlsx",
+          "status": 200,
+          "resolved_urls": [
+            "https://raw.githubusercontent.com/Aviral2642/nist-olir-owasp-llm-top10-csf2/main/NIST_CSF2.0_to_OWASP_LLM_Top10_v2.0_OLIR.xlsx"
+          ]
+        },
+        {
+          "kind": "artifact download",
+          "url": "https://raw.githubusercontent.com/Aviral2642/nist-olir-owasp-llm-top10-csf2/main/NIST_CSF2.0_to_OWASP_LLM_Top10_v2.0_OLIR.xlsx",
           "status": 200,
           "final_url": "https://raw.githubusercontent.com/Aviral2642/nist-olir-owasp-llm-top10-csf2/main/NIST_CSF2.0_to_OWASP_LLM_Top10_v2.0_OLIR.xlsx",
           "content_type": "application/octet-stream",
-          "content_length": "35913"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://genai.owasp.org",
-          "status": 200,
-          "final_url": "https://genai.owasp.org/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://genai.owasp.org",
-          "status": 200,
-          "final_url": "https://genai.owasp.org/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": null
+          "byte_length": 35913
         }
       ]
     },
@@ -976,11 +935,22 @@
       "submission_artifact_url": "https://p-sscrm.github.io/",
       "authority_tier": 4,
       "authority_tier_label": "Validated third-party Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/194.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/194.json",
+        "artifact_url": "https://p-sscrm.github.io/assets/data/P-SSCRM_to_SSDF_CROSSWALK_20260219.xlsx",
+        "checksum": "sha256:6cf6178d0e19c782c35bcf03ffae8cc41a06362a8c9ae5aef15ae94b473db898",
+        "byte_length": 16571,
+        "parser": "olir-xlsx",
+        "relationship_count": 43,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -995,28 +965,12 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://p-sscrm.github.io/assets/data/P-SSCRM_to_SSDF_CROSSWALK_20260219.xlsx",
           "status": 200,
           "final_url": "https://p-sscrm.github.io/assets/data/P-SSCRM_to_SSDF_CROSSWALK_20260219.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "16571"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://p-sscrm.github.io/",
-          "status": 200,
-          "final_url": "https://p-sscrm.github.io/",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": "3683"
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://p-sscrm.github.io/",
-          "status": 200,
-          "final_url": "https://p-sscrm.github.io/",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": "3683"
+          "byte_length": 16571
         }
       ]
     },
@@ -1041,7 +995,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1056,28 +1011,20 @@
           "mapping_comment": "<p>This reference introduces the concept of Structural Nullity and Fail-Closed mechanisms for high-integrity AI systems.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://doi.org/10.5281/zenodo.18498447",
           "status": 200,
           "final_url": "https://zenodo.org/records/18498447",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 94597
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://zenodo.org/records/18363217",
           "status": 200,
           "final_url": "https://zenodo.org/records/18363217",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://zenodo.org/records/18363217",
-          "status": 200,
-          "final_url": "https://zenodo.org/records/18363217",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 208784
         }
       ]
     },
@@ -1102,7 +1049,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1117,28 +1065,20 @@
           "mapping_comment": "<p>This mapping illustrates the direct relationship between the control sets, highlighting that NIST SP 800-171 was developed from the NIST SP 800-53 controls as a subset focused on the protection of confidentiality.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "http://43828014.hs-sites.com/171r2-to-53r5-mapping-download",
           "status": 200,
           "final_url": "https://43828014.hs-sites.com/171r2-to-53r5-mapping-download",
           "content_type": "text/html; charset=UTF-8",
-          "content_length": null
+          "byte_length": 37697
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
           "status": 200,
           "final_url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
-          "status": 200,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 56888
         }
       ]
     },
@@ -1159,11 +1099,22 @@
       "submission_artifact_url": "https://www.pcisecuritystandards.org/document_library/",
       "authority_tier": 7,
       "authority_tier_label": "Community candidate Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Supportive",
+      "ingested": true,
+      "map_file": "maps/olir/183.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/183.json",
+        "artifact_url": "https://raw.githubusercontent.com/Glimpz1/grc-mappings/main/olir/csf-2.0_pci-4.0.1_supportive/csf-v2_pci-dss_v4.0.1_olir-supportive.xlsx",
+        "checksum": "sha256:ffb436f3d36c6f311c39dbbe65793cacca99d499ceb8ff66020d08b7f14e38cf",
+        "byte_length": 67547,
+        "parser": "olir-xlsx",
+        "relationship_count": 551,
+        "relationship_semantics": [
+          "Supportive"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1178,28 +1129,20 @@
           "mapping_comment": "<p>Mappings are performed at the level of CSF Subcategory and PCI DSS Defined Approach Requirement.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "GitHub Contents API",
           "url": "https://github.com/Glimpz1/grc-mappings/tree/main/olir/csf-2.0_pci-4.0.1_supportive",
           "status": 200,
-          "final_url": "https://github.com/Glimpz1/grc-mappings/tree/main/olir/csf-2.0_pci-4.0.1_supportive",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "resolved_urls": [
+            "https://raw.githubusercontent.com/Glimpz1/grc-mappings/main/olir/csf-2.0_pci-4.0.1_supportive/csf-v2_pci-dss_v4.0.1_olir-supportive.xlsx"
+          ]
         },
         {
-          "kind": "NIST detail reference URL",
-          "url": "https://www.pcisecuritystandards.org/document_library/",
+          "kind": "artifact download",
+          "url": "https://raw.githubusercontent.com/Glimpz1/grc-mappings/main/olir/csf-2.0_pci-4.0.1_supportive/csf-v2_pci-dss_v4.0.1_olir-supportive.xlsx",
           "status": 200,
-          "final_url": "https://www.pcisecuritystandards.org/document_library/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://www.pcisecuritystandards.org/document_library/",
-          "status": 200,
-          "final_url": "https://www.pcisecuritystandards.org/document_library/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": null
+          "final_url": "https://raw.githubusercontent.com/Glimpz1/grc-mappings/main/olir/csf-2.0_pci-4.0.1_supportive/csf-v2_pci-dss_v4.0.1_olir-supportive.xlsx",
+          "content_type": "application/octet-stream",
+          "byte_length": 67547
         }
       ]
     },
@@ -1224,7 +1167,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1239,28 +1183,20 @@
           "mapping_comment": "<p>For other CIS Controls mappings see https://www.cisecurity.org/controls/cis-controls-navigator<br>If interested in helping with CIS Controls Mappings or submitting corrections see https://workbench.cisecurity.org/communities/94 or email controlsinfo@cisecurity.org</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://www.cisecurity.org/insights/white-papers/cis-controls-v8-1-mapping-to-nist-csf-2-0",
           "status": 200,
           "final_url": "https://www.cisecurity.org/insights/white-papers/cis-controls-v8-1-mapping-to-nist-csf-2-0",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 115794
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://www.cisecurity.org/controls/v8-1",
           "status": 200,
           "final_url": "https://www.cisecurity.org/controls/v8-1",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://www.cisecurity.org/controls/v8-1",
-          "status": 200,
-          "final_url": "https://www.cisecurity.org/controls/v8-1",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 262888
         }
       ]
     },
@@ -1285,6 +1221,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "OLIR status is \"Archive\", not Final — held out of the published graph pending NIST finalization",
       "retrieval_attempts": []
     },
@@ -1307,8 +1244,19 @@
       "authority_tier_label": "NIST owner-authority Final",
       "mapping_model": "Concept Crosswalk",
       "ingested": true,
-      "map_file": "maps/800-53-to-csf.json",
-      "artifact_id": "artifact-nist-olir-csf2-to-sp800-53",
+      "map_file": "maps/olir/186.json",
+      "artifact_id": null,
+      "artifact": {
+        "map_file": "maps/olir/186.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
+        "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
+        "byte_length": 38766,
+        "parser": "olir-xlsx",
+        "relationship_count": 746,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
       "quarantine_reason": null,
       "retrieval_attempts": [
         {
@@ -1324,28 +1272,12 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "38766"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
-          "status": 200,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
-          "status": 200,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 38766
         }
       ]
     },
@@ -1366,11 +1298,22 @@
       "submission_artifact_url": "https://www.nist.gov/itl/applied-cybersecurity/nice/nice-framework-resource-center/nice-framework-current-versions",
       "authority_tier": 1,
       "authority_tier_label": "NIST owner-authority Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/173.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/173.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2-0-NFv2-0-0_Concept_Crosswalk_Sep10-2025.xlsx",
+        "checksum": "sha256:05eef235778608cc3f3b0e8fcf5d6de51027752f5404c6ded6e248f7447f6a3c",
+        "byte_length": 37056,
+        "parser": "olir-xlsx",
+        "relationship_count": 850,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1385,28 +1328,12 @@
           "mapping_comment": "<p>This crosswalk reflects updates made to the NICE Framework following the publication of v2.0.0 Components of March 2025. Some alignments have been revised due to internal review and to incorporate a new Work Role, OT Cybersecurity Engineering (DD-WRL-009).&nbsp;</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2-0-NFv2-0-0_Concept_Crosswalk_Sep10-2025.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2-0-NFv2-0-0_Concept_Crosswalk_Sep10-2025.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "37056"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://www.nist.gov/itl/applied-cybersecurity/nice/nice-framework-resource-center/nice-framework-current-versions",
-          "status": 200,
-          "final_url": "https://www.nist.gov/itl/applied-cybersecurity/nice/nice-framework-resource-center/nice-framework-current-versions",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://www.nist.gov/itl/applied-cybersecurity/nice/nice-framework-resource-center/nice-framework-current-versions",
-          "status": 200,
-          "final_url": "https://www.nist.gov/itl/applied-cybersecurity/nice/nice-framework-resource-center/nice-framework-current-versions",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": null
+          "byte_length": 37056
         }
       ]
     },
@@ -1427,11 +1354,22 @@
       "submission_artifact_url": "https://doi.org/10.6028/NIST.SP.800-82r3",
       "authority_tier": 1,
       "authority_tier_label": "NIST owner-authority Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/174.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 404; catalog listed reference URL 404",
+      "artifact": {
+        "map_file": "maps/olir/174.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP_800-82r3OLIR.xlsx",
+        "checksum": "sha256:49119c1f3c859199dd78912ad65f188f79ef1b066e27a95355afb9b3519f83ee",
+        "byte_length": 144345,
+        "parser": "olir-xlsx",
+        "relationship_count": 49,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1446,28 +1384,12 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP_800-82r3OLIR.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP_800-82r3OLIR.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "144345"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://doi.org/10.6028/NIST.SP.800-82r3",
-          "status": 404,
-          "final_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-82r3.pdf",
-          "content_type": "text/html",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://doi.org/10.6028/NIST.SP.800-82r3",
-          "status": 404,
-          "final_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-82r3.pdf",
-          "content_type": "text/html",
-          "content_length": null
+          "byte_length": 144345
         }
       ]
     },
@@ -1492,7 +1414,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1507,28 +1430,20 @@
           "mapping_comment": "<p>We developed this mapping in response to industry's request for the government to clarify how the Code fits into the existing cyber standards/frameworks landscape.&nbsp;</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://www.gov.uk/government/publications/cyber-governance-mapping/mapping-cyber-governance-code-to-nist-cyber-security-framework",
           "status": 200,
           "final_url": "https://www.gov.uk/government/publications/cyber-governance-mapping/mapping-cyber-governance-code-to-nist-cyber-security-framework",
           "content_type": "text/html; charset=utf-8",
-          "content_length": "13687"
+          "byte_length": 88408
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://www.gov.uk/government/publications/cyber-governance-code-of-practice",
           "status": 200,
           "final_url": "https://www.gov.uk/government/publications/cyber-governance-code-of-practice",
           "content_type": "text/html; charset=utf-8",
-          "content_length": "14156"
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://www.gov.uk/government/publications/cyber-governance-code-of-practice",
-          "status": 200,
-          "final_url": "https://www.gov.uk/government/publications/cyber-governance-code-of-practice",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": "14156"
+          "byte_length": 84619
         }
       ]
     },
@@ -1553,7 +1468,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 403; catalog listed reference URL 403",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1568,28 +1484,20 @@
           "mapping_comment": "<p>This mapping illustrates the direct relationship between CMMC and NIST SP 800-171, highlighting that CMMC was developed from the 800-171 requirements.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "http://43828014.hs-sites.com/171r2-cmmc-mapping",
           "status": 200,
           "final_url": "https://43828014.hs-sites.com/171r2-cmmc-mapping",
           "content_type": "text/html; charset=UTF-8",
-          "content_length": null
+          "byte_length": 37801
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://dodcio.defense.gov/Portals/0/Documents/CMMC/ModelOverviewv2.pdf",
-          "status": 403,
+          "status": 200,
           "final_url": "https://dodcio.defense.gov/Portals/0/Documents/CMMC/ModelOverviewv2.pdf",
-          "content_type": "text/html",
-          "content_length": "436"
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://dodcio.defense.gov/Portals/0/Documents/CMMC/ModelOverviewv2.pdf",
-          "status": 403,
-          "final_url": "https://dodcio.defense.gov/Portals/0/Documents/CMMC/ModelOverviewv2.pdf",
-          "content_type": "text/html",
-          "content_length": "436"
+          "content_type": "application/pdf",
+          "byte_length": 977491
         }
       ]
     },
@@ -1614,7 +1522,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 403; catalog listed reference URL 403",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1629,28 +1538,20 @@
           "mapping_comment": "<p>This mapping illustrates the direct relationship between CMMC and NIST SP 800-171, highlighting that CMMC was developed from the 800-171 requirements.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "http://43828014.hs-sites.com/171r2-cmmc-mapping",
           "status": 200,
           "final_url": "https://43828014.hs-sites.com/171r2-cmmc-mapping",
           "content_type": "text/html; charset=UTF-8",
-          "content_length": null
+          "byte_length": 37801
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://dodcio.defense.gov/Portals/0/Documents/CMMC/ModelOverviewv2.pdf",
-          "status": 403,
+          "status": 200,
           "final_url": "https://dodcio.defense.gov/Portals/0/Documents/CMMC/ModelOverviewv2.pdf",
-          "content_type": "text/html",
-          "content_length": "436"
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://dodcio.defense.gov/Portals/0/Documents/CMMC/ModelOverviewv2.pdf",
-          "status": 403,
-          "final_url": "https://dodcio.defense.gov/Portals/0/Documents/CMMC/ModelOverviewv2.pdf",
-          "content_type": "text/html",
-          "content_length": "436"
+          "content_type": "application/pdf",
+          "byte_length": 977491
         }
       ]
     },
@@ -1673,8 +1574,19 @@
       "authority_tier_label": "NIST owner-authority Final",
       "mapping_model": "Concept Crosswalk",
       "ingested": true,
-      "map_file": "maps/800-171-to-csf.json",
-      "artifact_id": "artifact-nist-olir-csf2-to-sp800-171",
+      "map_file": "maps/olir/179.json",
+      "artifact_id": null,
+      "artifact": {
+        "map_file": "maps/olir/179.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2.0_Concept_Crosswalk_SP171r3_OLIR.xlsx",
+        "checksum": "sha256:08e50ecfe201417d1b7e257d5b68ee8a69686c8a31d1521c722892732809f0a0",
+        "byte_length": 28991,
+        "parser": "olir-xlsx",
+        "relationship_count": 313,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
       "quarantine_reason": null,
       "retrieval_attempts": [
         {
@@ -1690,28 +1602,12 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2.0_Concept_Crosswalk_SP171r3_OLIR.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2.0_Concept_Crosswalk_SP171r3_OLIR.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "28991"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://csrc.nist.gov/pubs/sp/800/171/r3/final",
-          "status": 200,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/171/r3/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://csrc.nist.gov/pubs/sp/800/171/r3/final",
-          "status": 200,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/171/r3/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 28991
         }
       ]
     },
@@ -1736,7 +1632,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1751,28 +1648,20 @@
           "mapping_comment": "<p>The CRI Profile is licensed under the Creative Commons License by the Cyber Risk Institute (CRI). The CRI Profile is an extension of the NIST CSF developed by and for the financial services sector. The CRI Profile extends the NIST CSF's scope by targeting more specific coverage of enterprise technology/ICT, third-party risk management, and business continuity/resilience. The CRI Profile also extends the NIST CSF by including Diagnostic Statements that provide control objective detail below the subcategory level.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://cyberriskinstitute.org/the-profile/",
           "status": 200,
           "final_url": "https://cyberriskinstitute.org/the-profile/",
           "content_type": "text/html; charset=UTF-8",
-          "content_length": "20891"
+          "byte_length": 83131
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://CyberRiskInstitute.org/The-Profile/",
           "status": 200,
           "final_url": "https://cyberriskinstitute.org/The-Profile/",
           "content_type": "text/html; charset=UTF-8",
-          "content_length": "20891"
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://CyberRiskInstitute.org/The-Profile/",
-          "status": 200,
-          "final_url": "https://cyberriskinstitute.org/The-Profile/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": "20891"
+          "byte_length": 83131
         }
       ]
     },
@@ -1797,7 +1686,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 403; catalog listed reference URL 403",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 403",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1812,28 +1702,20 @@
           "mapping_comment": "<p>The intent of this OLIR is to initiate the formalization of the relationships between ISO/IEC 27001:2022 and the NIST Cybersecurity Framework (CSF) version 2.0. This marks a foundational step in aligning the updated international information security standard with the latest version of the CSF. The objective is to establish a baseline mapping that reflects both frameworks&rsquo; complementary strengths, while recognising that refinements and community input will be necessary over time. This OLIR aims to act as a collaborative resource for cybersecurity and risk management professionals to explore, debate, and better understand how ISO/IEC 27001:2022 and CSF v2.0 can be used together to strengthen organizational security programs.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://www.razil.io/post/nist-csf-2-0-to-iso-27001-2022-annexure-a-mapping",
           "status": 200,
           "final_url": "https://www.razil.io/post/nist-csf-2-0-to-iso-27001-2022-annexure-a-mapping",
           "content_type": "text/html;charset=utf-8",
-          "content_length": "19396"
+          "byte_length": 87204
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://www.iso.org/obp/ui/#iso:std:iso-iec:27001:ed-3:v1:en",
           "status": 403,
           "final_url": "https://www.iso.org/obp/ui/",
           "content_type": "text/html; charset=UTF-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://www.iso.org/obp/ui/#iso:std:iso-iec:27001:ed-3:v1:en",
-          "status": 403,
-          "final_url": "https://www.iso.org/obp/ui/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": null
+          "byte_length": 5486
         }
       ]
     },
@@ -1854,11 +1736,25 @@
       "submission_artifact_url": "https://securecontrolsframework.com/scf-download/",
       "authority_tier": 4,
       "authority_tier_label": "Validated third-party Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Set Theory: Equal, Set Theory: Subset, intersects with, not related to",
+      "ingested": true,
+      "map_file": "maps/olir/152.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/152.json",
+        "artifact_url": "https://content.securecontrolsframework.com/olir/scf-olir-strm-nist-800-171-r3.xlsx",
+        "checksum": "sha256:f72e928c9eea6a9f53caae758fcae80c6f8aad728c36d9f0a9a0c3cbd57d82f7",
+        "byte_length": 97586,
+        "parser": "olir-xlsx",
+        "relationship_count": 1014,
+        "relationship_semantics": [
+          "Set Theory: Equal",
+          "Set Theory: Subset",
+          "intersects with",
+          "not related to"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1873,28 +1769,12 @@
           "mapping_comment": "<p>The SCF is a metaframework that contains commonly-used cybersecurity and privacy laws, regulations and frameworks to assist an organization with identifying and conveying mandatory and discretionary controls with the goal of becoming both secure and compliant.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://securecontrolsframework.com/content/olir/scf-olir-strm-nist-800-171-r3.xlsx",
           "status": 200,
           "final_url": "https://content.securecontrolsframework.com/olir/scf-olir-strm-nist-800-171-r3.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "97586"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://securecontrolsframework.com/scf-download/",
-          "status": 200,
-          "final_url": "https://securecontrolsframework.com/free-content/scf-download",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://securecontrolsframework.com/scf-download/",
-          "status": 200,
-          "final_url": "https://securecontrolsframework.com/free-content/scf-download",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 97586
         }
       ]
     },
@@ -1915,11 +1795,25 @@
       "submission_artifact_url": "https://securecontrolsframework.com/scf-download/",
       "authority_tier": 4,
       "authority_tier_label": "Validated third-party Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Set Theory: Equal, Set Theory: Subset, Set Theory: Superset, intersects with",
+      "ingested": true,
+      "map_file": "maps/olir/153.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/153.json",
+        "artifact_url": "https://content.securecontrolsframework.com/olir/scf-olir-strm-nist-csf-2-0.xlsx",
+        "checksum": "sha256:e991ce8c73098fb317c3b0bf88da738ab4b0a8b012329ca76eb260323572e9ca",
+        "byte_length": 67606,
+        "parser": "olir-xlsx",
+        "relationship_count": 611,
+        "relationship_semantics": [
+          "Set Theory: Equal",
+          "Set Theory: Subset",
+          "Set Theory: Superset",
+          "intersects with"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -1934,28 +1828,12 @@
           "mapping_comment": "<p>The SCF is a metaframework that contains commonly-used cybersecurity and privacy laws, regulations and frameworks to assist an organization with identifying and conveying mandatory and discretionary controls with the goal of becoming both secure and compliant.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://securecontrolsframework.com/content/olir/scf-olir-strm-nist-csf-2-0.xlsx",
           "status": 200,
           "final_url": "https://content.securecontrolsframework.com/olir/scf-olir-strm-nist-csf-2-0.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "67606"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://securecontrolsframework.com/scf-download/",
-          "status": 200,
-          "final_url": "https://securecontrolsframework.com/free-content/scf-download",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://securecontrolsframework.com/scf-download/",
-          "status": 200,
-          "final_url": "https://securecontrolsframework.com/free-content/scf-download",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 67606
         }
       ]
     },
@@ -1980,6 +1858,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Profile of the IoT Core Baseline for Consumer IoT Products\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -2000,11 +1879,22 @@
       "submission_artifact_url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
       "authority_tier": 1,
       "authority_tier_label": "NIST owner-authority Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/149.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/149.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-37r2-Cybersecurity_Framework_v2-0_Concept_Crosswalk.xlsx",
+        "checksum": "sha256:065547e1b58de527ea06a28db205f9b64e015244ab257bd97e23a306355c633d",
+        "byte_length": 27256,
+        "parser": "olir-xlsx",
+        "relationship_count": 217,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2019,28 +1909,12 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-37r2-Cybersecurity_Framework_v2-0_Concept_Crosswalk.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-37r2-Cybersecurity_Framework_v2-0_Concept_Crosswalk.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "27256"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
-          "status": 200,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
-          "status": 200,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 27256
         }
       ]
     },
@@ -2065,6 +1939,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Information and Communications Technology (ICT) Risk Outcomes\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -2089,6 +1964,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -2109,11 +1985,25 @@
       "submission_artifact_url": "https://securecontrolsframework.com/scf-download/",
       "authority_tier": 4,
       "authority_tier_label": "Validated third-party Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Intersects With, Set Theory: Equal, Set Theory: Subset, not related to",
+      "ingested": true,
+      "map_file": "maps/olir/144.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/144.json",
+        "artifact_url": "https://content.securecontrolsframework.com/olir/scf-olir-strm-nist-800-53-r5-1-1.xlsx",
+        "checksum": "sha256:ee2f064bbcdf7a2a5dc2bf2de6dcdb9360d9b11c35da55ced6fb0a491717026c",
+        "byte_length": 216482,
+        "parser": "olir-xlsx",
+        "relationship_count": 1501,
+        "relationship_semantics": [
+          "Intersects With",
+          "Set Theory: Equal",
+          "Set Theory: Subset",
+          "not related to"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2128,28 +2018,12 @@
           "mapping_comment": "<p>The SCF is a metaframework that contains commonly-used cybersecurity and privacy laws, regulations and frameworks to assist an organization with identifying and conveying mandatory and discretionary controls with the goal of becoming both secure and compliant.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://securecontrolsframework.com/content/olir/scf-olir-strm-nist-800-53-r5-1-1.xlsx",
           "status": 200,
           "final_url": "https://content.securecontrolsframework.com/olir/scf-olir-strm-nist-800-53-r5-1-1.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "216482"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://securecontrolsframework.com/scf-download/",
-          "status": 200,
-          "final_url": "https://securecontrolsframework.com/free-content/scf-download",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://securecontrolsframework.com/scf-download/",
-          "status": 200,
-          "final_url": "https://securecontrolsframework.com/free-content/scf-download",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 216482
         }
       ]
     },
@@ -2170,11 +2044,24 @@
       "submission_artifact_url": "https://securecontrolsframework.com/scf-download/",
       "authority_tier": 4,
       "authority_tier_label": "Validated third-party Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Set Theory: Equal, Set Theory: Subset, intersects with",
+      "ingested": true,
+      "map_file": "maps/olir/145.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/145.json",
+        "artifact_url": "https://content.securecontrolsframework.com/olir/scf-olir-strm-nist-800-171-r2.xlsx",
+        "checksum": "sha256:d9284810250516608b64803d30df4f82a84e391a8f6b4b0bd22d51e109c5dd8a",
+        "byte_length": 43833,
+        "parser": "olir-xlsx",
+        "relationship_count": 181,
+        "relationship_semantics": [
+          "Set Theory: Equal",
+          "Set Theory: Subset",
+          "intersects with"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2189,28 +2076,12 @@
           "mapping_comment": "<p>The SCF is a metaframework that contains commonly-used cybersecurity and privacy laws, regulations and frameworks to assist an organization with identifying and conveying mandatory and discretionary controls with the goal of becoming both secure and compliant.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://securecontrolsframework.com/content/olir/scf-olir-strm-nist-800-171-r2.xlsx",
           "status": 200,
           "final_url": "https://content.securecontrolsframework.com/olir/scf-olir-strm-nist-800-171-r2.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "43833"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://securecontrolsframework.com/scf-download/",
-          "status": 200,
-          "final_url": "https://securecontrolsframework.com/free-content/scf-download",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://securecontrolsframework.com/scf-download/",
-          "status": 200,
-          "final_url": "https://securecontrolsframework.com/free-content/scf-download",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 43833
         }
       ]
     },
@@ -2235,7 +2106,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; Google Drive export 200; artifact download 401; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2250,28 +2122,28 @@
           "mapping_comment": "<p>Mapping activity was conducted jointly by the CSA's CCM WG and NIST experts, and involved the mapping of the full stack of 197 controls of the CCM v4.0.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "Google Drive export",
           "url": "https://docs.google.com/spreadsheets/d/1UrlVUnmAvaaoddMntklZzHZhemLqn7l8/edit?gid=1513806566#gid=1513806566",
           "status": 200,
-          "final_url": "https://docs.google.com/spreadsheets/d/1UrlVUnmAvaaoddMntklZzHZhemLqn7l8/edit?gid=1513806566",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": "280977"
+          "resolved_urls": [
+            "https://docs.google.com/spreadsheets/d/1UrlVUnmAvaaoddMntklZzHZhemLqn7l8/export?format=xlsx"
+          ]
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
+          "url": "https://docs.google.com/spreadsheets/d/1UrlVUnmAvaaoddMntklZzHZhemLqn7l8/export?format=xlsx",
+          "status": 401,
+          "final_url": "https://docs.google.com/spreadsheets/d/1UrlVUnmAvaaoddMntklZzHZhemLqn7l8/export?format=xlsx",
+          "content_type": "text/html; charset=utf-8",
+          "byte_length": 8949
+        },
+        {
+          "kind": "artifact download",
           "url": "https://cloudsecurityalliance.org/research/cloud-controls-matrix",
           "status": 200,
           "final_url": "https://cloudsecurityalliance.org/research/cloud-controls-matrix",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://cloudsecurityalliance.org/research/cloud-controls-matrix",
-          "status": 200,
-          "final_url": "https://cloudsecurityalliance.org/research/cloud-controls-matrix",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 82708
         }
       ]
     },
@@ -2296,6 +2168,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -2320,6 +2193,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -2344,6 +2218,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -2364,11 +2239,22 @@
       "submission_artifact_url": "https://csrc.nist.gov/publications/detail/sp/800-171/rev-2/final",
       "authority_tier": 1,
       "authority_tier_label": "NIST owner-authority Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/138.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/138.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP_800_171_Rev2_to_SP_800_171_Rev3_CROSSWALK.xlsx",
+        "checksum": "sha256:56b537d0be238b928e6c309a6a7bb40472a5289713a5401627c81722db1c14da",
+        "byte_length": 19720,
+        "parser": "olir-xlsx",
+        "relationship_count": 78,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2383,28 +2269,12 @@
           "mapping_comment": null
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP_800_171_Rev2_to_SP_800_171_Rev3_CROSSWALK.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP_800_171_Rev2_to_SP_800_171_Rev3_CROSSWALK.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "19720"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/sp/800-171/rev-2/final",
-          "status": 200,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/171/r2/upd1/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/sp/800-171/rev-2/final",
-          "status": 200,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/171/r2/upd1/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 19720
         }
       ]
     },
@@ -2429,7 +2299,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 404; catalog listed reference URL 404",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2444,28 +2315,20 @@
           "mapping_comment": null
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://workforce-builder.herokuapp.com/tools/olirs",
           "status": 200,
           "final_url": "https://workforce-builder.herokuapp.com/tools/olirs",
           "content_type": "text/html; charset=utf-8",
-          "content_length": "5923"
+          "byte_length": 5923
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/publications/detail/sp/800-181/final",
-          "status": 404,
-          "final_url": "https://csrc.nist.gov/publications/detail/sp/800-181/final",
+          "status": 200,
+          "final_url": "https://csrc.nist.gov/pubs/sp/800/181/final",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/sp/800-181/final",
-          "status": 404,
-          "final_url": "https://csrc.nist.gov/publications/detail/sp/800-181/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 46272
         }
       ]
     },
@@ -2490,7 +2353,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 404; catalog listed reference URL 404",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2505,28 +2369,20 @@
           "mapping_comment": null
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://workforce-builder.herokuapp.com/tools/olirs",
           "status": 200,
           "final_url": "https://workforce-builder.herokuapp.com/tools/olirs",
           "content_type": "text/html; charset=utf-8",
-          "content_length": "5923"
+          "byte_length": 5923
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/publications/detail/white-paper/2018/04/16/cybersecurity-framework-v11/final",
-          "status": 404,
+          "status": 200,
           "final_url": "https://csrc.nist.gov/pubs/cswp/6/cybersecurity-framework-v11/final",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/white-paper/2018/04/16/cybersecurity-framework-v11/final",
-          "status": 404,
-          "final_url": "https://csrc.nist.gov/pubs/cswp/6/cybersecurity-framework-v11/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 49252
         }
       ]
     },
@@ -2551,7 +2407,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2566,28 +2423,12 @@
           "mapping_comment": "<p>The CRI Profile is an extension of the NIST CSF developed by and for the financial services sector. The CRI Profile extends the NIST CSF's scope by targeting more specific coverage of enterprise technology/ICT, third-party risk management, and business continuity/resilience. The CRI Profile also extends the NIST CSF by including Diagnostic Statements that provide control objective detail below the subcategory level.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://CyberRiskInstitute.org/The-Profile/",
           "status": 200,
           "final_url": "https://cyberriskinstitute.org/The-Profile/",
           "content_type": "text/html; charset=UTF-8",
-          "content_length": "20891"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://CyberRiskInstitute.org/The-Profile/",
-          "status": 200,
-          "final_url": "https://cyberriskinstitute.org/The-Profile/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": "20891"
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://CyberRiskInstitute.org/The-Profile/",
-          "status": 200,
-          "final_url": "https://cyberriskinstitute.org/The-Profile/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": "20891"
+          "byte_length": 83131
         }
       ]
     },
@@ -2612,7 +2453,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2627,28 +2469,20 @@
           "mapping_comment": "<p>For other CIS Controls mappings see https://www.cisecurity.org/controls/cis-controls-navigator<br>If interested in helping with CIS Controls Mappings or submitting corrections see https://workbench.cisecurity.org/communities/94 or email controlsinfo@cisecurity.org</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://www.cisecurity.org/controls",
           "status": 200,
           "final_url": "https://www.cisecurity.org/controls",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 276022
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://learn.cisecurity.org/cis-controls-download",
           "status": 200,
           "final_url": "https://learn.cisecurity.org/cis-controls-download",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://learn.cisecurity.org/cis-controls-download",
-          "status": 200,
-          "final_url": "https://learn.cisecurity.org/cis-controls-download",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 61082
         }
       ]
     },
@@ -2669,11 +2503,22 @@
       "submission_artifact_url": "https://csrc.nist.gov/pubs/sp/800/221/a/final",
       "authority_tier": 1,
       "authority_tier_label": "NIST owner-authority Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/118.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 404; catalog listed reference URL 404",
+      "artifact": {
+        "map_file": "maps/olir/118.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/221A_to_CSF_2_0_0_CROSSWALK%2020240224.xlsx",
+        "checksum": "sha256:ed5a7f8e99d9296eb0298e6ef63d48b3373378caee7a85cc3313a0885b66ed04",
+        "byte_length": 45524,
+        "parser": "olir-xlsx",
+        "relationship_count": 84,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2688,28 +2533,12 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/221A_to_CSF_2_0_0_CROSSWALK%2020240224.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/221A_to_CSF_2_0_0_CROSSWALK%2020240224.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "45524"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://csrc.nist.gov/pubs/sp/800/221/a/final",
-          "status": 404,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/221/a/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://csrc.nist.gov/pubs/sp/800/221/a/final",
-          "status": 404,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/221/a/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 45524
         }
       ]
     },
@@ -2730,11 +2559,22 @@
       "submission_artifact_url": "https://csrc.nist.gov/publications/detail/white-paper/2018/04/16/cybersecurity-framework-v11/final",
       "authority_tier": 1,
       "authority_tier_label": "NIST owner-authority Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/119.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 404; catalog listed reference URL 404",
+      "artifact": {
+        "map_file": "maps/olir/119.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1-1_to_CSFv2-0_CROSSWALK_20240326.xlsx",
+        "checksum": "sha256:232952c3c2429a8a97914c00f7ae81d4d995ab36bddbe37faf4fcb1074057342",
+        "byte_length": 26404,
+        "parser": "olir-xlsx",
+        "relationship_count": 185,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2749,28 +2589,12 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1-1_to_CSFv2-0_CROSSWALK_20240326.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1-1_to_CSFv2-0_CROSSWALK_20240326.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "26404"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/white-paper/2018/04/16/cybersecurity-framework-v11/final",
-          "status": 404,
-          "final_url": "https://csrc.nist.gov/pubs/cswp/6/cybersecurity-framework-v11/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/white-paper/2018/04/16/cybersecurity-framework-v11/final",
-          "status": 404,
-          "final_url": "https://csrc.nist.gov/pubs/cswp/6/cybersecurity-framework-v11/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 26404
         }
       ]
     },
@@ -2791,11 +2615,22 @@
       "submission_artifact_url": "https://csrc.nist.gov/publications/detail/sp/800-218/final",
       "authority_tier": 1,
       "authority_tier_label": "NIST owner-authority Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/196.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/196.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SSDF_to_CSF_2_0_0_CROSSWALK.xlsx",
+        "checksum": "sha256:0866ced901f7aa600dff69fabb43eb32935e3658a4bed2539d33e80880fca283",
+        "byte_length": 12695,
+        "parser": "olir-xlsx",
+        "relationship_count": 35,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2810,28 +2645,12 @@
           "mapping_comment": "<p>N/A</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SSDF_to_CSF_2_0_0_CROSSWALK.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SSDF_to_CSF_2_0_0_CROSSWALK.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "12695"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/sp/800-218/final",
-          "status": 200,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/218/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/sp/800-218/final",
-          "status": 200,
-          "final_url": "https://csrc.nist.gov/pubs/sp/800/218/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 12695
         }
       ]
     },
@@ -2856,6 +2675,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -2876,11 +2696,22 @@
       "submission_artifact_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-66r2.pdf",
       "authority_tier": 1,
       "authority_tier_label": "NIST owner-authority Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/107.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 404; catalog listed reference URL 404",
+      "artifact": {
+        "map_file": "maps/olir/107.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-53_SecurityRule_Crosswalk_2024.xlsx",
+        "checksum": "sha256:80ee1b51d5b48f394e35311a9a93006d2f9e530e35266c6f1f00eb212b776b95",
+        "byte_length": 179055,
+        "parser": "olir-xlsx",
+        "relationship_count": 40,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2895,28 +2726,12 @@
           "mapping_comment": "<p>This SP-800-66-Rev-2-to-SP-800-53-Rev-5.1.1 crosswalk is identical to the HIPAA-Security-Rule-to-SP-800-53-Rev-5.1.1 crosswalk that appears in OLIR and exists primarily to ensure the proper functioning of OLIR and CPRT.</p>\n<p>Readers are encouraged to use the HIPAA-Security-Rule-to-SP-800-53-Rev-5.1.1 crosswalk</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-53_SecurityRule_Crosswalk_2024.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-53_SecurityRule_Crosswalk_2024.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "179055"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-66r2.pdf",
-          "status": 404,
-          "final_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-66r2.pdf",
-          "content_type": "text/html",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-66r2.pdf",
-          "status": 404,
-          "final_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-66r2.pdf",
-          "content_type": "text/html",
-          "content_length": null
+          "byte_length": 179055
         }
       ]
     },
@@ -2941,6 +2756,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -2961,11 +2777,22 @@
       "submission_artifact_url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164",
       "authority_tier": 1,
       "authority_tier_label": "NIST owner-authority Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/110.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": {
+        "map_file": "maps/olir/110.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-53_SecurityRule_Crosswalk_2024.xlsx",
+        "checksum": "sha256:80ee1b51d5b48f394e35311a9a93006d2f9e530e35266c6f1f00eb212b776b95",
+        "byte_length": 179055,
+        "parser": "olir-xlsx",
+        "relationship_count": 40,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -2980,28 +2807,12 @@
           "mapping_comment": "<p>Readers are encouraged to use this crosswalk instead of the identical SP-800-66-Rev-2-to-SP-800-53-Rev-5.1.1 crosswalk as that exists primarily to ensure the proper functioning of OLIR and CPRT.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-53_SecurityRule_Crosswalk_2024.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/SP800-53_SecurityRule_Crosswalk_2024.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "179055"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164",
-          "status": 200,
-          "final_url": "https://unblock.federalregister.gov/",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": "3195"
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164",
-          "status": 200,
-          "final_url": "https://unblock.federalregister.gov/",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": "3194"
+          "byte_length": 179055
         }
       ]
     },
@@ -3026,6 +2837,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Workforce Framework for Cybersecurity (NICE Framework) (NIST SP 800-181 Rev 1)\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3050,6 +2862,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3070,11 +2883,22 @@
       "submission_artifact_url": "https://www.iso.org/obp/ui/#iso:std:iso-iec:27001:ed-3:v1:en",
       "authority_tier": 7,
       "authority_tier_label": "Community candidate Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/155.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 403; catalog listed reference URL 403",
+      "artifact": {
+        "map_file": "maps/olir/155.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/sp800-53r5-to-iso-27001-mapping-2022-OLIR-2023-10-12-UPDATED.xlsx",
+        "checksum": "sha256:e631de234a1fac057991773f015c221226940540f5602e1b70a3768eaff5cbd9",
+        "byte_length": 155745,
+        "parser": "olir-xlsx",
+        "relationship_count": 51,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -3089,28 +2913,12 @@
           "mapping_comment": "<p>Organizations should not assume security requirement and control equivalency based solely on the mapping tables herein since there is always some degree of subjectivity in the mapping analysis because the mappings are not always one-to-one and may not be completely equivalent. Organization-specific implementations may also play a role in control equivalency.</p>"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/sp800-53r5-to-iso-27001-mapping-2022-OLIR-2023-10-12-UPDATED.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/sp800-53r5-to-iso-27001-mapping-2022-OLIR-2023-10-12-UPDATED.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "155745"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://www.iso.org/obp/ui/#iso:std:iso-iec:27001:ed-3:v1:en",
-          "status": 403,
-          "final_url": "https://www.iso.org/obp/ui/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://www.iso.org/obp/ui/#iso:std:iso-iec:27001:ed-3:v1:en",
-          "status": 403,
-          "final_url": "https://www.iso.org/obp/ui/",
-          "content_type": "text/html; charset=UTF-8",
-          "content_length": null
+          "byte_length": 155745
         }
       ]
     },
@@ -3135,6 +2943,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3159,7 +2968,8 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 200; catalog listed reference URL 200",
+      "artifact": null,
+      "quarantine_reason": "no structured artifact could be downloaded from the NIST detail JSON, submission, reference, or catalog URL; retrieval evidence: NIST catalog detail endpoint 200; artifact download 200; artifact download 200",
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -3174,28 +2984,20 @@
           "mapping_comment": "The SCF is a metaframework that contains commonly-used cybersecurity and privacy laws, regulations and frameworks to assist an organization with identifying and conveying mandatory and discretionary controls with the goal of becoming both secure and compliant."
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://content.securecontrolsframework.com/olir/Secure-Controls-Framework-SCFv2023.2-to-NIST-800-171-R2.xlsx",
           "status": 200,
           "final_url": "https://securecontrolsframework.com/free-content/scf-download",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 49472
         },
         {
-          "kind": "NIST detail reference URL",
+          "kind": "artifact download",
           "url": "https://securecontrolsframework.com/scf-download/",
           "status": 200,
           "final_url": "https://securecontrolsframework.com/free-content/scf-download",
           "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://securecontrolsframework.com/scf-download/",
-          "status": 200,
-          "final_url": "https://securecontrolsframework.com/free-content/scf-download",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 49472
         }
       ]
     },
@@ -3220,6 +3022,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3244,6 +3047,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Profile of the IoT Core Baseline for Consumer IoT Products\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3268,6 +3072,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3292,6 +3097,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3316,6 +3122,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3340,6 +3147,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3364,6 +3172,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3388,6 +3197,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3412,6 +3222,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Recommended Criteria for Cybersecurity Labeling for Consumer Internet of Things (IoT) Products\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3436,6 +3247,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3460,6 +3272,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3480,11 +3293,22 @@
       "submission_artifact_url": "https://csrc.nist.gov/publications/detail/white-paper/2018/04/16/cybersecurity-framework-v11/final",
       "authority_tier": 1,
       "authority_tier_label": "NIST owner-authority Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Concept Crosswalk",
+      "ingested": true,
+      "map_file": "maps/olir/69.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 404; catalog listed reference URL 404",
+      "artifact": {
+        "map_file": "maps/olir/69.json",
+        "artifact_url": "https://csrc.nist.gov/CSRC/media/Projects/olir/documents/submissions/WIP_Framework_v_1_1_to_800_53_Rev5.xlsx",
+        "checksum": "sha256:8bbc85a3eeb2929b5706a960c05263c0c6258d30df30a2625dda082d851688a3",
+        "byte_length": 178654,
+        "parser": "olir-xlsx",
+        "relationship_count": 31,
+        "relationship_semantics": [
+          "Concept Crosswalk"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -3499,28 +3323,12 @@
           "mapping_comment": "N/A"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/CSRC/media/Projects/olir/documents/submissions/WIP_Framework_v_1_1_to_800_53_Rev5.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/CSRC/media/Projects/olir/documents/submissions/WIP_Framework_v_1_1_to_800_53_Rev5.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "178654"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/white-paper/2018/04/16/cybersecurity-framework-v11/final",
-          "status": 404,
-          "final_url": "https://csrc.nist.gov/pubs/cswp/6/cybersecurity-framework-v11/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://csrc.nist.gov/publications/detail/white-paper/2018/04/16/cybersecurity-framework-v11/final",
-          "status": 404,
-          "final_url": "https://csrc.nist.gov/pubs/cswp/6/cybersecurity-framework-v11/final",
-          "content_type": "text/html; charset=utf-8",
-          "content_length": null
+          "byte_length": 178654
         }
       ]
     },
@@ -3545,6 +3353,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3569,6 +3378,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3589,11 +3399,24 @@
       "submission_artifact_url": "https://doi.org/10.6028/NIST.SP.800-213A",
       "authority_tier": 1,
       "authority_tier_label": "NIST owner-authority Final",
-      "mapping_model": null,
-      "ingested": false,
-      "map_file": null,
+      "mapping_model": "Set Theory: Subset, Set Theory: Superset, intersects with",
+      "ingested": true,
+      "map_file": "maps/olir/74.json",
       "artifact_id": null,
-      "quarantine_reason": "no downloadable structured relationship artifact was exposed after live retrieval: NIST catalog detail endpoint 200; NIST detail submission URL 200; NIST detail reference URL 404; catalog listed reference URL 404",
+      "artifact": {
+        "map_file": "maps/olir/74.json",
+        "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/OLIR_review_800-213A_to_800-53_rev5_final.xlsx",
+        "checksum": "sha256:e8778484f8f1f141fcf64cee82435f7ede0a9725881b8f56e40c7cee27bb8e92",
+        "byte_length": 206817,
+        "parser": "olir-xlsx",
+        "relationship_count": 70,
+        "relationship_semantics": [
+          "Set Theory: Subset",
+          "Set Theory: Superset",
+          "intersects with"
+        ]
+      },
+      "quarantine_reason": null,
       "retrieval_attempts": [
         {
           "kind": "NIST catalog detail endpoint",
@@ -3608,28 +3431,12 @@
           "mapping_comment": "SP 800-213a provides a catalog of internet of things (IoT) device cybersecurity capabilities (i.e., features and functions needed from a device to support security controls) and non-technical supporting capabilities (i.e., actions and support needed from device manufacturers and other supporting entities to support security controls)"
         },
         {
-          "kind": "NIST detail submission URL",
+          "kind": "artifact download",
           "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/OLIR_review_800-213A_to_800-53_rev5_final.xlsx",
           "status": 200,
           "final_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/OLIR_review_800-213A_to_800-53_rev5_final.xlsx",
           "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "content_length": "206817"
-        },
-        {
-          "kind": "NIST detail reference URL",
-          "url": "https://doi.org/10.6028/NIST.SP.800-213A",
-          "status": 404,
-          "final_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-213A.pdf",
-          "content_type": "text/html",
-          "content_length": null
-        },
-        {
-          "kind": "catalog listed reference URL",
-          "url": "https://doi.org/10.6028/NIST.SP.800-213A",
-          "status": 404,
-          "final_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-213A.pdf",
-          "content_type": "text/html",
-          "content_length": null
+          "byte_length": 206817
         }
       ]
     },
@@ -3654,6 +3461,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3678,6 +3486,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"IoT Device Cybersecurity Capability Core Baseline\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3702,6 +3511,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"IoT Device Cybersecurity Capability Core Baseline\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3726,6 +3536,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"IoT Device Cybersecurity Capability Core Baseline\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3750,6 +3561,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Security and Privacy Controls for Federal Information Systems and Organizations\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3774,6 +3586,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Security and Privacy Controls for Federal Information Systems and Organizations\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3798,6 +3611,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Security and Privacy Controls for Federal Information Systems and Organizations\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3822,6 +3636,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"IoT Device Cybersecurity Capability Core Baseline\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3846,6 +3661,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3870,6 +3686,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"IoT Device Cybersecurity Capability Core Baseline\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3894,6 +3711,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3918,6 +3736,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Security and Privacy Controls for Federal Information Systems and Organizations\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3942,6 +3761,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"NIST Privacy Framework: A Tool for Improving Privacy Through Enterprise Risk Management\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3966,6 +3786,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -3990,6 +3811,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -4014,6 +3836,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -4038,6 +3861,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -4062,6 +3886,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -4086,6 +3911,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -4110,6 +3936,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -4134,6 +3961,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -4158,6 +3986,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -4182,6 +4011,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     },
@@ -4206,6 +4036,7 @@
       "ingested": false,
       "map_file": null,
       "artifact_id": null,
+      "artifact": null,
       "quarantine_reason": "focal document \"Framework for Improving Critical Infrastructure Cybersecurity\" is not a Control Atlas catalog (current-publication scope only)",
       "retrieval_attempts": []
     }

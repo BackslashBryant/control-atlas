@@ -1,0 +1,754 @@
+{
+  "schema_version": "1.0",
+  "olir_id": 218,
+  "source_artifact": "https://raw.githubusercontent.com/JoergPauloweit/ISO27001-NIST-Mapping/main/Cybersecurity%20Framework%20v2.0_Concept%20Crosswalk_Template_Version%202_Pauloweit.xlsx",
+  "sha256": "sha256:7ba6a8c3fa5207f84b1a72480fa5bfacc6326ab97bf6e28aab631bd3cf626848",
+  "byte_length": 21824,
+  "parser": "olir-xlsx",
+  "relationships": [
+    {
+      "focal_id": "GV.OC-05",
+      "reference_id": "Control 5.8",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-8"
+    },
+    {
+      "focal_id": "GV.RR-01",
+      "reference_id": "Control 5.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-18"
+    },
+    {
+      "focal_id": "GV.RR-02",
+      "reference_id": "Control 5.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-19"
+    },
+    {
+      "focal_id": "GV.RR-02",
+      "reference_id": "Control 5.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-20"
+    },
+    {
+      "focal_id": "GV.RR-03",
+      "reference_id": "Control 6.6",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-21"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "Control 5.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-24"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "Control 5.37",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-25"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "Control 6.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-26"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "Control 6.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-27"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "Control 6.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-28"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "Control 6.5",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-29"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "Control 6.7",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-30"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "Control 6.8",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-31"
+    },
+    {
+      "focal_id": "GV.PO-02",
+      "reference_id": "Control 5.31",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-32"
+    },
+    {
+      "focal_id": "GV.PO-02",
+      "reference_id": "Control 5.32",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-33"
+    },
+    {
+      "focal_id": "GV.PO-02",
+      "reference_id": "Control 5.34",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-34"
+    },
+    {
+      "focal_id": "GV.OV-01",
+      "reference_id": "Control 5.5",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-36"
+    },
+    {
+      "focal_id": "GV.OV-01",
+      "reference_id": "Control 5.6",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-37"
+    },
+    {
+      "focal_id": "GV.OV-01",
+      "reference_id": "Control 5.24",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-38"
+    },
+    {
+      "focal_id": "GV.OV-02",
+      "reference_id": "Control 5.27",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-39"
+    },
+    {
+      "focal_id": "GV.OV-02",
+      "reference_id": "Control 5.35",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-40"
+    },
+    {
+      "focal_id": "GV.OV-02",
+      "reference_id": "Control 5.36",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-41"
+    },
+    {
+      "focal_id": "GV.OV-03",
+      "reference_id": "Control 8.30",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-42"
+    },
+    {
+      "focal_id": "GV.OV-03",
+      "reference_id": "Control 8.32",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-43"
+    },
+    {
+      "focal_id": "GV.OV-03",
+      "reference_id": "Control 8.34",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-44"
+    },
+    {
+      "focal_id": "GV.SC-01",
+      "reference_id": "Control 5.19",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-46"
+    },
+    {
+      "focal_id": "GV.SC-01",
+      "reference_id": "Control 5.21",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-47"
+    },
+    {
+      "focal_id": "GV.SC-05",
+      "reference_id": "Control 5.20",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-51"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "Control 5.22",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-53"
+    },
+    {
+      "focal_id": "ID.AM-01",
+      "reference_id": "Control 5.9",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-59"
+    },
+    {
+      "focal_id": "ID.AM-08",
+      "reference_id": "Control 5.11",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-65"
+    },
+    {
+      "focal_id": "ID.RA-02",
+      "reference_id": "Control 5.7",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-68"
+    },
+    {
+      "focal_id": "PR.AA-01",
+      "reference_id": "Control 5.16",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-84"
+    },
+    {
+      "focal_id": "PR.AA-03",
+      "reference_id": "Control 5.17",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-86"
+    },
+    {
+      "focal_id": "PR.AA-03",
+      "reference_id": "Control 8.5",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-87"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "Control 5.15",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-89"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "Control 5.18",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-90"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "Control 8.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-91"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "Control 8.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-92"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "Control 8.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-93"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "Control 8.18",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-94"
+    },
+    {
+      "focal_id": "PR.AA-06",
+      "reference_id": "Control 7.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-95"
+    },
+    {
+      "focal_id": "PR.AA-06",
+      "reference_id": "Control 7.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-96"
+    },
+    {
+      "focal_id": "PR.AA-06",
+      "reference_id": "Control 7.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-97"
+    },
+    {
+      "focal_id": "PR.AA-06",
+      "reference_id": "Control 7.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-98"
+    },
+    {
+      "focal_id": "PR.AT-01",
+      "reference_id": "Control 6.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-100"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "Control 5.10",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-103"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "Control 5.12",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-104"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "Control 5.13",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-105"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "Control 5.33",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-106"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "Control 7.9",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-107"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "Control 7.10",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-108"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "Control 8.10",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-109"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "Control 8.11",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-110"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "Control 8.12",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-111"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "Control 8.13",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-112"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "Control 8.33",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-113"
+    },
+    {
+      "focal_id": "PR.DS-02",
+      "reference_id": "Control 5.14",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-114"
+    },
+    {
+      "focal_id": "PR.DS-02",
+      "reference_id": "Control 8.24",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-115"
+    },
+    {
+      "focal_id": "PR.DS-10",
+      "reference_id": "Control 5.23",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-116"
+    },
+    {
+      "focal_id": "PR.PS-01",
+      "reference_id": "Control 8.8",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-119"
+    },
+    {
+      "focal_id": "PR.PS-01",
+      "reference_id": "Control 8.9",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-120"
+    },
+    {
+      "focal_id": "PR.PS-02",
+      "reference_id": "Control 8.7",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-121"
+    },
+    {
+      "focal_id": "PR.PS-03",
+      "reference_id": "Control 8.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-122"
+    },
+    {
+      "focal_id": "PR.PS-05",
+      "reference_id": "Control 8.19",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-124"
+    },
+    {
+      "focal_id": "PR.PS-06",
+      "reference_id": "Control 8.25",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-125"
+    },
+    {
+      "focal_id": "PR.PS-06",
+      "reference_id": "Control 8.26",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-126"
+    },
+    {
+      "focal_id": "PR.PS-06",
+      "reference_id": "Control 8.28",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-127"
+    },
+    {
+      "focal_id": "PR.PS-06",
+      "reference_id": "Control 8.29",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-128"
+    },
+    {
+      "focal_id": "PR.PS-06",
+      "reference_id": "Control 8.31",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-129"
+    },
+    {
+      "focal_id": "PR.IR-01",
+      "reference_id": "Control 8.20",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-131"
+    },
+    {
+      "focal_id": "PR.IR-01",
+      "reference_id": "Control 8.21",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-132"
+    },
+    {
+      "focal_id": "PR.IR-01",
+      "reference_id": "Control 8.22",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-133"
+    },
+    {
+      "focal_id": "PR.IR-01",
+      "reference_id": "Control 8.23",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-134"
+    },
+    {
+      "focal_id": "PR.IR-02",
+      "reference_id": "Control 7.5",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-135"
+    },
+    {
+      "focal_id": "PR.IR-02",
+      "reference_id": "Control 7.6",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-136"
+    },
+    {
+      "focal_id": "PR.IR-02",
+      "reference_id": "Control 7.7",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-137"
+    },
+    {
+      "focal_id": "PR.IR-02",
+      "reference_id": "Control 7.8",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-138"
+    },
+    {
+      "focal_id": "PR.IR-02",
+      "reference_id": "Control 7.11",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-139"
+    },
+    {
+      "focal_id": "PR.IR-02",
+      "reference_id": "Control 7.12",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-140"
+    },
+    {
+      "focal_id": "PR.IR-02",
+      "reference_id": "Control 7.13",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-141"
+    },
+    {
+      "focal_id": "PR.IR-02",
+      "reference_id": "Control 7.14",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-142"
+    },
+    {
+      "focal_id": "PR.IR-03",
+      "reference_id": "Control 8.14",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-143"
+    },
+    {
+      "focal_id": "PR.IR-03",
+      "reference_id": "Control 8.17",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-144"
+    },
+    {
+      "focal_id": "PR.IR-03",
+      "reference_id": "Control 8.27",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-145"
+    },
+    {
+      "focal_id": "DE.AE-02",
+      "reference_id": "Control 5.25",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-149"
+    },
+    {
+      "focal_id": "DE.CM-01",
+      "reference_id": "Control 8.15",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-156"
+    },
+    {
+      "focal_id": "DE.CM-03",
+      "reference_id": "Control 8.16",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-158"
+    },
+    {
+      "focal_id": "DE.CM-09",
+      "reference_id": "Control  8.6",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-160"
+    },
+    {
+      "focal_id": "RS.MA-01",
+      "reference_id": "Control  5.26",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-163"
+    },
+    {
+      "focal_id": "RS.AN-07",
+      "reference_id": "Control 5.28",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-171"
+    },
+    {
+      "focal_id": "RC.RP-01",
+      "reference_id": "Control 5.29",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-181"
+    },
+    {
+      "focal_id": "RC.RP-02",
+      "reference_id": "Control 5.30",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "best available ISO match",
+      "source_locator": "Relationships#row-182"
+    }
+  ]
+}

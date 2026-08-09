@@ -42,6 +42,7 @@ async function main() {
   run('fetch-stig-source-observations', 'fetch-stig-source-observations.mjs');
   run('fetch-disa-stigs', 'fetch-disa-stigs.mjs');
   run('fetch-mitre-data', 'fetch-mitre-data.mjs');
+  run('sync-catalog-source-bundles', 'sync-catalog-source-bundles.mjs');
   run('hydrate-artifacts', 'hydrate-artifacts.mjs');
   run('reconcile-source-freshness', 'reconcile-source-freshness.mjs');
   run('build-framework-data', 'build-framework-data.mjs');
