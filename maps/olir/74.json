@@ -1,0 +1,570 @@
+{
+  "schema_version": "1.0",
+  "olir_id": 74,
+  "source_artifact": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/OLIR_review_800-213A_to_800-53_rev5_final.xlsx",
+  "sha256": "sha256:e8778484f8f1f141fcf64cee82435f7ede0a9725881b8f56e40c7cee27bb8e92",
+  "byte_length": 206817,
+  "parser": "olir-xlsx",
+  "relationships": [
+    {
+      "focal_id": "AC-1",
+      "reference_id": "DO:SMP(5e)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-2"
+    },
+    {
+      "focal_id": "AC-1",
+      "reference_id": "DO:SMP(5f)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-3"
+    },
+    {
+      "focal_id": "AC-1",
+      "reference_id": "DO:SMP(5g)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-4"
+    },
+    {
+      "focal_id": "AC-1",
+      "reference_id": "DO:SMP(5h)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-5"
+    },
+    {
+      "focal_id": "AC-2",
+      "reference_id": "LA:ROL(1)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-6"
+    },
+    {
+      "focal_id": "AC-2",
+      "reference_id": "LA:ROL(2)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-7"
+    },
+    {
+      "focal_id": "AC-2",
+      "reference_id": "LA:ROL(3)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-8"
+    },
+    {
+      "focal_id": "AC-2",
+      "reference_id": "LA:ROL(4)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-9"
+    },
+    {
+      "focal_id": "AC-2",
+      "reference_id": "LA:ROL(6)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-10"
+    },
+    {
+      "focal_id": "AC-2",
+      "reference_id": "DO:DSC(2a)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-11"
+    },
+    {
+      "focal_id": "AC-2",
+      "reference_id": "DO:MNT(1g)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-12"
+    },
+    {
+      "focal_id": "AC-2",
+      "reference_id": "EA:CSC(3a)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-13"
+    },
+    {
+      "focal_id": "AC-2",
+      "reference_id": "EA:CSC(3b)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-14"
+    },
+    {
+      "focal_id": "AC-2",
+      "reference_id": "EA:CSC(3c)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-15"
+    },
+    {
+      "focal_id": "AC-2(1)",
+      "reference_id": "LA:ROL(6)",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "subset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-16"
+    },
+    {
+      "focal_id": "AC-2(2)",
+      "reference_id": "LA:ACF(1)",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "subset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-17"
+    },
+    {
+      "focal_id": "AC-2(3)",
+      "reference_id": "LA:ACF(1)",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "subset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-18"
+    },
+    {
+      "focal_id": "AC-2(3)",
+      "reference_id": "LA:ACF(3)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-19"
+    },
+    {
+      "focal_id": "AC-2(5)",
+      "reference_id": "LA:ACF(1)",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "subset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-21"
+    },
+    {
+      "focal_id": "AC-2(7)",
+      "reference_id": "LA:ROL(5)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-23"
+    },
+    {
+      "focal_id": "AC-2(7)",
+      "reference_id": "LA:ROL(6)",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "subset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-24"
+    },
+    {
+      "focal_id": "AC-2(8)",
+      "reference_id": "LA:ROL(7)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-25"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "DI:AID(1)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-31"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "LA:ROL(1)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-32"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "LA:ROL(3)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-33"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "LA:ROL(9)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-34"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "LA:IFC(4)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-35"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "LA:IFC(5)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-36"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "LA:IFC(7)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-37"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "LA:IFC(9)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-38"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "LA:IFC(15)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-39"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "DO:SMP(8a)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-40"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "EA:CSC(2c)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-41"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "EA:CSC(3a)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-42"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "EA:CSC(3b)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-43"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "EA:CSC(3c)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-44"
+    },
+    {
+      "focal_id": "AC-3",
+      "reference_id": "EA:RSP(1g)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-45"
+    },
+    {
+      "focal_id": "AC-3(7)",
+      "reference_id": "LA:ROL(2)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-52"
+    },
+    {
+      "focal_id": "AC-3(7)",
+      "reference_id": "LA:ROL(4)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-53"
+    },
+    {
+      "focal_id": "AC-3(7)",
+      "reference_id": "DO:SMP(3b)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-54"
+    },
+    {
+      "focal_id": "AC-3(7)",
+      "reference_id": "DO:SMP(5j)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-55"
+    },
+    {
+      "focal_id": "AC-3(7)",
+      "reference_id": "EA:RSP(1d)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-56"
+    },
+    {
+      "focal_id": "AC-3(7)",
+      "reference_id": "EA:RSP(1e)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-57"
+    },
+    {
+      "focal_id": "AC-3(7)",
+      "reference_id": "EA:RSP(1f)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-58"
+    },
+    {
+      "focal_id": "AC-3(8)",
+      "reference_id": "LA:ACF(3)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-59"
+    },
+    {
+      "focal_id": "AC-5",
+      "reference_id": "EA:RSP(1h)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-100"
+    },
+    {
+      "focal_id": "AC-6",
+      "reference_id": "LA:ROL(5)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-101"
+    },
+    {
+      "focal_id": "AC-6",
+      "reference_id": "LA:IFC(4)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-102"
+    },
+    {
+      "focal_id": "AC-6",
+      "reference_id": "LA:IFC(5)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-103"
+    },
+    {
+      "focal_id": "AC-6",
+      "reference_id": "DO:DSC(4b)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-104"
+    },
+    {
+      "focal_id": "AC-7",
+      "reference_id": "LA:ACF(1)",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "subset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-115"
+    },
+    {
+      "focal_id": "AC-8",
+      "reference_id": "LA:USE(1)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-120"
+    },
+    {
+      "focal_id": "AC-8",
+      "reference_id": "LA:USE(2)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-121"
+    },
+    {
+      "focal_id": "AC-8",
+      "reference_id": "LA:USE(3)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-122"
+    },
+    {
+      "focal_id": "AC-9",
+      "reference_id": "LA:ACF(1)",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "subset of",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-123"
+    },
+    {
+      "focal_id": "AC-10",
+      "reference_id": "LA:LDU(2)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-128"
+    },
+    {
+      "focal_id": "AC-10",
+      "reference_id": "LA:XCN(5)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-129"
+    },
+    {
+      "focal_id": "AC-14",
+      "reference_id": "DO:SMP(6a)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-137"
+    },
+    {
+      "focal_id": "AC-17",
+      "reference_id": "LA:ACF(2)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-151"
+    },
+    {
+      "focal_id": "AC-17",
+      "reference_id": "LA:IFC(1)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-152"
+    },
+    {
+      "focal_id": "AC-17(4)",
+      "reference_id": "LA:IFC(8)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-156"
+    },
+    {
+      "focal_id": "AC-17(10)",
+      "reference_id": "LA:AUN(4)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-162"
+    },
+    {
+      "focal_id": "AC-18",
+      "reference_id": "LA:IFC(13)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-163"
+    },
+    {
+      "focal_id": "AC-18",
+      "reference_id": "LA:IFC(14)",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-164"
+    },
+    {
+      "focal_id": "AC-18",
+      "reference_id": "LA:IFC(15)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-165"
+    },
+    {
+      "focal_id": "AC-21",
+      "reference_id": "LA:ROL(8)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "semantic",
+      "source_locator": "Relationships-AC#row-183"
+    },
+    {
+      "focal_id": "AC-21",
+      "reference_id": "LA:LDU(1)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-184"
+    },
+    {
+      "focal_id": "AC-21",
+      "reference_id": "LA:XCN(1)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-185"
+    },
+    {
+      "focal_id": "AC-21",
+      "reference_id": "LA:XCN(2)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-186"
+    },
+    {
+      "focal_id": "AC-21",
+      "reference_id": "LA:XCN(3)",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "functional",
+      "source_locator": "Relationships-AC#row-187"
+    }
+  ]
+}

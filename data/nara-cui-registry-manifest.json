@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-08T22:14:36.190Z",
+  "generated_at": "2026-08-09T01:19:20.674Z",
   "source": "https://www.archives.gov/cui/registry/category-list",
   "list_page": {
     "url": "https://www.archives.gov/cui/registry/category-list",
@@ -9,11 +9,11 @@
   "change_log": {
     "url": "https://www.archives.gov/cui/registry/changelog",
     "status": "FAILED",
-    "error": "fetch failed (503): https://www.archives.gov/cui/registry/changelog"
+    "error": "fetch failed (404): https://www.archives.gov/cui/registry/changelog"
   },
   "total_entries": 126,
-  "ok_count": 124,
-  "failed_count": 2,
+  "ok_count": 125,
+  "failed_count": 1,
   "results": [
     {
       "slug": "ammonium-nitrate",
@@ -225,8 +225,25 @@
       "slug": "protected-critical-infrastructure-information",
       "title": "Protected Critical Infrastructure Information",
       "grouping": "Critical Infrastructure",
-      "status": "FAILED",
-      "error": "fetch failed (503): https://www.archives.gov/cui/registry/category-detail/protected-critical-infrastructure-information"
+      "banner_marking": "CUI//SP-PCII",
+      "description": "As defined by 6 USC 131-134, and 6 CFR 29, PCII relates to threats, vulnerabilities, or operational experience related to the national infrastructure. PCII offers protection to private sector infrastructure information voluntarily shared with government entities for purposes of homeland security.",
+      "category_marking": "PCII",
+      "alternative_banner_markings": {},
+      "authorities": [
+        {
+          "authority_citation": "6 CFR 29",
+          "authority_url": null,
+          "basic_or_specified": "Specified",
+          "banner_marking": "CUI//SP-PCII",
+          "sanctions": "6 CFR 29.9"
+        }
+      ],
+      "designation": "CUI-SPECIFIED",
+      "last_modified": "2025-05-13T12:13:39-04:00",
+      "detail_url": "https://www.archives.gov/cui/registry/category-detail/protected-critical-infrastructure-information",
+      "byte_length": 36568,
+      "sha256": "c12d714ad7dc67882b4ac49536a1b984303dc2d59e1134f4efe520d16dd41d43",
+      "status": "OK"
     },
     {
       "slug": "safety-act-info",
@@ -434,7 +451,7 @@
       "title": "Privileged Safety Information",
       "grouping": "Defense",
       "status": "FAILED",
-      "error": "fetch failed (503): https://www.archives.gov/cui/registry/category-detail/privileged-safety-info"
+      "error": "fetch failed (404): https://www.archives.gov/cui/registry/category-detail/privileged-safety-info"
     },
     {
       "slug": "ucni-dod",

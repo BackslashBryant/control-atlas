@@ -1,0 +1,330 @@
+{
+  "schema_version": "1.0",
+  "olir_id": 209,
+  "source_artifact": "https://raw.githubusercontent.com/OraclesTech/guardian-sdk/main/docs/compliance/olir/csf20/GuardianSDK_CSF20_OLIR_Submission_v2.xlsx",
+  "sha256": "sha256:ac9cac551f90a3251c572a528b33a6c39e967877f6cf48c4fd70091a75068f02",
+  "byte_length": 23832,
+  "parser": "olir-xlsx",
+  "relationships": [
+    {
+      "focal_id": "GV.RM-02",
+      "reference_id": "GS-CF-01",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-11"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "GS-CF-01",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-23"
+    },
+    {
+      "focal_id": "GV.OV-02",
+      "reference_id": "GS-PO-02",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-27"
+    },
+    {
+      "focal_id": "ID.AM-07",
+      "reference_id": "GS-TT-05",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Semantic",
+      "source_locator": "Relationships#row-47"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "GS-TT-01",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-50"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "GS-TT-02",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-51"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "GS-TT-03",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-52"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "GS-TT-04",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-53"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "GS-TT-14",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-54"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "GS-TT-15",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-55"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "GS-TT-16",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-56"
+    },
+    {
+      "focal_id": "ID.RA-04",
+      "reference_id": "GS-TT-06",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-59"
+    },
+    {
+      "focal_id": "ID.RA-04",
+      "reference_id": "GS-TT-07",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-60"
+    },
+    {
+      "focal_id": "ID.RA-05",
+      "reference_id": "GS-TT-09",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-61"
+    },
+    {
+      "focal_id": "ID.IM-01",
+      "reference_id": "GS-PO-02",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-68"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "GS-TT-05",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-84"
+    },
+    {
+      "focal_id": "PR.DS-02",
+      "reference_id": "GS-CF-03",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "Superset of",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-85"
+    },
+    {
+      "focal_id": "PR.PS-01",
+      "reference_id": "GS-CF-01",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-89"
+    },
+    {
+      "focal_id": "PR.PS-04",
+      "reference_id": "GS-CF-02",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-92"
+    },
+    {
+      "focal_id": "PR.IR-01",
+      "reference_id": "GS-PF-01",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-96"
+    },
+    {
+      "focal_id": "DE.AE-02",
+      "reference_id": "GS-PF-04",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-102"
+    },
+    {
+      "focal_id": "DE.AE-03",
+      "reference_id": "GS-PF-03",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "Subset of",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-103"
+    },
+    {
+      "focal_id": "DE.AE-04",
+      "reference_id": "GS-PF-04",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "Superset of",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-104"
+    },
+    {
+      "focal_id": "DE.AE-06",
+      "reference_id": "GS-CF-02",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-105"
+    },
+    {
+      "focal_id": "DE.AE-07",
+      "reference_id": "GS-PF-02",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-106"
+    },
+    {
+      "focal_id": "DE.AE-08",
+      "reference_id": "GS-PF-01",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "Subset of",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-107"
+    },
+    {
+      "focal_id": "DE.CM-03",
+      "reference_id": "GS-PF-03",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-111"
+    },
+    {
+      "focal_id": "DE.CM-06",
+      "reference_id": "GS-AG-02",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-112"
+    },
+    {
+      "focal_id": "DE.CM-09",
+      "reference_id": "GS-PF-01",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "Subset of",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-113"
+    },
+    {
+      "focal_id": "DE.CM-09",
+      "reference_id": "GS-PF-02",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "Subset of",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-114"
+    },
+    {
+      "focal_id": "DE.CM-09",
+      "reference_id": "GS-PF-04",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "Subset of",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-115"
+    },
+    {
+      "focal_id": "DE.CM-09",
+      "reference_id": "GS-MM-01",
+      "relationship_type": "Set Theory: Subset",
+      "raw_relationship_type": "Subset of",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-116"
+    },
+    {
+      "focal_id": "RS.MA-02",
+      "reference_id": "GS-PF-04",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-120"
+    },
+    {
+      "focal_id": "RS.MA-03",
+      "reference_id": "GS-PF-04",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "Superset of",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-121"
+    },
+    {
+      "focal_id": "RS.AN-06",
+      "reference_id": "GS-CF-02",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-126"
+    },
+    {
+      "focal_id": "RS.CO-02",
+      "reference_id": "GS-CF-02",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-130"
+    },
+    {
+      "focal_id": "RS.MI-01",
+      "reference_id": "GS-PF-01",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-133"
+    },
+    {
+      "focal_id": "RS.MI-01",
+      "reference_id": "GS-PO-01",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-134"
+    },
+    {
+      "focal_id": "RS.MI-01",
+      "reference_id": "GS-AG-01",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-135"
+    },
+    {
+      "focal_id": "RC.RP-02",
+      "reference_id": "GS-PO-02",
+      "relationship_type": "Intersects with",
+      "raw_relationship_type": "Intersects with",
+      "rationale": "Functional",
+      "source_locator": "Relationships#row-140"
+    }
+  ]
+}

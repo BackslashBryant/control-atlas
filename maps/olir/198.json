@@ -1,0 +1,1362 @@
+{
+  "schema_version": "1.0",
+  "olir_id": 198,
+  "source_artifact": "https://raw.githubusercontent.com/Aviral2642/nist-olir-owasp-llm-top10-csf2/main/NIST_CSF2.0_to_OWASP_LLM_Top10_v2.0_OLIR.xlsx",
+  "sha256": "sha256:bb9aba0749a3bbcec9e2f6ac46c3b4ee6d23f2e1d84e61c17ae6ffb148a83309",
+  "byte_length": 35913,
+  "parser": "olir-xlsx",
+  "relationships": [
+    {
+      "focal_id": "GV.OC-01",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-2"
+    },
+    {
+      "focal_id": "GV.OC-01",
+      "reference_id": "LLM09-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-3"
+    },
+    {
+      "focal_id": "GV.OC-02",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-4"
+    },
+    {
+      "focal_id": "GV.OC-02",
+      "reference_id": "LLM09-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-5"
+    },
+    {
+      "focal_id": "GV.OC-03",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-6"
+    },
+    {
+      "focal_id": "GV.OC-03",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-7"
+    },
+    {
+      "focal_id": "GV.OC-03",
+      "reference_id": "LLM09-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-8"
+    },
+    {
+      "focal_id": "GV.OC-04",
+      "reference_id": "LLM09-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-9"
+    },
+    {
+      "focal_id": "GV.OC-04",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-10"
+    },
+    {
+      "focal_id": "GV.OC-05",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-11"
+    },
+    {
+      "focal_id": "GV.OC-05",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-12"
+    },
+    {
+      "focal_id": "GV.RM-02",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-13"
+    },
+    {
+      "focal_id": "GV.RM-02",
+      "reference_id": "LLM09-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-14"
+    },
+    {
+      "focal_id": "GV.RR-02",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-15"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-16"
+    },
+    {
+      "focal_id": "GV.PO-01",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-17"
+    },
+    {
+      "focal_id": "GV.SC-01",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-18"
+    },
+    {
+      "focal_id": "GV.SC-01",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-19"
+    },
+    {
+      "focal_id": "GV.SC-02",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-20"
+    },
+    {
+      "focal_id": "GV.SC-03",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-21"
+    },
+    {
+      "focal_id": "GV.SC-04",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-22"
+    },
+    {
+      "focal_id": "GV.SC-05",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-23"
+    },
+    {
+      "focal_id": "GV.SC-05",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-24"
+    },
+    {
+      "focal_id": "GV.SC-06",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-25"
+    },
+    {
+      "focal_id": "GV.SC-06",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-26"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-27"
+    },
+    {
+      "focal_id": "GV.SC-07",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-28"
+    },
+    {
+      "focal_id": "GV.SC-08",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-29"
+    },
+    {
+      "focal_id": "GV.SC-09",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-30"
+    },
+    {
+      "focal_id": "GV.SC-10",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-31"
+    },
+    {
+      "focal_id": "ID.AM-02",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-32"
+    },
+    {
+      "focal_id": "ID.AM-02",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-33"
+    },
+    {
+      "focal_id": "ID.AM-03",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-34"
+    },
+    {
+      "focal_id": "ID.AM-03",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-35"
+    },
+    {
+      "focal_id": "ID.AM-03",
+      "reference_id": "LLM05-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-36"
+    },
+    {
+      "focal_id": "ID.AM-04",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-37"
+    },
+    {
+      "focal_id": "ID.AM-05",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-38"
+    },
+    {
+      "focal_id": "ID.AM-05",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-39"
+    },
+    {
+      "focal_id": "ID.AM-07",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-40"
+    },
+    {
+      "focal_id": "ID.AM-07",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-41"
+    },
+    {
+      "focal_id": "ID.AM-07",
+      "reference_id": "LLM08-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-42"
+    },
+    {
+      "focal_id": "ID.AM-08",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-43"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-44"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "LLM05-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-45"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "LLM07-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-46"
+    },
+    {
+      "focal_id": "ID.RA-01",
+      "reference_id": "LLM08-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-47"
+    },
+    {
+      "focal_id": "ID.RA-02",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-48"
+    },
+    {
+      "focal_id": "ID.RA-02",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-49"
+    },
+    {
+      "focal_id": "ID.RA-02",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-50"
+    },
+    {
+      "focal_id": "ID.RA-03",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-51"
+    },
+    {
+      "focal_id": "ID.RA-03",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-52"
+    },
+    {
+      "focal_id": "ID.RA-03",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-53"
+    },
+    {
+      "focal_id": "ID.RA-03",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-54"
+    },
+    {
+      "focal_id": "ID.RA-04",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-55"
+    },
+    {
+      "focal_id": "ID.RA-04",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-56"
+    },
+    {
+      "focal_id": "ID.RA-04",
+      "reference_id": "LLM09-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-57"
+    },
+    {
+      "focal_id": "ID.RA-07",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-58"
+    },
+    {
+      "focal_id": "ID.RA-07",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-59"
+    },
+    {
+      "focal_id": "ID.RA-08",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-60"
+    },
+    {
+      "focal_id": "ID.RA-08",
+      "reference_id": "LLM05-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-61"
+    },
+    {
+      "focal_id": "ID.RA-09",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-62"
+    },
+    {
+      "focal_id": "ID.RA-09",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-63"
+    },
+    {
+      "focal_id": "ID.RA-10",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-64"
+    },
+    {
+      "focal_id": "ID.IM-02",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-65"
+    },
+    {
+      "focal_id": "ID.IM-02",
+      "reference_id": "LLM05-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-66"
+    },
+    {
+      "focal_id": "ID.IM-04",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-67"
+    },
+    {
+      "focal_id": "ID.IM-04",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-68"
+    },
+    {
+      "focal_id": "ID.IM-04",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-69"
+    },
+    {
+      "focal_id": "PR.AA-01",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-70"
+    },
+    {
+      "focal_id": "PR.AA-01",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-71"
+    },
+    {
+      "focal_id": "PR.AA-02",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-72"
+    },
+    {
+      "focal_id": "PR.AA-03",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-73"
+    },
+    {
+      "focal_id": "PR.AA-03",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-74"
+    },
+    {
+      "focal_id": "PR.AA-04",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-75"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-76"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-77"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-78"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "LLM07-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-79"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "LLM08-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-80"
+    },
+    {
+      "focal_id": "PR.AA-05",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-81"
+    },
+    {
+      "focal_id": "PR.AT-01",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-82"
+    },
+    {
+      "focal_id": "PR.AT-01",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-83"
+    },
+    {
+      "focal_id": "PR.AT-01",
+      "reference_id": "LLM09-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-84"
+    },
+    {
+      "focal_id": "PR.AT-02",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-85"
+    },
+    {
+      "focal_id": "PR.AT-02",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-86"
+    },
+    {
+      "focal_id": "PR.AT-02",
+      "reference_id": "LLM05-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-87"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-88"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-89"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "LLM07-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-90"
+    },
+    {
+      "focal_id": "PR.DS-01",
+      "reference_id": "LLM08-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-91"
+    },
+    {
+      "focal_id": "PR.DS-02",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-92"
+    },
+    {
+      "focal_id": "PR.DS-02",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-93"
+    },
+    {
+      "focal_id": "PR.DS-02",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-94"
+    },
+    {
+      "focal_id": "PR.DS-10",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-95"
+    },
+    {
+      "focal_id": "PR.DS-10",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-96"
+    },
+    {
+      "focal_id": "PR.DS-10",
+      "reference_id": "LLM07-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-97"
+    },
+    {
+      "focal_id": "PR.DS-10",
+      "reference_id": "LLM08-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-98"
+    },
+    {
+      "focal_id": "PR.DS-11",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-99"
+    },
+    {
+      "focal_id": "PR.PS-01",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-100"
+    },
+    {
+      "focal_id": "PR.PS-01",
+      "reference_id": "LLM07-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-101"
+    },
+    {
+      "focal_id": "PR.PS-01",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-102"
+    },
+    {
+      "focal_id": "PR.PS-02",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-103"
+    },
+    {
+      "focal_id": "PR.PS-04",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-104"
+    },
+    {
+      "focal_id": "PR.PS-04",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-105"
+    },
+    {
+      "focal_id": "PR.PS-04",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-106"
+    },
+    {
+      "focal_id": "PR.PS-04",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-107"
+    },
+    {
+      "focal_id": "PR.PS-05",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-108"
+    },
+    {
+      "focal_id": "PR.PS-06",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "intersects with",
+      "raw_relationship_type": "intersects with",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-109"
+    },
+    {
+      "focal_id": "PR.PS-06",
+      "reference_id": "LLM05-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-110"
+    },
+    {
+      "focal_id": "PR.PS-06",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-111"
+    },
+    {
+      "focal_id": "PR.IR-01",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-112"
+    },
+    {
+      "focal_id": "PR.IR-01",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-113"
+    },
+    {
+      "focal_id": "PR.IR-01",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-114"
+    },
+    {
+      "focal_id": "PR.IR-03",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-115"
+    },
+    {
+      "focal_id": "PR.IR-04",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-116"
+    },
+    {
+      "focal_id": "DE.CM-01",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-117"
+    },
+    {
+      "focal_id": "DE.CM-01",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-118"
+    },
+    {
+      "focal_id": "DE.CM-01",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-119"
+    },
+    {
+      "focal_id": "DE.CM-03",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-120"
+    },
+    {
+      "focal_id": "DE.CM-03",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-121"
+    },
+    {
+      "focal_id": "DE.CM-03",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-122"
+    },
+    {
+      "focal_id": "DE.CM-06",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-123"
+    },
+    {
+      "focal_id": "DE.CM-09",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-124"
+    },
+    {
+      "focal_id": "DE.CM-09",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-125"
+    },
+    {
+      "focal_id": "DE.CM-09",
+      "reference_id": "LLM05-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-126"
+    },
+    {
+      "focal_id": "DE.CM-09",
+      "reference_id": "LLM08-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-127"
+    },
+    {
+      "focal_id": "DE.CM-09",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-128"
+    },
+    {
+      "focal_id": "DE.AE-02",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-129"
+    },
+    {
+      "focal_id": "DE.AE-02",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-130"
+    },
+    {
+      "focal_id": "DE.AE-02",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-131"
+    },
+    {
+      "focal_id": "DE.AE-03",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-132"
+    },
+    {
+      "focal_id": "DE.AE-03",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-133"
+    },
+    {
+      "focal_id": "DE.AE-04",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-134"
+    },
+    {
+      "focal_id": "DE.AE-04",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-135"
+    },
+    {
+      "focal_id": "DE.AE-04",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-136"
+    },
+    {
+      "focal_id": "DE.AE-07",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-137"
+    },
+    {
+      "focal_id": "DE.AE-07",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-138"
+    },
+    {
+      "focal_id": "DE.AE-07",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-139"
+    },
+    {
+      "focal_id": "RS.MA-01",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-140"
+    },
+    {
+      "focal_id": "RS.MA-01",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-141"
+    },
+    {
+      "focal_id": "RS.MA-01",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-142"
+    },
+    {
+      "focal_id": "RS.MA-02",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-143"
+    },
+    {
+      "focal_id": "RS.MA-02",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-144"
+    },
+    {
+      "focal_id": "RS.MA-05",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-145"
+    },
+    {
+      "focal_id": "RS.AN-03",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-146"
+    },
+    {
+      "focal_id": "RS.AN-03",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-147"
+    },
+    {
+      "focal_id": "RS.AN-03",
+      "reference_id": "LLM05-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-148"
+    },
+    {
+      "focal_id": "RS.AN-07",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-149"
+    },
+    {
+      "focal_id": "RS.AN-07",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-150"
+    },
+    {
+      "focal_id": "RS.AN-08",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-151"
+    },
+    {
+      "focal_id": "RS.AN-08",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-152"
+    },
+    {
+      "focal_id": "RS.CO-02",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-153"
+    },
+    {
+      "focal_id": "RS.CO-03",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-154"
+    },
+    {
+      "focal_id": "RS.CO-03",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-155"
+    },
+    {
+      "focal_id": "RS.MI-01",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-156"
+    },
+    {
+      "focal_id": "RS.MI-01",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-157"
+    },
+    {
+      "focal_id": "RS.MI-01",
+      "reference_id": "LLM06-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-158"
+    },
+    {
+      "focal_id": "RS.MI-01",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-159"
+    },
+    {
+      "focal_id": "RS.MI-02",
+      "reference_id": "LLM01-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-160"
+    },
+    {
+      "focal_id": "RS.MI-02",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-161"
+    },
+    {
+      "focal_id": "RS.MI-02",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-162"
+    },
+    {
+      "focal_id": "RC.RP-01",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-163"
+    },
+    {
+      "focal_id": "RC.RP-02",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-164"
+    },
+    {
+      "focal_id": "RC.RP-02",
+      "reference_id": "LLM10-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-165"
+    },
+    {
+      "focal_id": "RC.RP-03",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-166"
+    },
+    {
+      "focal_id": "RC.RP-04",
+      "reference_id": "LLM09-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-167"
+    },
+    {
+      "focal_id": "RC.RP-05",
+      "reference_id": "LLM03-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-168"
+    },
+    {
+      "focal_id": "RC.RP-05",
+      "reference_id": "LLM04-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-169"
+    },
+    {
+      "focal_id": "RC.CO-04",
+      "reference_id": "LLM02-2025",
+      "relationship_type": "Set Theory: Superset",
+      "raw_relationship_type": "superset of",
+      "rationale": "Functional",
+      "source_locator": "OLIR Mapping#row-170"
+    }
+  ]
+}

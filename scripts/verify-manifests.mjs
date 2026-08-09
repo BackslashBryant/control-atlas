@@ -15,6 +15,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readGeneratedCollection } from './lib/generated-graph-artifacts.mjs';
 import { COMPLETENESS_STATES, resolveExpectedLocator, classifyCatalog } from './lib/completeness.mjs';
+import { NON_CATALOG_TECHNICAL_SHARDS } from './sync-catalog-source-bundles.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SHA256_PREFIXED = /^sha256:[a-f0-9]{64}$/i;
@@ -39,6 +40,15 @@ const REQUIRED_ARTIFACT_FIELDS = [
 
 const errors = [];
 const err = (msg) => errors.push(msg);
+
+function generatedCatalogIds() {
+  const directory = join(ROOT, 'data/generated/catalog-records');
+  if (!existsSync(directory)) return new Set();
+  return new Set(readdirSync(directory, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
+    .map((entry) => entry.name.slice(0, -5))
+    .filter((id) => !NON_CATALOG_TECHNICAL_SHARDS.includes(id)));
+}
 
 function isRealSha256(str) {
   return typeof str === 'string' && !FORBIDDEN.test(str) && SHA256_PREFIXED.test(str);
@@ -74,6 +84,16 @@ if (!registry) {
   const sourceIds = new Set(sources.map((s) => s.id));
   const publicationIds = new Set(publications.map((p) => p.id));
   const shaToArtifacts = new Map();
+
+  for (const [layer, records] of [['publication', publications], ['source', sources], ['artifact', artifacts]]) {
+    for (const record of records) {
+      const parser = record.parser || record.metadata?.parser;
+      const canonical = record.lifecycle_status === 'active' || record.graph_eligible === true;
+      if (canonical && parser === 'manual-seed') {
+        err(`${layer} ${record.id} is active/graph-eligible but declares parser: manual-seed`);
+      }
+    }
+  }
 
   for (const art of artifacts) {
     // Duplicate / colliding canonical IDs.
@@ -135,6 +155,12 @@ if (!registry) {
         if (!knownRef(id)) err(`bundle ${b.catalog_id}.${key} unresolved reference: ${id}`);
       }
     }
+  }
+  const generatedIds = generatedCatalogIds();
+  const missingBundles = [...generatedIds].filter((id) => !bundleCatalogIds.has(id));
+  const staleBundles = [...bundleCatalogIds].filter((id) => !generatedIds.has(id));
+  if (missingBundles.length || staleBundles.length) {
+    err(`generated catalog IDs must equal catalog_source_bundles (missing bundles: ${missingBundles.join(', ') || 'none'}; stale bundles: ${staleBundles.join(', ') || 'none'})`);
   }
 
   // Forbidden markers anywhere in the registry.
@@ -251,10 +277,7 @@ const CLASSIFY_ERROR_MESSAGES = {
 function buildCoverageManifest() {
   const artifacts = new Map((registry?.artifacts || []).map((a) => [a.id, a]));
   const quarantinedIds = new Set((registry?.quarantine || []).map((q) => q.id));
-  const shardDir = join(ROOT, 'data/generated/catalog-records');
-  const shardIds = existsSync(shardDir)
-    ? new Set(readdirSync(shardDir).filter((f) => f.endsWith('.json')).map((f) => f.replace('.json', '')))
-    : new Set();
+  const shardIds = generatedCatalogIds();
 
   const catalogs = [];
   for (const b of registry?.catalog_source_bundles || []) {

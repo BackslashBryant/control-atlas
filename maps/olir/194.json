@@ -1,0 +1,354 @@
+{
+  "schema_version": "1.0",
+  "olir_id": 194,
+  "source_artifact": "https://p-sscrm.github.io/assets/data/P-SSCRM_to_SSDF_CROSSWALK_20260219.xlsx",
+  "sha256": "sha256:6cf6178d0e19c782c35bcf03ffae8cc41a06362a8c9ae5aef15ae94b473db898",
+  "byte_length": 16571,
+  "parser": "olir-xlsx",
+  "relationships": [
+    {
+      "focal_id": "PO.1.1",
+      "reference_id": "G.1.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Organizational security requirements, such as those imposed by standards and regulations, are included in the SDLC.",
+      "source_locator": "Sheet1#row-2"
+    },
+    {
+      "focal_id": "PO.1.2",
+      "reference_id": "P.1.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Identify and document security requirements for organization-developed software, including AI models",
+      "source_locator": "Sheet1#row-3"
+    },
+    {
+      "focal_id": "PO.1.3",
+      "reference_id": "G.3.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Component, system, AI model, and service acquisition policies include the inclusion of adherence to security policies, security requirements, and secure SDLC practices that are compatible with compliance requirements.",
+      "source_locator": "Sheet1#row-4"
+    },
+    {
+      "focal_id": "PO.2.1",
+      "reference_id": "G.2.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Ownership for security controls throughout the SDLC at the organizational level and at the product team- and operational- level are established and visible.",
+      "source_locator": "Sheet1#row-5"
+    },
+    {
+      "focal_id": "PO.2.2",
+      "reference_id": "G.4.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Provide security training for all personnel involved in software development",
+      "source_locator": "Sheet1#row-6"
+    },
+    {
+      "focal_id": "PO.2.3",
+      "reference_id": "G.2.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Upper management understands the business risks of insecure software and supports the resources necessary for secure software development.",
+      "source_locator": "Sheet1#row-7"
+    },
+    {
+      "focal_id": "PO.3.1",
+      "reference_id": "P.4.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Choose tools to efficiently discover previously-undetected vulnerabilities",
+      "source_locator": "Sheet1#row-8"
+    },
+    {
+      "focal_id": "PO.3.2",
+      "reference_id": "P.4.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Choose tools to efficiently discover previously-undetected vulnerabilities",
+      "source_locator": "Sheet1#row-9"
+    },
+    {
+      "focal_id": "PO.3.3",
+      "reference_id": "G.1.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Produce an audit trail for every step in the build process, the integrity/provenance of training data, and evidence of the use of secure software development practices.",
+      "source_locator": "Sheet1#row-10"
+    },
+    {
+      "focal_id": "PO.4.1",
+      "reference_id": "G.2.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Criteria throughout the SDLC are used to check the software's security during development.",
+      "source_locator": "Sheet1#row-11"
+    },
+    {
+      "focal_id": "PO.4.2",
+      "reference_id": "G.5.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Make security decisions on software release based upon criteria for checking the security of the software.",
+      "source_locator": "Sheet1#row-12"
+    },
+    {
+      "focal_id": "PO.5.1",
+      "reference_id": "E.3.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Separate and protect each environment involved in software development (i.e., development, build, test, deployment, model training)",
+      "source_locator": "Sheet1#row-13"
+    },
+    {
+      "focal_id": "PO.5.2",
+      "reference_id": "E.3.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Separate and protect each environment involved in software development (i.e., development, build, test, deployment, model training)",
+      "source_locator": "Sheet1#row-14"
+    },
+    {
+      "focal_id": "PS.1.1",
+      "reference_id": "E.1.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Prevent unauthorized changes to artifacts, both inadvertent and intentional.",
+      "source_locator": "Sheet1#row-15"
+    },
+    {
+      "focal_id": "PS.2.1",
+      "reference_id": "P.1.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Provide software acquirers assurance that the software they acquire is legitimate and has not been tampered with.",
+      "source_locator": "Sheet1#row-16"
+    },
+    {
+      "focal_id": "PS.3.1",
+      "reference_id": "E.1.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Preserve release artifacts to help in the identification and analysis of vulnerabilities discovered after release.",
+      "source_locator": "Sheet1#row-17"
+    },
+    {
+      "focal_id": "PS.3.2",
+      "reference_id": "G.1.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Enable traceability and reproducibility of the actions performed while writing code, compiling, testing, and deploying software by making transparent the steps that were performed, by whom and in what order.",
+      "source_locator": "Sheet1#row-18"
+    },
+    {
+      "focal_id": "PS.3.2",
+      "reference_id": "G.1.5",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "By providing SBOM, enable internal and external customers to analyze the contents of the final software package, including the version of the dependencies.",
+      "source_locator": "Sheet1#row-19"
+    },
+    {
+      "focal_id": "PW.1.1",
+      "reference_id": "P.2.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Decrease the number of design flaws and security vulnerabilities introduced during the architecture and design phases.",
+      "source_locator": "Sheet1#row-20"
+    },
+    {
+      "focal_id": "PW.1.2",
+      "reference_id": "G.5.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Record and track the software‚Äôs security risk-based exceptions and mitigation plans.",
+      "source_locator": "Sheet1#row-21"
+    },
+    {
+      "focal_id": "PW.1.3",
+      "reference_id": "P.2.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Reduce introducing new vulnerabilities by reusing standardized and proven security features.",
+      "source_locator": "Sheet1#row-22"
+    },
+    {
+      "focal_id": "PW.2.1",
+      "reference_id": "P.2.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Decrease the number of design flaws and security vulnerabilities introduced during the architecture and design phases.",
+      "source_locator": "Sheet1#row-23"
+    },
+    {
+      "focal_id": "PW.4.1",
+      "reference_id": "P.3.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Engineers can choose from organization-approved components",
+      "source_locator": "Sheet1#row-24"
+    },
+    {
+      "focal_id": "PW.4.2",
+      "reference_id": "P.2.5",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Maintain components built in-house.",
+      "source_locator": "Sheet1#row-25"
+    },
+    {
+      "focal_id": "PW.4.4",
+      "reference_id": "P.4.5",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Identify increased security risk of third-party and open-source components",
+      "source_locator": "Sheet1#row-26"
+    },
+    {
+      "focal_id": "PW.5.1",
+      "reference_id": "P.2.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Decrease the number of security vulnerabilities introduced during source code creation.",
+      "source_locator": "Sheet1#row-27"
+    },
+    {
+      "focal_id": "PW.6.1",
+      "reference_id": "E.2.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Reduce vulnerabilities during compilation and build.",
+      "source_locator": "Sheet1#row-28"
+    },
+    {
+      "focal_id": "PW.6.2",
+      "reference_id": "E.2.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Through automated builds, reduce human error and malicious actions and artifacts that cause the output of the build process to contain security vulnerabilities.",
+      "source_locator": "Sheet1#row-29"
+    },
+    {
+      "focal_id": "PW.6.2",
+      "reference_id": "E.2.8",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Protect the integrity of build output",
+      "source_locator": "Sheet1#row-30"
+    },
+    {
+      "focal_id": "PW.7.1",
+      "reference_id": "G.2.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Guidelines on which code should undergo a security-focused manual or automated review are communicated.",
+      "source_locator": "Sheet1#row-31"
+    },
+    {
+      "focal_id": "PW.7.2",
+      "reference_id": "P.4.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Detect security vulnerabilities introduced during architecture, design, and source code creation including those injected with malicious intent",
+      "source_locator": "Sheet1#row-32"
+    },
+    {
+      "focal_id": "PW.8.1",
+      "reference_id": "P.4.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Discover vulnerabilities only detected through executable testing",
+      "source_locator": "Sheet1#row-33"
+    },
+    {
+      "focal_id": "PW.8.2",
+      "reference_id": "P.4.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Discover vulnerabilities only detected through executable testing",
+      "source_locator": "Sheet1#row-34"
+    },
+    {
+      "focal_id": "PW.9.1",
+      "reference_id": "P.2.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Improve the security of software at the time of installation.",
+      "source_locator": "Sheet1#row-35"
+    },
+    {
+      "focal_id": "PW.9.2",
+      "reference_id": "P.2.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Improve the security of software at the time of installation.",
+      "source_locator": "Sheet1#row-36"
+    },
+    {
+      "focal_id": "RV.1.1",
+      "reference_id": "G.4.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Stay current on attack trends.",
+      "source_locator": "Sheet1#row-37"
+    },
+    {
+      "focal_id": "RV.1.1",
+      "reference_id": "P.5.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Update vulnerable dependency when a fixed version is available",
+      "source_locator": "Sheet1#row-38"
+    },
+    {
+      "focal_id": "RV.1.2",
+      "reference_id": "P.4.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Detect vulnerabilities before deployment through the use of automated tools to reduce the window of opportunity for attackers.",
+      "source_locator": "Sheet1#row-39"
+    },
+    {
+      "focal_id": "RV.1.3",
+      "reference_id": "D.1.3",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Aid organizations in responding to vulnerabilities to reduce the window of opportunity for attackers",
+      "source_locator": "Sheet1#row-40"
+    },
+    {
+      "focal_id": "RV.2.1",
+      "reference_id": "D.1.1",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Plan the resolution of discovered vulnerabilities",
+      "source_locator": "Sheet1#row-41"
+    },
+    {
+      "focal_id": "RV.2.2",
+      "reference_id": "D.1.2",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Remediate vulnerabilities based upon a risk-based prioritization",
+      "source_locator": "Sheet1#row-42"
+    },
+    {
+      "focal_id": "RV.3.1",
+      "reference_id": "D.1.6",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Reduce the frequency of vulnerabilities in the future",
+      "source_locator": "Sheet1#row-43"
+    },
+    {
+      "focal_id": "RV.3.3",
+      "reference_id": "D.1.4",
+      "relationship_type": "Concept Crosswalk",
+      "raw_relationship_type": "Concept Crosswalk",
+      "rationale": "Proactively eradicate classes of vulnerabilities.",
+      "source_locator": "Sheet1#row-44"
+    }
+  ]
+}

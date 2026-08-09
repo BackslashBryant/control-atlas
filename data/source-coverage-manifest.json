@@ -1,21 +1,41 @@
 {
   "schema_version": "3.0",
-  "generated_at": "2026-08-08T21:16:06.373Z",
+  "generated_at": "2026-08-09T01:24:11.655Z",
   "completeness": {
     "total_publications": 65,
     "total_artifacts": 38,
-    "total_catalog_bundles": 7,
+    "total_catalog_bundles": 23,
     "manual_seed_artifacts": 0,
     "catalog_states": {
       "reconciled": 3,
       "partial": 0,
-      "discovered": 4,
+      "discovered": 20,
       "unknown": 0,
       "quarantined": 0
     },
     "provenance_verified": true
   },
   "catalogs": [
+    {
+      "catalog_id": "cmmc-2",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 4,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
     {
       "catalog_id": "csf-2",
       "completeness_status": "reconciled",
@@ -34,28 +54,7 @@
         "direct_file_import",
         "extracted_from_official_publication"
       ],
-      "last_refresh": "2026-08-08",
-      "has_shard": true
-    },
-    {
-      "catalog_id": "nist-800-53",
-      "completeness_status": "discovered",
-      "expected_records": null,
-      "imported_records": 2232,
-      "excluded_records": 0,
-      "missing_records": null,
-      "expected_basis": null,
-      "expected_evidence": null,
-      "imported_evidence": null,
-      "exclusions": [],
-      "primary_artifacts": 1,
-      "supplemental_artifacts": 3,
-      "mapping_artifacts": 1,
-      "methods": [
-        "extracted_from_official_publication",
-        "direct_file_import"
-      ],
-      "last_refresh": "2026-08-08",
+      "last_refresh": "2026-08-09",
       "has_shard": true
     },
     {
@@ -75,14 +74,14 @@
       "methods": [
         "extracted_from_official_publication"
       ],
-      "last_refresh": "2026-08-08",
+      "last_refresh": "2026-08-09",
       "has_shard": true
     },
     {
-      "catalog_id": "dod-rai",
+      "catalog_id": "disa-cci",
       "completeness_status": "discovered",
       "expected_records": null,
-      "imported_records": 14,
+      "imported_records": 5138,
       "excluded_records": 0,
       "missing_records": null,
       "expected_basis": null,
@@ -91,46 +90,6 @@
       "exclusions": [],
       "primary_artifacts": 1,
       "supplemental_artifacts": 1,
-      "mapping_artifacts": 0,
-      "methods": [
-        "extracted_from_official_publication"
-      ],
-      "last_refresh": "2026-08-08",
-      "has_shard": true
-    },
-    {
-      "catalog_id": "dod-zt",
-      "completeness_status": "discovered",
-      "expected_records": null,
-      "imported_records": 62,
-      "excluded_records": 0,
-      "missing_records": null,
-      "expected_basis": null,
-      "expected_evidence": null,
-      "imported_evidence": null,
-      "exclusions": [],
-      "primary_artifacts": 4,
-      "supplemental_artifacts": 0,
-      "mapping_artifacts": 0,
-      "methods": [
-        "extracted_from_official_publication"
-      ],
-      "last_refresh": "2026-08-07",
-      "has_shard": true
-    },
-    {
-      "catalog_id": "disa-stig",
-      "completeness_status": "reconciled",
-      "expected_records": 16877,
-      "imported_records": 16877,
-      "excluded_records": 0,
-      "missing_records": 0,
-      "expected_basis": "Full parse of the official DISA July 2026 SRG/STIG compilation (U_SRG-STIG_Library_July_2026.zip). Expected = STIG XCCDF rule records across all ingested benchmarks.",
-      "expected_evidence": "data/disa-artifact-manifest.json#reconciliation.stig_records_parsed",
-      "imported_evidence": "data/disa-artifact-manifest.json#reconciliation.stig_records_parsed",
-      "exclusions": [],
-      "primary_artifacts": 2,
-      "supplemental_artifacts": 0,
       "mapping_artifacts": 1,
       "methods": [
         "direct_file_import"
@@ -156,6 +115,368 @@
         "direct_file_import"
       ],
       "last_refresh": "2026-08-08",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "disa-stig",
+      "completeness_status": "reconciled",
+      "expected_records": 16877,
+      "imported_records": 16877,
+      "excluded_records": 0,
+      "missing_records": 0,
+      "expected_basis": "Full parse of the official DISA July 2026 SRG/STIG compilation (U_SRG-STIG_Library_July_2026.zip). Expected = STIG XCCDF rule records across all ingested benchmarks.",
+      "expected_evidence": "data/disa-artifact-manifest.json#reconciliation.stig_records_parsed",
+      "imported_evidence": "data/disa-artifact-manifest.json#reconciliation.stig_records_parsed",
+      "exclusions": [],
+      "primary_artifacts": 2,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 1,
+      "methods": [
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-09",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "dod-rai",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 14,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 1,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
+      ],
+      "last_refresh": "2026-08-09",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "dod-zt",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 62,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 4,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "fedramp-rev5",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 5,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 1,
+      "mapping_artifacts": 0,
+      "methods": [
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "fips-199",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 4,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "fips-200",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 18,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "mitre-attack",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 713,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 1,
+      "methods": [
+        "direct_file_import",
+        "api_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "mitre-attack-ics",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 110,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "mitre-d3fend",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 279,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 1,
+      "methods": [
+        "api_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "nist-800-171",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 148,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 2,
+      "methods": [
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "nist-800-171-rev2",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 125,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "nist-800-172",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 133,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "nist-800-37",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 8,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "nist-800-53",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 2232,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 3,
+      "mapping_artifacts": 1,
+      "methods": [
+        "extracted_from_official_publication",
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-09",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "nist-800-53a",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 2232,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "nist-800-53b",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 5,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-09",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "nist-ai-rmf",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 92,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
+      "catalog_id": "nist-ssdf",
+      "completeness_status": "discovered",
+      "expected_records": null,
+      "imported_records": 47,
+      "excluded_records": 0,
+      "missing_records": null,
+      "expected_basis": null,
+      "expected_evidence": null,
+      "imported_evidence": null,
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "extracted_from_official_publication"
+      ],
+      "last_refresh": "2026-08-07",
       "has_shard": true
     }
   ],

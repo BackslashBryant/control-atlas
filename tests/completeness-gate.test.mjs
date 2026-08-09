@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import test from 'node:test';
 import { COMPLETENESS_STATES, resolveExpectedLocator, classifyCatalog } from '../scripts/lib/completeness.mjs';
 
@@ -70,6 +70,29 @@ test('no committed catalog is reconciled with an unknown expected/missing invent
       assert.equal(c.missing_records, 0, `${c.catalog_id} reconciled with missing_records != 0`);
       assert.equal(c.expected_records, c.imported_records + c.excluded_records + c.missing_records,
         `${c.catalog_id} reconciled but expected != imported + excluded + missing`);
+    }
+  }
+});
+
+test('every generated catalog participates in the source coverage model', () => {
+  const coverage = JSON.parse(readFileSync('data/source-coverage-manifest.json', 'utf8'));
+  const generated = readdirSync('data/generated/catalog-records', { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
+    .map((entry) => entry.name.slice(0, -5))
+    .sort();
+  const covered = coverage.catalogs.map((catalog) => catalog.catalog_id).sort();
+  assert.deepEqual(covered, generated);
+  assert.ok(coverage.catalogs.every((catalog) => ['reconciled', 'discovered', 'partial', 'quarantined'].includes(catalog.completeness_status)),
+    'a shipped catalog with records cannot be coverage-unknown');
+});
+
+test('active canonical source layers never retain manual-seed provenance', () => {
+  const registry = JSON.parse(readFileSync('data/source-registry.json', 'utf8'));
+  for (const layer of ['publications', 'sources', 'artifacts']) {
+    for (const record of registry[layer] || []) {
+      if (record.lifecycle_status === 'active' || record.graph_eligible === true) {
+        assert.notEqual(record.parser || record.metadata?.parser, 'manual-seed', `${layer}:${record.id}`);
+      }
     }
   }
 });
