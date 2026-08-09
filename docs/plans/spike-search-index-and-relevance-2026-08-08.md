@@ -2,7 +2,7 @@
 
 **For:** the data/backend agent
 **Requested:** 2026-08-08
-**Blocks:** Epic 12 Phase 2 (`epic-12-ux-stabilization-2026-08-08.md`)
+**Blocks:** Epic 12 Phase 2 (`epic-12-first-click-clarity-2026-08-08.md`)
 **Type:** spike — investigate, prove, recommend. Do not ship UI.
 
 ---
@@ -40,14 +40,13 @@ Three rows in the top six are byte-identical. The redesigned row needs, **per re
 | Canonical record type | The 6-kind taxonomy (Epic 12 §3.3) | partially — 30 raw types exist |
 | Connection count | Currently **wrong** — see below | broken |
 
-**The connection count is contradicting itself.** Search rows for `fips-200 / AC` render `0 published connections`. That record's own page renders `3 CONNECTIONS` (FAMILY-AC, RMF-PREPARE, CATALOG). Two code paths, two answers, and search shows the discouraging one.
+> **Update 2026-08-08 — the connection-count item is solved; do not re-investigate it.** Repo inspection found the cause and it is not a counting disagreement. `published_connection_count` **is** computed at build time (`scripts/build-framework-data.mjs:1921-1944`), **is** written into every library-search document, and **is** read correctly by `ExplorePage.tsx:289`. It is dropped in transit: `src/ui/workers/jsonParseWorker.ts:9-21` lists 11 columns and omits it, and `src/ui/lib/runtimeLoader.ts:372` hard-codes `transport_columns.length !== 11`. Because `parseOffThread` runs for every `library-search.json` fetch, every row in every browser reads 0. Fix is two fields plus deriving the column count from the shared field list; it is owned by **Epic 12 Phase 0a**, not by this spike. Left here because it changes the field table below: the count is already in the index.
 
 ### Deliverable 1
 
 1. Document what `library-search.json.gz` actually contains per entry, as a field table.
 2. State, per row of the table above, whether the field is present, derivable at build time, or missing.
-3. **Find and fix the connection-count discrepancy at the source.** One computation, one answer, consumed by both the row and the record page. Report which one was wrong and why.
-4. If official text is absent from the index, cost adding it: bytes added to the gzipped payload, and the build-step change. **Report the number before implementing** — the size budget matters more than the feature (see constraints).
+3. If official text is absent from the index, cost adding it: bytes added to the gzipped payload, and the build-step change. **Report the number before implementing** — the size budget matters more than the feature (see constraints).
 
 ---
 
@@ -122,8 +121,7 @@ New sources, new record types, ingestion changes, the graph/connection model bey
 ## Report back with
 
 1. The index field table, with present / derivable / missing per field.
-2. Root cause of the connection-count discrepancy, and the fix.
-3. The open-source evaluation: candidates, licences, health, sizes, selection, rejection reasons.
-4. Before/after eval-set scores for the recommended approach.
-5. Payload size delta, gzipped.
-6. A go/no-go on Phase 2's snippet requirement: **can the result row show real official text within the size budget, yes or no.** This is the single answer Epic 12 is blocked on.
+2. The open-source evaluation: candidates, licences, health, sizes, selection, rejection reasons.
+3. Before/after eval-set scores for the recommended approach.
+4. Payload size delta, gzipped.
+5. A go/no-go on Phase 2's snippet requirement: **can the result row show real official text within the size budget, yes or no.** This is the single answer Epic 12 is blocked on.
