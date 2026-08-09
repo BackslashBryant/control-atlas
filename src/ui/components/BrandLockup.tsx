@@ -54,7 +54,7 @@ export function BrandFlourish() {
       {/* Static, so a screen reader is not re-read every rotation tick. */}
       <span className="visually-hidden">
         Keyboard shortcut: Control plus Alt plus the first letter of the action
-        shown in the masthead opens that part of Control Atlas.
+        shown in the header opens that part of Control Atlas.
       </span>
     </span>
   );

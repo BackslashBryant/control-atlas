@@ -31,7 +31,9 @@ export function sourceFreshness(source, now = new Date()) {
 export function sourceCurrentAsOf(source, now = new Date()) {
   const freshness = sourceFreshness(source, now);
   if (freshness.is_stale) {
-    return `Freshness check overdue — last checked ${source?.last_checked || 'on an unknown date'}. This source may have changed. Verify the official source before relying on this page.`;
+    return source?.last_checked
+      ? `Last verified against the source on ${source.last_checked}. The source may have changed since then; open the official source for the latest version.`
+      : 'No verified check date is recorded. Open the official source for the latest version.';
   }
   return `Version ${source?.version || 'not recorded'} · Current as of ${source.last_checked}`;
 }

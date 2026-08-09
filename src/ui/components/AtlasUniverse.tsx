@@ -263,7 +263,7 @@ function publicationProjection(
     edges,
     level: "publications",
     title: area.label,
-    description: "This aggregate has split into the publications organized here. Open one to reveal only its publisher-declared structure.",
+    description: "This area contains several publications. Open one to see the sections as its publisher organized them.",
   };
 }
 
@@ -419,7 +419,7 @@ function AtlasUniverseGraph(props: {
     },
   );
   const [activeNodeId, setActiveNodeId] = useState("");
-  const [liveMessage, setLiveMessage] = useState("Atlas landscape ready.");
+  const [liveMessage, setLiveMessage] = useState("Atlas ready.");
   const semanticGuard = useRef(0);
 
   const currentArea = selectedArea
@@ -573,8 +573,7 @@ function AtlasUniverseGraph(props: {
       <p aria-live="polite" className="sr-only">{liveMessage}</p>
       <div className="atlas-universe__legend" aria-label="Atlas relationship legend">
         <span><i className="is-organizing" />Control Atlas structure</span>
-        <span><i className="is-published" />Publisher-declared structure</span>
-        <span>Mappings, baselines, RMF, and evidence appear after focus, not as parents.</span>
+        <span><i className="is-published" />Publisher structure</span>
       </div>
     </div>
   );

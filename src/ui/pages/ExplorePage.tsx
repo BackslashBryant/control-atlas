@@ -109,14 +109,15 @@ function FilterControls(props: {
       return { label: `${kind.label} (${count})`, disabled: count === 0 };
     })(),
     value: kind.id,
-  }));
+  })).sort((left, right) => left.label.localeCompare(right.label, undefined, { sensitivity: "base" }));
   const rawOptions = rawTypesForKind(state.kind)
     .filter((rawType) => facets.objectTypes.includes(rawType))
     .filter((rawType) => allDocuments.some((document) => document.object_type === rawType))
     .map((rawType) => ({
       label: `${displayNameFor("object_type", rawType)} (${allDocuments.filter((document) => document.object_type === rawType).length})`,
       value: rawType,
-    }));
+    }))
+    .sort((left, right) => left.label.localeCompare(right.label, undefined, { sensitivity: "base" }));
   const familyOptions = state.filter
     ? [...new Set(allDocuments.filter((document) => document.catalog_id === state.filter).map((document) => document.control_family).filter(Boolean))]
       .sort((left, right) => String(left).localeCompare(String(right)))
@@ -130,14 +131,18 @@ function FilterControls(props: {
           id="library-publisher-filter"
           label="Publisher"
           onChange={(publisher) => onNavigate("search", { publisher })}
-          options={(facets.publishers || []).map((value: string) => ({
-            value,
-            label: `${value} (${allDocuments.filter((document) => document.publisher_name === value).length})`,
-          }))}
+          options={(facets.publishers || [])
+            .map((value: string) => ({
+              value,
+              label: `${value} (${allDocuments.filter((document) => document.publisher_name === value).length})`,
+            }))
+            .sort((left, right) => left.label.localeCompare(right.label, undefined, { sensitivity: "base" }))}
           value={state.publisher}
         />
       ) : null}
-      <SelectField label="Content kind" onChange={(kind) => onNavigate("search", { kind, objectType: "" })} options={kindOptions} value={state.kind} />
+      {kindOptions.filter((option) => !option.disabled).length >= 2 ? (
+        <SelectField label="Content kind" onChange={(kind) => onNavigate("search", { kind, objectType: "" })} options={kindOptions} value={state.kind} />
+      ) : null}
       {rawOptions.length >= 2 ? <SelectField label="Refine record type" onChange={(objectType) => onNavigate("search", { objectType })} options={rawOptions} value={state.objectType} /> : null}
       <TypeaheadFilter
         id="library-publication-filter"
@@ -316,7 +321,7 @@ export function ExplorePage(props: {
           <button aria-pressed={state.viewMode !== "map"} onClick={() => switchView("list")} type="button"><IconList aria-hidden="true" size={16} />List</button>
           <button aria-pressed={state.viewMode === "map"} onClick={() => switchView("map")} type="button"><IconMap aria-hidden="true" size={16} />Map</button>
         </div>
-        <label className="search-sort"><span>Sort</span><select aria-label="Sort search results" onChange={(event) => onNavigate("search", { sort: event.target.value })} value={state.sort || "relevance"}><option value="relevance">Relevance</option><option value="identifier">Identifier</option><option value="title">Title</option><option value="publication">Publication or source</option></select></label>
+        <label className="search-sort"><span>Sort</span><select aria-label="Sort search results" onChange={(event) => onNavigate("search", { sort: event.target.value })} value={state.sort || "relevance"}><option value="identifier">Identifier</option><option value="publication">Publication or source</option><option value="relevance">Relevance</option><option value="title">Title</option></select></label>
         <Button aria-pressed={compareMode} onClick={() => { setCompareMode((value) => !value); setSelectedRecords([]); }} type="button" variant="secondary"><IconGitCompare aria-hidden="true" size={17} />Compare records</Button>
         {compareMode && selectedRecords.length >= 2 ? <Button onClick={() => onNavigate("matrix", { crosswalk: "relationships", items: selectedRecords.join(",") })} type="button" variant="primary">Compare {selectedRecords.length}</Button> : null}
         <Button className="search-mobile-filter-button" onClick={() => setFiltersOpen(true)} type="button" variant="secondary"><IconAdjustmentsHorizontal aria-hidden="true" size={17} /> Filters{activeFilters.length ? ` (${activeFilters.length})` : ""}</Button>

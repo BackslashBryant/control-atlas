@@ -511,7 +511,7 @@ const RelationshipGraphInner = forwardRef<
   if (!graphData.nodes.length) {
     return (
       <p className="muted">
-        No graph nodes to display with the current filters.
+        No connected items match the current filters.
       </p>
     );
   }
@@ -657,7 +657,7 @@ const RelationshipGraphInner = forwardRef<
       </div>
       <p aria-live="polite" className="visually-hidden">
         {liveMessage ||
-          `Diagram loaded: ${graphData.nodes.length} nodes / ${graphData.links.length} links.`}{" "}
+          `Diagram loaded: ${graphData.nodes.length} items / ${graphData.links.length} links.`}{" "}
         Diagram zoom level {zoomLevel.toFixed(1)}x.
         {layoutRunning ? " Arranging diagram." : ""}
       </p>

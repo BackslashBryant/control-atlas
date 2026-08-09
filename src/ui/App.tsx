@@ -406,7 +406,7 @@ export function App() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      // The masthead keycap advertises Ctrl+Alt+<word>; make it real. Matched
+      // The header keycap advertises Ctrl+Alt+<word>; make it real. Matched
       // against the word currently displayed, so words that share a first
       // letter never collide. Checked before Ctrl+K so Ctrl+Alt+K is not
       // swallowed by the search overlay.

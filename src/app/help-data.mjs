@@ -8,7 +8,7 @@ export const helpSurfaces = [
   {
     view: "atlas-map",
     title: "Atlas",
-    body: "Trace publisher-declared structure separately from cited mappings, applicability selections, and process relationships.",
+    body: "Follow the publisher's organization separately from cited mappings, applicability selections, and process relationships.",
     actionLabel: "Open Atlas",
   },
   {
@@ -60,13 +60,13 @@ export const helpSurfaces = [
 ];
 
 // Keyboard shortcuts belong here, not on About. The Ctrl+Alt entry describes
-// the masthead keycap, which rotates: the letter is always the first letter of
+// the header keycap, which rotates: the letter is always the first letter of
 // the word currently showing (see src/shared/brand-rotation.ts).
 export const helpShortcuts = [
   { keys: "Ctrl + K", action: "Open search" },
   {
     keys: "Ctrl + Alt + first letter",
-    action: "Go to the surface named on the masthead keycap",
+    action: "Open the section named on the keyboard shortcut",
   },
   { keys: "Esc", action: "Close a dialog, drawer, or menu" },
 ];

@@ -96,11 +96,11 @@ test("Phase 3 filters stay stable, bounded, and free of hierarchy node types", a
   expect(renderedSets[1]).toEqual(renderedSets[0]);
   const kindLabels = await page.getByLabel("Content kind").locator("option:not([value=''])").allTextContents();
   expect(kindLabels.map((label) => label.replace(/ \(\d+\)$/, ""))).toEqual([
+    "Baselines & profiles",
+    "Process & methods",
     "Requirements",
     "Technical rules",
     "Threats & defenses",
-    "Baselines & profiles",
-    "Process & methods",
     "Tools & communities",
   ]);
 });

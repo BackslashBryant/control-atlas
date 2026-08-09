@@ -38,14 +38,13 @@ import {
 } from "../components/RelationshipExplorer";
 import { RecordContextRail } from "../components/RecordContextRail";
 import { CanonicalBreadcrumb } from "../components/CanonicalBreadcrumb";
-import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { GlossaryTermChip } from "../components/GlossaryTermChip";
 import { QuickIntentCard } from "../components/QuickIntentCard";
 import {
   glossaryTermsForDocument,
 } from "../lib/glossarySearch.mjs";
 import { serializeHashUrl } from "../lib/hashRoutes";
-import { buildImpactBreakdown, recordDisplayTitle } from "../lib/recordTitle";
+import { recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { normalizeViewState, type ViewState } from "../lib/viewState";
 import { officialTextPreview } from "../lib/officialText";
@@ -69,46 +68,6 @@ import {
 } from "../lib/pagePrimitives";
 
 const ODP_PATTERN = /\[(?:Assignment|Selection)[^\]]*\]/g;
-
-/**
- * W7.2 — the compact relationship-class overview rendered beneath the
- * "Where this sits" rail. Groups from `groupRelationships` are Class-3
- * correlation except nistBaseline/fedrampBaseline, which are Class-2
- * applicability (a baseline selects from a catalog, it does not own the
- * control — docs/tree-model.md #3) and get the distinct tone-applicability
- * badge so the two classes never look alike.
- */
-const RELATIONSHIP_CLASS_BUCKETS: Array<{
-  id: string;
-  label: string;
-  tone: "applicability" | "default";
-  groupIds: string[];
-}> = [
-  {
-    id: "selected-by",
-    label: "Selected by",
-    tone: "applicability",
-    groupIds: ["nistBaseline", "fedrampBaseline"],
-  },
-  {
-    id: "correlated-through",
-    label: "Correlated through",
-    tone: "default",
-    groupIds: ["disa", "mitre", "csf", "sp171", "other"],
-  },
-  {
-    id: "implemented-by",
-    label: "Implemented by",
-    tone: "default",
-    groupIds: ["stig"],
-  },
-  {
-    id: "assessed-through",
-    label: "Assessed through",
-    tone: "default",
-    groupIds: ["assessment"],
-  },
-];
 
 /**
  * Split text on ODP bracket markers (e.g. "[Assignment: organization-defined
@@ -221,33 +180,6 @@ export function ObjectDetailPage(props: {
   const relationshipGroupSignature = connectionGroups
     .map((group) => `${group.id}:${group.items.length}`)
     .join("|");
-  const classBuckets = useMemo(
-    () =>
-      RELATIONSHIP_CLASS_BUCKETS.map((bucket) => ({
-        id: bucket.id,
-        label: bucket.label,
-        tone: bucket.tone,
-        items: grouped
-          .filter((group) => bucket.groupIds.includes(group.id))
-          .flatMap((group) =>
-            group.items.map((item: any) => {
-              const itemId =
-                item.counterpart.metadata?.item_id || item.counterpart.id;
-              return {
-                id: item.counterpart.id,
-                // "Assessed through AC-2" reads as a self-reference — the
-                // assessment procedure needs its source and object type, not
-                // just the shared item ID.
-                label:
-                  bucket.id === "assessed-through"
-                    ? `SP 800-53A — ${itemId} assessment procedure`
-                    : itemId,
-              };
-            }),
-          ),
-      })).filter((bucket) => bucket.items.length > 0),
-    [relationshipGroupSignature],
-  );
   const [openRelationshipGroupIds, setOpenRelationshipGroupIds] = useState<
     string[]
   >([]);
@@ -257,16 +189,6 @@ export function ObjectDetailPage(props: {
   const federalContext = node
     ? bundle.runtime.getFederalContext(node.id)
     : null;
-  const advancedRelationships = edges.slice(0, 25);
-  const impact = useMemo(
-    () =>
-      node
-        ? buildImpactBreakdown(node.id, edges, (id) =>
-            bundle.runtime.getNode(id),
-          )
-        : { total: 0, byType: [] },
-    [bundle.runtime, edges, node],
-  );
 
   const isWithdrawn = node?.lifecycle_status === "withdrawn";
   const supersededByIds: string[] = Array.isArray(node?.metadata?.superseded_by)
@@ -491,7 +413,7 @@ export function ObjectDetailPage(props: {
           </p>
           {provenanceBreakdown.importedFrom.length ? (
             <p className="support-meta">
-              Imported from: {provenanceBreakdown.importedFrom.join(", ")}
+              From: {provenanceBreakdown.importedFrom.join(", ")}
             </p>
           ) : null}
           {provenanceBreakdown.enrichedBy.length ? (
@@ -631,40 +553,6 @@ export function ObjectDetailPage(props: {
               </div>
             </div>
 
-            {/* One canonical relationship summary, not two competing
-                systems: the class breakdown (Selected by / Correlated
-                through / Implemented by / Assessed through) introduces the
-                same groups the accordion below lists in full, instead of
-                repeating them in a separate section. */}
-            {classBuckets.length ? (
-              <div className="tree-relationship-classes" aria-label="Relationship classes">
-                {classBuckets.map((bucket) => (
-                  <div className="tree-relationship-class-row" key={bucket.id}>
-                    <span className="tree-relationship-class-label">{bucket.label}</span>
-                    <div className="badge-row">
-                      {bucket.items.slice(0, 6).map((item) => (
-                        <button
-                          className="badge-button"
-                          key={item.id}
-                          onClick={() => onOpenNode(item.id)}
-                          type="button"
-                        >
-                          <Badge tone={bucket.tone === "applicability" ? "applicability" : undefined}>
-                            {item.label}
-                          </Badge>
-                        </button>
-                      ))}
-                      {bucket.items.length > 6 ? (
-                        <span className="tree-relationship-class-more">
-                          +{bucket.items.length - 6} more below
-                        </span>
-                      ) : null}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : null}
-
             {state.relationshipView === "map" ||
             state.relationshipView === "list" ||
             state.relationshipView === "table" ? (
@@ -702,15 +590,17 @@ export function ObjectDetailPage(props: {
               />
             ) : null}
 
-            <RelationshipGroupsSection
-              formatRelationshipLabel={formatRelationshipLabel}
-              groups={connectionGroups}
-              onOpenNode={(nodeId) => onOpenNode(nodeId)}
-              onOpenGroupIdsChange={setOpenRelationshipGroupIds}
-              openGroupIds={openRelationshipGroupIds}
-              source={source}
-              sourceTrustSummary={sourceTrustSummary}
-            />
+            {state.relationshipView === "map" ||
+            state.relationshipView === "list" ||
+            state.relationshipView === "table" ? null : (
+              <RelationshipGroupsSection
+                formatRelationshipLabel={formatRelationshipLabel}
+                groups={connectionGroups}
+                onOpenNode={(nodeId) => onOpenNode(nodeId)}
+                onOpenGroupIdsChange={setOpenRelationshipGroupIds}
+                openGroupIds={openRelationshipGroupIds}
+              />
+            )}
           </Panel>
 
           <section className="stack" data-record-section="advanced">
@@ -844,8 +734,6 @@ export function ObjectDetailPage(props: {
             document={document}
             node={node}
             onNavigate={onNavigate}
-            onOpenNode={onOpenNode}
-            publishedBuckets={classBuckets}
           />
 
           {relatedGlossaryTerms.length ? (
@@ -879,45 +767,6 @@ export function ObjectDetailPage(props: {
                   <strong>{node.id}</strong>
                 </div>
               </div>
-              <table className="detail-table">
-                <thead>
-                  <tr>
-                    <th>Connected item</th>
-                    <th>Connection</th>
-                    <th>Source type</th>
-                    <th>Trust level</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {advancedRelationships.map((edge: any) => {
-                    const counterpartId =
-                      edge.source_node_id === node.id
-                        ? edge.target_node_id
-                        : edge.source_node_id;
-                    const counterpart = bundle.runtime.getNode(counterpartId);
-                    return (
-                      <tr key={edge.id}>
-                        <td>
-                          {counterpart?.metadata?.item_id || counterpartId}
-                        </td>
-                        <td>{formatRelationshipLabel(edge)}</td>
-                        <td>
-                          <ProvenanceTerm
-                            kind="provenance"
-                            value={edge.provenance_class}
-                          />
-                        </td>
-                        <td>
-                          <ProvenanceTerm
-                            kind="confidence"
-                            value={edge.confidence}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
             </DisclosurePanel>
           </Accordion.Root>
         </aside>

@@ -162,8 +162,8 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
       <aside className="home-trust-boundary">
         <p>
           Official public material stays primary and attributed. Control Atlas
-          suggestions are labeled, never added to the published graph, and
-          never decide applicability or compliance.
+          suggestions are labeled, kept separate from links found in published
+          sources, and never decide applicability or compliance.
         </p>
       </aside>
     </section>

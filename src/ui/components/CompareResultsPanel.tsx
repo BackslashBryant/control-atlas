@@ -175,6 +175,11 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
           .join(" · ") || "No mapping provenance recorded for this comparison."}
         {graph.summary.sourceBacked ? " mappings." : ""}
       </p>
+      <p className="compare-decision-boundary" role="note">
+        A missing mapping means these published results contain no cited link;
+        it does not prove that no relationship exists. Use the cited sources
+        when deciding what the result means for your work.
+      </p>
 
       {/* This legend used to define each term as itself ("Published mapping =
           published mapping"), which tells a newcomer nothing. */}

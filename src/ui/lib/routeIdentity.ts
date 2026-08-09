@@ -128,7 +128,7 @@ const START_PARAMS = new Set(["goal", "context"]);
 const COMPARE_PARAMS = new Set(["crosswalk", "workbench", "source", "target", "items", "relationshipType", "provenance", "confidence", "includeCandidates", "chainCatalog", "chainBenchmark", "chainItem", "baselineA", "baselineB", "intent", "compareView", "mappingSource", "compareRun"]);
 const LEARN_PARAMS = new Set(["pattern"]);
 const BUILD_PARAMS = new Set(["templateType", "framework", "format", "environment", "baseline", "controlFamily", "category", "q"]);
-const SOURCE_PARAMS = new Set(["q", "source", "provenance", "eligibility", "lifecycle", "access"]);
+const SOURCE_PARAMS = new Set(["q", "source", "publisher", "provenance", "eligibility", "lifecycle", "access"]);
 const RETIRED_PARAMS = new Set(["q"]);
 
 function normalizedPath(input: string): { path: string; params: URLSearchParams } {

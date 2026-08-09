@@ -17,10 +17,17 @@ test('source freshness handles leap boundaries and invalid dates deterministical
   assert.equal(sourceFreshness({}, now).age_days, null);
 });
 
-test('newcomer-facing freshness wording never calls a stale source current', () => {
+test('newcomer-facing freshness wording states the verified date calmly and never calls a stale source current', () => {
   const fresh = { version: 'Rev. 5', last_checked: '2026-06-09', stale_after_days: 45 };
   const stale = { version: 'Rev. 5', last_checked: '2025-01-23', stale_after_days: 45 };
   assert.equal(sourceCurrentAsOf(fresh, now), 'Version Rev. 5 · Current as of 2026-06-09');
-  assert.match(sourceCurrentAsOf(stale, now), /^Freshness check overdue — last checked 2025-01-23\./);
+  assert.equal(
+    sourceCurrentAsOf(stale, now),
+    'Last verified against the source on 2025-01-23. The source may have changed since then; open the official source for the latest version.',
+  );
   assert.doesNotMatch(sourceCurrentAsOf(stale, now), /Current as of/);
+  assert.equal(
+    sourceCurrentAsOf({}, now),
+    'No verified check date is recorded. Open the official source for the latest version.',
+  );
 });

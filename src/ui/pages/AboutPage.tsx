@@ -40,13 +40,11 @@ export function AboutPage() {
           <p>{PRODUCT_DECISION_BOUNDARY}</p>
         </SummaryCard>
 
-        <SummaryCard title="A tree for hierarchy, a graph for relationships">
+        <SummaryCard title="Hierarchy and relationships answer different questions">
           <p>
-            Control Atlas keeps hierarchy and relationships separate. Path
-            shows where a record sits in Control Atlas structure and in its
-            publisher hierarchy on separate rails. Map and List show
-            baselines, mappings, assessments, and implementation links without
-            treating them as parents.
+            Path shows where a publisher placed a record. Map and List show
+            cited links to baselines, mappings, assessments, and implementation
+            guidance.
           </p>
           <p>
             AC-2 lives under SP 800-53&apos;s own Access Control family. It is

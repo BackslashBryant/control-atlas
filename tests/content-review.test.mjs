@@ -370,16 +370,14 @@ test('starter documents use the same direct decision boundary as the public prod
   assert.doesNotMatch(disclaimer, /owns any .* conclusions/i);
 });
 
-test('about page states the exact product boundary without a decorative hierarchy', () => {
+test('about page states the exact product boundary and explains hierarchy in user language', () => {
   const aboutPage = readFileSync('src/ui/pages/AboutPage.tsx', 'utf8');
   assert.match(appShell, /AboutPage/);
   assert.match(aboutPage, /PRODUCT_DEFINITION/);
   assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
-  // The two-rails distinction must survive the copy cut, in whatever wording.
-  assert.match(aboutPage, /separate rails/i);
-  assert.match(aboutPage, /Control Atlas structure/);
-  assert.match(aboutPage, /publisher hierarchy/i);
-  assert.match(aboutPage, /A tree for hierarchy, a graph for relationships/);
+  assert.match(aboutPage, /Path shows where a publisher placed a record/);
+  assert.match(aboutPage, /Map and List show\s+cited links/);
+  assert.doesNotMatch(aboutPage, /graph parenting|not as parents|focus semantics/i);
   assert.doesNotMatch(aboutPage, /\b(?:Roots|Trunk|Twigs|Leaves|Fruit|Acorns)\b/);
   assert.doesNotMatch(aboutPage, /plain English|right starting point/i);
   // About explains the model once; it is not the keyboard-shortcut page and
@@ -392,7 +390,7 @@ test('about page states the exact product boundary without a decorative hierarch
   );
 });
 
-test('the tree/graph line and the AC-2 example live in exactly one place', () => {
+test('the hierarchy explanation and the AC-2 example live in exactly one place', () => {
   const uiFiles = readdirSync('src/ui', { recursive: true })
     .map(String)
     .filter((path) => /\.(?:ts|tsx)$/.test(path))
@@ -402,11 +400,11 @@ test('the tree/graph line and the AC-2 example live in exactly one place', () =>
     ]);
   uiFiles.push(['src/index.html', readFileSync('src/index.html', 'utf8')]);
 
-  const withTreeGraphLine = uiFiles.filter(([, contents]) =>
-    /A tree for hierarchy, a graph for relationships/.test(contents),
+  const withHierarchyExplanation = uiFiles.filter(([, contents]) =>
+    /Path shows where a publisher placed a record/.test(contents),
   );
   assert.deepEqual(
-    withTreeGraphLine.map(([path]) => path),
+    withHierarchyExplanation.map(([path]) => path),
     ['src/ui/pages/AboutPage.tsx'],
   );
 

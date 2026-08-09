@@ -130,6 +130,7 @@ export type ViewState =
       view: "sources";
       query: string;
       source: string;
+      publisher: string;
       provenance: string;
       eligibility: string;
       lifecycle: string;
@@ -391,6 +392,7 @@ export function parseViewState(search: string): ViewState {
       view,
       query: params.get("q") || "",
       source: params.get("source") || "",
+      publisher: params.get("publisher") || "",
       provenance: params.get("provenance") || "",
       eligibility: params.get("eligibility") || "",
       lifecycle: params.get("lifecycle") || "",
@@ -567,6 +569,7 @@ export function normalizeViewState(
       view,
       query: incoming.query || "",
       source: incoming.source || "",
+      publisher: incoming.publisher || "",
       provenance: incoming.provenance || "",
       eligibility: incoming.eligibility || "",
       lifecycle: incoming.lifecycle || "",
@@ -771,6 +774,7 @@ export function serializeViewState(state: ViewState): string {
     params.set("view", state.view);
     setIfValue(params, "q", state.query);
     setIfValue(params, "source", state.source);
+    setIfValue(params, "publisher", state.publisher);
     setIfValue(params, "provenance", state.provenance);
     setIfValue(params, "eligibility", state.eligibility);
     setIfValue(params, "lifecycle", state.lifecycle);
