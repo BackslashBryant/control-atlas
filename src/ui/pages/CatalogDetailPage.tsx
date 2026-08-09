@@ -11,7 +11,7 @@ import {
   publicationSourceForCatalog,
 } from "../lib/catalogInventory";
 import { catalogProfileFor } from "../lib/catalogProfiles";
-import { WorkbenchControlSurface } from "../lib/pagePrimitives";
+import { PageHeader, WorkbenchControlSurface } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
@@ -434,13 +434,11 @@ function CatalogInventory(props: {
 
   return (
     <section className="panel catalog-index" data-visual-identity="publisher-research-library">
-      <header className="page-header" data-route-primary-copy="true" data-route-primary-header="true">
-        <h1>Library</h1>
-        <p className="page-summary">
-          Search every published record, or browse the publications they come
-          from.
-        </p>
-      </header>
+      <PageHeader
+        primary
+        summary="Search every published record, or browse the publications they come from."
+        title="Library"
+      />
       {/* Library merge: searching records and browsing publications are the
           same destination, so the record search runs from here instead of
           making the reader pick a surface first. */}

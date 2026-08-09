@@ -44,7 +44,6 @@ body {
 }
 
 #root > [data-static-header],
-#root > [data-static-header-reserve],
 #root > [data-react-root] .site-header {
   grid-column: 1;
   grid-row: 1;
@@ -54,7 +53,6 @@ body {
   display: none;
 }
 
-#root > [data-static-context-reserve],
 #root > [data-react-root] .orbital-context {
   grid-column: 1;
   grid-row: 2;
@@ -138,14 +136,6 @@ body {
   line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-}
-
-[data-static-header-reserve] {
-  min-height: 68px;
-}
-
-[data-static-context-reserve] {
-  min-height: var(--ca-control-md);
 }
 
 .route-transition {
@@ -371,6 +361,9 @@ body {
 .app-shell {
   position: relative;
   isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .app-shell[data-mode="operational"]::before {
@@ -673,18 +666,28 @@ body {
   white-space: nowrap;
 }
 
-/* Shared page composition */
+/* Shared page composition. The route title is a compact strip; explanatory
+   copy and actions follow as content instead of inflating the strip into a
+   second hero below the global header. */
 .page-header {
   position: relative;
-  margin-bottom: var(--ca-space-8);
-  padding: 0 0 var(--ca-space-5) var(--ca-space-5);
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 64px;
+  min-height: 64px;
+  max-height: 64px;
+  margin-bottom: 0;
+  padding: var(--ca-space-2) var(--ca-space-4);
+  overflow: hidden;
   border-bottom: 1px solid var(--ca-border);
+  background: color-mix(in srgb, var(--ca-surface-deep) 72%, transparent);
 }
 
 .page-header::before {
   position: absolute;
-  top: 0.2rem;
-  bottom: var(--ca-space-5);
+  top: var(--ca-space-2);
+  bottom: var(--ca-space-2);
   left: 0;
   width: 2px;
   background: linear-gradient(var(--ca-primary), transparent);
@@ -705,11 +708,57 @@ body {
 .page-header h1,
 .panel h1,
 .detail-page h1 {
-  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
   font-weight: 700;
   letter-spacing: 0.01em;
-  text-transform: uppercase;
-  text-wrap: balance;
+  text-transform: none;
+}
+
+.page-header-title,
+.page-header > .page-header-row,
+.page-header > .page-header-row > div {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ca-space-3);
+  width: 100%;
+  min-width: 0;
+}
+
+.page-header-title h1,
+.page-header > .page-header-row h1,
+.page-header-title h1 > button {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page-header > .eyebrow,
+.page-header > .page-header-row .page-summary {
+  display: none;
+}
+
+.page-header-eyebrow {
+  flex: none;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.page-header-support {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ca-space-4);
+  margin: var(--ca-space-3) 0 var(--ca-space-6);
+}
+
+.page-header-support .page-summary {
+  margin: 0;
+}
+
+.page-header-support .page-header-action {
+  flex: none;
 }
 
 .page-header .eyebrow,
@@ -738,6 +787,18 @@ body {
 .template-detail-layout {
   grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr);
   gap: var(--ca-space-6);
+}
+
+.detail-page > .detail-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.detail-page [data-record-section] {
+  min-width: 0;
+}
+
+.detail-page .detail-sidebar {
+  position: static;
 }
 
 .page-sidebar,
@@ -1668,7 +1729,7 @@ details > summary {
    overlapped nav buttons with the actions column on ordinary laptop widths
    (grid items ignore their track's width when content can't fit, rather than
    clipping — the box model exception `min-width: auto` makes for grid). */
-@media (max-width: 1023px) {
+@media (max-width: 1519px) {
   .site-header .primary-nav {
     display: none;
   }
@@ -1698,10 +1759,6 @@ details > summary {
 }
 
 @media (max-width: 880px) {
-  [data-static-context-reserve] {
-    min-height: 79px;
-  }
-
   .static-search-form {
     grid-template-columns: 1fr;
   }
@@ -1802,7 +1859,20 @@ details > summary {
   }
 
   .page-header {
-    padding-left: var(--ca-space-4);
+    padding-inline: var(--ca-space-3);
+  }
+
+  .page-header-title {
+    gap: var(--ca-space-2);
+  }
+
+  .page-header-eyebrow {
+    display: none;
+  }
+
+  .page-header-support {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .page-header-row,

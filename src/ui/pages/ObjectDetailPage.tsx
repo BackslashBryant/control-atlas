@@ -477,10 +477,93 @@ export function ObjectDetailPage(props: {
         title={recordDisplayTitle(node) || document.title}
       />
 
-      {/* Orientation before complexity: where this record sits comes right
-          after identity, before any official text or relationship detail —
-          not buried inside the two-column grid below the description. */}
-      <section className="atlas-structural-position">
+      {/* Payoff before orientation: official text and source condition answer
+          the user's question before hierarchy, relationships, and advanced
+          implementation detail. */}
+      <section data-record-section="official-text">
+        <SummaryCard
+          title={source ? "Official description" : "Source identity unavailable"}
+          tone="trust"
+        >
+          {source ? (
+            <>
+              <p className="support-meta">
+                Source excerpt from {source.display_name || source.name}
+              </p>
+              <p>
+                {descriptionPreview
+                  ? renderOdpText(descriptionPreview.preview)
+                  : "No narrative description was published for this record."}
+              </p>
+              {descriptionPreview?.truncated ? (
+                <details className="official-description-disclosure">
+                  <summary>Read full official description</summary>
+                  <p>{renderOdpText(document.description)}</p>
+                </details>
+              ) : null}
+            </>
+          ) : (
+            <p>
+              Official source identity unavailable. This record is not shown
+              as official content until its publication identity can be
+              verified.
+            </p>
+          )}
+          {source && (source.artifact_url || source.catalog_browse_url) ? (
+            <p>
+              <a
+                href={source.artifact_url || source.catalog_browse_url}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Open official source
+              </a>
+            </p>
+          ) : null}
+        </SummaryCard>
+      </section>
+
+      <section data-record-section="source-freshness">
+        <SummaryCard
+          title="Source support"
+          tone={sourceFreshness(source).is_stale ? "warning" : "trust"}
+        >
+          <p>{sourceTrustSummary(source)}</p>
+          <p className="support-meta">
+            Published by: {source?.owner || source?.publisher || "Unavailable"}
+          </p>
+          {provenanceBreakdown.importedFrom.length ? (
+            <p className="support-meta">
+              Imported from: {provenanceBreakdown.importedFrom.join(", ")}
+            </p>
+          ) : null}
+          {provenanceBreakdown.enrichedBy.length ? (
+            <p className="support-meta">
+              Enriched by: {provenanceBreakdown.enrichedBy.join(", ")}
+            </p>
+          ) : null}
+          {provenanceBreakdown.connectionsSuppliedBy.length ? (
+            <p className="support-meta">
+              Connections supplied by:{" "}
+              {provenanceBreakdown.connectionsSuppliedBy.join(", ")}
+            </p>
+          ) : null}
+          {source ? (
+            <p className="support-meta">{sourceCurrentAsOf(source)}</p>
+          ) : null}
+          <div className="card-actions">
+            <Button
+              variant="secondary"
+              onClick={() => onNavigate("sources", { source: source?.id || "" })}
+              type="button"
+            >
+              View data sources
+            </Button>
+          </div>
+        </SummaryCard>
+      </section>
+
+      <section className="atlas-structural-position" data-record-section="hierarchy">
         <p className="eyebrow">Hierarchy</p>
         <h2>Where this sits</h2>
         <WhereThisSitsRail
@@ -553,81 +636,7 @@ export function ObjectDetailPage(props: {
 
       <div className="detail-grid">
         <section className="stack">
-          <SummaryCard
-            title={source ? "Official description" : "Source identity unavailable"}
-            tone="trust"
-          >
-            {source ? (
-              <>
-                <p className="support-meta">
-                  Source excerpt from {source.display_name || source.name}
-                </p>
-                <p>
-                  {descriptionPreview
-                    ? renderOdpText(descriptionPreview.preview)
-                    : "No narrative description was published for this record."}
-                </p>
-                {descriptionPreview?.truncated ? (
-                  <details className="official-description-disclosure">
-                    <summary>Read full official description</summary>
-                    <p>{renderOdpText(document.description)}</p>
-                  </details>
-                ) : null}
-              </>
-            ) : (
-              <p>
-                Official source identity unavailable. This record is not shown
-                as official content until its publication identity can be
-                verified.
-              </p>
-            )}
-            {source && (source.artifact_url || source.catalog_browse_url) ? (
-              <p>
-                <a
-                  href={source.artifact_url || source.catalog_browse_url}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Open official source
-                </a>
-              </p>
-            ) : null}
-          </SummaryCard>
-          {node.metadata?.discussion ? (
-            <SummaryCard title="Discussion" tone="trust">
-              <p className="support-meta">
-                {source?.display_name || source?.name || "The publisher"}'s
-                own explanation of why this exists.
-              </p>
-              <p>{renderOdpText(node.metadata.discussion)}</p>
-            </SummaryCard>
-          ) : null}
-          {node.node_type === "assessment_procedure" ? (
-            <SummaryCard title="Assessment objectives and methods" tone="trust">
-              <p className="support-meta">Source: NIST SP 800-53A.</p>
-              {renderAssessmentProcedure(node.metadata) || (
-                <p>No assessment content was published for this procedure.</p>
-              )}
-            </SummaryCard>
-          ) : null}
-          {node.node_type === "attack_technique" ? (
-            <SummaryCard title="Threat context">
-              <p>
-                Domain:{" "}
-                {node.metadata?.attack_domain === "ics"
-                  ? "ICS ATT&CK"
-                  : "Enterprise ATT&CK"}
-              </p>
-              {node.metadata?.tactics?.length ? (
-                <p>Tactics: {node.metadata.tactics.join(", ")}</p>
-              ) : null}
-              {node.metadata?.platforms?.length ? (
-                <p>Platforms: {node.metadata.platforms.join(", ")}</p>
-              ) : null}
-            </SummaryCard>
-          ) : null}
-
-          <Panel>
+          <Panel data-record-section="connections">
             <div className="section-header">
               <div>
                 <h2>Connections</h2>
@@ -756,11 +765,46 @@ export function ObjectDetailPage(props: {
             />
           </Panel>
 
-          {/* One grouped disclosure below the payoff, not two lone accordions
-              on either side of it. "Where it appears" is a single line of
-              placement detail — it sat above Connections, putting a click
-              before the reason the page exists. */}
-          <Accordion.Root className="accordion-root" collapsible type="single">
+          <section className="stack" data-record-section="advanced">
+            {node.metadata?.discussion ? (
+              <SummaryCard title="Discussion" tone="trust">
+                <p className="support-meta">
+                  {source?.display_name || source?.name || "The publisher"}'s
+                  own explanation of why this exists.
+                </p>
+                <p>{renderOdpText(node.metadata.discussion)}</p>
+              </SummaryCard>
+            ) : null}
+            {node.node_type === "assessment_procedure" ? (
+              <SummaryCard title="Assessment objectives and methods" tone="trust">
+                <p className="support-meta">Source: NIST SP 800-53A.</p>
+                {renderAssessmentProcedure(node.metadata) || (
+                  <p>No assessment content was published for this procedure.</p>
+                )}
+              </SummaryCard>
+            ) : null}
+            {node.node_type === "attack_technique" ? (
+              <SummaryCard title="Threat context">
+                <p>
+                  Domain:{" "}
+                  {node.metadata?.attack_domain === "ics"
+                    ? "ICS ATT&CK"
+                    : "Enterprise ATT&CK"}
+                </p>
+                {node.metadata?.tactics?.length ? (
+                  <p>Tactics: {node.metadata.tactics.join(", ")}</p>
+                ) : null}
+                {node.metadata?.platforms?.length ? (
+                  <p>Platforms: {node.metadata.platforms.join(", ")}</p>
+                ) : null}
+              </SummaryCard>
+            ) : null}
+
+            {/* One grouped disclosure below the payoff, not two lone accordions
+                on either side of it. "Where it appears" is a single line of
+                placement detail — it sat above Connections, putting a click
+                before the reason the page exists. */}
+            <Accordion.Root className="accordion-root" collapsible type="single">
             <DisclosurePanel title="Where it appears" value="where-it-appears">
               <p>
                 {locationSummary.length ? (
@@ -842,53 +886,11 @@ export function ObjectDetailPage(props: {
                 <p>{renderOdpText(node.metadata.fix_text)}</p>
               </DisclosurePanel>
             ) : null}
-          </Accordion.Root>
-
+            </Accordion.Root>
+          </section>
         </section>
 
         <aside className="stack detail-sidebar">
-          <SummaryCard
-            title="Source support"
-            tone={sourceFreshness(source).is_stale ? "warning" : "trust"}
-          >
-            <p>{sourceTrustSummary(source)}</p>
-            <p className="support-meta">
-              Published by: {source?.owner || source?.publisher || "Unavailable"}
-            </p>
-            {provenanceBreakdown.importedFrom.length ? (
-              <p className="support-meta">
-                Imported from: {provenanceBreakdown.importedFrom.join(", ")}
-              </p>
-            ) : null}
-            {provenanceBreakdown.enrichedBy.length ? (
-              <p className="support-meta">
-                Enriched by: {provenanceBreakdown.enrichedBy.join(", ")}
-              </p>
-            ) : null}
-            {provenanceBreakdown.connectionsSuppliedBy.length ? (
-              <p className="support-meta">
-                Connections supplied by:{" "}
-                {provenanceBreakdown.connectionsSuppliedBy.join(", ")}
-              </p>
-            ) : null}
-            {source ? (
-              <p className="support-meta">
-                {sourceCurrentAsOf(source)}
-              </p>
-            ) : null}
-            <div className="card-actions">
-              <Button
-                variant="secondary"
-                onClick={() =>
-                  onNavigate("sources", { source: source?.id || "" })
-                }
-                type="button"
-              >
-                View data sources
-              </Button>
-            </div>
-          </SummaryCard>
-
           <RecordContextRail
             bundle={bundle}
             document={document}

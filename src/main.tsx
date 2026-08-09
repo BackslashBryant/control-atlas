@@ -8,6 +8,7 @@ import {
   completeRouteTransition,
   requestSearchOverlayOpen,
   ROUTE_COMMITTED_EVENT,
+  ROUTE_TRANSITION_END_EVENT,
   SEARCH_RESULTS_FOCUS_EVENT,
 } from './shared/navigation-events';
 import '../styles/tokens.css';
@@ -231,19 +232,34 @@ function navigateFromStaticHome(target: string) {
 }
 
 function focusSearchResultsWhenReady() {
+  let observer: MutationObserver | null = null;
+  let timeout = 0;
+
+  const cleanup = () => {
+    observer?.disconnect();
+    window.removeEventListener(ROUTE_TRANSITION_END_EVENT, focusResults);
+    window.clearTimeout(timeout);
+  };
   const focusResults = () => {
     const results = reactRootElement.querySelector<HTMLElement>('#library-results');
-    if (!results) return false;
+    if (!results || results.closest('[inert]')) return false;
     results.focus();
+    if (document.activeElement !== results) return false;
+    cleanup();
     return true;
   };
   if (focusResults()) return;
 
-  const observer = new MutationObserver(() => {
-    if (focusResults()) observer.disconnect();
+  observer = new MutationObserver(() => {
+    focusResults();
   });
-  observer.observe(reactRootElement, { childList: true, subtree: true });
-  window.setTimeout(() => observer.disconnect(), 15_000);
+  observer.observe(reactRootElement, {
+    attributes: true,
+    childList: true,
+    subtree: true,
+  });
+  window.addEventListener(ROUTE_TRANSITION_END_EVENT, focusResults);
+  timeout = window.setTimeout(cleanup, 15_000);
 }
 
 function connectStaticSearch() {
@@ -269,20 +285,19 @@ function syncProgressiveShell() {
   const search = isSearchHash();
   rootElement.dataset.reactActive =
     rootElement.dataset.reactShellReady === 'true' ? 'true' : 'false';
+  if (rootElement.dataset.progressiveShellReleased === 'true') {
+    delete rootElement.dataset.staticRouteActive;
+    delete rootElement.dataset.staticRouteKind;
+    delete rootElement.dataset.staticRoutePersistent;
+    delete rootElement.dataset.staticSearchActive;
+    return;
+  }
   if (search) {
     rootElement.dataset.staticSearchActive = 'true';
   } else {
     delete rootElement.dataset.staticSearchActive;
   }
 
-  for (const selector of [
-    '[data-static-header-reserve]',
-    '[data-static-context-reserve]',
-  ]) {
-    rootElement
-      .querySelector<HTMLElement>(selector)
-      ?.toggleAttribute('hidden', home);
-  }
   rootElement
     .querySelector<HTMLElement>('[data-static-search]')
     ?.toggleAttribute('hidden', !search);

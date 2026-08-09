@@ -161,6 +161,10 @@
     if (element) element.toggleAttribute("hidden", hidden);
   }
 
+  function remove(element) {
+    if (element) element.remove();
+  }
+
   function syncFirstPaintShell() {
     var root = document.getElementById("root");
     if (!root) return;
@@ -169,10 +173,16 @@
     var identity = routeIdentity();
     var shell = root.querySelector("[data-static-route]");
 
-    setHidden(root.querySelector("[data-static-home]"), !home);
-    setHidden(root.querySelector("[data-static-header-reserve]"), home);
-    setHidden(root.querySelector("[data-static-context-reserve]"), home);
-    setHidden(root.querySelector("[data-static-search]"), !search);
+    if (home) {
+      remove(root.querySelector("[data-static-route]"));
+      remove(root.querySelector("[data-static-search]"));
+    } else if (search) {
+      remove(root.querySelector("[data-static-home]"));
+      remove(root.querySelector("[data-static-route]"));
+    } else {
+      remove(root.querySelector("[data-static-home]"));
+      remove(root.querySelector("[data-static-search]"));
+    }
 
     if (search) root.dataset.staticSearchActive = "true";
     else delete root.dataset.staticSearchActive;
@@ -186,7 +196,7 @@
       shell.querySelector("[data-static-route-summary]").textContent = identity.summary;
       shell.removeAttribute("hidden");
     } else if (shell) {
-      shell.toggleAttribute("hidden", home || search);
+      setHidden(shell, true);
     }
 
     if (search) {
