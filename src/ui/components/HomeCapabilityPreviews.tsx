@@ -6,6 +6,7 @@ import {
 } from "@tabler/icons-react";
 
 import type { ViewState } from "../lib/viewState";
+import { AppLink } from "./AppLink";
 
 type Navigate = (
   view: ViewState["view"],
@@ -22,10 +23,10 @@ const PREVIEWS = [
     detail: "SP 800-171 · Supply Chain Risk Management · 3.17.1",
     action: "Open the record",
     icon: IconBinaryTree,
-    navigate: (onNavigate: Navigate) =>
-      onNavigate("library-detail", {
+    view: "library-detail",
+    patch: {
         node: "nist-800-171:3.17.1",
-      }),
+    },
   },
   {
     id: "threat-defense",
@@ -36,11 +37,11 @@ const PREVIEWS = [
     detail: "ATT&CK · Initial Access · T1195.002",
     action: "Open in the Atlas",
     icon: IconRadar,
-    navigate: (onNavigate: Navigate) =>
-      onNavigate("atlas-map", {
+    view: "atlas-map",
+    patch: {
         node: "mitre-attack:T1195.002",
         relationshipView: "map",
-      }),
+    },
   },
   {
     id: "working-output",
@@ -51,11 +52,11 @@ const PREVIEWS = [
     detail: "Task · Prepare for a security assessment",
     action: "Open the task",
     icon: IconChecklist,
-    navigate: (onNavigate: Navigate) =>
-      onNavigate("templates", {
+    view: "templates",
+    patch: {
         buildSection: "tasks",
         task: "prepare-security-assessment",
-      }),
+    },
   },
 ] as const;
 
@@ -86,14 +87,15 @@ export function HomeCapabilityPreviews(props: { onNavigate: Navigate }) {
                 <p>{preview.description}</p>
                 <small>{preview.detail}</small>
               </div>
-              <button
+              <AppLink
                 className="home-capability-action"
-                onClick={() => preview.navigate(props.onNavigate)}
-                type="button"
+                onNavigate={props.onNavigate}
+                patch={preview.patch}
+                view={preview.view}
               >
                 {preview.action}
                 <IconArrowRight aria-hidden="true" size={16} stroke={2} />
-              </button>
+              </AppLink>
             </article>
           );
         })}

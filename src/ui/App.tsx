@@ -20,7 +20,7 @@ import {
 } from "./components/LibrarySkeleton";
 import { SiteFooter } from "./components/SiteFooter";
 import { TopNav } from "./components/TopNav";
-import { Button } from "./components/lsm/Button";
+import { AppLink } from "./components/AppLink";
 import {
   OrbitalContextBar,
   orbitalRouteContext,
@@ -39,6 +39,7 @@ import { recordDisplayTitle, routeDocumentTitle } from "./lib/recordTitle";
 import {
   beginRouteTransition,
   completeRouteTransition,
+  CLOSE_OVERLAYS_EVENT,
   notifyRouteCommitted,
   OPEN_SEARCH_OVERLAY_EVENT,
 } from "../shared/navigation-events";
@@ -190,6 +191,20 @@ export function App() {
   const [routeRecovery, setRouteRecovery] = useState("");
   const [chromeReady, setChromeReady] = useState(false);
 
+  const closeOverlays = useCallback(() => {
+    window.dispatchEvent(new Event(CLOSE_OVERLAYS_EVENT));
+    setSearchOverlayOpen(false);
+    setHelpOpen(false);
+    setGlossaryFocusTermId("");
+  }, []);
+
+  const openSearchOverlay = useCallback(() => {
+    window.dispatchEvent(new Event(CLOSE_OVERLAYS_EVENT));
+    setHelpOpen(false);
+    setGlossaryFocusTermId("");
+    setSearchOverlayOpen(true);
+  }, []);
+
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => setChromeReady(true));
     return () => window.cancelAnimationFrame(frame);
@@ -205,6 +220,7 @@ export function App() {
 
   useEffect(() => {
     const syncLocation = () => {
+      closeOverlays();
       beginRouteTransition("Opening the selected workspace", window.location.hash);
       setLocation(readHashLocation());
     };
@@ -214,7 +230,7 @@ export function App() {
       window.removeEventListener("hashchange", syncLocation);
       window.removeEventListener("popstate", syncLocation);
     };
-  }, []);
+  }, [closeOverlays]);
 
   function requestFullGraph() {
     setGraphRequested((current) => (current ? current : true));
@@ -422,26 +438,27 @@ export function App() {
       }
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
-        setSearchOverlayOpen(true);
+        openSearchOverlay();
       }
     };
     // The Home route boots without this component mounted at all (its
     // shortcuts are advertised on a static shell React hasn't rendered yet),
     // so main.tsx boots React on Ctrl+K and fires this once mounted instead.
-    const onOpenSearchOverlay = () => setSearchOverlayOpen(true);
+    const onOpenSearchOverlay = () => openSearchOverlay();
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener(OPEN_SEARCH_OVERLAY_EVENT, onOpenSearchOverlay);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener(OPEN_SEARCH_OVERLAY_EVENT, onOpenSearchOverlay);
     };
-  }, []);
+  }, [openSearchOverlay]);
 
   function navigate(
     nextView: ViewState["view"],
     patch: Partial<ViewState> = {},
     reset = false,
   ) {
+    closeOverlays();
     const current = latestNavStateRef.current;
     const nextState = normalizeViewState(nextView, {
       ...(!reset && current.view === nextView
@@ -483,6 +500,8 @@ export function App() {
   }
 
   function openGlossary(termId = "") {
+    window.dispatchEvent(new Event(CLOSE_OVERLAYS_EVENT));
+    setSearchOverlayOpen(false);
     setGlossaryFocusTermId(termId);
     setHelpOpen(true);
   }
@@ -523,7 +542,7 @@ export function App() {
       </a>
       {chromeReady ? <TopNav
         onNavigate={navigate}
-        onOpenSearch={() => setSearchOverlayOpen(true)}
+        onOpenSearch={openSearchOverlay}
         viewState={viewState}
       /> : null}
       {chromeReady ? <OrbitalContextBar entityName={routeEntityName} onNavigate={navigate} state={viewState} /> : null}
@@ -556,7 +575,7 @@ export function App() {
                 onOpenGlossary={openGlossary}
                 onOpenNode={openNode}
                 onOpenNodeByItemId={openNodeByItemId}
-                onOpenSearch={() => setSearchOverlayOpen(true)}
+                onOpenSearch={openSearchOverlay}
                 onRequestFullGraph={requestFullGraph}
                 onRetryLoad={retryLoad}
                 state={viewState}
@@ -691,18 +710,14 @@ function AppContent(props: {
           have moved.
         </p>
         <div className="card-actions">
-          <Button
-            variant="primary"
-            onClick={() => onNavigate("home")}
-            type="button"
-          >
+          <AppLink onNavigate={onNavigate} variant="primary" view="home">
             Go to Home
-          </Button>
+          </AppLink>
           <details>
             <summary>Try another path</summary>
             <div className="card-actions disclosure-actions">
-              <Button variant="secondary" onClick={() => onNavigate("start-here")} type="button">Start here</Button>
-              <Button variant="secondary" onClick={() => onNavigate("search")} type="button">Search records</Button>
+              <AppLink onNavigate={onNavigate} variant="secondary" view="start-here">Start here</AppLink>
+              <AppLink onNavigate={onNavigate} variant="secondary" view="search">Search records</AppLink>
             </div>
           </details>
         </div>
@@ -830,20 +845,12 @@ function AppContent(props: {
         <h1>No public map entry for "{state.query}"</h1>
         <p>Try Search or Start to find the closest path.</p>
         <div className="card-actions">
-          <Button
-            variant="primary"
-            onClick={() => onNavigate("search", { query: state.query })}
-            type="button"
-          >
+          <AppLink onNavigate={onNavigate} patch={{ query: state.query }} variant="primary" view="search">
             Search records
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => onNavigate("start-here")}
-            type="button"
-          >
+          </AppLink>
+          <AppLink onNavigate={onNavigate} variant="secondary" view="start-here">
             Start guided path
-          </Button>
+          </AppLink>
         </div>
       </section>
     );

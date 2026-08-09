@@ -52,6 +52,8 @@ import { officialTextPreview } from "../lib/officialText";
 import { recordDisplayTitle } from "../lib/recordTitle";
 
 import { Button, Panel } from "../components/lsm";
+import { AppLink, shouldInterceptAppLink } from "../components/AppLink";
+import { RecordLink } from "../components/RecordLink";
 
 type AtlasMapPageProps = {
   bundle: RuntimeBundle;
@@ -237,13 +239,13 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           160,
         ).preview : "See the full cyber landscape, then zoom into an area, publication, or record."}
         title={record ? (
-          <button
+          <RecordLink
             className="atlas-record-title-link"
-            onClick={() => onOpenNode(record.center_node.id)}
-            type="button"
+            nodeId={record.center_node.id}
+            onOpenNode={onOpenNode}
           >
             {focusedAtlasTitle(record)}
-          </button>
+          </RecordLink>
         ) : "Atlas map"}
       />
 
@@ -278,20 +280,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             No Atlas record matches <strong>{noMatchQuery}</strong>.
           </p>
           <div className="card-actions">
-            <Button
-              variant="secondary"
-              onClick={() => onNavigate("search", { query: noMatchQuery })}
-              type="button"
-            >
+            <AppLink onNavigate={onNavigate} patch={{ query: noMatchQuery }} variant="secondary" view="search">
               Search all records
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => onNavigate("catalog-detail")}
-              type="button"
-            >
+            </AppLink>
+            <AppLink onNavigate={onNavigate} variant="secondary" view="search">
               Browse the Catalog
-            </Button>
+            </AppLink>
           </div>
         </div>
       ) : null}
@@ -312,8 +306,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       {recordStatus === "missing" || recordStatus === "error" ? (
         <AtlasLoadFailure
           error={recordStatus === "error"}
-          onSearch={() => onNavigate("search", { query: state.node })}
-          onSources={() => onNavigate("sources")}
+          onNavigate={onNavigate}
+          query={state.node}
         />
       ) : null}
 
@@ -497,10 +491,6 @@ function FocusedAtlas(props: {
     });
   }
 
-  function openSources(sourceId?: string) {
-    onNavigate("sources", sourceId ? { source: sourceId } : undefined);
-  }
-
   const boardView = false;
   // The record workspace always shows Connections. relationshipView now
   // selects which supporting panel is open, so old deep links still resolve.
@@ -603,8 +593,8 @@ function FocusedAtlas(props: {
             onIncludeCandidates={() =>
               updateFilters({ includeCandidates: true })
             }
-            onSearch={() => onNavigate("search", { query: centerLabel })}
-            onSources={() => onNavigate("sources")}
+            onNavigate={onNavigate}
+            query={centerLabel}
           />
         </div>
       ) : (
@@ -654,19 +644,14 @@ function FocusedAtlas(props: {
                       <ul className="atlas-path-child-list">
                         {structuralChildren.map((child) => (
                           <li key={child.id}>
-                            <button
-                              onClick={() =>
-                                patchAtlas({
-                                  node: child.id,
-                                  atlasStage: "",
-                                  relationshipGroup: "",
-                                })
-                              }
+                            <AppLink
+                              onNavigate={onNavigate}
+                              patch={{ ...state, node: child.id, atlasStage: "", relationshipGroup: "" }}
                               title={child.title}
-                              type="button"
+                              view="atlas-map"
                             >
                               {child.itemId}
-                            </button>
+                            </AppLink>
                           </li>
                         ))}
                       </ul>
@@ -691,13 +676,9 @@ function FocusedAtlas(props: {
                   >
                     See connections
                   </Button>
-                  <Button
-                    onClick={() => openSources(record.center_node.source_id)}
-                    type="button"
-                    variant="secondary"
-                  >
+                  <AppLink onNavigate={onNavigate} patch={{ source: record.center_node.source_id }} variant="secondary" view="sources">
                     Review official source
-                  </Button>
+                  </AppLink>
                 </div>
               </section>
             ) : null}
@@ -798,13 +779,13 @@ function FocusedAtlas(props: {
                       )}
                     </p>
                     <h2>
-                      <button
+                      <RecordLink
                         className="atlas-record-title-link"
-                        onClick={() => onOpenNode(inspectedId)}
-                        type="button"
+                        nodeId={inspectedId}
+                        onOpenNode={onOpenNode}
                       >
                         {inspectedItemId}
-                      </button>
+                      </RecordLink>
                     </h2>
                     {showInspectedTitle ? <p>{inspectedTitle}</p> : null}
                   </div>
@@ -850,32 +831,29 @@ function FocusedAtlas(props: {
 
               <div className="atlas-inspector-actions">
                 {selectedRow ? (
-                  <Button
-                    variant="primary"
-                    onClick={() => {
-                      setSelectedRow(null);
-                      patchAtlas({
-                        node: selectedRow.counterpart.id,
-                        atlasStage: "",
-                        relationshipGroup: "",
-                        relationshipSearch: "",
-                      });
+                  <AppLink
+                    onNavigate={onNavigate}
+                    onClick={(event) => {
+                      if (shouldInterceptAppLink(event)) setSelectedRow(null);
                     }}
-                    type="button"
+                    patch={{ ...state, node: selectedRow.counterpart.id, atlasStage: "", relationshipGroup: "", relationshipSearch: "" }}
+                    variant="primary"
+                    view="atlas-map"
                   >
                     <IconMap aria-hidden="true" size={18} />
                     Explore from this record
-                  </Button>
+                  </AppLink>
                 ) : null}
                 {selectedRow ? (
-                  <Button
+                  <AppLink
+                    onNavigate={onNavigate}
+                    patch={selectedSource?.source_id ? { source: selectedSource.source_id } : undefined}
                     variant="secondary-quiet"
-                    onClick={() => openSources(selectedSource?.source_id)}
-                    type="button"
+                    view="sources"
                   >
                     <IconFolderOpen aria-hidden="true" size={18} />
                     View source
-                  </Button>
+                  </AppLink>
                 ) : null}
               </div>
             </aside>
@@ -1323,10 +1301,10 @@ function AtlasGuidedPath(props: {
             <ul className="atlas-path-record-list">
               {rmfStep.results.map((result) => (
                 <li key={`${result.id}:${result.relationshipType}`}>
-                  <button
+                  <RecordLink
                     className="atlas-path-record"
-                    onClick={() => onOpenNode(result.id)}
-                    type="button"
+                    nodeId={result.id}
+                    onOpenNode={onOpenNode}
                   >
                     <span className="atlas-path-record-text">
                       <strong>{result.itemId}</strong>
@@ -1336,7 +1314,7 @@ function AtlasGuidedPath(props: {
                       {displayNameFor("relationship_type", result.relationshipType)}
                     </span>
                     <IconChevronRight aria-hidden="true" size={20} />
-                  </button>
+                  </RecordLink>
                 </li>
               ))}
             </ul>
@@ -1353,13 +1331,9 @@ function AtlasGuidedPath(props: {
                 not an invented one-template-per-step rule.
               </p>
             </div>
-            <Button
-              variant="secondary"
-              onClick={() => onNavigate("templates")}
-              type="button"
-            >
+            <AppLink onNavigate={onNavigate} variant="secondary" view="templates">
               Browse templates
-            </Button>
+            </AppLink>
           </aside>
         </div>
       ) : null}
@@ -1482,8 +1456,8 @@ function AtlasNoConnections(props: {
   includeCandidates: boolean;
   onClear: () => void;
   onIncludeCandidates: () => void;
-  onSearch: () => void;
-  onSources: () => void;
+  onNavigate: AtlasMapPageProps["onNavigate"];
+  query: string;
 }) {
   return (
     <section className="atlas-no-connections" role="status">
@@ -1503,8 +1477,8 @@ function AtlasNoConnections(props: {
             Show {props.candidateCount} candidate links
           </Button>
         ) : null}
-        <Button variant="secondary" onClick={props.onSearch} type="button">Search Atlas</Button>
-        <Button variant="secondary" onClick={props.onSources} type="button">View sources</Button>
+        <AppLink onNavigate={props.onNavigate} patch={{ query: props.query }} variant="secondary" view="search">Search Atlas</AppLink>
+        <AppLink onNavigate={props.onNavigate} variant="secondary" view="sources">View sources</AppLink>
       </div>
     </section>
   );
@@ -1512,16 +1486,16 @@ function AtlasNoConnections(props: {
 
 function AtlasLoadFailure(props: {
   error: boolean;
-  onSearch: () => void;
-  onSources: () => void;
+  onNavigate: AtlasMapPageProps["onNavigate"];
+  query: string;
 }) {
   return (
     <section className="atlas-no-connections" role="alert">
       <h2>{props.error ? "Connections could not be loaded." : "This record is not in the Atlas."}</h2>
       <p>{props.error ? "The connection list did not load. Try again or continue through Search." : "The link may be stale or the record may not have a cited Atlas connection."}</p>
       <div className="card-actions">
-        <Button variant="primary" onClick={props.onSearch} type="button">Search records</Button>
-        <Button variant="secondary" onClick={props.onSources} type="button">View sources</Button>
+        <AppLink onNavigate={props.onNavigate} patch={{ query: props.query }} variant="primary" view="search">Search records</AppLink>
+        <AppLink onNavigate={props.onNavigate} variant="secondary" view="sources">View sources</AppLink>
       </div>
     </section>
   );

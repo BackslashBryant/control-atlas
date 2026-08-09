@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { IconMenu2, IconSearch, IconX } from "@tabler/icons-react";
-import { Button, Tabs } from "./lsm";
+import { Button } from "./lsm";
+import { AppLink } from "./AppLink";
 
 import { BrandFlourish, BrandMark } from "./BrandLockup";
 import {
@@ -11,6 +12,7 @@ import {
 } from "../lib/navigation";
 
 import type { ViewState } from "../lib/viewState";
+import { CLOSE_OVERLAYS_EVENT } from "../../shared/navigation-events";
 
 type TopNavProps = {
   viewState: ViewState;
@@ -75,12 +77,18 @@ export function TopNav(props: TopNavProps) {
   }, []);
 
   useEffect(() => {
+    const closeMenu = () => setMobileMenuOpen(false);
+    window.addEventListener(CLOSE_OVERLAYS_EVENT, closeMenu);
+    return () => window.removeEventListener(CLOSE_OVERLAYS_EVENT, closeMenu);
+  }, []);
+
+  useEffect(() => {
     if (!mobileMenuOpen) return;
 
     const priorOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const sheet = mobileMenuRef.current;
-    const firstLink = sheet?.querySelector<HTMLButtonElement>("nav button");
+    const firstLink = sheet?.querySelector<HTMLAnchorElement>("nav a[href]");
     window.requestAnimationFrame(() => firstLink?.focus());
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -122,40 +130,37 @@ export function TopNav(props: TopNavProps) {
     };
   }, [mobileMenuOpen]);
 
-  function navigate(
-    view: ViewState["view"],
-    patch?: Record<string, string>,
-  ) {
-    setMobileMenuOpen(false);
-    onNavigate(view, patch as Partial<ViewState> | undefined, true);
-  }
-
   return (
     <header className="site-header" ref={headerRef}>
-      <button
+      <AppLink
         aria-label="Control Atlas — home"
         className="brand"
-        onClick={() => onNavigate("home")}
-        type="button"
+        onNavigate={onNavigate}
+        view="home"
       >
         <BrandMark />
         <span className="brand-lockup">
           <span className="brand-name">Control Atlas</span>
           <BrandFlourish />
         </span>
-      </button>
+      </AppLink>
 
       {!compactNavigation ? (
         <nav aria-label="Primary navigation" className="primary-nav ml-[16px] self-end mb-[-1px]">
-          <Tabs
-            tabs={PRIMARY_NAV_ITEMS.map(item => ({ id: item.view, label: item.label }))}
-            activeId={activeView as string}
-            onChange={(id) => {
-              const item = PRIMARY_NAV_ITEMS.find(i => i.view === id);
-              if (item) navigate(item.view, item.patch);
-            }}
-            className="border-b-0 h-full gap-[2px]"
-          />
+          <div className="border-b-0 h-full gap-[2px]">
+            {PRIMARY_NAV_ITEMS.map((item) => (
+              <AppLink
+                aria-current={activeView === item.view ? "page" : undefined}
+                className={activeView === item.view ? "nav-active" : undefined}
+                key={item.view}
+                onNavigate={onNavigate}
+                patch={item.patch}
+                view={item.view}
+              >
+                {item.label}
+              </AppLink>
+            ))}
+          </div>
         </nav>
       ) : null}
 
@@ -173,15 +178,17 @@ export function TopNav(props: TopNavProps) {
         </div>
         {!compactHeader ? <nav aria-label="Utility navigation" className="header-actions-text">
           {UTILITY_NAV_ITEMS.map((item) => (
-            <Button
+            <AppLink
               aria-current={activeView === item.view ? "page" : undefined}
               key={item.view}
+              className="header-utility-link"
+              onNavigate={onNavigate}
+              patch={item.patch}
               variant="secondary"
-              className="!min-h-[36px] !border-transparent hover:!border-[var(--ca-border-strong)]"
-              onClick={() => navigate(item.view, item.patch)}
+              view={item.view}
             >
               {item.label}
-            </Button>
+            </AppLink>
           ))}
         </nav> : null}
         <button
@@ -218,16 +225,18 @@ export function TopNav(props: TopNavProps) {
                 {section.items.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <button
+                    <AppLink
                       aria-current={activeView === item.view ? "page" : undefined}
                       className={activeView === item.view ? "active" : ""}
                       key={item.label}
-                      onClick={() => navigate(item.view, item.patch)}
-                      type="button"
+                      onClick={() => setMobileMenuOpen(false)}
+                      onNavigate={onNavigate}
+                      patch={item.patch}
+                      view={item.view}
                     >
                       <Icon aria-hidden="true" size={18} stroke={1.8} />
                       <span>{item.label}</span>
-                    </button>
+                    </AppLink>
                   );
                 })}
               </div>

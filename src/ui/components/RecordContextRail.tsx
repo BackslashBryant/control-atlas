@@ -8,6 +8,7 @@ import {
 } from "../lib/contextualMatching";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
+import { AppLink } from "./AppLink";
 
 export function RecordContextRail(props: {
   bundle: RuntimeBundle;
@@ -63,18 +64,14 @@ export function RecordContextRail(props: {
           <div className="record-suggestion-list">
             {entries.map((suggestion) => (
               <article key={suggestion.id}>
-                <button
-                  onClick={() =>
-                    onNavigate(
-                      suggestion.destination.view,
-                      suggestion.destination.patch,
-                    )
-                  }
-                  type="button"
+                <AppLink
+                  onNavigate={onNavigate}
+                  patch={suggestion.destination.patch}
+                  view={suggestion.destination.view}
                 >
                   <strong>{suggestion.title}</strong>
                   <span>{suggestion.owner}</span>
-                </button>
+                </AppLink>
                 <p>{suggestion.summary}</p>
                 <p className="record-suggestion-reason">
                   <strong>Why shown:</strong> {suggestion.reason.label}
@@ -93,19 +90,15 @@ export function RecordContextRail(props: {
             ))}
           </div>
           {entries.some((entry) => entry.resource) ? (
-            <button
+            <AppLink
               className="record-suggestion-view-all"
-              onClick={() =>
-                onNavigate("commons", {
-                  query: resourceQuery,
-                  showAll: "true",
-                })
-              }
-              type="button"
+              onNavigate={onNavigate}
+              patch={{ query: resourceQuery, showAll: "true" }}
+              view="commons"
             >
               <IconBook2 aria-hidden="true" size={15} />
               View all matching resources
-            </button>
+            </AppLink>
           ) : null}
         </section>
       ))}

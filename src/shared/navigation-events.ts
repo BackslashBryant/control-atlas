@@ -2,6 +2,7 @@ export const ROUTE_COMMITTED_EVENT = "control-atlas:route-committed";
 export const SEARCH_RESULTS_FOCUS_EVENT =
   "control-atlas:search-results-focus-requested";
 export const OPEN_SEARCH_OVERLAY_EVENT = "control-atlas:open-search-overlay";
+export const CLOSE_OVERLAYS_EVENT = "control-atlas:close-overlays";
 export const ROUTE_TRANSITION_START_EVENT = "control-atlas:route-transition-start";
 export const ROUTE_TRANSITION_END_EVENT = "control-atlas:route-transition-end";
 
@@ -71,4 +72,8 @@ export function requestSearchResultsFocus() {
 // the job the same way a click on the header search button would.
 export function requestSearchOverlayOpen() {
   window.dispatchEvent(new Event(OPEN_SEARCH_OVERLAY_EVENT));
+}
+
+export function requestOverlayClose() {
+  window.dispatchEvent(new Event(CLOSE_OVERLAYS_EVENT));
 }

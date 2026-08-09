@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { Panel, Button, StatusChip } from "./lsm";
+import { Panel, Button } from "./lsm";
+import { AppLink } from "./AppLink";
 
 export function LoadingStatusPanel(props: {
   slow: boolean;
@@ -59,38 +60,38 @@ export function OfflineFallbackActions(props: {
 }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px]">
-      <button
+      <AppLink
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
-        onClick={() => props.onNavigate("patterns")}
-        type="button"
+        onNavigate={props.onNavigate}
+        view="patterns"
       >
         <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Read explanations</strong>
         <span className="text-[var(--ca-text-muted)] text-[13px]">Cited explanations of source identity, structure, search, mappings, records, and starter documents.</span>
-      </button>
-      <button
+      </AppLink>
+      <AppLink
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
-        onClick={() => props.onNavigate("templates")}
-        type="button"
+        onNavigate={props.onNavigate}
+        view="templates"
       >
         <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Open starter documents</strong>
         <span className="text-[var(--ca-text-muted)] text-[13px]">Create a blank starter file from explicit inputs.</span>
-      </button>
-      <button
+      </AppLink>
+      <AppLink
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
-        onClick={() => props.onNavigate("start-here")}
-        type="button"
+        onNavigate={props.onNavigate}
+        view="start-here"
       >
         <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Browse publications</strong>
         <span className="text-[var(--ca-text-muted)] text-[13px]">Open a catalog or program source directly.</span>
-      </button>
-      <button
+      </AppLink>
+      <AppLink
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
-        onClick={() => props.onNavigate("about")}
-        type="button"
+        onNavigate={props.onNavigate}
+        view="about"
       >
         <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Read the product boundary</strong>
         <span className="text-[var(--ca-text-muted)] text-[13px]">How sources are attributed and which decisions remain with practitioners and responsible authorities.</span>
-      </button>
+      </AppLink>
     </div>
   );
 }

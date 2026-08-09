@@ -1,6 +1,6 @@
 import React from 'react';
 
-type ButtonVariant = 'primary' | 'secondary' | 'secondary-quiet' | 'destructive' | 'editorial';
+export type ButtonVariant = 'primary' | 'secondary' | 'secondary-quiet' | 'destructive' | 'editorial';
 
 const BUTTON_BASE = "inline-flex items-center justify-center gap-[8px] min-h-[44px] px-[16px] border rounded-[3px] font-bold uppercase tracking-[0.06em] cursor-pointer transition-colors";
 
@@ -13,13 +13,17 @@ const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
   editorial: "bg-[var(--ca-editorial)] text-[var(--ca-surface-deep)] border-[var(--ca-editorial)] hover:bg-[color-mix(in_srgb,var(--ca-editorial)_84%,white)]"
 };
 
+export function buttonClassName(variant: ButtonVariant = 'primary', className = '') {
+  return `${BUTTON_BASE} ${BUTTON_VARIANTS[variant]} ${className}`;
+}
+
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
 }
 
 export function Button({ variant = 'primary', className = '', ...props }: ButtonProps) {
   return (
-    <button className={`${BUTTON_BASE} ${BUTTON_VARIANTS[variant]} ${className}`} {...props} />
+    <button className={buttonClassName(variant, className)} {...props} />
   );
 }
 
@@ -30,6 +34,6 @@ interface ButtonLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> 
 /** For external/navigational links that need button styling — an <a>, never a <button>, so it keeps native link semantics (open-in-new-tab, middle-click, screen-reader "link" role). */
 export function ButtonLink({ variant = 'primary', className = '', ...props }: ButtonLinkProps) {
   return (
-    <a className={`${BUTTON_BASE} ${BUTTON_VARIANTS[variant]} ${className}`} {...props} />
+    <a className={buttonClassName(variant, className)} {...props} />
   );
 }

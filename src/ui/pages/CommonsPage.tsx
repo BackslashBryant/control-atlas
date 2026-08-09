@@ -102,7 +102,7 @@ export function CommonsPage(props: {
   const reset = () => update({ ...EMPTY_STATE });
 
   return (
-    <main className="commons-page resources-ecosystem-page" data-visual-identity="ecosystem-directory">
+    <div className="commons-page resources-ecosystem-page" data-visual-identity="ecosystem-directory">
       <div className="ca-content-container resources-directory">
         <header className="resources-directory-header" data-route-primary-header="true">
           <div data-route-primary-copy="true">
@@ -169,9 +169,9 @@ export function CommonsPage(props: {
               <div><p className="eyebrow">{selectedCollection ? "Collection" : "Directory"}</p><h2>{selectedCollection?.title || "All matching resources"}</h2>{selectedCollection ? <p>{selectedCollection.whyCurated}</p> : null}</div>
               <div className="resources-result-status"><p aria-live="polite" role="status">Showing {filtered.length} of {resources.length}</p><button onClick={reset} type="button">Back to collections</button></div>
             </div>
-            <div className="resources-result-grid">
-              {filtered.map((resource) => <CommonsResourceCard key={resource.id} onSelectDetail={(id) => onNavigate("commons-detail", { id })} resource={resource} />)}
-            </div>
+            <ul className="resources-result-grid">
+              {filtered.map((resource) => <li key={resource.id}><CommonsResourceCard onNavigate={onNavigate} resource={resource} /></li>)}
+            </ul>
           </section>
         ) : (
           <section className="empty-state" data-control-results id="resources-results">
@@ -181,7 +181,7 @@ export function CommonsPage(props: {
           </section>
         )}
       </div>
-    </main>
+    </div>
   );
 }
 

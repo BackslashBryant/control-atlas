@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ProvenanceTerm } from "./ProvenanceTerm";
 import { displayNameFor } from "../../app/display-names.mjs";
 import { Button } from "./lsm/Button";
+import { RecordLink } from "./RecordLink";
 
 const PAGE_SIZE = 10;
 
@@ -105,12 +106,12 @@ function RelationshipGroupItem(props: {
       <Accordion.Content className="accordion-content">
         <div className="stack compact">
           {visibleItems.map((item) => (
-            <button
+            <RecordLink
               className="relationship-card"
               data-record-connection-id={item.edge.id}
               key={`${group.id}-${item.counterpart.id}`}
-              onClick={() => props.onOpenNode(item.counterpart.id)}
-              type="button"
+              nodeId={item.counterpart.id}
+              onOpenNode={props.onOpenNode}
             >
               <div>
                 <strong>
@@ -145,7 +146,7 @@ function RelationshipGroupItem(props: {
                   </span>
                 ) : null}
               </div>
-            </button>
+            </RecordLink>
           ))}
         </div>
         {group.items.length > PAGE_SIZE ? (
@@ -278,13 +279,13 @@ export function ExpandableControlList(props: {
           const title = control.metadata?.title || control.label || itemId;
           return (
             <li key={control.id}>
-              <button
+              <RecordLink
                 className="link-action"
-                onClick={() => props.onOpenNode(control.id)}
-                type="button"
+                nodeId={control.id}
+                onOpenNode={props.onOpenNode}
               >
                 <strong>{itemId}</strong> — {title}
-              </button>
+              </RecordLink>
               {props.sourceRefList(entry.source_refs)}
             </li>
           );

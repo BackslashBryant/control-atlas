@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
 import { AtlasConnectionMap } from "./AtlasConnectionMap";
+import { AppLink } from "./AppLink";
 import { Button } from "./lsm/Button";
 import { CompareExportDisclosure } from "./LoadStatusPanel";
 import { ProvenanceTerm } from "./ProvenanceTerm";
@@ -136,11 +137,6 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
     onNavigate("matrix", { compareView: view, crosswalk: matrixCrosswalk });
   };
 
-  const openAtlasMap = () => {
-    if (!graph.atlasMapNode) return;
-    onNavigate("atlas-map", { node: graph.atlasMapNode });
-  };
-
   return (
     <section className="compare-results-panel">
       <div className="compare-summary-grid summary-grid">
@@ -206,9 +202,9 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
       >
         <div className="card-actions">
           {graph.atlasMapNode ? (
-            <Button variant="secondary" onClick={openAtlasMap} type="button">
+            <AppLink onNavigate={onNavigate} patch={{ node: graph.atlasMapNode }} variant="secondary" view="atlas-map">
               Open in the Atlas
-            </Button>
+            </AppLink>
           ) : null}
           <Button
             aria-pressed={compareView === "map"}

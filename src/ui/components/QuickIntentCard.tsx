@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import type { ViewState } from "../lib/viewState";
+import { AppLink, shouldInterceptAppLink, type AppNavigate } from "./AppLink";
 import { Input } from "./lsm";
 
 export function QuickIntentCard(props: {
@@ -6,19 +8,26 @@ export function QuickIntentCard(props: {
   body: string;
   icon: ReactNode;
   actionLabel?: string;
-  onClick: () => void;
+  onNavigate: AppNavigate;
+  onBeforeNavigate?: () => void;
+  patch?: Partial<ViewState>;
   selected?: boolean;
+  view: ViewState["view"];
 }) {
   return (
-    <button
+    <AppLink
       className={`flex flex-col items-start text-left p-[24px] border rounded-[3px] transition-all group w-full cursor-pointer h-full ${
         props.selected
           ? "border-[var(--ca-secondary)] bg-[color-mix(in_srgb,var(--ca-secondary)_10%,transparent)] shadow-[0_0_0_1px_var(--ca-secondary)]"
           : "border-[var(--ca-border-strong)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)]"
       }`}
-      onClick={props.onClick}
-      type="button"
-      aria-pressed={props.selected}
+      data-selected={props.selected ? "true" : undefined}
+      onClick={(event) => {
+        if (shouldInterceptAppLink(event)) props.onBeforeNavigate?.();
+      }}
+      onNavigate={props.onNavigate}
+      patch={props.patch}
+      view={props.view}
     >
       <div className="text-[var(--ca-secondary)] mb-[16px] p-[8px] bg-[color-mix(in_srgb,var(--ca-secondary)_10%,transparent)] rounded group-hover:bg-[color-mix(in_srgb,var(--ca-secondary)_20%,transparent)] transition-colors">
         {props.icon}
@@ -31,7 +40,7 @@ export function QuickIntentCard(props: {
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
         </span>
       ) : null}
-    </button>
+    </AppLink>
   );
 }
 

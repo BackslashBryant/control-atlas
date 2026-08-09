@@ -1,4 +1,5 @@
 import { ProvenanceTerm } from '../components/ProvenanceTerm';
+import { RecordLink } from '../components/RecordLink';
 
 export function parseCatalogItemIds(value: string, catalogId: string): string[] {
   return [
@@ -83,9 +84,9 @@ export function ChainRelationshipItem(props: {
   const title = node.metadata?.title || node.label || itemId;
   return (
     <li className="chain-link-item">
-      <button className="link-action" onClick={() => onOpenNode(node.id)} type="button">
+      <RecordLink className="link-action" nodeId={node.id} onOpenNode={onOpenNode}>
         <strong>{itemId}</strong> — {title}
-      </button>
+      </RecordLink>
       {relationshipEdge ? (
         <ProvenanceBadge
           provenanceClass={relationshipEdge.provenance_class}

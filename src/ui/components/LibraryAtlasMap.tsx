@@ -1,16 +1,23 @@
 import { IconMap } from "@tabler/icons-react";
+import type { ViewState } from "../lib/viewState";
+import { AppLink, type AppNavigate } from "./AppLink";
 
 export type LibraryMapItem = {
   id: string;
   kind: string;
   label: string;
   group: string;
-  onOpen: () => void;
+  destination?: {
+    view: ViewState["view"];
+    patch?: Partial<ViewState>;
+  };
+  externalHref?: string;
+  onAction?: () => void;
 };
 
 export function LibraryAtlasMap(props: {
   items: LibraryMapItem[];
-  onOpenAtlas: () => void;
+  onNavigate: AppNavigate;
 }) {
   const groups = new Map<string, LibraryMapItem[]>();
   for (const item of props.items) {
@@ -26,9 +33,9 @@ export function LibraryAtlasMap(props: {
           <h2>{props.items.length.toLocaleString()} mapped result{props.items.length === 1 ? "" : "s"}</h2>
           <p>The current Library query is grouped by publication or source. Open any record to expand its immediate Atlas neighborhood.</p>
         </div>
-        <button className="button button--secondary" onClick={props.onOpenAtlas} type="button">
+        <AppLink className="button button--secondary" onNavigate={props.onNavigate} view="atlas-map">
           <IconMap aria-hidden="true" size={17} /> Zoom out to the whole Atlas
-        </button>
+        </AppLink>
       </header>
       {props.items.length ? (
         <div className="library-atlas-map__groups">
@@ -36,12 +43,16 @@ export function LibraryAtlasMap(props: {
             <section className="library-atlas-map__group" key={group}>
               <h3>{group} <span>{items.length}</span></h3>
               <div className="library-atlas-map__nodes">
-                {items.slice(0, 100).map((item) => (
-                  <button className="library-map-node" data-map-node-id={item.id} key={`${item.kind}:${item.id}`} onClick={item.onOpen} type="button">
-                    <small>{item.kind}</small>
-                    <strong>{item.label}</strong>
-                  </button>
-                ))}
+                {items.slice(0, 100).map((item) => {
+                  const content = <><small>{item.kind}</small><strong>{item.label}</strong></>;
+                  return item.destination ? (
+                    <AppLink className="library-map-node" data-map-node-id={item.id} key={`${item.kind}:${item.id}`} onNavigate={props.onNavigate} patch={item.destination.patch} view={item.destination.view}>{content}</AppLink>
+                  ) : item.externalHref ? (
+                    <a className="library-map-node" data-map-node-id={item.id} href={item.externalHref} key={`${item.kind}:${item.id}`} rel="noopener noreferrer" target="_blank">{content}</a>
+                  ) : (
+                    <button className="library-map-node" data-map-node-id={item.id} key={`${item.kind}:${item.id}`} onClick={item.onAction} type="button">{content}</button>
+                  );
+                })}
               </div>
               {items.length > 100 ? <p className="muted">Showing 100 of {items.length.toLocaleString()} in this publication.</p> : null}
             </section>

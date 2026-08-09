@@ -24,13 +24,13 @@ test("Phase 3 header has three primary doors, two utilities, and no overflow fro
 
     const primary = page.locator('header.site-header nav[aria-label="Primary navigation"]');
     const utility = page.locator('header.site-header nav[aria-label="Utility navigation"]');
-    await expect(primary.locator("button")).toHaveCount(3);
-    await expect(utility.locator("button")).toHaveCount(2);
-    await expect(primary.locator("button")).toHaveText(["Start here", "Library", "Guides"]);
-    await expect(utility.locator("button")).toHaveText(["Sources", "About"]);
+    await expect(primary.locator("a[href]")).toHaveCount(3);
+    await expect(utility.locator("a[href]")).toHaveCount(2);
+    await expect(primary.locator("a[href]")).toHaveText(["Start here", "Library", "Guides"]);
+    await expect(utility.locator("a[href]")).toHaveText(["Sources", "About"]);
     const geometry = await page.locator("header.site-header").evaluate((header) => ({
       clientWidth: header.clientWidth,
-      fontSizes: [...header.querySelectorAll('nav[aria-label="Primary navigation"] button')].map((button) => globalThis.getComputedStyle(button).fontSize),
+      fontSizes: [...header.querySelectorAll('nav[aria-label="Primary navigation"] a[href]')].map((link) => globalThis.getComputedStyle(link).fontSize),
       scrollWidth: header.scrollWidth,
     }));
     expect(new Set(geometry.fontSizes).size).toBe(1);
@@ -45,10 +45,10 @@ test("Phase 3 header has three primary doors, two utilities, and no overflow fro
     const navigationName = ["Sources", "About"].includes(destination.label)
       ? "Utility navigation"
       : "Primary navigation";
-    await page.locator(`header.site-header nav[aria-label="${navigationName}"]`).getByRole("button", { name: destination.label, exact: true }).click();
+    await page.locator(`header.site-header nav[aria-label="${navigationName}"]`).getByRole("link", { name: destination.label, exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`#${destination.path}$`));
     await expect(page.locator("#workspace h1")).toHaveText(destination.label);
-    await expect(page.locator(`header.site-header nav[aria-label="${navigationName}"]`).getByRole("button", { name: destination.label, exact: true })).toHaveAttribute("aria-current", "page");
+    await expect(page.locator(`header.site-header nav[aria-label="${navigationName}"]`).getByRole("link", { name: destination.label, exact: true })).toHaveAttribute("aria-current", "page");
   }
 });
 
@@ -121,13 +121,13 @@ test("Phase 3 record identity is canonical across Library, Atlas, and direct pat
   await page.locator('[data-record-id="nist-800-53:AC-2"] .search-result-primary').click();
   await waitForAppReady(page, { allowPartial: true });
   await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", canonicalBreadcrumb);
-  await expect(page.locator('header.site-header nav[aria-label="Primary navigation"] button[aria-current="page"]')).toHaveText("Library");
-  await expect(page.getByRole("button", { name: "See this in the Atlas map", exact: true })).toBeVisible();
+  await expect(page.locator('header.site-header nav a[aria-current="page"]')).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "See this in the Atlas map", exact: true })).toBeVisible();
 
   await gotoApp(page, "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page, { allowPartial: true });
   await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", canonicalBreadcrumb);
-  await expect(page.locator('header.site-header nav[aria-label="Primary navigation"] button[aria-current="page"]')).toHaveText("Library");
+  await expect(page.locator('header.site-header nav[aria-label="Primary navigation"] a[aria-current="page"]')).toHaveText("Library");
 
   await gotoApp(page, "/#/record/nist-800-53/AC-2?from=search&returnTo=%2Flibrary");
   await waitForAppReady(page, { allowPartial: true });
@@ -157,7 +157,7 @@ test("Phase 3 List and Map preserve Library state and never drop non-empty resul
   await expect.poll(() => page.evaluate(() => globalThis.scrollY)).toBeGreaterThanOrEqual(Math.max(0, before - 2));
   await page.getByRole("button", { name: "Map", exact: true }).dispatchEvent("click");
   await expect(page.locator(".library-atlas-map")).toHaveAttribute("data-map-node-count", String(resultCount));
-  await page.getByRole("button", { name: /Zoom out to the whole Atlas/ }).click();
+  await page.getByRole("link", { name: /Zoom out to the whole Atlas/ }).click();
   await expect(page).toHaveURL(/#\/atlas$/);
 
   await gotoApp(page, "/#/library?q=zzzzqqqq-no-results");
@@ -188,9 +188,9 @@ test("Phase 3 record actions and global footer expose the required hierarchy", a
   await gotoApp(page, "/#/record/nist-800-53/AC-2");
   await waitForAppReady(page, { allowPartial: true });
   const actions = page.locator(".page-header-actions");
-  await expect(actions.getByRole("button", { name: "Open official source", exact: true })).toBeVisible();
-  await expect(actions.getByRole("button", { name: "See this in the Atlas map", exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Back", exact: true })).toHaveCount(1);
+  await expect(actions.getByRole("link", { name: "Open official source", exact: true })).toBeVisible();
+  await expect(actions.getByRole("link", { name: "See this in the Atlas map", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Back", exact: true })).toHaveCount(1);
   await actions.locator("summary", { hasText: "More actions" }).click();
   await actions.getByRole("button", { name: "Copy link", exact: true }).click();
   const copied = await page.evaluate(() => globalThis.__copiedRecordUrl);

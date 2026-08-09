@@ -7,6 +7,8 @@ import { templatesForPatterns } from "../lib/glossarySearch.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import { Badge, PATTERN_RENAMES } from "../lib/pagePrimitives";
+import { AppLink } from "./AppLink";
+import { RecordLink } from "./RecordLink";
 
 export function GlossaryDrawer(props: {
   open: boolean;
@@ -41,14 +43,11 @@ export function GlossaryDrawer(props: {
     document.getElementById(`glossary-term-${focusTermId}`)?.scrollIntoView({ block: "nearest" });
   }, [filtered, focusTermId, open]);
 
-  function openFirstControl(controlId: string) {
+  function firstControlId(controlId: string) {
     if (!bundle) return;
     const matches = bundle.runtime.searchLibrary(controlId);
     const match = matches.find((item: any) => item.item_id === controlId) || matches[0];
-    if (match) {
-      setOpen(false);
-      onOpenNode(match.id);
-    }
+    return match?.id as string | undefined;
   }
 
   return (
@@ -89,9 +88,12 @@ export function GlossaryDrawer(props: {
                     <p>{entry.definition}</p>
                     <p className="drawer-support">Why it matters: {entry.why_it_matters}</p>
                     <div className="chip-row">
-                      {entry.related_patterns.map((patternId) => <button className="chip" key={patternId} onClick={() => { setOpen(false); onNavigate("patterns", { pattern: patternId }); }} type="button">{PATTERN_RENAMES[patternId] || patternId}</button>)}
-                      {relatedTemplateIds.map((templateId) => <button className="chip" key={templateId} onClick={() => { setOpen(false); onNavigate("templates", { templateType: templateId }); }} type="button">{templateId.replaceAll("_", " ")}</button>)}
-                      {entry.related_controls.map((controlId) => <button className="chip" key={controlId} onClick={() => openFirstControl(controlId)} type="button">{controlId}</button>)}
+                      {entry.related_patterns.map((patternId) => <AppLink className="chip" key={patternId} onNavigate={onNavigate} patch={{ pattern: patternId }} view="patterns">{PATTERN_RENAMES[patternId] || patternId}</AppLink>)}
+                      {relatedTemplateIds.map((templateId) => <AppLink className="chip" key={templateId} onNavigate={onNavigate} patch={{ templateType: templateId }} view="templates">{templateId.replaceAll("_", " ")}</AppLink>)}
+                      {entry.related_controls.map((controlId) => {
+                        const nodeId = firstControlId(controlId);
+                        return nodeId ? <RecordLink className="chip" key={controlId} nodeId={nodeId} onOpenNode={onOpenNode}>{controlId}</RecordLink> : null;
+                      })}
                     </div>
                     <p className="drawer-link">Reference: {entry.source}</p>
                   </article>

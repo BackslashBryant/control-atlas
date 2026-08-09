@@ -3,6 +3,7 @@ import { IconBook2, IconExternalLink, IconChevronRight } from "@tabler/icons-rea
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import { contextualResourceRecommendations } from "../lib/contextualResourceRecommendations.mjs";
+import { AppLink } from "./AppLink";
 
 type ContextualCommonsModuleProps = {
   bundle: RuntimeBundle | null;
@@ -63,13 +64,15 @@ export function ContextualCommonsModule({
         </div>
 
         {onNavigate ? (
-          <button
-            onClick={() => onNavigate("commons", { query: query || contextId || framework })}
+          <AppLink
             className="text-[11px] font-semibold bg-transparent text-[var(--ca-text)] hover:underline inline-flex items-center gap-1"
+            onNavigate={onNavigate}
+            patch={{ query: query || contextId || framework }}
+            view="commons"
           >
             <span>See all resources ({dataset?.resources.length})</span>
             <IconChevronRight size={12} />
-          </button>
+          </AppLink>
         ) : null}
       </div>
       <p className="contextual-resources-label">{contextLabel}</p>
@@ -82,12 +85,14 @@ export function ContextualCommonsModule({
           >
             <div>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => onNavigate?.("commons-detail", { id: res.id })}
+                {onNavigate ? <AppLink
                   className="text-xs font-semibold bg-transparent text-[var(--ca-text)] hover:text-[var(--ca-primary)] text-left"
+                  onNavigate={onNavigate}
+                  patch={{ id: res.id }}
+                  view="commons-detail"
                 >
                   {res.name}
-                </button>
+                </AppLink> : <span className="text-xs font-semibold text-[var(--ca-text)]">{res.name}</span>}
                 <span className="text-[10px] px-1.5 py-0.2 rounded bg-[var(--ca-surface-raised)] text-[var(--ca-text)] capitalize">
                   {res.resourceLane.replace("_", " ")}
                 </span>

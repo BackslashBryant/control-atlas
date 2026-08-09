@@ -16,7 +16,7 @@ import {
 } from "../../shared/product-identity";
 import { labelForGoal } from "../../app/start-here-guide.mjs";
 import { HomeCapabilityPreviews } from "../components/HomeCapabilityPreviews";
-import { Button } from "../components/lsm";
+import { AppLink } from "../components/AppLink";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
@@ -116,22 +116,22 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
           </button>
 
           <div className="home-primary-actions">
-            <Button
+            <AppLink
               className="home-start-here"
-              onClick={() => onNavigate("start-here")}
-              type="button"
+              onNavigate={onNavigate}
               variant="primary"
+              view="start-here"
             >
               <IconCompass aria-hidden="true" size={20} stroke={1.8} />
               Start with your work
-            </Button>
-            <button
+            </AppLink>
+            <AppLink
               className="home-inline-link"
-              onClick={() => onNavigate("catalog-detail", { catalog: "" })}
-              type="button"
+              onNavigate={onNavigate}
+              view="search"
             >
               Browse official publications
-            </button>
+            </AppLink>
           </div>
         </div>
 
@@ -141,18 +141,19 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
         {HOME_ENTRANCES.map((entrance) => {
           const Icon = entrance.icon;
           return (
-            <button
+            <AppLink
               className="home-secondary-action"
               key={entrance.label}
-              onClick={() => onNavigate(entrance.view, entrance.patch)}
-              type="button"
+              onNavigate={onNavigate}
+              patch={entrance.patch}
+              view={entrance.view}
             >
               <Icon aria-hidden="true" size={20} stroke={1.7} />
               <span>
                 <strong>{entrance.label}</strong>
                 <small>{entrance.description}</small>
               </span>
-            </button>
+            </AppLink>
           );
         })}
       </nav>

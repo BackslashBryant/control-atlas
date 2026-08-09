@@ -20,6 +20,7 @@ import {
   type RelationshipFilterState,
 } from "../lib/useRelationshipFilters";
 import { RelationshipGraphTable } from "./RelationshipGraphTable";
+import { RecordLink } from "./RecordLink";
 const RelationshipGraphWithHandle = lazy(() => import("./RelationshipGraph"));
 
 export type RelationshipGraphHandle = {
@@ -521,15 +522,15 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
             <aside className="relationship-map-selection">
               <p className="eyebrow">Selected item</p>
               {selectedNode.id !== centerNodeId ? (
-                <button
+                <RecordLink
                   className="card-title-action"
-                  onClick={() => onOpenNode(selectedNode.id)}
-                  type="button"
+                  nodeId={selectedNode.id}
+                  onOpenNode={onOpenNode}
                 >
                   <strong>
                     {selectedNode.metadata?.item_id || selectedNode.id}
                   </strong>
-                </button>
+                </RecordLink>
               ) : (
                 <strong>
                   {selectedNode.metadata?.item_id || selectedNode.id}

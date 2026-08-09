@@ -94,9 +94,10 @@ test("every app state has one approved display identity", () => {
 
 test("the three primary doors and two utilities own consistent active navigation", () => {
   assert.equal(selectedNavFor("start-here"), "start-here");
-  for (const view of ["search", "catalog-detail", "library-detail", "atlas-map", "matrix", "commons", "commons-detail"] as const) {
+  for (const view of ["search", "catalog-detail", "atlas-map", "matrix", "commons", "commons-detail"] as const) {
     assert.equal(selectedNavFor(view), "search", view);
   }
+  assert.equal(selectedNavFor("library-detail"), null);
   assert.equal(selectedNavFor("patterns"), "patterns");
   assert.equal(selectedNavFor("sources"), "sources");
   assert.equal(selectedNavFor("about"), "about");

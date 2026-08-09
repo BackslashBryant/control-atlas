@@ -70,10 +70,10 @@ test("V1 workflow 05 — follow a record and return without losing search state"
       name: "AC-2 — Account Management",
       exact: true,
     })
-    .getByRole("button", { name: "AC-2 — Account Management" })
+    .getByRole("link", { name: "AC-2 — Account Management" })
     .click();
   await expect(page).toHaveURL(/#\/record\/nist-800-53\/AC-2/);
-  await page.getByRole("button", { name: "Back", exact: true }).click();
+  await page.getByRole("link", { name: "Back", exact: true }).click();
   await expect(page).toHaveURL(/#\/library\?q=AC-2/);
   await expect(page.getByLabel("Filter results by ID, title, or topic")).toHaveValue("AC-2");
 });
@@ -100,7 +100,7 @@ test("V1 workflow 06 — explore one record through Connections, Hierarchy, and 
   await expect(hierarchy).toContainText("Publisher hierarchy");
   await expect(hierarchy).toContainText("Decomposes into");
   await expect(
-    hierarchy.getByRole("button", { name: "AC-2.1", exact: true }),
+    hierarchy.getByRole("link", { name: "AC-2.1", exact: true }),
   ).toBeVisible();
 
   // The complete list supports the map instead of replacing it.

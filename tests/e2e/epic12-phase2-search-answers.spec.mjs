@@ -30,7 +30,7 @@ test("Phase 2 search results answer access-control questions before the click", 
       excerpt: element.querySelector(".search-result-row__excerpt")?.textContent?.trim() || "",
       publisher: element.getAttribute("data-publisher") || "",
       subtitle: element.querySelector(".search-result-row__source")?.textContent?.trim() || "",
-      title: element.querySelector("h2")?.textContent?.trim() || "",
+      title: element.querySelector("h3")?.textContent?.trim() || "",
     })),
   );
   expect(new Set(rendered.map(({ title, subtitle }) => `${title}\n${subtitle}`)).size)
@@ -162,14 +162,16 @@ for (const viewport of [
           const input = element.querySelector("input").getBoundingClientRect();
           return {
             height: wrapper.height,
-            yDifference: Math.abs(icon.y - input.y),
+            centerDifference: Math.abs(
+              icon.y + icon.height / 2 - (input.y + input.height / 2),
+            ),
           };
         }),
       );
       expect(measurements.length, `${route} at ${viewport.width}px`).toBeGreaterThan(0);
       for (const measurement of measurements) {
         expect(measurement.height, `${route} at ${viewport.width}px`).toBeLessThanOrEqual(46);
-        expect(measurement.yDifference, `${route} at ${viewport.width}px`).toBeLessThanOrEqual(6);
+        expect(measurement.centerDifference, `${route} at ${viewport.width}px`).toBeLessThanOrEqual(6);
       }
     }
   });

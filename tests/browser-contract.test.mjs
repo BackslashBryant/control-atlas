@@ -304,8 +304,10 @@ test('shared shell exposes visible search access and valid intent-card markup', 
   const intentCard = readFileSync('src/ui/components/QuickIntentCard.tsx', 'utf8');
   assert.match(topNav, /onClick=\{onOpenSearch\}/);
   assert.match(topNav, /aria-label="Open search"/);
-  assert.equal((topNav.match(/<Tabs/g) || []).length, 1);
-  assert.match(topNav, /tabs=\{PRIMARY_NAV_ITEMS\.map/);
+  assert.match(topNav, /<nav aria-label="Primary navigation"/);
+  assert.match(topNav, /PRIMARY_NAV_ITEMS\.map/);
+  assert.match(topNav, /<AppLink/);
+  assert.doesNotMatch(topNav, /<Tabs/);
   assert.match(templatesPage, /className="build-start-layout"/);
   assert.match(templatesPage, /className="build-resource-rail"/);
   assert.doesNotMatch(intentCard, /<h[1-6]>/);
@@ -420,7 +422,10 @@ test('Build stays locally coherent while Library owns resource discovery', () =>
   assert.doesNotMatch(resourcesPage, /BuildLocalNav/);
   assert.doesNotMatch(resourceDetail, /BuildLocalNav/);
   assert.match(resourcesPage, /<p className="eyebrow">Resources<\/p>/);
-  assert.match(resourceDetail, /<IconArrowLeft[^>]+\/>Back<\/button>/);
+  assert.match(
+    resourceDetail,
+    /<AppLink onNavigate=\{onNavigate\} view="commons"><IconArrowLeft[^>]+\/>Back<\/AppLink>/,
+  );
 });
 
 test('route interactions keep canonical context and synchronize visible state', () => {

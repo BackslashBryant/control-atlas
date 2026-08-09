@@ -7,6 +7,7 @@ import {
   type AncestorLink,
 } from "../lib/ancestorPath";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
+import { RecordLink } from "./RecordLink";
 
 /**
  * W7.2 — the persistent "Where this sits" tree path. Walks the W1.6
@@ -130,19 +131,19 @@ export function WhereThisSitsRail(props: {
                           {link.label}
                         </span>
                       ) : (
-                        <button
+                        <RecordLink
                           className={
                             isOrganizing
                               ? "atlas-path-crumb-link atlas-path-crumb-organizing"
                               : "atlas-path-crumb-link"
                           }
-                          onClick={() => onOpenNode(link.id)}
-                          type="button"
+                          nodeId={link.id}
+                          onOpenNode={onOpenNode}
                           aria-label={isOrganizing ? `${link.label} — ${organizingLabel}` : undefined}
                           title={isOrganizing ? organizingLabel : undefined}
                         >
                           {link.label}
-                        </button>
+                        </RecordLink>
                       )}
                     </Fragment>
                   );

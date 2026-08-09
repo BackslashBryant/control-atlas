@@ -15,6 +15,7 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import { practitionerGuides } from "../../app/learn-content.mjs";
 import { LibraryAtlasMap, type LibraryMapItem } from "../components/LibraryAtlasMap";
 import { Button, Panel } from "../components/lsm";
+import { AppLink } from "../components/AppLink";
 import { buildCatalogCoverageList, catalogCoverageForId, isLowCatalogCoverage } from "../lib/catalogCoverage";
 import { searchExploreResources } from "../lib/exploreResourceSearch.mjs";
 import { searchGlossary } from "../lib/glossarySearch.mjs";
@@ -26,6 +27,7 @@ import { resourceAccessLabel, resourceTypeLabel } from "../lib/resourceBrands.mj
 import { filterDirectoryResources } from "../lib/resourcesDirectory.mjs";
 import { searchResourceDocuments } from "../lib/resourceSearch.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
+import { CLOSE_OVERLAYS_EVENT } from "../../shared/navigation-events";
 import { connectionSummary, MarkedSearchText, publisherPublicationLabel, searchPreviewText } from "../lib/searchPresentation";
 import { normalizeViewState, type ViewState } from "../lib/viewState";
 
@@ -182,7 +184,7 @@ export function ExplorePage(props: {
   onOpenGlossary: (termId?: string) => void;
 }) {
   const { bundle, graphReady, state, onNavigate, onOpenNode, onRequestFullGraph, onOpenGlossary } = props;
-  const resultsRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLUListElement>(null);
   const composingRef = useRef(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [detailsReady, setDetailsReady] = useState(false);
@@ -208,6 +210,12 @@ export function ExplorePage(props: {
       window.cancelAnimationFrame(detailsFrame);
     };
   }, [state.query, state.filter, state.publisher, state.kind, state.objectType, state.controlFamily, state.connectedOnly, state.sort, state.collection]);
+
+  useEffect(() => {
+    const closeFilters = () => setFiltersOpen(false);
+    window.addEventListener(CLOSE_OVERLAYS_EVENT, closeFilters);
+    return () => window.removeEventListener(CLOSE_OVERLAYS_EVENT, closeFilters);
+  }, []);
 
   useEffect(() => {
     if (!filtersOpen) return;
@@ -285,7 +293,19 @@ export function ExplorePage(props: {
     kind: result.kind === "record" ? displayNameFor("object_type", result.payload.document.object_type) : result.kind,
     label: result.title,
     group: result.publication,
-    onOpen: () => result.kind === "record" ? onNavigate("atlas-map", { node: result.payload.document.id, relationshipView: "map" }) : openResult(result),
+    destination: result.kind === "record"
+      ? { view: "atlas-map" as const, patch: { node: result.payload.document.id, relationshipView: "map" } }
+      : result.kind === "guide"
+        ? { view: "patterns" as const, patch: { pattern: result.payload.id } }
+        : result.kind === "resource"
+          ? { view: "commons-detail" as const, patch: { id: result.payload.id } }
+          : result.kind === "source"
+            ? { view: "sources" as const, patch: { source: result.payload.id } }
+            : result.kind === "template"
+              ? { view: "templates" as const, patch: { templateType: result.payload.templateType } }
+              : undefined,
+    externalHref: result.kind === "artifact" ? result.payload.href : undefined,
+    onAction: result.kind === "glossary" ? () => openResult(result) : undefined,
   }));
   const activeFilters = [
     state.filter && { key: "filter", label: catalogs.get(state.filter) || state.filter },
@@ -323,7 +343,7 @@ export function ExplorePage(props: {
         </div>
         <label className="search-sort"><span>Sort</span><select aria-label="Sort search results" onChange={(event) => onNavigate("search", { sort: event.target.value })} value={state.sort || "relevance"}><option value="identifier">Identifier</option><option value="publication">Publication or source</option><option value="relevance">Relevance</option><option value="title">Title</option></select></label>
         <Button aria-pressed={compareMode} onClick={() => { setCompareMode((value) => !value); setSelectedRecords([]); }} type="button" variant="secondary"><IconGitCompare aria-hidden="true" size={17} />Compare records</Button>
-        {compareMode && selectedRecords.length >= 2 ? <Button onClick={() => onNavigate("matrix", { crosswalk: "relationships", items: selectedRecords.join(",") })} type="button" variant="primary">Compare {selectedRecords.length}</Button> : null}
+        {compareMode && selectedRecords.length >= 2 ? <AppLink onNavigate={onNavigate} patch={{ crosswalk: "relationships", items: selectedRecords.join(",") }} variant="primary" view="matrix">Compare {selectedRecords.length}</AppLink> : null}
         <Button className="search-mobile-filter-button" onClick={() => setFiltersOpen(true)} type="button" variant="secondary"><IconAdjustmentsHorizontal aria-hidden="true" size={17} /> Filters{activeFilters.length ? ` (${activeFilters.length})` : ""}</Button>
       </div>
 
@@ -331,9 +351,9 @@ export function ExplorePage(props: {
 
       <div className="search-results-layout">
         <aside aria-label="Search filters" className="search-filter-rail"><div className="search-filter-heading"><strong>Filter results</strong>{activeFilters.length ? <button onClick={clearFilters} type="button">Clear all</button> : null}</div><FilterControls {...filterProps} /></aside>
-        <div aria-busy={visibleCount > 0 && !detailsReady} aria-label="Search results" className="search-result-list" id="library-results" ref={resultsRef} tabIndex={-1}>
+        <ul aria-busy={visibleCount > 0 && !detailsReady} aria-label="Search results" className="search-result-list" id="library-results" ref={resultsRef} tabIndex={-1}>
           {connectedOnly && !graphReady ? <p className="notice-inline" role="status">Loading connection data for this filter…</p> : null}
-          {state.viewMode === "map" ? <LibraryAtlasMap items={mapItems} onOpenAtlas={() => onNavigate("atlas-map")} /> : unifiedResults.slice(0, visibleCount).map((result: any) => {
+          {state.viewMode === "map" ? <li className="search-result-list-item search-result-list-map"><LibraryAtlasMap items={mapItems} onNavigate={onNavigate} /></li> : unifiedResults.slice(0, visibleCount).map((result: any) => {
             if (result.kind === "record") {
               const row = result.payload;
               const node = detailsReady ? bundle.runtime.getNode(row.document.id) : null;
@@ -346,11 +366,11 @@ export function ExplorePage(props: {
               const recordType = displayNameFor("object_type", row.document.object_type);
               const selected = selectedRecords.includes(row.document.item_id);
               return (
-                <article aria-label={row.title} className="search-result-row" data-publisher={row.document.publisher_name || row.publisherPublication} data-published-connection-count={relationshipCount} data-record-id={row.document.id} data-result-class="published-record" key={result.key}>
+                <li className="search-result-list-item" key={result.key}><article aria-label={row.title} className="search-result-row" data-publisher={row.document.publisher_name || row.publisherPublication} data-published-connection-count={relationshipCount} data-record-id={row.document.id} data-result-class="published-record">
                   <div className="search-result-row__type">{compareMode ? <input aria-label={`Select ${row.document.item_id} for comparison`} checked={selected} onChange={() => setSelectedRecords((items) => selected ? items.filter((id) => id !== row.document.item_id) : [...items, row.document.item_id])} type="checkbox" /> : null}{recordType}</div>
-                  <div className="search-result-row__body"><h2 id={`title-${row.document.id}`}><button aria-label={row.title} className="search-result-primary" onClick={() => onOpenNode(row.document.id)} type="button"><MarkedSearchText query={state.query} text={titleLine} /></button></h2><p className="search-result-row__source">{row.document.item_id || row.document.id} · {recordType}</p>{detailsReady && path ? <p className="search-result-row__path">{path}</p> : null}{detailsReady ? <p className="search-result-row__excerpt"><MarkedSearchText query={state.query} text={excerpt} /></p> : null}{detailsReady ? <div className="search-result-row__signals"><span>{row.matchReason}</span><span>{connectionSummary(relationshipCount, relationshipCatalogCount)}</span>{lowCoverage ? <Badge tone="warning">Limited coverage</Badge> : null}</div> : null}</div>
-                  {detailsReady ? <div className="search-result-row__actions"><button aria-label={`Compare ${row.document.item_id || row.title}`} onClick={() => onNavigate("matrix", { crosswalk: "relationships", items: row.document.item_id })} type="button">Compare</button><button aria-label={`Copy link to ${row.document.item_id || row.title}`} onClick={() => navigator.clipboard?.writeText(`${window.location.origin}${window.location.pathname}${serializeHashUrl(normalizeViewState("library-detail", { view: "library-detail", node: row.document.id }))}`)} type="button">Copy link</button></div> : null}
-                </article>
+                  <div className="search-result-row__body"><h3 id={`title-${row.document.id}`}><AppLink aria-label={row.title} className="search-result-primary" onNavigate={onNavigate} patch={{ node: row.document.id }} view="library-detail"><MarkedSearchText query={state.query} text={titleLine} /></AppLink></h3><p className="search-result-row__source">{row.document.item_id || row.document.id} · {recordType}</p>{detailsReady && path ? <p className="search-result-row__path">{path}</p> : null}{detailsReady ? <p className="search-result-row__excerpt"><MarkedSearchText query={state.query} text={excerpt} /></p> : null}{detailsReady ? <div className="search-result-row__signals"><span>{row.matchReason}</span><span>{connectionSummary(relationshipCount, relationshipCatalogCount)}</span>{lowCoverage ? <Badge tone="warning">Limited coverage</Badge> : null}</div> : null}</div>
+                  {detailsReady ? <div className="search-result-row__actions"><AppLink aria-label={`Compare ${row.document.item_id || row.title}`} onNavigate={onNavigate} patch={{ crosswalk: "relationships", items: row.document.item_id }} view="matrix">Compare</AppLink><button aria-label={`Copy link to ${row.document.item_id || row.title}`} onClick={() => navigator.clipboard?.writeText(`${window.location.origin}${window.location.pathname}${serializeHashUrl(normalizeViewState("library-detail", { view: "library-detail", node: row.document.id }))}`)} type="button">Copy link</button></div> : null}
+                </article></li>
               );
             }
             const item = result.payload;
@@ -358,11 +378,17 @@ export function ExplorePage(props: {
             const summary = result.kind === "source" ? `Publisher: ${item.publisher || item.agency || "Source owner"}` : result.kind === "glossary" ? `${item.definition} Reference: ${item.source}` : item.summary;
             const publisher = result.publication || "Publisher unavailable";
             const titleLine = `${publisher} · ${result.title}`;
-            return <article aria-labelledby={`title-${result.key}`} className="search-result-row search-result-row--universal" data-publisher={publisher} data-result-class={result.kind} key={result.key}><div className="search-result-row__type">{type}</div><div className="search-result-row__body"><h2 id={`title-${result.key}`}><button aria-label={`Open ${titleLine}`} className="search-result-primary" onClick={() => openResult(result)} type="button"><MarkedSearchText query={state.query} text={titleLine} /><IconArrowUpRight aria-hidden="true" size={15} /></button></h2><p className="search-result-row__source">{result.identifier} · {type}{result.kind === "resource" ? ` · ${resourceAccessLabel(item)}` : ""}</p>{detailsReady ? <p className="search-result-row__excerpt"><MarkedSearchText query={state.query} text={summary} /></p> : null}{detailsReady ? <div className="search-result-row__signals"><span>Matched {type.toLocaleLowerCase()} metadata</span></div> : null}</div></article>;
+            const titleContent = <><MarkedSearchText query={state.query} text={titleLine} /><IconArrowUpRight aria-hidden="true" size={15} /></>;
+            const titleTarget = result.kind === "artifact" && item.href
+              ? <a aria-label={`Open ${titleLine}`} className="search-result-primary" href={item.href} rel="noopener noreferrer" target="_blank">{titleContent}</a>
+              : result.kind === "glossary"
+                ? <button aria-label={`Open ${titleLine}`} className="search-result-primary" onClick={() => openResult(result)} type="button">{titleContent}</button>
+                : <AppLink aria-label={`Open ${titleLine}`} className="search-result-primary" onNavigate={onNavigate} patch={result.kind === "guide" ? { pattern: item.id } : result.kind === "resource" ? { id: item.id } : result.kind === "source" ? { source: item.id } : { templateType: item.templateType }} view={result.kind === "guide" ? "patterns" : result.kind === "resource" ? "commons-detail" : result.kind === "source" ? "sources" : "templates"}>{titleContent}</AppLink>;
+            return <li className="search-result-list-item" key={result.key}><article aria-labelledby={`title-${result.key}`} className="search-result-row search-result-row--universal" data-publisher={publisher} data-result-class={result.kind}><div className="search-result-row__type">{type}</div><div className="search-result-row__body"><h3 id={`title-${result.key}`}>{titleTarget}</h3><p className="search-result-row__source">{result.identifier} · {type}{result.kind === "resource" ? ` · ${resourceAccessLabel(item)}` : ""}</p>{detailsReady ? <p className="search-result-row__excerpt"><MarkedSearchText query={state.query} text={summary} /></p> : null}{detailsReady ? <div className="search-result-row__signals"><span>Matched {type.toLocaleLowerCase()} metadata</span></div> : null}</div></article></li>;
           })}
-          {state.viewMode !== "map" && visibleCount > 0 && unifiedResults.length > visibleCount ? <Button onClick={() => setVisibleCount((count) => count + 25)} type="button" variant="secondary">Show 25 more</Button> : null}
-          {searchStarted && unifiedResults.length === 0 ? <section className="empty-state"><IconSparkles aria-hidden="true" size={24} /><h2>No matching results found.</h2><p>Try an identifier, title, topic, publication, or remove a filter.</p><Button onClick={() => onNavigate("search", { query: "", filter: "", publisher: "", kind: "", objectType: "", controlFamily: "", collection: "", connectedOnly: "", sort: "relevance", viewMode: "list" })} type="button" variant="primary">Clear search</Button></section> : !searchStarted ? <section className="empty-state subtle"><p className="muted">Try T1195.002, access control, encryption, or supply chain.</p></section> : null}
-        </div>
+          {state.viewMode !== "map" && visibleCount > 0 && unifiedResults.length > visibleCount ? <li className="search-result-list-action"><Button onClick={() => setVisibleCount((count) => count + 25)} type="button" variant="secondary">Show 25 more</Button></li> : null}
+          {searchStarted && unifiedResults.length === 0 ? <li className="search-result-list-item"><section className="empty-state"><IconSparkles aria-hidden="true" size={24} /><h2>No matching results found.</h2><p>Try an identifier, title, topic, publication, or remove a filter.</p><Button onClick={() => onNavigate("search", { query: "", filter: "", publisher: "", kind: "", objectType: "", controlFamily: "", collection: "", connectedOnly: "", sort: "relevance", viewMode: "list" })} type="button" variant="primary">Clear search</Button></section></li> : !searchStarted ? <li className="search-result-list-item"><section className="empty-state subtle"><p className="muted">Try T1195.002, access control, encryption, or supply chain.</p></section></li> : null}
+        </ul>
       </div>
 
       {filtersOpen ? createPortal(<div className="search-filter-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setFiltersOpen(false); }}><section aria-label="Filter search results" aria-modal="true" className="search-filter-drawer" role="dialog"><header><div><p className="eyebrow">Library</p><h2>Filter results</h2></div><button aria-label="Close filters" onClick={() => setFiltersOpen(false)} type="button"><IconX aria-hidden="true" size={20} /></button></header><FilterControls {...filterProps} /><footer><Button onClick={() => setFiltersOpen(false)} type="button" variant="primary">Show {unifiedResults.length.toLocaleString()} results</Button>{activeFilters.length ? <Button onClick={clearFilters} type="button" variant="secondary">Clear all</Button> : null}</footer></section></div>, document.body) : null}

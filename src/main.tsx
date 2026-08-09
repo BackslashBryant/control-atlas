@@ -49,6 +49,21 @@ let reactModules: Promise<
 > | null = null;
 let brandMotionMedia: MediaQueryList | null = null;
 
+function isPlainPrimaryNavigation(event: Event) {
+  if (!(event instanceof MouseEvent)) return false;
+  const target = event.currentTarget as HTMLAnchorElement | null;
+  return (
+    !event.defaultPrevented &&
+    event.button === 0 &&
+    !event.altKey &&
+    !event.ctrlKey &&
+    !event.metaKey &&
+    !event.shiftKey &&
+    target?.target !== '_blank' &&
+    !target?.hasAttribute('download')
+  );
+}
+
 function isHomeHash() {
   const route = window.location.hash.replace(/^#/, '');
   return route === '' || route === '/' || route.startsWith('/?');
@@ -320,7 +335,9 @@ function connectStaticHome() {
     });
 
   rootElement.querySelectorAll<HTMLElement>('[data-static-home] [data-route]').forEach((control) => {
-    control.addEventListener('click', () => {
+    control.addEventListener('click', (event) => {
+      if (!isPlainPrimaryNavigation(event)) return;
+      event.preventDefault();
       const target = control.dataset.route;
       if (target) navigateFromStaticHome(target);
     });
@@ -353,7 +370,9 @@ function connectStaticHeader() {
   rootElement
     .querySelectorAll<HTMLElement>('[data-static-header] [data-route]')
     .forEach((control) => {
-      control.addEventListener('click', () => {
+      control.addEventListener('click', (event) => {
+        if (!isPlainPrimaryNavigation(event)) return;
+        event.preventDefault();
         const target = control.dataset.route;
         if (target) navigateFromStaticHome(target);
       });

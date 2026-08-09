@@ -745,6 +745,15 @@ a {
   display: grid;
   min-width: 0;
   gap: var(--ca-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.search-result-list-item,
+.search-result-list-action {
+  min-width: 0;
+  list-style: none;
 }
 
 .search-result-list:focus {
@@ -787,20 +796,22 @@ a {
   overflow-wrap: anywhere;
 }
 
-.search-result-row__body h2 {
+.search-result-row__body h3 {
   margin: 0 0 var(--ca-space-1);
   font-size: 1rem;
 }
 
 .search-result-primary,
 .atlas-record-title-link {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--ca-space-1);
-  min-width: 0;
+  width: 100%;
+  min-width: 44px;
+  min-height: 44px;
   max-width: 100%;
-  padding: 0;
+  padding-block: var(--ca-space-1);
   border: 0;
   background: transparent;
   color: var(--ca-text);
@@ -809,13 +820,6 @@ a {
   overflow-wrap: anywhere;
   word-break: break-word;
   cursor: pointer;
-}
-
-.search-result-primary::after {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  content: "";
 }
 
 .search-result-primary:hover,
@@ -901,7 +905,7 @@ a {
   color: inherit;
 }
 
-.search-result-row__actions button {
+.search-result-row__actions :is(button, a) {
   min-height: 2rem;
   padding: 0 var(--ca-space-2);
   border: 1px solid transparent;
@@ -911,8 +915,8 @@ a {
   font: 650 0.65rem/1 var(--ca-font-mono);
 }
 
-.search-result-row__actions button:hover,
-.search-result-row__actions button:focus-visible {
+.search-result-row__actions :is(button, a):hover,
+.search-result-row__actions :is(button, a):focus-visible {
   border-color: var(--ca-border-strong);
   background: var(--ca-surface-deep);
 }
@@ -1140,8 +1144,8 @@ a {
   gap: 0;
 }
 
-.primary-nav button,
-.header-actions button {
+.primary-nav a,
+.header-actions :is(button, a) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1155,7 +1159,7 @@ a {
   font-size: var(--ca-text-sm);
 }
 
-.primary-nav button {
+.primary-nav a {
   position: relative;
   border-radius: 0;
   border-width: 0 0 2px;
@@ -1164,8 +1168,8 @@ a {
   color: var(--ca-text-muted);
 }
 
-.primary-nav button.active,
-.primary-nav button:hover {
+.primary-nav a.nav-active,
+.primary-nav a:hover {
   border-color: var(--ca-secondary);
   background: color-mix(in srgb, var(--ca-primary) 13%, transparent);
   color: var(--ca-text);
@@ -3421,7 +3425,21 @@ button.atlas-path-crumb-organizing:focus-visible {
 .catalog-record-list,
 .start-here-resource-list {
   display: grid;
+  margin: 0;
+  padding: 0;
   border-top: 1px solid var(--ca-border-subtle);
+  list-style: none;
+}
+
+.catalog-index-list > li,
+.catalog-record-list > li {
+  list-style: none;
+}
+
+.catalog-index-row h3,
+.catalog-record-row h3 {
+  margin: 0;
+  font: inherit;
 }
 
 .catalog-index-row {
@@ -3901,7 +3919,7 @@ a:focus-visible {
     color: var(--ca-text-muted);
   }
 
-  .mobile-nav-sheet nav button,
+  .mobile-nav-sheet nav a,
   .mobile-nav-sheet-actions button {
     display: flex;
     align-items: center;
@@ -3916,9 +3934,9 @@ a:focus-visible {
     font-size: var(--ca-text-sm);
   }
 
-  .mobile-nav-sheet nav button.active,
-  .mobile-nav-sheet nav button[aria-current="page"],
-  .mobile-nav-sheet nav button:hover,
+  .mobile-nav-sheet nav a.active,
+  .mobile-nav-sheet nav a[aria-current="page"],
+  .mobile-nav-sheet nav a:hover,
   .mobile-nav-sheet-actions button:hover {
     border-color: rgba(34, 211, 238, 0.35);
     background: rgba(37, 99, 235, 0.14);
@@ -5287,7 +5305,7 @@ a:focus-visible {
   }
 }
 
-.primary-nav button.active.nav-active {
+.primary-nav a.nav-active {
   color: var(--ca-nav-active-text);
   border-color: transparent;
   border-bottom: 2px solid var(--ca-secondary);
@@ -5296,7 +5314,7 @@ a:focus-visible {
   font-weight: 700;
 }
 
-.primary-nav button:hover:not(.nav-active) {
+.primary-nav a:hover:not(.nav-active) {
   border-color: rgba(148, 163, 184, 0.35);
   background: rgba(15, 23, 42, 0.55);
 }
@@ -7129,7 +7147,7 @@ button.atlas-leverage-row:hover {
   justify-content: space-between;
   grid-column: 1 / -1;
   align-self: end;
-  min-height: 42px;
+  min-height: 44px;
   padding: 8px 0;
   border: 0;
   border-top: 1px solid var(--ca-border);
@@ -7174,8 +7192,8 @@ button.atlas-leverage-row:hover {
   gap: 2px;
 }
 
-.record-context-link-list button,
-.record-suggestion-list article > button {
+.record-context-link-list :is(button, a),
+.record-suggestion-list article > :is(button, a) {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -7189,13 +7207,13 @@ button.atlas-leverage-row:hover {
   text-align: left;
 }
 
-.record-suggestion-list article > button > strong,
-.record-suggestion-list article > button > span {
+.record-suggestion-list article > :is(button, a) > strong,
+.record-suggestion-list article > :is(button, a) > span {
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
-.record-suggestion-list article > button > span {
+.record-suggestion-list article > :is(button, a) > span {
   flex: 0 1 40%;
   text-align: right;
 }
@@ -7233,7 +7251,7 @@ button.atlas-leverage-row:hover {
   line-height: 1.45;
 }
 
-.record-suggestion-list article > button span {
+.record-suggestion-list article > :is(button, a) span {
   color: var(--ca-text-muted);
   font-size: var(--ca-text-xs);
 }
@@ -7559,6 +7577,14 @@ button.atlas-leverage-row:hover {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resources-result-grid > li {
+  min-width: 0;
+  list-style: none;
 }
 
 .learn-article-grid {
@@ -7567,7 +7593,7 @@ button.atlas-leverage-row:hover {
   gap: 12px;
 }
 
-.learn-article-grid > button {
+.learn-article-grid > a {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: start;
@@ -7581,8 +7607,8 @@ button.atlas-leverage-row:hover {
   background: var(--ca-surface);
 }
 
-.learn-article-grid > button:hover,
-.learn-article-grid > button:focus-visible {
+.learn-article-grid > a:hover,
+.learn-article-grid > a:focus-visible {
   border-color: var(--ca-accent);
   background: var(--ca-surface-raised);
 }
