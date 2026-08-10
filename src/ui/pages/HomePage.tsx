@@ -1,21 +1,19 @@
 import {
-  IconBinaryTree,
-  IconBriefcase,
-  IconClipboardList,
+  IconArrowRight,
+  IconBooks,
   IconCompass,
-  IconFileSearch,
-  IconRadar,
+  IconRoute,
   IconSearch,
-  IconShieldLock,
-  IconTool,
+  IconTopologyStar3,
+  IconUsersGroup,
 } from "@tabler/icons-react";
 
 import {
-  GLOBAL_SEARCH_PLACEHOLDER,
-  PRODUCT_HERO,
-} from "../../shared/product-identity";
-import { labelForGoal } from "../../app/start-here-guide.mjs";
-import { HomeCapabilityPreviews } from "../components/HomeCapabilityPreviews";
+  HOME_ATLAS_AREAS,
+  HOME_AUTHORITY_GROUPS,
+  HOME_CONTENT,
+  HOME_DESTINATIONS,
+} from "../../shared/home-content.mjs";
 import { AppLink } from "../components/AppLink";
 import type { ViewState } from "../lib/viewState";
 
@@ -24,67 +22,12 @@ type HomePageProps = {
   onOpenSearch: () => void;
 };
 
-// Work-first entrances. Each route carries useful state so a person lands in
-// the relevant workflow without first learning Control Atlas's feature names.
-const HOME_ENTRANCES = [
-  {
-    label: labelForGoal("understand"),
-    description:
-      "Find the control or requirement you need, and the official source behind it.",
-    icon: IconFileSearch,
-    view: "start-here",
-    patch: { goal: "understand" },
-  },
-  {
-    label: labelForGoal("implement"),
-    description:
-      "Turn requirements into hardening steps and technical checks.",
-    icon: IconShieldLock,
-    view: "start-here",
-    patch: { goal: "implement" },
-  },
-  {
-    label: labelForGoal("assess"),
-    description:
-      "Follow the assessment and authorization path, with the published methods.",
-    icon: IconBinaryTree,
-    view: "start-here",
-    patch: { goal: "assess" },
-  },
-  {
-    label: labelForGoal("operate"),
-    description:
-      "Explore adversary techniques, defenses, monitoring, and operations.",
-    icon: IconRadar,
-    view: "start-here",
-    patch: { goal: "operate" },
-  },
-  {
-    label: labelForGoal("risk"),
-    description:
-      "Find requirements, CUI and CMMC material, SBOM resources, and assurance tools.",
-    icon: IconBriefcase,
-    view: "start-here",
-    patch: { goal: "risk" },
-  },
-  {
-    label: labelForGoal("document"),
-    description: "Pick the document you need, then pull in the sources that back it.",
-    icon: IconClipboardList,
-    view: "start-here",
-    patch: { goal: "document" },
-  },
-  {
-    label: labelForGoal("tools"),
-    description:
-      "Find the tools and communities beyond the official publishers.",
-    icon: IconTool,
-    // Direct destination, not a guided goal: link straight to the tools and
-    // communities view so it has a one-click path from home.
-    view: "commons",
-    patch: {},
-  },
-] as const;
+const DESTINATION_ICONS = {
+  atlas: IconTopologyStar3,
+  library: IconBooks,
+  resources: IconUsersGroup,
+  start: IconRoute,
+} as const;
 
 export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
   return (
@@ -96,14 +39,10 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
       <div className="home-hero">
         <div className="home-hero-lead">
           <header className="home-entry-header">
-            <h1 id="home-title">
-              Find the source. See what connects. Keep the work moving.
-            </h1>
-            <p className="home-product-identity">
-              Govern, secure, assess, operate, and defend systems from one
-              public, source-traceable workbench.
-            </p>
-            <p className="home-brand-line">{PRODUCT_HERO}</p>
+            <p className="eyebrow">{HOME_CONTENT.eyebrow}</p>
+            <h1 id="home-title">{HOME_CONTENT.headline}</h1>
+            <p className="home-product-identity">{HOME_CONTENT.definition}</p>
+            <p className="home-brand-line">{HOME_CONTENT.support}</p>
           </header>
 
           <button
@@ -113,7 +52,7 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
             type="button"
           >
             <IconSearch aria-hidden="true" size={20} stroke={2} />
-            <span>{GLOBAL_SEARCH_PLACEHOLDER}</span>
+            <span>{HOME_CONTENT.searchPlaceholder}</span>
             <span className="home-search-trigger__action">Search</span>
           </button>
 
@@ -122,52 +61,64 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
               className="home-start-here"
               onNavigate={onNavigate}
               variant="primary"
-              view="start-here"
+              view="atlas-map"
             >
-              <IconCompass aria-hidden="true" size={20} stroke={1.8} />
-              Start with your work
+              <IconTopologyStar3 aria-hidden="true" size={20} stroke={1.8} />
+              Explore the Atlas
             </AppLink>
             <AppLink
               className="home-inline-link"
               onNavigate={onNavigate}
               view="search"
             >
-              Browse official publications
+              Search the Library
             </AppLink>
           </div>
         </div>
 
+        <aside aria-label="Federal cybersecurity ecosystem preview" className="home-ecosystem">
+          <header>
+            <p className="eyebrow">The ecosystem at a glance</p>
+            <h2>From authority to action</h2>
+          </header>
+          <div className="home-ecosystem-authorities" aria-label="Authority groups">
+            {HOME_AUTHORITY_GROUPS.map((group) => <span key={group}>{group}</span>)}
+          </div>
+          <div className="home-ecosystem-trunk">
+            <IconCompass aria-hidden="true" size={19} stroke={1.8} />
+            <strong>Control Atlas</strong>
+            <small>connected reference system</small>
+          </div>
+          <div className="home-ecosystem-areas" aria-label="Cybersecurity areas">
+            {HOME_ATLAS_AREAS.map((area) => <span key={area}>{area}</span>)}
+          </div>
+          <p>Zoom from the whole landscape to the source, relationship, or record you need.</p>
+        </aside>
       </div>
 
-      <nav aria-label="Start from your work" className="home-secondary-grid">
-        {HOME_ENTRANCES.map((entrance) => {
-          const Icon = entrance.icon;
+      <nav aria-label="Choose a Control Atlas destination" className="home-secondary-grid">
+        {HOME_DESTINATIONS.map((destination) => {
+          const Icon = DESTINATION_ICONS[destination.id as keyof typeof DESTINATION_ICONS];
           return (
             <AppLink
               className="home-secondary-action"
-              key={entrance.label}
+              key={destination.id}
               onNavigate={onNavigate}
-              patch={entrance.patch}
-              view={entrance.view}
+              view={destination.view as ViewState["view"]}
             >
               <Icon aria-hidden="true" size={20} stroke={1.7} />
               <span>
-                <strong>{entrance.label}</strong>
-                <small>{entrance.description}</small>
+                <strong>{destination.label}</strong>
+                <small>{destination.description}</small>
               </span>
+              <IconArrowRight aria-hidden="true" className="home-secondary-arrow" size={16} stroke={2} />
             </AppLink>
           );
         })}
       </nav>
 
-      <HomeCapabilityPreviews onNavigate={onNavigate} />
-
       <aside className="home-trust-boundary">
-        <p>
-          Official material always comes first, with its source named. Anything
-          Control Atlas adds is clearly labeled, kept separate from the official
-          links, and never decides what applies to you.
-        </p>
+        <p>{HOME_CONTENT.trust}</p>
       </aside>
     </section>
   );

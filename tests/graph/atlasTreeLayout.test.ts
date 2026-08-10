@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
@@ -7,7 +6,6 @@ import {
   atlasTreeCollisions,
   layoutAtlasTree,
   serializeAtlasCoordinates,
-  stableAtlasPositions,
 } from "../../src/ui/lib/atlasTreeLayout";
 import { renderedAtlasSet } from "../../src/ui/lib/atlasTreeAggregation";
 import {
@@ -21,23 +19,22 @@ const spine = JSON.parse(
 ).atlas_spine as AtlasSpine;
 const model = buildAtlasTreeModel(spine);
 
-test("L0-L2 coordinates are deterministic, collision-free, and snapshot-locked", () => {
-  const first = [...stableAtlasPositions(model).values()];
-  const second = [...stableAtlasPositions(model).values()];
+test("overview coordinates are deterministic, collision-free, and fit a legible workbench", () => {
+  const rendered = renderedAtlasSet({ model });
+  const first = layoutAtlasTree({ model, rendered });
+  const second = layoutAtlasTree({ model, rendered });
   const serialized = serializeAtlasCoordinates(first);
   assert.equal(serialized, serializeAtlasCoordinates(second));
   assert.deepEqual(atlasTreeCollisions(first), []);
-  assert.equal(
-    createHash("sha256").update(serialized).digest("hex"),
-    "ceb85d1f1f9956731e988f35e2537b3b7aa463930a808d8cd1e18fed9e1f8045",
-  );
+  assert.ok(Math.max(...first.map((node) => node.x + node.width)) <= 800);
+  assert.ok(Math.max(...first.map((node) => node.y + node.height)) <= 700);
 });
 
 test("coordinates do not depend on the atlas-spine input order", () => {
   const reversedModel = buildAtlasTreeModel({ entries: [...spine.entries].reverse() });
   assert.equal(
-    serializeAtlasCoordinates([...stableAtlasPositions(model).values()]),
-    serializeAtlasCoordinates([...stableAtlasPositions(reversedModel).values()]),
+    serializeAtlasCoordinates(layoutAtlasTree({ model, rendered: renderedAtlasSet({ model }) })),
+    serializeAtlasCoordinates(layoutAtlasTree({ model: reversedModel, rendered: renderedAtlasSet({ model: reversedModel }) })),
   );
 });
 
@@ -50,9 +47,11 @@ test("L3 child-band layout is byte-identical and collision-free", () => {
 });
 
 test("authority is above the trunk visually and absent from canonical ancestry", () => {
-  const positions = stableAtlasPositions(model);
+  const overview = renderedAtlasSet({ model });
+  const positions = new Map(layoutAtlasTree({ model, rendered: overview }).map((node) => [node.id, node]));
   const trunk = positions.get("atlas:TRUNK")!;
-  assert.ok(model.authorityNodes.every((node) => positions.get(node.id)!.y < trunk.y));
+  assert.ok(overview.filter((node) => node.nodeType === "authority_aggregate").every((node) => positions.get(node.id)!.y < trunk.y));
+  assert.ok(model.areas.every((node) => positions.get(node.id)!.y > trunk.y));
   assert.equal(model.trunk.parentId, null);
   assert.equal(canonicalAncestryIsAuthorityFree(model), true);
 });

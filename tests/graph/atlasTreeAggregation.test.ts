@@ -4,6 +4,7 @@ import test from "node:test";
 
 import {
   aggregateAtlasChildren,
+  aggregateAuthorityOverview,
   ATLAS_RENDER_NODE_CAP,
   TECHNOLOGY_GATE_THRESHOLD,
   maxRenderedAtlasNodes,
@@ -45,7 +46,13 @@ test("real spine focus states stay within the 120-node render budget", () => {
   const maximum = maxRenderedAtlasNodes(model);
   assert.equal(maximum, 33);
   assert.ok(maximum <= ATLAS_RENDER_NODE_CAP);
-  assert.equal(renderedAtlasSet({ model }).length, 28);
+  const overview = renderedAtlasSet({ model });
+  assert.equal(overview.length, 13);
+  assert.equal(aggregateAuthorityOverview(model).length, 3);
+  assert.equal(
+    new Set(aggregateAuthorityOverview(model).flatMap((node) => node.memberIds)).size,
+    model.authorityNodes.length,
+  );
   assert.equal(model.publications.length, 23);
   assert.equal(model.nodesById.get("atlas:LIMB-KNOWLEDGE")?.childCount, 0);
   assert.equal(model.nodesById.get("atlas:LIMB-OPERATIONS")?.childCount, 0);

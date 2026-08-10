@@ -310,5 +310,8 @@ export function userFacingLoadError(error) {
   if (/Unable to load/i.test(message) || /Invalid .* artifact/i.test(message) || /graph/i.test(message)) {
     return 'The library data could not load. Check your connection and try again.';
   }
+  if (/too long|timed out/i.test(message)) {
+    return 'The public data took too long to load. Retry to start a fresh request.';
+  }
   return 'Something went wrong while loading Control Atlas. Try again in a moment.';
 }

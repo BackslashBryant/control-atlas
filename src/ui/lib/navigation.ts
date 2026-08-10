@@ -2,6 +2,8 @@ import {
   IconCompass,
   IconInfoCircle,
   IconLibrary,
+  IconTopologyStar3,
+  IconUsersGroup,
   IconSourceCode,
 } from "@tabler/icons-react";
 
@@ -32,10 +34,10 @@ export const UTILITY_SECTION_LABEL = "Sources and product information";
 
 export const PRIMARY_NAV_ITEMS: NavItem[] = [
   {
-    label: routeIdentityFor("start-here").label,
-    view: "start-here",
-    path: routeIdentityFor("start-here").path,
-    icon: IconCompass,
+    label: routeIdentityFor("atlas-map").label,
+    view: "atlas-map",
+    path: routeIdentityFor("atlas-map").path,
+    icon: IconTopologyStar3,
     section: "discovery",
   },
   {
@@ -43,6 +45,13 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
     view: "search",
     path: routeIdentityFor("search").path,
     icon: IconLibrary,
+    section: "discovery",
+  },
+  {
+    label: routeIdentityFor("commons").label,
+    view: "commons",
+    path: routeIdentityFor("commons").path,
+    icon: IconUsersGroup,
     section: "discovery",
   },
   {

@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  clearRuntimeArtifactCache,
   compressedArtifactPath,
+  fetchArtifact,
+  parseJsonResponseOffThread,
   runtimeArtifactPlan,
 } from "../../src/ui/lib/runtimeLoader";
 import { requiresFullGraph } from "../../src/ui/lib/navigationState";
@@ -166,4 +169,131 @@ test("expensive graph scope begins only after an explicit graph-dependent action
     }).fullGraph,
     true,
   );
+});
+
+test("artifact loading falls back from compressed to uncompressed data", async () => {
+  const originalFetch = globalThis.fetch;
+  const requests: string[] = [];
+  clearRuntimeArtifactCache();
+  globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) => {
+    const url = String(input);
+    requests.push(url);
+    if (url.endsWith(".gz")) throw new TypeError("compressed fetch failed");
+    return new Response(JSON.stringify({ ready: true }), { status: 200 });
+  }) as typeof fetch;
+  try {
+    assert.deepEqual(
+      await fetchArtifact("./fixture.json", {
+        compressedTimeoutMs: 50,
+        fallbackTimeoutMs: 50,
+      }),
+      { ready: true },
+    );
+    assert.deepEqual(requests, ["./fixture.json.gz", "./fixture.json"]);
+  } finally {
+    globalThis.fetch = originalFetch;
+    clearRuntimeArtifactCache();
+  }
+});
+
+test("artifact timeouts reject and evict the pending cache entry", async () => {
+  const originalFetch = globalThis.fetch;
+  let requests = 0;
+  clearRuntimeArtifactCache();
+  globalThis.fetch = (() => {
+    requests += 1;
+    return new Promise<Response>(() => undefined);
+  }) as typeof fetch;
+  try {
+    await assert.rejects(
+      fetchArtifact("./never.json", {
+        compressedTimeoutMs: 15,
+        fallbackTimeoutMs: 15,
+      }),
+      (error: any) => error?.code === "artifact_timeout",
+    );
+    await assert.rejects(
+      fetchArtifact("./never.json", {
+        compressedTimeoutMs: 15,
+        fallbackTimeoutMs: 15,
+      }),
+      (error: any) => error?.code === "artifact_timeout",
+    );
+    assert.equal(requests, 4, "a second call starts compressed and fallback requests again");
+  } finally {
+    globalThis.fetch = originalFetch;
+    clearRuntimeArtifactCache();
+  }
+});
+
+test("a rejected artifact request can succeed on a fresh retry", async () => {
+  const originalFetch = globalThis.fetch;
+  let requests = 0;
+  clearRuntimeArtifactCache();
+  globalThis.fetch = (async () => {
+    requests += 1;
+    if (requests < 4) return new Response("unavailable", { status: 503 });
+    return new Response(JSON.stringify({ recovered: true }), { status: 200 });
+  }) as typeof fetch;
+  try {
+    await assert.rejects(fetchArtifact("./retry.json"));
+    assert.deepEqual(await fetchArtifact("./retry.json"), { recovered: true });
+    assert.equal(requests, 4);
+  } finally {
+    globalThis.fetch = originalFetch;
+    clearRuntimeArtifactCache();
+  }
+});
+
+test("the JSON worker rejects and terminates when it never responds", async () => {
+  const originalWorker = Object.getOwnPropertyDescriptor(globalThis, "Worker");
+  let terminated = false;
+  class SilentWorker {
+    addEventListener() {}
+    postMessage() {}
+    terminate() { terminated = true; }
+  }
+  Object.defineProperty(globalThis, "Worker", {
+    configurable: true,
+    value: SilentWorker,
+  });
+  try {
+    await assert.rejects(
+      parseJsonResponseOffThread(new Response("{}"), 15),
+      (error: any) => error?.code === "worker_timeout",
+    );
+    assert.equal(terminated, true);
+  } finally {
+    if (originalWorker) Object.defineProperty(globalThis, "Worker", originalWorker);
+    else delete (globalThis as any).Worker;
+  }
+});
+
+test("the JSON worker isolates unreadable cross-thread messages", async () => {
+  const originalWorker = Object.getOwnPropertyDescriptor(globalThis, "Worker");
+  let terminated = false;
+  class MessageErrorWorker {
+    listeners = new Map<string, (event: any) => void>();
+    addEventListener(type: string, listener: (event: any) => void) {
+      this.listeners.set(type, listener);
+    }
+    postMessage() {
+      queueMicrotask(() => this.listeners.get("messageerror")?.({}));
+    }
+    terminate() { terminated = true; }
+  }
+  Object.defineProperty(globalThis, "Worker", {
+    configurable: true,
+    value: MessageErrorWorker,
+  });
+  try {
+    await assert.rejects(
+      parseJsonResponseOffThread(new Response("{}"), 100),
+      (error: any) => error?.code === "worker_failure",
+    );
+    assert.equal(terminated, true);
+  } finally {
+    if (originalWorker) Object.defineProperty(globalThis, "Worker", originalWorker);
+    else delete (globalThis as any).Worker;
+  }
 });

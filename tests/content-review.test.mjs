@@ -178,7 +178,7 @@ test('Start here plans are traceable to real publications and routes', async () 
   assert.equal(guide.startingPlanFor('not-a-goal', 'federal'), null);
 });
 
-test('primary navigation uses the Phase 3 three-door information architecture', () => {
+test('primary navigation exposes Atlas, Library, Resources, and Guides', () => {
   const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
   for (const [view, label] of [
     ['start-here', 'Start here'],
@@ -199,9 +199,9 @@ test('primary navigation uses the Phase 3 three-door information architecture', 
   const primaryViews = [...navigation.matchAll(/view: "([a-z-]+)",\n\s+path: routeIdentityFor/g)].map(
     (match) => match[1],
   );
-  assert.deepEqual(primaryViews.slice(0, 3), ['start-here', 'search', 'patterns']);
+  assert.deepEqual(primaryViews.slice(0, 4), ['atlas-map', 'search', 'commons', 'patterns']);
   assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
-  assert.doesNotMatch(navigation, /view: "atlas-map"|view: "matrix"|view: "templates"|view: "commons"/);
+  assert.doesNotMatch(navigation, /view: "matrix"|view: "templates"/);
 });
 
 test('old public paths redirect into the Phase 3 canonical hierarchy', () => {
@@ -224,6 +224,13 @@ test('old public paths redirect into the Phase 3 canonical hierarchy', () => {
 });
 
 test('Home is an entry surface, not a lesson about the data model', () => {
+  const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
+  const homeContent = readFileSync('src/shared/home-content.mjs', 'utf8');
+  const viteConfig = readFileSync('vite.config.ts', 'utf8');
+  assert.match(homeContent, /See the landscape\. Trace the source\. Move the work forward\./);
+  assert.match(homePage, /HOME_CONTENT\.headline/);
+  assert.match(homePage, /home-ecosystem/);
+  assert.match(viteConfig, /renderStaticHome/);
   for (const path of ['src/ui/pages/HomePage.tsx', 'src/index.html']) {
     const home = readFileSync(path, 'utf8');
     assert.doesNotMatch(home, /home-spine/, `${path} still renders the nine-area directory`);
@@ -231,12 +238,6 @@ test('Home is an entry surface, not a lesson about the data model', () => {
     // A real record may appear in a preview, never as a hierarchy lesson.
     assert.doesNotMatch(home, /AC-2 is selected into|AC-2 lives under|one hierarchy/, `${path} still teaches the AC-2 example`);
     assert.doesNotMatch(home, /which baseline to use/, `${path} repeats the About trust boundary`);
-    assert.match(
-      home,
-      /Find the source\. See what connects\. Keep the work moving\./,
-    );
-    // Home shows the product, not just claims about it.
-    assert.match(home, /home-capability-previews|HomeCapabilityPreviews/, `${path} has no real capability preview`);
     // Searching is the field above; no card may repeat it.
     assert.doesNotMatch(home, /Find a requirement/, `${path} duplicates the search entrance`);
     assert.doesNotMatch(home, /guidance that applies to your work/, `${path} implies an applicability decision`);
@@ -299,6 +300,7 @@ test('the internal tree vocabulary never reaches rendered copy', () => {
       .replace(/(?:class|className)=(?:"[^"]*"|\{`[^`]*`\}|\{[^}]*\})/g, ' ')
       .replace(/[A-Za-z_]*(?:LIMB|Limb|limb)[A-Za-z_]*/g, ' ')
       .replace(/treeSpine\.\w+/g, ' ')
+      .replace(/model\.trunk(?:\.id)?/g, ' ')
       .replace(/data-[\w-]+="[^"]*"/g, ' ');
     const match = rendered.match(TREE_WORDS);
     assert.ok(

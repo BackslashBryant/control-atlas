@@ -4,8 +4,8 @@
 
 - Public product name: **Control Atlas**
 - Campaign line: **Ctrl+Alt+Comply**
-- Tagline: **The public map for federal cyber compliance.**
-- Supporting line: Open-source reference workbench for mapping controls, tracing frameworks, and generating starter RMF/ATO templates - no login, no evidence upload, no organizational data required.
+- Tagline: **Federal cybersecurity reference and practitioner workbench.**
+- Supporting line: Control Atlas brings requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources together so people can understand where things come from, how they connect, and what to do next.
 
 ## Canonical Doc Hierarchy
 
@@ -21,16 +21,12 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**None - v1.0.2 published.** The 2026 correction and v1 maintenance programs
-are shipped. `v1.0.2` points to `e46a122`, was deployed to Pages, passed the
-43-test live route/accessibility suite, and passed the same-runner mobile
-Lighthouse gate against `v1.0.0` (median 49 versus 31; candidate CLS 0.125 in
-all three runs). The release record is
+**None.** Epic 13 is complete. The prior `v1.0.2` release record remains in
 [`docs/audits/v1-0-2-release-2026-07-28.md`](audits/v1-0-2-release-2026-07-28.md).
-Human NVDA/VoiceOver/TalkBack and physical-device proof remain explicit
-external residuals; automated evidence does not satisfy them.
+Human NVDA/VoiceOver/TalkBack and physical iOS/Android checks remain external
+evidence, not an implementation sprint.
 
-## Epic Status (July 9, 2026)
+## Epic Status (August 10, 2026)
 
 | Epic                                 | Status                | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | ------------------------------------ | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -45,6 +41,7 @@ external residuals; automated evidence does not satisfy them.
 | 8 — MITRE Threat Lens                | **Shipped**           | ATT&CK Enterprise + ICS, D3FEND countermeasures, Compare threat chain — [`docs/plans/epic-8-mitre-threat-lens.md`](plans/epic-8-mitre-threat-lens.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-8.md`](audits/live-browser-audit-2026-06-19-epic-8.md).                                                                                                                                                                                                                                             |
 | 9 — Interactive Relationship Graph   | **Shipped**           | Object-local relationship diagram in Library detail, provenance filters, lazy graph surface, table fallback — [`docs/plans/epic-9-relationship-graph.md`](plans/epic-9-relationship-graph.md), ADR [`0011`](adr/0011-graph-library.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-9.md`](audits/live-browser-audit-2026-06-19-epic-9.md).                                                                                                                                                            |
 | 10 — Atlas Map-First UX              | **Shipped**           | v2.2 + stability pass + **Frontend Overhaul** + **Frontend Full Review remediation** + Map Foundation v4.0 + **SPR-20260708 remediation** (staged graph bootstrap, sharded library search, live smoke CI, trust/UX polish) — [`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md), [`docs/superpowers/plans/2026-06-22-map-foundation-v4.md`](superpowers/plans/2026-06-22-map-foundation-v4.md), [`docs/audits/frontend-full-review-2026-06-22.md`](audits/frontend-full-review-2026-06-22.md). |
+| 13 — Reference + Workbench           | **Shipped**           | Product-first homepage, first-class Resources routes, bounded runtime failure recovery, and a 13-node aggregated Atlas overview with persistent inspector-led drilldown — [`docs/plans/epic-13-reference-workbench-2026-08-10.md`](plans/epic-13-reference-workbench-2026-08-10.md), ADR [`0015`](adr/0015-atlas-aggregation-workbench.md). |
 
 ## Active Direction
 
@@ -75,6 +72,12 @@ No backend or user, organization, or system data is part of this product directi
 
 ### 2026 correction program
 
+- [x] Epic 13 - Federal cybersecurity reference and workbench: Home states the
+  product job and four entrances in the first viewport; Resources is canonical
+  and first class; runtime, worker, optional-data, and lazy-route failures are
+  isolated with retry; and Atlas overview aggregates authority into three
+  honest presentation groups around the trunk and nine areas with a persistent
+  inspector.
 - [x] Epic 4 - Record and Build progressive disclosure: record pages place the available record explanation before structural position, Build has subordinate Tasks/Starter documents/Resources navigation, and task/document paths recover invalid state without losing valid configuration.
 - [x] Epic 5 - Source-first record integrity and legacy cleanup: official descriptions and source links are the default record surface; synthetic translation and its curated data are removed; relationships declare published rationale, Navigation note, or absence; Start Here is a source navigator; unsourced Playbooks are absent; and the legacy renderer is deleted.
 - [x] Epic 6 - Responsive and accessibility completion: Compare and Resources retain their meaning and controls at the required narrow/zoom-equivalent widths; the accessibility matrix records automated evidence and the pending human assistive-technology review.

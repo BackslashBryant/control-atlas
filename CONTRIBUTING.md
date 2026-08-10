@@ -4,7 +4,7 @@
 
 - Public product name: **Control Atlas**
 - Protected brand item: **the rotating Ctrl+Alt flourish**, using real Control Atlas actions from `src/shared/brand-rotation.ts`
-- Product definition: **Federal cyber guidance is scattered and hard to use. Control Atlas brings the public sources, connections, and starter tools together so the people doing the work can find what they need and keep moving.**
+- Product definition: **Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.**
 - Decision boundary: **Control Atlas keeps the public material and its sources together. The people doing the work decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO.**
 
 Control Atlas is a static, public-data-only reference workbench. Contributions must preserve that boundary and the active Control Atlas implementation baseline unless an ADR says otherwise.

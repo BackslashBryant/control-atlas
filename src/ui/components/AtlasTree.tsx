@@ -18,6 +18,7 @@ import type { AtlasSpine } from "../lib/atlasDrilldown";
 import {
   renderedAtlasSet,
   requiresTechnologyGate,
+  type AtlasAggregateNode,
   type AtlasRenderableNode,
 } from "../lib/atlasTreeAggregation";
 import {
@@ -75,11 +76,12 @@ export type AtlasTreeProps = {
 
 const nodeTypes = { atlasTree: memo(AtlasTreeNodeView) };
 
-function isAggregate(node: AtlasRenderableNode) {
+function isAggregate(node: AtlasRenderableNode): node is AtlasAggregateNode {
   return "aggregate" in node && node.aggregate;
 }
 
 function nodeKind(node: AtlasRenderableNode) {
+  if (node.nodeType === "authority_aggregate") return "authority";
   if (isAggregate(node)) return node.nodeType === "technology_gate" ? "technology-gate" : "aggregate";
   return node.level;
 }
@@ -88,7 +90,9 @@ function AtlasTreeNodeView({ data, selected }: NodeProps<AtlasFlowNode>) {
   const { node, semanticLevel, mapped, mappingDegree } = data;
   const kind = nodeKind(node);
   const detail = semanticLevel === "orientation"
-    ? `${node.descendantRecordCount.toLocaleString()} records`
+    ? node.nodeType === "authority_aggregate"
+      ? `${node.childCount.toLocaleString()} instruments`
+      : `${node.descendantRecordCount.toLocaleString()} records`
     : semanticLevel === "discovery"
       ? node.level === "publication"
         ? `${node.publicationType || "Publication"} · ${node.descendantRecordCount.toLocaleString()} records · ${mappingDegree.toLocaleString()} mapped records`
@@ -144,7 +148,7 @@ function AtlasTreeStage(props: {
   semanticLevel: SemanticLevel;
   reducedMotion: boolean;
   onSemanticLevel: (level: SemanticLevel) => void;
-  onOpenNode: (node: AtlasRenderableNode) => void;
+  onSelectNode: (node: AtlasRenderableNode) => void;
 }) {
   const reactFlow = useReactFlow<AtlasFlowNode, AtlasFlowEdge>();
   const guard = useRef(0);
@@ -179,7 +183,7 @@ function AtlasTreeStage(props: {
                 : "justification",
           );
         }}
-        onNodeClick={(_, node) => props.onOpenNode(node.data.node)}
+        onNodeClick={(_, node) => props.onSelectNode(node.data.node)}
         panOnScroll={false}
         preventScrolling
         proOptions={{ hideAttribution: true }}
@@ -194,7 +198,7 @@ function AtlasTreeStage(props: {
 
 function CompactAtlasTree(props: {
   nodes: AtlasFlowNode[];
-  onOpenNode: (node: AtlasRenderableNode) => void;
+  onSelectNode: (node: AtlasRenderableNode) => void;
 }) {
   function moveFocus(event: KeyboardEvent<HTMLButtonElement>) {
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
@@ -217,7 +221,7 @@ function CompactAtlasTree(props: {
             className={`atlas-tree-compact__node atlas-tree-compact__node--${nodeKind(node)}`}
             data-atlas-node-id={node.id}
             key={node.id}
-            onClick={() => props.onOpenNode(node)}
+            onClick={() => props.onSelectNode(node)}
             onKeyDown={moveFocus}
             role="treeitem"
             type="button"
@@ -261,11 +265,13 @@ export function AtlasTree(props: AtlasTreeProps) {
   const [technologyQuery, setTechnologyQuery] = useState("");
   const [traceOpen, setTraceOpen] = useState(Boolean(focusId));
   const [overlayEnabled, setOverlayEnabled] = useState(false);
+  const [selectedId, setSelectedId] = useState(focusId || model.trunk.id);
   useEffect(() => {
     setSemanticLevel(focusId ? "justification" : "orientation");
     setTraceOpen(Boolean(focusId));
     setOverlayEnabled(false);
-  }, [focusId]);
+    setSelectedId(focusId || model.trunk.id);
+  }, [focusId, model.trunk.id]);
 
   const rendered = useMemo(
     () => renderedAtlasSet({
@@ -313,6 +319,7 @@ export function AtlasTree(props: AtlasTreeProps) {
       width: placement.width,
       height: placement.height,
       draggable: false,
+      selected: selectedId === node.id,
       selectable: node.level !== "authority" || Boolean(node.parentId),
       focusable: true,
       ariaRole: "button" as const,
@@ -326,10 +333,10 @@ export function AtlasTree(props: AtlasTreeProps) {
           : 0,
       },
     } satisfies AtlasFlowNode;
-  }), [mappedIds, mappingDegreeByCatalog, positionById, rendered, semanticLevel]);
+  }), [mappedIds, mappingDegreeByCatalog, positionById, rendered, selectedId, semanticLevel]);
   const flowEdges = useMemo(() => {
     const visible = new Set(rendered.map((node) => node.id));
-    return rendered.flatMap((node) => {
+    const structural = rendered.flatMap((node) => {
       if (!node.parentId || !visible.has(node.parentId)) return [];
       const relation = node.level === "authority"
         ? "authority"
@@ -347,7 +354,23 @@ export function AtlasTree(props: AtlasTreeProps) {
         selectable: false,
       } satisfies AtlasFlowEdge];
     });
-  }, [rendered]);
+    if (!focusId) {
+      const authorityEdges = rendered
+        .filter((node) => node.nodeType === "authority_aggregate")
+        .map((node) => ({
+          id: `authority-overview:${node.id}->${model.trunk.id}`,
+          source: node.id,
+          target: model.trunk.id,
+          type: "smoothstep",
+          className: "atlas-tree__edge atlas-tree__edge--authority",
+          data: { relation: "authority" as const },
+          focusable: false,
+          selectable: false,
+        } satisfies AtlasFlowEdge));
+      return [...authorityEdges, ...structural];
+    }
+    return structural;
+  }, [focusId, model.trunk.id, rendered]);
   const identity = useMemo(
     () => overlay
       ? preserveTreeIdentityWithOverlay(flowNodes, flowEdges, overlay)
@@ -357,6 +380,10 @@ export function AtlasTree(props: AtlasTreeProps) {
   const collisions = atlasTreeCollisions(positions);
 
   const focusedNode = focusId ? model.nodesById.get(focusId) || null : null;
+  const selectedNode = rendered.find((node) => node.id === selectedId) || focusedNode || model.trunk;
+  const selectedMembers = isAggregate(selectedNode)
+    ? selectedNode.memberIds.map((id) => model.nodesById.get(id)).filter((node): node is AtlasModelNode => Boolean(node))
+    : [];
   const publication = focusedNode
     ? [...(props.focusPath || atlasDisplayTrace(model, focusedNode.id))]
         .map((hop) => model.nodesById.get(hop.id))
@@ -410,8 +437,8 @@ export function AtlasTree(props: AtlasTreeProps) {
     <section aria-labelledby="atlas-tree-title" className="atlas-tree" data-tree-edge-count={flowEdges.length} data-tree-node-count={flowNodes.length}>
       <header className="atlas-tree__intro">
         <div>
-          <p className="eyebrow">Atlas map</p>
-          <h2 id="atlas-tree-title">Atlas map</h2>
+          <p className="eyebrow">Atlas</p>
+          <h2 id="atlas-tree-title">Federal cybersecurity, from authority to action</h2>
           {semanticLevel === "orientation" && !focusId ? (
             <p data-orientation-explanation>
               Federal cybersecurity material is spread across separate laws, agencies, and publications that were never organized together. Publishers wrote their own documents; Control Atlas drew the lines between them.
@@ -445,21 +472,52 @@ export function AtlasTree(props: AtlasTreeProps) {
         ) : null}
       </div>
 
-      {compact ? (
-        <CompactAtlasTree nodes={identity.nodes} onOpenNode={openNode} />
-      ) : (
-        <ReactFlowProvider>
-          <AtlasTreeStage
-            edges={identity.edges}
-            layoutKey={layoutKey}
-            nodes={identity.nodes}
-            onOpenNode={openNode}
-            onSemanticLevel={setSemanticLevel}
-            reducedMotion={reducedMotion}
-            semanticLevel={semanticLevel}
-          />
-        </ReactFlowProvider>
-      )}
+      <div className="atlas-tree__workbench">
+        {compact ? (
+          <CompactAtlasTree nodes={identity.nodes} onSelectNode={(node) => setSelectedId(node.id)} />
+        ) : (
+          <ReactFlowProvider>
+            <AtlasTreeStage
+              edges={identity.edges}
+              layoutKey={layoutKey}
+              nodes={identity.nodes}
+              onSelectNode={(node) => setSelectedId(node.id)}
+              onSemanticLevel={setSemanticLevel}
+              reducedMotion={reducedMotion}
+              semanticLevel={semanticLevel}
+            />
+          </ReactFlowProvider>
+        )}
+
+        <aside aria-labelledby="atlas-inspector-title" className="atlas-tree__inspector">
+          <p className="eyebrow">{nodeKind(selectedNode).replaceAll("-", " ")}</p>
+          <h3 id="atlas-inspector-title">{selectedNode.label}</h3>
+          <p>{selectedNode.blurb}</p>
+          <dl>
+            {selectedNode.nodeType === "authority_aggregate" ? (
+              <div><dt>Authority instruments</dt><dd>{selectedNode.childCount.toLocaleString()}</dd></div>
+            ) : (
+              <>
+                <div><dt>Records below</dt><dd>{selectedNode.descendantRecordCount.toLocaleString()}</dd></div>
+                <div><dt>Direct branches</dt><dd>{selectedNode.childCount.toLocaleString()}</dd></div>
+              </>
+            )}
+          </dl>
+          {selectedMembers.length ? (
+            <div className="atlas-tree__inspector-members">
+              <strong>Grouped here</strong>
+              <ul>{selectedMembers.slice(0, 8).map((node) => <li key={node.id}>{node.label}</li>)}</ul>
+              {selectedMembers.length > 8 ? <small>+ {selectedMembers.length - 8} more instruments</small> : null}
+            </div>
+          ) : null}
+          {selectedNode.nodeType !== "authority_aggregate" && selectedNode.nodeType !== "technology_gate" && !isAggregate(selectedNode) ? (
+            <button className="button button--primary" onClick={() => openNode(selectedNode)} type="button">
+              {selectedNode.level === "area" ? "Open this area" : selectedNode.level === "publication" ? "Open this publication" : selectedNode.level === "summary" ? "Open this branch" : "Return to overview"}
+            </button>
+          ) : null}
+          <small className="atlas-tree__inspector-hint">Select a node to inspect it. Use the action above only when you are ready to drill down.</small>
+        </aside>
+      </div>
 
       {technologyParent ? (
         <aside aria-labelledby="atlas-technology-picker-title" className="atlas-tree__technology-picker">

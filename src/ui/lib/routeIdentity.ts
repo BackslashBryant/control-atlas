@@ -21,7 +21,7 @@ export type RouteIdentity = {
 const ROUTE_IDENTITIES: Record<AppView, RouteIdentity> = {
   home: { path: "/", label: "Home", title: "Home", contextLabel: "Home", analyticsName: "home" },
   "start-here": { path: "/start", label: "Start here", title: "Start here", contextLabel: "Start here", analyticsName: "start_here" },
-  "atlas-map": { path: "/atlas", label: "Atlas map", title: "Atlas map", contextLabel: "Atlas map", analyticsName: "atlas" },
+  "atlas-map": { path: "/atlas", label: "Atlas", title: "Atlas", contextLabel: "Atlas", analyticsName: "atlas" },
   search: { path: "/library", label: "Library", title: "Library", contextLabel: "Library", analyticsName: "library" },
   "catalog-detail": { path: "/library/publication", label: "Library", title: "Library", contextLabel: "Library", analyticsName: "publication" },
   "library-detail": { path: "/record", label: "Record", title: "Record", contextLabel: "Record", analyticsName: "record_detail" },
@@ -29,8 +29,8 @@ const ROUTE_IDENTITIES: Record<AppView, RouteIdentity> = {
   patterns: { path: "/guides", label: "Guides", title: "Guides", contextLabel: "Guides", analyticsName: "guides" },
   templates: { path: "/build", label: "Documents", title: "Documents", contextLabel: "Documents", analyticsName: "build" },
   sources: { path: "/sources", label: "Sources", title: "Sources", contextLabel: "Sources", analyticsName: "sources" },
-  commons: { path: "/library", label: "Library", title: "Library", contextLabel: "Library", analyticsName: "library_resources" },
-  "commons-detail": { path: "/library/resource", label: "Library", title: "Resource", contextLabel: "Library", analyticsName: "resource_detail" },
+  commons: { path: "/resources", label: "Resources", title: "Resources", contextLabel: "Resources", analyticsName: "resources" },
+  "commons-detail": { path: "/resources/resource", label: "Resources", title: "Resource", contextLabel: "Resources", analyticsName: "resource_detail" },
   about: { path: "/about", label: "About", title: "About", contextLabel: "About", analyticsName: "about" },
   retired: { path: "/retired", label: "Retired identifier", title: "Retired identifier", contextLabel: "Retired identifier", analyticsName: "retired_identifier" },
   "not-found": { path: "/not-found", label: "Page not found", title: "Page not found", contextLabel: "Page not found", analyticsName: "not_found" },
@@ -38,8 +38,8 @@ const ROUTE_IDENTITIES: Record<AppView, RouteIdentity> = {
 
 const SELECTED_NAV_BY_VIEW: Record<AppView, AppView | null> = {
   home: null,
-  "start-here": "start-here",
-  "atlas-map": "search",
+  "start-here": null,
+  "atlas-map": "atlas-map",
   // Search results are a state of Library, not a separate destination, so the
   // Library tab stays selected while a query is open.
   search: "search",
@@ -50,10 +50,10 @@ const SELECTED_NAV_BY_VIEW: Record<AppView, AppView | null> = {
   "library-detail": null,
   matrix: "search",
   patterns: "patterns",
-  templates: "start-here",
+  templates: null,
   sources: "sources",
-  commons: "search",
-  "commons-detail": "search",
+  commons: "commons",
+  "commons-detail": "commons",
   about: "about",
   retired: "search",
   "not-found": null,
@@ -132,6 +132,7 @@ const COMPARE_PARAMS = new Set(["crosswalk", "workbench", "source", "target", "i
 const LEARN_PARAMS = new Set(["pattern"]);
 const BUILD_PARAMS = new Set(["templateType", "framework", "format", "environment", "baseline", "controlFamily", "category", "q"]);
 const SOURCE_PARAMS = new Set(["q", "source", "publisher", "provenance", "eligibility", "lifecycle", "access"]);
+const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "kind", "collection", "owner", "costType", "sort", "showAll"]);
 const RETIRED_PARAMS = new Set(["q"]);
 
 function normalizedPath(input: string): { path: string; params: URLSearchParams } {
@@ -226,11 +227,6 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
     path = "/library";
   } else if (/^\/catalog\/[^/]+$/.test(path)) {
     path = path.replace(/^\/catalog/, "/library/publication");
-  } else if (path === "/resources") {
-    path = "/library";
-    params.set("kind", "tools-communities");
-  } else if (/^\/resources\/[^/]+$/.test(path)) {
-    path = path.replace(/^\/resources/, "/library/resource");
   }
 
   // The startup shim owns pre-hash `?view=...` links. Preserve them until it
@@ -250,17 +246,23 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   }
 
   if (path === "/build/resources") {
-    path = "/library";
-    params.set("kind", "tools-communities");
+    path = "/resources";
   } else if (/^\/build\/resources\/[^/]+$/.test(path)) {
-    path = path.replace(/^\/build\/resources/, "/library/resource");
+    path = path.replace(/^\/build\/resources/, "/resources");
+  } else if (path === "/library" && params.get("kind") === "tools-communities") {
+    path = "/resources";
+    params.delete("kind");
+  } else if (/^\/library\/resource\/[^/]+$/.test(path)) {
+    path = path.replace(/^\/library\/resource/, "/resources");
   }
 
   let permitted: Set<string> | null = null;
   if (path === "/atlas") permitted = ATLAS_PARAMS;
   if (path === "/library") permitted = SEARCH_PARAMS;
+  if (path === "/resources") permitted = RESOURCE_PARAMS;
   if (/^\/library\/publication\/[^/]+$/.test(path)) permitted = CATALOG_PARAMS;
   if (/^\/library\/resource\/[^/]+$/.test(path)) permitted = DETAIL_PARAMS;
+  if (/^\/resources\/[^/]+$/.test(path)) permitted = DETAIL_PARAMS;
   if (path.startsWith("/record/")) permitted = DETAIL_PARAMS;
   if (path === "/start") permitted = START_PARAMS;
   if (path === "/compare") permitted = COMPARE_PARAMS;

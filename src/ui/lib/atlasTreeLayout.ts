@@ -95,6 +95,22 @@ export function layoutAtlasTree(options: {
   focusId?: string;
 }) {
   const { model, rendered, focusId = "" } = options;
+  if (!focusId) {
+    const authority = rendered
+      .filter((node) => node.nodeType === "authority_aggregate");
+    const areas = AREA_ORDER
+      .map((id) => rendered.find((node) => node.id === id))
+      .filter((node): node is AtlasRenderableNode => Boolean(node));
+    const overview = new Map<string, AtlasTreePosition>();
+    authority.forEach((node, index) => {
+      overview.set(node.id, position(node.id, index * 280, 0));
+    });
+    overview.set(model.trunk.id, position(model.trunk.id, 280, 150));
+    areas.forEach((area, index) => {
+      overview.set(area.id, position(area.id, (index % 3) * 280, 330 + Math.floor(index / 3) * 130));
+    });
+    return [...overview.values()].sort((left, right) => left.id.localeCompare(right.id));
+  }
   const stable = stableAtlasPositions(model);
   const renderedById = new Map(rendered.map((node) => [node.id, node]));
   const laidOut = new Map<string, AtlasTreePosition>();

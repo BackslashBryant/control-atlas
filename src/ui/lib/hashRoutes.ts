@@ -45,7 +45,8 @@ const PATH_TO_VIEW: Record<string, AppView> = {
   "/guides": "patterns",
   "/build": "templates",
   "/sources": "sources",
-  "/library/resource": "commons-detail",
+  "/resources": "commons",
+  "/resources/resource": "commons-detail",
   "/about": "about",
   "/retired": "retired",
   "/not-found": "not-found",
@@ -84,10 +85,10 @@ function parseNodeIdFromPath(pathname: string): {
       buildSection: "",
     };
   }
-  const resourceMatch = pathname.match(/^\/library\/resource\/([^/]+)$/);
+  const resourceMatch = pathname.match(/^\/resources\/([^/]+)$/);
   if (resourceMatch) {
     return {
-      basePath: "/library/resource",
+      basePath: "/resources/resource",
       nodeId: "",
       catalogId: "",
       resourceId: decodeURIComponent(resourceMatch[1]),
@@ -195,7 +196,7 @@ export function serializeHashLocation(state: ViewState): string {
   if (state.view === "commons-detail" && state.id) {
     params.delete("id");
     const qs = params.toString();
-    return `/library/resource/${encodeURIComponent(state.id)}${qs ? `?${qs}` : ""}`;
+    return `/resources/${encodeURIComponent(state.id)}${qs ? `?${qs}` : ""}`;
   }
 
   if (state.view === "catalog-detail" && !state.catalog) {
@@ -203,11 +204,8 @@ export function serializeHashLocation(state: ViewState): string {
   }
 
   if (state.view === "commons") {
-    const qs = new URLSearchParams();
-    qs.set("kind", "tools-communities");
-    if (state.query) qs.set("q", state.query);
-    if (state.collection) qs.set("collection", state.collection);
-    return `/library?${qs.toString()}`;
+    const qs = params.toString();
+    return `/resources${qs ? `?${qs}` : ""}`;
   }
 
   if (state.view === "templates") {

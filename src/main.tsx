@@ -39,7 +39,7 @@ if (!rootElement || !reactRootElement) {
 
 let brandRotationInterval = 0;
 let brandRotationTransition = 0;
-let reactBoot: Promise<void> | null = null;
+let reactBoot: Promise<boolean> | null = null;
 let reactModules: Promise<
   [
     typeof import('react'),
@@ -381,7 +381,8 @@ function connectStaticHeader() {
     .querySelector<HTMLElement>('[data-static-menu-boot]')
     ?.addEventListener('click', () => {
       if (!beginRouteTransition('Opening navigation', 'static:menu')) return;
-      void bootReactApp().then(() => {
+      void bootReactApp().then((booted) => {
+        if (!booted) return;
         completeRouteTransition();
         rootElement
           .querySelector<HTMLElement>('[data-react-root] .mobile-nav-toggle')
@@ -392,7 +393,8 @@ function connectStaticHeader() {
     .querySelector<HTMLElement>('[data-static-search-open]')
     ?.addEventListener('click', () => {
       if (!beginRouteTransition('Opening search', 'static:search')) return;
-      void bootReactApp().then(() => {
+      void bootReactApp().then((booted) => {
+        if (!booted) return;
         completeRouteTransition();
         window.setTimeout(() => requestSearchOverlayOpen(), 0);
       });
@@ -406,7 +408,8 @@ function connectStaticHeader() {
 function onStaticSearchShortcut(event: KeyboardEvent) {
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
     event.preventDefault();
-    void bootReactApp().then(() => {
+    void bootReactApp().then((booted) => {
+      if (!booted) return;
       // React's passive effects (which attach the listener this event needs)
       // flush asynchronously after commit, not within this same microtask —
       // a rAF landed before that flush and the event was lost. A short delay
@@ -445,9 +448,11 @@ async function bootReactApp() {
         ),
       );
       observeRouteHydration();
+      return true;
     })
     .catch((error: unknown) => {
       reactBoot = null;
+      reactModules = null;
       completeRouteTransition();
       const boundary = rootElement.querySelector<HTMLElement>('.home-trust-boundary');
       if (boundary) {
@@ -457,7 +462,24 @@ async function bootReactApp() {
           ' The interactive workspace could not load. Reload this page to try again.',
         );
       }
-      throw error;
+      if (isHomeHash()) {
+        staticHome?.removeAttribute('hidden');
+        if (staticHomeApp) staticHomeApp.id = 'app';
+        if (staticHomeWorkspace) staticHomeWorkspace.id = 'workspace';
+        rootElement.dataset.reactActive = 'false';
+        window.addEventListener('keydown', onStaticSearchShortcut);
+        startBrandRotation();
+      }
+      rootElement.dataset.reactBootError = "true";
+      const routeSummary = rootElement.querySelector<HTMLElement>(
+        '[data-static-route-summary]',
+      );
+      if (routeSummary) {
+        routeSummary.textContent =
+          'The interactive workspace could not load. Reload this page to try again.';
+        routeSummary.setAttribute('role', 'alert');
+      }
+      return false;
     });
 
   syncProgressiveShell();
@@ -470,7 +492,10 @@ function loadReactModules() {
     import('react'),
     import('react-dom/client'),
     import('./ui/App'),
-  ]);
+  ]).catch((error) => {
+    reactModules = null;
+    throw error;
+  });
   return reactModules;
 }
 
@@ -484,26 +509,28 @@ function warmInteractiveRoute() {
   const routeUrl = new URL(hashRoute, window.location.origin);
   switch (routeUrl.pathname.split('/')[1]) {
     case 'search':
-      void import('./ui/pages/ExplorePage');
+      void import('./ui/pages/ExplorePage').catch(() => undefined);
       break;
     case 'explore':
-      void import('./ui/pages/AtlasMapPage');
+      void import('./ui/pages/AtlasMapPage').catch(() => undefined);
       break;
     case 'catalog':
-      void import('./ui/pages/CatalogDetailPage');
+      void import('./ui/pages/CatalogDetailPage').catch(() => undefined);
       break;
     case 'record':
-      void import('./ui/pages/ObjectDetailPage');
+      void import('./ui/pages/ObjectDetailPage').catch(() => undefined);
       break;
   }
   void Promise.all([
     import('./ui/lib/hashRoutes'),
     import('./ui/lib/runtimeLoader'),
-  ]).then(([routes, runtime]) =>
-    runtime.preloadRuntimeArtifacts(
-      routes.parseHashLocation(routeUrl.pathname, routeUrl.search),
-    ),
-  );
+  ])
+    .then(([routes, runtime]) =>
+      runtime.preloadRuntimeArtifacts(
+        routes.parseHashLocation(routeUrl.pathname, routeUrl.search),
+      ),
+    )
+    .catch(() => undefined);
 }
 
 async function start() {

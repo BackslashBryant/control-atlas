@@ -2,8 +2,17 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** July 28, 2026 (`v1.0.2` published; automated correction and
-maintenance closeout complete)
+**Last synced:** August 10, 2026 (Epic 13 reference-workbench closeout)
+
+## Epic 13 closeout
+
+The homepage now identifies Control Atlas as the federal cybersecurity
+reference system and practitioner workbench, Resources is a canonical
+first-class destination, runtime failures are isolated with bounded recovery,
+and the Atlas overview uses three truthful authority aggregates, one trunk,
+nine areas, and inspector-led drilldown. No implementation residual remains.
+The existing human assistive-technology and physical-device evidence rows stay
+open below.
 
 ## 2026 correction program
 

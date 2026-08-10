@@ -14,6 +14,37 @@ export type AtlasAggregateNode = AtlasTreeNode & {
 
 export type AtlasRenderableNode = AtlasTreeNode | AtlasAggregateNode;
 
+const AUTHORITY_OVERVIEW_GROUPS = [
+  { key: "statutes", label: "Statutes", nodeTypes: new Set(["statute"]), blurb: "Laws that establish federal cybersecurity duties and authority." },
+  { key: "regulations", label: "Regulations & clauses", nodeTypes: new Set(["regulation"]), blurb: "Regulations and acquisition clauses that turn authority into requirements." },
+  { key: "directives", label: "Policy & directives", nodeTypes: new Set(["policy_directive"]), blurb: "Executive and agency direction that shapes federal cybersecurity practice." },
+] as const;
+
+export function aggregateAuthorityOverview(model: AtlasTreeModel): AtlasAggregateNode[] {
+  return AUTHORITY_OVERVIEW_GROUPS.flatMap((group) => {
+    const members = model.authorityNodes.filter((node) => group.nodeTypes.has(node.nodeType as never));
+    if (!members.length) return [];
+    return [{
+      id: `authority-aggregate:${group.key}`,
+      itemId: group.key.toUpperCase(),
+      label: group.label,
+      blurb: group.blurb,
+      nodeType: "authority_aggregate",
+      parentId: null,
+      childCount: members.length,
+      descendantRecordCount: 0,
+      level: "summary" as const,
+      alsoRequiredBy: [],
+      sourceRefs: [],
+      rationale: "Orientation-only grouping of authority instruments by published form.",
+      aggregate: true as const,
+      memberIds: members.map((member) => member.id).sort(),
+      rangeStart: members[0]?.itemId || "",
+      rangeEnd: members.at(-1)?.itemId || "",
+    }];
+  });
+}
+
 function lexical(left: AtlasTreeNode, right: AtlasTreeNode) {
   return left.itemId.localeCompare(right.itemId, undefined, {
     numeric: true,
@@ -134,7 +165,7 @@ export function renderedAtlasSet(options: {
 }) {
   const { model, focusId = "", selectedTechnologyId = "", dynamicChildren = [] } = options;
   if (!focusId) {
-    const orientation = [...model.authorityNodes, model.trunk, ...model.areas];
+    const orientation = [...aggregateAuthorityOverview(model), model.trunk, ...model.areas];
     if (orientation.length > ATLAS_RENDER_NODE_CAP) throw new Error("Atlas orientation exceeds the node cap.");
     return orientation satisfies AtlasRenderableNode[];
   }

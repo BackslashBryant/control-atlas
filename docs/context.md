@@ -5,9 +5,10 @@
 - Public product name: **Control Atlas**
 - Protected brand flourish: **Ctrl+Alt+** followed by a rotating, real product
   action such as **Trace**, **Search**, **Explore**, **Compare**, or **Build**.
-- Product definition: A public, no-account working commons for finding, reading,
-  comparing, and tracing federal cybersecurity material back to its source — built
-  openly from public material for the people doing the work.
+- Product definition: A federal cybersecurity reference and practitioner
+  workbench that brings requirements, frameworks, controls, mappings, official
+  guidance, tools, and practitioner resources together so people can understand
+  where things come from, how they connect, and what to do next.
 - Boundary: Control Atlas organizes public material. The people responsible
   for the work decide applicability, baseline selection, compliance and
   inheritance claims, and authorization or ATO outcomes.
@@ -22,9 +23,10 @@ publication are complete. `v1.0.2` is the final v1 patch and points to
 pre-hash query-state adapter remains because it preserves application state,
 not a retired route.
 
-**Active sprint:** None. New work must be a separately scoped post-v1
-maintenance or product increment. Human NVDA/VoiceOver/TalkBack and physical
-iOS/Android checks remain external evidence, not an unfinished code epic.
+**Active sprint:** None. Epic 13 shipped the product-first homepage,
+first-class Resources navigation, isolated runtime recovery, and aggregated
+Atlas workbench. Human NVDA/VoiceOver/TalkBack and physical iOS/Android checks
+remain external evidence.
 
 ## Shipped on `main` (do not re-plan)
 
@@ -53,11 +55,13 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Preserve the v1.0.2 release evidence and the explicit human
+1. Preserve the Epic 13 product definition, canonical Resources routes,
+   failure-isolation contracts, and inspector-led Atlas behavior.
+2. Preserve the v1.0.2 release evidence and the explicit human
    NVDA/VoiceOver/TalkBack/physical-device residual.
-2. Revisit sparse-catalog crosswalks only when an official upstream source
+3. Revisit sparse-catalog crosswalks only when an official upstream source
    publishes direct, reproducible mappings.
-3. Reopen staged ingestion/search tools only against the checked-in benchmark
+4. Reopen staged ingestion/search tools only against the checked-in benchmark
    and a concrete product failure; the July 17 experiments and strengthening
    sequence are complete.
 

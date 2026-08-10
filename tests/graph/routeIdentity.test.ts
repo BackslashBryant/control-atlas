@@ -18,9 +18,10 @@ test("Phase 3 durable paths and old bookmarks resolve to one canonical IA", () =
     ["/search?q=access+control&connectedOnly=true", "/library?q=access+control&connectedOnly=true"],
     ["/catalog", "/library"],
     ["/catalog/nist-800-53?q=account&family=AC", "/library/publication/nist-800-53?q=account&family=AC"],
-    ["/resources", "/library?kind=tools-communities"],
-    ["/resources?collection=open-source&q=oscal", "/library?collection=open-source&q=oscal&kind=tools-communities"],
-    ["/resources/official-nist-sp800-53-r5?from=templates", "/library/resource/official-nist-sp800-53-r5"],
+    ["/resources", "/resources"],
+    ["/resources?collection=open-source&q=oscal", "/resources?collection=open-source&q=oscal"],
+    ["/resources/official-nist-sp800-53-r5?from=templates", "/resources/official-nist-sp800-53-r5"],
+    ["/library?kind=tools-communities&q=oscal", "/resources?q=oscal"],
     ["/learn", "/guides"],
     ["/help", "/about"],
   ] as const;
@@ -63,11 +64,11 @@ test("Build and former Build-resource bookmarks retain their durable content", (
   );
   assert.equal(
     canonicalizeHashLocation("/build/resources/official-nist-sp800-53-r5?from=templates").canonicalPath,
-    "/library/resource/official-nist-sp800-53-r5",
+    "/resources/official-nist-sp800-53-r5",
   );
   assert.equal(
     canonicalizeHashLocation("/build/resources?category=tools&lane=open_source").canonicalPath,
-    "/library?kind=tools-communities",
+    "/resources?lane=open_source",
   );
 });
 
@@ -92,10 +93,14 @@ test("every app state has one approved display identity", () => {
   assert.equal(routeIdentityFor("about").path, "/about");
 });
 
-test("the three primary doors and two utilities own consistent active navigation", () => {
-  assert.equal(selectedNavFor("start-here"), "start-here");
-  for (const view of ["search", "catalog-detail", "atlas-map", "matrix", "commons", "commons-detail"] as const) {
+test("the four product entrances and two utilities own consistent active navigation", () => {
+  assert.equal(selectedNavFor("start-here"), null);
+  for (const view of ["search", "catalog-detail", "matrix"] as const) {
     assert.equal(selectedNavFor(view), "search", view);
+  }
+  assert.equal(selectedNavFor("atlas-map"), "atlas-map");
+  for (const view of ["commons", "commons-detail"] as const) {
+    assert.equal(selectedNavFor(view), "commons", view);
   }
   assert.equal(selectedNavFor("library-detail"), null);
   assert.equal(selectedNavFor("patterns"), "patterns");
@@ -105,6 +110,8 @@ test("the three primary doors and two utilities own consistent active navigation
   const destinations = new Map(CANONICAL_DESTINATIONS.map((entry) => [entry.view, entry]));
   assert.equal(destinations.get("start-here")?.label, "Start here");
   assert.equal(destinations.get("search")?.label, "Library");
+  assert.equal(destinations.get("atlas-map")?.label, "Atlas");
+  assert.equal(destinations.get("commons")?.label, "Resources");
   assert.equal(destinations.get("patterns")?.label, "Guides");
 });
 
