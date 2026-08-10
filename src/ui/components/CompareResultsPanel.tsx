@@ -203,7 +203,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
         <div className="card-actions">
           {graph.atlasMapNode ? (
             <AppLink onNavigate={onNavigate} patch={{ node: graph.atlasMapNode }} variant="secondary" view="atlas-map">
-              Open in the Atlas
+              Open Atlas map
             </AppLink>
           ) : null}
           <Button

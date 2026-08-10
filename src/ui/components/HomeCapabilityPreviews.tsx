@@ -35,7 +35,7 @@ const PREVIEWS = [
     description:
       "Start with ATT&CK T1195.002, then inspect only the defensive relationships MITRE or another publisher actually records.",
     detail: "ATT&CK · Initial Access · T1195.002",
-    action: "Open in the Atlas",
+    action: "Open Atlas map",
     icon: IconRadar,
     view: "atlas-map",
     patch: {

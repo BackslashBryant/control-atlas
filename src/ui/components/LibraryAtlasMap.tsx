@@ -34,7 +34,7 @@ export function LibraryAtlasMap(props: {
           <p>The current Library query is grouped by publication or source. Open any record to expand its immediate Atlas neighborhood.</p>
         </div>
         <AppLink className="button button--secondary" onNavigate={props.onNavigate} view="atlas-map">
-          <IconMap aria-hidden="true" size={17} /> Zoom out to the whole Atlas
+          <IconMap aria-hidden="true" size={17} /> Open Atlas map overview
         </AppLink>
       </header>
       {props.items.length ? (

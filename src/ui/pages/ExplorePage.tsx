@@ -339,7 +339,7 @@ export function ExplorePage(props: {
         <div aria-live="polite" className="search-result-count">{searchStarted ? `${unifiedResults.length.toLocaleString()} result${unifiedResults.length === 1 ? "" : "s"}` : "Enter a search or choose a filter"}</div>
         <div aria-label="Library view" className="library-view-toggle" role="group">
           <button aria-pressed={state.viewMode !== "map"} onClick={() => switchView("list")} type="button"><IconList aria-hidden="true" size={16} />List</button>
-          <button aria-pressed={state.viewMode === "map"} onClick={() => switchView("map")} type="button"><IconMap aria-hidden="true" size={16} />Map</button>
+          <button aria-pressed={state.viewMode === "map"} onClick={() => switchView("map")} type="button"><IconMap aria-hidden="true" size={16} />Atlas map</button>
         </div>
         <label className="search-sort"><span>Sort</span><select aria-label="Sort search results" onChange={(event) => onNavigate("search", { sort: event.target.value })} value={state.sort || "relevance"}><option value="identifier">Identifier</option><option value="publication">Publication or source</option><option value="relevance">Relevance</option><option value="title">Title</option></select></label>
         <Button aria-pressed={compareMode} onClick={() => { setCompareMode((value) => !value); setSelectedRecords([]); }} type="button" variant="secondary"><IconGitCompare aria-hidden="true" size={17} />Compare records</Button>

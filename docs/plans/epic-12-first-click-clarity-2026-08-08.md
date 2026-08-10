@@ -694,6 +694,17 @@ Under the authority spine, `nist-ai-rmf` (0/92), `nist-ssdf` (0/47) and `dod-rai
 
 The purpose is settled and does not need re-deciding: **the Atlas map shows where a record sits, what surrounds it, and what it descends from.**
 
+**Delivery status, 2026-08-09: implemented and accepted for release.** The shipped
+model renders 18 visual authority instruments, the trunk, all nine areas, 23
+publication roots, and publisher-native summaries only. The real-spine maximum is
+33 rendered nodes; the 448-rule benchmark becomes 12 deterministic buckets; the
+L0-L2 position snapshot is collision-free and locked at
+`ceb85d1f1f9956731e988f35e2537b3b7aa463930a808d8cd1e18fed9e1f8045`.
+Permanent Phase 7 tests cover layout, aggregation, overlay identity/ranking,
+authority-rail parity, URL/history restoration, compact keyboard behavior, scoped
+runtime requests, and 20 consecutive cold loads. Phase 1-6 and the unchanged
+32-case accessibility suite remain part of the release gate.
+
 ### 7.1 The model: a skill tree
 
 **Owner direction, 2026-08-08:** a skill-tree-style view you branch through and can work your way back up.
@@ -710,7 +721,7 @@ It is the right metaphor, for reasons that are specific rather than decorative:
 Skill trees have properties that compliance data does not. Each of these is a hard design rule:
 
 1. **The tree is the canonical hierarchy only — single parent, no exceptions.** Cross-framework mappings are many-to-many (AC-2 alone reaches 7 counterpart catalogs). Drawing those as tree edges produces the hairball that was already rejected. **Mappings are a toggleable overlay**: selecting a node lights up its counterparts on other branches as highlights, never as structural edges. This is §3.4's canonical-parent rule expressed visually, and it is what keeps the tree a tree.
-2. **Draw structure, count leaves.** There are 29,350 nodes; a drawable tree is a few hundred. §1.4 measured the real number: **294 nodes for the whole L0–L3 tree excluding STIG benchmarks**, ~315 with the authority instruments. Never attempt to draw the record layer.
+2. **Draw structure, count leaves.** There are 29,367 nodes, of which 29,349 participate in canonical trunk reachability and 18 are authority instruments. The generated Atlas spine has 693 entries, but only 531 are publisher-native summary types; the other 111 L3+ entries are record-layer nodes and are excluded. Never attempt to draw the record layer.
 3. **No locks, no progression, no completion.** A skill tree implies prerequisites and unlocking. Nothing here is locked, and implying "you must finish X first" would be false and would contradict the product's own honesty about not deciding what applies to a given system. Show position and counts; never gate.
 
 ### 7.3 Levels
@@ -720,10 +731,10 @@ L1   Instrument    statute / regulation / policy directive    ~20   ABOVE the tr
 L0   Trunk         Cybersecurity                                1
 L1'  Area          the nine areas                               9    below the trunk
 L2   Publication   the 23 catalog roots                        23
-L3   Publisher     family / function / tactic / benchmark     614   (261 excluding STIG)
+L3   Publisher     family / function / tactic / benchmark     531   summaries only
 ```
 
-Instruments above, areas below — the existing silhouette, with the fake roots node (A4) replaced by real ones.
+Instruments above, areas below — the existing silhouette, with the fake roots node (A4) replaced by real ones. Authority is above the trunk **visually only**; `atlas:TRUNK` remains the canonical root and authority never participates in canonical parent selection.
 
 ### 7.4 Three jobs by depth
 
@@ -731,13 +742,13 @@ The owner's answer to "what is the map's primary job" was **all three, by depth*
 
 | Zoom | Job | Node shows | Suppressed |
 |---|---|---|---|
-| `<0.7`, L0–L1 | **Orientation** — "what is this world" | Label, aggregate count, one explanatory sentence per mandate bucket | Descriptions, type chips, overlay toggle |
+| `<0.7`, L0–L1 | **Orientation** — "what is this world" | Label, aggregate count, one plain-language fragmentation explanation, four mandate-kind counts | Descriptions, type chips, overlay toggle |
 | `0.7–1.3`, L2–L3 | **Discovery** — "what else connects" | Label, `publication_type` chip, `descendant_record_count`, mapping-degree dot, mandate chip | Publisher prose |
-| `>1.3` or focused | **Justification** — "why does this apply" | Full trace-back rail, publisher text, "also required by" chips, connections | Sibling detail (siblings collapse to labels) |
+| `>1.3` or focused | **Justification** — "why does this item exist" | Full displayed trace-back rail, publisher text, "also required by" chips, connections | Sibling detail (siblings collapse to labels) |
 
 This is not new machinery. `AtlasUniverse.tsx:552`'s `onMoveEnd` already implements zoom<0.5 collapse / >1.3 expand with a 500 ms `semanticGuard`. Keep the mechanism; change the thresholds and what each level projects.
 
-The "why the sprawl exists" sentence is said **once**, at orientation zoom, on the three mandate buckets. It is the editorial contribution and it must not be repeated at every level.
+The "why the sprawl exists" sentence is said **once**, at orientation zoom, alongside counts for the four mandate kinds: `statutory`, `contractual`, `federal_policy_or_regulatory_mandate`, and `issued_without_federal_mandate`. It is the editorial contribution and it must not be repeated at every level.
 
 ### 7.5 Deterministic layout
 
@@ -753,7 +764,7 @@ The repo's existing pattern is already correct and should be followed rather tha
 
 **Aggregation when `children > 40`:** bucket by a publisher-supplied grouping key if one exists, else by `item_id` prefix range (`A–F · 128`). Buckets are themselves nodes; expanding one replaces it in place under the same cap. Deterministic, because buckets are a pure function of the lexically sorted child array.
 
-**Technology gate — `TECHNOLOGY_GATE_THRESHOLD = 60`.** Owner direction: *"once you get to STIGs, you pick the tech to proceed to that level of depth."* Any node whose `child_count` exceeds the threshold renders **a picker instead of children** — the tree shows one placeholder child ("Choose a benchmark — 353 available") and a searchable, count-annotated list beside the stage. Picking one inserts exactly one child at a fixed position and the tree continues normally. New URL param `atlasBenchmark`, serialised alongside the existing atlas params (`viewState.ts:652`).
+**Technology gate — `TECHNOLOGY_GATE_THRESHOLD = 60`.** Owner direction: *"once you get to STIGs, you pick the tech to proceed to that level of depth."* Any publication whose publisher-native summary child count exceeds the threshold renders **a picker instead of children** — the tree shows one placeholder child ("Choose a benchmark — 353 available") and a searchable, count-annotated list beside the stage. Picking one inserts exactly one child at a fixed position and the tree continues normally. New URL param `atlasBenchmark`, serialised alongside the existing atlas params.
 
 Measured fit: `disa-stig:CATALOG` = 353 → gated. `disa-cci:CATALOG` = 44 → not gated. `disa-srg:CATALOG` = 25 → not gated. Below the gate, benchmark→rule is median 24 / max 448, so the 448-rule benchmark hits the 40-child bucket rule.
 
@@ -763,19 +774,19 @@ Measured fit: `disa-stig:CATALOG` = 353 → gated. `disa-cci:CATALOG` = 44 → n
 
 **Branch out (down).** Expand from a root toward records; every expansion writes to the URL so any depth is shareable and restores on reload.
 
-**Trace back (up).** A persistent "Why does this apply?" control on any focused node, opening root-first. Each hop shows the `rationale` and `source_refs` already written onto every organizing edge by `pushOrganizingEdge` (`build-framework-data.mjs:2059-2066`) — **that data exists and is currently rendered nowhere.**
+**Trace back (up).** A persistent "Trace back to authority" control on any focused node, opening root-first. The displayed path starts at the selected publication's curated `primary_authority`, follows the authority spine's declared parent chain, and then joins the canonical trunk/area/publication path. This is display composition, never canonical ancestry. Each hop retains its origin, rationale, and available source references.
 
-Extend `src/ui/components/WhereThisSitsRail.tsx` from two rails to three. Its origin-run segmentation loop (`:90-98`) already does the work and needs one more origin value:
+Reuse the three-origin `src/ui/components/WhereThisSitsRail.tsx` shipped in Phase 6 and extend its authority segment to the full declared parent chain:
 
-- **Authority** (new) — the `issued_under` hops
+- **Authority** — the publication's curated primary authority and its declared authority parents
 - **Control Atlas structure** — `organizing` hops
 - **Publisher hierarchy** — `structural` hops
 
-~20 lines in a 157-line file, and because the record page uses the same component, **the record page gains authority trace-back for free.**
+The Atlas tree and record page consume the same composition function and must produce byte-identical hop sequences.
 
 ### 7.8 Mapping overlay
 
-Toggle only, never structure. When on with a node focused: fetch that node's shard via the existing `loadAtlasNeighborhood(nodeId)` (`runtimeLoader.ts:444`) — one ~1.9 MB shard, no full graph — and draw counterparts as **decorations on already-rendered nodes** (ring + connector, visually distinct from tree edges; `tree-model.md` §3:254 requires that going down and going sideways never look alike). Never add nodes or edges to the tree model.
+Toggle only, never structure. When on with a node focused: fetch that node's shard via the existing `loadAtlasNeighborhood(nodeId)`, no full graph, and decorate only matching nodes already in the rendered tree. Ranked counterparts that are not structural tree nodes remain in the bounded side-highlight list; they never become tree nodes or edges. `tree-model.md` §3 requires that going down and going sideways never look alike.
 
 **Cap: 24 highlights**, ranked publisher-declared first, then confidence, then lexical id. §1.4's density table justifies the number: median node has 1 counterpart, 800-53 base controls median 14 / max 81, only 463 nodes have ≥21. **24 renders >99% of nodes completely.** Beyond the cap, one summary chip — "3,467 more" — routing to `/compare`, which is where that many relationships belong.
 
@@ -798,6 +809,20 @@ src/ui/lib/atlasTreeAggregation.ts    budget, buckets, technology gate
 
 ### 7.10 Open-source-first gate
 
+**Implementation decision, 2026-08-09.** Current official project evidence
+confirms the planned split. Keep `@xyflow/react` for the interactive stage: it is
+MIT-licensed, actively maintained, already integrated, and provides the viewport,
+focus, keyboard, and accessibility controls the semantic-zoom contract relies on.
+Add `d3-hierarchy` (ISC) only for pure L3+ child-band coordinate math over
+lexically sorted input; it owns no rendering or interaction state. Do not adopt
+`react-complex-tree`: its MIT-licensed W3C tree and keyboard implementation is
+strong, but its multi-select, drag/drop, rename, and environment state add lifecycle
+cost without improving this read-only compact branch's established accessibility
+contract. Its maintainers also identify Headless Tree as the successor direction,
+which raises avoidable migration cost. Preserve the existing semantic DOM compact
+representation. No renderer, framework, or development-environment change is
+justified.
+
 **Keep React Flow.** Already a dependency, MIT, actively maintained, and only ~15% of it is used (custom node types, controls, viewport events). At ~120 rendered nodes, replacing it saves ~40 KB gzipped and costs pan/zoom, focus management, edge routing, and the `onMoveEnd` hook the semantic zoom is built on. Not a good trade.
 
 | Candidate | Verdict |
@@ -806,7 +831,7 @@ src/ui/lib/atlasTreeAggregation.ts    budget, buckets, technology gate
 | **`elkjs`** — already a dep | Reject for the tree. Async, worker-bound, built for compound-graph routing; buys nothing at 120 nodes and costs a round trip. Keep it where it is (`/record`, `/compare`) |
 | **`dagre` / `dagre-d3`** | Reject — effectively unmaintained; `dagre-d3` archived |
 | **Cytoscape, sigma.js, regl renderers** | Reject — Cytoscape was removed deliberately; WebGL solves a 10k-node problem that does not exist here |
-| **`react-complex-tree`** — MIT, maintained, strong keyboard/ARIA | **Evaluate for the compact branch only.** `AtlasUniverseMobile` (`:585-665`) is a hand-rolled DOM tree with hand-rolled a11y — the one place a library clearly beats what exists |
+| **`react-complex-tree`** — MIT, maintained, strong keyboard/ARIA | **Reject for this phase.** Its selection, drag/drop, rename, and environment state add lifecycle cost to a read-only branch; its maintainers identify Headless Tree as the successor direction. Preserve the smaller semantic DOM tree and its existing accessibility contract |
 
 **Split:** hand-author **L0–L2** (44 nodes, fixed silhouette, ~5 visible at once — exactly what `ATLAS_UNIVERSE_POSITIONS` already does well); `d3-hierarchy` for **L3+**.
 
@@ -819,7 +844,7 @@ One flag, not a blocker: React Flow is imported **statically** by `AtlasUniverse
 - Node coordinates are byte-identical across two cold loads of the same data; laying out the same input twice produces identical output.
 - No frame exceeds 120 rendered nodes for any focus node in the real spine; the record layer is never drawn.
 - `disa-stig:CATALOG` gates; `disa-srg:CATALOG` does not; the 448-rule benchmark buckets; bucketing is a pure function of sorted input.
-- "Trace back" from any record renders the complete path to its authority root, and that path is byte-identical to the record page's breadcrumb.
+- "Trace back" from any record renders the complete displayed path to its authority root, and that path is byte-identical to the record page's displayed authority rail.
 - Toggling the mapping overlay adds **zero** nodes and **zero** edges to the tree model — assert by identity against the pre-overlay model.
 - `disa-cci:CCI-000366` yields exactly 24 highlights plus one summary chip; a median node yields 1 and no chip.
 - Drill state is encoded in the URL and restores on reload at every depth.

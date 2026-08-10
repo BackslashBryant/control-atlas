@@ -90,6 +90,13 @@ for (const viewport of VIEWPORTS) {
             : [];
           const overflows = [...globalThis.document.querySelectorAll("body *")]
             .filter((element) => {
+              // React Flow's transformed coordinate plane is intentionally
+              // wider than its clipped viewport. Phase 7 keeps page bounds
+              // protected by .atlas-tree__stage; the plane itself is not
+              // document overflow.
+              if (element.matches(".react-flow__viewport, .react-flow__nodes")) {
+                return false;
+              }
               const style = globalThis.getComputedStyle(element);
               return (
                 element.clientWidth > 100 &&

@@ -240,7 +240,7 @@ export function App() {
     viewState.view === "library-detail"
       ? `${viewState.view}:${viewState.node}`
       : viewState.view === "atlas-map"
-        ? `${viewState.view}:${viewState.atlasAxis || "landing"}:${viewState.atlasFramework || "none"}`
+        ? `${viewState.view}:${viewState.atlasAxis || "landing"}:${viewState.atlasFramework || "none"}:${viewState.atlasBenchmark || "none"}`
       : viewState.view === "catalog-detail"
         ? `${viewState.view}:${viewState.catalog}`
         : viewState.view === "matrix"

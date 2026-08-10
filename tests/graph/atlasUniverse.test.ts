@@ -1,13 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import {
-  ATLAS_UNIVERSE_POSITIONS,
-  atlasUniverseCollisions,
-} from "../../src/ui/lib/atlasUniverse";
+import { readFileSync } from "node:fs";
 
-test("Atlas universe places every area exactly once without collisions", () => {
-  assert.equal(ATLAS_UNIVERSE_POSITIONS.length, 9);
-  assert.equal(new Set(ATLAS_UNIVERSE_POSITIONS.map((area) => area.id)).size, 9);
-  assert.deepEqual(atlasUniverseCollisions(), []);
+test("AtlasUniverse no longer contains the obsolete projection", () => {
+  const source = readFileSync("src/ui/components/AtlasUniverse.tsx", "utf8");
+  assert.match(source, /AtlasTree as AtlasUniverse/);
+  assert.doesNotMatch(source, /AUTHORITY-ROOTS|junction|ATLAS_UNIVERSE_POSITIONS/);
 });

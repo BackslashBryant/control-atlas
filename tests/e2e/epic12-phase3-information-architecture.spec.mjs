@@ -143,7 +143,7 @@ test("Phase 3 List and Map preserve Library state and never drop non-empty resul
   await expect(page.getByRole("group", { name: "Library view" })).toBeVisible();
   const resultCount = Number((await page.locator(".search-result-count").textContent())?.match(/\d+/)?.[0] || 0);
   expect(resultCount).toBeGreaterThan(0);
-  const mapButton = page.getByRole("button", { name: "Map", exact: true });
+  const mapButton = page.getByRole("button", { name: "Atlas map", exact: true });
   await page.evaluate(() => globalThis.scrollTo(0, 320));
   const before = await page.evaluate(() => globalThis.scrollY);
   await mapButton.dispatchEvent("click");
@@ -155,9 +155,9 @@ test("Phase 3 List and Map preserve Library state and never drop non-empty resul
   await expect(page).toHaveURL(/#\/library\?q=access%20control&kind=requirements&sort=identifier$|#\/library\?q=access\+control&kind=requirements&sort=identifier$/);
   await expect(page.getByRole("article").first()).toBeVisible();
   await expect.poll(() => page.evaluate(() => globalThis.scrollY)).toBeGreaterThanOrEqual(Math.max(0, before - 2));
-  await page.getByRole("button", { name: "Map", exact: true }).dispatchEvent("click");
+  await page.getByRole("button", { name: "Atlas map", exact: true }).dispatchEvent("click");
   await expect(page.locator(".library-atlas-map")).toHaveAttribute("data-map-node-count", String(resultCount));
-  await page.getByRole("link", { name: /Zoom out to the whole Atlas/ }).click();
+  await page.getByRole("link", { name: /Open Atlas map overview/ }).click();
   await expect(page).toHaveURL(/#\/atlas$/);
   await waitForAppReady(page);
   await expect(page.locator(".route-transition")).toBeHidden();
@@ -231,11 +231,12 @@ test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface lab
   await page.setViewportSize({ width: 1440, height: 900 });
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
-  await expect(page.locator(".atlas-universe")).toBeVisible();
+  await expect(page.locator(".atlas-tree")).toBeVisible();
   await expect(page.locator("body")).not.toContainText("Connected work surface");
-  const areas = page.locator(".atlas-universe__area");
-  expect(await areas.count()).toBeGreaterThan(0);
+  const areas = page.locator('[data-atlas-node-id^="atlas:LIMB-"]');
+  await expect(areas).toHaveCount(9);
   for (const area of await areas.all()) {
-    await expect(area.locator("small, span").last()).toContainText(/\d+ publications? \/ \d[\d,]* records/);
+    await expect(area).toContainText(/\d[\d,]* records/);
   }
+  await expect(page.locator(".atlas-tree__totals")).toContainText("23");
 });
