@@ -17,8 +17,10 @@ import {
 } from "@tabler/icons-react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
-import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
-import { AtlasUniverse } from "../components/AtlasUniverse";
+import {
+  AtlasTree,
+  benchmarkChildrenFromNeighborhood,
+} from "../components/AtlasTree";
 import { CanonicalBreadcrumb } from "../components/CanonicalBreadcrumb";
 import { RelationshipGraphTable } from "../components/RelationshipGraphTable";
 import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
@@ -39,7 +41,6 @@ import {
   NIST_FRAMEWORK_ID,
 } from "../lib/atlasDrilldown";
 import { catalogProfileFor } from "../lib/catalogProfiles";
-import treeSpine from "../../../data/curated/tree-spine.json";
 import { resolveAtlasSearchTransition } from "../lib/atlasSearch";
 import { PageHeader, scrollElementBelowHeader } from "../lib/pagePrimitives";
 import { relationshipExplanation } from "../lib/relationshipProvenance";
@@ -65,14 +66,6 @@ type AtlasMapPageProps = {
 
 type AtlasView = "path" | "map" | "list";
 
-// Areas whose content is not a published catalog (Operations lives in Build's
-// tasks, Knowledge in the resource directory). Declared in tree-spine.json so
-// the data and the board cannot drift apart.
-const AREA_DESTINATIONS = treeSpine.areaDestinations as Record<
-  string,
-  { view: string; actionLabel: string; summary: string }
->;
-
 function atlasView(value: string, focused: boolean): AtlasView {
   // "purpose"/"rmf" are legacy view ids: both opened the hierarchy under a
   // different lens, so they resolve to "path" and keep old links working.
@@ -95,21 +88,6 @@ function atlasView(value: string, focused: boolean): AtlasView {
   return focused ? "map" : "path";
 }
 
-function useCompactAtlas() {
-  const [compact, setCompact] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(max-width: 767px)").matches,
-  );
-  useEffect(() => {
-    const media = window.matchMedia("(max-width: 767px)");
-    const onChange = (event: MediaQueryListEvent) => setCompact(event.matches);
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
-  }, []);
-  return compact;
-}
-
 function requestedNodeId(bundle: RuntimeBundle, rawNode: string) {
   const node = rawNode.trim();
   if (!node || node === "foundation" || node === "landscape") return "";
@@ -130,7 +108,6 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     onNavigate,
     onOpenNode,
   } = props;
-  const compact = useCompactAtlas();
   const nodeId = useMemo(
     () => requestedNodeId(bundle, state.node),
     [bundle, state.node],
@@ -140,6 +117,11 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   const [recordStatus, setRecordStatus] = useState<
     "idle" | "loading" | "ready" | "missing" | "error"
   >(nodeId ? "loading" : "idle");
+  const [benchmarkRecord, setBenchmarkRecord] =
+    useState<AtlasNeighborhoodRecord | null>(null);
+  const [benchmarkStatus, setBenchmarkStatus] = useState<
+    "idle" | "loading" | "ready" | "error"
+  >(state.atlasBenchmark ? "loading" : "idle");
   const [mapSearchDraft, setMapSearchDraft] = useState(
     state.relationshipSearch || "",
   );
@@ -175,6 +157,32 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       cancelled = true;
     };
   }, [nodeId]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setBenchmarkRecord(null);
+    if (!state.atlasBenchmark) {
+      setBenchmarkStatus("idle");
+      return () => {
+        cancelled = true;
+      };
+    }
+    setBenchmarkStatus("loading");
+    loadAtlasNeighborhood(state.atlasBenchmark)
+      .then((nextRecord) => {
+        if (cancelled) return;
+        startTransition(() => {
+          setBenchmarkRecord(nextRecord);
+          setBenchmarkStatus(nextRecord ? "ready" : "error");
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setBenchmarkStatus("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [state.atlasBenchmark]);
 
   useEffect(() => {
     if (!record) return;
@@ -315,7 +323,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       {record ? (
         <FocusedAtlas
           bundle={bundle}
-          compact={compact}
+          benchmarkRecord={benchmarkRecord}
           onNavigate={onNavigate}
           onOpenNode={onOpenNode}
           patchAtlas={patchAtlas}
@@ -326,6 +334,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       ) : recordStatus === "idle" && bundle.routeReady ? (
         <AtlasGuidedPath
           bundle={bundle}
+          benchmarkRecord={benchmarkRecord}
           onNavigate={onNavigate}
           onOpenNode={onOpenNode}
           patchAtlas={patchAtlas}
@@ -334,8 +343,13 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       ) : recordStatus === "idle" ? (
         <div className="atlas-loading" role="status">
           <div aria-hidden="true" className="atlas-loading-block" />
-          Preparing the Atlas relationship map…
+          Preparing the Atlas map…
         </div>
+      ) : null}
+      {benchmarkStatus === "error" ? (
+        <p className="atlas-load-inline-error" role="alert">
+          This benchmark branch could not be loaded. Choose another technology or return to the Atlas map overview.
+        </p>
       ) : null}
       </div>
     </Panel>
@@ -344,7 +358,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
 
 function FocusedAtlas(props: {
   bundle: RuntimeBundle;
-  compact: boolean;
+  benchmarkRecord: AtlasNeighborhoodRecord | null;
   record: AtlasNeighborhoodRecord;
   state: AtlasMapPageProps["state"];
   view: AtlasView;
@@ -352,7 +366,7 @@ function FocusedAtlas(props: {
   onNavigate: AtlasMapPageProps["onNavigate"];
   onOpenNode: AtlasMapPageProps["onOpenNode"];
 }) {
-  const { bundle, record, state, view, patchAtlas, compact, onNavigate, onOpenNode } = props;
+  const { bundle, benchmarkRecord, record, state, view, patchAtlas, onNavigate, onOpenNode } = props;
   const filters: AtlasFilterState = {
     relationshipType: state.relationshipType,
     provenance: state.provenance,
@@ -570,6 +584,59 @@ function FocusedAtlas(props: {
         </div>
       </div>
 
+      {bundle.atlasSpine ? (
+        <AtlasTree
+          areaId={state.atlasLimb}
+          benchmarkChildren={benchmarkChildrenFromNeighborhood(benchmarkRecord)}
+          benchmarkId={state.atlasBenchmark}
+          catalogSummaries={bundle.catalogSummaries || []}
+          focusedRecord={record}
+          focusPath={record.structural_path}
+          onOpenArea={(atlasLimb) =>
+            patchAtlas({
+              atlasAxis: "landscape",
+              atlasLimb,
+              atlasFramework: "",
+              atlasFamily: "",
+              atlasBenchmark: "",
+              node: "",
+            })
+          }
+          onOpenCompare={() => onNavigate("matrix", { source: centerCatalogId })}
+          onOpenPublication={(atlasLimb, atlasFramework) =>
+            patchAtlas({
+              atlasAxis: "framework",
+              atlasLimb,
+              atlasFramework,
+              atlasFamily: "",
+              atlasBenchmark: "",
+              node: "",
+            })
+          }
+          onOpenSummary={(atlasFamily) =>
+            patchAtlas({ atlasFamily, atlasBenchmark: "", node: "" })
+          }
+          onReset={() =>
+            patchAtlas({
+              atlasAxis: "",
+              atlasLimb: "",
+              atlasFramework: "",
+              atlasFamily: "",
+              atlasBenchmark: "",
+              node: "",
+            })
+          }
+          onSelectBenchmark={(atlasBenchmark) =>
+            patchAtlas({ atlasBenchmark, atlasFamily: "", node: "" })
+          }
+          publicationId={state.atlasFramework}
+          spine={bundle.atlasSpine}
+          summaryId={state.atlasFamily}
+        />
+      ) : (
+        <p role="alert">The Atlas map structure is unavailable. Reload the page to try again.</p>
+      )}
+
       {rows.length === 0 ? (
         <div id="atlas-focused-view">
           <AtlasNoConnections
@@ -683,19 +750,6 @@ function FocusedAtlas(props: {
                 </div>
               </section>
             ) : null}
-
-            <AtlasConnectionMap
-              center={record.center_node}
-              compact={compact}
-              expandedGroupId={state.relationshipGroup}
-              groups={groups}
-              onExpandedGroupChange={(relationshipGroup) =>
-                patchAtlas({ relationshipGroup })
-              }
-              onOpenList={() => patchAtlas({ relationshipView: "list" })}
-              onSelectItem={setSelectedRow}
-              selectedItemId={selectedRow?.counterpart.id || ""}
-            />
 
             {/* The complete relationship set. It supports the map instead of
                 competing with it, and stays the accessible DOM equivalent:
@@ -885,12 +939,13 @@ export function atlasDrilldownModel(
 
 function AtlasGuidedPath(props: {
   bundle: RuntimeBundle;
+  benchmarkRecord: AtlasNeighborhoodRecord | null;
   state: AtlasMapPageProps["state"];
   patchAtlas: (patch: Partial<AtlasMapPageProps["state"]>) => void;
   onNavigate: AtlasMapPageProps["onNavigate"];
   onOpenNode: AtlasMapPageProps["onOpenNode"];
 }) {
-  const { bundle, state, patchAtlas, onNavigate, onOpenNode } = props;
+  const { bundle, benchmarkRecord, state, patchAtlas, onNavigate, onOpenNode } = props;
   const [recordFilter, setRecordFilter] = useState("");
   const axis =
     state.atlasAxis ||
@@ -946,7 +1001,7 @@ function AtlasGuidedPath(props: {
 
   const choiceLinks = useMemo(() => {
     const links = [
-      { id: "atlas:root", label: "Explore" },
+      { id: "atlas:root", label: "Atlas map" },
     ];
     if (axis === "framework") {
       if (framework) {
@@ -983,6 +1038,7 @@ function AtlasGuidedPath(props: {
       atlasFramework: "",
       atlasBaseline: "",
       atlasFamily: "",
+      atlasBenchmark: "",
       atlasRmfStep: "",
       node: "",
       ...patch,
@@ -1026,67 +1082,38 @@ function AtlasGuidedPath(props: {
     <section className="atlas-ancestry">
       <ChoiceTrail links={choiceLinks} onOpen={openAncestor} />
 
-      {!axis || axis === "landscape" ? (
-        <AtlasUniverse
-          areas={model.frameworkGroups}
+      {bundle.atlasSpine ? (
+        <AtlasTree
+          areaId={state.atlasLimb}
+          benchmarkChildren={benchmarkChildrenFromNeighborhood(benchmarkRecord)}
+          benchmarkId={state.atlasBenchmark}
           catalogSummaries={bundle.catalogSummaries || []}
-          nodeCount={
-            (bundle.catalogSummaries || []).reduce(
-              (total, catalog) =>
-                total + (catalog.leaf_record_count ?? catalog.node_count ?? 0),
-              0,
-            ) || bundle.runtime.dataset.nodes.length
+          onOpenArea={(atlasLimb) => {
+            setOpenLimbId(atlasLimb);
+            resetDrill({ atlasAxis: "landscape", atlasLimb });
+          }}
+          onOpenCompare={() => onNavigate("matrix")}
+          onOpenPublication={(atlasLimb, atlasFramework) => {
+            setOpenLimbId(atlasLimb);
+            resetDrill({ atlasAxis: "framework", atlasLimb, atlasFramework });
+          }}
+          onOpenSummary={(atlasFamily) =>
+            patchAtlas({ atlasFamily, atlasBenchmark: "", node: "" })
           }
-          initialAreaId={axis === "landscape" ? openLimbId : ""}
-          initialFrameworkId={axis === "landscape" ? state.atlasFramework : ""}
-          onExpandArea={(area) => {
-            setOpenLimbId(area.id);
-            resetDrill({ atlasAxis: "landscape", atlasLimb: area.id });
-          }}
-          onOpenArea={(area) => {
-            const destination = AREA_DESTINATIONS[area.id];
-            if (area.frameworks.length === 0 && destination) {
-              onNavigate(destination.view as ViewState["view"]);
-              return;
-            }
-            setOpenLimbId(area.id);
-            resetDrill({ atlasAxis: "framework", atlasLimb: area.id });
-          }}
-          onExpandFramework={(area, choice) => {
-            setOpenLimbId(area.id);
-            resetDrill({
-              atlasAxis: "landscape",
-              atlasLimb: area.id,
-              atlasFramework: choice.id,
-            });
-          }}
-          onCollapseToArea={(area) => {
-            setOpenLimbId(area.id);
-            resetDrill({ atlasAxis: "landscape", atlasLimb: area.id });
-          }}
-          onResetOverview={() => {
+          onReset={() => {
             setOpenLimbId("");
             resetDrill({});
           }}
-          onOpenFramework={(area, choice) => {
-            setOpenLimbId(area.id);
-            resetDrill({
-              atlasAxis: "framework",
-              atlasLimb: area.id,
-              atlasFramework: choice.id,
-            });
-          }}
-          onOpenUnit={(area, choice, unit) => {
-            setOpenLimbId(area.id);
-            resetDrill({
-              atlasAxis: "framework",
-              atlasLimb: area.id,
-              atlasFramework: choice.id,
-              atlasFamily: unit.id,
-            });
-          }}
+          onSelectBenchmark={(atlasBenchmark) =>
+            patchAtlas({ atlasBenchmark, atlasFamily: "", node: "" })
+          }
+          publicationId={state.atlasFramework}
+          spine={bundle.atlasSpine}
+          summaryId={state.atlasFamily}
         />
-      ) : null}
+      ) : (
+        <p role="alert">The Atlas map structure is unavailable. Reload the page to try again.</p>
+      )}
 
       {axis === "framework" && !framework ? (
         <>

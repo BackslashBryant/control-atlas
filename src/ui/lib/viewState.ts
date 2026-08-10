@@ -34,6 +34,7 @@ export type ViewState =
       atlasAxis: string;
       atlasLimb: string;
       atlasFramework: string;
+      atlasBenchmark: string;
       atlasBaseline: string;
       atlasFamily: string;
       atlasRmfStep: string;
@@ -193,6 +194,7 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
     atlasAxis: "",
     atlasLimb: "",
     atlasFramework: "",
+    atlasBenchmark: "",
     atlasBaseline: "",
     atlasFamily: "",
     atlasRmfStep: "",
@@ -278,6 +280,7 @@ export function parseViewState(search: string): ViewState {
       atlasAxis: params.get("atlasAxis") || "",
       atlasLimb: params.get("atlasLimb") || "",
       atlasFramework: params.get("atlasFramework") || "",
+      atlasBenchmark: params.get("atlasBenchmark") || "",
       atlasBaseline: params.get("atlasBaseline") || "",
       atlasFamily: params.get("atlasFamily") || "",
       atlasRmfStep: params.get("atlasRmfStep") || "",
@@ -655,6 +658,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "atlasAxis", state.atlasAxis);
     setIfValue(params, "atlasLimb", state.atlasLimb);
     setIfValue(params, "atlasFramework", state.atlasFramework);
+    setIfValue(params, "atlasBenchmark", state.atlasBenchmark);
     setIfValue(params, "atlasBaseline", state.atlasBaseline);
     setIfValue(params, "atlasFamily", state.atlasFamily);
     setIfValue(params, "atlasRmfStep", state.atlasRmfStep);
@@ -817,6 +821,7 @@ export type AtlasMapUrlOptions = {
   atlasAxis?: string;
   atlasLimb?: string;
   atlasFramework?: string;
+  atlasBenchmark?: string;
   atlasBaseline?: string;
   atlasFamily?: string;
   atlasRmfStep?: string;
@@ -855,6 +860,7 @@ export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
     atlasAxis: options.atlasAxis || "",
     atlasLimb: options.atlasLimb || "",
     atlasFramework: options.atlasFramework || "",
+    atlasBenchmark: options.atlasBenchmark || "",
     atlasBaseline: options.atlasBaseline || "",
     atlasFamily: options.atlasFamily || "",
     atlasRmfStep: options.atlasRmfStep || "",

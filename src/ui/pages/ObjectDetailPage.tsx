@@ -37,7 +37,7 @@ import {
   relationshipFiltersToPatch,
 } from "../components/RelationshipExplorer";
 import { RecordContextRail } from "../components/RecordContextRail";
-import { CanonicalBreadcrumb } from "../components/CanonicalBreadcrumb";
+import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import { GlossaryTermChip } from "../components/GlossaryTermChip";
 import { QuickIntentCard } from "../components/QuickIntentCard";
 import { AppLink, shouldInterceptAppLink } from "../components/AppLink";
@@ -49,6 +49,7 @@ import { recordDisplayTitle } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { normalizeViewState, type ViewState } from "../lib/viewState";
 import { officialTextPreview } from "../lib/officialText";
+import { canonicalBreadcrumbForNode } from "../lib/canonicalBreadcrumb";
 import {
   Badge,
   DisclosurePanel,
@@ -416,7 +417,12 @@ export function ObjectDetailPage(props: {
       <section className="atlas-structural-position" data-record-section="hierarchy">
         <p className="eyebrow">Hierarchy</p>
         <h2>Where this sits</h2>
-        <CanonicalBreadcrumb bundle={bundle} nodeId={node.id} />
+        <WhereThisSitsRail
+          bundle={bundle}
+          canonicalBreadcrumb={canonicalBreadcrumbForNode(bundle, node.id).text}
+          nodeId={node.id}
+          onOpenNode={onOpenNode}
+        />
       </section>
 
       {isEnhancement && baseControlNode ? (

@@ -104,12 +104,12 @@ test("Atlas root presents an authority-rooted interactive hierarchy", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("application", { name: "Interactive Control Atlas hierarchy" })).toBeVisible();
-  await expect(page.locator(".atlas-universe__area")).toHaveCount(9);
+  await expect(page.locator(".atlas-tree")).toBeVisible();
+  await expect(page.locator('[data-atlas-node-id^="atlas:LIMB-"]')).toHaveCount(9);
   await expect(page.locator(".react-flow")).toHaveCount(1);
   await expect(
     page.getByText(
-      /Federal cybersecurity work is spread across separate laws, agencies, and publications that were never organized together/,
+      /Federal cybersecurity material is spread across separate laws, agencies, and publications that were never organized together/,
     ),
   ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveCount(

@@ -91,17 +91,15 @@ test("expanding an Atlas area uses the spine without monolithic graph JSON", asy
   await page.goto("/#/explore");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(
-    page.getByRole("application", { name: "Interactive Control Atlas hierarchy" }),
-  ).toBeVisible();
+  await expect(page.locator(".atlas-tree")).toBeVisible();
   expect(
     requested.some((url) => url.includes("atlas-spine.json")),
   ).toBeTruthy();
   expect(graphArtifactUrls(requested)).toEqual([]);
 
-  await page.getByRole("button", { name: /Compliance/ }).click();
+  await page.locator('.react-flow__node:has([data-atlas-node-id="atlas:LIMB-COMPLIANCE"])').dispatchEvent("click");
   await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
-  await expect(page.locator('[data-semantic-level="publications"]')).toBeVisible();
+  await expect(page.locator(".atlas-tree")).toHaveAttribute("data-tree-node-count", "21");
   expect(graphArtifactUrls(requested)).toEqual([]);
 });
 
@@ -119,9 +117,7 @@ test("focused Atlas loads one neighborhood without monolithic graph JSON", async
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(
-    page.getByRole("region", { name: "Relationship map" }),
-  ).toBeVisible();
+  await expect(page.locator(".atlas-tree")).toBeVisible();
 
   expect(graphArtifactUrls(requested)).toEqual([]);
   expect(
@@ -164,9 +160,7 @@ test("focused Atlas loading state avoids a content-agnostic mobile minimum heigh
   );
 
   releaseNeighborhood();
-  await expect(
-    page.getByRole("region", { name: "Relationship map" }),
-  ).toBeVisible({
+  await expect(page.locator(".atlas-tree")).toBeVisible({
     timeout: 30000,
   });
   const loadedHeight = await page.locator("#app").evaluate(

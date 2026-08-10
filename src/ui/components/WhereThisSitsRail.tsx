@@ -7,6 +7,12 @@ import {
   type AncestorLink,
 } from "../lib/ancestorPath";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
+import authoritySpine from "../../../data/curated/authority-spine.json";
+import {
+  buildAtlasTreeModel,
+  extendDisplayedAuthorityTrace,
+  type AtlasTraceHop,
+} from "../lib/atlasTreeModel";
 import { RecordLink } from "./RecordLink";
 
 /**
@@ -20,9 +26,10 @@ export function WhereThisSitsRail(props: {
   bundle?: RuntimeBundle;
   nodeId?: string;
   links?: AncestorLink[];
+  canonicalBreadcrumb?: string;
   onOpenNode: (nodeId: string) => void;
 }) {
-  const { bundle, nodeId = "", links, onOpenNode } = props;
+  const { bundle, canonicalBreadcrumb, nodeId = "", links, onOpenNode } = props;
   const graph = useMemo(
     () =>
       buildAncestorGraph(
@@ -70,12 +77,21 @@ export function WhereThisSitsRail(props: {
         },
       ]
     : null;
-  const chain =
+  const baseChain =
     links ||
     displayedChain ||
     (attachedChain && attachedChain.length > derivedChain.length
       ? attachedChain
       : derivedChain);
+  const chain = useMemo(
+    () => bundle?.atlasSpine && baseChain.length
+      ? extendDisplayedAuthorityTrace(
+          buildAtlasTreeModel(bundle.atlasSpine, authoritySpine),
+          baseChain as AtlasTraceHop[],
+        )
+      : baseChain,
+    [baseChain, bundle?.atlasSpine],
+  );
   const unavailable =
     !links &&
     Boolean(nodeId) &&
@@ -102,7 +118,7 @@ export function WhereThisSitsRail(props: {
   // authority hop composed for display, Control Atlas's curated organizing
   // spine, and the publisher's native hierarchy. None is allowed to borrow
   // the attribution of another.
-  const segments: { origin: AncestorLink["origin"]; links: AncestorLink[] }[] = [];
+  const segments: { origin: AncestorLink["origin"]; links: AtlasTraceHop[] }[] = [];
   for (const link of chain) {
     const current = segments[segments.length - 1];
     if (current && current.origin === link.origin) {
@@ -113,7 +129,12 @@ export function WhereThisSitsRail(props: {
   }
 
   return (
-    <nav aria-label="Where this sits" className="tree-path-rail">
+    <nav
+      aria-label="Where this sits"
+      className="tree-path-rail"
+      data-canonical-breadcrumb={canonicalBreadcrumb || undefined}
+      data-displayed-trace={chain.map((link) => link.id).join(">")}
+    >
       {segments.map((segment, segmentIndex) => {
         const isOrganizing = segment.origin === "organizing";
         const isAuthority = segment.origin === "authority";
@@ -153,6 +174,9 @@ export function WhereThisSitsRail(props: {
                           }
                         >
                           {link.label}
+                          {link.rationale || link.source_refs?.length ? (
+                            <span className="sr-only">. {link.rationale || ""} {link.source_refs?.map((ref) => ref.locator || ref.source_id).filter(Boolean).join(". ") || ""}</span>
+                          ) : null}
                         </span>
                       ) : (
                         <RecordLink
@@ -181,6 +205,9 @@ export function WhereThisSitsRail(props: {
                           }
                         >
                           {link.label}
+                          {link.rationale || link.source_refs?.length ? (
+                            <span className="sr-only">. {link.rationale || ""} {link.source_refs?.map((ref) => ref.locator || ref.source_id).filter(Boolean).join(". ") || ""}</span>
+                          ) : null}
                         </RecordLink>
                       )}
                     </Fragment>

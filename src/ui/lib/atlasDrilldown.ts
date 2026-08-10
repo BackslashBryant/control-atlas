@@ -57,6 +57,13 @@ export type AtlasSpineEntry = {
   publication_type?: string;
   mandate_note?: string;
   area_id?: string;
+  source_refs?: Array<{
+    source_id?: string;
+    ref_type?: string;
+    locator?: string;
+  }>;
+  rationale?: string;
+  grouping_key?: string;
 };
 
 export type AtlasSpine = {

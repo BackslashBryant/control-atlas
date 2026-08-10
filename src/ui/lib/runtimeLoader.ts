@@ -218,7 +218,7 @@ export function runtimeArtifactPlan(
         state.crosswalk === "threat-chain")) ||
     (state.view === "templates" && Boolean(state.templateType));
   return {
-    atlasSpine: state.view === "atlas-map",
+    atlasSpine: state.view === "atlas-map" || state.view === "library-detail",
     catalogBootstrap:
       state.view === "atlas-map" ||
       state.view === "library-detail" ||

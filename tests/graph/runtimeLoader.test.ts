@@ -41,6 +41,11 @@ test("route bootstrap loads only the smallest faithful artifact scope", () => {
     true,
     "record breadcrumbs use the same canonical publication identity as Atlas",
   );
+  assert.equal(
+    recordDetail.atlasSpine,
+    true,
+    "record rails extend primary authority through the shared authority spine",
+  );
 
   const globalSearch = runtimeArtifactPlan(normalizeViewState("search"));
   assert.equal(globalSearch.librarySearch, true);
@@ -107,6 +112,10 @@ test("route bootstrap loads only the smallest faithful artifact scope", () => {
     normalizeViewState("atlas-map", { atlasAxis: "framework" }),
     normalizeViewState("atlas-map", { atlasFramework: "nist-800-53" }),
     normalizeViewState("atlas-map", { atlasFamily: "nist-800-53:FAMILY-AC" }),
+    normalizeViewState("atlas-map", {
+      atlasFramework: "disa-stig",
+      atlasBenchmark: "disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG",
+    }),
   ]) {
     assert.equal(runtimeArtifactPlan(atlasState).fullGraph, false);
     assert.equal(requiresFullGraph(atlasState), false);

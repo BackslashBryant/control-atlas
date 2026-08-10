@@ -1,0 +1,100 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+
+import {
+  aggregateAtlasChildren,
+  ATLAS_RENDER_NODE_CAP,
+  TECHNOLOGY_GATE_THRESHOLD,
+  maxRenderedAtlasNodes,
+  renderedAtlasSet,
+  requiresTechnologyGate,
+} from "../../src/ui/lib/atlasTreeAggregation";
+import { buildAtlasTreeModel, type AtlasTreeNode } from "../../src/ui/lib/atlasTreeModel";
+import { atlasTreeCollisions, layoutAtlasTree } from "../../src/ui/lib/atlasTreeLayout";
+import type { AtlasSpine } from "../../src/ui/lib/atlasDrilldown";
+import { atlasNeighborhoodShardId } from "../../src/app/atlas-neighborhood.mjs";
+
+const spine = JSON.parse(
+  readFileSync(new URL("../../data/generated/atlas-spine.json", import.meta.url), "utf8"),
+).atlas_spine as AtlasSpine;
+const model = buildAtlasTreeModel(spine);
+
+function benchmarkChildren(benchmarkId: string): AtlasTreeNode[] {
+  const shardId = atlasNeighborhoodShardId(benchmarkId);
+  const artifact = JSON.parse(readFileSync(
+    new URL(`../../data/generated/atlas-neighborhood/${shardId}.json`, import.meta.url),
+    "utf8",
+  )).atlas_neighborhood_shard;
+  const record = artifact.records[benchmarkId];
+  const childIds = new Set(
+    record.edges
+      .filter((edge: string[]) => edge[4] === "structural" && edge[1] === benchmarkId)
+      .map((edge: string[]) => edge[2]),
+  );
+  return record.nodes
+    .filter((node: string[]) => childIds.has(node[0]))
+    .map((node: string[]) => ({
+      id: node[0], itemId: node[2], label: node[3], blurb: node[8], nodeType: node[1],
+      parentId: benchmarkId, childCount: 0, descendantRecordCount: 1, level: "summary",
+      alsoRequiredBy: [], sourceRefs: [], rationale: node[8] || "Publisher record.",
+    } satisfies AtlasTreeNode));
+}
+
+test("real spine focus states stay within the 120-node render budget", () => {
+  const maximum = maxRenderedAtlasNodes(model);
+  assert.equal(maximum, 33);
+  assert.ok(maximum <= ATLAS_RENDER_NODE_CAP);
+  assert.equal(renderedAtlasSet({ model }).length, 28);
+  assert.equal(model.publications.length, 23);
+  assert.equal(model.nodesById.get("atlas:LIMB-KNOWLEDGE")?.childCount, 0);
+  assert.equal(model.nodesById.get("atlas:LIMB-OPERATIONS")?.childCount, 0);
+});
+
+test("technology gate is general and matches the real DISA branches", () => {
+  assert.equal(TECHNOLOGY_GATE_THRESHOLD, 60);
+  assert.equal(model.nodesById.get("disa-stig:CATALOG")?.childCount, 353);
+  assert.equal(model.nodesById.get("disa-srg:CATALOG")?.childCount, 25);
+  assert.equal(requiresTechnologyGate(model.nodesById.get("disa-stig:CATALOG")!), true);
+  assert.equal(requiresTechnologyGate(model.nodesById.get("disa-srg:CATALOG")!), false);
+  const gated = renderedAtlasSet({ model, focusId: "disa-stig:CATALOG" });
+  assert.ok(gated.some((node) => node.id === "technology-gate:disa-stig:CATALOG"));
+  assert.equal(gated.filter((node) => node.parentId === "disa-stig:CATALOG").length, 1);
+  const selected = renderedAtlasSet({
+    model,
+    focusId: "disa-stig:CATALOG",
+    selectedTechnologyId: "disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG",
+  });
+  assert.deepEqual(
+    selected.filter((node) => node.parentId === "disa-stig:CATALOG").map((node) => node.id),
+    ["disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG"],
+  );
+});
+
+test("the real 448-rule benchmark buckets as a pure function of sorted input", () => {
+  const benchmarkId = "disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG";
+  const children = benchmarkChildren(benchmarkId);
+  assert.equal(children.length, 448);
+  assert.equal(requiresTechnologyGate(model.nodesById.get(benchmarkId)!), false);
+  const first = aggregateAtlasChildren(benchmarkId, children);
+  const reversed = aggregateAtlasChildren(benchmarkId, [...children].reverse());
+  assert.equal(JSON.stringify(first), JSON.stringify(reversed));
+  assert.equal(first.length, 12);
+  assert.ok(first.every((bucket) => "aggregate" in bucket && bucket.aggregate));
+  const rendered = renderedAtlasSet({
+    model,
+    focusId: benchmarkId,
+    selectedTechnologyId: benchmarkId,
+    dynamicChildren: children,
+  });
+  assert.equal(rendered.length, 16);
+  assert.deepEqual(
+    atlasTreeCollisions(layoutAtlasTree({ model, rendered, focusId: benchmarkId })),
+    [],
+  );
+});
+
+test("the atlas-spine model never renders the full record layer", () => {
+  assert.equal(model.nodesById.has("disa-cci:CCI-000366"), false);
+  assert.ok(model.nodes.length < 1_000);
+});

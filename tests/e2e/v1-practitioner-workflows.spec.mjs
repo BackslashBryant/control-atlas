@@ -83,10 +83,9 @@ test("V1 workflow 06 — explore one record through Connections, Hierarchy, and 
 }) => {
   await open(page, "/#/explore?node=nist-800-53%3AAC-2");
 
-  // Connections is the workspace: it is present without choosing a mode.
-  await expect(
-    page.getByRole("region", { name: "Relationship map" }),
-  ).toBeVisible();
+  // The Atlas map skill tree is the workspace: it is present without
+  // choosing a supporting panel.
+  await expect(page.locator(".atlas-tree")).toBeVisible();
   // Orientation stays on screen without opening anything.
   await expect(page.locator("[data-canonical-breadcrumb]")).toContainText(
     "SP 800-53 Rev. 5",
@@ -103,15 +102,13 @@ test("V1 workflow 06 — explore one record through Connections, Hierarchy, and 
     hierarchy.getByRole("link", { name: "AC-2.1", exact: true }),
   ).toBeVisible();
 
-  // The complete list supports the map instead of replacing it.
+  // The complete list supports the Atlas map instead of replacing it.
   await page.getByRole("button", { name: "View all", exact: true }).click();
   await expect(page).toHaveURL(/relationshipView=list/);
   await expect(
     page.getByRole("table", { name: "Relationship table" }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("region", { name: "Relationship map" }),
-  ).toBeVisible();
+  await expect(page.locator(".atlas-tree")).toBeVisible();
 });
 
 test("V1 workflow 07 — compare with a shareable explicit configuration", async ({
