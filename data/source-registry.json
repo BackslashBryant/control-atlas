@@ -129,7 +129,9 @@
       "owner": "NIST",
       "authority_class": "publisher",
       "provenance_class": "federal_published",
-      "mandate_basis": [],
+      "mandate_basis": [
+        "Executive Order 13800 (federal agency use; otherwise voluntary)"
+      ],
       "license_or_use": "NIST Terms of Use",
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
@@ -184,8 +186,8 @@
       "authority_class": "publisher",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "FISMA",
-        "Federal Acquisition Regulation"
+        "DFARS 252.204-7012",
+        "32 CFR Part 170"
       ],
       "license_or_use": "NIST Computer Security Resource Center Terms of Use",
       "lifecycle_status": "active",
@@ -213,10 +215,7 @@
       "owner": "NIST",
       "authority_class": "publisher",
       "provenance_class": "federal_published",
-      "mandate_basis": [
-        "FISMA",
-        "Federal Acquisition Regulation"
-      ],
+      "mandate_basis": [],
       "license_or_use": "NIST Computer Security Resource Center Terms of Use",
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
@@ -304,7 +303,7 @@
       "authority_class": "publisher",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "DoD cybersecurity program"
+        "DoDI 8500.01"
       ],
       "license_or_use": "DISA STIG / CCI Terms of Use",
       "lifecycle_status": "active",
@@ -333,7 +332,7 @@
       "authority_class": "publisher",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "DoD cybersecurity program"
+        "DoDI 8500.01"
       ],
       "license_or_use": "DISA STIG Terms of Use",
       "lifecycle_status": "active",
@@ -393,7 +392,7 @@
       "authority_class": "publisher",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "DoD cybersecurity program"
+        "DoDI 8500.01"
       ],
       "license_or_use": "DISA STIG Terms of Use",
       "lifecycle_status": "active",
@@ -814,10 +813,7 @@
       "owner": "NIST",
       "authority_class": "publisher",
       "provenance_class": "federal_published",
-      "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
-      ],
+      "mandate_basis": [],
       "license_or_use": "NIST AI Resource Center Terms of Use",
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
@@ -844,10 +840,7 @@
       "owner": "NIST",
       "authority_class": "publisher",
       "provenance_class": "federal_published",
-      "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
-      ],
+      "mandate_basis": [],
       "license_or_use": "NIST Computer Security Resource Center Terms of Use",
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
@@ -876,7 +869,8 @@
       "authority_class": "government_mapping",
       "provenance_class": "federal_program",
       "mandate_basis": [
-        "DoD cybersecurity program"
+        "32 CFR Part 170",
+        "DFARS 252.204-7021"
       ],
       "license_or_use": "32 CFR Part 170 CMMC Program Rule Public Domain",
       "lifecycle_status": "active",
@@ -905,7 +899,8 @@
       "authority_class": "government_mapping",
       "provenance_class": "federal_program",
       "mandate_basis": [
-        "Federal authorization program"
+        "44 U.S.C. §§ 3608 and 3614",
+        "OMB M-24-15 (legacy Rev. 5 transition)"
       ],
       "license_or_use": "GSA FedRAMP Open Source License / Public Domain",
       "lifecycle_status": "active",
@@ -968,9 +963,7 @@
       "owner": "DoD",
       "authority_class": "publisher",
       "provenance_class": "federal_published",
-      "mandate_basis": [
-        "DoD cybersecurity program"
-      ],
+      "mandate_basis": [],
       "license_or_use": "DoD Responsible AI Toolkit Public Domain",
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
@@ -999,8 +992,8 @@
       "authority_class": "publisher",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
+        "FIPS 200",
+        "OMB Circular A-130"
       ],
       "license_or_use": "NIST Computer Security Resource Center Terms of Use",
       "lifecycle_status": "active",
@@ -1088,8 +1081,7 @@
       "authority_class": "publisher",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
+        "OMB Circular A-130"
       ],
       "license_or_use": "NIST Computer Security Resource Center Terms of Use",
       "lifecycle_status": "active",
@@ -1118,8 +1110,7 @@
       "authority_class": "publisher",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
+        "OMB Circular A-130"
       ],
       "license_or_use": "NIST Computer Security Resource Center Terms of Use",
       "lifecycle_status": "active",
@@ -1210,8 +1201,7 @@
       "authority_class": "publisher",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
+        "DFARS 252.204-7012"
       ],
       "license_or_use": "NIST Computer Security Resource Center Terms of Use",
       "lifecycle_status": "active",
@@ -1535,7 +1525,7 @@
       "authority_class": "publisher",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "DoD cybersecurity program"
+        "DoD Zero Trust Strategy and Roadmap"
       ],
       "license_or_use": "Distribution Statement A. Approved for public release.",
       "lifecycle_status": "active",
@@ -2001,6 +1991,500 @@
         "identity_kind": "reference",
         "supplemental_role": "reconciliation",
         "note": "CSF informative references (also embedded in the CSF v2.0 OSCAL catalog artifact)"
+      }
+    },
+    {
+      "id": "authority-usc-40-11331",
+      "name": "40 U.S.C. § 11331",
+      "display_name": "40 U.S.C. § 11331",
+      "display_group": "United States Code",
+      "owner": "Office of the Law Revision Counsel",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Federal information-system standards"
+      ],
+      "license_or_use": "Official United States Code",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "Current through July 14, 2026",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://uscode.house.gov/view.xhtml?edition=prelim&num=0&req=granuleid%3AUSC-prelim-title40-section11331",
+      "catalog_browse_url": "https://uscode.house.gov/view.xhtml?edition=prelim&num=0&req=granuleid%3AUSC-prelim-title40-section11331",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:USC-40-11331"
+      }
+    },
+    {
+      "id": "authority-usc-44-3554",
+      "name": "44 U.S.C. § 3554",
+      "display_name": "44 U.S.C. § 3554",
+      "display_group": "United States Code",
+      "owner": "Office of the Law Revision Counsel",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Federal agency information-security responsibilities"
+      ],
+      "license_or_use": "Official United States Code",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "Current through July 17, 2026",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://uscode.house.gov/view.xhtml?req=%28title%3A44+section%3A3554+edition%3Aprelim%29",
+      "catalog_browse_url": "https://uscode.house.gov/view.xhtml?req=%28title%3A44+section%3A3554+edition%3Aprelim%29",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:USC-44-3554"
+      }
+    },
+    {
+      "id": "authority-usc-44-3504",
+      "name": "44 U.S.C. § 3504",
+      "display_name": "44 U.S.C. § 3504",
+      "display_group": "United States Code",
+      "owner": "Office of the Law Revision Counsel",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "OMB information-policy authority"
+      ],
+      "license_or_use": "Official United States Code",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "Current through July 7, 2026",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://uscode.house.gov/view.xhtml?req=%28title%3A44+section%3A3504+edition%3Aprelim%29",
+      "catalog_browse_url": "https://uscode.house.gov/view.xhtml?req=%28title%3A44+section%3A3504+edition%3Aprelim%29",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:USC-44-3504"
+      }
+    },
+    {
+      "id": "authority-omb-circular-a-130",
+      "name": "OMB Circular A-130, Managing Information as a Strategic Resource",
+      "display_name": "OMB Circular A-130",
+      "display_group": "OMB",
+      "owner": "Office of Management and Budget",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "44 U.S.C. § 3504"
+      ],
+      "license_or_use": "Official OMB policy publication",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "Revised July 28, 2016",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://whitehouse.gov/wp-content/uploads/legacy_drupal_files/omb/circulars/A130/a130revised.pdf",
+      "catalog_browse_url": "https://www.whitehouse.gov/omb/information-resources/guidance/circulars-memoranda/",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:OMB-CIRCULAR-A-130"
+      }
+    },
+    {
+      "id": "authority-eo-13800",
+      "name": "Executive Order 13800, Strengthening the Cybersecurity of Federal Networks and Critical Infrastructure",
+      "display_name": "Executive Order 13800",
+      "display_group": "Executive Orders",
+      "owner": "Executive Office of the President",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Federal agency Cybersecurity Framework use"
+      ],
+      "license_or_use": "Official Federal Register publication",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "May 11, 2017",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.federalregister.gov/documents/2017/05/16/2017-10004/strengthening-the-cybersecurity-of-federal-networks-and-critical-infrastructure",
+      "catalog_browse_url": "https://www.federalregister.gov/documents/2017/05/16/2017-10004/strengthening-the-cybersecurity-of-federal-networks-and-critical-infrastructure",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:EO-13800"
+      }
+    },
+    {
+      "id": "authority-eo-13556",
+      "name": "Executive Order 13556, Controlled Unclassified Information",
+      "display_name": "Executive Order 13556",
+      "display_group": "Executive Orders",
+      "owner": "Executive Office of the President",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Controlled Unclassified Information program"
+      ],
+      "license_or_use": "Official Federal Register publication",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "November 4, 2010",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.govinfo.gov/content/pkg/FR-2010-11-09/pdf/2010-28360.pdf",
+      "catalog_browse_url": "https://www.govinfo.gov/content/pkg/FR-2010-11-09/pdf/2010-28360.pdf",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:EO-13556"
+      }
+    },
+    {
+      "id": "authority-32-cfr-2002",
+      "name": "32 CFR Part 2002, Controlled Unclassified Information",
+      "display_name": "32 CFR Part 2002",
+      "display_group": "Code of Federal Regulations",
+      "owner": "National Archives and Records Administration",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Executive Order 13556"
+      ],
+      "license_or_use": "Official eCFR publication",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "Current as of August 9, 2026",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.ecfr.gov/current/title-32/subtitle-B/chapter-XX/part-2002",
+      "catalog_browse_url": "https://www.ecfr.gov/current/title-32/subtitle-B/chapter-XX/part-2002",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:32-CFR-2002"
+      }
+    },
+    {
+      "id": "authority-usc-41-1303",
+      "name": "41 U.S.C. § 1303",
+      "display_name": "41 U.S.C. § 1303",
+      "display_group": "United States Code",
+      "owner": "Office of the Law Revision Counsel",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Federal acquisition councils"
+      ],
+      "license_or_use": "Official United States Code",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "Current as of August 9, 2026",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title41-section1303",
+      "catalog_browse_url": "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title41-section1303",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:USC-41-1303"
+      }
+    },
+    {
+      "id": "authority-dfars-252-204-7012",
+      "name": "DFARS 252.204-7012, Safeguarding Covered Defense Information and Cyber Incident Reporting",
+      "display_name": "DFARS 252.204-7012",
+      "display_group": "DFARS",
+      "owner": "Department of Defense",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "41 U.S.C. § 1303",
+        "Defense acquisition regulation"
+      ],
+      "license_or_use": "Official Acquisition.gov publication",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "DFARS Change 5/7/2026",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.acquisition.gov/dfars/252.204-7012-safeguarding-covered-defense-information-and-cyber-incident-reporting.",
+      "catalog_browse_url": "https://www.acquisition.gov/dfars/252.204-7012-safeguarding-covered-defense-information-and-cyber-incident-reporting.",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:DFARS-252.204-7012"
+      }
+    },
+    {
+      "id": "authority-pl-116-92-sec-1648",
+      "name": "Public Law 116-92 § 1648",
+      "display_name": "Pub. L. 116-92 § 1648",
+      "display_group": "Public Laws",
+      "owner": "United States Congress",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Cybersecurity Maturity Model Certification"
+      ],
+      "license_or_use": "Official GovInfo public law",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "December 20, 2019",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ92/pdf/PLAW-116publ92.pdf",
+      "catalog_browse_url": "https://www.govinfo.gov/content/pkg/PLAW-116publ92/pdf/PLAW-116publ92.pdf",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:PL-116-92-SEC-1648"
+      }
+    },
+    {
+      "id": "authority-32-cfr-170",
+      "name": "32 CFR Part 170, Cybersecurity Maturity Model Certification Program",
+      "display_name": "32 CFR Part 170",
+      "display_group": "Code of Federal Regulations",
+      "owner": "Department of Defense",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Public Law 116-92 § 1648"
+      ],
+      "license_or_use": "Official eCFR publication",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "Current as of August 9, 2026",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170",
+      "catalog_browse_url": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:32-CFR-170"
+      }
+    },
+    {
+      "id": "authority-dfars-252-204-7021",
+      "name": "DFARS 252.204-7021, Contractor Compliance With CMMC Level Requirements",
+      "display_name": "DFARS 252.204-7021",
+      "display_group": "DFARS",
+      "owner": "Department of Defense",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Public Law 116-92 § 1648",
+        "41 U.S.C. § 1303"
+      ],
+      "license_or_use": "Official Acquisition.gov publication",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "DFARS Change 5/7/2026",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.acquisition.gov/dfars/252.204-7021-contractor-compliance-cybersecurity-maturity-model-certification-level-requirements.",
+      "catalog_browse_url": "https://www.acquisition.gov/dfars/252.204-7021-contractor-compliance-cybersecurity-maturity-model-certification-level-requirements.",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:DFARS-252.204-7021"
+      }
+    },
+    {
+      "id": "authority-usc-44-3608",
+      "name": "44 U.S.C. § 3608",
+      "display_name": "44 U.S.C. § 3608",
+      "display_group": "United States Code",
+      "owner": "Office of the Law Revision Counsel",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Federal Risk and Authorization Management Program"
+      ],
+      "license_or_use": "Official United States Code as presented by FedRAMP",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "Current as of August 9, 2026",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.fedramp.gov/2026/authority/law/gsa/",
+      "catalog_browse_url": "https://www.fedramp.gov/2026/authority/law/",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:USC-44-3608"
+      }
+    },
+    {
+      "id": "authority-usc-44-3614",
+      "name": "44 U.S.C. § 3614",
+      "display_name": "44 U.S.C. § 3614",
+      "display_group": "United States Code",
+      "owner": "Office of the Law Revision Counsel",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "OMB FedRAMP guidance"
+      ],
+      "license_or_use": "Official United States Code as presented by FedRAMP",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "Current as of August 9, 2026",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.fedramp.gov/2026/authority/law/omb/",
+      "catalog_browse_url": "https://www.fedramp.gov/2026/authority/law/",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:USC-44-3614"
+      }
+    },
+    {
+      "id": "authority-omb-m-24-15",
+      "name": "OMB Memorandum M-24-15, Modernizing FedRAMP",
+      "display_name": "OMB M-24-15",
+      "display_group": "OMB",
+      "owner": "Office of Management and Budget",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "44 U.S.C. § 3614"
+      ],
+      "license_or_use": "Official OMB policy publication hosted by FedRAMP",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "July 25, 2024",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.fedramp.gov/resources/documents/FedRAMP_Policy_Memo.pdf",
+      "catalog_browse_url": "https://www.fedramp.gov/2026/authority/m-24-15/",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:OMB-M-24-15"
+      }
+    },
+    {
+      "id": "authority-dodd-5144-02",
+      "name": "DoD Directive 5144.02, DoD Chief Information Officer",
+      "display_name": "DoDD 5144.02",
+      "display_group": "DoD Issuances",
+      "owner": "Department of Defense",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "DoD CIO authority and responsibilities"
+      ],
+      "license_or_use": "Official DoD issuance",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "April 21, 2015, incorporating Change 1",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.esd.whs.mil/portals/54/documents/dd/issuances/dodd/514402p.pdf",
+      "catalog_browse_url": "https://www.esd.whs.mil/Directives/issuances/dodd/",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:DODD-5144.02"
+      }
+    },
+    {
+      "id": "authority-dodi-8500-01",
+      "name": "DoD Instruction 8500.01, Cybersecurity",
+      "display_name": "DoDI 8500.01",
+      "display_group": "DoD Issuances",
+      "owner": "Department of Defense",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "DoD Directive 5144.02"
+      ],
+      "license_or_use": "Official DoD issuance",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "March 14, 2014, incorporating Change 1 on October 7, 2019",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.esd.whs.mil/portals/54/documents/dd/issuances/dodi/850001_2014.pdf",
+      "catalog_browse_url": "https://www.esd.whs.mil/Directives/issuances/dodi/",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:DODI-8500.01"
+      }
+    },
+    {
+      "id": "authority-dod-zt-strategy",
+      "name": "Department of Defense Zero Trust Strategy and Roadmap",
+      "display_name": "DoD Zero Trust Strategy",
+      "display_group": "DoD CIO",
+      "owner": "Department of Defense Chief Information Officer",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "Department-wide zero-trust implementation"
+      ],
+      "license_or_use": "Official DoD CIO public release",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "October 21, 2022",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
+      "catalog_browse_url": "https://dodcio.defense.gov/Library/",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:DOD-ZT-STRATEGY"
+      }
+    },
+    {
+      "id": "authority-omb-m-26-05",
+      "name": "OMB Memorandum M-26-05, Adopting a Risk-based Approach to Software and Hardware Security",
+      "display_name": "OMB M-26-05",
+      "display_group": "OMB",
+      "owner": "Office of Management and Budget",
+      "authority_class": "publisher",
+      "provenance_class": "federal_published",
+      "mandate_basis": [],
+      "license_or_use": "Official OMB policy publication",
+      "lifecycle_status": "active",
+      "eligibility_status": "limited",
+      "access_status": "public",
+      "version": "January 23, 2026",
+      "retrieved_at": "2026-08-09",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.whitehouse.gov/wp-content/uploads/2026/01/M-26-05-Adopting-a-Risk-based-Approach-to-Software-and-Hardware-Security.pdf",
+      "catalog_browse_url": "https://www.whitehouse.gov/omb/information-resources/guidance/memoranda/",
+      "graph_eligible": false,
+      "metadata": {
+        "identity_kind": "reference",
+        "note": "Current policy evidence that M-22-18 and M-23-16 were rescinded and agencies may choose SSDF resources."
       }
     }
   ],
@@ -3273,7 +3757,9 @@
       "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
-      "mandate_basis": [],
+      "mandate_basis": [
+        "Executive Order 13800 (federal agency use; otherwise voluntary)"
+      ],
       "version": "2.0",
       "retrieved_at": "2026-07-28",
       "retrieval_method": "manual_review",
@@ -3329,8 +3815,8 @@
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "FISMA",
-        "Federal Acquisition Regulation"
+        "DFARS 252.204-7012",
+        "32 CFR Part 170"
       ],
       "version": "2021-01",
       "retrieved_at": "2026-06-13",
@@ -3358,10 +3844,7 @@
       "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
-      "mandate_basis": [
-        "FISMA",
-        "Federal Acquisition Regulation"
-      ],
+      "mandate_basis": [],
       "version": "2026-05",
       "retrieved_at": "2026-06-13",
       "retrieval_method": "download",
@@ -3449,7 +3932,7 @@
       "owner": "DISA",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "DoD cybersecurity program"
+        "DoDI 8500.01"
       ],
       "version": "2025-01-23",
       "retrieved_at": "2025-01-23",
@@ -3478,7 +3961,7 @@
       "owner": "DISA",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "DoD cybersecurity program"
+        "DoDI 8500.01"
       ],
       "version": "V3R7",
       "retrieved_at": "2026-07-04",
@@ -3538,7 +4021,7 @@
       "owner": "DISA",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "DoD cybersecurity program"
+        "DoDI 8500.01"
       ],
       "version": "V2R2",
       "retrieved_at": "2026-07-04",
@@ -3959,10 +4442,7 @@
       "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
-      "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
-      ],
+      "mandate_basis": [],
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
       "retrieval_method": "download",
@@ -3989,10 +4469,7 @@
       "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
-      "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
-      ],
+      "mandate_basis": [],
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
       "retrieval_method": "download",
@@ -4021,7 +4498,8 @@
       "owner": "DoD",
       "provenance_class": "federal_program",
       "mandate_basis": [
-        "DoD cybersecurity program"
+        "32 CFR Part 170",
+        "DFARS 252.204-7021"
       ],
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -4050,7 +4528,8 @@
       "owner": "FedRAMP",
       "provenance_class": "federal_program",
       "mandate_basis": [
-        "Federal authorization program"
+        "44 U.S.C. §§ 3608 and 3614",
+        "OMB M-24-15 (legacy Rev. 5 transition)"
       ],
       "version": "Legacy Rev5 security controls baseline workbook",
       "retrieved_at": "2026-07-16",
@@ -4115,9 +4594,7 @@
       "display_group": "DoD",
       "owner": "DoD",
       "provenance_class": "federal_published",
-      "mandate_basis": [
-        "DoD cybersecurity program"
-      ],
+      "mandate_basis": [],
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
       "retrieval_method": "extracted_from_official_publication",
@@ -4145,8 +4622,8 @@
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
+        "FIPS 200",
+        "OMB Circular A-130"
       ],
       "version": "2026-06-09",
       "retrieved_at": "2026-06-09",
@@ -4234,8 +4711,7 @@
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
+        "OMB Circular A-130"
       ],
       "version": "2018-12",
       "retrieved_at": "2026-06-13",
@@ -4264,8 +4740,7 @@
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
+        "OMB Circular A-130"
       ],
       "version": "2026-06-09",
       "retrieved_at": "2026-06-13",
@@ -4356,8 +4831,7 @@
       "owner": "NIST",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "FISMA",
-        "FIPS 200"
+        "DFARS 252.204-7012"
       ],
       "version": "1.1.0",
       "retrieved_at": "2026-06-09",
@@ -4681,7 +5155,7 @@
       "owner": "DoD",
       "provenance_class": "federal_published",
       "mandate_basis": [
-        "DoD cybersecurity program"
+        "DoD Zero Trust Strategy and Roadmap"
       ],
       "version": "2022-07",
       "retrieved_at": "2026-06-15",

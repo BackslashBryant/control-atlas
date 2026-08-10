@@ -74,24 +74,40 @@ export function pickCanonicalParent(childId, candidateIds, graph) {
 
   const childCatalog = graph.nodesById.get(childId)?.metadata?.catalog_id;
   let pool = candidateIds;
+  let preferDeepest = false;
   if (childCatalog) {
     const sameCatalog = pool.filter(
       (id) => graph.nodesById.get(id)?.metadata?.catalog_id === childCatalog,
     );
-    if (sameCatalog.length > 0) pool = sameCatalog;
+    if (sameCatalog.length > 0) {
+      pool = sameCatalog;
+      preferDeepest = true;
+    }
   }
   if (pool.length === 1) return pool[0];
 
-  let shallowest = Infinity;
+  if (preferDeepest) {
+    const finiteDepthPool = pool.filter((id) =>
+      Number.isFinite(shallowestDepth(id, graph, new Set())),
+    );
+    if (finiteDepthPool.length > 0) pool = finiteDepthPool;
+  }
+
+  let selectedDepth = preferDeepest ? -Infinity : Infinity;
   for (const id of pool) {
     const depth = shallowestDepth(id, graph, new Set());
-    if (depth < shallowest) shallowest = depth;
+    if (
+      (preferDeepest && depth > selectedDepth) ||
+      (!preferDeepest && depth < selectedDepth)
+    ) {
+      selectedDepth = depth;
+    }
   }
-  const shallowestPool = pool.filter(
-    (id) => shallowestDepth(id, graph, new Set()) === shallowest,
+  const depthPool = pool.filter(
+    (id) => shallowestDepth(id, graph, new Set()) === selectedDepth,
   );
-  if (shallowestPool.length === 1) return shallowestPool[0];
-  return [...shallowestPool].sort()[0];
+  if (depthPool.length === 1) return depthPool[0];
+  return [...depthPool].sort()[0];
 }
 
 function canonicalParentWithOrigin(id, graph) {

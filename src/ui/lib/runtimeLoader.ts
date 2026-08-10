@@ -6,6 +6,7 @@ import type {
   CommonsSearchIndex,
 } from "./commonsTypes";
 import type { ViewState } from "./viewState";
+import type { AtlasSpine } from "./atlasDrilldown";
 import { expandLibrarySearchTransport } from "./librarySearchTransport";
 
 const CACHE_VERSION = RUNTIME_CACHE_VERSION;
@@ -59,6 +60,7 @@ export type LibrarySearchArtifact = {
 export type RuntimeBundle = {
   runtime: ReturnType<typeof createFederalGraphRuntime>;
   templateRegistry: TemplateRegistry;
+  atlasSpine?: AtlasSpine;
   catalogSummaries?: Array<Record<string, any>>;
   catalogPublishedGroups?: Array<{
     name: string;
@@ -83,6 +85,18 @@ export type AtlasNeighborhoodNode = {
   label?: string;
   parent_id?: string;
   source_id?: string;
+  ancestor_path?: Array<{
+    id: string;
+    label: string;
+    node_type: string;
+    origin: "structural" | "organizing";
+  }>;
+  display_path?: Array<{
+    id: string;
+    label: string;
+    node_type: string;
+    origin: "structural" | "organizing" | "authority";
+  }>;
   metadata?: {
     item_id?: string;
     title?: string;
@@ -119,7 +133,7 @@ export type AtlasNeighborhoodRecord = {
     id: string;
     label: string;
     node_type: string;
-    origin: "structural" | "organizing";
+    origin: "structural" | "organizing" | "authority";
   }>;
   published_connection_count: number;
   candidate_connection_count: number;
@@ -149,6 +163,7 @@ type LibrarySearchBootstrap = {
 };
 
 export type RuntimeArtifactPlan = {
+  atlasSpine: boolean;
   catalogBootstrap: boolean;
   catalogFamily: string;
   catalogId: string;
@@ -183,17 +198,14 @@ export function runtimeArtifactPlan(
       Boolean(state.templateType));
   const fullGraph =
     Boolean(options.graphRequested) ||
-    // The Atlas landing renders from the compact catalog bootstrap. Load the
-    // full graph only after a graph-dependent drilldown is requested. A
-    // focused Atlas record still works from one neighborhood shard. Keep this
-    // in step with requiresFullGraph in navigationState.ts.
+    // Atlas area, publication, and native-group choices render from the compact
+    // Atlas spine. Baseline and RMF choices still need the full graph; a focused
+    // record uses one neighborhood shard. Keep this in step with
+    // requiresFullGraph in navigationState.ts.
     (state.view === "atlas-map" &&
       !state.node &&
       Boolean(
-        (state.atlasAxis && state.atlasAxis !== "landscape") ||
-          state.atlasFramework ||
-          state.atlasBaseline ||
-          state.atlasFamily ||
+        state.atlasBaseline ||
           state.atlasRmfStep ||
           state.sourceView === "rmf" ||
           state.sourceView === "rmf-lifecycle" ||
@@ -206,13 +218,20 @@ export function runtimeArtifactPlan(
         state.crosswalk === "threat-chain")) ||
     (state.view === "templates" && Boolean(state.templateType));
   return {
+    atlasSpine: state.view === "atlas-map",
     catalogBootstrap:
       state.view === "atlas-map" ||
+      state.view === "library-detail" ||
       state.view === "catalog-detail" ||
       state.view === "matrix" ||
+      state.view === "search" ||
       buildDetailRequested,
     catalogId:
-      state.view === "catalog-detail" ? state.catalog : "",
+      state.view === "catalog-detail"
+        ? state.catalog
+        : state.view === "atlas-map"
+          ? state.atlasFramework
+          : "",
     catalogFamily:
       state.view === "catalog-detail" ? state.family : "",
     commons:
@@ -271,6 +290,9 @@ export async function preloadRuntimeArtifacts(state: ViewState) {
   }
   if (plan.catalogBootstrap) {
     add(artifactPath("catalog-bootstrap.json"));
+  }
+  if (plan.atlasSpine) {
+    add(artifactPath("atlas-spine.json"));
   }
   // A catalog route first paints from sources + catalog-bootstrap. Its larger
   // record shard starts after that shell is ready instead of competing with
@@ -422,7 +444,7 @@ export async function loadAtlasNeighborhood(
   const shardRecord =
     shardArtifact.atlas_neighborhood_shard?.records?.[nodeId] || null;
   if (!shardRecord) return null;
-  const nodeById = new Map(
+  const nodeById = new Map<string, AtlasNeighborhoodNode>(
     (shardRecord.nodes || []).map(
       ([
         id,
@@ -493,6 +515,25 @@ export async function loadAtlasNeighborhood(
     );
     return edge;
   });
+  const structuralPath = (shardRecord.structural_path || []).flatMap((id) => {
+    const node = nodeById.get(id);
+    if (!node) return [];
+    const origin =
+      node.node_type === "statute" ||
+      node.node_type === "regulation" ||
+      node.node_type === "policy_directive"
+        ? "authority"
+        : node.node_type === "trunk" || node.node_type === "limb"
+          ? "organizing"
+          : "structural";
+    return [{
+      id,
+      label: node.metadata?.title || id,
+      node_type: node.node_type || "",
+      origin,
+    }];
+  }) satisfies AtlasNeighborhoodRecord["structural_path"];
+  centerNode.display_path = structuralPath.slice(0, -1);
   const nodes = [
     centerNode,
     ...[...counterpartIds]
@@ -511,19 +552,7 @@ export async function loadAtlasNeighborhood(
     // is genuine structural parentage. The shard only stores bare ids here,
     // so origin is derived from node_type rather than carried from the
     // build-time ancestor_path (which isn't present on shard nodes).
-    structural_path: (shardRecord.structural_path || []).flatMap((id) => {
-      const node = nodeById.get(id);
-      return node
-        ? [{
-            id,
-            label: node.metadata?.title || id,
-            node_type: node.node_type || "",
-            origin: (node.node_type === "trunk" || node.node_type === "limb"
-              ? "organizing"
-              : "structural") as "structural" | "organizing",
-          }]
-        : [];
-    }),
+    structural_path: structuralPath,
     published_connection_count: shardRecord.published_connection_count,
     candidate_connection_count: shardRecord.candidate_connection_count,
   };
@@ -628,6 +657,7 @@ export async function loadFullGraphPhase(
   commonsDataset?: CommonsResourceDataset,
   catalogSummaries: Array<Record<string, any>> = [],
   mappingSources: Record<string, Array<{ value: string; label: string }>> = {},
+  atlasSpine?: AtlasSpine,
 ): Promise<RuntimeBundle> {
   const [sources, nodes, edges, evidence, findings] = await Promise.all([
     fetchCollection(artifactPath("sources.json"), "sources"),
@@ -657,6 +687,7 @@ export async function loadFullGraphPhase(
     commonsDataset,
     catalogSummaries,
     mappingSources,
+    atlasSpine,
     routeReady: true,
     graphReady: true,
   };
@@ -703,6 +734,10 @@ type CatalogBootstrap = {
   >;
 };
 
+type AtlasSpineArtifact = {
+  atlas_spine?: AtlasSpine;
+};
+
 function emptyLibraryBootstrap(): LibrarySearchBootstrap {
   return {
     librarySearch: {
@@ -745,6 +780,7 @@ async function loadRouteScopedPhase(
     libraryBootstrap,
     sourcesArtifact,
     catalogArtifact,
+    atlasSpineArtifact,
     catalogRecordsArtifact,
     record,
     templateRegistryRaw,
@@ -763,6 +799,9 @@ async function loadRouteScopedPhase(
       : Promise.resolve(null),
     plan.catalogBootstrap
       ? fetchArtifact(artifactPath("catalog-bootstrap.json"))
+      : Promise.resolve(null),
+    plan.atlasSpine
+      ? fetchArtifact(artifactPath("atlas-spine.json"))
       : Promise.resolve(null),
     plan.catalogId
       ? fetchArtifact(
@@ -806,6 +845,11 @@ async function loadRouteScopedPhase(
         | { catalog_bootstrap?: CatalogBootstrap }
         | null
     )?.catalog_bootstrap || {};
+  const atlasSpine = (atlasSpineArtifact as AtlasSpineArtifact | null)
+    ?.atlas_spine;
+  if (plan.atlasSpine && !atlasSpine?.entries?.length) {
+    throw new Error("Atlas spine artifact has no entries.");
+  }
   const catalogRecords =
     (
       catalogRecordsArtifact as
@@ -877,6 +921,7 @@ async function loadRouteScopedPhase(
         (commonsDatasetRaw as CommonsResourceDataset) || undefined,
       mappingSources: catalogBootstrap.mapping_sources || {},
       catalogSummaries: catalogBootstrap.catalogs || [],
+      atlasSpine,
       catalogPublishedGroups,
       catalogRecordsReady: plan.catalogId ? true : undefined,
       routeReady: true,
@@ -894,9 +939,12 @@ async function loadRouteScopedPhase(
 async function loadCatalogShellPhase(
   plan: RuntimeArtifactPlan,
 ): Promise<RuntimeBundle> {
-  const [sourcesArtifact, catalogArtifact] = await Promise.all([
+  const [sourcesArtifact, catalogArtifact, atlasSpineArtifact] = await Promise.all([
     fetchArtifact(artifactPath("sources.json")),
     fetchArtifact(artifactPath("catalog-bootstrap.json")),
+    plan.atlasSpine
+      ? fetchArtifact(artifactPath("atlas-spine.json"))
+      : Promise.resolve(null),
   ]);
   const sources =
     (sourcesArtifact as { sources?: Array<Record<string, unknown>> }).sources ||
@@ -907,6 +955,11 @@ async function loadCatalogShellPhase(
         catalog_bootstrap?: CatalogBootstrap;
       }
     ).catalog_bootstrap || {};
+  const atlasSpine = (atlasSpineArtifact as AtlasSpineArtifact | null)
+    ?.atlas_spine;
+  if (plan.atlasSpine && !atlasSpine?.entries?.length) {
+    throw new Error("Atlas spine artifact has no entries.");
+  }
 
   return {
     runtime: createFederalGraphRuntime({
@@ -918,6 +971,7 @@ async function loadCatalogShellPhase(
     templateRegistry: { templates: [] },
     mappingSources: catalogBootstrap.mapping_sources || {},
     catalogSummaries: catalogBootstrap.catalogs || [],
+    atlasSpine,
     catalogRecordsReady: false,
     routeReady: true,
     graphReady: false,
@@ -987,6 +1041,7 @@ export async function loadRuntimeDatasetStaged(handlers: {
       routePhase.bundle.commonsDataset,
       routePhase.bundle.catalogSummaries || [],
       routePhase.bundle.mappingSources || {},
+      routePhase.bundle.atlasSpine,
     );
     handlers.onFullReady(fullBundle);
   } catch (error) {

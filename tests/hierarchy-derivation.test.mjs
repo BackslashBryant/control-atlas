@@ -1,12 +1,108 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  assertTrunkReachability,
+  canonicalTrunkReachable,
+  evaluateTrunkReachability,
+  undirectedTrunkReachable,
   pickCanonicalCciParent,
   deriveCciHierarchyParents,
   deriveAssessmentProcedureParents,
   deriveEditorialSpine,
   deriveSyntheticCatalogs,
 } from "../scripts/hierarchy-derivation.mjs";
+
+test("canonical reachability rejects a node connected to the trunk only by correlation", () => {
+  const nodes = [
+    { id: "atlas:TRUNK", node_type: "trunk" },
+    { id: "atlas:LIMB-COMPLIANCE", node_type: "limb" },
+    {
+      id: "orphan:RECORD",
+      node_type: "control",
+      metadata: { catalog_id: "orphan" },
+    },
+  ];
+  const edges = [
+    {
+      source_node_id: "atlas:TRUNK",
+      target_node_id: "atlas:LIMB-COMPLIANCE",
+      relationship_type: "organizes",
+      relationship_class: "organizing",
+    },
+    {
+      source_node_id: "orphan:RECORD",
+      target_node_id: "atlas:LIMB-COMPLIANCE",
+      relationship_type: "references",
+      relationship_class: "correlation",
+    },
+  ];
+
+  const canonical = canonicalTrunkReachable(nodes, edges, "atlas:TRUNK");
+  const undirected = undirectedTrunkReachable(nodes, edges, "atlas:TRUNK");
+  assert.equal(undirected.has("orphan:RECORD"), true);
+  assert.equal(canonical.has("atlas:LIMB-COMPLIANCE"), true);
+  assert.equal(canonical.has("orphan:RECORD"), false);
+  assert.throws(
+    () => assertTrunkReachability(nodes, edges, "atlas:TRUNK"),
+    /undirected 3\/3; canonical 2\/3/,
+  );
+});
+
+test("isolated authority instruments are exempt from both trunk-reachability gates", () => {
+  const nodes = [
+    { id: "atlas:TRUNK", node_type: "trunk" },
+    { id: "authority:STATUTE", node_type: "statute" },
+    { id: "authority:REGULATION", node_type: "regulation" },
+    { id: "authority:POLICY", node_type: "policy_directive" },
+  ];
+
+  const canonicalPredicate = canonicalTrunkReachable(
+    nodes,
+    [],
+    "atlas:TRUNK",
+  );
+  const undirectedPredicate = undirectedTrunkReachable(
+    nodes,
+    [],
+    "atlas:TRUNK",
+  );
+  for (const authorityId of [
+    "authority:STATUTE",
+    "authority:REGULATION",
+    "authority:POLICY",
+  ]) {
+    assert.equal(canonicalPredicate.has(authorityId), true);
+    assert.equal(undirectedPredicate.has(authorityId), true);
+  }
+
+  const result = evaluateTrunkReachability(nodes, [], "atlas:TRUNK");
+  assert.equal(result.totalNodeCount, 4);
+  assert.equal(result.eligibleNodeCount, 1);
+  assert.equal(result.exemptAuthorityNodeCount, 3);
+  assert.equal(result.undirected.size, 1);
+  assert.equal(result.canonical.size, 1);
+  assert.deepEqual(result.undirectedOrphans, []);
+  assert.deepEqual(result.canonicalOrphans, []);
+  assert.doesNotThrow(() =>
+    assertTrunkReachability(nodes, [], "atlas:TRUNK"),
+  );
+});
+
+test("an isolated ordinary node still fails when an isolated authority node is exempt", () => {
+  const nodes = [
+    { id: "atlas:TRUNK", node_type: "trunk" },
+    { id: "authority:STATUTE", node_type: "statute" },
+    { id: "ordinary:RECORD", node_type: "control" },
+  ];
+
+  const result = evaluateTrunkReachability(nodes, [], "atlas:TRUNK");
+  assert.deepEqual(result.undirectedOrphans, ["ordinary:RECORD"]);
+  assert.deepEqual(result.canonicalOrphans, ["ordinary:RECORD"]);
+  assert.throws(
+    () => assertTrunkReachability(nodes, [], "atlas:TRUNK"),
+    /eligible 2\/3 \(1 authority exempt\); undirected 1\/2; canonical 1\/2/,
+  );
+});
 
 const catalogs = {
   assessmentProcedureItemIds: new Set(["AC-1", "AC-2.1"]),

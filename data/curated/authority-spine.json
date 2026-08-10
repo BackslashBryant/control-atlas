@@ -1,0 +1,193 @@
+{
+  "schema_version": "1.0",
+  "_doc": "Curated authority and publication-mandate data. Relationships are recorded only where supported by the cited official primary source. Mandate describes the publication, not any visitor or organization.",
+  "instruments": [
+    {
+      "id": "authority:USC-40-11331",
+      "node_type": "statute",
+      "label": "40 U.S.C. § 11331",
+      "blurb": "Directs the Secretary of Commerce to prescribe federal information-system standards and makes required information-security standards compulsory and binding.",
+      "parent": null,
+      "source_id": "authority-usc-40-11331",
+      "source_refs": [{ "source_id": "authority-usc-40-11331", "ref_type": "primary", "locator": "40 U.S.C. § 11331(a)-(b)" }]
+    },
+    {
+      "id": "authority:USC-44-3554",
+      "node_type": "statute",
+      "label": "44 U.S.C. § 3554",
+      "blurb": "Assigns federal agency heads responsibility for information security and compliance with related standards and guidance.",
+      "parent": null,
+      "source_id": "authority-usc-44-3554",
+      "source_refs": [{ "source_id": "authority-usc-44-3554", "ref_type": "primary", "locator": "44 U.S.C. § 3554(a)" }]
+    },
+    {
+      "id": "authority:USC-44-3504",
+      "node_type": "statute",
+      "label": "44 U.S.C. § 3504",
+      "blurb": "Authorizes the OMB Director to develop and oversee federal information-resource policies, principles, standards, and guidelines.",
+      "parent": null,
+      "source_id": "authority-usc-44-3504",
+      "source_refs": [{ "source_id": "authority-usc-44-3504", "ref_type": "primary", "locator": "44 U.S.C. § 3504(a)" }]
+    },
+    {
+      "id": "authority:OMB-CIRCULAR-A-130",
+      "node_type": "policy_directive",
+      "label": "OMB Circular A-130",
+      "blurb": "Establishes executive-branch policy for managing information as a strategic resource, including information-security and privacy responsibilities.",
+      "parent": "authority:USC-44-3504",
+      "source_id": "authority-omb-circular-a-130",
+      "source_refs": [{ "source_id": "authority-omb-circular-a-130", "ref_type": "primary", "locator": "Circular A-130 §§ 1, 5 and Appendix I" }]
+    },
+    {
+      "id": "authority:EO-13800",
+      "node_type": "policy_directive",
+      "label": "Executive Order 13800",
+      "blurb": "Directs executive-branch agencies to manage cybersecurity risk using the NIST Cybersecurity Framework.",
+      "parent": "authority:USC-44-3554",
+      "source_id": "authority-eo-13800",
+      "source_refs": [{ "source_id": "authority-eo-13800", "ref_type": "primary", "locator": "EO 13800 § 1(c)(ii)" }]
+    },
+    {
+      "id": "authority:EO-13556",
+      "node_type": "policy_directive",
+      "label": "Executive Order 13556",
+      "blurb": "Establishes the executive branch Controlled Unclassified Information program.",
+      "parent": null,
+      "source_id": "authority-eo-13556",
+      "source_refs": [{ "source_id": "authority-eo-13556", "ref_type": "primary", "locator": "EO 13556 §§ 1-6" }]
+    },
+    {
+      "id": "authority:32-CFR-2002",
+      "node_type": "regulation",
+      "label": "32 CFR Part 2002",
+      "blurb": "Implements the executive-branch Controlled Unclassified Information program established by Executive Order 13556.",
+      "parent": "authority:EO-13556",
+      "source_id": "authority-32-cfr-2002",
+      "source_refs": [{ "source_id": "authority-32-cfr-2002", "ref_type": "primary", "locator": "32 CFR §§ 2002.1-2002.50" }]
+    },
+    {
+      "id": "authority:USC-41-1303",
+      "node_type": "statute",
+      "label": "41 U.S.C. § 1303",
+      "blurb": "Establishes the acquisition councils responsible for maintaining the Federal Acquisition Regulation system.",
+      "parent": null,
+      "source_id": "authority-usc-41-1303",
+      "source_refs": [{ "source_id": "authority-usc-41-1303", "ref_type": "primary", "locator": "41 U.S.C. § 1303" }]
+    },
+    {
+      "id": "authority:DFARS-252.204-7012",
+      "node_type": "regulation",
+      "label": "DFARS 252.204-7012",
+      "blurb": "Requires covered contractor information systems to meet the NIST SP 800-171 security requirements specified by the clause.",
+      "parent": "authority:USC-41-1303",
+      "source_id": "authority-dfars-252-204-7012",
+      "source_refs": [{ "source_id": "authority-dfars-252-204-7012", "ref_type": "primary", "locator": "DFARS 252.204-7012(b)(2)(i)" }]
+    },
+    {
+      "id": "authority:PL-116-92-SEC-1648",
+      "node_type": "statute",
+      "label": "Pub. L. 116-92 § 1648",
+      "blurb": "Directs the Secretary of Defense to develop a unified cybersecurity standard for defense contractors.",
+      "parent": null,
+      "source_id": "authority-pl-116-92-sec-1648",
+      "source_refs": [{ "source_id": "authority-pl-116-92-sec-1648", "ref_type": "primary", "locator": "Pub. L. 116-92 § 1648" }]
+    },
+    {
+      "id": "authority:32-CFR-170",
+      "node_type": "regulation",
+      "label": "32 CFR Part 170",
+      "blurb": "Establishes the Cybersecurity Maturity Model Certification program and its assessment requirements.",
+      "parent": "authority:PL-116-92-SEC-1648",
+      "source_id": "authority-32-cfr-170",
+      "source_refs": [{ "source_id": "authority-32-cfr-170", "ref_type": "primary", "locator": "32 CFR §§ 170.1-170.25" }]
+    },
+    {
+      "id": "authority:DFARS-252.204-7021",
+      "node_type": "regulation",
+      "label": "DFARS 252.204-7021",
+      "blurb": "Requires contractors to maintain the CMMC status specified in a contract containing the clause.",
+      "parent": "authority:PL-116-92-SEC-1648",
+      "source_id": "authority-dfars-252-204-7021",
+      "source_refs": [{ "source_id": "authority-dfars-252-204-7021", "ref_type": "primary", "locator": "DFARS 252.204-7021(d)" }]
+    },
+    {
+      "id": "authority:USC-44-3608",
+      "node_type": "statute",
+      "label": "44 U.S.C. § 3608",
+      "blurb": "Establishes FedRAMP as a government-wide reusable cloud-security assessment and authorization program.",
+      "parent": null,
+      "source_id": "authority-usc-44-3608",
+      "source_refs": [{ "source_id": "authority-usc-44-3608", "ref_type": "primary", "locator": "44 U.S.C. § 3608" }]
+    },
+    {
+      "id": "authority:USC-44-3614",
+      "node_type": "statute",
+      "label": "44 U.S.C. § 3614",
+      "blurb": "Directs OMB to issue government-wide FedRAMP scope and implementation guidance.",
+      "parent": null,
+      "source_id": "authority-usc-44-3614",
+      "source_refs": [{ "source_id": "authority-usc-44-3614", "ref_type": "primary", "locator": "44 U.S.C. § 3614" }]
+    },
+    {
+      "id": "authority:OMB-M-24-15",
+      "node_type": "policy_directive",
+      "label": "OMB Memorandum M-24-15",
+      "blurb": "Defines the modern FedRAMP scope, authorization process, and agency responsibilities.",
+      "parent": "authority:USC-44-3614",
+      "source_id": "authority-omb-m-24-15",
+      "source_refs": [{ "source_id": "authority-omb-m-24-15", "ref_type": "primary", "locator": "M-24-15 §§ III-IX" }]
+    },
+    {
+      "id": "authority:DODD-5144.02",
+      "node_type": "policy_directive",
+      "label": "DoD Directive 5144.02",
+      "blurb": "Assigns the Department of Defense Chief Information Officer's responsibilities and authorities.",
+      "parent": null,
+      "source_id": "authority-dodd-5144-02",
+      "source_refs": [{ "source_id": "authority-dodd-5144-02", "ref_type": "primary", "locator": "DoDD 5144.02 §§ 1-3" }]
+    },
+    {
+      "id": "authority:DODI-8500.01",
+      "node_type": "policy_directive",
+      "label": "DoD Instruction 8500.01",
+      "blurb": "Establishes DoD cybersecurity policy and directs DISA to maintain CCIs, SRGs, and STIGs.",
+      "parent": "authority:DODD-5144.02",
+      "source_id": "authority-dodi-8500-01",
+      "source_refs": [{ "source_id": "authority-dodi-8500-01", "ref_type": "primary", "locator": "DoDI 8500.01 §§ 1, 2 and Enclosure 2" }]
+    },
+    {
+      "id": "authority:DOD-ZT-STRATEGY",
+      "node_type": "policy_directive",
+      "label": "DoD Zero Trust Strategy and Roadmap",
+      "blurb": "Directs Department-wide zero-trust target-level outcomes and implementation through fiscal year 2027.",
+      "parent": null,
+      "source_id": "authority-dod-zt-strategy",
+      "source_refs": [{ "source_id": "authority-dod-zt-strategy", "ref_type": "primary", "locator": "DoD Zero Trust Strategy, Goals and Objectives" }]
+    }
+  ],
+  "publications": [
+    { "catalog_id": "nist-800-53", "mandate": "statutory", "primary_authority": "authority:USC-40-11331", "also_required_by": ["authority:USC-44-3554"], "publication_type": "Control catalog", "mandate_note": "FIPS 200, a catalog already represented in Atlas, is the immediate compulsory standard that requires agencies to select appropriately tailored SP 800-53 controls.", "source_refs": [{ "source_id": "nist-800-53", "ref_type": "primary", "locator": "SP 800-53 Rev. 5, Introduction" }, { "source_id": "nist-fips-200", "ref_type": "primary", "locator": "FIPS 200 § 3" }] },
+    { "catalog_id": "csf-2", "mandate": "federal_policy_or_regulatory_mandate", "primary_authority": "authority:EO-13800", "also_required_by": [], "publication_type": "Outcome framework", "mandate_note": "Executive Order 13800 requires executive-branch agencies to use the Cybersecurity Framework for federal-network risk management; NIST states that most organizations outside that federal scope use it voluntarily.", "source_refs": [{ "source_id": "nist-csf-2", "ref_type": "primary", "locator": "CSF 2.0" }, { "source_id": "authority-eo-13800", "ref_type": "primary", "locator": "EO 13800 § 1(c)(ii)" }] },
+    { "catalog_id": "cmmc-2", "mandate": "contractual", "primary_authority": "authority:DFARS-252.204-7021", "also_required_by": ["authority:32-CFR-170"], "publication_type": "Certification program", "mandate_note": "The required CMMC level is specified through a solicitation or contract clause; the publication does not determine a visitor's required level.", "source_refs": [{ "source_id": "dod-cmmc-rule", "ref_type": "primary", "locator": "32 CFR Part 170" }, { "source_id": "authority-dfars-252-204-7021", "ref_type": "primary", "locator": "DFARS 252.204-7021(d)" }] },
+    { "catalog_id": "nist-800-171", "mandate": "contractual", "primary_authority": "authority:DFARS-252.204-7012", "also_required_by": [], "publication_type": "Control catalog", "mandate_note": "DFARS 252.204-7012 requires the SP 800-171 edition in effect when the solicitation is issued unless the contracting officer authorizes otherwise.", "source_refs": [{ "source_id": "nist-800-171-oscal-mappings", "ref_type": "primary", "locator": "SP 800-171 Rev. 3" }, { "source_id": "authority-dfars-252-204-7012", "ref_type": "primary", "locator": "DFARS 252.204-7012(b)(2)(i)" }] },
+    { "catalog_id": "nist-800-171-rev2", "mandate": "contractual", "primary_authority": "authority:DFARS-252.204-7012", "also_required_by": ["authority:32-CFR-170"], "publication_type": "Control catalog", "mandate_note": "Revision 2 remains the edition incorporated by the current CMMC regulation and may remain specified in existing contractual instruments.", "source_refs": [{ "source_id": "nist-800-171-rev2", "ref_type": "primary", "locator": "SP 800-171 Rev. 2" }, { "source_id": "authority-32-cfr-170", "ref_type": "primary", "locator": "32 CFR § 170.14(c)(2)" }] },
+    { "catalog_id": "nist-800-172", "mandate": "issued_without_federal_mandate", "primary_authority": null, "also_required_by": [], "publication_type": "Control catalog", "mandate_note": "SP 800-172 Rev. 3 publishes recommended enhanced requirements. A requirement becomes binding only when a federal agency selects it for a contractual vehicle or other agreement; current CMMC incorporates the superseded 2021 edition, not Rev. 3.", "source_refs": [{ "source_id": "nist-800-172-rev3", "ref_type": "primary", "locator": "SP 800-172 Rev. 3, Abstract and § 1.1" }, { "source_id": "authority-32-cfr-170", "ref_type": "primary", "locator": "32 CFR § 170.14(c)(3)" }] },
+    { "catalog_id": "cui-policy", "mandate": "federal_policy_or_regulatory_mandate", "primary_authority": "authority:32-CFR-2002", "also_required_by": ["authority:EO-13556"], "publication_type": "Policy and regulation", "mandate_note": "The catalog records the executive-branch CUI regulation itself; requirements for non-executive entities arise only through a law, regulation, or agreement that carries them outward.", "source_refs": [{ "source_id": "isoo-cui-regulation", "ref_type": "primary", "locator": "32 CFR Part 2002" }, { "source_id": "authority-eo-13556", "ref_type": "primary", "locator": "EO 13556" }] },
+    { "catalog_id": "nist-ssdf", "mandate": "issued_without_federal_mandate", "primary_authority": null, "also_required_by": [], "publication_type": "Implementation standard", "mandate_note": "OMB M-26-05 rescinded M-22-18 and M-23-16 on January 23, 2026 and says agencies may choose to use SP 800-218 and related secure-development resources.", "source_refs": [{ "source_id": "nist-ssdf", "ref_type": "primary", "locator": "SP 800-218" }, { "source_id": "authority-omb-m-26-05", "ref_type": "primary", "locator": "M-26-05 pp. 1-2" }] },
+    { "catalog_id": "nist-ai-rmf", "mandate": "issued_without_federal_mandate", "primary_authority": null, "also_required_by": [], "publication_type": "Risk framework", "mandate_note": "NIST describes the AI RMF and its Playbook as voluntary resources for managing AI risk.", "source_refs": [{ "source_id": "nist-ai-rmf-playbook", "ref_type": "primary", "locator": "NIST AI RMF and Playbook overview" }] },
+    { "catalog_id": "dod-rai", "mandate": "issued_without_federal_mandate", "primary_authority": null, "also_required_by": [], "publication_type": "Risk framework", "mandate_note": "The official DoD CDAO publication expressly describes the Responsible AI Toolkit as a voluntary process.", "source_refs": [{ "source_id": "dod-rai-toolkit", "ref_type": "primary", "locator": "CDAO Responsible AI Toolkit article" }] },
+    { "catalog_id": "dod-zt", "mandate": "federal_policy_or_regulatory_mandate", "primary_authority": "authority:DOD-ZT-STRATEGY", "also_required_by": [], "publication_type": "Implementation standard", "mandate_note": "The DoD strategy directs Department-wide target-level implementation through fiscal year 2027; this describes the publication's DoD policy role, not applicability outside that scope.", "source_refs": [{ "source_id": "dod-zt-reference-architecture-v2", "ref_type": "primary", "locator": "DoD Zero Trust Reference Architecture v2.0" }, { "source_id": "authority-dod-zt-strategy", "ref_type": "primary", "locator": "DoD Zero Trust Strategy, Goals and Objectives" }] },
+    { "catalog_id": "disa-srg", "mandate": "federal_policy_or_regulatory_mandate", "primary_authority": "authority:DODI-8500.01", "also_required_by": [], "publication_type": "Implementation standard", "mandate_note": "DoDI 8500.01 directs DISA to develop and maintain SRGs and directs DoD Components to ensure applicable SRG compliance.", "source_refs": [{ "source_id": "disa-srg-library", "ref_type": "primary", "locator": "DISA SRG Library" }, { "source_id": "authority-dodi-8500-01", "ref_type": "primary", "locator": "DoDI 8500.01, Enclosure 2" }] },
+    { "catalog_id": "disa-stig", "mandate": "federal_policy_or_regulatory_mandate", "primary_authority": "authority:DODI-8500.01", "also_required_by": [], "publication_type": "Implementation standard", "mandate_note": "DoDI 8500.01 directs DISA to develop and maintain STIGs and directs DoD Components to ensure applicable STIG compliance.", "source_refs": [{ "source_id": "disa-stig-library", "ref_type": "primary", "locator": "DISA STIG Library" }, { "source_id": "authority-dodi-8500-01", "ref_type": "primary", "locator": "DoDI 8500.01, Enclosure 2" }] },
+    { "catalog_id": "mitre-attack", "mandate": "issued_without_federal_mandate", "primary_authority": null, "also_required_by": [], "publication_type": "Threat knowledge base", "mandate_note": "MITRE publishes ATT&CK as a knowledge base of observed adversary behavior; its official publication does not assert a federal mandate.", "source_refs": [{ "source_id": "mitre-attack-enterprise", "ref_type": "primary", "locator": "MITRE ATT&CK Enterprise" }] },
+    { "catalog_id": "mitre-attack-ics", "mandate": "issued_without_federal_mandate", "primary_authority": null, "also_required_by": [], "publication_type": "Threat knowledge base", "mandate_note": "MITRE publishes ATT&CK for ICS as a knowledge base; its official publication does not assert a federal mandate.", "source_refs": [{ "source_id": "mitre-attack-ics", "ref_type": "primary", "locator": "MITRE ATT&CK for ICS" }] },
+    { "catalog_id": "mitre-d3fend", "mandate": "issued_without_federal_mandate", "primary_authority": null, "also_required_by": [], "publication_type": "Defensive knowledge base", "mandate_note": "MITRE D3FEND is an NSA-funded cybersecurity countermeasure knowledge graph; its official publication does not assert a federal mandate.", "source_refs": [{ "source_id": "mitre-d3fend-ontology", "ref_type": "primary", "locator": "MITRE D3FEND About" }] },
+    { "catalog_id": "fips-200", "mandate": "statutory", "primary_authority": "authority:USC-40-11331", "also_required_by": ["authority:USC-44-3554"], "publication_type": "Risk framework", "mandate_note": "NIST states that FIPS 200 is compulsory and binding for covered federal information and information systems.", "source_refs": [{ "source_id": "nist-fips-200", "ref_type": "primary", "locator": "FIPS 200" }, { "source_id": "authority-usc-40-11331", "ref_type": "primary", "locator": "40 U.S.C. § 11331(b)" }] },
+    { "catalog_id": "nist-800-37", "mandate": "federal_policy_or_regulatory_mandate", "primary_authority": "authority:OMB-CIRCULAR-A-130", "also_required_by": ["authority:USC-44-3554"], "publication_type": "Risk framework", "mandate_note": "OMB Circular A-130 directs federal agencies to implement the NIST Risk Management Framework; the publication remains guidance outside that federal-policy scope.", "source_refs": [{ "source_id": "nist-800-37-rev2", "ref_type": "primary", "locator": "SP 800-37 Rev. 2" }, { "source_id": "authority-omb-circular-a-130", "ref_type": "primary", "locator": "Circular A-130 Appendix I" }] },
+    { "catalog_id": "fips-199", "mandate": "statutory", "primary_authority": "authority:USC-40-11331", "also_required_by": ["authority:USC-44-3554"], "publication_type": "Risk framework", "mandate_note": "FIPS 199 is the mandatory federal standard used to categorize information and systems by impact.", "source_refs": [{ "source_id": "nist-fips-199", "ref_type": "primary", "locator": "FIPS 199" }, { "source_id": "authority-usc-40-11331", "ref_type": "primary", "locator": "40 U.S.C. § 11331(b)" }] },
+    { "catalog_id": "nist-800-53a", "mandate": "federal_policy_or_regulatory_mandate", "primary_authority": "authority:OMB-CIRCULAR-A-130", "also_required_by": ["authority:USC-44-3554"], "publication_type": "Control catalog", "mandate_note": "OMB Circular A-130 and FISMA assessment duties place NIST assessment procedures in the federal RMF; the publication is not itself a statute.", "source_refs": [{ "source_id": "nist-800-53a-assessment-procedures", "ref_type": "primary", "locator": "SP 800-53A Rev. 5" }, { "source_id": "authority-omb-circular-a-130", "ref_type": "primary", "locator": "Circular A-130 Appendix I" }] },
+    { "catalog_id": "fedramp-rev5", "mandate": "statutory", "primary_authority": "authority:USC-44-3608", "also_required_by": ["authority:USC-44-3614", "authority:OMB-M-24-15"], "publication_type": "Authorization program", "mandate_note": "FedRAMP is a statutory federal authorization program, but the Rev. 5 materials represented here are legacy content retained for reference and transition to the Consolidated Rules for 2026; this entry does not imply that every current authorization uses the legacy path.", "source_refs": [{ "source_id": "fedramp-rev5", "ref_type": "primary", "locator": "FedRAMP Rev. 5 legacy baselines" }, { "source_id": "fedramp-2026-rules", "ref_type": "primary", "locator": "FedRAMP Legacy Documentation notice, June 24, 2026" }, { "source_id": "authority-usc-44-3608", "ref_type": "primary", "locator": "44 U.S.C. § 3608" }] },
+    { "catalog_id": "nist-800-53b", "mandate": "statutory", "primary_authority": "authority:USC-40-11331", "also_required_by": ["authority:OMB-CIRCULAR-A-130"], "publication_type": "Control-selection method", "mandate_note": "SP 800-53B supplies the federal baselines used to carry out FIPS 200 control selection and OMB Circular A-130 risk-management policy.", "source_refs": [{ "source_id": "nist-800-53b-baselines", "ref_type": "primary", "locator": "SP 800-53B" }, { "source_id": "nist-fips-200", "ref_type": "primary", "locator": "FIPS 200 § 3" }] },
+    { "catalog_id": "disa-cci", "mandate": "federal_policy_or_regulatory_mandate", "primary_authority": "authority:DODI-8500.01", "also_required_by": [], "publication_type": "Implementation standard", "mandate_note": "DoDI 8500.01 directs DISA to develop and maintain Control Correlation Identifiers as part of the DoD cybersecurity program.", "source_refs": [{ "source_id": "disa-cci-list", "ref_type": "primary", "locator": "DISA CCI List" }, { "source_id": "authority-dodi-8500-01", "ref_type": "primary", "locator": "DoDI 8500.01, Enclosure 2" }] }
+  ]
+}

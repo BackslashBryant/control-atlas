@@ -7,6 +7,10 @@ import {
   atlasNeighborhoodShardId,
   buildAtlasNeighborhoodShards,
 } from "../src/app/atlas-neighborhood.mjs";
+import {
+  ancestorChain,
+  buildAncestorGraph,
+} from "../src/app/ancestor-path.mjs";
 import { readGeneratedCollection } from "../scripts/lib/generated-graph-artifacts.mjs";
 
 test("Atlas neighborhood sharding is deterministic and preserves canonical edges", () => {
@@ -104,6 +108,106 @@ test("Atlas neighborhood records carry the canonical structural path for cold de
   ]);
 });
 
+test("displayed structural paths compose one authority hop without changing canonical ancestry", () => {
+  const graph = {
+    nodes: [
+      {
+        id: "authority:EO-EXAMPLE",
+        node_type: "policy_directive",
+        label: "Executive Order Example",
+        metadata: { title: "Executive Order Example" },
+      },
+      {
+        id: "atlas:TRUNK",
+        node_type: "trunk",
+        label: "Cybersecurity",
+      },
+      {
+        id: "atlas:LIMB-TEST",
+        node_type: "limb",
+        label: "Test",
+      },
+      {
+        id: "x:CATALOG",
+        node_type: "catalog",
+        label: "Catalog",
+        metadata: {
+          catalog_id: "x",
+          primary_authority: "authority:EO-EXAMPLE",
+        },
+      },
+      {
+        id: "x:item",
+        node_type: "control",
+        label: "Item",
+        metadata: { catalog_id: "x" },
+      },
+    ],
+    edges: [
+      {
+        id: "trunk-limb",
+        source_node_id: "atlas:TRUNK",
+        target_node_id: "atlas:LIMB-TEST",
+        relationship_type: "organizes",
+        relationship_class: "organizing",
+        publication_status: "editorial",
+        source_refs: [],
+      },
+      {
+        id: "limb-catalog",
+        source_node_id: "atlas:LIMB-TEST",
+        target_node_id: "x:CATALOG",
+        relationship_type: "organizes",
+        relationship_class: "organizing",
+        publication_status: "editorial",
+        source_refs: [],
+      },
+      {
+        id: "catalog-item",
+        source_node_id: "x:CATALOG",
+        target_node_id: "x:item",
+        relationship_type: "contains",
+        relationship_class: "structural",
+        publication_status: "published",
+        source_refs: [],
+      },
+      {
+        id: "catalog-authority",
+        source_node_id: "x:CATALOG",
+        target_node_id: "authority:EO-EXAMPLE",
+        relationship_type: "issued_under",
+        relationship_class: "organizing",
+        publication_status: "published",
+        source_refs: [
+          { source_id: "official-example", ref_type: "primary", locator: "section-1" },
+        ],
+      },
+    ],
+  };
+
+  const canonicalGraph = buildAncestorGraph(graph.nodes, graph.edges);
+  assert.deepEqual(
+    ancestorChain("x:item", canonicalGraph).map((link) => link.id),
+    ["atlas:TRUNK", "atlas:LIMB-TEST", "x:CATALOG", "x:item"],
+  );
+
+  const shards = buildAtlasNeighborhoodShards(graph, 8);
+  const record = shards
+    .find((shard) => shard.shard_id === atlasNeighborhoodShardId("x:item", 8))
+    .records["x:item"];
+  assert.deepEqual(record.structural_path, [
+    "authority:EO-EXAMPLE",
+    "atlas:TRUNK",
+    "atlas:LIMB-TEST",
+    "x:CATALOG",
+    "x:item",
+  ]);
+  assert.ok(
+    record.nodes.some((node) => node[0] === "authority:EO-EXAMPLE"),
+    "the composed authority hop must travel with the neighborhood shard",
+  );
+});
+
 test("generated Atlas shards contain only incident canonical edges", () => {
   const canonicalEdges = new Map(
     readGeneratedCollection(".", "edges").edges.map((edge) => [edge.id, edge]),
@@ -171,4 +275,26 @@ test("generated Atlas shards contain only incident canonical edges", () => {
   const orphaned = [...shardedNodeIds].filter((id) => !canonicalNodeIds.has(id));
   assert.deepEqual(missing, [], "every canonical node needs a shard record");
   assert.deepEqual(orphaned, [], "no shard record may reference a dropped node");
+});
+
+test("generated AC-2.1 display path adds authority while canonical ancestry does not", () => {
+  const nodeId = "nist-800-53:AC-2.1";
+  const shardId = atlasNeighborhoodShardId(nodeId);
+  const artifact = JSON.parse(
+    readFileSync(`data/generated/atlas-neighborhood/${shardId}.json`, "utf8"),
+  );
+  const record = artifact.atlas_neighborhood_shard.records[nodeId];
+  assert.ok(record, `missing generated neighborhood record for ${nodeId}`);
+  assert.equal(record.structural_path[0], "authority:USC-40-11331");
+  assert.deepEqual(record.structural_path.slice(-4), [
+    "nist-800-53:CATALOG",
+    "nist-800-53:FAMILY-AC",
+    "nist-800-53:AC-2",
+    "nist-800-53:AC-2.1",
+  ]);
+  assert.equal(record.center_node.ancestor_path[0].id, "atlas:TRUNK");
+  assert.equal(
+    record.center_node.ancestor_path.some((link) => link.id.startsWith("authority:")),
+    false,
+  );
 });

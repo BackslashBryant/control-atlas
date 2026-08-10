@@ -1,20 +1,20 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
   buildAtlasBootstrapModel,
   buildAtlasDrilldownModel,
+  hydrateAtlasFrameworkRecords,
   type AtlasDrillEdge,
   type AtlasDrillNode,
+  type AtlasSpine,
+  type AtlasSpineEntry,
 } from "../../src/ui/lib/atlasDrilldown";
 import {
   normalizeViewState,
   parseViewState,
   serializeViewState,
 } from "../../src/ui/lib/viewState";
-import spine from "../../data/curated/tree-spine.json";
-import { readGeneratedCollection } from "../../scripts/lib/generated-graph-artifacts.mjs";
 
 const nodes: AtlasDrillNode[] = [
   node("nist-800-53:FAMILY-AC", "family", "FAMILY-AC", "Access Control"),
@@ -44,14 +44,75 @@ const edges: AtlasDrillEdge[] = [
   edge("rmf-select", "nist-800-37:RMF-SELECT", "nist-800-53b:MODERATE", "selects"),
 ];
 
-test("Atlas bootstrap preserves the nine-area spine without waiting for the full graph", () => {
-  const model = buildAtlasBootstrapModel(
-    [
-      { id: "nist-800-53", name: "SP 800-53 Rev. 5" },
-      { id: "mitre-attack", name: "MITRE ATT&CK" },
-    ],
-    spine,
-  );
+function spineEntry(
+  id: string,
+  nodeType: string,
+  label: string,
+  parentId: string | null,
+  overrides: Partial<AtlasSpineEntry> = {},
+): AtlasSpineEntry {
+  return {
+    id,
+    node_type: nodeType,
+    label,
+    blurb: `${label} description`,
+    parent_id: parentId,
+    child_count: 0,
+    descendant_record_count: 0,
+    ...overrides,
+  };
+}
+
+const areaEntries = [
+  ["atlas:LIMB-COMPLIANCE", "Compliance"],
+  ["atlas:LIMB-GOVERNANCE", "Governance"],
+  ["atlas:LIMB-RISK", "Risk"],
+  ["atlas:LIMB-ASSESSMENT", "Assessment"],
+  ["atlas:LIMB-IMPLEMENTATION", "Implementation"],
+  ["atlas:LIMB-THREAT", "Threats & Defense"],
+  ["atlas:LIMB-OPERATIONS", "Operations"],
+  ["atlas:LIMB-KNOWLEDGE", "Knowledge"],
+  ["atlas:LIMB-PRIVACY", "Privacy"],
+].map(([id, label]) => spineEntry(id, "limb", label, "atlas:TRUNK"));
+
+const atlasSpine: AtlasSpine = {
+  entries: [
+    spineEntry("authority:FISMA", "statute", "FISMA", null),
+    spineEntry("atlas:TRUNK", "trunk", "Cybersecurity", null),
+    ...areaEntries,
+    spineEntry(
+      "nist-800-53:CATALOG",
+      "catalog",
+      "SP 800-53 Rev. 5",
+      "atlas:LIMB-COMPLIANCE",
+      { area_id: "atlas:LIMB-COMPLIANCE", child_count: 1, descendant_record_count: 1_196 },
+    ),
+    spineEntry(
+      "nist-800-53:FAMILY-AC",
+      "family",
+      "Access Control",
+      "nist-800-53:CATALOG",
+      { child_count: 25, descendant_record_count: 129 },
+    ),
+    spineEntry(
+      "mitre-attack:CATALOG",
+      "catalog",
+      "MITRE ATT&CK",
+      "atlas:LIMB-THREAT",
+      { area_id: "atlas:LIMB-THREAT", child_count: 1, descendant_record_count: 697 },
+    ),
+    spineEntry(
+      "mitre-attack:TA0001",
+      "tactic",
+      "Initial Access",
+      "mitre-attack:CATALOG",
+      { child_count: 10, descendant_record_count: 10 },
+    ),
+  ],
+};
+
+test("Atlas bootstrap reads the runtime spine without waiting for the full graph", () => {
+  const model = buildAtlasBootstrapModel(atlasSpine);
 
   assert.equal(model.frameworkGroups.length, 9);
   assert.equal(model.baselines.length, 0);
@@ -61,6 +122,96 @@ test("Atlas bootstrap preserves the nine-area spine without waiting for the full
       .find((group) => group.id === "atlas:LIMB-THREAT")
       ?.frameworks.find((framework) => framework.id === "mitre-attack")?.label,
     "MITRE ATT&CK",
+  );
+  assert.deepEqual(
+    model.frameworkGroups
+      .find((group) => group.id === "atlas:LIMB-COMPLIANCE")
+      ?.frameworks[0]?.units.map((unit) => unit.id),
+    ["nist-800-53:FAMILY-AC"],
+  );
+  assert.equal(
+    model.frameworkGroups.some((group) => group.id === "authority:FISMA"),
+    false,
+    "authority roots do not become areas in the existing Atlas view",
+  );
+});
+
+test("Atlas bootstrap fails closed instead of falling back to catalogLimbs", () => {
+  assert.throws(
+    () => buildAtlasBootstrapModel({ entries: [] }),
+    /Atlas spine artifact has no entries/,
+  );
+});
+
+test("Atlas spine summaries hydrate records from a catalog artifact without the full graph", () => {
+  const model = hydrateAtlasFrameworkRecords(buildAtlasBootstrapModel(atlasSpine), [
+    {
+      id: "nist-800-53:AC-2",
+      node_type: "control",
+      ancestor_path: [{ id: "atlas:TRUNK" }, { id: "nist-800-53:FAMILY-AC" }],
+      metadata: {
+        catalog_id: "nist-800-53",
+        item_id: "AC-2",
+        title: "Account Management",
+      },
+    },
+    {
+      id: "nist-800-53:AC-2.1",
+      node_type: "control_enhancement",
+      ancestor_path: [{ id: "nist-800-53:FAMILY-AC" }, { id: "nist-800-53:AC-2" }],
+      metadata: {
+        catalog_id: "nist-800-53",
+        item_id: "AC-2.1",
+        title: "Automated System Account Management",
+      },
+    },
+  ]);
+
+  const accessControl = model.frameworkGroups
+    .find((group) => group.id === "atlas:LIMB-COMPLIANCE")
+    ?.frameworks[0]?.units[0];
+  assert.deepEqual(accessControl?.records.map((record) => record.id), [
+    "nist-800-53:AC-2",
+  ]);
+});
+
+test("membership summaries preserve drilldown for catalogs without structural L4 children", () => {
+  const spine: AtlasSpine = {
+    entries: [
+      spineEntry("atlas:TRUNK", "trunk", "Cybersecurity", null),
+      spineEntry("atlas:LIMB-ASSESSMENT", "limb", "Assessment", "atlas:TRUNK"),
+      spineEntry(
+        "nist-800-53a:CATALOG",
+        "catalog",
+        "SP 800-53A",
+        "atlas:LIMB-ASSESSMENT",
+        { area_id: "atlas:LIMB-ASSESSMENT" },
+      ),
+      spineEntry(
+        "membership:nist-800-53a:AC",
+        "family",
+        "AC",
+        "nist-800-53a:CATALOG",
+      ),
+    ],
+  };
+  const model = hydrateAtlasFrameworkRecords(buildAtlasBootstrapModel(spine), [
+    {
+      id: "nist-800-53a:AC-2",
+      node_type: "assessment_procedure",
+      metadata: {
+        catalog_id: "nist-800-53a",
+        item_id: "AC-2",
+        title: "Account Management assessment",
+        family: "AC",
+      },
+    },
+  ]);
+  assert.deepEqual(
+    model.frameworkGroups[0]?.frameworks[0]?.units[0]?.records.map(
+      (record) => record.id,
+    ),
+    ["nist-800-53a:AC-2"],
   );
 });
 
@@ -163,168 +314,9 @@ test("guided Atlas selections survive URL serialization and parsing", () => {
   assert.equal(parsed.atlasRmfStep, "");
 });
 
-test("CA-ATL-005: the Atlas selector groups every catalog under its limb in trunk order", () => {
-  const structuralNodes: AtlasDrillNode[] = [
-    node("atlas:TRUNK", "trunk", "TRUNK", "Cybersecurity"),
-    node("atlas:LIMB-COMPLIANCE", "limb", "LIMB-COMPLIANCE", "Compliance"),
-    node("atlas:LIMB-THREAT", "limb", "LIMB-THREAT", "Threats & Defense"),
-    node("nist-800-53:CATALOG", "catalog", "CATALOG", "SP 800-53"),
-    node("nist-800-53:FAMILY-AC", "family", "FAMILY-AC", "Access Control"),
-    node(
-      "mitre-attack:CATALOG",
-      "catalog",
-      "CATALOG",
-      "MITRE ATT&CK Enterprise",
-      "mitre-attack",
-    ),
-    node("mitre-attack:TA0001", "tactic", "TA0001", "Initial Access", "mitre-attack"),
-  ];
-  const structuralEdges: AtlasDrillEdge[] = [
-    edge("trunk-compliance", "atlas:TRUNK", "atlas:LIMB-COMPLIANCE", "organizes", "organizing"),
-    edge("trunk-threat", "atlas:TRUNK", "atlas:LIMB-THREAT", "organizes", "organizing"),
-    edge("compliance-nist", "atlas:LIMB-COMPLIANCE", "nist-800-53:CATALOG", "organizes", "organizing"),
-    edge("threat-attack", "atlas:LIMB-THREAT", "mitre-attack:CATALOG", "organizes", "organizing"),
-    edge("nist-root", "nist-800-53:CATALOG", "nist-800-53:FAMILY-AC", "contains"),
-    edge("attack-root", "mitre-attack:CATALOG", "mitre-attack:TA0001", "contains"),
-  ];
-
-  const model = buildAtlasDrilldownModel({
-    nodes: structuralNodes,
-    edges: structuralEdges,
-  });
-  // Groups follow the trunk-declared limb order.
-  assert.deepEqual(
-    model.frameworkGroups.map((group) => group.id),
-    ["atlas:LIMB-COMPLIANCE", "atlas:LIMB-THREAT"],
-  );
-  assert.deepEqual(
-    model.frameworkGroups.map((group) =>
-      group.frameworks.map((framework) => framework.id),
-    ),
-    [["nist-800-53"], ["mitre-attack"]],
-  );
-  assert.ok(
-    model.frameworkGroups
-      .flatMap((group) => group.frameworks)
-      .every((framework) => framework.units.length > 0),
-  );
-});
-
-test("generated selector groups all catalogs under their limbs, no dead ends, empty limbs kept", () => {
-  const generatedNodes = readGeneratedCollection(".", "nodes").nodes as AtlasDrillNode[];
-  const generatedEdges = readGeneratedCollection(".", "edges").edges as AtlasDrillEdge[];
-  const model = buildAtlasDrilldownModel({
-    nodes: generatedNodes,
-    edges: generatedEdges,
-  });
-  assert.equal(model.frameworkGroups.length, 9, "nine limbs");
-  const frameworks = model.frameworkGroups.flatMap((group) => group.frameworks);
-  // Every catalog is now reachable through a limb, not just the old four.
-  assert.ok(frameworks.length >= 16, `expected >=16 catalogs, got ${frameworks.length}`);
-  for (const id of [
-    "nist-800-53",
-    "csf-2",
-    "cmmc-2",
-    "mitre-attack",
-    "fips-199",
-    "fips-200",
-    "nist-800-37",
-  ]) {
-    assert.ok(
-      frameworks.some((framework) => framework.id === id),
-      `catalog ${id} must be reachable through a limb`,
-    );
-  }
-  assert.ok(
-    frameworks.every(
-      (framework) =>
-        framework.units.length > 0 &&
-        framework.units.every(
-          (unit) => unit.id.length > 0 && unit.label.trim().length > 0,
-        ),
-    ),
-    "no catalog is a dead end",
-  );
-  // Areas with no published catalog are still rendered, never dropped. Since
-  // 2026-08-02 Assessment carries the 800-53A procedures, and the only two
-  // without a catalog (Operations, Knowledge) are the ones whose content lives
-  // on another surface — every one of those must name where that is, so no
-  // area is ever a dead end.
-  const areasWithoutCatalogs = model.frameworkGroups
-    .filter((group) => group.frameworks.length === 0)
-    .map((group) => group.label)
-    .sort();
-  assert.deepEqual(areasWithoutCatalogs, ["Knowledge", "Operations"]);
-  const destinations = spine.areaDestinations as Record<string, unknown>;
-  for (const group of model.frameworkGroups) {
-    if (group.frameworks.length > 0) continue;
-    assert.ok(
-      destinations[group.id],
-      `${group.label} has no catalogs and no declared destination`,
-    );
-  }
-});
-
-test("guided Atlas indexes structural edges once instead of rescanning per unit", () => {
-  const scaleNodes: AtlasDrillNode[] = [
-    node("atlas:TRUNK", "trunk", "TRUNK", "Cybersecurity"),
-    node("atlas:LIMB-COMPLIANCE", "limb", "LIMB-COMPLIANCE", "Compliance"),
-    node("nist-800-53:CATALOG", "catalog", "CATALOG", "SP 800-53"),
-  ];
-  const scaleEdges: AtlasDrillEdge[] = [
-    edge("trunk-compliance", "atlas:TRUNK", "atlas:LIMB-COMPLIANCE", "organizes", "organizing"),
-    edge("compliance-nist", "atlas:LIMB-COMPLIANCE", "nist-800-53:CATALOG", "organizes", "organizing"),
-  ];
-  for (let familyIndex = 0; familyIndex < 100; familyIndex += 1) {
-    const familyId = `nist-800-53:FAMILY-${familyIndex}`;
-    scaleNodes.push(
-      node(familyId, "family", `FAMILY-${familyIndex}`, `Family ${familyIndex}`),
-    );
-    scaleEdges.push(
-      edge(`root-${familyIndex}`, "nist-800-53:CATALOG", familyId, "contains"),
-    );
-    for (let recordIndex = 0; recordIndex < 10; recordIndex += 1) {
-      const recordId = `nist-800-53:C-${familyIndex}-${recordIndex}`;
-      scaleNodes.push(
-        node(
-          recordId,
-          "control",
-          `C-${familyIndex}-${recordIndex}`,
-          `Control ${familyIndex}-${recordIndex}`,
-        ),
-      );
-      scaleEdges.push(
-        edge(
-          `record-${familyIndex}-${recordIndex}`,
-          familyId,
-          recordId,
-          "contains",
-        ),
-      );
-    }
-  }
-
-  let endpointReads = 0;
-  const trackedEdges = scaleEdges.map(
-    (candidate) =>
-      new Proxy(candidate, {
-        get(target, property, receiver) {
-          if (property === "source_node_id" || property === "target_node_id") {
-            endpointReads += 1;
-          }
-          return Reflect.get(target, property, receiver);
-        },
-      }),
-  );
-
-  const model = buildAtlasDrilldownModel({
-    nodes: scaleNodes,
-    edges: trackedEdges,
-  });
-
-  assert.equal(model.frameworkGroups[0]?.frameworks[0]?.units.length, 100);
-  assert.ok(
-    endpointReads < scaleEdges.length * 20,
-    `expected linear edge indexing, observed ${endpointReads} endpoint reads`,
-  );
+test("full-graph drilldown is narrowed to baseline and RMF data", () => {
+  const model = buildAtlasDrilldownModel({ nodes, edges });
+  assert.deepEqual(model.frameworkGroups, []);
+  assert.ok(model.baselines.length > 0);
+  assert.ok(model.rmfSteps.length > 0);
 });

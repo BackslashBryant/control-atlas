@@ -18,20 +18,15 @@ export function isStaticViewWithoutBundle(view: ViewState["view"]) {
 
 export function requiresFullGraph(state: ViewState) {
   return (
-    // The Atlas landing uses the compact publisher-catalog bootstrap. Only a
-    // structure/process choice needs the monolithic graph; a focused record
-    // uses its neighborhood shard. These boundaries are enforced by the
-    // bootstrap payload tests.
+    // The Atlas landing uses the compact Atlas-spine artifact. Baseline and
+    // RMF choices still need the monolithic graph; Atlas area,
+    // publication, and native-group choices read from atlas-spine.json. A
+    // focused record uses its neighborhood shard. These boundaries are
+    // enforced by the bootstrap payload tests.
     (state.view === "atlas-map" &&
       !state.node &&
       Boolean(
-        // Opening an area only needs the compact publisher-catalog bootstrap.
-        // The full graph begins when someone chooses a publication or the
-        // process view, where structural records are actually needed.
-        (state.atlasAxis && state.atlasAxis !== "landscape") ||
-          state.atlasFramework ||
-          state.atlasBaseline ||
-          state.atlasFamily ||
+        state.atlasBaseline ||
           state.atlasRmfStep ||
           state.sourceView === "rmf" ||
           state.sourceView === "rmf-lifecycle" ||

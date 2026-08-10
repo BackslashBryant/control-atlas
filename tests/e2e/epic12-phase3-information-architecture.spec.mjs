@@ -159,8 +159,12 @@ test("Phase 3 List and Map preserve Library state and never drop non-empty resul
   await expect(page.locator(".library-atlas-map")).toHaveAttribute("data-map-node-count", String(resultCount));
   await page.getByRole("link", { name: /Zoom out to the whole Atlas/ }).click();
   await expect(page).toHaveURL(/#\/atlas$/);
+  await waitForAppReady(page);
+  await expect(page.locator(".route-transition")).toBeHidden();
 
   await gotoApp(page, "/#/library?q=zzzzqqqq-no-results");
+  await waitForAppReady(page);
+  await expect(page.locator(".route-transition")).toBeHidden();
   await expect(page.getByRole("group", { name: "Library view" })).toBeVisible();
 });
 

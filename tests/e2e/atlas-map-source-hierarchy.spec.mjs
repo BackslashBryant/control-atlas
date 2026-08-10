@@ -107,7 +107,11 @@ test("Atlas root presents an authority-rooted interactive hierarchy", async ({
   await expect(page.getByRole("application", { name: "Interactive Control Atlas hierarchy" })).toBeVisible();
   await expect(page.locator(".atlas-universe__area")).toHaveCount(9);
   await expect(page.locator(".react-flow")).toHaveCount(1);
-  await expect(page.getByText(/Mappings, baselines, RMF, and evidence appear after focus, not as parents/)).toBeVisible();
+  await expect(
+    page.getByText(
+      /Federal cybersecurity work is spread across separate laws, agencies, and publications that were never organized together/,
+    ),
+  ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveCount(
     0,
   );

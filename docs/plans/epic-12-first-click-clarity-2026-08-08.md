@@ -598,33 +598,34 @@ bookmarks without restoring a retired primary-navigation destination.
 
 The owner's framing settles the design question: **federal compliance is sprawling because of bureaucracy, and the tree is the product's editorial contribution that makes that sprawl legible.** Curated structure is the feature — it is what a library competitor cannot do. The authority chain is the right shape for it because it explains why 800-53, CMMC and 17,000 STIG rules all exist and descend from different statutes.
 
-### 6.2 Spine placement — roots above the trunk
+### 6.2 Spine placement — visual roots above the trunk
 
-**Decision:** authority instruments are real root nodes **above** `atlas:TRUNK`; the nine areas stay as the descent path below it. A catalog carries `issued_under` up-edges to **one or more** instruments.
+**Decision:** authority instruments are shown as roots **above** `atlas:TRUNK`, but they do not participate in the canonical `organizes` hierarchy. The trunk remains the single canonical root and the nine areas stay as the descent path below it. A catalog carries `issued_under` up-edges to **one or more** instruments.
 
-This is not the shape a first reading suggests, and the reason matters. `docs/tree-model.md` §2 puts roots above the trunk, and line 117 says *"traceable … upward to **one or more** roots"* — plural. **The data agrees.** SP 800-171 answers to EO 13556 *and* 32 CFR 2002 *and* FAR 52.204-21 *and* DFARS 252.204-7012 — four instruments across three branches of authority, and which one binds a given reader depends on who they are. Forcing a catalog to nominate one primary authority would be a determination wearing structure's clothing, which `PRODUCT_DECISION_BOUNDARY` and `tree-model.md` §7 both prohibit.
+This is not the shape a first reading suggests, and the reason matters. `docs/tree-model.md` §2 puts authority roots above the trunk visually, and line 117 says *"traceable … upward to **one or more** roots"* — plural. **The data agrees.** A publication can be issued under several instruments across different branches of authority. `primary_authority` selects the one composed into the displayed authority rail; `also_required_by[]` preserves the rest without changing canonical ownership or making a determination about the visitor.
 
-Modelling authority as many-to-many up-edges keeps it honest, preserves the nine areas, `ATLAS_UNIVERSE_POSITIONS`, `atlasLimb` deep links and `areaDestinations`, and requires no rewrite of canonical doctrine.
+Modelling authority as many-to-many `issued_under` up-edges keeps it honest, preserves the nine areas, `ATLAS_UNIVERSE_POSITIONS`, `atlasLimb` deep links and `areaDestinations`, and requires no rewrite of canonical doctrine.
 
 ### 6.3 The curated data
 
 New file **`data/curated/authority-spine.json`** — deliberately separate from `tree-spine.json`, which already carries four unrelated concerns and whose limb assignments need no legal-citation review.
 
-Three new node types, ~20 instruments: `statute` (~6), `regulation` (~8 — CFR parts, FAR/DFARS clauses), `policy_directive` (~8 — EOs, OMB memos, DoDIs). IDs `authority:<CITATION-SLUG>` (`authority:USC-44-3554`, `authority:EO-13556`, `authority:32-CFR-2002`, `authority:DFARS-252.204-7012`). **Tiering by declared `parent`, never derived.**
+Three new node types, ~20 instruments: `statute` (~6), `regulation` (~8 — CFR parts, FAR/DFARS clauses), `policy_directive` (~8 — EOs, OMB memos, DoDIs). IDs `authority:<CITATION-SLUG>` (`authority:USC-44-3554`, `authority:EO-13556`, `authority:32-CFR-2002`, `authority:DFARS-252.204-7012`). **Tiering by declared `parent`, never derived.** These node types are classification labels, not an ordering constraint: any instrument type may parent any instrument type through `issued_under`, with parent resolution and cycle checks.
 
 Do **not** create authority nodes for FIPS 199/200 — they are already catalogs (`fips-199:CATALOG` 3 children, `fips-200:CATALOG` 17) whose authority parent is FISMA. Modelling them twice is the first thing that will break.
 
 Each catalog gets a block carrying `mandate`, `primary_authority`, `also_required_by[]`, `publication_type`, `mandate_note`, `source_refs`. `publication_type` wires up the `tree-model.md` §2 classification table, which is curated doctrine currently rendered nowhere — free value at the discovery zoom level.
 
-**Mandate is three-valued, not binary.** A boolean would ship a factual error:
+**Mandate is four-valued, not binary.** A boolean or three-value model would ship factual errors:
 
-- `statutory` — required by law (800-53, 800-53A/B, 800-37, FIPS 199/200 ← FISMA)
-- `contractual` — required by contract flow-down (800-171, 800-172, CMMC ← FAR 52.204-21 / DFARS 252.204-7012 / 32 CFR 170)
-- `issued_without_federal_mandate` — CSF 2.0, ATT&CK, ATT&CK ICS, D3FEND, AI RMF
+- `statutory` — required by law or issued as part of a program directly required by statute (FIPS 199/200 ← FISMA; FedRAMP ← 44 U.S.C. chapter 36)
+- `contractual` — required by contract flow-down (800-171 ← DFARS 252.204-7012; CMMC ← DFARS 252.204-7021 / 32 CFR 170)
+- `federal_policy_or_regulatory_mandate` — required by binding federal regulation or executive/agency policy rather than directly by statute or contract (32 CFR 2002, DoD Zero Trust, DISA STIG/SRG/CCI)
+- `issued_without_federal_mandate` — SSDF under current OMB M-26-05, SP 800-172 Rev. 3 as issued (an agency may make selected requirements binding through a contract or agreement), ATT&CK, ATT&CK ICS, D3FEND, AI RMF, DoD RAI
 
-Three, because: **SSDF is not voluntary** — EO 14028 §4 plus OMB M-22-18 / M-23-16 make attestation mandatory for federal software suppliers, and the registry currently implies otherwise by giving `nist-ssdf` an empty `mandate_basis`. **CSF 2.0 is voluntary but referenced**, so it needs a cited `mandate_note`, not a bare label. And **the contractual bucket is the distinction practitioners actually get wrong** — it is why 800-171 feels like law to a contractor and like nothing to a civilian agency.
+Four, because current official evidence does not fit the original taxonomy. OMB M-26-05 rescinded M-22-18 and M-23-16, so SSDF must be classified from current evidence rather than the superseded attestation rationale. CSF 2.0 is federally policy-mandated for executive agencies and otherwise voluntary; SP 800-172 becomes contractually binding only when selected into a contract or agreement; and the exact FedRAMP Rev. 5 artifact is legacy material inside a statutory program. **Kind and scope are separate axes:** do not add scope enum values. Whenever mandate scope is not universal, `mandate_note` is required, cites the controlling source through `source_refs`, and states the boundary without claiming that the publication applies to the visitor. CSF 2.0, SP 800-172 and FedRAMP Rev. 5 are permanent required-note cases.
 
-Copy discipline: this is a property of the **publication**, never of the reader. *"NIST SP 800-53 is issued under FISMA (44 U.S.C. §3554)."* Never "this applies to you." The third bucket is labelled *"Issued without a federal mandate"* — never "optional," which is a determination.
+Copy discipline: this is a property of the **publication**, never of the reader. *"NIST SP 800-53 is issued under FISMA (44 U.S.C. §3554)."* Never "this applies to you." The fourth bucket is labelled *"Issued without a federal mandate"* — never "optional," which is a determination.
 
 **Curate independently, then reconcile.** `mandate_basis` in `data/source-registry.json` is wrong in at least two places (A7). Do not derive from it; build the spine, add a reconciliation test that surfaces the discrepancies, then correct the registry.
 
@@ -632,11 +633,13 @@ Copy discipline: this is a property of the **publication**, never of the reader.
 
 ### 6.4 Emission
 
-New `applyAuthoritySpine(nodeState, edgeState, registry)` in `scripts/build-framework-data.mjs`, called **before** `applyOrganizingSpine` so the existing residual backfill and connectivity gates still run last and still catch anything it misses. It reuses `pushOrganizingEdge` verbatim and emits:
+New `applyAuthoritySpine(nodeState, edgeState, registry)` in `scripts/build-framework-data.mjs`, called **before** `applyOrganizingSpine` so the existing residual backfill and connectivity gates still run last and still catch anything it misses. It emits:
 
 1. instrument nodes via a `buildAuthorityNode()` modelled on `buildStructureNode` (`:1997`), with no `catalog_id` — the same exemption path trunk and limb already use;
-2. `organizes` edges **trunk → statute** and **statute → regulation/policy**;
-3. **`issued_under` edges catalog → instrument** (upward), one per `primary_authority` plus one per `also_required_by`.
+2. **`issued_under` edges catalog → instrument** (upward), one per `primary_authority` plus one per `also_required_by`;
+3. **`issued_under` edges instrument → instrument** for every explicitly declared `parent`.
+
+Authority instruments emit **no `organizes` edges**. The trunk stays the single canonical root; authority placement above it is a runtime presentation concern.
 
 **The trap, stated explicitly because it fails silently:** do *not* add `issued_under` to `ORGANIZING_RELATIONSHIP_TYPES` in `src/app/structural-hierarchy.mjs`. If you do, `buildAncestorGraph` (`ancestor-path.mjs:19-28`) treats instruments as parent candidates and `canonicalParentWithOrigin` picks one by **lexical sort** (`:115`) — arbitrarily reparenting all 23 catalogs with no error. Add a separate exported `SECONDARY_ORGANIZING_RELATIONSHIP_TYPES = new Set(["issued_under"])`, set `relationship_class: organizing` explicitly on the edge (otherwise `defaultRelationshipClass` classifies the unknown type as `correlation`), and leave `isValidatedStructuralEdge` untouched — it never sees these edges, because they are not `structural`.
 
@@ -646,11 +649,13 @@ New `applyAuthoritySpine(nodeState, edgeState, registry)` in `scripts/build-fram
 
 **6.5a — fix the build gate (A6).** Add `canonicalTrunkReachable(nodes, edges, trunkId)` using `buildAncestorGraph` + `ancestorChain`. **Use it as the step-4 predicate** (`build-framework-data.mjs:2311`) — the 8 `dod-zt:OVERLAY-*` nodes are skipped today *because* the undirected component already contains them, so switching the predicate makes the existing backfill file them under `dod-zt:CATALOG` automatically (+8 edges, nothing else). **Keep both gates at step 5** and report both counts: undirected catches disconnected content, canonical catches breadcrumb dead ends. They are different failures and the console should stop printing only the flattering one.
 
+The three authority instrument node types are exempt from both trunk-reachability denominators and orphan lists because they intentionally sit outside `organizes`. The trunk and existing organizing structure remain gated exactly as before; no other production node is exempt.
+
 ### 6.6 The runtime artifact — and the empty-areas fix
 
 New **`data/generated/atlas-spine.json`**: the full L0–L3 tree (trunk, instruments, catalogs) plus L4 summaries. Per entry: `id`, `node_type`, `label`, `blurb`, `parent_id`, `child_count`, `descendant_record_count`, and for catalogs `mandate`, `primary_authority`, `also_required_by[]`, `publication_type`, `mandate_note`, `area_id`.
 
-Measured size: 44 L0–L3 entries + 614 L4 summaries ≈ **120 KB raw, ~25 KB gzipped**. Register in `RUNTIME_COLLECTIONS` and the manifest's `runtime_artifacts` (`:1900`) so `verify:manifests` and `check:data-size` see it.
+Measured after generation: 51 L0–L3 entries + 642 L4 summaries = **329,528 bytes raw, 23,857 bytes gzipped**. Register in `RUNTIME_COLLECTIONS` and the manifest's `runtime_artifacts` (`:1900`) so `verify:manifests` and `check:data-size` see it.
 
 **Two counts, deliberately distinct** — conflating them is a current source of nonsense. `child_count` (`disa-cci:CATALOG` has 44 children but 5,138 records) decides layout only. `descendant_record_count` (from `catalog-bootstrap.json`'s `leaf_record_count`) is always the number a node *displays*.
 
@@ -664,7 +669,7 @@ Also add `cross_catalog_connected_count` to `catalog-bootstrap.json`. Today's `c
 
 **Decision:** every catalog appears. Voluntary-and-unmapped reads as *explained* ("issued without a federal mandate — no crosswalk published"). Mandated-and-unmapped says so directly ("no published mappings yet"). Consistent with the product's honesty rules, and it keeps the roadmap visible every time the app is opened.
 
-Under the authority spine, `nist-ai-rmf` (0/92), `nist-ssdf` (0/47) and `dod-rai` (0/14) sitting thin becomes an *explanation* rather than a gap. `nist-800-172` (1/133) and `cui-policy` (2/129) are the harder cases — both **are** mandated, so their emptiness is a genuine data gap and the strongest argument for prioritising those crosswalks.
+Under the authority spine, `nist-ai-rmf` (0/92), `nist-ssdf` (0/47) and `dod-rai` (0/14) sitting thin becomes an *explanation* rather than a gap. `nist-800-172` (1/133) is issued without a blanket federal mandate but can become binding when selected into a contract or agreement; `cui-policy` (2/128) is regulatory-policy mandated. Their thinness remains a genuine data gap and the strongest argument for prioritising those crosswalks.
 
 `Connected work surface` is deleted from the codebase. Zero is a fine answer; a placeholder phrase that hides a zero is not.
 
@@ -678,7 +683,7 @@ Under the authority spine, `nist-ai-rmf` (0/92), `nist-ssdf` (0/47) and `dod-rai
 - Zero nodes fail canonical-parent trunk reachability.
 - Reading `atlas-spine.json` yields non-zero publication counts for **Risk** and **Assessment**, and Compliance = 11, Governance = 3, Implementation = 3.
 - Expanding an area on `#/explore` requests **no** `nodes.json` / `edges.json`.
-- A control's `structural_path` includes an authority hop; the record page's rail renders it.
+- The displayed authority rail includes the hop composed from the catalog's curated `primary_authority`; canonical ancestry and canonical ownership do not include authority instruments.
 - `Connected work surface` appears zero times in the codebase.
 
 ---
@@ -841,7 +846,7 @@ One flag, not a blocker: React Flow is imported **statically** by `AtlasUniverse
 | 6 | Zero canonical-parent failures; zero nodes with >1 incoming `organizes` | `tests/framework-data.test.mjs` |
 | 6 | Catalog sets cross-validate both directions; instrument parents resolve; no cycles; every `source_id` exists in the registry; every `issued_under` edge carries `source_refs` | new `tests/authority-spine.test.mjs` |
 | 6 | **Reconciliation:** each catalog's `mandate` is consistent with its source's `mandate_basis` — this is the test that surfaces the AI RMF / SSDF registry errors (A7) instead of letting them ship | `tests/authority-spine.test.mjs` |
-| 6 | A control's `structural_path` includes an authority hop | `tests/atlas-neighborhood.test.mjs` |
+| 6 | The displayed authority rail composes a hop from `primary_authority`; canonical ancestry remains unchanged | `tests/atlas-neighborhood.test.mjs` + `tests/e2e/accessibility.spec.mjs` |
 | 6 | Reading `atlas-spine.json` yields non-zero counts for **Risk** and **Assessment** specifically, and Compliance = 11, Governance = 3, Implementation = 3 | `tests/graph/atlasDrilldown.test.ts` |
 | 6 | Expanding an area requests no `nodes.json` / `edges.json` — the `graphArtifactUrls` helper already does this check for other routes | `tests/e2e/bootstrap-payload.spec.mjs` |
 | 7 | Collisions empty at every level; same input laid out twice is byte-identical; **position snapshot for L0–L2** that fails if a node moves without its parent set changing — this is what protects spatial memory | new `tests/graph/atlasTreeLayout.test.ts`, modelled on `atlasUniverse.test.ts` |
@@ -877,7 +882,7 @@ New features, new sources, new record types, template/document generation change
 
 **2026-08-08 — show all branches, state the gap plainly.** Voluntary-and-unmapped reads as explained; mandated-and-unmapped says "no published mappings yet." §6.7.
 
-**2026-08-08 — mandate is three-valued**, not binary: `statutory` / `contractual` / `issued_without_federal_mandate`. A boolean would ship a factual error about SSDF. §6.3.
+**2026-08-09 — mandate is four-valued**, not binary: `statutory` / `contractual` / `federal_policy_or_regulatory_mandate` / `issued_without_federal_mandate`. Kind and scope remain separate; non-universal scope requires a cited `mandate_note`. Current OMB M-26-05 evidence places SSDF in the issued-without-federal-mandate bucket. §6.3.
 
 **2026-08-08 — STIGs get a technology gate**, generalised to any node over the threshold rather than special-cased. §7.6.
 
@@ -886,7 +891,7 @@ New features, new sources, new record types, template/document generation change
 - **Every legal citation in Phase 6 is unverified.** Instrument IDs, citations and mandate classifications must be source-checked before ship, each with a `data/source-registry.json` entry. That is real prerequisite work inside Phase 6, not incidental.
 - **Phase 6 rewrites `ancestor_path` for all 29,350 nodes** and rebuilds every neighborhood shard (243 MB across 128). Expect `graph-diff-summary` and `check:data-size` to be loud; measure before merging. Do 6.5b before 6.5a or two rebuilds fight over the same diff.
 - **The `issued_under` trap fails silently.** Adding it to `ORGANIZING_RELATIONSHIP_TYPES` reparents all 23 catalogs by lexical sort with no error. §6.4 states the correct approach; do not shortcut it.
-- **`nist-800-172` (1/133) and `cui-policy` (2/129) are mandated but unmapped** — genuine data gaps, not explained ones. They ship with "no published mappings yet" per §6.7, but they are the strongest argument for prioritising those crosswalks next.
+- **`nist-800-172` (1/133) is conditionally contractual and `cui-policy` (2/128) is regulatory-policy mandated, but both are effectively unmapped** — genuine data gaps. They ship with "no published mappings yet" per §6.7 and are the strongest argument for prioritising those crosswalks next.
 - **Determinism holds only within a build.** A STIG refresh that adds a benchmark shifts positions. Derive from a stable sort key, never array index; the §7.5 snapshot test turns a shift into a visible diff rather than a silent regression against spatial memory.
 - **Phase 2 depends on official text being available to the search index.** If it isn't, that is a data-layer task to scope before Phase 2 starts — the difference between a day and a week. The connection-count half of that dependency is now answered: it is a two-field transport fix in Phase 0.
 - **Phase 3's unification is lower-risk than it looks**, because the index is already unified. The work is browse UI, facets and redirects, not a data migration. Do not let it get re-scoped into one.

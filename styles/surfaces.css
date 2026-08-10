@@ -2237,9 +2237,20 @@ button.atlas-path-crumb-organizing:focus-visible {
   color: var(--ca-editorial-text);
 }
 
-/* Two rails, not one mixed breadcrumb: consecutive same-origin hops group
-   under their own label instead of one heading claiming the whole chain is
-   publisher-declared. */
+.atlas-path-crumb-authority {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-1);
+  color: var(--ca-prov-official-text);
+}
+
+button.atlas-path-crumb-authority:hover,
+button.atlas-path-crumb-authority:focus-visible {
+  color: var(--ca-prov-official-text);
+}
+
+/* Separate authority, Control Atlas, and publisher rails keep each hop under
+   its actual owner instead of turning the display path into one mixed claim. */
 .tree-path-rail {
   display: flex;
   flex-direction: column;
@@ -2269,6 +2280,10 @@ button.atlas-path-crumb-organizing:focus-visible {
 
 .tree-path-rail-row-organizing .tree-path-rail-label {
   color: var(--ca-editorial-text);
+}
+
+.tree-path-rail-row-authority .tree-path-rail-label {
+  color: var(--ca-prov-official-text);
 }
 
 .atlas-path-prompt {

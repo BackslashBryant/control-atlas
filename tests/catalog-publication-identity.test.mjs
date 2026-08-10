@@ -59,3 +59,21 @@ test("missing or mismatched publication identity fails closed", () => {
   assert.ok(errors.some((error) => error.includes("ingestion provenance")));
   assert.ok(errors.some((error) => error.includes("ingestion source")));
 });
+
+test("official authority nodes are catalog-exempt but still require valid provenance", () => {
+  const source = sources[0];
+  const valid = {
+    id: "authority:USC-44-3554",
+    node_type: "statute",
+    source_id: source.id,
+    metadata: { ingestion_source_id: source.id },
+  };
+  assert.deepEqual(validateCatalogPublicationIdentity([valid], sources), []);
+
+  const invalid = structuredClone(valid);
+  invalid.source_id = "missing-source";
+  invalid.metadata.ingestion_source_id = "missing-source";
+  const errors = validateCatalogPublicationIdentity([invalid], sources);
+  assert.ok(errors.some((error) => error.includes("ingestion provenance")));
+  assert.ok(errors.some((error) => error.includes("publication identity")));
+});

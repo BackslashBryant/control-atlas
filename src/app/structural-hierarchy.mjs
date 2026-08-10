@@ -16,6 +16,9 @@ export const STRUCTURAL_RELATIONSHIP_TYPES = new Set([
 ]);
 
 export const ORGANIZING_RELATIONSHIP_TYPES = new Set(["organizes"]);
+export const SECONDARY_ORGANIZING_RELATIONSHIP_TYPES = new Set([
+  "issued_under",
+]);
 
 // These node kinds may be connected to native records, but they are lenses,
 // selections, aids, or process context. They can never own structural

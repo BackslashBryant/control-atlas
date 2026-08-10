@@ -33,12 +33,15 @@ import {
   buildAncestorGraph,
 } from "../src/app/ancestor-path.mjs";
 import {
+  assertTrunkReachability,
+  canonicalTrunkReachable,
   deriveAssessmentProcedureParents,
   deriveCciHierarchyParents,
   deriveEditorialSpine,
   deriveSyntheticCatalogs,
 } from "./hierarchy-derivation.mjs";
 import { createFederalGraphRuntime } from "../src/app/runtime.mjs";
+import { validateAuthoritySpine } from "../src/app/authority-spine.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED = join(ROOT, "data", "generated");
@@ -48,6 +51,7 @@ const RUNTIME_COLLECTIONS = [
   "edges",
   "evidence",
   "graph-health",
+  "atlas-spine",
 ];
 const SHARDED_RUNTIME_COLLECTIONS = new Set(["nodes", "edges", "evidence"]);
 const RUNTIME_COLLECTION_SHARD_COUNT = 64;
@@ -1812,7 +1816,7 @@ function existingGeneratedAt(collections) {
     const path = join(GENERATED, `${name}.json`);
     if (!existsSync(path)) return null;
     const existing = readJson(path);
-    const collection = name === "graph-health" ? "findings" : name;
+    const collection = runtimeCollectionKey(name);
     if (!existing.generated_at || existing.schema_version !== "1.0")
       return null;
     if (generatedAt && existing.generated_at !== generatedAt) return null;
@@ -1994,7 +1998,7 @@ function buildDiffSummary(previous, collections, generatedAt) {
     const currentCollection = collections[name];
     if (!previousCollection) return true;
     const previousPayload = JSON.stringify(
-      previousCollection[name === "graph-health" ? "findings" : name],
+      previousCollection[runtimeCollectionKey(name)],
     );
     return previousPayload !== JSON.stringify(currentCollection);
   });
@@ -2008,6 +2012,372 @@ function buildDiffSummary(previous, collections, generatedAt) {
       (name) => !changedRuntimeArtifacts.includes(name),
     ),
   };
+}
+
+function runtimeCollectionKey(name) {
+  if (name === "graph-health") return "findings";
+  if (name === "atlas-spine") return "atlas_spine";
+  return name;
+}
+
+function authorityCatalogIds(treeSpine) {
+  return new Set([
+    ...Object.keys(treeSpine.catalogLimbs || {}),
+    ...(treeSpine.syntheticCatalogs || []).map((entry) => entry.catalog_id),
+  ]);
+}
+
+function buildAuthorityNode(instrument) {
+  return {
+    id: instrument.id,
+    node_type: instrument.node_type,
+    label: instrument.label,
+    source_id: instrument.source_id,
+    lifecycle_status: "active",
+    // These entries were verified by manual review against official primary
+    // sources. No downloaded artifact bytes exist, so an empty artifact list
+    // is more honest than inventing a checksum-backed artifact record.
+    artifact_ids: [],
+    metadata: {
+      ingestion_source_id: instrument.source_id,
+      item_id: instrument.id.slice("authority:".length),
+      title: instrument.label,
+      description: instrument.blurb,
+      type: instrument.node_type,
+      source_refs: instrument.source_refs,
+      source_locator: instrument.source_refs[0]?.locator || "",
+    },
+  };
+}
+
+function pushAuthorityEdge(
+  edgeState,
+  registry,
+  { subjectId, sourceNodeId, targetNodeId, sourceRefs, rationale },
+) {
+  const primaryReference = sourceRefs[0];
+  const source = registry.byId.get(primaryReference.source_id);
+  const evidenceId = `evidence:${subjectId}`;
+  edgeState.evidence.push({
+    id: evidenceId,
+    source_id: primaryReference.source_id,
+    source_version: source?.version || "",
+    locator: primaryReference.locator,
+    retrieved_at: source?.retrieved_at || null,
+    checksum: source?.checksum || null,
+    evidence_quality: "primary",
+    ingestion_source_id: primaryReference.source_id,
+  });
+  edgeState.edges.push({
+    id: `edge:${subjectId}`,
+    source_node_id: sourceNodeId,
+    target_node_id: targetNodeId,
+    relationship_type: "issued_under",
+    relationship_class: RELATIONSHIP_CLASSES.organizing,
+    provenance_class: source?.provenance_class || "federal_published",
+    confidence: "direct",
+    publication_status: "published",
+    evidence_ids: [evidenceId],
+    display_label: `${sourceNodeId} is issued under ${targetNodeId}`,
+    warning: null,
+    inference_rule_id: null,
+    rationale,
+    source_refs: sourceRefs,
+  });
+}
+
+export function applyAuthoritySpine(nodeState, edgeState, registry) {
+  const authoritySpine = readJson(
+    join(ROOT, "data", "curated", "authority-spine.json"),
+  );
+  const treeSpine = readJson(join(ROOT, "data", "curated", "tree-spine.json"));
+  const errors = validateAuthoritySpine(authoritySpine, {
+    catalogIds: authorityCatalogIds(treeSpine),
+    sourceIds: new Set(registry.sources.map((source) => source.id)),
+  });
+  if (errors.length) {
+    throw new Error(`Invalid authority spine:\n- ${errors.join("\n- ")}`);
+  }
+
+  for (const instrument of authoritySpine.instruments) {
+    nodeState.nodes.push(
+      attachNodeProvenance(
+        buildAuthorityNode(instrument),
+        instrument.source_id,
+        registry,
+      ),
+    );
+    if (instrument.parent) {
+      pushAuthorityEdge(edgeState, registry, {
+        subjectId: `authority:instrument:${instrument.id}->${instrument.parent}`,
+        sourceNodeId: instrument.id,
+        targetNodeId: instrument.parent,
+        sourceRefs: instrument.source_refs,
+        rationale: `${instrument.label} declares ${instrument.parent} as its verified authority parent.`,
+      });
+    }
+  }
+
+  for (const publication of authoritySpine.publications) {
+    const authorityIds = [
+      ...(publication.primary_authority
+        ? [publication.primary_authority]
+        : []),
+      ...publication.also_required_by,
+    ];
+    for (const authorityId of authorityIds) {
+      pushAuthorityEdge(edgeState, registry, {
+        subjectId: `authority:publication:${publication.catalog_id}->${authorityId}`,
+        sourceNodeId: `${publication.catalog_id}:CATALOG`,
+        targetNodeId: authorityId,
+        sourceRefs: publication.source_refs,
+        rationale: `${publication.catalog_id} is issued under ${authorityId}; this secondary relationship does not change canonical ownership.`,
+      });
+    }
+  }
+
+  return authoritySpine;
+}
+
+function attachAuthorityPublicationMetadata(nodes, authoritySpine) {
+  const rootByCatalogId = new Map(
+    nodes
+      .filter((node) => node.node_type === "catalog")
+      .map((node) => [catalogIdOf(node), node]),
+  );
+  for (const publication of authoritySpine.publications) {
+    const root = rootByCatalogId.get(publication.catalog_id);
+    if (!root) {
+      throw new Error(
+        `Authority publication ${publication.catalog_id} has no emitted catalog root`,
+      );
+    }
+    Object.assign(root.metadata, {
+      mandate: publication.mandate,
+      primary_authority: publication.primary_authority,
+      also_required_by: publication.also_required_by,
+      publication_type: publication.publication_type,
+      mandate_note: publication.mandate_note,
+      authority_source_refs: publication.source_refs,
+    });
+  }
+}
+
+const ATLAS_SUMMARY_NODE_TYPES = new Set([
+  "family",
+  "benchmark",
+  "category",
+  "tactic",
+  "group",
+  "function",
+]);
+
+export function buildAtlasSpine(graph, authoritySpine, treeSpine) {
+  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+  const ancestorGraph = buildAncestorGraph(graph.nodes, graph.edges);
+  const canonicalChildrenByParent = new Map();
+  for (const node of graph.nodes) {
+    const chain = ancestorChain(node.id, ancestorGraph);
+    if (chain.length < 2) continue;
+    const parentId = chain.at(-2).id;
+    const children = canonicalChildrenByParent.get(parentId) || [];
+    children.push(node.id);
+    canonicalChildrenByParent.set(parentId, children);
+  }
+  for (const children of canonicalChildrenByParent.values()) {
+    children.sort((leftId, rightId) => {
+      const left = nodeById.get(leftId);
+      const right = nodeById.get(rightId);
+      const leftKey = left?.metadata?.item_id || left?.label || leftId;
+      const rightKey = right?.metadata?.item_id || right?.label || rightId;
+      return leftKey.localeCompare(rightKey, undefined, {
+        numeric: true,
+        sensitivity: "base",
+      });
+    });
+  }
+
+  const isLeafRecord = (node) =>
+    node &&
+    node.node_type !== "catalog" &&
+    node.node_type !== "trunk" &&
+    node.node_type !== "limb" &&
+    !ATLAS_SUMMARY_NODE_TYPES.has(node.node_type) &&
+    !node.id.startsWith("authority:");
+  const descendantRecordCount = (rootId) => {
+    let count = 0;
+    const stack = [...(canonicalChildrenByParent.get(rootId) || [])];
+    const seen = new Set();
+    while (stack.length) {
+      const nodeId = stack.pop();
+      if (seen.has(nodeId)) continue;
+      seen.add(nodeId);
+      const node = nodeById.get(nodeId);
+      if (isLeafRecord(node)) count += 1;
+      stack.push(...(canonicalChildrenByParent.get(nodeId) || []));
+    }
+    return count;
+  };
+  const catalogLeafCount = (catalogId) =>
+    graph.nodes.filter(
+      (node) => node.metadata?.catalog_id === catalogId && isLeafRecord(node),
+    ).length;
+  const publicationByCatalogId = new Map(
+    authoritySpine.publications.map((publication) => [
+      publication.catalog_id,
+      publication,
+    ]),
+  );
+  const rootByCatalogId = new Map(
+    graph.nodes
+      .filter((node) => node.node_type === "catalog")
+      .map((node) => [catalogIdOf(node), node]),
+  );
+  const catalogCounts = new Map(
+    [...rootByCatalogId.keys()].map((catalogId) => [
+      catalogId,
+      catalogLeafCount(catalogId),
+    ]),
+  );
+
+  const entries = [];
+  const instrumentChildren = new Map(
+    authoritySpine.instruments.map((instrument) => [instrument.id, []]),
+  );
+  for (const instrument of authoritySpine.instruments) {
+    if (instrument.parent) {
+      instrumentChildren.get(instrument.parent)?.push(instrument.id);
+    }
+  }
+  for (const instrument of authoritySpine.instruments) {
+    const issuedCatalogs = authoritySpine.publications.filter(
+      (publication) =>
+        publication.primary_authority === instrument.id ||
+        publication.also_required_by.includes(instrument.id),
+    );
+    entries.push({
+      id: instrument.id,
+      node_type: instrument.node_type,
+      label: instrument.label,
+      blurb: instrument.blurb,
+      parent_id: instrument.parent,
+      child_count:
+        (instrumentChildren.get(instrument.id)?.length || 0) +
+        issuedCatalogs.length,
+      descendant_record_count: issuedCatalogs.reduce(
+        (total, publication) =>
+          total + (catalogCounts.get(publication.catalog_id) || 0),
+        0,
+      ),
+    });
+  }
+
+  const trunk = graph.nodes.find((node) => node.node_type === "trunk");
+  if (!trunk) throw new Error("Atlas spine cannot find the canonical trunk");
+  const totalCatalogRecords = [...catalogCounts.values()].reduce(
+    (total, count) => total + count,
+    0,
+  );
+  entries.push({
+    id: trunk.id,
+    node_type: trunk.node_type,
+    label: trunk.metadata?.title || trunk.label,
+    blurb: trunk.metadata?.description || "",
+    parent_id: null,
+    child_count: treeSpine.limbs.length,
+    descendant_record_count: totalCatalogRecords,
+  });
+
+  for (const limb of treeSpine.limbs) {
+    const catalogIds = [
+      ...Object.entries(treeSpine.catalogLimbs),
+      ...(treeSpine.syntheticCatalogs || []).map((entry) => [
+        entry.catalog_id,
+        entry.limb,
+      ]),
+    ]
+      .filter(([, limbId]) => limbId === limb.id)
+      .map(([catalogId]) => catalogId);
+    entries.push({
+      id: limb.id,
+      node_type: "limb",
+      label: limb.label,
+      blurb: limb.blurb,
+      parent_id: trunk.id,
+      child_count: catalogIds.length,
+      descendant_record_count: catalogIds.reduce(
+        (total, catalogId) => total + (catalogCounts.get(catalogId) || 0),
+        0,
+      ),
+    });
+    for (const catalogId of catalogIds) {
+      const root = rootByCatalogId.get(catalogId);
+      const publication = publicationByCatalogId.get(catalogId);
+      if (!root || !publication) {
+        throw new Error(`Atlas spine cannot resolve catalog ${catalogId}`);
+      }
+      const summaryIds = canonicalChildrenByParent.get(root.id) || [];
+      const membershipGroups = new Map();
+      if (summaryIds.length === 0) {
+        for (const node of graph.nodes.filter(
+          (entry) =>
+            entry.node_type !== "catalog" &&
+            entry.metadata?.catalog_id === catalogId,
+        )) {
+          const family = node.metadata?.family || "All records";
+          const members = membershipGroups.get(family) || [];
+          members.push(node);
+          membershipGroups.set(family, members);
+        }
+      }
+      entries.push({
+        id: root.id,
+        node_type: "catalog",
+        label: root.metadata?.title || root.label,
+        blurb: root.metadata?.description || publication.mandate_note,
+        parent_id: limb.id,
+        child_count: summaryIds.length || membershipGroups.size,
+        descendant_record_count: catalogCounts.get(catalogId) || 0,
+        mandate: publication.mandate,
+        primary_authority: publication.primary_authority,
+        also_required_by: publication.also_required_by,
+        publication_type: publication.publication_type,
+        mandate_note: publication.mandate_note,
+        area_id: limb.id,
+      });
+      for (const summaryId of summaryIds) {
+        const summary = nodeById.get(summaryId);
+        if (!summary) continue;
+        const childIds = canonicalChildrenByParent.get(summaryId) || [];
+        entries.push({
+          id: summary.id,
+          node_type: summary.node_type,
+          label: summary.metadata?.title || summary.label || summary.id,
+          blurb: summary.metadata?.description || "",
+          parent_id: root.id,
+          child_count: childIds.length,
+          descendant_record_count: isLeafRecord(summary)
+            ? 1 + descendantRecordCount(summaryId)
+            : descendantRecordCount(summaryId),
+        });
+      }
+      for (const [family, members] of [...membershipGroups.entries()].sort(
+        ([left], [right]) => left.localeCompare(right),
+      )) {
+        entries.push({
+          id: `membership:${catalogId}:${slugKey(family)}`,
+          node_type: "family",
+          label: family,
+          blurb: `${members.length.toLocaleString()} records`,
+          parent_id: root.id,
+          child_count: members.length,
+          descendant_record_count: members.length,
+        });
+      }
+    }
+  }
+
+  return { entries };
 }
 
 // --- Class-4 organizing spine (Cybersecurity trunk + limbs) ---------------
@@ -2132,29 +2502,6 @@ function pushStructuralBackfillEdge(edgeState, sourceById, { subjectId, parentNo
       },
     ],
   });
-}
-
-function trunkConnectedComponent(rootId, edges, nodeIds) {
-  const adjacency = new Map();
-  for (const id of nodeIds) adjacency.set(id, []);
-  for (const edge of edges) {
-    const source = edge.source_node_id;
-    const target = edge.target_node_id;
-    if (adjacency.has(source)) adjacency.get(source).push(target);
-    if (adjacency.has(target)) adjacency.get(target).push(source);
-  }
-  const seen = new Set([rootId]);
-  const stack = [rootId];
-  while (stack.length) {
-    const current = stack.pop();
-    for (const neighbor of adjacency.get(current) || []) {
-      if (!seen.has(neighbor)) {
-        seen.add(neighbor);
-        stack.push(neighbor);
-      }
-    }
-  }
-  return seen;
 }
 
 /**
@@ -2333,11 +2680,13 @@ function applyOrganizingSpine(nodeState, edgeState, registry) {
   for (const node of nodes) {
     if (node.node_type === "catalog") catalogRootByCatalogId.set(catalogIdOf(node), node);
   }
-  const nodeIds = new Set(nodes.map((node) => node.id));
-  let component = trunkConnectedComponent(spine.trunk.id, edgeState.edges, nodeIds);
-  const hardFail = [];
+  const canonicalBeforeBackfill = canonicalTrunkReachable(
+    nodes,
+    edgeState.edges,
+    spine.trunk.id,
+  );
   for (const node of nodes) {
-    if (component.has(node.id)) continue;
+    if (canonicalBeforeBackfill.has(node.id)) continue;
     const cid = catalogIdOf(node);
     const root = catalogRootByCatalogId.get(cid);
     // A catalog whose records are parented elsewhere (CCIs under the control
@@ -2367,27 +2716,24 @@ function applyOrganizingSpine(nodeState, edgeState, registry) {
         targetNodeId: node.id,
         rationale: `${node.id} (${cid}) filed under ${spine.residualLimbs[cid]} for reachability (editorial, non-structural).`,
       });
-    } else {
-      hardFail.push(node.id);
     }
   }
 
   // 5. Hard connectivity gate — every node must reach the trunk.
-  component = trunkConnectedComponent(spine.trunk.id, edgeState.edges, nodeIds);
-  const stillOrphan = nodes.filter((node) => !component.has(node.id)).map((node) => node.id);
-  if (stillOrphan.length) {
-    throw new Error(
-      `Trunk connectivity gate FAILED: ${stillOrphan.length} node(s) cannot reach ${spine.trunk.id}` +
-        (hardFail.length ? ` (${hardFail.length} had no catalog root or residual limb)` : "") +
-        `. First 25: ${stillOrphan.slice(0, 25).join(", ")}`,
-    );
-  }
+  const reachability = assertTrunkReachability(
+    nodes,
+    edgeState.edges,
+    spine.trunk.id,
+  );
   const organizingCount = edgeState.edges.filter(
     (edge) => edge.relationship_type === "organizes",
   ).length;
   console.log(
     `[organizing-spine] trunk+${spine.limbs.length} limbs, ${synthetic.wrappers.length} synthetic catalogs, ` +
-      `${organizingCount} organizing edges; 100% of ${nodes.length} nodes reach ${spine.trunk.id}.`,
+      `${organizingCount} organizing edges; eligible ${reachability.eligibleNodeCount}/${reachability.totalNodeCount} ` +
+      `(${reachability.exemptAuthorityNodeCount} authority exempt); ` +
+      `undirected ${reachability.undirected.size}/${reachability.eligibleNodeCount}, ` +
+      `canonical ${reachability.canonical.size}/${reachability.eligibleNodeCount} reach ${spine.trunk.id}.`,
   );
 }
 
@@ -2397,7 +2743,9 @@ export function buildFrameworkData() {
   );
   const nodeState = buildNodes(registry);
   const edgeState = buildEdges(registry, nodeState.nodes);
+  const authoritySpine = applyAuthoritySpine(nodeState, edgeState, registry);
   applyOrganizingSpine(nodeState, edgeState, registry);
+  attachAuthorityPublicationMetadata(nodeState.nodes, authoritySpine);
   attachAncestorPaths(nodeState.nodes, edgeState.edges);
   const findings = [...nodeState.findings, ...edgeState.findings];
   const graph = {
@@ -2471,12 +2819,15 @@ export function buildFrameworkData() {
         : { evidence_ids }),
     }),
   );
+  const treeSpine = readJson(join(ROOT, "data", "curated", "tree-spine.json"));
+  const atlasSpine = buildAtlasSpine(graph, authoritySpine, treeSpine);
   const collections = {
     sources: graph.sources,
     nodes: emittedNodes,
     edges: emittedEdges,
     evidence: graph.evidence,
     "graph-health": graph.findings,
+    "atlas-spine": atlasSpine,
   };
   const previousCollections = loadExistingCollections();
   const generatedAt =
@@ -2589,7 +2940,7 @@ const catalogRecords = new Map();
     }
   }
   for (const [name, values] of Object.entries(collections)) {
-    const collection = name === "graph-health" ? "findings" : name;
+    const collection = runtimeCollectionKey(name);
     if (SHARDED_RUNTIME_COLLECTIONS.has(name)) {
       const shardDir = join(GENERATED, "graph-data", name);
       mkdirSync(shardDir, { recursive: true });

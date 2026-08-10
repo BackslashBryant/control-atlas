@@ -70,7 +70,7 @@ test("protected Ctrl+Alt slogan rotates and native Home history remains coherent
     })
     .not.toBe(firstWord);
 
-  await page.getByRole("button", { name: /^Browse official publications$/ }).click();
+  await page.getByRole("link", { name: /^Browse official publications$/ }).click();
   await waitForAppReady(page);
   await expect(page).toHaveURL(/#\/catalog/);
 

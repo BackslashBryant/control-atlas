@@ -1,4 +1,105 @@
 #!/usr/bin/env node
+import {
+  ancestorChain,
+  buildAncestorGraph,
+} from "../src/app/ancestor-path.mjs";
+
+export const TRUNK_REACHABILITY_EXEMPT_NODE_TYPES = new Set([
+  "statute",
+  "regulation",
+  "policy_directive",
+]);
+
+export function isTrunkReachabilityEligible(node) {
+  return !TRUNK_REACHABILITY_EXEMPT_NODE_TYPES.has(node?.node_type);
+}
+
+export function canonicalTrunkReachable(nodes, edges, trunkId) {
+  const graph = buildAncestorGraph(nodes, edges);
+  // Authority instruments are intentionally outside the trunk-reachability
+  // gate. Include them in this predicate result so step-4 residual backfill
+  // does not fabricate catalog/root attachments for isolated authority nodes.
+  const reachable = new Set(
+    nodes
+      .filter((node) => !isTrunkReachabilityEligible(node))
+      .map((node) => node.id),
+  );
+  for (const node of nodes) {
+    if (!isTrunkReachabilityEligible(node)) continue;
+    if (ancestorChain(node.id, graph).some((link) => link.id === trunkId)) {
+      reachable.add(node.id);
+    }
+  }
+  return reachable;
+}
+
+export function undirectedTrunkReachable(nodes, edges, trunkId) {
+  const adjacency = new Map(nodes.map((node) => [node.id, []]));
+  for (const edge of edges) {
+    const source = edge.source_node_id;
+    const target = edge.target_node_id;
+    if (adjacency.has(source)) adjacency.get(source).push(target);
+    if (adjacency.has(target)) adjacency.get(target).push(source);
+  }
+  const reachable = new Set([trunkId]);
+  const stack = [trunkId];
+  while (stack.length) {
+    const current = stack.pop();
+    for (const neighbor of adjacency.get(current) || []) {
+      if (reachable.has(neighbor)) continue;
+      reachable.add(neighbor);
+      stack.push(neighbor);
+    }
+  }
+  // Match the canonical predicate contract: exempt authority nodes are gate-
+  // satisfied even when they are deliberately isolated from the trunk.
+  for (const node of nodes) {
+    if (!isTrunkReachabilityEligible(node)) reachable.add(node.id);
+  }
+  return reachable;
+}
+
+export function evaluateTrunkReachability(nodes, edges, trunkId) {
+  const eligibleNodes = nodes.filter(isTrunkReachabilityEligible);
+  const eligibleNodeIds = new Set(eligibleNodes.map((node) => node.id));
+  const allUndirected = undirectedTrunkReachable(nodes, edges, trunkId);
+  const allCanonical = canonicalTrunkReachable(nodes, edges, trunkId);
+  const undirected = new Set(
+    [...allUndirected].filter((nodeId) => eligibleNodeIds.has(nodeId)),
+  );
+  const canonical = new Set(
+    [...allCanonical].filter((nodeId) => eligibleNodeIds.has(nodeId)),
+  );
+  return {
+    undirected,
+    canonical,
+    totalNodeCount: nodes.length,
+    eligibleNodeCount: eligibleNodes.length,
+    exemptAuthorityNodeCount: nodes.length - eligibleNodes.length,
+    undirectedOrphans: eligibleNodes
+      .filter((node) => !undirected.has(node.id))
+      .map((node) => node.id),
+    canonicalOrphans: eligibleNodes
+      .filter((node) => !canonical.has(node.id))
+      .map((node) => node.id),
+  };
+}
+
+export function assertTrunkReachability(nodes, edges, trunkId) {
+  const result = evaluateTrunkReachability(nodes, edges, trunkId);
+  if (result.undirectedOrphans.length || result.canonicalOrphans.length) {
+    throw new Error(
+      `Trunk reachability gate FAILED: eligible ${result.eligibleNodeCount}/${result.totalNodeCount} ` +
+        `(${result.exemptAuthorityNodeCount} authority exempt); ` +
+        `undirected ${result.undirected.size}/${result.eligibleNodeCount}; ` +
+        `canonical ${result.canonical.size}/${result.eligibleNodeCount}. ` +
+        `Undirected first 25: ${result.undirectedOrphans.slice(0, 25).join(", ") || "none"}. ` +
+        `Canonical first 25: ${result.canonicalOrphans.slice(0, 25).join(", ") || "none"}.`,
+    );
+  }
+  return result;
+}
+
 /**
  * W1.3b — promotes an already-published CCI<->800-53 correlation into a
  * compact structural parent (`parent_id` + `parent_derivation` on the CCI

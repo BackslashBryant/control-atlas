@@ -55,8 +55,24 @@ export function WhereThisSitsRail(props: {
         },
       ]
     : null;
+  const displayedChain: AncestorLink[] | null = selectedNode?.display_path
+    ?.length
+    ? [
+        ...(selectedNode.display_path as AncestorLink[]),
+        {
+          id: selectedNode.id,
+          label:
+            selectedNode.metadata?.title ||
+            selectedNode.label ||
+            selectedNode.id,
+          node_type: selectedNode.node_type || "",
+          origin: "structural" as const,
+        },
+      ]
+    : null;
   const chain =
     links ||
+    displayedChain ||
     (attachedChain && attachedChain.length > derivedChain.length
       ? attachedChain
       : derivedChain);
@@ -78,16 +94,14 @@ export function WhereThisSitsRail(props: {
 
   if (chain.length === 0) return null;
 
-  const organizingLabel = "Control Atlas structure, not publisher-declared";
+  const organizingLabel = "Control Atlas structure";
+  const authorityLabel = "Official authority";
   const lastId = chain[chain.length - 1].id;
 
-  // Two rails, not one mixed breadcrumb: consecutive hops of the same origin
-  // group under one label ("Control Atlas structure" or "Publisher
-  // hierarchy") instead of one heading claiming the whole chain is
-  // publisher-declared when some hops are Control Atlas's own spine. Most
-  // chains produce exactly two groups (organizing spine, then the publisher's
-  // native tree); a record whose own parent is itself organizing-derived
-  // (e.g. a CCI) can produce more, and each still renders under its true rail.
+  // Separate rails preserve three different claims: a source-verified
+  // authority hop composed for display, Control Atlas's curated organizing
+  // spine, and the publisher's native hierarchy. None is allowed to borrow
+  // the attribution of another.
   const segments: { origin: AncestorLink["origin"]; links: AncestorLink[] }[] = [];
   for (const link of chain) {
     const current = segments[segments.length - 1];
@@ -102,17 +116,25 @@ export function WhereThisSitsRail(props: {
     <nav aria-label="Where this sits" className="tree-path-rail">
       {segments.map((segment, segmentIndex) => {
         const isOrganizing = segment.origin === "organizing";
+        const isAuthority = segment.origin === "authority";
+        const segmentLabel = isAuthority
+          ? "Authority"
+          : isOrganizing
+            ? "Control Atlas structure"
+            : "Publisher hierarchy";
         return (
           <Fragment key={segmentIndex}>
             <div
               className={
-                isOrganizing
+                isAuthority
+                  ? "tree-path-rail-row tree-path-rail-row-authority"
+                  : isOrganizing
                   ? "tree-path-rail-row tree-path-rail-row-organizing"
                   : "tree-path-rail-row tree-path-rail-row-structural"
               }
             >
               <span className="tree-path-rail-label">
-                {isOrganizing ? "Control Atlas structure" : "Publisher hierarchy"}
+                {segmentLabel}
               </span>
               <div className="atlas-path-breadcrumb">
                 {segment.links.map((link, index) => {
@@ -123,7 +145,9 @@ export function WhereThisSitsRail(props: {
                       {isSubject ? (
                         <span
                           className={
-                            isOrganizing
+                            isAuthority
+                              ? "atlas-path-crumb-subject atlas-path-crumb-authority"
+                              : isOrganizing
                               ? "atlas-path-crumb-subject atlas-path-crumb-organizing"
                               : "atlas-path-crumb-subject"
                           }
@@ -133,14 +157,28 @@ export function WhereThisSitsRail(props: {
                       ) : (
                         <RecordLink
                           className={
-                            isOrganizing
+                            isAuthority
+                              ? "atlas-path-crumb-link atlas-path-crumb-authority"
+                              : isOrganizing
                               ? "atlas-path-crumb-link atlas-path-crumb-organizing"
                               : "atlas-path-crumb-link"
                           }
                           nodeId={link.id}
                           onOpenNode={onOpenNode}
-                          aria-label={isOrganizing ? `${link.label} — ${organizingLabel}` : undefined}
-                          title={isOrganizing ? organizingLabel : undefined}
+                          aria-label={
+                            isAuthority
+                              ? `${link.label} — ${authorityLabel}`
+                              : isOrganizing
+                                ? `${link.label} — ${organizingLabel}`
+                                : undefined
+                          }
+                          title={
+                            isAuthority
+                              ? authorityLabel
+                              : isOrganizing
+                                ? organizingLabel
+                                : undefined
+                          }
                         >
                           {link.label}
                         </RecordLink>

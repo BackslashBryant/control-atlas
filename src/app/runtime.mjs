@@ -1,3 +1,8 @@
+import {
+  defaultRelationshipClass,
+  RELATIONSHIP_CLASSES,
+} from "./structural-hierarchy.mjs";
+
 function normalize(value) {
   return String(value || "")
     .trim()
@@ -306,12 +311,27 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
   // Nodes that participate in at least one published edge — used to report
   // honest per-catalog connectivity instead of implying full coverage.
   const connectedNodeIds = new Set();
+  const crossCatalogConnectedNodeIds = new Set();
   for (const edge of dataset.edges) {
     if (edge.publication_status && edge.publication_status !== "published") {
       continue;
     }
     connectedNodeIds.add(edge.source_node_id);
     connectedNodeIds.add(edge.target_node_id);
+    const sourceCatalog = nodeById.get(edge.source_node_id)?.metadata?.catalog_id;
+    const targetCatalog = nodeById.get(edge.target_node_id)?.metadata?.catalog_id;
+    if (
+      edge.publication_status === "published" &&
+      edge.relationship_type !== "issued_under" &&
+      sourceCatalog &&
+      targetCatalog &&
+      sourceCatalog !== targetCatalog &&
+      (edge.relationship_class || defaultRelationshipClass(edge.relationship_type)) ===
+        RELATIONSHIP_CLASSES.correlation
+    ) {
+      crossCatalogConnectedNodeIds.add(edge.source_node_id);
+      crossCatalogConnectedNodeIds.add(edge.target_node_id);
+    }
   }
   const derivedCatalogs = [
     ...new Set(
@@ -323,8 +343,14 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       const catalogNodes = dataset.nodes.filter(
         (node) => node.metadata?.catalog_id === id,
       );
+      const catalogRoot = catalogNodes.find(
+        (node) => node.node_type === "catalog",
+      );
       const connectedCount = catalogNodes.filter((node) =>
         connectedNodeIds.has(node.id),
+      ).length;
+      const crossCatalogConnectedCount = catalogNodes.filter((node) =>
+        crossCatalogConnectedNodeIds.has(node.id),
       ).length;
       const tierNode = catalogNodes.find((node) =>
         TIER_NODE_TYPES.has(node.node_type),
@@ -352,6 +378,12 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
         tier_label: tierLabels?.[0] || null,
         tier_label_plural: tierLabels?.[1] || null,
         connected_count: connectedCount,
+        cross_catalog_connected_count: crossCatalogConnectedCount,
+        mandate: catalogRoot?.metadata?.mandate,
+        primary_authority: catalogRoot?.metadata?.primary_authority ?? null,
+        also_required_by: catalogRoot?.metadata?.also_required_by || [],
+        publication_type: catalogRoot?.metadata?.publication_type || "",
+        mandate_note: catalogRoot?.metadata?.mandate_note || "",
         relationship_count: dataset.edges.filter(
           (edge) =>
             nodeById.get(edge.source_node_id)?.metadata?.catalog_id === id ||

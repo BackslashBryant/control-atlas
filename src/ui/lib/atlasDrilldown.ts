@@ -19,11 +19,14 @@ export type AtlasDrillNode = {
   id: string;
   node_type?: string;
   label?: string;
+  parent_id?: string;
+  ancestor_path?: Array<{ id: string }>;
   metadata?: {
     catalog_id?: string;
     item_id?: string;
     title?: string;
     description?: string;
+    family?: string;
   };
 };
 
@@ -34,6 +37,30 @@ export type AtlasDrillEdge = {
   relationship_type: string;
   relationship_class: string;
   publication_status: string;
+};
+
+export type AtlasSpineEntry = {
+  id: string;
+  node_type: string;
+  label: string;
+  blurb: string;
+  parent_id: string | null;
+  child_count: number;
+  descendant_record_count: number;
+  mandate?:
+    | "statutory"
+    | "contractual"
+    | "federal_policy_or_regulatory_mandate"
+    | "issued_without_federal_mandate";
+  primary_authority?: string | null;
+  also_required_by?: string[];
+  publication_type?: string;
+  mandate_note?: string;
+  area_id?: string;
+};
+
+export type AtlasSpine = {
+  entries: AtlasSpineEntry[];
 };
 
 export type AtlasRecordChoice = {
@@ -79,40 +106,102 @@ export type AtlasDrilldownModel = {
   frameworkGroups: AtlasFrameworkGroup[];
 };
 
-export function buildAtlasBootstrapModel(
-  catalogs: Array<{ id?: string; name?: string }>,
-  spine: {
-    limbs: Array<{ id: string; label: string; blurb: string }>;
-    catalogLimbs: Record<string, string>;
-  },
-): AtlasDrilldownModel {
-  const catalogById = new Map(
-    catalogs
-      .filter((catalog): catalog is { id: string; name?: string } => Boolean(catalog.id))
-      .map((catalog) => [catalog.id, catalog]),
-  );
+function spineItemId(entry: AtlasSpineEntry) {
+  if (entry.node_type === "catalog" && entry.id.endsWith(":CATALOG")) {
+    return entry.id.slice(0, -":CATALOG".length);
+  }
+  const separator = entry.id.indexOf(":");
+  return separator >= 0 ? entry.id.slice(separator + 1) : entry.id;
+}
+
+function spineUnit(entry: AtlasSpineEntry): AtlasFamilyChoice {
+  return {
+    id: entry.id,
+    itemId: spineItemId(entry),
+    label: entry.label,
+    description: entry.blurb,
+    nodeType: entry.node_type,
+    records: [],
+  };
+}
+
+export function buildAtlasBootstrapModel(spine: AtlasSpine): AtlasDrilldownModel {
+  if (!Array.isArray(spine?.entries) || spine.entries.length === 0) {
+    throw new Error("Atlas spine artifact has no entries.");
+  }
+
+  const entriesByParent = new Map<string, AtlasSpineEntry[]>();
+  for (const entry of spine.entries) {
+    if (!entry.parent_id) continue;
+    const children = entriesByParent.get(entry.parent_id) || [];
+    children.push(entry);
+    entriesByParent.set(entry.parent_id, children);
+  }
+  const limbs = spine.entries.filter((entry) => entry.node_type === "limb");
+  const catalogs = spine.entries.filter((entry) => entry.node_type === "catalog");
+
   return {
     baselines: [],
     rmfSteps: [],
-    frameworkGroups: spine.limbs.map((limb) => ({
+    frameworkGroups: limbs.map((limb) => ({
       id: limb.id,
       label: limb.label,
       description: limb.blurb,
-      frameworks: Object.entries(spine.catalogLimbs)
-        .filter(([, limbId]) => limbId === limb.id)
-        .map(([catalogId]) => {
-          const catalog = catalogById.get(catalogId);
+      frameworks: catalogs
+        .filter((catalog) => catalog.area_id === limb.id)
+        .map((catalog) => {
+          const catalogId = spineItemId(catalog);
           return {
             id: catalogId,
             itemId: catalogId,
-            label: catalog?.name || catalogId,
-            description: "",
+            label: catalog.label,
+            description: catalog.blurb,
             nodeType: "catalog",
             groupId: limb.id,
-            units: [],
+            units: (entriesByParent.get(catalog.id) || []).map(spineUnit),
           };
-        })
-        .sort((left, right) => left.label.localeCompare(right.label)),
+        }),
+    })),
+  };
+}
+
+export function hydrateAtlasFrameworkRecords(
+  model: AtlasDrilldownModel,
+  nodes: AtlasDrillNode[],
+): AtlasDrilldownModel {
+  const directParentId = (node: AtlasDrillNode) =>
+    node.ancestor_path?.at(-1)?.id || node.parent_id || "";
+  const choicesByParent = new Map<string, AtlasRecordChoice[]>();
+  for (const node of nodes) {
+    const parentId = directParentId(node);
+    if (!parentId) continue;
+    const choices = choicesByParent.get(parentId) || [];
+    choices.push(toChoice(node));
+    choicesByParent.set(parentId, choices);
+  }
+  return {
+    ...model,
+    frameworkGroups: model.frameworkGroups.map((group) => ({
+      ...group,
+      frameworks: group.frameworks.map((framework) => ({
+        ...framework,
+        units: framework.units.map((unit) => {
+          const records = unit.id.startsWith(`membership:${framework.id}:`)
+            ? nodes
+                .filter(
+                  (node) =>
+                    node.node_type !== "catalog" &&
+                    node.metadata?.catalog_id === framework.id &&
+                    (node.metadata?.family || "All records") === unit.label,
+                )
+                .map(toChoice)
+            : choicesByParent.get(unit.id) || [];
+          return {
+            ...unit,
+            records: records.sort(byItemId),
+          };
+        }),
+      })),
     })),
   };
 }
@@ -141,30 +230,6 @@ function byItemId(left: AtlasRecordChoice, right: AtlasRecordChoice) {
     numeric: true,
     sensitivity: "base",
   });
-}
-
-// Records that belong to a catalog by membership rather than by a published
-// containment edge. Grouped by their family when the publisher gives one, so
-// 5,000 CCIs do not arrive as a single flat list.
-function groupRecordsByFamily(records: AtlasDrillNode[]): AtlasFamilyChoice[] {
-  const byFamily = new Map<string, AtlasDrillNode[]>();
-  for (const record of records) {
-    const family =
-      (record.metadata as { family?: string } | undefined)?.family || "All records";
-    const bucket = byFamily.get(family) || [];
-    bucket.push(record);
-    byFamily.set(family, bucket);
-  }
-  return [...byFamily.entries()]
-    .map(([family, entries]) => ({
-      id: `membership:${family}`,
-      itemId: family,
-      label: family,
-      description: `${entries.length.toLocaleString()} records`,
-      nodeType: "family",
-      records: entries.map(toChoice).sort(byItemId),
-    }))
-    .sort(byItemId);
 }
 
 export function buildAtlasDrilldownModel(dataset: {
@@ -201,90 +266,6 @@ export function buildAtlasDrilldownModel(dataset: {
       selectedIdsByBaseline.set(edge.source_node_id, selected);
     }
   }
-  // Class-4 organizing spine: limb -> catalog attachment. These edges are
-  // publication_status "editorial" (never "published"), so index them from the
-  // full edge set, not from publishedEdges.
-  const organizingChildrenByParent = new Map<string, string[]>();
-  for (const edge of dataset.edges) {
-    if (
-      edge.relationship_class === "organizing" &&
-      edge.relationship_type === "organizes"
-    ) {
-      const children = organizingChildrenByParent.get(edge.source_node_id) || [];
-      children.push(edge.target_node_id);
-      organizingChildrenByParent.set(edge.source_node_id, children);
-    }
-  }
-
-  const buildFramework = (
-    catalogNode: AtlasDrillNode,
-    limbId: string,
-  ): AtlasFrameworkChoice => {
-    const units = (structuralChildrenByParent.get(catalogNode.id) || [])
-      .map((nodeId) => nodesById.get(nodeId))
-      .filter((node): node is AtlasDrillNode => Boolean(node))
-      .map((unit) => ({
-        ...toChoice(unit),
-        records: (structuralChildrenByParent.get(unit.id) || [])
-          .map((nodeId) => nodesById.get(nodeId))
-          .filter((node): node is AtlasDrillNode => Boolean(node))
-          .map(toChoice)
-          .sort(byItemId),
-      }))
-      .sort(byItemId);
-    // CCIs and assessment procedures hang beneath the control they cite or
-    // assess, so their catalog root deliberately owns no structural children
-    // (see attachRecords in data/curated/tree-spine.json). Browsing still has
-    // to work, so group those records by catalog membership instead of leaving
-    // the catalog a dead end.
-    const catalogId = catalogNode.metadata?.catalog_id || catalogNode.id;
-    const membershipUnits =
-      units.length > 0
-        ? units
-        : groupRecordsByFamily(
-            dataset.nodes.filter(
-              (node) =>
-                node.metadata?.catalog_id === catalogId &&
-                node.node_type !== "catalog",
-            ),
-          );
-    return {
-      ...toChoice(catalogNode),
-      id: catalogId,
-      groupId: limbId,
-      units: membershipUnits,
-    };
-  };
-
-  // One group per limb, in trunk-declared order, empty limbs included (A.7 greys
-  // them rather than hiding — docs/plans/cybersecurity-trunk-and-voice-2026-07-31 A.7).
-  const trunkNode = dataset.nodes.find((node) => node.node_type === "trunk");
-  const limbNodes = dataset.nodes.filter((node) => node.node_type === "limb");
-  const limbById = new Map(limbNodes.map((node) => [node.id, node]));
-  const trunkLimbOrder = trunkNode
-    ? organizingChildrenByParent.get(trunkNode.id) || []
-    : [];
-  const orderedLimbIds = [
-    ...trunkLimbOrder.filter((id) => limbById.has(id)),
-    ...limbNodes
-      .map((node) => node.id)
-      .filter((id) => !trunkLimbOrder.includes(id)),
-  ];
-  const frameworkGroups: AtlasFrameworkGroup[] = orderedLimbIds.map((limbId) => {
-    const limb = limbById.get(limbId) as AtlasDrillNode;
-    const frameworks = (organizingChildrenByParent.get(limbId) || [])
-      .map((id) => nodesById.get(id))
-      .filter((node): node is AtlasDrillNode => Boolean(node))
-      .filter((node) => node.node_type === "catalog")
-      .map((catalogNode) => buildFramework(catalogNode, limbId))
-      .sort((left, right) => left.label.localeCompare(right.label));
-    return {
-      id: limb.id,
-      label: limb.metadata?.title || limb.label || limb.id,
-      description: limb.metadata?.description || "",
-      frameworks,
-    };
-  });
   const familyNodes = dataset.nodes
     .filter(
       (node) =>
@@ -355,5 +336,5 @@ export function buildAtlasDrilldownModel(dataset: {
     };
   }).filter((step): step is AtlasRmfStepChoice => Boolean(step));
 
-  return { baselines, rmfSteps, frameworkGroups };
+  return { baselines, rmfSteps, frameworkGroups: [] };
 }

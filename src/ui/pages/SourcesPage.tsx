@@ -53,7 +53,7 @@ const SOURCE_LAYER_TABS: Array<{
     id: "organization",
     label: "Control Atlas structure",
     description:
-      "How Control Atlas groups publications into areas. Not a publisher source.",
+      "How Control Atlas connects authority branches and groups publications into areas.",
   },
 ];
 
@@ -338,11 +338,10 @@ export function SourcesPage(props: {
             {activeRows.map((row) => (
               <SummaryCard key={row.id} title={row.publication}>
                 <p>
-                  Control Atlas's own organizing spine, across Cybersecurity
-                  and its areas, never a publisher's declared structure. See
-                  the Path rail
-                  on any record for how organizing hops are badged
-                  separately from the publisher's own hierarchy.
+                  Control Atlas's organizing spine connects federal authority,
+                  Cybersecurity, and its areas. See the Path rail on any record
+                  for how Control Atlas structure and publisher hierarchy are
+                  identified.
                 </p>
                 <p className="support-meta">Owner: {row.publisher}</p>
               </SummaryCard>

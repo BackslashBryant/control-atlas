@@ -1,5 +1,6 @@
 import {
   buildCatalogCoverageList,
+  catalogCoverageMessage,
   catalogCoverageForId,
   isLowCatalogCoverage,
   type CatalogCoverage,
@@ -29,12 +30,11 @@ export function CatalogCoverageNotice(props: {
   return (
     <p className="catalog-coverage-chip" role="note">
       <span className="catalog-coverage-chip-label">
-        {coverage?.name}: {coverage?.connected}/{coverage?.total} connected (
-        {coverage?.pct}%)
+        {coverage?.name}: {coverage?.connected}/{coverage?.total} records
+        connected to other publications ({coverage?.pct}%)
       </span>
       <span className="catalog-coverage-chip-detail">
-        Low map coverage — a missing link is not proof that no relationship
-        exists.{" "}
+        {coverage ? catalogCoverageMessage(coverage) : null}{" "}
         <AppLink className="text-link" onNavigate={onNavigateSources} view="sources">
           Review sources
         </AppLink>

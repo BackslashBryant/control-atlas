@@ -10,6 +10,10 @@ import {
   type AncestorEdge,
 } from "../../src/ui/lib/ancestorPath.ts";
 import { readGeneratedCollection } from "../../scripts/lib/generated-graph-artifacts.mjs";
+import {
+  ORGANIZING_RELATIONSHIP_TYPES,
+  SECONDARY_ORGANIZING_RELATIONSHIP_TYPES,
+} from "../../src/app/structural-hierarchy.mjs";
 
 function graphFrom(nodes: AncestorNode[], edges: AncestorEdge[] = []) {
   return buildAncestorGraph(nodes, edges);
@@ -106,6 +110,86 @@ test("pickCanonicalParent prefers a candidate in the child's own catalog_id", ()
     graph,
   );
   assert.equal(picked, "same-catalog-parent");
+});
+
+test("AC-2(1) prefers the deepest same-catalog containment parent", () => {
+  const nodes: AncestorNode[] = [
+    {
+      id: "nist-800-53:CATALOG",
+      node_type: "catalog",
+      metadata: { catalog_id: "nist-800-53" },
+    },
+    {
+      id: "nist-800-53:FAMILY-AC",
+      node_type: "family",
+      metadata: { catalog_id: "nist-800-53" },
+    },
+    {
+      id: "nist-800-53:AC-2",
+      node_type: "control",
+      metadata: { catalog_id: "nist-800-53" },
+    },
+    {
+      id: "nist-800-53:AC-2.1",
+      node_type: "control_enhancement",
+      metadata: { catalog_id: "nist-800-53" },
+    },
+  ];
+  const structural = (source_node_id: string, target_node_id: string): AncestorEdge => ({
+    source_node_id,
+    target_node_id,
+    relationship_type: "contains",
+    relationship_class: "structural",
+  });
+  const graph = graphFrom(nodes, [
+    structural("nist-800-53:CATALOG", "nist-800-53:FAMILY-AC"),
+    structural("nist-800-53:FAMILY-AC", "nist-800-53:AC-2"),
+    structural("nist-800-53:FAMILY-AC", "nist-800-53:AC-2.1"),
+    structural("nist-800-53:AC-2", "nist-800-53:AC-2.1"),
+  ]);
+
+  assert.deepEqual(
+    ancestorChain("nist-800-53:AC-2.1", graph).map((link) => link.id),
+    [
+      "nist-800-53:CATALOG",
+      "nist-800-53:FAMILY-AC",
+      "nist-800-53:AC-2",
+      "nist-800-53:AC-2.1",
+    ],
+  );
+});
+
+test("deepest-parent selection rejects a cyclic candidate when a finite path exists", () => {
+  const nodes: AncestorNode[] = [
+    { id: "root", node_type: "catalog", metadata: { catalog_id: "x" } },
+    {
+      id: "finite",
+      node_type: "group",
+      parent_id: "root",
+      parent_relationship_class: "structural",
+      metadata: { catalog_id: "x" },
+    },
+    {
+      id: "cycle-a",
+      node_type: "group",
+      parent_id: "cycle-b",
+      parent_relationship_class: "structural",
+      metadata: { catalog_id: "x" },
+    },
+    {
+      id: "cycle-b",
+      node_type: "group",
+      parent_id: "cycle-a",
+      parent_relationship_class: "structural",
+      metadata: { catalog_id: "x" },
+    },
+    { id: "child", node_type: "control", metadata: { catalog_id: "x" } },
+  ];
+
+  assert.equal(
+    pickCanonicalParent("child", ["cycle-a", "finite"], graphFrom(nodes)),
+    "finite",
+  );
 });
 
 test("pickCanonicalParent falls back to the shallower candidate, then lexical order", () => {
@@ -346,6 +430,34 @@ test("A.4: a structural parent still wins over any organizing hop (regression gu
   assert.equal(chain.at(-2)?.origin, "structural");
 });
 
+test("issued_under remains secondary and cannot become a canonical parent hop", () => {
+  assert.equal(SECONDARY_ORGANIZING_RELATIONSHIP_TYPES.has("issued_under"), true);
+  assert.equal(ORGANIZING_RELATIONSHIP_TYPES.has("issued_under"), false);
+  const nodes: AncestorNode[] = [
+    {
+      id: "nist-800-53:CATALOG",
+      node_type: "catalog",
+      metadata: { catalog_id: "nist-800-53" },
+    },
+    { id: "authority:USC-44-3554", node_type: "statute" },
+  ];
+  const edges: AncestorEdge[] = [
+    {
+      source_node_id: "nist-800-53:CATALOG",
+      target_node_id: "authority:USC-44-3554",
+      relationship_type: "issued_under",
+      relationship_class: "organizing",
+    },
+  ];
+
+  assert.deepEqual(
+    ancestorChain("authority:USC-44-3554", graphFrom(nodes, edges)).map(
+      (link) => link.id,
+    ),
+    ["authority:USC-44-3554"],
+  );
+});
+
 test("AC-2 generated ancestry now walks up through the organizing spine to the trunk", () => {
   const nodes = readGeneratedCollection(".", "nodes").nodes as AncestorNode[];
   const edges = readGeneratedCollection(".", "edges").edges as AncestorEdge[];
@@ -365,6 +477,22 @@ test("AC-2 generated ancestry now walks up through the organizing spine to the t
   assert.deepEqual(
     chain.map((link) => link.origin),
     ["organizing", "organizing", "structural", "structural", "structural"],
+  );
+});
+
+test("generated AC-2.1 ancestry includes its base control", () => {
+  const nodes = readGeneratedCollection(".", "nodes").nodes as AncestorNode[];
+  const edges = readGeneratedCollection(".", "edges").edges as AncestorEdge[];
+
+  const chain = ancestorChain("nist-800-53:AC-2.1", graphFrom(nodes, edges));
+  assert.deepEqual(
+    chain.slice(-4).map((link) => link.id),
+    [
+      "nist-800-53:CATALOG",
+      "nist-800-53:FAMILY-AC",
+      "nist-800-53:AC-2",
+      "nist-800-53:AC-2.1",
+    ],
   );
 });
 
