@@ -6,7 +6,7 @@ import {
   IconSearch,
   IconX,
 } from "@tabler/icons-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import "../../../styles/resources.css";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
@@ -59,10 +59,13 @@ export function CommonsPage(props: {
   const { bundle, viewState, onNavigate } = props;
   const state = viewState.view === "commons" ? viewState : EMPTY_STATE;
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [queryDraft, setQueryDraft] = useState(state.query);
   const directoryAvailable = Boolean(bundle?.commonsDataset);
   const resources = (bundle?.commonsDataset?.resources || []) as CommonsResource[];
   const collections = (bundle?.commonsDataset?.collections || []) as CommonsCollection[];
   const update = (patch: Partial<CommonsState>) => onNavigate("commons", { ...state, ...patch });
+
+  useEffect(() => setQueryDraft(state.query), [state.query]);
 
   const filtered = useMemo(() => {
     const eligible = filterDirectoryResources(resources, {
@@ -119,11 +122,14 @@ export function CommonsPage(props: {
         </header>
 
         <WorkbenchControlSurface className="resources-control-surface" label="Find resources" targetId="resources-results">
-          <label className="resources-search" htmlFor="resources-query">
+          <form className="resources-search" onSubmit={(event) => { event.preventDefault(); const query = queryDraft.trim(); if (query !== state.query) update({ query }); }} role="search">
             <IconSearch aria-hidden="true" size={22} />
-            <input aria-label="Find resources" id="resources-query" onChange={(event) => update({ query: event.target.value })} placeholder="Try OSCAL, 8140, ATO reuse, Iron Bank, CMMC, or STIG scanner" type="search" value={state.query} />
-            {state.query ? <button aria-label="Clear resource search" onClick={() => update({ query: "" })} type="button"><IconX aria-hidden="true" size={18} /></button> : null}
-          </label>
+            <input aria-label="Find resources" id="resources-query" onChange={(event) => setQueryDraft(event.target.value)} placeholder="Try OSCAL, 8140, ATO reuse, Iron Bank, CMMC, or STIG scanner" type="search" value={queryDraft} />
+            <span className="resources-search-actions">
+              {queryDraft ? <button aria-label="Clear resource search" onClick={() => { setQueryDraft(""); update({ query: "" }); }} type="button"><IconX aria-hidden="true" size={18} /></button> : null}
+              <button className="resources-search-submit" type="submit">Search resources</button>
+            </span>
+          </form>
           <div className="resources-facets">
             <button aria-controls="resources-filter-panel" aria-expanded={filtersOpen} className="resources-filter-toggle" onClick={() => setFiltersOpen((open) => !open)} type="button">
               Filters{activeFilterCount ? ` (${activeFilterCount})` : ""}

@@ -187,6 +187,7 @@ export function ExplorePage(props: {
   const resultsRef = useRef<HTMLUListElement>(null);
   const composingRef = useRef(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [queryDraft, setQueryDraft] = useState(state.query);
   const [detailsReady, setDetailsReady] = useState(false);
   const [visibleCount, setVisibleCount] = useState(0);
   const [compareMode, setCompareMode] = useState(false);
@@ -196,6 +197,8 @@ export function ExplorePage(props: {
   const hasFilters = Boolean(state.filter || state.publisher || state.kind || state.objectType || state.controlFamily || state.collection || connectedOnly);
   const searchStarted = hasQuery || hasFilters;
   const allDocuments = useMemo(() => bundle.runtime.searchLibrary(""), [bundle.runtime]);
+
+  useEffect(() => setQueryDraft(state.query), [state.query]);
 
   useEffect(() => {
     setDetailsReady(false);
@@ -333,10 +336,10 @@ export function ExplorePage(props: {
   return (
     <Panel className="search-results-panel border-0 !bg-transparent p-0" data-visual-identity="classified-research-search">
       <PageHeader primary summary="One ranked view across published records, guides, documents, resources, communities, and sources." title="Library" />
-      <form className="search-results-query-row" onSubmit={(event) => { event.preventDefault(); if (!composingRef.current) resultsRef.current?.focus(); }} role="search">
+      <form className="search-results-query-row" onSubmit={(event) => { event.preventDefault(); if (composingRef.current) return; const query = queryDraft.trim(); if (query !== state.query) onNavigate("search", { query }); window.requestAnimationFrame(() => resultsRef.current?.focus()); }} role="search">
         <label className="catalog-search search-results-query">
           <IconSearch aria-hidden="true" size={18} />
-          <input aria-label="Filter results by ID, title, or topic" id="library-search-query" name="query" onChange={(event) => onNavigate("search", { query: event.target.value })} onCompositionEnd={() => { composingRef.current = false; }} onCompositionStart={() => { composingRef.current = true; }} placeholder="Filter results by identifier, title, or topic" type="search" value={state.query} />
+          <input aria-label="Filter results by ID, title, or topic" id="library-search-query" name="query" onChange={(event) => setQueryDraft(event.target.value)} onCompositionEnd={() => { composingRef.current = false; }} onCompositionStart={() => { composingRef.current = true; }} placeholder="Filter results by identifier, title, or topic" type="search" value={queryDraft} />
         </label>
         <Button type="submit" variant="secondary">Search</Button>
       </form>

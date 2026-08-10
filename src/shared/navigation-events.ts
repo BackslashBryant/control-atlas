@@ -6,6 +6,9 @@ export const CLOSE_OVERLAYS_EVENT = "control-atlas:close-overlays";
 export const ROUTE_TRANSITION_START_EVENT = "control-atlas:route-transition-start";
 export const ROUTE_TRANSITION_END_EVENT = "control-atlas:route-transition-end";
 
+const ROUTE_TRANSITION_MAX_MS = 4000;
+let transitionTimeout = 0;
+
 function transitionElements() {
   const root = document.getElementById("root");
   const overlay = root?.querySelector<HTMLElement>("[data-route-transition]");
@@ -42,12 +45,16 @@ export function beginRouteTransition(
     workspace.setAttribute("aria-busy", "true");
   }
   window.dispatchEvent(new CustomEvent(ROUTE_TRANSITION_START_EVENT, { detail: { label } }));
+  window.clearTimeout(transitionTimeout);
+  transitionTimeout = window.setTimeout(completeRouteTransition, ROUTE_TRANSITION_MAX_MS);
   return true;
 }
 
 export function completeRouteTransition() {
   const { root, overlay } = transitionElements();
   if (!root) return;
+  window.clearTimeout(transitionTimeout);
+  transitionTimeout = 0;
   delete root.dataset.routeTransition;
   delete root.dataset.routeTransitionDestination;
   overlay?.setAttribute("hidden", "");

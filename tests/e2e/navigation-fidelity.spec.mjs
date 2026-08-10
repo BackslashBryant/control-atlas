@@ -87,6 +87,60 @@ test('header search submits to canonical Library and carries focus to results', 
   await expect(page.locator('#library-results')).toBeFocused({ timeout: 15000 });
 });
 
+test('full-page search fields wait for explicit submission', async ({ page }) => {
+  test.setTimeout(90000);
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  await gotoApp(page, '/#/library?q=AC-2');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  const librarySearch = page.getByRole('searchbox', {
+    name: 'Filter results by ID, title, or topic',
+  });
+  await librarySearch.fill('account management');
+  await expect(page).toHaveURL(/#\/library\?q=AC-2/);
+  await page.getByRole('button', { name: 'Search', exact: true }).click();
+  await expect(page).toHaveURL(/#\/library\?q=account\+management/);
+
+  await gotoApp(page, '/#/resources?q=OSCAL');
+  await waitForAppReady(page);
+  const resourceSearch = page.getByRole('searchbox', { name: 'Find resources' });
+  await resourceSearch.fill('Iron Bank');
+  await expect(page).toHaveURL(/#\/resources\?q=OSCAL/);
+  await page.getByRole('button', { name: 'Search resources' }).click();
+  await expect(page).toHaveURL(/#\/resources\?q=Iron\+Bank/);
+
+  await gotoApp(page, '/#/sources?q=NIST');
+  await waitForAppReady(page);
+  const sourceSearch = page.getByRole('searchbox', { name: 'Search sources' });
+  await sourceSearch.fill('FedRAMP');
+  await expect(page).toHaveURL(/#\/sources\?q=NIST/);
+  await page.getByRole('button', { name: 'Search sources' }).click();
+  await expect(page).toHaveURL(/#\/sources\?q=FedRAMP/);
+
+  await gotoApp(page, '/#/library/publication/nist-800-53?q=AC-2');
+  await waitForAppReady(page);
+  const catalogSearch = page.getByRole('searchbox', { name: 'Search this catalog' });
+  await catalogSearch.fill('AC-3');
+  await expect(page).toHaveURL(/q=AC-2/);
+  await page.getByRole('button', { name: 'Search records' }).click();
+  await expect(page).toHaveURL(/q=AC-3/);
+});
+
+test('route transition releases after destination commit while data continues loading', async ({ page }) => {
+  test.setTimeout(30000);
+  await page.route('**/data/generated/catalog-bootstrap.json.gz*', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await route.continue();
+  });
+
+  await gotoApp(page, '/');
+  await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Library' }).click();
+  await expect(page).toHaveURL(/#\/library/);
+  await expect(page.locator('[data-route-transition][role="status"]')).toBeHidden({ timeout: 2000 });
+  await waitForAppReady(page);
+});
+
 test('Atlas landing renders the lightweight semantic hierarchy, not the relationship graph bundle', async ({ page }) => {
   test.setTimeout(90000);
   const requests = [];

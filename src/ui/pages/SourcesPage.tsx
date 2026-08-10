@@ -1,5 +1,5 @@
 import { IconSearch } from "@tabler/icons-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { sourceLinkFor } from "../graph/sourceLinks";
@@ -63,6 +63,7 @@ export function SourcesPage(props: {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
   const { bundle, state, onNavigate } = props;
+  const [queryDraft, setQueryDraft] = useState(state.query);
   const allSources = bundle.runtime.dataset.sources;
   const selectedSource = state.source
     ? bundle.runtime.getSource(state.source)
@@ -108,6 +109,8 @@ export function SourcesPage(props: {
   const statusOptions = distinct("lifecycle_status")
     .map((value) => ({ value, label: displayNameFor("lifecycle_status", value) }))
     .sort((left, right) => left.label.localeCompare(right.label, undefined, { sensitivity: "base" }));
+
+  useEffect(() => setQueryDraft(state.query), [state.query]);
 
   if (selectedSource) {
     return (
@@ -264,21 +267,22 @@ export function SourcesPage(props: {
         targetId="source-register-results"
       >
         <div className="source-register-controls">
-          <label className="field source-register-search" htmlFor="source-search">
+          <form className="field source-register-search" onSubmit={(event) => { event.preventDefault(); const query = queryDraft.trim(); if (query !== state.query) onNavigate("sources", { ...state, query }); }} role="search">
+          <label htmlFor="source-search">
             <span>Search sources</span>
             <div className="search-input">
               <IconSearch aria-hidden="true" size={18} stroke={1.8} />
               <input
                 id="source-search"
-                onChange={(event) =>
-                  onNavigate("sources", { ...state, query: event.target.value })
-                }
+                onChange={(event) => setQueryDraft(event.target.value)}
                 placeholder="Publication, publisher, or catalog"
                 type="search"
-                value={state.query}
+                value={queryDraft}
               />
             </div>
           </label>
+          <Button type="submit" variant="secondary">Search sources</Button>
+          </form>
           <div className="source-register-filters">
             {publisherOptions.length >= 2 ? (
               <SelectField

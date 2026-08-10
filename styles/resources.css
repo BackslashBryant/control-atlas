@@ -98,6 +98,21 @@
   width: 44px;
 }
 
+.resources-search-actions {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.resources-search .resources-search-submit {
+  background: var(--ca-primary);
+  border-radius: 0.2rem;
+  color: var(--ca-primary-contrast, #071018);
+  font-weight: 700;
+  padding-inline: 0.85rem;
+  width: auto;
+}
+
 .resources-facets {
   margin-top: 0.9rem;
 }
