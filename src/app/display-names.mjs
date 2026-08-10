@@ -53,6 +53,7 @@ const DISPLAY_NAMES = {
     leads_to: 'Leads to',
     applies_to: 'Applies to',
     defines: 'Defines',
+    issued_under: 'Issued under',
   },
   confidence: {
     direct: 'Direct match',
@@ -94,6 +95,9 @@ const DISPLAY_NAMES = {
     program_requirement: 'Program requirement',
     attack_technique: 'ATT&CK technique',
     defend_countermeasure: 'D3FEND countermeasure',
+    statute: 'Statute',
+    regulation: 'Regulation',
+    policy_directive: 'Policy directive',
   },
   retrieval_method: {
     // Artifact-specific update-method vocabulary (Schema 5.0 artifacts).
@@ -163,6 +167,9 @@ const DISPLAY_NAMES = {
     zt_overlay_catalog: 'Zero Trust overlay reference',
     zt_pillar: 'Zero Trust pillar',
     zt_tenet: 'Zero Trust tenet',
+    statute: 'Statute',
+    regulation: 'Regulation',
+    policy_directive: 'Policy directive',
   },
 };
 

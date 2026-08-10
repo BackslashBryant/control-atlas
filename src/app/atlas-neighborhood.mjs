@@ -50,6 +50,11 @@ export function buildAtlasNeighborhoodShards(
 ) {
   const ancestorGraph = buildAncestorGraph(graph.nodes, graph.edges);
   const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+  const catalogRootByCatalogId = new Map(
+    graph.nodes
+      .filter((node) => node.node_type === "catalog" && node.metadata?.catalog_id)
+      .map((node) => [node.metadata.catalog_id, node]),
+  );
   const edgesByNode = new Map(graph.nodes.map((node) => [node.id, []]));
 
   for (const edge of graph.edges) {
@@ -62,9 +67,20 @@ export function buildAtlasNeighborhoodShards(
   const shardRecords = new Map();
   for (const node of graph.nodes) {
     const edges = (edgesByNode.get(node.id) || []).map(compactEdge);
-    const structuralPath = ancestorChain(node.id, ancestorGraph).map(
+    const canonicalStructuralPath = ancestorChain(node.id, ancestorGraph).map(
       (link) => link.id,
     );
+    const catalogId = node.metadata?.catalog_id || "";
+    const primaryAuthority = catalogRootByCatalogId.get(catalogId)?.metadata
+      ?.primary_authority;
+    // `issued_under` is deliberately secondary and never enters canonical
+    // parenting. The displayed path composes exactly one curated authority hop
+    // ahead of the unchanged canonical chain so record routes can explain why
+    // a publication exists without changing who structurally owns the record.
+    const structuralPath =
+      primaryAuthority && nodeById.has(primaryAuthority)
+        ? [primaryAuthority, ...canonicalStructuralPath]
+        : canonicalStructuralPath;
     const neighborhoodNodeIds = new Set([
       node.id,
       ...structuralPath,

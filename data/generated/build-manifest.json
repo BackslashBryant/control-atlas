@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-09T01:24:31.935Z",
+  "generated_at": "2026-08-10T00:13:29.789Z",
   "build_manifest": {
     "kind": "build_manifest",
     "runtime_artifacts": [
@@ -9,6 +9,7 @@
       "edges.json",
       "evidence.json",
       "graph-health.json",
+      "atlas-spine.json",
       "library-search.json",
       "atlas-neighborhood-manifest.json",
       "atlas-neighborhood/",
@@ -25,10 +26,10 @@
     "source_registry_path": "data/source-registry.json",
     "source_registry_schema": "4.0",
     "counts": {
-      "sources": 103,
-      "nodes": 29349,
-      "edges": 73393,
-      "evidence": 73393,
+      "sources": 122,
+      "nodes": 29367,
+      "edges": 73436,
+      "evidence": 73436,
       "findings": 2
     }
   }

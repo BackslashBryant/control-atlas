@@ -1170,11 +1170,82 @@ test("runtime reports honest per-catalog connectivity (CATL-24)", () => {
       `${catalog.id} connected_count exceeds node_count`,
     );
     assert.ok(catalog.connected_count >= 0);
+    assert.equal(
+      typeof catalog.cross_catalog_connected_count,
+      "number",
+      `${catalog.id} missing cross_catalog_connected_count`,
+    );
+    assert.ok(
+      catalog.cross_catalog_connected_count <= catalog.connected_count,
+      `${catalog.id} cross-catalog count exceeds total connected count`,
+    );
   }
   // A catalog whose nodes all sit on published edges reports full connectivity.
   const nist = catalogs.find((catalog) => catalog.id === "nist-800-53");
   assert.ok(nist);
   assert.ok(nist.connected_count > 0);
+  assert.ok(nist.cross_catalog_connected_count > 0);
+  const csf = catalogs.find((catalog) => catalog.id === "csf-2");
+  assert.equal(csf.cross_catalog_connected_count, 1, "candidate mappings do not count");
+  const fedramp = catalogs.find((catalog) => catalog.id === "fedramp-rev5");
+  assert.equal(
+    fedramp.cross_catalog_connected_count,
+    0,
+    "cross-catalog applicability edges are not mappings",
+  );
+});
+
+test("cross-catalog coverage excludes secondary authority and unpublished edges", () => {
+  const runtime = createFederalGraphRuntime({
+    sources: [],
+    evidence: [],
+    findings: [],
+    nodes: [
+      {
+        id: "a:ONE",
+        node_type: "catalog",
+        metadata: {
+          catalog_id: "a",
+          mandate: "contractual",
+          primary_authority: "authority:CLAUSE",
+          also_required_by: ["authority:REGULATION"],
+          publication_type: "control catalog",
+          mandate_note: "Required when selected in a covered contract.",
+        },
+      },
+      { id: "b:TWO", metadata: { catalog_id: "b" } },
+    ],
+    edges: [
+      {
+        id: "edge:authority",
+        source_node_id: "a:ONE",
+        target_node_id: "b:TWO",
+        relationship_type: "issued_under",
+        publication_status: "published",
+      },
+      {
+        id: "edge:missing-status",
+        source_node_id: "a:ONE",
+        target_node_id: "b:TWO",
+        relationship_type: "maps_to",
+      },
+    ],
+  });
+
+  assert.ok(
+    runtime
+      .getCatalogs()
+      .every((catalog) => catalog.cross_catalog_connected_count === 0),
+  );
+  const catalog = runtime.getCatalogs().find((entry) => entry.id === "a");
+  assert.equal(catalog.mandate, "contractual");
+  assert.equal(catalog.primary_authority, "authority:CLAUSE");
+  assert.deepEqual(catalog.also_required_by, ["authority:REGULATION"]);
+  assert.equal(catalog.publication_type, "control catalog");
+  assert.equal(
+    catalog.mandate_note,
+    "Required when selected in a covered contract.",
+  );
 });
 
 test("runtime filters library documents by keyword and facets", () => {

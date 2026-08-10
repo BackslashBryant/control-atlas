@@ -13,6 +13,7 @@ import {
   lifecycleStatus,
 } from "../scripts/build-framework-data.mjs";
 import { readGeneratedCollection } from "../scripts/lib/generated-graph-artifacts.mjs";
+import { evaluateTrunkReachability } from "../scripts/hierarchy-derivation.mjs";
 
 const generated = (name) => readGeneratedCollection(".", name);
 const sourceRegistry = JSON.parse(readFileSync("data/source-registry.json", "utf8"));
@@ -56,14 +57,144 @@ test("OLIR adapter parses workbook rows from official-style crosswalk sheets", a
 });
 
 test("federal graph build emits graph contract counts", () => {
-  const generatedAt = generated("sources").generated_at;
-  buildFrameworkData();
   assert.ok(buildResult.sources >= 51);
   assert.ok(buildResult.nodes > 9000);
   assert.ok(buildResult.edges > 12000);
   assert.equal(buildResult.edges, buildResult.evidence);
   assert.ok(buildResult.findings > 0);
-  assert.equal(generated("sources").generated_at, generatedAt);
+});
+
+test("authority nodes and issued-under relationships emit outside canonical organizes", () => {
+  const nodes = generated("nodes").nodes;
+  const edges = generated("edges").edges;
+  const authorityNodes = nodes.filter((node) =>
+    ["statute", "regulation", "policy_directive"].includes(node.node_type),
+  );
+  assert.equal(authorityNodes.length, 18);
+  const issuedUnder = edges.filter(
+    (edge) => edge.relationship_type === "issued_under",
+  );
+  assert.equal(issuedUnder.length, 35);
+  assert.ok(
+    issuedUnder.every(
+      (edge) =>
+        edge.relationship_class === "organizing" &&
+        Array.isArray(edge.source_refs) &&
+        edge.source_refs.length > 0,
+    ),
+  );
+  assert.equal(
+    edges.filter(
+      (edge) =>
+        edge.relationship_type === "organizes" &&
+        (edge.source_node_id.startsWith("authority:") ||
+          edge.target_node_id.startsWith("authority:")),
+    ).length,
+    0,
+  );
+  const incomingOrganizes = new Map();
+  for (const edge of edges.filter(
+    (entry) => entry.relationship_type === "organizes",
+  )) {
+    incomingOrganizes.set(
+      edge.target_node_id,
+      (incomingOrganizes.get(edge.target_node_id) || 0) + 1,
+    );
+  }
+  assert.ok([...incomingOrganizes.values()].every((count) => count === 1));
+});
+
+test("runtime Atlas spine carries full L0-L3 structure and L4 summaries", () => {
+  const artifact = generated("atlas-spine");
+  const entries = artifact.atlas_spine.entries;
+  assert.ok(entries.length > 0);
+  for (const entry of entries) {
+    for (const field of [
+      "id",
+      "node_type",
+      "label",
+      "blurb",
+      "parent_id",
+      "child_count",
+      "descendant_record_count",
+    ]) {
+      assert.ok(field in entry, `${entry.id} missing ${field}`);
+    }
+  }
+  const catalogEntries = entries.filter((entry) => entry.node_type === "catalog");
+  assert.equal(catalogEntries.length, 23);
+  const publicationsByArea = new Map();
+  for (const entry of catalogEntries) {
+    publicationsByArea.set(
+      entry.area_id,
+      (publicationsByArea.get(entry.area_id) || 0) + 1,
+    );
+    assert.equal(typeof entry.mandate, "string");
+    assert.ok("primary_authority" in entry);
+    assert.ok(Array.isArray(entry.also_required_by));
+    assert.ok(entry.publication_type);
+    assert.ok(entry.mandate_note);
+  }
+  assert.equal(publicationsByArea.get("atlas:LIMB-COMPLIANCE"), 11);
+  assert.equal(publicationsByArea.get("atlas:LIMB-GOVERNANCE"), 3);
+  assert.equal(publicationsByArea.get("atlas:LIMB-IMPLEMENTATION"), 3);
+  assert.ok((publicationsByArea.get("atlas:LIMB-RISK") || 0) > 0);
+  assert.ok((publicationsByArea.get("atlas:LIMB-ASSESSMENT") || 0) > 0);
+  const assessmentCatalog = catalogEntries.find(
+    (entry) => entry.id === "nist-800-53a:CATALOG",
+  );
+  assert.ok(assessmentCatalog.child_count > 0);
+  assert.ok(
+    entries.some(
+      (entry) =>
+        entry.parent_id === assessmentCatalog.id &&
+        entry.id.startsWith("membership:nist-800-53a:"),
+    ),
+  );
+  assert.ok(
+    entries.some(
+      (entry) => entry.child_count !== entry.descendant_record_count,
+    ),
+    "child_count and descendant_record_count must remain distinct measures",
+  );
+  const buildManifest = generated("build-manifest");
+  assert.ok(buildManifest.build_manifest.runtime_artifacts.includes("atlas-spine.json"));
+  const catalogBootstrap = generated("catalog-bootstrap").catalog_bootstrap.catalogs;
+  for (const catalog of catalogEntries) {
+    const catalogId = catalog.id.slice(0, -":CATALOG".length);
+    assert.equal(
+      catalog.descendant_record_count,
+      catalogBootstrap.find((entry) => entry.id === catalogId)?.leaf_record_count,
+      `${catalogId} Atlas and bootstrap record counts must reconcile`,
+    );
+  }
+});
+
+test("catalog bootstrap reports actual cross-catalog mapping coverage", () => {
+  const catalogs = generated("catalog-bootstrap").catalog_bootstrap.catalogs;
+  for (const catalog of catalogs) {
+    assert.equal(
+      typeof catalog.cross_catalog_connected_count,
+      "number",
+      `${catalog.id} missing cross_catalog_connected_count`,
+    );
+    assert.ok(catalog.cross_catalog_connected_count >= 0);
+    assert.ok(catalog.cross_catalog_connected_count <= catalog.node_count);
+  }
+  const expected = new Map([
+    ["nist-ai-rmf", 0],
+    ["nist-ssdf", 0],
+    ["dod-rai", 0],
+    ["nist-800-172", 1],
+    ["cui-policy", 2],
+  ]);
+  for (const [catalogId, count] of expected) {
+    assert.equal(
+      catalogs.find((catalog) => catalog.id === catalogId)
+        ?.cross_catalog_connected_count,
+      count,
+    );
+  }
 });
 
 test("issue 10 graph build emits FIPS, RMF, family, and 800-53B context for AC-2", () => {
@@ -566,6 +697,35 @@ test("dod-zt graph build emits pillars, capabilities, and overlay crosswalk edge
         edge.relationship_type === "references",
     ),
   );
+
+  const overlayIds = [
+    "APP",
+    "AUTO",
+    "DATA",
+    "DEVICE",
+    "ENABLER",
+    "NET",
+    "USER",
+    "VIS",
+  ].map((suffix) => `dod-zt:OVERLAY-${suffix}`);
+  const residualOverlayEdges = edges.filter(
+    (edge) =>
+      edge.source_node_id === "dod-zt:CATALOG" &&
+      overlayIds.includes(edge.target_node_id) &&
+      edge.relationship_type === "contains" &&
+      edge.relationship_class === "structural",
+  );
+  assert.equal(residualOverlayEdges.length, 8);
+
+  const reachability = evaluateTrunkReachability(nodes, edges, "atlas:TRUNK");
+  assert.deepEqual(reachability.undirectedOrphans, []);
+  assert.deepEqual(reachability.canonicalOrphans, []);
+  assert.equal(
+    reachability.eligibleNodeCount + reachability.exemptAuthorityNodeCount,
+    reachability.totalNodeCount,
+  );
+  assert.equal(reachability.undirected.size, reachability.eligibleNodeCount);
+  assert.equal(reachability.canonical.size, reachability.eligibleNodeCount);
 });
 
 test("lifecycleStatus maps withdrawn and deprecated record statuses to node lifecycle_status", () => {

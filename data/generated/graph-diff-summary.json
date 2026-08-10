@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-09T01:24:31.935Z",
+  "generated_at": "2026-08-10T00:13:29.789Z",
   "graph_diff_summary": {
     "kind": "graph_diff_summary",
-    "previous_generated_at": "2026-08-09T01:24:31.935Z",
-    "current_generated_at": "2026-08-09T01:24:31.935Z",
+    "previous_generated_at": "2026-08-10T00:13:29.789Z",
+    "current_generated_at": "2026-08-10T00:13:29.789Z",
     "changed_runtime_artifacts": [
       "nodes",
       "edges",
@@ -12,7 +12,8 @@
     ],
     "unchanged_runtime_artifacts": [
       "sources",
-      "graph-health"
+      "graph-health",
+      "atlas-spine"
     ]
   }
 }

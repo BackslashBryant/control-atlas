@@ -38,9 +38,9 @@ test("home bootstrap avoids graph JSON artifacts", async ({ page }) => {
   // route or graph payload until the user leaves the static front door.
   expect(scripts).toHaveLength(2);
 
-  await page.getByRole("button", { name: "Browse official publications" }).click();
+  await page.getByRole("link", { name: "Browse official publications" }).click();
   await waitForAppReady(page);
-  await expect(page).toHaveURL(/#\/catalog/);
+  await expect(page).toHaveURL(/#\/library/);
   expect(scripts.length).toBeGreaterThan(1);
 });
 
@@ -76,6 +76,32 @@ test("explore bootstrap avoids graph JSON until record open", async ({
   // Re-baselined 2026-08-01: records now carry their own path to the trunk
   // (attachAncestorPaths in scripts/build-framework-data.mjs), so opening one
   // no longer needs the monolithic graph at all. The budget only tightened.
+  expect(graphArtifactUrls(requested)).toEqual([]);
+});
+
+test("expanding an Atlas area uses the spine without monolithic graph JSON", async ({
+  page,
+}) => {
+  const requested = [];
+  page.on("request", (request) => {
+    const url = request.url();
+    if (url.includes("/data/generated/")) requested.push(url);
+  });
+
+  await page.goto("/#/explore");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await expect(
+    page.getByRole("application", { name: "Interactive Control Atlas hierarchy" }),
+  ).toBeVisible();
+  expect(
+    requested.some((url) => url.includes("atlas-spine.json")),
+  ).toBeTruthy();
+  expect(graphArtifactUrls(requested)).toEqual([]);
+
+  await page.getByRole("button", { name: /Compliance/ }).click();
+  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+  await expect(page.locator('[data-semantic-level="publications"]')).toBeVisible();
   expect(graphArtifactUrls(requested)).toEqual([]);
 });
 

@@ -240,7 +240,7 @@ export function App() {
     viewState.view === "library-detail"
       ? `${viewState.view}:${viewState.node}`
       : viewState.view === "atlas-map"
-        ? `${viewState.view}:${viewState.atlasAxis || "landing"}`
+        ? `${viewState.view}:${viewState.atlasAxis || "landing"}:${viewState.atlasFramework || "none"}`
       : viewState.view === "catalog-detail"
         ? `${viewState.view}:${viewState.catalog}`
         : viewState.view === "matrix"
@@ -293,13 +293,16 @@ export function App() {
               window.clearTimeout(timeoutTimer);
               setLoadSlow(false);
               startTransition(() => {
-                setBundle((current) =>
-                  runtimeState.view === "catalog-detail"
+                setBundle((current) => {
+                  const next = runtimeState.view === "catalog-detail"
                     ? result
                     : current?.graphReady
                       ? current
-                      : result,
-                );
+                      : result;
+                  return current?.atlasSpine && !next.atlasSpine
+                    ? { ...next, atlasSpine: current.atlasSpine }
+                    : next;
+                });
               });
               setLoadError("");
             }
@@ -310,7 +313,11 @@ export function App() {
               window.clearTimeout(timeoutTimer);
               setLoadSlow(false);
               startTransition(() => {
-                setBundle(result);
+                setBundle((current) =>
+                  current?.atlasSpine && !result.atlasSpine
+                    ? { ...result, atlasSpine: current.atlasSpine }
+                    : result,
+                );
               });
               setLoadError("");
             }
@@ -507,17 +514,22 @@ export function App() {
   }
 
   const canRenderWithoutBundle = isStaticViewWithoutBundle(viewState.view);
+  const hasRequiredRouteArtifacts =
+    viewState.view !== "atlas-map" || Boolean(bundle?.atlasSpine);
   const readyState = loadError
     ? "error"
     : canRenderWithoutBundle && viewState.view !== "search"
       ? "true"
-    : bundle?.routeReady && (!requiresFullGraph(viewState) || bundle.graphReady)
+    : bundle?.routeReady && hasRequiredRouteArtifacts &&
+        (!requiresFullGraph(viewState) || bundle.graphReady)
       ? "true"
       : bundle
         ? "partial"
         : "false";
   const showWorkspaceContent =
-    Boolean(bundle) || canRenderWithoutBundle || viewState.view === "search";
+    (Boolean(bundle) && hasRequiredRouteArtifacts) ||
+    canRenderWithoutBundle ||
+    viewState.view === "search";
   const routeContext = orbitalRouteContext(viewState, routeEntityName);
 
   useEffect(() => {

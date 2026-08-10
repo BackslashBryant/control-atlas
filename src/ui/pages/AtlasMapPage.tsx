@@ -34,6 +34,7 @@ import {
 import {
   buildAtlasBootstrapModel,
   buildAtlasDrilldownModel,
+  hydrateAtlasFrameworkRecords,
   type AtlasDrilldownModel,
   NIST_FRAMEWORK_ID,
 } from "../lib/atlasDrilldown";
@@ -864,11 +865,22 @@ function FocusedAtlas(props: {
 }
 
 export function atlasDrilldownModel(
-  bundle: Pick<RuntimeBundle, "catalogSummaries" | "runtime">,
+  bundle: Pick<RuntimeBundle, "atlasSpine" | "runtime">,
 ): AtlasDrilldownModel {
+  if (!bundle.atlasSpine) {
+    throw new Error("Atlas spine artifact is required for the Atlas hierarchy.");
+  }
+  const spineModel = buildAtlasBootstrapModel(bundle.atlasSpine);
   const fullModel = buildAtlasDrilldownModel(bundle.runtime.dataset);
-  if (fullModel.frameworkGroups.length) return fullModel;
-  return buildAtlasBootstrapModel(bundle.catalogSummaries || [], treeSpine);
+  const hydratedSpineModel = hydrateAtlasFrameworkRecords(
+    spineModel,
+    bundle.runtime.dataset.nodes,
+  );
+  return {
+    frameworkGroups: hydratedSpineModel.frameworkGroups,
+    baselines: fullModel.baselines,
+    rmfSteps: fullModel.rmfSteps,
+  };
 }
 
 function AtlasGuidedPath(props: {

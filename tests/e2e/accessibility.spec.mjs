@@ -159,6 +159,17 @@ test("a11y: focused Atlas relationship table has no serious or critical violatio
     page.getByRole("table", { name: "Relationship table" }),
   ).toBeVisible();
   await assertNoBlockingViolations(page, "focused Atlas relationship table");
+
+  await page.getByRole("button", { name: "Hierarchy" }).click();
+  await expect(page.locator(".route-transition")).toBeHidden();
+  const authorityRail = page.getByRole("navigation", { name: "Where this sits" });
+  await expect(authorityRail.getByText("Authority", { exact: true })).toBeVisible();
+  await expect(
+    authorityRail.getByRole("link", {
+      name: /40 U\.S\.C\. § 11331 — Official authority/,
+    }),
+  ).toBeVisible();
+  await assertNoBlockingViolations(page, "focused Atlas authority rail");
 });
 
 test("a11y: skip link moves keyboard focus to the workspace", async ({

@@ -194,7 +194,7 @@ function landscapeProjection(
     edges,
     level: "landscape",
     title: "Cybersecurity, in nine connected areas",
-    description: "Open an area to reveal its publications. The roots show why the work exists; the canopy shows where the work lives.",
+    description: "Open an area to reveal its publications, then follow the publisher's structure.",
   };
 }
 
@@ -689,7 +689,7 @@ export function AtlasUniverse(props: {
         <div>
           <p className="eyebrow">Control Atlas landscape</p>
           <h2 id="atlas-universe-title">The whole tree, from authority to implementation.</h2>
-          <p>Zoom from the nine areas into publications and their native structure. Relationship overlays stay separate so the hierarchy remains honest.</p>
+          <p>Federal cybersecurity work is spread across separate laws, agencies, and publications that were never organized together; Control Atlas connects them in one structure.</p>
         </div>
         <dl className="atlas-universe__totals" aria-label="Atlas totals">
           <div><dt>Published records</dt><dd>{props.nodeCount.toLocaleString()}</dd></div>

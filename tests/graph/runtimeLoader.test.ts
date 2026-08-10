@@ -5,6 +5,7 @@ import {
   compressedArtifactPath,
   runtimeArtifactPlan,
 } from "../../src/ui/lib/runtimeLoader";
+import { requiresFullGraph } from "../../src/ui/lib/navigationState";
 import { normalizeViewState } from "../../src/ui/lib/viewState";
 
 test("compressed artifacts keep cache-busting parameters after the gzip extension", () => {
@@ -35,9 +36,19 @@ test("route bootstrap loads only the smallest faithful artifact scope", () => {
     true,
     "record pages load their existing contextual Resources module",
   );
+  assert.equal(
+    recordDetail.catalogBootstrap,
+    true,
+    "record breadcrumbs use the same canonical publication identity as Atlas",
+  );
 
   const globalSearch = runtimeArtifactPlan(normalizeViewState("search"));
   assert.equal(globalSearch.librarySearch, true);
+  assert.equal(
+    globalSearch.catalogBootstrap,
+    true,
+    "the results page needs catalog mapping coverage without the full graph",
+  );
   assert.equal(
     globalSearch.commons,
     true,
@@ -72,6 +83,7 @@ test("route bootstrap loads only the smallest faithful artifact scope", () => {
 
   const atlasLanding = runtimeArtifactPlan(normalizeViewState("atlas-map"));
   assert.equal(atlasLanding.recordNodeId, "");
+  assert.equal(atlasLanding.atlasSpine, true);
   assert.equal(
     atlasLanding.librarySearch,
     true,
@@ -91,23 +103,27 @@ test("route bootstrap loads only the smallest faithful artifact scope", () => {
     "opening an area keeps its publication list responsive from the catalog bootstrap",
   );
 
-  const atlasStructure = runtimeArtifactPlan(
+  for (const atlasState of [
     normalizeViewState("atlas-map", { atlasAxis: "framework" }),
+    normalizeViewState("atlas-map", { atlasFramework: "nist-800-53" }),
+    normalizeViewState("atlas-map", { atlasFamily: "nist-800-53:FAMILY-AC" }),
+  ]) {
+    assert.equal(runtimeArtifactPlan(atlasState).fullGraph, false);
+    assert.equal(requiresFullGraph(atlasState), false);
+  }
+  const selectedFramework = runtimeArtifactPlan(
+    normalizeViewState("atlas-map", { atlasFramework: "nist-800-53" }),
   );
-  assert.equal(
-    atlasStructure.fullGraph,
-    true,
-    "published-structure choices require the structural graph",
-  );
+  assert.equal(selectedFramework.catalogId, "nist-800-53");
+  assert.equal(selectedFramework.fullGraph, false);
 
-  const atlasProcess = runtimeArtifactPlan(
-    normalizeViewState("atlas-map", { atlasAxis: "process" }),
-  );
-  assert.equal(
-    atlasProcess.fullGraph,
-    true,
-    "RMF process choices require the relationship graph",
-  );
+  for (const atlasState of [
+    normalizeViewState("atlas-map", { atlasBaseline: "nist-800-53b:MODERATE" }),
+    normalizeViewState("atlas-map", { atlasRmfStep: "nist-800-37:RMF-SELECT" }),
+  ]) {
+    assert.equal(runtimeArtifactPlan(atlasState).fullGraph, true);
+    assert.equal(requiresFullGraph(atlasState), true);
+  }
 });
 
 test("expensive graph scope begins only after an explicit graph-dependent action", () => {

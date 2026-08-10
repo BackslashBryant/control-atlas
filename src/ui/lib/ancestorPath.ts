@@ -7,8 +7,9 @@
  *   2. a native-catalog structural edge targeting the node.
  *      When more than one structural edge exists, the canonical-parent
  *      tie-break picks one:
- *      same `catalog_id` as the child, then the shallower candidate, then
- *      lexical order by id, in that priority.
+ *      same `catalog_id` as the child, then the deepest finite candidate,
+ *      then lexical order by id. When no same-catalog candidate exists, the
+ *      existing shallowest-first fallback remains in place.
  *
  * Pure and synchronous: never throws, never fetches. A missing parent
  * returns the partial chain built so far. A cycle (bad data) is detected via
@@ -42,9 +43,10 @@ export type AncestorLink = {
   label: string;
   node_type: string;
   // "structural" = a validated native-catalog tree edge; "organizing" = Control
-  // Atlas's own Class-4 spine hop (trunk/limb/catalog or a derived junction home),
-  // which the UI must badge as "Control Atlas structure", not publisher-declared.
-  origin: "structural" | "organizing";
+  // Atlas's own Class-4 spine hop (trunk/limb/catalog or a derived junction home).
+  // "authority" is a display-only hop composed from a catalog's curated
+  // primary_authority; it never participates in canonical parenting.
+  origin: "structural" | "organizing" | "authority";
 };
 
 export interface Graph {

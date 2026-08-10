@@ -50,11 +50,11 @@ test("Hierarchy panel shows real structural substance, not just breadcrumb lines
   await expect(panel.getByText("Record type")).toBeVisible();
   await expect(panel.getByText("Publication")).toBeVisible();
   await expect(panel.getByText("Decomposes into")).toBeVisible();
-  await expect(panel.getByRole("button", { name: "AC-2.1", exact: true })).toBeVisible();
+  await expect(panel.getByRole("link", { name: "AC-2.1", exact: true })).toBeVisible();
   await expect(panel.getByRole("button", { name: "See connections" })).toBeVisible();
   await expect(panel.getByRole("button", { name: "Open full record" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "AC-2 — Account Management", level: 1 })).toBeVisible();
-  await expect(panel.getByRole("button", { name: "Review official source" })).toBeVisible();
+  await expect(panel.getByRole("link", { name: "Review official source" })).toBeVisible();
 });
 
 test("focused Hierarchy badges the organizing hops, not just the direct record page", async ({ page }) => {
@@ -70,18 +70,28 @@ test("focused Hierarchy badges the organizing hops, not just the direct record p
   await dismissOnboarding(page);
 
   const rail = page.getByRole("navigation", { name: "Where this sits" });
-  const cybersecurity = rail.getByRole("button", { name: "Cybersecurity" });
+  const cybersecurity = rail.getByRole("link", {
+    name: /Cybersecurity — Control Atlas structure/,
+  });
   await expect(cybersecurity).toHaveClass(/atlas-path-crumb-organizing/);
   await expect(cybersecurity).toHaveAttribute(
     "title",
-    /Control Atlas structure, not publisher-declared/,
+    "Control Atlas structure",
   );
-  const compliance = rail.getByRole("button", { name: "Compliance" });
+  const compliance = rail.getByRole("link", {
+    name: /Compliance — Control Atlas structure/,
+  });
   await expect(compliance).toHaveClass(/atlas-path-crumb-organizing/);
   // The publisher-declared hops must stay unbadged — this isn't "badge
   // everything", it's "badge only the hops Control Atlas itself organized".
-  const catalog = rail.getByRole("button", { name: "SP 800-53 Rev. 5 Catalog" });
+  const catalog = rail.getByRole("link", { name: "SP 800-53 Rev. 5 Catalog" });
   await expect(catalog).not.toHaveClass(/atlas-path-crumb-organizing/);
+  await expect(rail.getByText("Authority", { exact: true })).toBeVisible();
+  const authority = rail.getByRole("link", {
+    name: /40 U\.S\.C\. § 11331 — Official authority/,
+  });
+  await expect(authority).toHaveClass(/atlas-path-crumb-authority/);
+  await expect(authority).toHaveAttribute("title", "Official authority");
 });
 
 test("focused Hierarchy opens its publisher-declared parent without inventing another parent", async ({ page }) => {
@@ -91,7 +101,7 @@ test("focused Hierarchy opens its publisher-declared parent without inventing an
 
   await page
     .getByRole("navigation", { name: "Where this sits" })
-    .getByRole("button", { name: "Access Control" })
+    .getByRole("link", { name: "Access Control" })
     .click();
   await expect(
     page.getByRole("heading", { name: "Access Control (AC) family", level: 1 }),
@@ -116,9 +126,13 @@ test("Hierarchy and View all are independently reachable and operable by keyboar
   await page.keyboard.press("Enter");
   await expect(hierarchyToggle).toHaveAttribute("aria-expanded", "true");
   await expect(page).toHaveURL(/relationshipView=path/);
+  await expect(page.locator(".route-transition")).toBeHidden();
 
-  await page.keyboard.press("Tab");
   const viewAllToggle = page.getByRole("button", { name: "View all", exact: true });
+  // Opening Hierarchy moves focus into its newly rendered links. Verify the
+  // second native control independently rather than assuming the two controls
+  // remain adjacent in the expanded panel's focus order.
+  await viewAllToggle.focus();
   await expect(viewAllToggle).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(viewAllToggle).toHaveAttribute("aria-expanded", "true");
