@@ -22,22 +22,21 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   }
   await expect(
     page.getByRole("heading", {
-      name: /Find the source\. See what connects/,
+      name: "See the landscape. Trace the source. Move the work forward.",
     }),
   ).toBeVisible();
-  await expect(page.getByRole("search").first()).toBeVisible();
-  await expect(page.locator(".home-secondary-action")).toHaveCount(7);
+  await expect(page.getByRole("searchbox", { name: "Search Control Atlas" })).toBeVisible();
+  await expect(page.locator(".home-secondary-action")).toHaveCount(4);
   await expect(page.locator(".site-header .brand-key-word")).toBeVisible();
-  // The hero is its own copy, separate from the package.json/meta one-liner.
   await expect(page.locator(".home-product-identity")).toContainText(
-    "Govern, secure, assess, operate, and defend",
+    "Control Atlas brings the federal cybersecurity landscape together in one place",
   );
-  await expect(page.locator(".home-capability-preview")).toHaveCount(3);
+  await expect(page.locator(".home-ecosystem-areas span")).toHaveCount(9);
   await expect(page.locator(".home-trust-boundary")).toContainText(
-    "Official public material stays primary",
+    "Official material stays source-traceable",
   );
 
-  await gotoApp(page, "/#/search?q=AC-2");
+  await gotoApp(page, "/#/library?q=AC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
   const controlResult = page
@@ -50,8 +49,30 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   ).toBeVisible({ timeout: 30000 });
 });
 
+test("live smoke: Resources and Atlas workbench are first-class routes", async ({ page }) => {
+  await gotoApp(page, "/#/resources?q=OSCAL");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await expect(page).toHaveURL(/#\/resources\?q=OSCAL/);
+  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work" })).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "Find resources" })).toHaveValue("OSCAL");
+  await expect(page.locator(".resource-card").first()).toBeVisible();
+
+  await gotoApp(page, "/#/atlas");
+  await waitForAppReady(page);
+  await expect(page.locator(".atlas-tree")).toHaveAttribute("data-tree-node-count", "13");
+  await expect(page.getByRole("heading", { name: "Cybersecurity", exact: true })).toBeVisible();
+  await page
+    .locator('.react-flow__node:has([data-atlas-node-id="atlas:LIMB-COMPLIANCE"])')
+    .dispatchEvent("click");
+  await expect(page).toHaveURL(/#\/atlas$/);
+  await expect(page.getByRole("heading", { name: "Compliance", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Open this area", exact: true }).click();
+  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+});
+
 test("live smoke: compare hub loads", async ({ page }) => {
-  await gotoApp(page, "/?view=matrix");
+  await gotoApp(page, "/#/compare");
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(
