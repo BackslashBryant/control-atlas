@@ -23,11 +23,11 @@ test("Start here asks two questions without making a determination", async ({
 
   await expect(page.getByRole("heading", { name: "Start here", exact: true })).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "1. What are you trying to do?" }),
+    page.getByRole("heading", { name: "What are you trying to do?" }),
   ).toBeVisible();
   // Step 2 only appears once a goal is chosen.
   await expect(
-    page.getByRole("heading", { name: "2. What context do you already know?" }),
+    page.getByRole("heading", { name: "What kind of system are you working with?" }),
   ).toHaveCount(0);
   await expect(page.getByLabel("System type")).toHaveCount(0);
   await expect(page.getByLabel("Data sensitivity")).toHaveCount(0);
@@ -43,7 +43,7 @@ test("Start here produces a plan traceable to real publications", async ({
 
   await page.getByRole("button", { name: "Prepare for assessment" }).click();
   await expect(
-    page.getByRole("heading", { name: "2. What context do you already know?" }),
+    page.getByRole("heading", { name: "What kind of system are you working with?" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "FedRAMP cloud service" }).click();
 

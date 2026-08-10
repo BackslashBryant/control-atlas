@@ -8,7 +8,7 @@ import {
   IconSparkles,
   IconX,
 } from "@tabler/icons-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { displayNameFor } from "../../app/display-names.mjs";
@@ -225,7 +225,10 @@ export function ExplorePage(props: {
   }, [filtersOpen]);
 
   const documents = useMemo(() => {
-    if (!searchStarted || state.kind === "tools-communities") return [];
+    // No query and no filters is the default browse state: return the full
+    // record corpus so #/library opens non-empty and browsable. The
+    // tools-communities kind is served from the directory index below, not here.
+    if (state.kind === "tools-communities") return [];
     const base = bundle.runtime.searchLibrary(state.query, {
       catalog_id: state.filter || undefined,
       publisher_name: state.publisher || undefined,
@@ -233,7 +236,7 @@ export function ExplorePage(props: {
       control_family: state.controlFamily || undefined,
     });
     return base.filter((document: any) => !state.kind || libraryKindForRawType(document.object_type) === state.kind);
-  }, [bundle.runtime, searchStarted, state.query, state.filter, state.publisher, state.kind, state.objectType, state.controlFamily]);
+  }, [bundle.runtime, state.query, state.filter, state.publisher, state.kind, state.objectType, state.controlFamily]);
   const catalogs = useMemo(() => new Map(bundle.runtime.getCatalogs().map((catalog: any) => [catalog.id, catalog.name])), [bundle.runtime]);
   const catalogCoverage = useMemo(() => buildCatalogCoverageList(bundle.runtime.getCatalogs(), 1), [bundle.runtime]);
   const recordRows = useMemo(() => documents.map((document: any) => ({
@@ -278,7 +281,7 @@ export function ExplorePage(props: {
     return rows.sort((left, right) => left.rank - right.rank || byText("title")(left, right));
   }, [directoryResources, glossaryMatches, guideMatches, recordRows, resourceMatches.artifacts, resourceMatches.templates, sourceMatches, state.sort]);
 
-  const openResult = (result: any) => {
+  const openResult = useCallback((result: any) => {
     const item = result.payload;
     if (result.kind === "record") return onOpenNode(item.document.id);
     if (result.kind === "guide") return onNavigate("patterns", { pattern: item.id });
@@ -287,8 +290,11 @@ export function ExplorePage(props: {
     if (result.kind === "template") return onNavigate("templates", { templateType: item.templateType });
     if (result.kind === "artifact" && item.href) return window.open(item.href, "_blank", "noopener,noreferrer");
     if (result.kind === "glossary") return onOpenGlossary(item.id);
-  };
-  const mapItems: LibraryMapItem[] = unifiedResults.map((result: any) => ({
+  }, [onNavigate, onOpenGlossary, onOpenNode]);
+  // Only materialise the map projection when the map view is active. The
+  // default Library corpus is large; building this on every list-view render
+  // would be wasted work.
+  const mapItems: LibraryMapItem[] = useMemo(() => state.viewMode !== "map" ? [] : unifiedResults.map((result: any) => ({
     id: result.kind === "record" ? result.payload.document.id : result.identifier,
     kind: result.kind === "record" ? displayNameFor("object_type", result.payload.document.object_type) : result.kind,
     label: result.title,
@@ -306,7 +312,7 @@ export function ExplorePage(props: {
               : undefined,
     externalHref: result.kind === "artifact" ? result.payload.href : undefined,
     onAction: result.kind === "glossary" ? () => openResult(result) : undefined,
-  }));
+  })), [openResult, state.viewMode, unifiedResults]);
   const activeFilters = [
     state.filter && { key: "filter", label: catalogs.get(state.filter) || state.filter },
     state.publisher && { key: "publisher", label: state.publisher },
@@ -336,7 +342,7 @@ export function ExplorePage(props: {
       </form>
 
       <div className="search-toolbar">
-        <div aria-live="polite" className="search-result-count">{searchStarted ? `${unifiedResults.length.toLocaleString()} result${unifiedResults.length === 1 ? "" : "s"}` : "Enter a search or choose a filter"}</div>
+        <div aria-live="polite" className="search-result-count">{`${unifiedResults.length.toLocaleString()} result${unifiedResults.length === 1 ? "" : "s"}`}</div>
         <div aria-label="Library view" className="library-view-toggle" role="group">
           <button aria-pressed={state.viewMode !== "map"} onClick={() => switchView("list")} type="button"><IconList aria-hidden="true" size={16} />List</button>
           <button aria-pressed={state.viewMode === "map"} onClick={() => switchView("map")} type="button"><IconMap aria-hidden="true" size={16} />Atlas map</button>
@@ -387,7 +393,7 @@ export function ExplorePage(props: {
             return <li className="search-result-list-item" key={result.key}><article aria-labelledby={`title-${result.key}`} className="search-result-row search-result-row--universal" data-publisher={publisher} data-result-class={result.kind}><div className="search-result-row__type">{type}</div><div className="search-result-row__body"><h3 id={`title-${result.key}`}>{titleTarget}</h3><p className="search-result-row__source">{result.identifier} · {type}{result.kind === "resource" ? ` · ${resourceAccessLabel(item)}` : ""}</p>{detailsReady ? <p className="search-result-row__excerpt"><MarkedSearchText query={state.query} text={summary} /></p> : null}{detailsReady ? <div className="search-result-row__signals"><span>Matched {type.toLocaleLowerCase()} metadata</span></div> : null}</div></article></li>;
           })}
           {state.viewMode !== "map" && visibleCount > 0 && unifiedResults.length > visibleCount ? <li className="search-result-list-action"><Button onClick={() => setVisibleCount((count) => count + 25)} type="button" variant="secondary">Show 25 more</Button></li> : null}
-          {searchStarted && unifiedResults.length === 0 ? <li className="search-result-list-item"><section className="empty-state"><IconSparkles aria-hidden="true" size={24} /><h2>No matching results found.</h2><p>Try an identifier, title, topic, publication, or remove a filter.</p><Button onClick={() => onNavigate("search", { query: "", filter: "", publisher: "", kind: "", objectType: "", controlFamily: "", collection: "", connectedOnly: "", sort: "relevance", viewMode: "list" })} type="button" variant="primary">Clear search</Button></section></li> : !searchStarted ? <li className="search-result-list-item"><section className="empty-state subtle"><p className="muted">Try T1195.002, access control, encryption, or supply chain.</p></section></li> : null}
+          {state.viewMode !== "map" && unifiedResults.length === 0 ? <li className="search-result-list-item"><section className="empty-state"><IconSparkles aria-hidden="true" size={24} /><h2>No matching results found.</h2><p>Try an identifier, title, topic, publication, or remove a filter.</p><Button onClick={() => onNavigate("search", { query: "", filter: "", publisher: "", kind: "", objectType: "", controlFamily: "", collection: "", connectedOnly: "", sort: "relevance", viewMode: "list" })} type="button" variant="primary">Clear search</Button></section></li> : null}
         </ul>
       </div>
 

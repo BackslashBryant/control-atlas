@@ -30,7 +30,7 @@ const HOME_ENTRANCES = [
   {
     label: labelForGoal("understand"),
     description:
-      "Start with controls and requirements, then keep the source attached.",
+      "Find the control or requirement you need, and the official source behind it.",
     icon: IconFileSearch,
     view: "start-here",
     patch: { goal: "understand" },
@@ -38,7 +38,7 @@ const HOME_ENTRANCES = [
   {
     label: labelForGoal("implement"),
     description:
-      "Move from requirements into implementation work and technical checks.",
+      "Turn requirements into hardening steps and technical checks.",
     icon: IconShieldLock,
     view: "start-here",
     patch: { goal: "implement" },
@@ -46,7 +46,7 @@ const HOME_ENTRANCES = [
   {
     label: labelForGoal("assess"),
     description:
-      "Open the assessment path, published methods, and package work.",
+      "Follow the assessment and authorization path, with the published methods.",
     icon: IconBinaryTree,
     view: "start-here",
     patch: { goal: "assess" },
@@ -69,7 +69,7 @@ const HOME_ENTRANCES = [
   },
   {
     label: labelForGoal("document"),
-    description: "Choose the work product first, then add source context.",
+    description: "Pick the document you need, then pull in the sources that back it.",
     icon: IconClipboardList,
     view: "start-here",
     patch: { goal: "document" },
@@ -77,10 +77,12 @@ const HOME_ENTRANCES = [
   {
     label: labelForGoal("tools"),
     description:
-      "Search the practitioner ecosystem without mixing it into publisher hierarchy.",
+      "Find the tools and communities beyond the official publishers.",
     icon: IconTool,
-    view: "start-here",
-    patch: { goal: "tools" },
+    // Direct destination, not a guided goal: link straight to the tools and
+    // communities view so it has a one-click path from home.
+    view: "commons",
+    patch: {},
   },
 ] as const;
 
@@ -162,9 +164,9 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
 
       <aside className="home-trust-boundary">
         <p>
-          Official public material stays primary and attributed. Control Atlas
-          suggestions are labeled, kept separate from links found in published
-          sources, and never decide applicability or compliance.
+          Official material always comes first, with its source named. Anything
+          Control Atlas adds is clearly labeled, kept separate from the official
+          links, and never decides what applies to you.
         </p>
       </aside>
     </section>

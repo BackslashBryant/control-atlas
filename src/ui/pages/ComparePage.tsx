@@ -377,7 +377,7 @@ export function ComparePage(props: {
     {
       id: "frameworks",
       title: "Catalog to catalog",
-      body: "Compare two published structures using one explicitly selected mapping source.",
+      body: "See how two frameworks line up, based on one published mapping you choose.",
       crosswalk: "relationships",
     },
     {
@@ -471,7 +471,7 @@ export function ComparePage(props: {
       <PageHeader
         eyebrow="Compare"
         primary
-        summary="Choose the kind of comparison. Then pick the two things you need to reconcile."
+        summary="Pick the kind of comparison, then choose the two things to line up."
         title="What do you want to compare?"
       />
       {selectedCatalogVersion ? (
@@ -481,7 +481,7 @@ export function ComparePage(props: {
       {crosswalk === "intent" ? (
         <section aria-labelledby="compare-kind-heading" className="nexus-section">
           <h2 className="visually-hidden" id="compare-kind-heading">
-            Choose a comparison type
+            Comparison types
           </h2>
           <div aria-label="Comparison modes" className="compare-mode-tabs" role="tablist">
             {comparisonCards.map((card) => (
@@ -501,6 +501,10 @@ export function ComparePage(props: {
               </button>
             ))}
           </div>
+          <p className="compare-help-link">
+            Not comparing yet?{" "}
+            <AppLink onNavigate={onNavigate} view="search">Browse the full Library</AppLink>
+          </p>
         </section>
       ) : (
         <div className="compare-mode-header">

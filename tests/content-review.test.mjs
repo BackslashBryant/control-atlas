@@ -116,8 +116,8 @@ test('Learn explanation copy avoids prohibited compliance or authorization claim
 // unchanged and still enforced: the flow may route, never determine.
 test('Start here guides in two steps without making a determination', () => {
   const startHere = readFileSync('src/ui/pages/StartHerePage.tsx', 'utf8');
-  assert.match(startHere, /1\. What are you trying to do\?/);
-  assert.match(startHere, /2\. What context do you already know\?/);
+  assert.match(startHere, /What are you trying to do\?/);
+  assert.match(startHere, /What kind of system are you working with\?/);
   assert.match(startHere, /Control Atlas does not decide\s+what applies to your system/);
   assert.doesNotMatch(startHere, /applicability recommendation|not a framework or baseline/i);
   assert.doesNotMatch(startHere, /System type|Data sensitivity|Operational environment/);

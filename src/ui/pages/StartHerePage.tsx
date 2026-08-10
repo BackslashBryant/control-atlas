@@ -52,7 +52,7 @@ export function StartHerePage(props: {
 
   return (
     <Panel className="max-w-[70rem] mx-auto start-here-panel" data-visual-identity="task-intake-compass">
-      <PageHeader primary summary="Two quick choices produce a source-traceable starting plan. Your answers stay in the URL so Back, Forward, reload, and copied links preserve this step." title="Start here" />
+      <PageHeader primary summary="Answer two quick questions to find the right publication to start with." title="Start here" />
 
       <ol aria-label="Start Here progress" className="start-here-progress">
         {["Goal", "Context", "Starting plan"].map((label, index) => {
@@ -70,7 +70,7 @@ export function StartHerePage(props: {
 
       {step === 1 ? (
         <section aria-labelledby="start-here-goal" className="start-here-step">
-          <h2 id="start-here-goal">1. What are you trying to do?</h2>
+          <h2 id="start-here-goal">What are you trying to do?</h2>
           <p>Choose the work in front of you.</p>
           <div className="start-here-choice-grid">
             {START_HERE_GOALS.map((goal: { id: string; label: string }) => <button key={goal.id} onClick={() => update({ goal: goal.id, context: "" })} type="button"><span>{goal.label}</span><IconArrowRight aria-hidden="true" size={17} /></button>)}
@@ -80,8 +80,8 @@ export function StartHerePage(props: {
 
       {step === 2 ? (
         <section aria-labelledby="start-here-context" className="start-here-step">
-          <h2 id="start-here-context">2. What context do you already know?</h2>
-          <p>This selects a sensible publication to open first. It is not a scoping determination.</p>
+          <h2 id="start-here-context">What kind of system are you working with?</h2>
+          <p>This opens the right publication first.</p>
           <div className="start-here-choice-grid">
             {START_HERE_CONTEXTS.map((context: { id: string; label: string }) => <button key={context.id} onClick={() => update({ context: context.id })} type="button"><span>{context.label}</span><IconArrowRight aria-hidden="true" size={17} /></button>)}
           </div>
@@ -101,7 +101,7 @@ export function StartHerePage(props: {
           </div>
           <div className="start-here-followups">
             <PlanStep bundle={bundle} catalogId={plan.thenReview.catalogId} onNavigate={onNavigate} role="Then review" />
-            <AppLink className="start-here-publication" onNavigate={onNavigate} patch={plan.action.patch as Partial<ViewState> | undefined} view={plan.action.view as ViewState["view"]}><span><small>Then act</small><strong>{plan.action.label}</strong><span>Continue with the selected goal still visible in this plan.</span></span><IconArrowRight aria-hidden="true" size={18} /></AppLink>
+            <AppLink className="start-here-publication" onNavigate={onNavigate} patch={plan.action.patch as Partial<ViewState> | undefined} view={plan.action.view as ViewState["view"]}><span><small>Then act</small><strong>{plan.action.label}</strong><span>Open the recommended starting point for what you're working on.</span></span><IconArrowRight aria-hidden="true" size={18} /></AppLink>
           </div>
           <div className="card-actions">
             <Button onClick={() => update({ context: "" })} type="button" variant="secondary"><IconArrowLeft aria-hidden="true" size={17} />Back to context</Button>

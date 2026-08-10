@@ -15,8 +15,7 @@ export function LoadingStatusPanel(props: {
     >
       <div aria-hidden="true" className="load-progress mb-[16px]" />
       <p className="mb-[16px]">
-        Please wait a moment while we load the public records, source registry,
-        and comparison views.
+        Loading the public records, source registry, and comparison views.
       </p>
       {props.slow ? (
         <p className="text-[var(--ca-warning)] mb-[16px]">

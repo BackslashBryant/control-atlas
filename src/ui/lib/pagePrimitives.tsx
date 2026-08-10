@@ -486,6 +486,7 @@ export function SelectField(props: {
     <label className="field" htmlFor={fieldId}>
       <span>{props.label}</span>
       <select
+        aria-label={props.label}
         disabled={props.disabled}
         id={fieldId}
         onChange={(event) => props.onChange(event.target.value)}

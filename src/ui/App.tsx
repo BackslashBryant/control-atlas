@@ -718,8 +718,8 @@ function AppContent(props: {
       <section className="notice">
         <h1>Page not found</h1>
         <p>
-          We could not find that page. The link may be incorrect or the page may
-          have moved.
+          That page could not be found. The link may be incorrect, or the page
+          may have moved.
         </p>
         <div className="card-actions">
           <AppLink onNavigate={onNavigate} variant="primary" view="home">
@@ -891,25 +891,25 @@ function routeLoadingCopy(view: ViewState["view"]) {
       return {
         title: "Loading comparison data",
         description:
-          "We are loading the public mappings needed to compare frameworks, baselines, and threat paths.",
+          "Loading the public mappings needed to compare frameworks, baselines, and threat paths.",
       };
     case "catalog-detail":
       return {
         title: "Loading the Library",
         description:
-          "We are loading the selected catalog, its public records, and source details.",
+          "Loading the selected catalog, its public records, and source details.",
       };
     case "sources":
       return {
         title: "Loading Sources",
         description:
-          "We are loading publisher details, source status, and known coverage gaps.",
+          "Loading publisher details, source status, and known coverage gaps.",
       };
     case "templates":
       return {
         title: "Loading document tasks",
         description:
-          "We are preparing starter documents and the official sources that support them.",
+          "Preparing starter documents and the official sources that support them.",
       };
     case "atlas-map":
       return {

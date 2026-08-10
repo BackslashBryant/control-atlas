@@ -801,6 +801,25 @@ a {
   box-shadow: none;
 }
 
+/* Keep the input box symmetric within its border: take the leading search
+   icon out of flow so the field spans edge to edge, then pad the text to
+   clear the icon. Without this the icon offsets the input ~26px to the right. */
+.catalog-search.search-results-query {
+  position: relative;
+}
+
+.catalog-search.search-results-query > svg {
+  position: absolute;
+  left: var(--ca-space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.catalog-search.search-results-query input[type="search"] {
+  padding-left: calc(18px + var(--ca-space-2));
+}
+
 .search-toolbar {
   display: flex;
   align-items: end;
@@ -6630,17 +6649,11 @@ button.atlas-leverage-row:hover {
   align-items: center;
 }
 
-@media (min-width: 1000px) {
-  .home-hero {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: var(--ca-space-9, 36px);
-  }
-}
-
 .home-hero-lead {
   display: grid;
   gap: var(--ca-space-5);
   align-content: start;
+  max-width: 62ch;
 }
 
 .home-entry-header {
@@ -6873,9 +6886,12 @@ button.atlas-leverage-row:hover {
   box-shadow: none;
 }
 
+/* Flex-wrap, not a fixed column count: the trailing row centres so an odd
+   number of entrances never leaves an empty grid slot. */
 .home-secondary-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
 }
 
@@ -7078,54 +7094,8 @@ button.atlas-leverage-row:hover {
   font-size: var(--ca-text-sm) !important;
 }
 
-.home-work-map {
-  position: relative;
-  display: grid;
-  gap: 8px;
-  padding: 24px;
-  border: 1px solid var(--ca-border-strong);
-  border-radius: var(--radius-lg);
-  background:
-    linear-gradient(90deg, transparent 24px, color-mix(in srgb, var(--ca-secondary) 20%, transparent) 25px, transparent 26px),
-    var(--ca-surface-raised);
-}
-
-.home-work-map::before {
-  content: "One connected body of work";
-  color: var(--ca-text-muted);
-  font: 600 var(--ca-text-xs) / 1.4 var(--ca-font-mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.home-work-map span {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 38px;
-  padding-inline: 14px;
-  border-left: 3px solid var(--ca-secondary);
-  background: var(--ca-surface);
-  color: var(--ca-text);
-  font-family: var(--font-display);
-  font-weight: 650;
-}
-
-.home-work-map span::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-}
-
-.home-secondary-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-auto-rows: 1fr;
-}
-
 .home-secondary-action {
-  height: 100%;
+  flex: 0 1 272px;
 }
 
 .typeahead-filter {
@@ -7963,31 +7933,7 @@ button.atlas-leverage-row:hover {
   }
 
   .home-secondary-grid {
-    grid-template-columns: 1fr;
     gap: 8px;
-  }
-
-  .home-work-map {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 4px;
-    padding: 12px;
-  }
-
-  .home-work-map::before {
-    grid-column: 1 / -1;
-  }
-
-  .home-work-map span {
-    min-height: 48px;
-    padding: 6px 2px;
-    border-left: 0;
-    border-top: 3px solid var(--ca-secondary);
-    font-size: 11px;
-    justify-content: center;
-  }
-
-  .home-work-map span::before {
-    display: none;
   }
 
   .home-capability-grid {
@@ -7999,6 +7945,7 @@ button.atlas-leverage-row:hover {
   }
 
   .home-secondary-action {
+    flex-basis: 100%;
     min-height: 58px;
     padding: 10px 12px;
   }
