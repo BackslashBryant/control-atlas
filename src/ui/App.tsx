@@ -153,6 +153,36 @@ function readHashLocation() {
   };
 }
 
+function routeTransitionScope(state: ViewState): string {
+  switch (state.view) {
+    case "atlas-map":
+      return [
+        state.view,
+        state.node,
+        state.atlasAxis,
+        state.atlasLimb,
+        state.atlasFramework,
+        state.atlasBenchmark,
+        state.atlasBaseline,
+        state.atlasFamily,
+        state.atlasRmfStep,
+        state.atlasStage,
+      ].join(":");
+    case "catalog-detail":
+      return `${state.view}:${state.catalog}`;
+    case "library-detail":
+      return `${state.view}:${state.node}`;
+    case "commons-detail":
+      return `${state.view}:${state.id}`;
+    case "sources":
+      return `${state.view}:${state.source}`;
+    case "patterns":
+      return `${state.view}:${state.pattern}`;
+    default:
+      return state.view;
+  }
+}
+
 export function App() {
   const [location, setLocation] = useState(readHashLocation);
   const routerNavigate = useCallback(
@@ -222,7 +252,11 @@ export function App() {
   useEffect(() => {
     const syncLocation = () => {
       closeOverlays();
-      beginRouteTransition("Opening the selected workspace", window.location.hash);
+      const nextLocation = readHashLocation();
+      const nextState = parseHashLocation(nextLocation.pathname, nextLocation.search);
+      if (routeTransitionScope(latestNavStateRef.current) !== routeTransitionScope(nextState)) {
+        beginRouteTransition("Opening the selected workspace", window.location.hash);
+      }
       setLocation(readHashLocation());
     };
     window.addEventListener("hashchange", syncLocation);
@@ -481,10 +515,15 @@ export function App() {
       ...(patch as Record<string, unknown>),
     } as Partial<ViewState>);
     const nextLocation = serializeHashLocation(nextState);
-    if (!beginRouteTransition("Opening the selected workspace", nextLocation)) return;
+    if (nextLocation === serializeHashLocation(current)) return;
+    const changesWorkspace = routeTransitionScope(current) !== routeTransitionScope(nextState);
+    if (
+      changesWorkspace &&
+      !beginRouteTransition("Opening the selected workspace", nextLocation)
+    ) return;
     latestNavStateRef.current = nextState;
     routerNavigate(nextLocation);
-    window.scrollTo({ top: 0, behavior: "auto" });
+    if (changesWorkspace) window.scrollTo({ top: 0, behavior: "auto" });
   }
 
   // The global keydown listener is registered once with no deps; it reaches the
@@ -540,12 +579,15 @@ export function App() {
   const routeContext = orbitalRouteContext(viewState, routeEntityName);
 
   useEffect(() => {
-    if (readyState === "false") return;
+    let completionFrame = 0;
     const frame = window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(completeRouteTransition);
+      completionFrame = window.requestAnimationFrame(completeRouteTransition);
     });
-    return () => window.cancelAnimationFrame(frame);
-  }, [readyState, viewState]);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(completionFrame);
+    };
+  }, [viewState]);
 
   return (
     <>

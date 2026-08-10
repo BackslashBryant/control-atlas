@@ -11,24 +11,23 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 900 });
 });
 
-test("Resources is reachable from utility navigation and global search reaches communities", async ({
+test("Resources is reachable from primary navigation and global search reaches communities", async ({
   page,
 }) => {
-  await gotoApp(page, "/#/catalog");
+  await gotoApp(page, "/#/library");
   await waitForAppReady(page);
 
-  // Resources holds external tools/templates/communities outside the Atlas
-  // hierarchy, so it lives in utility navigation, not the five primary
-  // destinations (Atlas/Library/Compare/Guides/Documents).
-  const utilityNav = page.getByRole("navigation", {
-    name: "Utility navigation",
+  // Resources is a first-class destination for external tools, services, and
+  // practitioner communities outside the Library publication corpus.
+  const primaryNav = page.getByRole("navigation", {
+    name: "Primary navigation",
   });
   await expect(
-    utilityNav.getByRole("button", { name: "Resources", exact: true }),
+    primaryNav.getByRole("link", { name: "Resources", exact: true }),
   ).toBeVisible();
 
-  await utilityNav
-    .getByRole("button", { name: "Resources", exact: true })
+  await primaryNav
+    .getByRole("link", { name: "Resources", exact: true })
     .click();
   await waitForAppReady(page);
   const resourceFilters = page.getByRole("region", {
@@ -45,7 +44,7 @@ test("Resources is reachable from utility navigation and global search reaches c
   await search.fill("NISTControls");
   await expect(page.getByText(/Communities \(\d+\)/)).toBeVisible();
   await expect(
-    page.getByRole("button", {
+    page.getByRole("link", {
       name: "Reddit /r/NISTControls Practitioner Community",
       exact: true,
     }),
@@ -53,21 +52,16 @@ test("Resources is reachable from utility navigation and global search reaches c
 
   await search.press("Enter");
   await waitForAppReady(page);
-  await expect(page).toHaveURL(/#\/search\?q=NISTControls/);
+  await expect(page).toHaveURL(/#\/library\?q=NISTControls/);
   await expect(page.locator('[data-result-class="resource"]')).toBeVisible();
 
-  await page
-    .getByRole("button", {
-      name: "Reddit /r/NISTControls Practitioner Community",
-      exact: true,
-    })
-    .click();
+  await page.locator('[data-result-class="resource"]').getByRole("link").click();
   await waitForAppReady(page);
   await expect(page).toHaveURL(
-    /#\/resources\/community-reddit-nistcontrols\?from=search/,
+    /#\/resources\/community-reddit-nistcontrols$/,
   );
   await expect(
-    utilityNav.getByRole("button", { name: "Resources", exact: true }),
+    primaryNav.getByRole("link", { name: "Resources", exact: true }),
   ).toHaveAttribute("aria-current", "page");
 });
 
@@ -80,9 +74,9 @@ test("former Build-nested Resources URLs recover to the top-level route", async 
   );
   await waitForAppReady(page);
   await expect(page).toHaveURL(
-    /#\/resources\/community-reddit-fedramp\?from=templates/,
+    /#\/resources\/community-reddit-fedramp$/,
   );
   await expect(
-    page.getByRole("button", { name: "Back to Resources" }),
+    page.getByRole("link", { name: "Back" }),
   ).toBeVisible();
 });

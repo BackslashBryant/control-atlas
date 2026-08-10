@@ -500,7 +500,9 @@ function loadReactModules() {
 }
 
 function onLocationChange() {
-  beginRouteTransition("Opening the selected workspace", window.location.hash);
+  if (rootElement.dataset.reactActive !== 'true') {
+    beginRouteTransition("Opening the selected workspace", window.location.hash);
+  }
   if (!isHomeHash()) void bootReactApp();
 }
 

@@ -3,7 +3,7 @@ import {
   IconExternalLink,
   IconSearch,
 } from "@tabler/icons-react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Button, ButtonLink } from "../components/lsm/Button";
 import { AppLink } from "../components/AppLink";
@@ -36,6 +36,8 @@ export function CatalogDetailPage(props: {
   onOpenNode: (nodeId: string) => void;
 }) {
   const { bundle, state, onNavigate, onOpenNode } = props;
+  const [queryDraft, setQueryDraft] = useState(state.query);
+  useEffect(() => setQueryDraft(state.query), [state.query]);
   const catalogs =
     bundle.catalogSummaries?.length
       ? bundle.catalogSummaries
@@ -187,10 +189,11 @@ export function CatalogDetailPage(props: {
           label={`Filter ${catalog.name} ${profile.recordLabel}`}
           targetId="catalog-record-results"
         >
-          <div
+          <form
             aria-label="Catalog record controls"
             className="catalog-record-toolbar"
-            role="group"
+            onSubmit={(event) => { event.preventDefault(); const query = queryDraft.trim(); if (query !== state.query) update({ query, browseAll: "true", page: "" }); }}
+            role="search"
           >
             <div className="catalog-record-filters">
               {families.length > 1 && !showTierBrowser ? (
@@ -220,21 +223,16 @@ export function CatalogDetailPage(props: {
                   <IconSearch aria-hidden="true" size={18} />
                   <input
                     aria-label="Search this catalog"
-                    onChange={(event) =>
-                      update({
-                        query: event.target.value,
-                        browseAll: "true",
-                        page: "",
-                      })
-                    }
+                    onChange={(event) => setQueryDraft(event.target.value)}
                     placeholder={`Identifier or title in ${catalog.name}`}
                     type="search"
-                    value={state.query}
+                    value={queryDraft}
                   />
                 </span>
               </label>
             </div>
-          </div>
+            <Button type="submit" variant="secondary">Search records</Button>
+          </form>
         </WorkbenchControlSurface>
 
         <div data-control-results id="catalog-record-results">
