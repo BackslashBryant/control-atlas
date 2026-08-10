@@ -180,43 +180,24 @@ body {
   display: none;
 }
 
-.route-transition__circuit {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, 2.25rem);
-  align-items: center;
-  justify-content: center;
-  height: 2.5rem;
+.route-transition__mark {
+  width: 4rem;
+  height: 4rem;
+  margin-inline: auto;
+  color: var(--ca-primary);
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--ca-primary) 48%, transparent));
+  animation: route-transition-mark-pulse 1.2s ease-in-out infinite;
 }
 
-.route-transition__circuit i {
-  position: relative;
-  display: block;
-  height: 2px;
-  background: var(--ca-primary);
-  box-shadow: 0 0 14px color-mix(in srgb, var(--ca-primary) 62%, transparent);
-}
-
-.route-transition__circuit i::after {
-  position: absolute;
-  top: 50%;
-  right: -3px;
-  width: 7px;
-  height: 7px;
-  border: 2px solid var(--ca-primary);
-  border-radius: 999px;
-  background: var(--ca-bg);
-  content: "";
-  transform: translateY(-50%);
-}
-
-.route-transition__circuit i:nth-child(2) {
-  background: var(--ca-accent);
-  transform: translateY(-10px);
-}
-
-.route-transition__circuit i:nth-child(3) {
-  transform: translateY(8px);
+@keyframes route-transition-mark-pulse {
+  0%, 100% {
+    opacity: 0.72;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes route-transition-in {
@@ -225,7 +206,8 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .route-transition { animation: none; }
+  .route-transition,
+  .route-transition__mark { animation: none; }
 }
 
 .static-search-shell {

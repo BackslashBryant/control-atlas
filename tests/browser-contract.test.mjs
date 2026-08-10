@@ -142,6 +142,19 @@ test('brand identity is immediate, animated, and does not use an entrance gate',
   assert.match(relationshipGraph, /elk\s*\.\s*layout/);
 });
 
+test('route transitions use the canonical Control Atlas mark', () => {
+  const transitionMarkup = html.match(
+    /<span aria-hidden="true" class="brand-icon-mark route-transition__mark">[\s\S]*?<\/span>/,
+  )?.[0];
+
+  assert.ok(transitionMarkup, 'the route transition must render the brand mark');
+  assert.match(transitionMarkup, /M 61\.2 61\.2 A 30 30 0 1 1 61\.2 18\.8/);
+  assert.match(transitionMarkup, /M 31 31 L 53 40 L 43 43 L 40 53 Z/);
+  assert.doesNotMatch(html, /route-transition__circuit/);
+  assert.match(orbitalCss, /\.route-transition__mark[\s\S]*route-transition-mark-pulse/);
+  assert.match(orbitalCss, /prefers-reduced-motion: reduce[\s\S]*\.route-transition__mark/);
+});
+
 test('map foundation uses the approved React Flow and ELK stack', () => {
   for (const dependency of [
     '@xyflow/react',
