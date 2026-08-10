@@ -22,10 +22,15 @@ async function openAtlas(page, path = "/#/atlas") {
   await expect(page.locator(".atlas-tree")).toBeVisible();
 }
 
-async function openTreeNode(page, id) {
+async function selectTreeNode(page, id) {
   await page
     .locator(`.react-flow__node:has([data-atlas-node-id="${id}"])`)
     .dispatchEvent("click");
+}
+
+async function drillSelectedNode(page, id, actionName) {
+  await selectTreeNode(page, id);
+  await page.getByRole("button", { name: actionName, exact: true }).click();
 }
 
 test("Atlas map branches down, gates technology, restores the URL, and honors history", async ({ page }) => {
@@ -33,21 +38,24 @@ test("Atlas map branches down, gates technology, restores the URL, and honors hi
   await openAtlas(page);
 
   const tree = page.locator(".atlas-tree");
-  await expect(tree).toHaveAttribute("data-tree-node-count", "28");
+  await expect(tree).toHaveAttribute("data-tree-node-count", "13");
   await expect(tree.locator("[data-orientation-explanation]")).toHaveCount(1);
   await expect(tree.locator('[data-atlas-node-id="atlas:TRUNK"]')).toBeVisible();
-  await expect(tree.locator('[data-atlas-node-id^="authority:"]')).toHaveCount(18);
+  await expect(tree.locator('[data-atlas-node-id^="authority-aggregate:"]')).toHaveCount(3);
   await expect(tree.locator('[data-atlas-node-id^="atlas:LIMB-"]')).toHaveCount(9);
   const stage = tree.locator(".atlas-tree__stage");
   await expect(stage).toHaveAttribute("data-semantic-level", "orientation");
   await page.waitForTimeout(550);
   for (let step = 0; step < 4; step += 1) await page.getByTitle("Zoom in").click();
-  await expect(stage).toHaveAttribute("data-semantic-level", "discovery");
+  await expect(stage).toHaveAttribute("data-semantic-level", "justification");
 
-  await openTreeNode(page, "atlas:LIMB-IMPLEMENTATION");
+  await selectTreeNode(page, "atlas:LIMB-IMPLEMENTATION");
+  await expect(page).not.toHaveURL(/atlasLimb=/);
+  await expect(page.getByRole("heading", { name: "Implementation", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Open this area", exact: true }).click();
   await expect(stage).toHaveAttribute("data-semantic-level", "justification");
   await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-IMPLEMENTATION/);
-  await openTreeNode(page, "disa-stig:CATALOG");
+  await drillSelectedNode(page, "disa-stig:CATALOG", "Open this publication");
   await expect(page).toHaveURL(/atlasFramework=disa-stig/);
   await expect(page.getByRole("heading", { name: "Choose a technology" })).toBeVisible();
   const picker = page.getByLabel(/Technology benchmark, 353 available/);
@@ -73,7 +81,7 @@ test("Atlas map branches down, gates technology, restores the URL, and honors hi
 
   await gotoApp(page, "/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-THREAT&atlasFramework=mitre-attack");
   await waitForAppReady(page);
-  await openTreeNode(page, "mitre-attack:TACTIC-TA0001");
+  await drillSelectedNode(page, "mitre-attack:TACTIC-TA0001", "Open this branch");
   await expect(page).toHaveURL(/atlasFamily=mitre-attack%3ATACTIC-TA0001/);
   await page.reload();
   await waitForAppReady(page);
@@ -108,8 +116,12 @@ test("focused trace matches the record rail and overlay preserves tree identity 
   expect(await tree.locator(".react-flow__node").evaluateAll((nodes) => nodes.map((node) => node.getAttribute("data-id")))).toEqual(nodeIdsBefore);
   expect(await tree.locator(".react-flow__edge").evaluateAll((edges) => edges.map((edge) => edge.getAttribute("data-id")))).toEqual(edgeIdsBefore);
   await page.getByRole("button", { name: "Hide mapping overlay" }).click();
-  expect(await tree.locator(".react-flow__node").evaluateAll((nodes) => nodes.map((node) => node.getAttribute("data-id")))).toEqual(nodeIdsBefore);
-  expect(await tree.locator(".react-flow__edge").evaluateAll((edges) => edges.map((edge) => edge.getAttribute("data-id")))).toEqual(edgeIdsBefore);
+  await expect.poll(
+    () => tree.locator(".react-flow__node").evaluateAll((nodes) => nodes.map((node) => node.getAttribute("data-id"))),
+  ).toEqual(nodeIdsBefore);
+  await expect.poll(
+    () => tree.locator(".react-flow__edge").evaluateAll((edges) => edges.map((edge) => edge.getAttribute("data-id"))),
+  ).toEqual(edgeIdsBefore);
   expect(monolithic).toEqual([]);
 });
 
@@ -122,13 +134,16 @@ test("compact Atlas map keeps equivalent hierarchy, keyboard movement, and techn
 
   const tree = page.getByRole("tree", { name: "Atlas map hierarchy" });
   await expect(tree).toBeVisible();
-  await expect(tree.getByRole("treeitem")).toHaveCount(28);
+  await expect(tree.getByRole("treeitem")).toHaveCount(13);
   const compliance = tree.getByRole("treeitem", { name: /Compliance/ });
   await compliance.focus();
   await page.keyboard.press("ArrowDown");
   await expect(compliance).not.toBeFocused();
   await compliance.focus();
   await page.keyboard.press("Enter");
+  await expect(page).not.toHaveURL(/atlasLimb=/);
+  await expect(page.getByRole("heading", { name: "Compliance", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Open this area", exact: true }).click();
   await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
   await expect(page.getByRole("button", { name: "Trace back to authority" })).toHaveAttribute("aria-expanded", "true");
   await expect(page.getByRole("heading", { name: "Trace back to authority" })).toBeVisible();

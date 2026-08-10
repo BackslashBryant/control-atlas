@@ -485,11 +485,11 @@ control_atlas_template:
 **Depth 0 / Signal landing (top to bottom):**
 
 1. **Product identity** — "Control Atlas" in `--ca-font-display`, with the `Ctrl+Alt+[word]` signature as a subordinate flourish.
-2. **Product definition** — "The public map for federal cyber compliance."
+2. **Product definition** — "Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster."
 3. **Trust boundary** — public reference data, no account, no uploaded system data, and no claim of official authorization.
 4. **One primary action** — Start guided setup.
 5. **Search workbench** — direct ID and plain-language lookup remains immediately available.
-6. **Secondary paths** — Guides, Documents, and Atlas are grouped in progressive disclosure to preserve hierarchy.
+6. **Product entrances** — Atlas, Library, Start the work, and Tools and communities are visible without progressive-disclosure guesswork.
 
 All non-home routes expose a shared context rail with Depth 1 / Mission or Depth 2 / Systems, the active task, current scope, and a return path for detail surfaces.
 
@@ -513,7 +513,7 @@ All non-home routes expose a shared context rail with Depth 1 / Mission or Depth
 
 **Hero tagline:** `Ctrl+Alt+[rotating word]` — signature hero element only. Not in the nav or header.
 
-**Static subtagline:** The public map for federal cyber compliance.
+**Static subtagline:** Federal cybersecurity reference and practitioner workbench.
 
 ### Visual Direction
 
@@ -564,7 +564,7 @@ The complete canonical values and semantic provenance/status mappings live in `s
 | Layer | Decision | Rationale |
 |---|---|---|
 | Base | Vite + React + TypeScript static app | Keeps full app control while preserving static public-data deployment |
-| Atlas | Semantic React DOM + record-indexed neighborhood shards | Readable, bounded, responsive Path/Map/List views without a canvas or monolithic graph download |
+| Atlas | React Flow viewport + deterministic `d3-hierarchy` aggregation over the compact generated spine, with semantic DOM tree/list alternative | Gives the ecosystem a legible spatial overview without a monolithic graph or inaccessible canvas; see ADR 0015 |
 | Other relationship diagrams | React Flow + ELK.js, lazy | Retained for existing bounded detail and Compare surfaces pending separate review |
 | Search | MiniSearch | Field-weighted, static-bundle-friendly, handles mixed ID/keyword queries |
 | Validation | Zod (runtime) + JSON Schema export | TypeScript-native with schema portability |

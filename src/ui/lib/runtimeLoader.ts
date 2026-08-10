@@ -11,6 +11,69 @@ import { expandLibrarySearchTransport } from "./librarySearchTransport";
 
 const CACHE_VERSION = RUNTIME_CACHE_VERSION;
 const artifactCache = new Map<string, Promise<unknown>>();
+const COMPRESSED_ARTIFACT_TIMEOUT_MS = 4_000;
+const FALLBACK_ARTIFACT_TIMEOUT_MS = 8_000;
+const JSON_WORKER_TIMEOUT_MS = 10_000;
+
+export type RuntimeLoadErrorCode =
+  | "artifact_timeout"
+  | "artifact_unavailable"
+  | "artifact_invalid"
+  | "worker_timeout"
+  | "worker_failure";
+
+export class RuntimeLoadError extends Error {
+  code: RuntimeLoadErrorCode;
+
+  constructor(code: RuntimeLoadErrorCode, message: string, options?: ErrorOptions) {
+    super(message, options);
+    this.name = "RuntimeLoadError";
+    this.code = code;
+  }
+}
+
+export type ArtifactFetchOptions = {
+  bypassCache?: boolean;
+  compressedTimeoutMs?: number;
+  fallbackTimeoutMs?: number;
+};
+
+export function clearRuntimeArtifactCache(path?: string) {
+  if (path) artifactCache.delete(path);
+  else artifactCache.clear();
+}
+
+async function optionalArtifact<T>(path: string, fallback: T): Promise<T> {
+  try {
+    return (await fetchArtifact(path)) as T;
+  } catch (error) {
+    console.warn(`Optional Control Atlas data did not load: ${path}`, error);
+    return fallback;
+  }
+}
+
+async function withDeadline<T>(
+  timeoutMs: number,
+  code: RuntimeLoadErrorCode,
+  task: (signal: AbortSignal) => Promise<T>,
+) {
+  const controller = new AbortController();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = globalThis.setTimeout(() => {
+      controller.abort();
+      reject(new RuntimeLoadError(code, "The requested data took too long to load."));
+    }, timeoutMs);
+  });
+  try {
+    return await Promise.race([task(controller.signal), timeout]);
+  } finally {
+    if (timer !== undefined) {
+      globalThis.clearTimeout(timer);
+    }
+    controller.abort();
+  }
+}
 
 export type TemplateRegistry = {
   templates?: Array<Record<string, unknown>>;
@@ -321,8 +384,8 @@ export async function preloadRuntimeArtifacts(state: ViewState) {
   await Promise.allSettled(requests);
 }
 
-export async function fetchArtifact(path: string) {
-  const cached = artifactCache.get(path);
+export async function fetchArtifact(path: string, options: ArtifactFetchOptions = {}) {
+  const cached = options.bypassCache ? undefined : artifactCache.get(path);
   if (cached) {
     return cached;
   }
@@ -334,25 +397,59 @@ export async function fetchArtifact(path: string) {
     // empty directory. Any failure of the compressed path now falls through.
     const parseOffThread = path.includes("library-search.json");
     try {
-      const response = await fetch(compressedArtifactPath(path));
-      if (response.ok && typeof DecompressionStream !== "undefined") {
-        const ds = new DecompressionStream("gzip");
-        const decompressedStream = response.body!.pipeThrough(ds);
-        const decompressedResponse = new Response(decompressedStream);
-        return parseOffThread
-          ? await parseJsonResponseOffThread(decompressedResponse)
-          : await decompressedResponse.json();
-      }
+      return await withDeadline(
+        options.compressedTimeoutMs ?? COMPRESSED_ARTIFACT_TIMEOUT_MS,
+        "artifact_timeout",
+        async (signal) => {
+          const response = await fetch(compressedArtifactPath(path), { signal });
+          if (!response.ok || typeof DecompressionStream === "undefined" || !response.body) {
+            throw new RuntimeLoadError("artifact_unavailable", "The compressed data is unavailable.");
+          }
+          const ds = new DecompressionStream("gzip");
+          const decompressedStream = response.body.pipeThrough(ds);
+          const decompressedResponse = new Response(decompressedStream);
+          return parseOffThread
+            ? await parseJsonResponseOffThread(decompressedResponse)
+            : await decompressedResponse.json();
+        },
+      );
     } catch {
       // Compressed fetch or decompression failed; use the uncompressed file.
     }
-    const fallbackResponse = await fetch(path);
-    if (!fallbackResponse.ok) {
-      throw new Error(`Unable to load ${path}.`);
+    try {
+      return await withDeadline(
+        options.fallbackTimeoutMs ?? FALLBACK_ARTIFACT_TIMEOUT_MS,
+        "artifact_timeout",
+        async (signal) => {
+          const fallbackResponse = await fetch(path, { signal });
+          if (!fallbackResponse.ok) {
+            throw new RuntimeLoadError(
+              "artifact_unavailable",
+              "The requested public data is unavailable.",
+            );
+          }
+          try {
+            return parseOffThread
+              ? await parseJsonResponseOffThread(fallbackResponse)
+              : await fallbackResponse.json();
+          } catch (error) {
+            if (error instanceof RuntimeLoadError) throw error;
+            throw new RuntimeLoadError(
+              "artifact_invalid",
+              "The requested public data could not be read.",
+              { cause: error },
+            );
+          }
+        },
+      );
+    } catch (error) {
+      if (error instanceof RuntimeLoadError) throw error;
+      throw new RuntimeLoadError(
+        "artifact_unavailable",
+        "The requested public data is unavailable.",
+        { cause: error },
+      );
     }
-    return parseOffThread
-      ? parseJsonResponseOffThread(fallbackResponse)
-      : fallbackResponse.json();
   })();
   artifactCache.set(path, request);
 
@@ -364,7 +461,10 @@ export async function fetchArtifact(path: string) {
   }
 }
 
-async function parseJsonResponseOffThread(response: Response) {
+export async function parseJsonResponseOffThread(
+  response: Response,
+  timeoutMs = JSON_WORKER_TIMEOUT_MS,
+) {
   const bytes = await response.arrayBuffer();
   if (typeof Worker === "undefined") {
     return JSON.parse(new TextDecoder().decode(bytes));
@@ -374,17 +474,55 @@ async function parseJsonResponseOffThread(response: Response) {
     { type: "module" },
   );
   return new Promise<unknown>((resolve, reject) => {
+    let settled = false;
+    const finish = (callback: () => void) => {
+      if (settled) return;
+      settled = true;
+      globalThis.clearTimeout(timeout);
+      worker.terminate();
+      callback();
+    };
+    const timeout = globalThis.setTimeout(() => {
+      finish(() => reject(new RuntimeLoadError(
+        "worker_timeout",
+        "The search index took too long to prepare.",
+      )));
+    }, timeoutMs);
     worker.addEventListener("message", async (event: MessageEvent<
       | { ok: true; value: unknown }
       | { message: string; ok: false }
     >) => {
-      worker.terminate();
-      if (event.data.ok === true) resolve(await expandLibrarySearchTransport(event.data.value));
-      else reject(new Error(event.data.message));
+      const result = event.data;
+      if (result.ok === true) {
+        try {
+          const value = await expandLibrarySearchTransport(result.value);
+          finish(() => resolve(value));
+        } catch (error) {
+          finish(() => reject(new RuntimeLoadError(
+            "worker_failure",
+            "The search index could not be prepared.",
+            { cause: error },
+          )));
+        }
+      } else {
+        finish(() => reject(new RuntimeLoadError(
+          "worker_failure",
+          (result as { message: string; ok: false }).message
+            || "The search index could not be prepared.",
+        )));
+      }
     }, { once: true });
     worker.addEventListener("error", (event) => {
-      worker.terminate();
-      reject(new Error(event.message || "Unable to parse the search index."));
+      finish(() => reject(new RuntimeLoadError(
+        "worker_failure",
+        event.message || "The search index could not be prepared.",
+      )));
+    }, { once: true });
+    worker.addEventListener("messageerror", () => {
+      finish(() => reject(new RuntimeLoadError(
+        "worker_failure",
+        "The search index returned an unreadable response.",
+      )));
     }, { once: true });
     worker.postMessage({ bytes }, [bytes]);
   });
@@ -618,13 +756,13 @@ export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
     commonsDatasetRaw,
   ] = await Promise.all([
     loadLibrarySearchBootstrap(),
-    fetchArtifact("./data/template-registry.json"),
-    fetchArtifact("./data/official-artifact-registry.json"),
-    fetchArtifact("./data/compliance-workflows.json"),
-    fetchArtifact("./data/compliance-tool-registry.json"),
-    fetchArtifact("./data/fedramp-transition-index.json"),
-    fetchArtifact("./data/generated/commons-search-index.json").catch(() => null),
-    fetchArtifact("./data/commons-resource-dataset.json").catch(() => null),
+    optionalArtifact<TemplateRegistry>("./data/template-registry.json", { templates: [] }),
+    optionalArtifact<OfficialArtifactRegistry>("./data/official-artifact-registry.json", { artifacts: [] }),
+    optionalArtifact<ComplianceWorkflowRegistry>("./data/compliance-workflows.json", { workflows: [] }),
+    optionalArtifact<ComplianceToolRegistry>("./data/compliance-tool-registry.json", { tools: [] }),
+    optionalArtifact<FedrampTransitionIndex>("./data/fedramp-transition-index.json", {}),
+    optionalArtifact<CommonsSearchIndex | null>("./data/generated/commons-search-index.json", null),
+    optionalArtifact<CommonsResourceDataset | null>("./data/commons-resource-dataset.json", null),
   ]);
   const templateRegistry = templateRegistryRaw as TemplateRegistry;
   const runtime = createSearchRuntime(libraryBootstrap);
@@ -705,13 +843,13 @@ export async function loadRuntimeDataset(): Promise<RuntimeBundle> {
     commonsDatasetRaw,
   ] = await Promise.all([
     loadLibrarySearchBootstrap(),
-    fetchArtifact("./data/template-registry.json"),
-    fetchArtifact("./data/official-artifact-registry.json"),
-    fetchArtifact("./data/compliance-workflows.json"),
-    fetchArtifact("./data/compliance-tool-registry.json"),
-    fetchArtifact("./data/fedramp-transition-index.json"),
-    fetchArtifact("./data/generated/commons-search-index.json").catch(() => null),
-    fetchArtifact("./data/commons-resource-dataset.json").catch(() => null),
+    optionalArtifact<TemplateRegistry>("./data/template-registry.json", { templates: [] }),
+    optionalArtifact<OfficialArtifactRegistry>("./data/official-artifact-registry.json", { artifacts: [] }),
+    optionalArtifact<ComplianceWorkflowRegistry>("./data/compliance-workflows.json", { workflows: [] }),
+    optionalArtifact<ComplianceToolRegistry>("./data/compliance-tool-registry.json", { tools: [] }),
+    optionalArtifact<FedrampTransitionIndex>("./data/fedramp-transition-index.json", {}),
+    optionalArtifact<CommonsSearchIndex | null>("./data/generated/commons-search-index.json", null),
+    optionalArtifact<CommonsResourceDataset | null>("./data/commons-resource-dataset.json", null),
   ]);
 
   return loadFullGraphPhase(
@@ -812,27 +950,25 @@ async function loadRouteScopedPhase(
       ? loadAtlasNeighborhood(plan.recordNodeId)
       : Promise.resolve(null),
     plan.registries
-      ? fetchArtifact("./data/template-registry.json")
+      ? optionalArtifact<TemplateRegistry>("./data/template-registry.json", { templates: [] })
       : Promise.resolve({ templates: [] }),
     plan.registries
-      ? fetchArtifact("./data/official-artifact-registry.json")
+      ? optionalArtifact<OfficialArtifactRegistry>("./data/official-artifact-registry.json", { artifacts: [] })
       : Promise.resolve({ artifacts: [] }),
     plan.registries
-      ? fetchArtifact("./data/compliance-workflows.json")
+      ? optionalArtifact<ComplianceWorkflowRegistry>("./data/compliance-workflows.json", { workflows: [] })
       : Promise.resolve({ workflows: [] }),
     plan.registries
-      ? fetchArtifact("./data/compliance-tool-registry.json")
+      ? optionalArtifact<ComplianceToolRegistry>("./data/compliance-tool-registry.json", { tools: [] })
       : Promise.resolve({ tools: [] }),
     plan.registries
-      ? fetchArtifact("./data/fedramp-transition-index.json")
+      ? optionalArtifact<FedrampTransitionIndex>("./data/fedramp-transition-index.json", {})
       : Promise.resolve({}),
     plan.commons
-      ? fetchArtifact("./data/generated/commons-search-index.json").catch(
-          () => null,
-        )
+      ? optionalArtifact<CommonsSearchIndex | null>("./data/generated/commons-search-index.json", null)
       : Promise.resolve(null),
     plan.commons
-      ? fetchArtifact("./data/commons-resource-dataset.json").catch(() => null)
+      ? optionalArtifact<CommonsResourceDataset | null>("./data/commons-resource-dataset.json", null)
       : Promise.resolve(null),
   ]);
 
@@ -985,15 +1121,19 @@ export async function loadRuntimeDatasetStaged(handlers: {
   state: ViewState;
   graphRequested?: boolean;
   searchOverlayOpen?: boolean;
+  signal?: AbortSignal;
 }) {
   try {
+    if (handlers.signal?.aborted) return;
     const plan = runtimeArtifactPlan(handlers.state, {
       graphRequested: handlers.graphRequested,
       searchOverlayOpen: handlers.searchOverlayOpen,
     });
     if (plan.catalogId) {
       handlers.onSearchReady(await loadCatalogShellPhase(plan));
+      if (handlers.signal?.aborted) return;
       const catalogPhase = await loadRouteScopedPhase(plan);
+      if (handlers.signal?.aborted) return;
       handlers.onFullReady(catalogPhase.bundle);
       return;
     }
@@ -1007,8 +1147,10 @@ export async function loadRuntimeDatasetStaged(handlers: {
         ...plan,
         librarySearch: false,
       });
+      if (handlers.signal?.aborted) return;
       handlers.onSearchReady(orientationPhase.bundle);
       const searchPhase = await loadRouteScopedPhase(plan);
+      if (handlers.signal?.aborted) return;
       handlers.onFullReady(searchPhase.bundle);
       return;
     }
@@ -1017,12 +1159,15 @@ export async function loadRuntimeDatasetStaged(handlers: {
         ...plan,
         commons: false,
       });
+      if (handlers.signal?.aborted) return;
       handlers.onSearchReady(officialPhase.bundle);
       const contextualPhase = await loadRouteScopedPhase(plan);
+      if (handlers.signal?.aborted) return;
       handlers.onFullReady(contextualPhase.bundle);
       return;
     }
     const routePhase = await loadRouteScopedPhase(plan);
+    if (handlers.signal?.aborted) return;
     handlers.onSearchReady(routePhase.bundle);
     if (!plan.fullGraph) {
       return;
@@ -1043,8 +1188,10 @@ export async function loadRuntimeDatasetStaged(handlers: {
       routePhase.bundle.mappingSources || {},
       routePhase.bundle.atlasSpine,
     );
+    if (handlers.signal?.aborted) return;
     handlers.onFullReady(fullBundle);
   } catch (error) {
+    if (handlers.signal?.aborted) return;
     handlers.onError(error);
   }
 }

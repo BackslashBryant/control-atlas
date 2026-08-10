@@ -36,12 +36,12 @@ test("curated organization is positively attributed to Control Atlas", () => {
   assert.doesNotMatch(sourcesPage, /Not a publisher source|never a publisher/i);
 });
 
-test("Atlas map names the five required product surfaces consistently", () => {
+test("Atlas names the product surface consistently", () => {
   assert.match(explorePage, />Atlas map<\/button>/);
   assert.match(objectDetailPage, /See this in the Atlas map/);
   assert.match(atlasPage, /: "Atlas map"/);
-  assert.match(routeIdentity, /label: "Atlas map"/);
-  assert.match(atlasTree, /<h2 id="atlas-tree-title">Atlas map<\/h2>/);
+  assert.match(routeIdentity, /label: "Atlas"/);
+  assert.match(atlasTree, /<h2 id="atlas-tree-title">Federal cybersecurity, from authority to action<\/h2>/);
 });
 
 test("Atlas map copy does not imply progression or visitor applicability", () => {

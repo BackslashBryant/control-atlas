@@ -2,11 +2,12 @@
 
 **Ctrl+Alt+Comply**
 
-**The public map for federal cybersecurity.**
+**Federal cybersecurity reference and practitioner workbench.**
 
-Open-source reference workbench for tracing public cybersecurity guidance,
-connecting the work it requires, and generating starter RMF/ATO templates — no
-login, no evidence upload, and no organizational data required.
+Control Atlas brings the federal cybersecurity landscape together in one place—
+requirements, frameworks, controls, mappings, official guidance, tools, and
+practitioner resources—so you can see what applies, understand how it connects,
+and get to the next step faster.
 
 Control Atlas is a static, open-source, public-data-only reference workbench for
 the broader federal and DoD cybersecurity ecosystem. Its primary user is the

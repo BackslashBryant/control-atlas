@@ -10,16 +10,16 @@ import {
 } from "../../src/ui/lib/informationArchitecture";
 import { PRIMARY_NAV_ITEMS, UTILITY_NAV_ITEMS } from "../../src/ui/lib/navigation";
 
-test("Phase 3 exposes exactly three primary doors and two utilities", () => {
+test("Epic 13 exposes the four product entrances and two utilities", () => {
   assert.deepEqual(
     PRIMARY_NAV_ITEMS.map(({ label, path }) => [label, path]),
-    [["Start here", "/start"], ["Library", "/library"], ["Guides", "/guides"]],
+    [["Atlas", "/atlas"], ["Library", "/library"], ["Resources", "/resources"], ["Guides", "/guides"]],
   );
   assert.deepEqual(
     UTILITY_NAV_ITEMS.map(({ label, path }) => [label, path]),
     [["Sources", "/sources"], ["About", "/about"]],
   );
-  assert.equal(new Set([...PRIMARY_NAV_ITEMS, ...UTILITY_NAV_ITEMS].map(({ path }) => path)).size, 5);
+  assert.equal(new Set([...PRIMARY_NAV_ITEMS, ...UTILITY_NAV_ITEMS].map(({ path }) => path)).size, 6);
 });
 
 test("Library uses the canonical two-tier taxonomy", () => {

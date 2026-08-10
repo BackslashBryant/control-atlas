@@ -21,6 +21,7 @@ import {
 import { SiteFooter } from "./components/SiteFooter";
 import { TopNav } from "./components/TopNav";
 import { AppLink } from "./components/AppLink";
+import { RouteErrorBoundary } from "./components/RouteErrorBoundary";
 import {
   OrbitalContextBar,
   orbitalRouteContext,
@@ -251,6 +252,7 @@ export function App() {
 
   useEffect(() => {
     let cancelled = false;
+    const loadController = new AbortController();
     setLoadSlow(false);
     setLoadError("");
     const runtimeState = latestNavStateRef.current;
@@ -276,7 +278,7 @@ export function App() {
           "Library data took too long to load. Check your connection and try again.",
         );
       }
-    }, 10000);
+    }, 13000);
 
     import("./lib/runtimeLoader")
       .then(({ loadRuntimeDatasetStaged }) =>
@@ -284,6 +286,7 @@ export function App() {
           state: runtimeState,
           graphRequested,
           searchOverlayOpen,
+          signal: loadController.signal,
           onSearchReady: (result) => {
             if (!cancelled) {
               // A delivered stage proves the connection works: cancel the hard
@@ -342,6 +345,7 @@ export function App() {
 
     return () => {
       cancelled = true;
+      loadController.abort();
       window.clearTimeout(slowTimer);
       window.clearTimeout(timeoutTimer);
     };
@@ -353,11 +357,14 @@ export function App() {
   ]);
 
   function retryLoad() {
-    setBundle(null);
-    setLoadError("");
-    setLoadSlow(false);
-    setGraphRequested(false);
-    setLoadAttempt((current) => current + 1);
+    void import("./lib/runtimeLoader").then(({ clearRuntimeArtifactCache }) => {
+      clearRuntimeArtifactCache();
+      setBundle(null);
+      setLoadError("");
+      setLoadSlow(false);
+      setGraphRequested(false);
+      setLoadAttempt((current) => current + 1);
+    });
   }
 
   useEffect(() => {
@@ -579,20 +586,25 @@ export function App() {
           id="app"
         >
           {showWorkspaceContent ? (
-            <Suspense fallback={<LoadingStatusPanel slow={false} suspensePending />}>
-              <AppContent
-                bundle={bundle}
-                loadError={loadError}
-                onNavigate={navigate}
-                onOpenGlossary={openGlossary}
-                onOpenNode={openNode}
-                onOpenNodeByItemId={openNodeByItemId}
-                onOpenSearch={openSearchOverlay}
-                onRequestFullGraph={requestFullGraph}
-                onRetryLoad={retryLoad}
-                state={viewState}
-              />
-            </Suspense>
+            <RouteErrorBoundary
+              onNavigate={navigate}
+              resetKey={`${runtimeScopeKey}:${loadAttempt}`}
+            >
+              <Suspense fallback={<LoadingStatusPanel slow={false} suspensePending />}>
+                <AppContent
+                  bundle={bundle}
+                  loadError={loadError}
+                  onNavigate={navigate}
+                  onOpenGlossary={openGlossary}
+                  onOpenNode={openNode}
+                  onOpenNodeByItemId={openNodeByItemId}
+                  onOpenSearch={openSearchOverlay}
+                  onRequestFullGraph={requestFullGraph}
+                  onRetryLoad={retryLoad}
+                  state={viewState}
+                />
+              </Suspense>
+            </RouteErrorBoundary>
           ) : loadError ? (
             <LoadErrorPanel message={loadError} onRetry={retryLoad}>
               <OfflineFallbackActions onNavigate={(view) => navigate(view)} />
@@ -608,33 +620,37 @@ export function App() {
       {chromeReady ? <SiteFooter onNavigate={navigate} /> : null}
 
       {searchOverlayOpen ? (
-        <Suspense fallback={null}>
-          <SearchOverlay
-            bundle={bundle}
-            onNavigate={navigate}
-            onOpenChange={setSearchOverlayOpen}
-            onOpenNode={openNode}
-            open
-          />
-        </Suspense>
+        <RouteErrorBoundary onNavigate={navigate} resetKey={`search:${runtimeScopeKey}:${loadAttempt}`}>
+          <Suspense fallback={null}>
+            <SearchOverlay
+              bundle={bundle}
+              onNavigate={navigate}
+              onOpenChange={setSearchOverlayOpen}
+              onOpenNode={openNode}
+              open
+            />
+          </Suspense>
+        </RouteErrorBoundary>
       ) : null}
 
       {helpOpen ? (
-        <Suspense fallback={null}>
-          <GlossaryDrawer
-            bundle={bundle}
-            focusTermId={glossaryFocusTermId}
-            onNavigate={navigate}
-            onOpenNode={openNode}
-            open
-            setOpen={(open) => {
-              setHelpOpen(open);
-              if (!open) {
-                setGlossaryFocusTermId("");
-              }
-            }}
-          />
-        </Suspense>
+        <RouteErrorBoundary onNavigate={navigate} resetKey={`glossary:${runtimeScopeKey}:${loadAttempt}`}>
+          <Suspense fallback={null}>
+            <GlossaryDrawer
+              bundle={bundle}
+              focusTermId={glossaryFocusTermId}
+              onNavigate={navigate}
+              onOpenNode={openNode}
+              open
+              setOpen={(open) => {
+                setHelpOpen(open);
+                if (!open) {
+                  setGlossaryFocusTermId("");
+                }
+              }}
+            />
+          </Suspense>
+        </RouteErrorBoundary>
       ) : null}
     </>
   );

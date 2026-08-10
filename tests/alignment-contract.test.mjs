@@ -32,7 +32,7 @@ test('alignment deliverables exist', () => {
 
 test('public product surfaces share one canonical identity and decision boundary', () => {
   const definition =
-    'Federal cyber guidance is scattered and hard to use. Control Atlas brings the public sources, connections, and starter tools together so the people doing the work can find what they need and keep moving.';
+    'Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.';
   const boundary =
     'Control Atlas keeps the public material and its sources together. The people doing the work decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO.';
 
@@ -52,9 +52,8 @@ test('public product surfaces share one canonical identity and decision boundary
   const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
   assert.match(aboutPage, /PRODUCT_DEFINITION/);
   assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
-  // The landing hero speaks in its own voice; the metadata one-liner stays on
-  // package.json/meta/About. The two must never be the same string again.
-  assert.match(homePage, /PRODUCT_HERO/);
+  // Home and the static shell consume one shared homepage content contract.
+  assert.match(homePage, /HOME_CONTENT\.definition/);
   assert.doesNotMatch(homePage, /PRODUCT_DEFINITION/);
   // The full decision boundary lives on About and the footer only; Home
   // states a one-line trust fact instead of repeating it.

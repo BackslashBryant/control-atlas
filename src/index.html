@@ -6,15 +6,15 @@
   <meta name="referrer" content="no-referrer">
   <meta name="application-name" content="Control Atlas">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <meta name="description" content="Federal cyber guidance is scattered and hard to use. Control Atlas brings the public sources, connections, and starter tools together so the people doing the work can find what they need and keep moving.">
+  <meta name="description" content="Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.">
   <meta property="og:title" content="Control Atlas">
-  <meta property="og:description" content="Federal cyber guidance is scattered and hard to use. Control Atlas brings the public sources, connections, and starter tools together so the people doing the work can find what they need and keep moving.">
+  <meta property="og:description" content="Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://backslashbryant.github.io/control-atlas/">
   <meta property="og:image" content="https://backslashbryant.github.io/control-atlas/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Control Atlas">
-  <meta name="twitter:description" content="Federal cyber guidance is scattered and hard to use. Control Atlas brings the public sources, connections, and starter tools together so the people doing the work can find what they need and keep moving.">
+  <meta name="twitter:description" content="Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.">
   <meta name="twitter:image" content="https://backslashbryant.github.io/control-atlas/og-image.png">
   <title>Control Atlas</title>
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
@@ -50,8 +50,9 @@
         </span>
       </a>
       <nav aria-label="Primary navigation" class="primary-nav ml-[32px] self-end mb-[-1px]">
-        <a data-route="#/start" href="#/start">Start here</a>
+        <a data-route="#/atlas" href="#/atlas">Atlas</a>
         <a data-route="#/library" href="#/library">Library</a>
+        <a data-route="#/resources" href="#/resources">Resources</a>
         <a data-route="#/guides" href="#/guides">Guides</a>
       </nav>
       <div class="header-actions">
@@ -80,55 +81,7 @@
         data-view="home"
         id="app"
       >
-        <section class="home-entry" aria-labelledby="home-title" data-visual-identity="universal-front-door">
-          <div class="home-hero">
-            <div class="home-hero-lead">
-              <header class="home-entry-header">
-                <h1 id="home-title">Find the source. See what connects. Keep the work moving.</h1>
-                <p class="home-product-identity">Govern, secure, assess, operate, and defend systems from one public, source-traceable workbench.</p>
-              </header>
-              <form class="home-search" data-home-search role="search">
-                <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="20"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-                <input aria-label="Search Control Atlas" name="query" placeholder="Search controls, clauses, STIGs, ATT&amp;CK, guides, tools, or communities&hellip;" type="search">
-                <button class="button button--secondary" type="submit">Search</button>
-              </form>
-              <div class="home-primary-actions">
-                <a class="button button--primary home-start-here" data-route="#/start" href="#/start">Start with your work</a>
-                <a class="home-inline-link" data-route="#/library" href="#/library">Browse official publications</a>
-              </div>
-            </div>
-          </div>
-
-          <nav aria-label="Start from your work" class="home-secondary-grid">
-            <a class="home-secondary-action" data-route="#/start?goal=understand" href="#/start?goal=understand"><span><strong>Understand a requirement</strong><small>Find the control or requirement you need, and the official source behind it.</small></span></a>
-            <a class="home-secondary-action" data-route="#/start?goal=implement" href="#/start?goal=implement"><span><strong>Secure or build a system</strong><small>Turn requirements into hardening steps and technical checks.</small></span></a>
-            <a class="home-secondary-action" data-route="#/start?goal=assess" href="#/start?goal=assess"><span><strong>Assess or authorize</strong><small>Follow the assessment and authorization path, with the published methods.</small></span></a>
-            <a class="home-secondary-action" data-route="#/start?goal=operate" href="#/start?goal=operate"><span><strong>Operate or defend</strong><small>Explore adversary techniques, defenses, monitoring, and operations.</small></span></a>
-            <a class="home-secondary-action" data-route="#/start?goal=risk" href="#/start?goal=risk"><span><strong>Manage risk or supply chain</strong><small>Find requirements, CUI and CMMC material, SBOM resources, and assurance tools.</small></span></a>
-            <a class="home-secondary-action" data-route="#/start?goal=document" href="#/start?goal=document"><span><strong>Produce a document</strong><small>Pick the document you need, then pull in the sources that back it.</small></span></a>
-            <a class="home-secondary-action" data-route="#/library?kind=tools-communities" href="#/library?kind=tools-communities"><span><strong>Find a tool, template, portal, training source, or community</strong><small>Find the tools and communities beyond the official publishers.</small></span></a>
-          </nav>
-
-          <section aria-labelledby="home-capabilities-title" class="home-capability-previews">
-            <header class="home-capability-header"><p class="eyebrow">What you can do here</p><h2 id="home-capabilities-title">Source, connection, next action</h2></header>
-            <div class="home-capability-grid">
-              <article class="home-capability-preview home-capability-preview--source-chain">
-                <div class="home-capability-copy"><p class="home-capability-eyebrow">Published chain</p><h3>Trace a supply-chain requirement</h3><p>Open SP 800-171 3.17.1 with its publisher, structural path, official text, and cited connections intact.</p><small>SP 800-171 &middot; Supply Chain Risk Management &middot; 3.17.1</small></div>
-                <a class="home-capability-action" data-route="#/record/nist-800-171/3.17.1" href="#/record/nist-800-171/3.17.1">Open the record</a>
-              </article>
-              <article class="home-capability-preview home-capability-preview--threat-defense">
-                <div class="home-capability-copy"><p class="home-capability-eyebrow">Threat and defense</p><h3>Follow a software supply-chain technique</h3><p>Start with ATT&amp;CK T1195.002, then inspect only the defensive relationships a publisher actually records.</p><small>ATT&amp;CK &middot; Initial Access &middot; T1195.002</small></div>
-                <a class="home-capability-action" data-route="#/atlas?node=mitre-attack%3AT1195.002&amp;relationshipView=map" href="#/atlas?node=mitre-attack%3AT1195.002&amp;relationshipView=map">Open in the Atlas</a>
-              </article>
-              <article class="home-capability-preview home-capability-preview--working-output">
-                <div class="home-capability-copy"><p class="home-capability-eyebrow">Working output</p><h3>Prepare an assessment</h3><p>Move through published inputs, readiness checks, and starter documents for assessment planning.</p><small>Task &middot; Prepare for a security assessment</small></div>
-                <a class="home-capability-action" data-route="#/build/tasks/prepare-security-assessment" href="#/build/tasks/prepare-security-assessment">Open the task</a>
-              </article>
-            </div>
-          </section>
-
-          <aside class="home-trust-boundary"><p>Official material always comes first, with its source named. Anything Control Atlas adds is clearly labeled, kept separate from the official links, and never decides what applies to you.</p></aside>
-        </section>
+        <!-- CONTROL_ATLAS_HOME -->
       </section>
     </main>
     <footer class="home-footer">

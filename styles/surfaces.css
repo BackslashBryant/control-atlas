@@ -660,7 +660,7 @@ a {
 
 .atlas-tree__stage {
   width: 100%;
-  height: clamp(38rem, 64vw, 54rem);
+  height: clamp(34rem, 58vh, 44rem);
   overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--ca-primary) 36%, var(--ca-border));
   border-radius: var(--ca-radius-md);
@@ -668,6 +668,87 @@ a {
     radial-gradient(ellipse at 50% 28%, color-mix(in srgb, var(--ca-accent) 10%, transparent), transparent 32%),
     radial-gradient(ellipse at 50% 78%, color-mix(in srgb, var(--ca-primary) 12%, transparent), transparent 40%),
     var(--ca-surface-deep);
+}
+
+.atlas-tree__workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(18rem, 3fr);
+  gap: var(--ca-space-4);
+  align-items: stretch;
+}
+
+.atlas-tree__inspector {
+  display: grid;
+  align-content: start;
+  gap: var(--ca-space-4);
+  min-width: 0;
+  padding: var(--ca-space-5);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--ca-radius-md);
+  background: var(--ca-surface-raised);
+}
+
+.atlas-tree__inspector h3,
+.atlas-tree__inspector p,
+.atlas-tree__inspector dl,
+.atlas-tree__inspector ul {
+  margin: 0;
+}
+
+.atlas-tree__inspector h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+  line-height: 1.15;
+}
+
+.atlas-tree__inspector > p:not(.eyebrow) {
+  color: var(--ca-text-muted);
+  line-height: 1.55;
+}
+
+.atlas-tree__inspector dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ca-space-2);
+}
+
+.atlas-tree__inspector dl div {
+  padding: var(--ca-space-3);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--ca-radius-sm);
+  background: var(--ca-surface);
+}
+
+.atlas-tree__inspector dt {
+  color: var(--ca-text-muted);
+  font: 600 0.64rem/1.3 var(--ca-font-mono);
+  text-transform: uppercase;
+}
+
+.atlas-tree__inspector dd {
+  margin: var(--ca-space-1) 0 0;
+  color: var(--ca-primary);
+  font: 700 1rem/1.3 var(--ca-font-mono);
+}
+
+.atlas-tree__inspector-members {
+  display: grid;
+  gap: var(--ca-space-2);
+  padding-top: var(--ca-space-3);
+  border-top: 1px solid var(--ca-border);
+}
+
+.atlas-tree__inspector-members ul {
+  display: grid;
+  gap: 5px;
+  padding-left: 1.1rem;
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+}
+
+.atlas-tree__inspector-hint {
+  color: var(--ca-text-muted);
+  line-height: 1.4;
 }
 .atlas-tree__stage .react-flow__controls {
   overflow: hidden;
@@ -766,6 +847,7 @@ a {
   .atlas-tree__intro { align-items: start; flex-direction: column; }
   .atlas-tree__totals { width: 100%; }
   .atlas-tree__totals div { flex: 1; min-width: 7rem; }
+  .atlas-tree__workbench { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -6634,8 +6716,8 @@ button.atlas-leverage-row:hover {
 .home-entry {
   display: grid;
   align-content: center;
-  gap: var(--ca-space-8);
-  width: min(100%, 1180px);
+  gap: var(--ca-space-6);
+  width: min(100%, 1240px);
   min-height: calc(100dvh - var(--ca-header-height, 0px));
   margin: 0 auto;
   padding: var(--ca-space-8) var(--ca-space-7, 28px);
@@ -6645,21 +6727,22 @@ button.atlas-leverage-row:hover {
    and the proof of the claim, side by side. Stacked below 1000px. */
 .home-hero {
   display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
   gap: var(--ca-space-6);
-  align-items: center;
+  align-items: stretch;
 }
 
 .home-hero-lead {
   display: grid;
   gap: var(--ca-space-5);
   align-content: start;
-  max-width: 62ch;
+  max-width: 68ch;
 }
 
 .home-entry-header {
   display: grid;
   gap: var(--ca-space-3);
-  max-width: 38ch;
+  max-width: 62ch;
 }
 
 .home-entry-header h1 {
@@ -6685,6 +6768,16 @@ button.atlas-leverage-row:hover {
   color: var(--ca-text);
   font-size: var(--ca-text-lg);
   line-height: 1.5;
+}
+
+.home-entry-header > .eyebrow {
+  color: var(--ca-secondary);
+  font-size: var(--ca-text-xs);
+  line-height: 1.3;
+}
+
+.home-product-identity {
+  max-width: 64ch;
 }
 
 .home-primary-actions {
@@ -6889,9 +6982,8 @@ button.atlas-leverage-row:hover {
 /* Flex-wrap, not a fixed column count: the trailing row centres so an odd
    number of entrances never leaves an empty grid slot. */
 .home-secondary-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -6900,10 +6992,10 @@ button.atlas-leverage-row:hover {
 .home-secondary-action {
   position: relative;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: start;
   gap: 12px;
-  min-height: 104px;
+  min-height: 118px;
   padding: 18px 18px 18px 20px;
   overflow: hidden;
   text-align: left;
@@ -6961,6 +7053,149 @@ button.atlas-leverage-row:hover {
 
 .home-secondary-action > span:first-child:last-child {
   grid-column: 1 / -1;
+}
+
+.home-secondary-action > span:first-child:not(:last-child) {
+  grid-column: 1 / 3;
+}
+
+.home-secondary-arrow,
+.home-secondary-action > svg.home-secondary-arrow {
+  align-self: center;
+  justify-self: end;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ca-text-muted);
+  box-sizing: border-box;
+}
+
+.home-ecosystem {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  min-height: 390px;
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--ca-secondary) 32%, var(--ca-border));
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--ca-secondary) 13%, transparent), transparent 36%),
+    linear-gradient(color-mix(in srgb, var(--ca-border) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ca-border) 22%, transparent) 1px, transparent 1px),
+    var(--ca-surface-raised);
+  background-size: auto, 28px 28px, 28px 28px, auto;
+}
+
+.home-ecosystem::before,
+.home-ecosystem::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  z-index: 0;
+  width: 1px;
+  background: color-mix(in srgb, var(--ca-secondary) 48%, var(--ca-border));
+}
+
+.home-ecosystem::before {
+  top: 105px;
+  height: 62px;
+}
+
+.home-ecosystem::after {
+  top: 218px;
+  height: 48px;
+}
+
+.home-ecosystem > * {
+  position: relative;
+  z-index: 1;
+}
+
+.home-ecosystem header,
+.home-ecosystem header p,
+.home-ecosystem header h2,
+.home-ecosystem > p {
+  margin: 0;
+}
+
+.home-ecosystem header h2 {
+  margin-top: 3px;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+}
+
+.home-ecosystem-authorities,
+.home-ecosystem-areas {
+  display: grid;
+  gap: 7px;
+}
+
+.home-ecosystem-authorities {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.home-ecosystem-authorities span,
+.home-ecosystem-areas span {
+  display: grid;
+  place-items: center;
+  min-height: 36px;
+  padding: 5px 7px;
+  text-align: center;
+  border: 1px solid var(--ca-border);
+  border-radius: 999px;
+  background: var(--ca-surface);
+  color: var(--ca-text-muted);
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.home-ecosystem-trunk {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0 8px;
+  width: max-content;
+  max-width: 100%;
+  margin: 10px auto;
+  padding: 12px 18px;
+  border: 1px solid var(--ca-secondary);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--ca-secondary) 12%, var(--ca-surface));
+  box-shadow: 0 0 26px color-mix(in srgb, var(--ca-secondary) 12%, transparent);
+}
+
+.home-ecosystem-trunk small {
+  grid-column: 1 / -1;
+  color: var(--ca-text-muted);
+  text-align: center;
+}
+
+.home-ecosystem-areas {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.home-ecosystem > p {
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+  line-height: 1.45;
+  text-align: center;
+}
+
+@media (max-width: 1100px) {
+  .home-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .home-ecosystem {
+    min-height: 360px;
+  }
+
+  .home-secondary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .home-secondary-action small {
@@ -7933,7 +8168,18 @@ button.atlas-leverage-row:hover {
   }
 
   .home-secondary-grid {
+    grid-template-columns: 1fr;
     gap: 8px;
+  }
+
+  .home-ecosystem {
+    min-height: 0;
+    padding: 18px 14px;
+  }
+
+  .home-ecosystem::before,
+  .home-ecosystem::after {
+    display: none;
   }
 
   .home-capability-grid {

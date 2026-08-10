@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
+import { HOME_CONTENT, HOME_DESTINATIONS } from '../src/shared/home-content.mjs';
 
 const html = readFileSync('src/index.html', 'utf8');
 const css = readFileSync('styles/tokens.css', 'utf8');
@@ -30,8 +31,8 @@ const graphLayout = existsSync('src/ui/lib/graphLayout.ts')
 test('shell identifies Control Atlas and progressively boots the React workspace', () => {
   assert.match(html, /Control Atlas/);
   assert.match(html, /name="application-name" content="Control Atlas"/);
-  assert.match(html, /Federal cyber guidance is scattered and hard to use/);
-  assert.match(html, /people doing the work can find what they need and keep moving/);
+  assert.match(html, new RegExp(HOME_CONTENT.definition.split('—')[0]));
+  assert.match(html, /understand how it connects, and get to the next step faster/);
   assert.match(html, /id="root"/);
   assert.ok(existsSync('src/main.tsx'), 'src/main.tsx must exist');
   assert.ok(existsSync('src/ui/App.tsx'), 'src/ui/App.tsx must exist');
@@ -52,7 +53,7 @@ test('shell identifies Control Atlas and progressively boots the React workspace
   assert.equal(packageJson.dependencies['react-router'], undefined);
 });
 
-test('shell exposes exactly three primary doors and two subordinate utilities', () => {
+test('shell exposes four product entrances and two subordinate utilities', () => {
   assert.doesNotMatch(html, /btn-toggle-mode/);
   assert.doesNotMatch(html, /Plain labels/);
   assert.doesNotMatch(html, /Technical labels/);
@@ -60,15 +61,16 @@ test('shell exposes exactly three primary doors and two subordinate utilities', 
   const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
   assert.match(navigation, /PRIMARY_NAV_ITEMS/);
   assert.match(navigation, /routeIdentityFor/);
-  assert.match(routeIdentity, /label: "Start here"/);
+  assert.match(routeIdentity, /label: "Atlas"/);
   assert.match(routeIdentity, /label: "Library"/);
+  assert.match(routeIdentity, /label: "Resources"/);
   assert.match(routeIdentity, /label: "Guides"/);
   assert.match(routeIdentity, /Sources/);
   assert.match(routeIdentity, /About/);
   assert.match(navigation, /PRIMARY_SECTION_LABEL = "Explore Control Atlas"/);
-  assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "start-here"[\s\S]*view: "search"[\s\S]*view: "patterns"/);
+  assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "atlas-map"[\s\S]*view: "search"[\s\S]*view: "commons"[\s\S]*view: "patterns"/);
   assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
-  assert.doesNotMatch(navigation, /view: "atlas-map"|view: "matrix"|view: "templates"|view: "commons"/);
+  assert.doesNotMatch(navigation, /view: "start-here"|view: "matrix"|view: "templates"/);
   assert.doesNotMatch(navigation, /The framework/);
   assert.doesNotMatch(navigation, /NAV_GROUPS/);
   assert.doesNotMatch(navigation, /Crosswalks/);
@@ -315,20 +317,21 @@ test('shared shell exposes visible search access and valid intent-card markup', 
 
 test('landing page states what the product is before asking for action', () => {
   const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
-  assert.match(homePage, /PRODUCT_HERO/);
-  assert.match(
-    homePage,
-    /Find the source\. See what connects\. Keep the work moving\./,
-  );
+  const homeContent = readFileSync('src/shared/home-content.mjs', 'utf8');
+  const viteConfig = readFileSync('vite.config.ts', 'utf8');
+  assert.match(homePage, /HOME_CONTENT\.definition/);
+  assert.match(homeContent, /See the landscape\. Trace the source\. Move the work forward\./);
+  assert.equal(HOME_CONTENT.definition.includes('requirements, frameworks, controls, mappings'), true);
   assert.match(homePage, /aria-label="Search Control Atlas"/);
-  assert.match(html, /aria-label="Search Control Atlas"/);
-  assert.match(html, />Understand a requirement</);
-  assert.match(html, />Operate or defend</);
-  assert.match(html, />Manage risk or supply chain</);
-  assert.match(html, /class="home-capability-previews"/);
-  assert.match(html, /T1195\.002/);
-  assert.match(html, /data-route="#\/start\?goal=document"/);
-  assert.equal((html.match(/class="home-secondary-action"/g) || []).length, 7);
+  assert.match(html, /CONTROL_ATLAS_HOME/);
+  assert.match(viteConfig, /renderStaticHome\(\)/);
+  assert.match(viteConfig, /html\.replace\('<!-- CONTROL_ATLAS_HOME -->'/);
+  assert.equal(HOME_DESTINATIONS.length, 4);
+  assert.deepEqual(HOME_DESTINATIONS.map(({ label }) => label), [
+    'Explore the Atlas', 'Search the Library', 'Browse Resources', 'Start with your work',
+  ]);
+  assert.match(homePage, /home-ecosystem-authorities/);
+  assert.match(homePage, /home-ecosystem-areas/);
   assert.doesNotMatch(homePage, /source-backed/i);
 });
 
@@ -406,7 +409,7 @@ test('result-affecting controls have one visible workbench owner', () => {
   );
 });
 
-test('Build stays locally coherent while Library owns resource discovery', () => {
+test('Build stays locally coherent while Resources owns resource discovery', () => {
   const localNav = readFileSync('src/ui/components/BuildLocalNav.tsx', 'utf8');
   const buildRouteState = readFileSync('src/ui/lib/buildRouteState.ts', 'utf8');
   const buildPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');

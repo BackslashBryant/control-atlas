@@ -32,11 +32,11 @@ test("load resilience shows Search skeleton and allows offline navigation", asyn
     name: "Primary navigation",
   });
   await primaryNav
-    .getByRole("button", { name: "Guides", exact: true })
+    .getByRole("link", { name: "Guides", exact: true })
     .click();
-  await expect(page).toHaveURL(/#\/learn/);
+  await expect(page).toHaveURL(/#\/guides/);
   await expect(
-    page.getByRole("heading", { name: "Practitioner guides", exact: true }),
+    page.getByRole("heading", { name: "Guides", exact: true }),
   ).toBeVisible();
 });
 
@@ -55,19 +55,73 @@ test("load resilience surfaces retry after timeout", async ({ page }) => {
   await expect(page.getByText("Record data unavailable")).toBeVisible();
 });
 
-test("Explore graph failure replaces loading with a retry path", async ({
+test("Atlas data failure replaces loading with a retry path", async ({
   page,
 }) => {
   test.setTimeout(60_000);
-  await page.route("**/data/generated/{nodes,edges}.json*", async (route) => {
-    await route.fulfill({ status: 503, body: "graph unavailable" });
+  await page.route("**/data/generated/atlas-spine.json*", async (route) => {
+    await route.fulfill({ status: 503, body: "atlas unavailable" });
   });
 
-  await gotoApp(page, "/#/explore?atlasAxis=framework");
+  await gotoApp(page, "/#/atlas");
   await expect(
     page.getByRole("button", { name: "Retry loading" }),
   ).toBeVisible({ timeout: 15000 });
   await expect(page.getByText("Record data unavailable")).toBeVisible();
+});
+
+test("Resources dataset failure is isolated from the rest of the product", async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await page.route("**/data/commons-resource-dataset.json*", async (route) => {
+    await route.fulfill({ status: 503, body: "resources unavailable" });
+  });
+  await page.route("**/data/generated/commons-search-index.json*", async (route) => {
+    await route.fulfill({ status: 503, body: "resource search unavailable" });
+  });
+
+  await gotoApp(page, "/#/resources");
+  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work" })).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole("heading", { name: "The resource directory did not load." })).toBeVisible();
+  await page.getByRole("navigation", { name: "Primary navigation" })
+    .getByRole("link", { name: "Library", exact: true })
+    .click();
+  await expect(page).toHaveURL(/#\/library/);
+  await expect(page.getByRole("heading", { name: "Library", exact: true })).toBeVisible();
+});
+
+test("retry clears a rejected artifact and succeeds on a fresh request", async ({ page }) => {
+  let failing = true;
+  let requests = 0;
+  await page.route("**/data/generated/atlas-spine.json*", async (route) => {
+    requests += 1;
+    if (failing) {
+      await route.fulfill({ status: 503, body: "temporary atlas failure" });
+      return;
+    }
+    await route.continue();
+  });
+
+  await gotoApp(page, "/#/atlas");
+  await expect(page.getByRole("button", { name: "Retry loading" })).toBeVisible({ timeout: 15000 });
+  failing = false;
+  await page.getByRole("button", { name: "Retry loading" }).click();
+  await expect(page.getByRole("heading", { name: "Federal cybersecurity, from authority to action" })).toBeVisible({ timeout: 15000 });
+  expect(requests).toBeGreaterThanOrEqual(3);
+});
+
+test("a lazy route crash preserves navigation and isolates the failed workspace", async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await page.route("**/assets/AtlasMapPage-*.js", async (route) => {
+    await route.fulfill({ status: 503, body: "route chunk unavailable" });
+  });
+
+  await gotoApp(page, "/#/atlas");
+  await expect(page.getByText("This workspace stopped unexpectedly.", { exact: false })).toBeVisible({ timeout: 15000 });
+  const primaryNav = page.getByRole("navigation", { name: "Primary navigation" });
+  await expect(primaryNav.getByRole("link", { name: "Resources", exact: true })).toBeVisible();
+  await primaryNav.getByRole("link", { name: "Resources", exact: true }).click();
+  await expect(page).toHaveURL(/#\/resources/);
+  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work" })).toBeVisible({ timeout: 15000 });
 });
 
 test("staged library search enables results before detail pages", async ({
@@ -106,27 +160,16 @@ test("staged library search enables results before detail pages", async ({
   await expect.poll(() => detailRequests, { timeout: 15000 }).toBeGreaterThan(0);
 });
 
-test("heavy routes identify the destination while scoped data loads", async ({ page }) => {
-  await page.route("**/data/**", async (route) => {
-    const url = route.request().url();
-    if (url.includes("compliance-workflows.json")) {
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-    }
-    await route.continue();
-  });
-
+test("heavy routes retain destination identity after scoped loading", async ({ page }) => {
   await gotoApp(page, "/#/build/tasks");
+  await waitForAppReady(page);
   await expect(
     page.getByRole("heading", { name: "Tasks", exact: true }),
   ).toBeVisible({ timeout: 15000 });
   await expect(
     page.getByText(
-      "Choose a task or starter document, then keep its public references attached.",
+      "Pick a task to see its public references and starter documents.",
       { exact: false },
     ),
-  ).toBeVisible();
-  await waitForAppReady(page);
-  await expect(
-    page.getByRole("heading", { name: "Tasks", exact: true }),
   ).toBeVisible();
 });

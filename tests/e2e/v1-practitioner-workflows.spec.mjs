@@ -141,10 +141,10 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
 
 test("V1 workflow 09 — find an external tool or starter resource", async ({ page }) => {
   await open(page, "/#/resources?q=OSCAL");
-  await expect(page).toHaveURL(/#\/library\?q=OSCAL&kind=tools-communities/);
-  await expect(page.getByRole("heading", { name: "Library", level: 1 })).toBeVisible();
-  await expect(page.getByRole("searchbox", { name: "Filter results by ID, title, or topic" })).toHaveValue("OSCAL");
-  await expect(page.locator('[data-result-class="resource"]').first()).toBeVisible();
+  await expect(page).toHaveURL(/#\/resources\?q=OSCAL/);
+  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work", level: 1 })).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "Find resources" })).toHaveValue("OSCAL");
+  await expect(page.locator(".resource-card").first()).toBeVisible();
 });
 
 test("V1 workflow 10 — recover from invalid settings, missing records, and empty filters", async ({

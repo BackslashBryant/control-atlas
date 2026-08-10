@@ -3,10 +3,10 @@
 // corpus. PRODUCT_HERO is the landing-page voice and must stay a different
 // string — it names the situation a visitor arrives in, not the contents.
 export const PRODUCT_DEFINITION =
-  "Federal cyber guidance is scattered and hard to use. Control Atlas brings the public sources, connections, and starter tools together so the people doing the work can find what they need and keep moving.";
+  "Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.";
 
 export const PRODUCT_HERO =
-  "Find the requirement, trace it to the source, and follow it into implementation and assessment.";
+  "Understand where things come from, how they connect, and what to do next.";
 
 export const GLOBAL_SEARCH_PLACEHOLDER =
   "Search controls, clauses, STIGs, ATT&CK, guides, tools, or communities…";
