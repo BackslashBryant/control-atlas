@@ -44,9 +44,22 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
     .filter({ hasNotText: "Assessment Procedure" });
   await expect(controlResult).toBeVisible({ timeout: 30000 });
   await controlResult.locator(".search-result-primary").click();
+  await expect(page.locator("main")).toHaveCount(1);
+  await expect(page.locator('[data-template="E"]')).toBeVisible({ timeout: 30000 });
   await expect(
-    page.getByText("Source excerpt from SP 800-53 Rev. 5", { exact: true }),
-  ).toBeVisible({ timeout: 30000 });
+    page.getByRole("heading", { name: "AC-2", exact: true, level: 1 }),
+  ).toBeVisible();
+  const guidanceBoundary = page.locator('[data-editorial-boundary="explicit"]');
+  await expect(guidanceBoundary).toBeVisible();
+  await expect(guidanceBoundary.locator(".record-guidance-boundary")).toHaveText(
+    "Control Atlas guidance",
+  );
+  const officialSource = page.getByRole("link", {
+    name: "Open official source",
+    exact: true,
+  });
+  await expect(officialSource).toHaveCount(1);
+  await expect(officialSource).toBeVisible();
 });
 
 test("live smoke: Resources and Atlas workbench are first-class routes", async ({ page }) => {
