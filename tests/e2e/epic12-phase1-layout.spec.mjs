@@ -156,24 +156,22 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
-test("Epic 12 Phase 1 puts record content in payoff-first order", async ({ page }) => {
+test("record template puts guidance before official text and connections", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await gotoApp(page, "/#/record/fips-200/AC");
   await waitForAppReady(page, { allowPartial: true });
-  await expect(page.locator("[data-record-section]")).toHaveCount(5, {
-    timeout: 15_000,
-  });
+  await expect(page.locator('[data-template="E"]')).toBeVisible({ timeout: 15_000 });
 
   const positions = await page.evaluate(() =>
-    ["official-text", "source-freshness", "hierarchy", "connections", "advanced"].map(
-      (section) => ({
-        section,
-        y:
-          globalThis.document
-            .querySelector(`[data-record-section="${section}"]`)
-            ?.getBoundingClientRect().y ?? null,
-      }),
-    ),
+    [
+      ["guidance", ".record-guidance"],
+      ["official", ".record-template-main .accordion-root"],
+      ["connections", '[data-record-section="connections"]'],
+      ["developer", ".record-developer-details"],
+    ].map(([section, selector]) => ({
+      section,
+      y: globalThis.document.querySelector(selector)?.getBoundingClientRect().y ?? null,
+    })),
   );
 
   expect(positions.every(({ y }) => y !== null), JSON.stringify(positions)).toBe(true);

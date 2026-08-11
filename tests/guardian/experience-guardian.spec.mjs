@@ -120,18 +120,27 @@ test.describe("Control Atlas Experience Guardian", () => {
         expect(deadSpace, `Unexpected ${deadSpace}px gap before the footer`).toBeLessThanOrEqual(160);
       }
 
-      if (state.officialBeforeEditorial && viewport === "mobile") {
+      if (
+        [
+          "control-rich",
+          "cci",
+          "stig-rule",
+          "attack-technique",
+          "supply-chain",
+          "record-sparse",
+        ].includes(state.id) && viewport === "mobile"
+      ) {
         const order = await page.evaluate(() => {
-          const official = [...globalThis.document.querySelectorAll("article")].find((element) =>
-            /Official description|Source identity unavailable/.test(element.textContent || ""),
+          const official = globalThis.document.querySelector(
+            ".record-template-main .accordion-root",
           );
           const editorial = globalThis.document.querySelector('[data-editorial-boundary="explicit"]');
           if (!official || !editorial) return "missing";
-          return official.compareDocumentPosition(editorial) & globalThis.Node.DOCUMENT_POSITION_FOLLOWING
-            ? "official-first"
-            : "editorial-first";
+          return editorial.compareDocumentPosition(official) & globalThis.Node.DOCUMENT_POSITION_FOLLOWING
+            ? "guidance-first"
+            : "official-first";
         });
-        expect(order).toBe("official-first");
+        expect(order).toBe("guidance-first");
       }
 
       const cards = await page.locator(".result-card, .summary-card, .card").count();

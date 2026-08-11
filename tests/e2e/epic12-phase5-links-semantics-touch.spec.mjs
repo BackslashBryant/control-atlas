@@ -77,7 +77,7 @@ test("Phase 5 renders canonical destinations as native links with working modifi
   for (const link of await officialSourceLinks.all()) {
     await expect(link).toHaveAttribute("href", /^https:\/\//);
   }
-  await expect(page.getByRole("link", { name: "See this in the Atlas map", exact: true })).toHaveAttribute("href", /^#\/atlas\?/);
+  await expect(page.getByRole("link", { name: "See in Atlas", exact: true })).toHaveAttribute("href", /^#\/atlas\?/);
 
   const destinationButtons = page.locator([
     "button.brand",

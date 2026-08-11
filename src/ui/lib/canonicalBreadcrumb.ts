@@ -24,6 +24,7 @@ function clean(value: unknown): string {
 export function canonicalBreadcrumbForNode(
   bundle: RuntimeBundle,
   nodeId: string,
+  recordLabel?: string,
 ): CanonicalBreadcrumb {
   const node = bundle.runtime.getNode(nodeId);
   const document = bundle.runtime.getLibraryDocument(nodeId);
@@ -46,7 +47,7 @@ export function canonicalBreadcrumbForNode(
     "Publisher unavailable";
   const publication =
     clean(catalog?.name) || clean(document.catalog_name) || clean(document.catalog_id);
-  const record = clean(document.item_id) || clean(node.label) || node.id;
+  const record = clean(recordLabel) || clean(document.item_id) || clean(node.label) || node.id;
   const items = [clean(area?.label), publisher, publication, clean(section?.label), record]
     .filter(Boolean)
     .filter((value, index, values) => index === 0 || value !== values[index - 1]);

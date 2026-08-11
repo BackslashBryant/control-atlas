@@ -34,13 +34,16 @@ for (const [label, width, height] of viewports) {
         await dismissOnboarding(page);
 
         await expect(page.getByRole("heading", { name: new RegExp(title, "i") })).toBeVisible();
-        await expect(page.getByText("Official description", { exact: true })).toBeVisible();
-        await expect(page.getByText("Source excerpt from", { exact: false })).toBeVisible();
-        await expect(page.getByRole("link", { name: /official source|official catalog/i }).first()).toBeVisible();
-        await expect(page.getByText("What this is", { exact: true })).toHaveCount(0);
-        await expect(page.getByText("What to do next", { exact: true })).toHaveCount(0);
+        await expect(page.getByText("Official source text", { exact: true })).toBeVisible();
+        await expect(page.getByRole("link", { name: "Open official source", exact: true })).toHaveCount(1);
+        await expect(page.getByText("What this is", { exact: true })).toBeVisible();
+        await expect(page.getByText("What you need to do", { exact: true })).toHaveCount(
+          recordType === "ATT&CK technique" || recordType === "MITRE D3FEND countermeasure" ? 0 : 1,
+        );
 
         if (hasDescription) {
+          const officialText = page.getByText("Official source text", { exact: true });
+          await officialText.click();
           await expect(page.getByText("No narrative description was published for this record.")).toHaveCount(0);
         } else {
           await expect(page.getByText("No narrative description was published for this record.")).toBeVisible();

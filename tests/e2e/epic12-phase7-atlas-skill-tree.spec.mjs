@@ -99,7 +99,7 @@ test("focused trace matches the record rail and overlay preserves tree identity 
   await waitForAppReady(page);
   await dismissOnboarding(page);
   const recordTrace = await page
-    .getByRole("navigation", { name: "Where this sits" })
+    .locator('[data-template="E"] [data-displayed-trace]')
     .getAttribute("data-displayed-trace");
   expect(recordTrace).toBeTruthy();
 

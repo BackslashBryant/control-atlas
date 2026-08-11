@@ -21,7 +21,7 @@ test("every active route has desktop and mobile Guardian coverage", () => {
   }
 });
 
-test("record review states cover the required object classes and source priority", () => {
+test("record review states cover the required object classes and responsive template", () => {
   for (const id of [
     "control-rich",
     "cci",
@@ -32,7 +32,9 @@ test("record review states cover the required object classes and source priority
   ]) {
     const state = matrix.states.find((entry) => entry.id === id);
     assert.ok(state, `Missing ${id}`);
-    assert.equal(state.officialBeforeEditorial, true);
+    assert.match(state.path, /#\/record\//);
+    assert.ok(state.viewports.includes("desktop"));
+    assert.ok(state.viewports.includes("mobile"));
   }
 });
 
@@ -41,7 +43,7 @@ test("major feature identities pair color with words, structure, or icons", () =
   const records = readFileSync("src/ui/pages/ObjectDetailPage.tsx", "utf8");
   assert.match(home, /data-visual-identity="universal-front-door"/);
   assert.match(home, /Icon(?:FileSearch|ShieldLock|Radar|Tool)/);
-  assert.match(records, /threat-research-record/);
-  assert.match(records, /defense-research-record/);
+  assert.match(records, /data-template="E"/);
+  assert.match(records, /data-editorial-boundary="explicit"/);
   assert.match(records, /displayNameFor\("object_type"/);
 });

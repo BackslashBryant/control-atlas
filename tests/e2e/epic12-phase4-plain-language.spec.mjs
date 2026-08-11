@@ -147,10 +147,7 @@ test("Phase 4 renders each default record connection once with its meaning and s
   await gotoApp(page, "/#/record/nist-800-53/AC-2");
   await waitForRenderedRoute(page, "/#/record/nist-800-53/AC-2");
 
-  const groups = page.locator('.accordion-item[id^="connection-group-"]');
-  for (const trigger of await groups.locator('.relationship-group-trigger').all()) {
-    await trigger.click();
-  }
+  const groups = page.locator(".record-connection-groups");
   const rows = groups.locator("[data-record-connection-id]");
   expect(await rows.count()).toBeGreaterThan(0);
   const ids = await rows.evaluateAll((elements) =>
@@ -177,8 +174,8 @@ test("Phase 4 keeps the product boundary contextual and reports freshness from v
 
   await gotoApp(page, FRESHNESS_RECORD);
   await waitForRenderedRoute(page, FRESHNESS_RECORD);
-  const sourceSupport = page.locator('[data-record-section="source-freshness"]');
-  await expect(sourceSupport).toContainText("Last verified against the source on 2026-06-13");
+  const sourceSupport = page.locator(".record-template-sidebar");
+  await expect(sourceSupport).toContainText("2026-06-13");
   await expect(sourceSupport).not.toContainText(/overdue|pipeline age/i);
-  await expect(sourceSupport).toContainText("From: FIPS 200");
+  await expect(sourceSupport).toContainText("FIPS 200");
 });

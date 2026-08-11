@@ -84,7 +84,7 @@ test("critical path: Atlas selected title leaves the map for record detail", asy
   ).toBeVisible();
 });
 
-test("critical path: record back returns to the original Explore results", async ({
+test("critical path: browser back returns from a record to the original search", async ({
   page,
 }) => {
   await gotoApp(page, "/#/search?q=AC-2");
@@ -99,10 +99,7 @@ test("critical path: record back returns to the original Explore results", async
     .locator(".search-result-primary")
     .click();
   await expect(page.locator(".detail-page")).toBeVisible();
-  await page
-    .locator(".page-header-actions")
-    .getByRole("button", { name: "Back to results" })
-    .click();
+  await page.goBack();
 
   await expect(page).toHaveURL(/#\/search\?q=AC-2/);
   await expect(page.getByLabel("Search by ID, title, or topic")).toHaveValue(
@@ -135,42 +132,41 @@ test("critical path: compare detailed mappings expose text provenance labels", a
   await expect(table.getByText("Published mapping").first()).toBeVisible();
 });
 
-test("critical path: library detail relationships show connection and source trust text", async ({
+test("critical path: library detail connections show meaning and source trust text", async ({
   page,
 }) => {
-  await gotoApp(page, "/?view=library-detail&node=nist-800-53%3AAC-2");
+  await gotoApp(page, "/#/record/nist-800-53/AC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(
     page.getByRole("heading", { name: "Connections" }).first(),
   ).toBeVisible();
-  await page.locator(".relationship-group-trigger").first().click();
-  const relationshipCard = page.locator(".relationship-card").first();
+  const relationshipCard = page.locator("[data-record-connection-id]").first();
   await expect(relationshipCard).toBeVisible();
   await expect(
-    relationshipCard.locator(".relationship-meta span").first(),
+    relationshipCard.locator(".relationship-meta"),
   ).not.toBeEmpty();
   await expect(
-    relationshipCard.locator(".relationship-meta span").nth(1),
+    relationshipCard.locator(".relationship-citation"),
   ).not.toBeEmpty();
 });
 
-test("critical path: library detail relationship map exposes table fallback", async ({
+test("critical path: record reading page uses a list and keeps the graph in Atlas", async ({
   page,
 }) => {
   await gotoApp(
     page,
-    "/?view=library-detail&node=nist-800-53%3AAC-2&relationshipView=list",
+    "/#/record/nist-800-53/AC-2",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const table = page.getByRole("table", { name: "Relationship table" });
-  await expect(table).toBeVisible();
-  await expect(table).toContainText("Published federal source");
-  await expect(table).toContainText("Relationship explanation");
-  await expect(table).not.toContainText("Review both sides of this");
+  const connections = page.locator('[data-record-section="connections"]');
+  await expect(connections).toBeVisible();
+  await expect(connections.locator("ul")).toBeVisible();
+  await expect(page.locator(".record-template .react-flow")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "See in Atlas", exact: true })).toBeVisible();
 });
 
 test("critical path: STIG chain summary table is labeled for screen readers", async ({
@@ -209,8 +205,8 @@ test("critical path: MITRE library search returns technique with plain-language 
   await expect(
     page.getByRole("heading", { name: /T1033/, level: 1 }),
   ).toBeVisible();
-  await expect(page.getByText("Official text / source excerpt")).toBeVisible();
-  await expect(page.getByText("Threat context")).toBeVisible();
+  await expect(page.getByText("Official source text", { exact: true })).toBeVisible();
+  await expect(page.getByText("What this is", { exact: true })).toBeVisible();
 });
 
 test("critical path: threat chain summary table is labeled for screen readers", async ({

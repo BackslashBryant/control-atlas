@@ -38,7 +38,7 @@ test("curated organization is positively attributed to Control Atlas", () => {
 
 test("Atlas names the product surface consistently", () => {
   assert.match(explorePage, />Atlas map<\/button>/);
-  assert.match(objectDetailPage, /See this in the Atlas map/);
+  assert.match(objectDetailPage, /See in Atlas/);
   assert.match(atlasPage, /: "Atlas map"/);
   assert.match(routeIdentity, /label: "Atlas"/);
   assert.match(atlasTree, /<h2 id="atlas-tree-title">Federal cybersecurity, from authority to action<\/h2>/);

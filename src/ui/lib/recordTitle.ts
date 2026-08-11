@@ -16,6 +16,84 @@ type TitledNode = {
   metadata?: { item_id?: string; title?: string; catalog_id?: string };
 };
 
+const NIST_FAMILY_CODES: Record<string, string> = {
+  "access control": "AC",
+  "awareness and training": "AT",
+  "audit and accountability": "AU",
+  "assessment, authorization, and monitoring": "CA",
+  "security assessment": "CA",
+  "security assessment and monitoring": "CA",
+  "configuration management": "CM",
+  "contingency planning": "CP",
+  "identification and authentication": "IA",
+  "incident response": "IR",
+  maintenance: "MA",
+  "media protection": "MP",
+  "physical and environmental protection": "PE",
+  "physical protection": "PE",
+  planning: "PL",
+  "personnel security": "PS",
+  "program management": "PM",
+  "personally identifiable information processing and transparency": "PT",
+  "risk assessment": "RA",
+  "system and services acquisition": "SA",
+  "system and communications protection": "SC",
+  "system and information integrity": "SI",
+  "supply chain risk management": "SR",
+};
+
+/** Family-qualify otherwise ambiguous NIST requirement numbers. */
+export function familyQualifiedRecordId(
+  itemId: string,
+  family?: string,
+  catalogId?: string,
+): string {
+  const identifier = itemId.trim();
+  if (!/^\d+(?:\.\d+)+$/.test(identifier)) return identifier;
+  if (
+    !["nist-800-171", "nist-800-171-rev2", "nist-800-172"].includes(
+      catalogId || "",
+    )
+  ) {
+    return identifier;
+  }
+  const familyCode = family
+    ? NIST_FAMILY_CODES[family.trim().toLocaleLowerCase()]
+    : undefined;
+  return familyCode ? `${familyCode}-${identifier}` : identifier;
+}
+
+/**
+ * Prefer the publisher's record name. Some catalogs publish only a numeric
+ * title; for those, the first complete source sentence is the honest name-like
+ * phrase shown beneath the qualified identifier.
+ */
+export function plainEnglishRecordName(
+  itemId: string,
+  title: string,
+  description = "",
+): string {
+  const identifier = itemId.trim();
+  const publishedTitle = title.trim();
+  if (publishedTitle && publishedTitle.toLocaleLowerCase() !== identifier.toLocaleLowerCase()) {
+    return publishedTitle;
+  }
+  const firstSentence = description.trim().match(/^.*?[.!?](?:\s|$)/)?.[0]?.trim();
+  return firstSentence || publishedTitle || identifier;
+}
+
+/** Keep only locators that read as public document citations, never file paths or fragments. */
+export function humanReadableEvidenceLocator(locator: string): string {
+  const value = locator.trim();
+  if (!value || /[#/\\]/.test(value)) return "";
+  if (/\b[0-9a-f]{8}-[0-9a-f-]{27,}\b/i.test(value)) return "";
+  if (/\.(?:csv|json|pdf|xml|xlsx?)\b/i.test(value)) return "";
+  return /^(?:appendix|clause|figure|page|paragraph|row|section|table|§)\b/i.test(value) ||
+    /^\d+\s+(?:CFR|U\.S\.C\.)\b/i.test(value)
+    ? value
+    : "";
+}
+
 /**
  * Construct one identifier-led title without repeating an identifier the
  * publisher already placed at the beginning of the official title.
@@ -204,6 +282,114 @@ export type CrossFrameworkGroup = {
   label: string;
   items: Array<{ nodeId: string; itemId: string }>;
 };
+
+export type RecordConnectionGroup = {
+  catalogId: string;
+  label: string;
+  items: Array<{
+    nodeId: string;
+    itemId: string;
+    title: string;
+    relationshipType: string;
+    edgeId: string;
+    provenanceClass: string;
+    sourceRefs: Array<{
+      sourceId: string;
+      sourceName: string;
+      sourceVersion: string;
+      locator: string;
+      evidenceQuality: string;
+    }>;
+  }>;
+};
+
+/**
+ * Record-page connections are published, cross-catalog correlation links only.
+ * Structural parent/child edges and same-publication relationships belong in
+ * classification, never in the Connections count.
+ */
+export function buildRecordConnectionGroups(
+  centerNodeId: string,
+  centerCatalogId: string,
+  edges: Array<{
+    id?: string;
+    source_node_id: string;
+    target_node_id: string;
+    relationship_type?: string;
+    relationship_class?: string;
+    publication_status?: string;
+    provenance_class?: string;
+    source_refs?: Array<{
+      source_id?: string;
+      source_name?: string;
+      source_version?: string;
+      locator?: string;
+      evidence_quality?: string;
+    }>;
+  }>,
+  getNode: (id: string) => TitledNode | null | undefined,
+  catalogLabel: (catalogId: string) => string | null | undefined,
+): RecordConnectionGroup[] {
+  const groups = new Map<string, RecordConnectionGroup>();
+  for (const [edgeIndex, edge] of edges.entries()) {
+    if (edge.publication_status !== "published") continue;
+    if (edge.relationship_class !== "correlation") continue;
+    const counterpartId =
+      edge.source_node_id === centerNodeId
+        ? edge.target_node_id
+        : edge.target_node_id === centerNodeId
+          ? edge.source_node_id
+          : null;
+    if (!counterpartId) continue;
+    const counterpart = getNode(counterpartId);
+    const catalogId = counterpart?.metadata?.catalog_id?.trim();
+    const itemId = counterpart?.metadata?.item_id?.trim();
+    const title = counterpart?.metadata?.title?.trim();
+    const groupLabel = catalogId ? catalogLabel(catalogId)?.trim() : "";
+    const relationshipType = edge.relationship_type?.trim();
+    const provenanceClass = edge.provenance_class?.trim();
+    if (
+      !counterpart ||
+      !catalogId ||
+      catalogId === centerCatalogId ||
+      !itemId ||
+      !title ||
+      !groupLabel ||
+      !relationshipType ||
+      !provenanceClass
+    ) continue;
+    if (!groups.has(catalogId)) {
+      groups.set(catalogId, {
+        catalogId,
+        label: groupLabel,
+        items: [],
+      });
+    }
+    groups.get(catalogId)!.items.push({
+      nodeId: counterpartId,
+      itemId,
+      title,
+      relationshipType,
+      edgeId: edge.id || `${centerNodeId}:${counterpartId}:${relationshipType}:${edgeIndex}`,
+      provenanceClass,
+      sourceRefs: (edge.source_refs || [])
+        .map((reference) => ({
+          sourceId: reference.source_id?.trim() || "",
+          sourceName: reference.source_name?.trim() || "",
+          sourceVersion: reference.source_version?.trim() || "",
+          locator: reference.locator?.trim() || "",
+          evidenceQuality: reference.evidence_quality?.trim() || "",
+        }))
+        .filter((reference) => reference.sourceId || reference.sourceName),
+    });
+  }
+  return [...groups.values()]
+    .map((group) => ({
+      ...group,
+      items: group.items.sort((a, b) => a.itemId.localeCompare(b.itemId)),
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+}
 
 /**
  * The focused control's equivalents in OTHER requirement frameworks, from real

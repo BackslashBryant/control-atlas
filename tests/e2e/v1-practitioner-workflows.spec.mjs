@@ -54,11 +54,14 @@ test("V1 workflow 03 — distinguish exact, ambiguous, and honest zero results",
 test("V1 workflow 04 — verify official record identity and source", async ({ page }) => {
   await open(page, "/#/record/nist-800-53/AC-2");
   await expect(
-    page.getByRole("heading", { name: /AC-2.*Account Management/, level: 1 }),
+    page.getByRole("heading", { name: "AC-2", level: 1 }),
   ).toBeVisible();
-  await expect(
-    page.getByText("Source excerpt from SP 800-53 Rev. 5", { exact: true }),
-  ).toBeVisible();
+  await expect(page.locator(".record-plain-name")).toHaveText("Account Management");
+  await expect(page.getByText("Official source text", { exact: true })).toBeVisible();
+  await expect(page.locator(".record-provenance-line")).toContainText("NIST");
+  const provenance = await page.locator(".record-provenance-line").innerText();
+  expect(provenance.match(/Revision 5/g)).toHaveLength(1);
+  expect(provenance.match(/Current as of/g)).toHaveLength(1);
 });
 
 test("V1 workflow 05 — follow a record and return without losing search state", async ({
@@ -73,7 +76,7 @@ test("V1 workflow 05 — follow a record and return without losing search state"
     .getByRole("link", { name: "AC-2 — Account Management" })
     .click();
   await expect(page).toHaveURL(/#\/record\/nist-800-53\/AC-2/);
-  await page.getByRole("link", { name: "Back", exact: true }).click();
+  await page.goBack();
   await expect(page).toHaveURL(/#\/library\?q=AC-2/);
   await expect(page.getByLabel("Filter results by ID, title, or topic")).toHaveValue("AC-2");
 });

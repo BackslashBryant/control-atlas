@@ -37,6 +37,7 @@ import {
   rankAtlasMappingOverlay,
 } from "../lib/atlasTreeOverlay";
 import type { AtlasNeighborhoodRecord } from "../lib/runtimeLoader";
+import { catalogMandateLabel } from "../lib/catalogMandate";
 import {
   areaCssVariables,
   areaPresentationFor,
@@ -124,19 +125,12 @@ function AtlasTreeNodeView({ data, selected }: NodeProps<AtlasFlowNode>) {
       <small>{detail}</small>
       {node.level === "publication" && semanticLevel !== "orientation" && node.mandate ? (
         <span className={`badge atlas-tree-node__mandate atlas-tree-node__mandate--${node.mandate}`}>
-          {mandateLabel(node.mandate)}
+          {catalogMandateLabel(node.mandate)}
         </span>
       ) : null}
       <Handle className="atlas-tree-node__handle" isConnectable={false} position={Position.Bottom} type="source" />
     </div>
   );
-}
-
-function mandateLabel(mandate: NonNullable<AtlasModelNode["mandate"]>) {
-  if (mandate === "statutory") return "Statutory";
-  if (mandate === "contractual") return "Contractual";
-  if (mandate === "federal_policy_or_regulatory_mandate") return "Federal policy or regulation";
-  return "Issued without a federal mandate";
 }
 
 function publicationCatalogId(id: string) {
@@ -472,7 +466,7 @@ export function AtlasTree(props: AtlasTreeProps) {
       {semanticLevel === "orientation" && !focusId ? (
         <div aria-label="Publication mandate kinds" className="atlas-tree__mandate-key">
           {(["statutory", "contractual", "federal_policy_or_regulatory_mandate", "issued_without_federal_mandate"] as const).map((mandate) => (
-            <span key={mandate}>{mandateLabel(mandate)} · {model.publications.filter((node) => node.mandate === mandate).length}</span>
+            <span key={mandate}>{catalogMandateLabel(mandate)} · {model.publications.filter((node) => node.mandate === mandate).length}</span>
           ))}
         </div>
       ) : null}

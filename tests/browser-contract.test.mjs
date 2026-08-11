@@ -365,7 +365,7 @@ test('skip links focus the workspace without turning the target into an applicat
 test('mounted record surfaces render official descriptions rather than synthetic translations', () => {
   const detailPage = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
   const surfaces = [detailPage, readFileSync('src/ui/pages/CatalogDetailPage.tsx', 'utf8'), readFileSync('src/ui/pages/AtlasMapPage.tsx', 'utf8'), readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8'), readFileSync('src/ui/components/SearchOverlay.tsx', 'utf8')].join('\n');
-  assert.match(detailPage, /Official description/);
+  assert.match(detailPage, /Official source text/);
   assert.match(surfaces, /No narrative description was published for this record/);
   assert.doesNotMatch(surfaces, /plain_language_summary|plain_action/);
 });
@@ -421,10 +421,8 @@ test('result-affecting controls have one visible workbench owner', () => {
   assert.match(compare, /data-control-results[^>]*id="compare-workspace"/);
   assert.doesNotMatch(compare, /function (?:Field|SelectField)\(/);
   assert.match(compareResults, /aria-label="Comparison result controls"/);
-  assert.match(
-    record,
-    /!\["map", "list", "table"\]\.includes\(\s*state\.relationshipView/,
-  );
+  assert.match(record, /buildRecordConnectionGroups/);
+  assert.doesNotMatch(record, /RelationshipExplorer|SelectField/);
 });
 
 test('Build stays locally coherent while Resources owns resource discovery', () => {
