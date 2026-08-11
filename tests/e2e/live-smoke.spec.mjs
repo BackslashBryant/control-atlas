@@ -76,9 +76,6 @@ test("live smoke: Resources and Atlas workbench are first-class routes", async (
   await page
     .locator('.react-flow__node:has([data-atlas-node-id="atlas:LIMB-COMPLIANCE"])')
     .dispatchEvent("click");
-  await expect(page).toHaveURL(/#\/atlas$/);
-  await expect(page.getByRole("heading", { name: "Compliance", exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Open this area", exact: true }).click();
   await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
 });
 

@@ -50,7 +50,7 @@ test("primary clicks expose transition feedback before the route replaces stale 
   const probe = await page.evaluate(() => globalThis.__transitionProbe);
   expect(probe.shownAt - probe.clickAt).toBeLessThanOrEqual(100);
   expect(probe.inert).toBe(true);
-  await expect(page.locator(".atlas-universe")).toBeVisible();
+  await expect(page.locator(".atlas-tree")).toBeVisible();
 });
 
 for (const viewport of [
@@ -65,15 +65,18 @@ for (const viewport of [
 ]) {
   test(`responsive Atlas shell is collision and overflow free at ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/#/explore");
+    await page.goto("/#/atlas");
     await waitForReady(page);
     const dimensions = await page.evaluate(() => ({
       clientWidth: globalThis.document.documentElement.clientWidth,
       scrollWidth: globalThis.document.documentElement.scrollWidth,
     }));
     expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
-    await expect(page.locator(".atlas-universe")).toBeVisible();
-    expect(await visibleCollisions(page.locator(".atlas-universe__area:visible"))).toEqual([]);
+    await expect(page.locator(".atlas-tree")).toBeVisible();
+    const visibleNodes = viewport.width >= 1024
+      ? page.locator(".react-flow__node:visible")
+      : page.locator(".atlas-tree-compact__node:visible");
+    expect(await visibleCollisions(visibleNodes)).toEqual([]);
     if (viewport.width < 1024) {
       const search = page.getByRole("button", { name: "Open search" });
       const menu = page.getByRole("button", { name: "Open navigation menu" });
@@ -106,68 +109,52 @@ for (const zoom of [
 
 test("reduced motion keeps the complete Atlas visible without animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/#/explore");
+  await page.goto("/#/atlas");
   await waitForReady(page);
-  await expect(page.locator(".atlas-universe__branch").first()).toHaveCSS("animation-name", "none");
-  await expect(page.locator(".atlas-universe__branch").first()).toHaveCSS("stroke-dashoffset", "0px");
+  await expect(page.locator(".react-flow__edge-path").first()).toHaveCSS("animation-name", "none");
 });
 
 test("Atlas first paint is a collision-free nine-area circuit tree with drill-down", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/#/explore");
+  await page.goto("/#/atlas");
   await waitForReady(page);
-  await expect(page.locator(".atlas-universe__area")).toHaveCount(9);
-  await expect(page.locator(".atlas-universe__root")).toHaveAttribute("role", "group");
-  await expect(page.locator(".atlas-universe__cybersecurity")).toHaveAttribute("role", "group");
-  await expect(page.locator(".atlas-universe__area").first()).toHaveAttribute("role", "button");
-  await expect(page.getByRole("button", { name: /Authority roots/i })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: /Cybersecurity Control Atlas structure/i })).toHaveCount(0);
-  const collisions = await visibleCollisions(page.locator(".atlas-universe__area:visible"));
+  await expect(page.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
+  await expect(page.locator(".atlas-tree__areas [data-area-id]")).toHaveCount(9);
+  await expect(page.locator(".atlas-tree__areas [data-area-id]:disabled")).toHaveCount(2);
+  const collisions = await visibleCollisions(page.locator(".react-flow__node:visible"));
   expect(collisions).toEqual([]);
-  await page.screenshot({
-    fullPage: true,
-    path: "docs/evidence/live-review-correction-2026-08-03/screenshots/after-atlas-authority-tree-1440.png",
-  });
-  await page.getByRole("button", { name: /Threats & Defense/ }).click();
-  await expect(page.locator('[data-semantic-level="publications"]')).toBeVisible();
+  await page.locator('.react-flow__node:has([data-atlas-node-id="atlas:LIMB-THREAT"])').dispatchEvent("click");
+  await expect(page.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
   await expect(page).toHaveURL(/atlasAxis=landscape/);
   await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-THREAT/);
-  await expect(page.getByText(/split into the publications organized here/i)).toBeVisible();
-  await expect(page.locator(".atlas-universe__publication")).toHaveCount(3);
-  expect(await visibleCollisions(page.locator(".atlas-universe__publication:visible"), 8)).toEqual([]);
-  await page.screenshot({
-    fullPage: true,
-    path: "docs/evidence/live-review-correction-2026-08-03/screenshots/after-atlas-publications-1440.png",
-  });
-  await page.getByRole("button", { name: /MITRE ATT&CK Enterprise Catalog/i }).click();
-  await expect(page.locator('[data-semantic-level="structure"]')).toBeVisible();
+  await expect(page.locator(".atlas-tree-node--publication")).toHaveCount(3);
+  expect(await visibleCollisions(page.locator(".react-flow__node:visible"), 8)).toEqual([]);
+  await page.locator('.react-flow__node:has([data-atlas-node-id="mitre-attack:CATALOG"])').dispatchEvent("click");
+  await expect(page.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
   await expect(page).toHaveURL(/atlasFramework=mitre-attack/);
-  await expect(page.getByText(/publisher-declared top-level structure/i)).toBeVisible();
-  await page.screenshot({
-    fullPage: true,
-    path: "docs/evidence/live-review-correction-2026-08-03/screenshots/after-atlas-native-structure-1440.png",
-  });
+  await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("MITRE ATT&CK Enterprise Catalog");
   await page.reload();
   await waitForReady(page);
-  await expect(page.locator('[data-semantic-level="structure"]')).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("MITRE ATT&CK Enterprise Catalog");
   await page.goBack();
-  await expect(page.locator('[data-semantic-level="publications"]')).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("Threats & Defense");
   await page.goForward();
-  await expect(page.locator('[data-semantic-level="structure"]')).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("MITRE ATT&CK Enterprise Catalog");
 });
 
-test("focused Atlas map never overlaps its center or relationship spokes", async ({ page }) => {
+test("focused Atlas canvas stays collision-free across desktop and compact layouts", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/#/explore?node=nist-800-53%3AAC-2&relationshipView=map");
+  await page.goto("/#/atlas?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForReady(page);
-  const mapItems = page.locator(".atlas-radial-map:visible > .atlas-radial-center, .atlas-radial-map:visible > .atlas-radial-group");
-  await expect(mapItems).toHaveCount(5);
-  expect(await visibleCollisions(mapItems, 8)).toEqual([]);
+  await expect(page.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
+  const desktopNodes = page.locator(".react-flow__node:visible");
+  await expect(desktopNodes).not.toHaveCount(0);
+  expect(await visibleCollisions(desktopNodes, 8)).toEqual([]);
 
   await page.setViewportSize({ width: 390, height: 844 });
-  const mobileItems = page.locator(".atlas-radial-map--stacked:visible .atlas-radial-center, .atlas-radial-map--stacked:visible .atlas-radial-group");
-  await expect(mobileItems).toHaveCount(5);
-  expect(await visibleCollisions(mobileItems, 4)).toEqual([]);
+  const compactNodes = page.locator(".atlas-tree-compact__node:visible");
+  await expect(compactNodes).not.toHaveCount(0);
+  expect(await visibleCollisions(compactNodes, 4)).toEqual([]);
 });
 
 test("global Search handles empty, IME, exact-ID, Enter, Clear, Close, and Escape", async ({ page }) => {

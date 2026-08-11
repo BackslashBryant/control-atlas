@@ -74,7 +74,7 @@ test("V1 workflow 06 — explore one record through Connections, Hierarchy, and 
   // choosing a supporting panel.
   await expect(page.locator(".atlas-tree")).toBeVisible();
   // Orientation stays on screen without opening anything.
-  await expect(page.locator("[data-canonical-breadcrumb]")).toContainText(
+  await expect(page.locator(".atlas-tree__breadcrumb")).toContainText(
     "SP 800-53 Rev. 5",
   );
 

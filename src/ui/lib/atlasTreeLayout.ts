@@ -1,12 +1,11 @@
-import { hierarchy, tree } from "d3-hierarchy";
+import ELK from "elkjs/lib/elk.bundled.js";
 
 import type { AtlasRenderableNode } from "./atlasTreeAggregation";
-import type { AtlasTreeModel, AtlasTreeNode } from "./atlasTreeModel";
-import { AREA_IDS } from "./areaVisualLanguage";
+import type { AtlasTreeModel } from "./atlasTreeModel";
 
-export const ATLAS_NODE_WIDTH = 240;
-export const ATLAS_NODE_HEIGHT = 88;
-export const ATLAS_NODE_GAP = 28;
+export const ATLAS_NODE_WIDTH = 220;
+export const ATLAS_NODE_HEIGHT = 72;
+export const ATLAS_NODE_GAP = 16;
 
 export type AtlasTreePosition = {
   id: string;
@@ -16,126 +15,112 @@ export type AtlasTreePosition = {
   height: number;
 };
 
-function position(id: string, x: number, y: number): AtlasTreePosition {
-  return { id, x, y, width: ATLAS_NODE_WIDTH, height: ATLAS_NODE_HEIGHT };
-}
+type ElkNode = {
+  id: string;
+  width?: number;
+  height?: number;
+  x?: number;
+  y?: number;
+};
 
-function lexical(left: AtlasTreeNode, right: AtlasTreeNode) {
+type ElkEdge = {
+  id: string;
+  sources: string[];
+  targets: string[];
+};
+
+type ElkGraph = ElkNode & {
+  layoutOptions: Record<string, string>;
+  children: ElkNode[];
+  edges: ElkEdge[];
+};
+
+const elk = new ELK();
+
+function lexical(left: AtlasRenderableNode, right: AtlasRenderableNode) {
   return left.itemId.localeCompare(right.itemId, undefined, {
     numeric: true,
     sensitivity: "base",
   }) || left.id.localeCompare(right.id);
 }
 
-export function stableAtlasPositions(model: AtlasTreeModel) {
-  const result = new Map<string, AtlasTreePosition>();
-  const authorityRoots = model.authorityNodes.filter((node) => !node.parentId).sort(lexical);
-  const authorityChildren = model.authorityNodes.filter((node) => node.parentId).sort(lexical);
-  const centeredX = (index: number, count: number, spacing: number) =>
-    (index - (count - 1) / 2) * spacing;
-  authorityRoots.forEach((node, index) => {
-    result.set(node.id, position(node.id, centeredX(index, authorityRoots.length, 292), -900));
-  });
-  authorityChildren.forEach((node, index) => {
-    result.set(node.id, position(node.id, centeredX(index, authorityChildren.length, 292), -700));
-  });
-  result.set(model.trunk.id, position(model.trunk.id, -ATLAS_NODE_WIDTH / 2, -420));
-
-  const areaById = new Map(model.areas.map((area) => [area.id, area]));
-  AREA_IDS.forEach((areaId, index) => {
-    const area = areaById.get(areaId);
-    if (!area) return;
-    const x = centeredX(index, AREA_IDS.length, 360) - ATLAS_NODE_WIDTH / 2;
-    result.set(area.id, position(area.id, x, -120));
-    const publications = (model.childrenByParent.get(area.id) || [])
-      .filter((node) => node.level === "publication")
-      .sort(lexical);
-    publications.forEach((publication, publicationIndex) => {
-      result.set(
-        publication.id,
-        position(publication.id, x, 120 + publicationIndex * 128),
-      );
-    });
-  });
-  return result;
-}
-
-function layoutChildBand(
-  parent: AtlasTreePosition,
-  children: AtlasRenderableNode[],
-  y: number,
+function atlasLayoutEdges(
+  model: AtlasTreeModel,
+  rendered: AtlasRenderableNode[],
+  focusId: string,
 ) {
-  const sorted = [...children].sort(lexical);
-  const root = hierarchy<{ id: string; children?: Array<{ id: string }> }>({
-    id: parent.id,
-    children: sorted.map((child) => ({ id: child.id })),
+  const visible = new Set(rendered.map((node) => node.id));
+  const structural = rendered.flatMap((node) => {
+    if (!node.parentId || !visible.has(node.parentId)) return [];
+    return [{
+      id: `tree:${node.parentId}->${node.id}`,
+      sources: [node.parentId],
+      targets: [node.id],
+    } satisfies ElkEdge];
   });
-  tree<{ id: string; children?: Array<{ id: string }> }>()
-    .nodeSize([ATLAS_NODE_WIDTH + 44, 150])(root);
-  const offsetX = parent.x + ATLAS_NODE_WIDTH / 2;
-  return root.children?.map((child) =>
-    position(child.data.id, Math.round(offsetX + child.x - ATLAS_NODE_WIDTH / 2), y),
-  ) || [];
+  if (focusId) return structural;
+  const authority = rendered
+    .filter((node) => node.nodeType === "authority_aggregate")
+    .map((node) => ({
+      id: `authority-overview:${node.id}->${model.trunk.id}`,
+      sources: [node.id],
+      targets: [model.trunk.id],
+    } satisfies ElkEdge));
+  return [...authority, ...structural];
 }
 
-export function layoutAtlasTree(options: {
+function atlasElkGraph(options: {
+  model: AtlasTreeModel;
+  rendered: AtlasRenderableNode[];
+  focusId: string;
+}): ElkGraph {
+  const rendered = [...options.rendered].sort(lexical);
+  return {
+    id: "control-atlas-tree",
+    layoutOptions: {
+      "elk.algorithm": "layered",
+      "elk.direction": "RIGHT",
+      "elk.edgeRouting": "SPLINES",
+      "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
+      "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
+      "elk.layered.spacing.nodeNodeBetweenLayers": "96",
+      "elk.spacing.nodeNode": "16",
+      "elk.padding": "[top=24,left=24,bottom=24,right=24]",
+      "elk.aspectRatio": "1.45",
+    },
+    children: rendered.map((node) => ({
+      id: node.id,
+      width: ATLAS_NODE_WIDTH,
+      height: ATLAS_NODE_HEIGHT,
+    })),
+    edges: atlasLayoutEdges(options.model, rendered, options.focusId)
+      .sort((left, right) => left.id.localeCompare(right.id)),
+  };
+}
+
+export async function layoutAtlasTree(options: {
   model: AtlasTreeModel;
   rendered: AtlasRenderableNode[];
   focusId?: string;
 }) {
-  const { model, rendered, focusId = "" } = options;
-  if (!focusId) {
-    const authority = rendered
-      .filter((node) => node.nodeType === "authority_aggregate");
-    const areas = AREA_IDS
-      .map((id) => rendered.find((node) => node.id === id))
-      .filter((node): node is AtlasRenderableNode => Boolean(node));
-    const overview = new Map<string, AtlasTreePosition>();
-    authority.forEach((node, index) => {
-      overview.set(node.id, position(node.id, index * 280, 0));
-    });
-    overview.set(model.trunk.id, position(model.trunk.id, 280, 150));
-    areas.forEach((area, index) => {
-      overview.set(area.id, position(area.id, (index % 3) * 280, 330 + Math.floor(index / 3) * 130));
-    });
-    return [...overview.values()].sort((left, right) => left.id.localeCompare(right.id));
+  const graph = atlasElkGraph({
+    ...options,
+    focusId: options.focusId || "",
+  });
+  const laidOut = await elk.layout(graph) as ElkGraph;
+  const positions = (laidOut.children || []).map((node) => ({
+    id: node.id,
+    x: Math.round(node.x || 0),
+    y: Math.round(node.y || 0),
+    width: node.width || ATLAS_NODE_WIDTH,
+    height: node.height || ATLAS_NODE_HEIGHT,
+  }));
+  if (positions.length !== options.rendered.length) {
+    throw new Error(
+      `ELK placed ${positions.length} of ${options.rendered.length} Atlas nodes.`,
+    );
   }
-  const stable = stableAtlasPositions(model);
-  const renderedById = new Map(rendered.map((node) => [node.id, node]));
-  const laidOut = new Map<string, AtlasTreePosition>();
-  for (const node of rendered) {
-    const fixed = stable.get(node.id);
-    if (fixed) laidOut.set(node.id, fixed);
-  }
-
-  const focus = renderedById.get(focusId);
-  if (focus) {
-    const parentPosition = focus.parentId ? stable.get(focus.parentId) || laidOut.get(focus.parentId) : undefined;
-    if (parentPosition) {
-      const siblings = rendered.filter(
-        (node) => node.parentId === focus.parentId && !stable.has(node.id),
-      );
-      for (const childPosition of layoutChildBand(parentPosition, siblings, parentPosition.y + 170)) {
-        laidOut.set(childPosition.id, childPosition);
-      }
-    }
-    const focusPosition = stable.get(focus.id) || laidOut.get(focus.id);
-    if (focusPosition) {
-      const children = rendered.filter((node) => node.parentId === focus.id);
-      const lowestFixed = Math.max(...[...laidOut.values()].map((entry) => entry.y), focusPosition.y);
-      for (const childPosition of layoutChildBand(focusPosition, children, lowestFixed + 180)) {
-        laidOut.set(childPosition.id, childPosition);
-      }
-    }
-  }
-
-  for (const node of rendered) {
-    if (!laidOut.has(node.id)) {
-      const parent = node.parentId ? laidOut.get(node.parentId) : undefined;
-      laidOut.set(node.id, position(node.id, parent?.x || 0, (parent?.y || 0) + 180));
-    }
-  }
-  return [...laidOut.values()].sort((left, right) => left.id.localeCompare(right.id));
+  return positions.sort((left, right) => left.id.localeCompare(right.id));
 }
 
 export function atlasTreeCollisions(

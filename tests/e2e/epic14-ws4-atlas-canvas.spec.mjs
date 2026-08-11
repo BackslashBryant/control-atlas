@@ -1,0 +1,124 @@
+import { expect, test } from "@playwright/test";
+
+import {
+  attachPageDiagnostics,
+  dismissOnboarding,
+  gotoApp,
+  waitForAppReady,
+} from "./support.mjs";
+
+const POPULATED_AREAS = [
+  ["atlas:LIMB-GOVERNANCE", "Governance"],
+  ["atlas:LIMB-RISK", "Risk"],
+  ["atlas:LIMB-COMPLIANCE", "Compliance"],
+  ["atlas:LIMB-ARCHITECTURE", "Architecture"],
+  ["atlas:LIMB-IMPLEMENTATION", "Implementation"],
+  ["atlas:LIMB-ASSESSMENT", "Assessment"],
+  ["atlas:LIMB-THREAT", "Threats & Defense"],
+];
+
+test.beforeEach(async ({ page }) => {
+  attachPageDiagnostics(page);
+});
+
+async function openAtlas(page, viewport = { width: 1440, height: 900 }) {
+  await page.setViewportSize(viewport);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await gotoApp(page, "/#/atlas");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+}
+
+async function clickFlowNode(page, id) {
+  const node = page.locator(`.react-flow__node:has([data-atlas-node-id="${id}"])`);
+  await expect(node).toBeVisible();
+  await node.dispatchEvent("click");
+}
+
+test("Template D keeps the Atlas canvas first and honors the locked dock geometry", async ({ page }) => {
+  await openAtlas(page);
+
+  const template = page.locator('[data-page-template="canvas"]');
+  const workbench = template.locator(".atlas-tree__workbench");
+  const leftDock = workbench.locator(".atlas-tree__dock--left");
+  const canvas = workbench.locator(".atlas-tree__canvas");
+  const inspector = workbench.locator(".atlas-tree__inspector");
+
+  await expect(page.locator("main")).toHaveCount(1);
+  await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
+  await expect(page.getByText("See the landscape, then drill in.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "Jump to a record" })).toBeVisible();
+  await expect(template.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
+  await expect(template.locator(".atlas-ancestry > .atlas-choice-trail")).toHaveCount(0);
+  await expect(workbench).toBeVisible();
+  await expect(canvas.getByRole("application", { name: "Interactive Atlas map hierarchy" })).toBeVisible();
+
+  const geometry = await Promise.all([leftDock, canvas, inspector].map((locator) => locator.evaluate((node) => {
+    const box = node.getBoundingClientRect();
+    return { left: box.left, right: box.right, top: box.top, width: box.width };
+  })));
+  expect(geometry[0].width).toBeCloseTo(280, 0);
+  expect(geometry[2].width).toBeCloseTo(320, 0);
+  expect(geometry[0].right).toBeLessThanOrEqual(geometry[1].left);
+  expect(geometry[1].right).toBeLessThanOrEqual(geometry[2].left);
+  expect(geometry[1].top).toBeLessThan(900);
+
+  const areaControls = leftDock.locator("[data-area-id]");
+  await expect(areaControls).toHaveCount(9);
+  await expect(leftDock.locator('[data-area-id][data-empty="true"]')).toHaveCount(2);
+  await expect(leftDock.getByRole("button", { name: /Operations/ })).toBeDisabled();
+  await expect(leftDock.getByRole("button", { name: /Knowledge/ })).toBeDisabled();
+  await expect(leftDock.getByText("Nothing mapped yet.", { exact: true })).toHaveCount(2);
+  await expect(page.getByRole("button", { name: /Open this (?:area|publication|branch)/ })).toHaveCount(0);
+});
+
+test("every populated area drills directly and the live breadcrumb reverses the path", async ({ page }) => {
+  await openAtlas(page);
+  const breadcrumb = page.getByRole("navigation", { name: "Atlas breadcrumb" });
+
+  for (const [id, label] of POPULATED_AREAS) {
+    await page.locator(`.atlas-tree__areas [data-area-id="${id}"]`).click();
+    await expect(page).toHaveURL(new RegExp(`atlasLimb=${encodeURIComponent(id)}`));
+    await expect(breadcrumb.getByText(label, { exact: true })).toHaveAttribute("aria-current", "page");
+  }
+
+  await breadcrumb.getByRole("button", { name: "Atlas", exact: true }).click();
+  await expect(page).toHaveURL(/#\/atlas$/);
+  await expect(breadcrumb.getByText("Atlas", { exact: true })).toHaveAttribute("aria-current", "page");
+
+  await clickFlowNode(page, "atlas:LIMB-OPERATIONS");
+  await expect(page).toHaveURL(/#\/atlas$/);
+  await expect(page.locator(".atlas-tree__inspector")).toContainText("Operations");
+  await expect(page.locator(".atlas-tree__inspector")).toContainText("Nothing mapped yet.");
+});
+
+test("a populated node drills two levels without a second confirmation", async ({ page }) => {
+  await openAtlas(page);
+
+  await clickFlowNode(page, "atlas:LIMB-COMPLIANCE");
+  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+  await expect(page.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
+  await clickFlowNode(page, "nist-800-53:CATALOG");
+  await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
+  const breadcrumb = page.getByRole("navigation", { name: "Atlas breadcrumb" });
+  await expect(breadcrumb).toContainText("Compliance");
+  await expect(breadcrumb).toContainText("SP 800-53 Rev. 5 Catalog");
+  await breadcrumb.getByRole("button", { name: "Compliance", exact: true }).click();
+  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+  await expect(page).not.toHaveURL(/atlasFramework=/);
+});
+
+test("compact Atlas preserves direct keyboard drill without horizontal overflow", async ({ page }) => {
+  await openAtlas(page, { width: 390, height: 844 });
+
+  const tree = page.getByRole("tree", { name: "Atlas map hierarchy" });
+  await expect(tree).toBeVisible();
+  await expect(tree.getByRole("treeitem")).toHaveCount(13);
+  await expect(tree.getByRole("treeitem", { name: /Operations/ })).toBeDisabled();
+  const compliance = tree.getByRole("treeitem", { name: /Compliance/ });
+  await compliance.focus();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+  await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("Compliance");
+  expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBe(0);
+});

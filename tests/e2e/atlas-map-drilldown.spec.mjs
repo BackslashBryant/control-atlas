@@ -10,82 +10,70 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("the Explore landing shows nine areas, none of them a dead end, and an area opens its publications", async ({
+async function clickFlowNode(page, id) {
+  const node = page.locator(`.react-flow__node:has([data-atlas-node-id="${id}"])`);
+  await expect(node).toBeVisible();
+  await node.dispatchEvent("click");
+}
+
+test("the Atlas landing shows nine honest areas and a populated area drills to its publications", async ({
   page,
 }) => {
   test.setTimeout(120_000);
-  await gotoApp(page, "/#/explore");
+  await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
 
-  // The root is now an actual semantic hierarchy: authority roots feed
-  // Cybersecurity and the nine areas, with every area remaining actionable.
-  await expect(page.getByRole("application", { name: "Interactive Control Atlas hierarchy" })).toBeVisible();
-  await expect(page.locator(".atlas-universe__area")).toHaveCount(9);
-  await expect(page.locator(".atlas-universe__area[disabled]")).toHaveCount(0);
-  await expect(page.getByText("Not yet loaded")).toHaveCount(0);
+  await expect(page.getByRole("application", { name: "Interactive Atlas map hierarchy" })).toBeVisible();
+  await expect(page.locator(".atlas-tree__areas [data-area-id]")).toHaveCount(9);
+  await expect(page.locator(".atlas-tree__areas [data-area-id]:disabled")).toHaveCount(2);
+  await expect(page.locator(".atlas-tree__areas").getByText("Nothing mapped yet.", { exact: true })).toHaveCount(2);
 
-  // An area with publications splits in place instead of abandoning the map.
-  await page.getByRole("button", { name: /Compliance/ }).click();
-  await expect(page.locator('[data-semantic-level="publications"]')).toBeVisible();
+  await page.locator('.atlas-tree__areas [data-area-id="atlas:LIMB-COMPLIANCE"]').click();
+  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
   await expect(
-    page.getByRole("button", { name: /SP 800-53 Rev\. 5/ }),
+    page.locator('[data-atlas-node-id="nist-800-53:CATALOG"]'),
   ).toBeVisible();
 });
 
-test("framework choices survive refresh and the rail steps back one generation", async ({
+test("a canvas branch survives refresh and its breadcrumb steps back one generation", async ({
   page,
 }) => {
   test.setTimeout(120_000);
-  await gotoApp(
-    page,
-    "/#/explore?atlasAxis=framework&atlasFramework=nist-800-53&atlasBaseline=nist-800-53b%3ALOW&atlasFamily=nist-800-53%3AFAMILY-AC",
-  );
+  await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByLabel("Filter this family")).toBeVisible();
-  await expect(page).toHaveURL(/atlasBaseline=/);
-  await expect(
-    page.getByText(/shown by this optional baseline filter/i),
-  ).toBeVisible();
-  await expect(page.locator(".atlas-choice-trail")).toContainText(
-    "ExploreSP 800-53 Rev. 5 CatalogAccess Control",
-  );
-  await expect(page.locator(".atlas-choice-trail")).not.toContainText("LOW");
+  await clickFlowNode(page, "atlas:LIMB-COMPLIANCE");
+  await clickFlowNode(page, "nist-800-53:CATALOG");
+  await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
+  const breadcrumb = page.getByRole("navigation", { name: "Atlas breadcrumb" });
+  await expect(breadcrumb).toContainText("Compliance");
+  await expect(breadcrumb).toContainText("SP 800-53 Rev. 5 Catalog");
 
   await page.reload();
   await waitForAppReady(page);
-  await expect(page.getByLabel("Filter this family")).toBeVisible({
-    timeout: 30000,
-  });
+  await expect(page.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
+  await expect(breadcrumb).toContainText("SP 800-53 Rev. 5 Catalog");
 
-  await page
-    .locator(".atlas-choice-trail")
-    .getByRole("button", { name: "SP 800-53 Rev. 5 Catalog" })
-    .click();
-  await expect(
-    page.getByText(
-      "Optional display filter: which published baseline selection should narrow the records?",
-    ),
-  ).toBeVisible();
-  await expect(page).not.toHaveURL(/atlasFamily=/);
-  await expect(page).not.toHaveURL(/atlasBaseline=/);
+  await breadcrumb.getByRole("button", { name: "Compliance", exact: true }).click();
+  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+  await expect(page).not.toHaveURL(/atlasFramework=/);
 
   await page.goBack();
-  await expect(page.getByLabel("Filter this family")).toBeVisible();
+  await expect(breadcrumb).toContainText("SP 800-53 Rev. 5 Catalog");
 });
 
 test("family filtering is local and an empty result explains itself", async ({
   page,
 }) => {
   test.setTimeout(120_000);
-  await gotoApp(
-    page,
-    "/#/explore?atlasAxis=framework&atlasFramework=nist-800-53&atlasFamily=nist-800-53%3AFAMILY-AC",
-  );
+  await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  await clickFlowNode(page, "atlas:LIMB-COMPLIANCE");
+  await clickFlowNode(page, "nist-800-53:CATALOG");
+  await clickFlowNode(page, "nist-800-53:FAMILY-AC");
   const filter = page.getByLabel("Filter this family");
   await filter.fill("AC-2");
   await expect(page.locator(".atlas-path-record")).not.toHaveCount(0);

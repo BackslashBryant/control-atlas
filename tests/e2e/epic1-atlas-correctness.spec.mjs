@@ -7,7 +7,7 @@ import {
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
-  await page.goto("/#/explore");
+  await page.goto("/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 });
@@ -16,17 +16,13 @@ test("exact Atlas identifier focuses the record and keeps choices out of ancestr
   page,
 }) => {
   await page
-    .getByRole("searchbox", { name: "Jump to another record" })
+    .getByRole("searchbox", { name: "Jump to a record" })
     .fill("nist-800-53:AC-2");
-  await page.getByRole("searchbox", { name: "Jump to another record" }).press("Enter");
+  await page.getByRole("searchbox", { name: "Jump to a record" }).press("Enter");
 
   await expect(page).toHaveURL(/node=nist-800-53%3AAC-2/);
-  await expect(
-    page.getByRole("heading", {
-      level: 1,
-      name: "AC-2 — Account Management",
-    }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Atlas" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("Access Control");
   // Hierarchy is closed by default in the record workspace (Connections is
   // the default surface); open it to reach "Where this sits".
   await page.getByRole("button", { name: "Hierarchy" }).click();
@@ -40,10 +36,10 @@ test("exact Atlas identifier focuses the record and keeps choices out of ancestr
 });
 
 test("ambiguous Atlas text hands off to canonical Search", async ({ page }) => {
-  await page.getByRole("searchbox", { name: "Jump to another record" }).fill("account");
-  await page.getByRole("searchbox", { name: "Jump to another record" }).press("Enter");
+  await page.getByRole("searchbox", { name: "Jump to a record" }).fill("account");
+  await page.getByRole("searchbox", { name: "Jump to a record" }).press("Enter");
 
-  await expect(page).toHaveURL(/\/search\?q=account/);
+  await expect(page).toHaveURL(/\/library\?q=account/);
   await expect(
     page.getByRole("heading", {
       level: 1,
@@ -56,15 +52,15 @@ test("no-match Atlas search stays local with announced recovery actions", async 
   page,
 }) => {
   const query = "zzzz-epic-one-no-match";
-  await page.getByRole("searchbox", { name: "Jump to another record" }).fill(query);
-  await page.getByRole("searchbox", { name: "Jump to another record" }).press("Enter");
+  await page.getByRole("searchbox", { name: "Jump to a record" }).fill(query);
+  await page.getByRole("searchbox", { name: "Jump to a record" }).press("Enter");
 
-  await expect(page).toHaveURL(/\/explore/);
+  await expect(page).toHaveURL(/\/atlas/);
   await expect(
     page.getByText(`No Atlas record matches ${query}.`, { exact: true }),
   ).toBeVisible();
-  await expect(page.getByRole("button", { name: "Search all records" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Browse the Catalog" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Search all records" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Browse the Catalog" })).toBeVisible();
   await expect(page.getByRole("status")).toContainText(
     `No Atlas record matches ${query}. Try Search or browse the Catalog.`,
   );
@@ -73,7 +69,7 @@ test("no-match Atlas search stays local with announced recovery actions", async 
 test("focused Atlas exposes explicit lenses and class-direction List semantics", async ({
   page,
 }) => {
-  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
+  await page.goto("/#/atlas?node=nist-800-53%3AAC-2");
   await waitForAppReady(page);
 
   await page.getByRole("button", { name: "Hierarchy" }).click();
@@ -83,7 +79,7 @@ test("focused Atlas exposes explicit lenses and class-direction List semantics",
   await expect(
     page.getByRole("navigation", { name: "Where this sits" }).first(),
   ).toContainText("Access Control");
-  await expect(page.getByRole("region", { name: "Relationship map" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Connections", level: 2 })).toBeVisible();
   await expect(page.getByRole("button", { name: "View all", exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "View all", exact: true }).click();

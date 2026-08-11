@@ -9,11 +9,13 @@ const explorePage = readFileSync("src/ui/pages/ExplorePage.tsx", "utf8");
 const objectDetailPage = readFileSync("src/ui/pages/ObjectDetailPage.tsx", "utf8");
 const routeIdentity = readFileSync("src/ui/lib/routeIdentity.ts", "utf8");
 
-test("the Atlas explains the federal sprawl once at orientation zoom", () => {
+test("the Atlas canvas uses the locked slim purpose line without a competing intro", () => {
   const explanation =
     "Federal cybersecurity material is spread across separate laws, agencies, and publications that were never organized together. Publishers wrote their own documents; Control Atlas drew the lines between them.";
 
-  assert.equal(atlasTree.split(explanation).length - 1, 1);
+  assert.equal(atlasTree.split(explanation).length - 1, 0);
+  assert.match(atlasPage, /<h1 id="atlas-page-title">Atlas<\/h1>/);
+  assert.match(atlasPage, /See the landscape, then drill in\./);
   assert.doesNotMatch(
     atlasTree,
     /The roots show why the work exists; the canopy shows where the work lives\./,
@@ -39,9 +41,9 @@ test("curated organization is positively attributed to Control Atlas", () => {
 test("Atlas names the product surface consistently", () => {
   assert.match(explorePage, /label: "Map", value: "map"/);
   assert.match(objectDetailPage, /See in Atlas/);
-  assert.match(atlasPage, /: "Atlas map"/);
+  assert.match(atlasPage, /<h1 id="atlas-page-title">Atlas<\/h1>/);
   assert.match(routeIdentity, /label: "Atlas"/);
-  assert.match(atlasTree, /<h2 id="atlas-tree-title">Federal cybersecurity, from authority to action<\/h2>/);
+  assert.doesNotMatch(atlasTree, /Federal cybersecurity, from authority to action/);
 });
 
 test("Atlas map copy does not imply progression or visitor applicability", () => {

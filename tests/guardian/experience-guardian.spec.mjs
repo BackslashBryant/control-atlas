@@ -65,8 +65,11 @@ test.describe("Control Atlas Experience Guardian", () => {
       }
 
       if (state.id === "atlas-overview") {
-        await expect(page.locator(".atlas-universe")).toBeVisible();
-        const collisions = await page.locator(".atlas-universe__area:visible").evaluateAll((elements) => {
+        await expect(page.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
+        const nodes = viewport === "desktop"
+          ? page.locator(".react-flow__node:visible")
+          : page.locator(".atlas-tree-compact__node:visible");
+        const collisions = await nodes.evaluateAll((elements) => {
           const boxes = elements.map((element) => ({ label: element.textContent?.trim() || "area", box: element.getBoundingClientRect() }));
           return boxes.flatMap((left, index) => boxes.slice(index + 1).filter((right) => !(left.box.right + 4 <= right.box.left || right.box.right + 4 <= left.box.left || left.box.bottom + 4 <= right.box.top || right.box.bottom + 4 <= left.box.top)).map((right) => [left.label, right.label]));
         });
@@ -74,21 +77,13 @@ test.describe("Control Atlas Experience Guardian", () => {
       }
 
       if (state.id === "atlas-publications") {
-        if (viewport === "desktop") {
-          await expect(page.locator('[data-semantic-level="publications"]')).toBeVisible();
-          await expect(page.locator(".atlas-universe__publication")).toHaveCount(3);
-        } else {
-          await expect(page.locator(".atlas-universe-mobile")).toContainText("Publications");
-        }
+        await expect(page.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
+        await expect(page.locator(".atlas-tree-node--publication, .atlas-tree-compact__node--publication")).toHaveCount(3);
       }
 
       if (state.id === "atlas-structure") {
-        if (viewport === "desktop") {
-          await expect(page.locator('[data-semantic-level="structure"]')).toBeVisible();
-          await expect(page.locator(".atlas-universe__unit").first()).toBeVisible();
-        } else {
-          await expect(page.locator(".atlas-universe-mobile")).toContainText("Publisher structure");
-        }
+        await expect(page.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
+        await expect(page.locator(".atlas-tree-node--summary, .atlas-tree-compact__node--summary").first()).toBeVisible();
       }
 
       if (["mixed-search", "exact-search", "filtered-search"].includes(state.id)) {

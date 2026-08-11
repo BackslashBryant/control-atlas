@@ -64,15 +64,27 @@ test("WS1 Atlas spends the full area palette on its nine branch nodes", async ({
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page, { allowPartial: true });
 
-  const areaNodes = page.locator(".atlas-tree-node--area");
-  await expect(areaNodes).toHaveCount(9, { timeout: 60_000 });
+  const tree = page.locator('.atlas-tree[data-layout-status="ready"]');
+  await expect(tree).toBeVisible({ timeout: 60_000 });
+  const areaNodes = tree.locator(".atlas-tree-node--area");
+  await expect.poll(
+    () => areaNodes.evaluateAll((nodes) => new Set(nodes.map((node) => node.getAttribute("data-area-id")).filter(Boolean)).size),
+  ).toBe(9);
   const styles = await areaNodes.evaluateAll((nodes) => nodes.map((node) => ({
     area: node.getAttribute("data-area-id"),
     background: globalThis.getComputedStyle(node).backgroundColor,
     border: globalThis.getComputedStyle(node).borderColor,
+    borderStyle: globalThis.getComputedStyle(node).borderStyle,
+    empty: node.classList.contains("is-empty"),
+    hue: globalThis.getComputedStyle(node).getPropertyValue("--ca-area-color").trim(),
   })));
 
   expect(new Set(styles.map((entry) => entry.area)).size).toBe(9);
   expect(new Set(styles.map((entry) => entry.background)).size).toBe(9);
-  expect(new Set(styles.map((entry) => entry.border)).size).toBe(9);
+  expect(new Set(styles.map((entry) => entry.hue)).size).toBe(9);
+  const populatedStyles = styles.filter((entry) => !entry.empty);
+  const emptyStyles = styles.filter((entry) => entry.empty);
+  expect(new Set(populatedStyles.map((entry) => entry.border)).size).toBe(populatedStyles.length);
+  expect(emptyStyles).toHaveLength(2);
+  expect(emptyStyles.every((entry) => entry.borderStyle === "dashed")).toBe(true);
 });

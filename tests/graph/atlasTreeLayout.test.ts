@@ -19,39 +19,50 @@ const spine = JSON.parse(
 ).atlas_spine as AtlasSpine;
 const model = buildAtlasTreeModel(spine);
 
-test("overview coordinates are deterministic, collision-free, and fit a legible workbench", () => {
+test("overview coordinates are deterministic, collision-free, and fit a legible workbench", async () => {
   const rendered = renderedAtlasSet({ model });
-  const first = layoutAtlasTree({ model, rendered });
-  const second = layoutAtlasTree({ model, rendered });
+  const first = await layoutAtlasTree({ model, rendered });
+  const second = await layoutAtlasTree({ model, rendered });
   const serialized = serializeAtlasCoordinates(first);
   assert.equal(serialized, serializeAtlasCoordinates(second));
   assert.deepEqual(atlasTreeCollisions(first), []);
-  assert.ok(Math.max(...first.map((node) => node.x + node.width)) <= 800);
-  assert.ok(Math.max(...first.map((node) => node.y + node.height)) <= 700);
+  assert.ok(Math.max(...first.map((node) => node.x + node.width)) <= 1_000);
+  assert.ok(Math.max(...first.map((node) => node.y + node.height)) <= 900);
 });
 
-test("coordinates do not depend on the atlas-spine input order", () => {
+test("coordinates do not depend on the atlas-spine input order", async () => {
   const reversedModel = buildAtlasTreeModel({ entries: [...spine.entries].reverse() });
+  const forward = await layoutAtlasTree({ model, rendered: renderedAtlasSet({ model }) });
+  const reversed = await layoutAtlasTree({
+    model: reversedModel,
+    rendered: renderedAtlasSet({ model: reversedModel }),
+  });
   assert.equal(
-    serializeAtlasCoordinates(layoutAtlasTree({ model, rendered: renderedAtlasSet({ model }) })),
-    serializeAtlasCoordinates(layoutAtlasTree({ model: reversedModel, rendered: renderedAtlasSet({ model: reversedModel }) })),
+    serializeAtlasCoordinates(forward),
+    serializeAtlasCoordinates(reversed),
   );
 });
 
-test("L3 child-band layout is byte-identical and collision-free", () => {
+test("L3 child-band layout is byte-identical and collision-free", async () => {
   const rendered = renderedAtlasSet({ model, focusId: "disa-srg:CATALOG" });
-  const first = layoutAtlasTree({ model, rendered, focusId: "disa-srg:CATALOG" });
-  const second = layoutAtlasTree({ model, rendered, focusId: "disa-srg:CATALOG" });
+  const first = await layoutAtlasTree({ model, rendered, focusId: "disa-srg:CATALOG" });
+  const second = await layoutAtlasTree({ model, rendered, focusId: "disa-srg:CATALOG" });
   assert.equal(serializeAtlasCoordinates(first), serializeAtlasCoordinates(second));
   assert.deepEqual(atlasTreeCollisions(first), []);
 });
 
-test("authority is above the trunk visually and absent from canonical ancestry", () => {
+test("authority is left of the trunk visually and absent from canonical ancestry", async () => {
   const overview = renderedAtlasSet({ model });
-  const positions = new Map(layoutAtlasTree({ model, rendered: overview }).map((node) => [node.id, node]));
+  const positions = new Map(
+    (await layoutAtlasTree({ model, rendered: overview })).map((node) => [node.id, node]),
+  );
   const trunk = positions.get("atlas:TRUNK")!;
-  assert.ok(overview.filter((node) => node.nodeType === "authority_aggregate").every((node) => positions.get(node.id)!.y < trunk.y));
-  assert.ok(model.areas.every((node) => positions.get(node.id)!.y > trunk.y));
+  assert.ok(
+    overview
+      .filter((node) => node.nodeType === "authority_aggregate")
+      .every((node) => positions.get(node.id)!.x < trunk.x),
+  );
+  assert.ok(model.areas.every((node) => positions.get(node.id)!.x > trunk.x));
   assert.equal(model.trunk.parentId, null);
   assert.equal(canonicalAncestryIsAuthorityFree(model), true);
 });

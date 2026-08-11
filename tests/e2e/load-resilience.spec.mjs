@@ -16,7 +16,7 @@ test("load resilience shows Search skeleton and allows offline navigation", asyn
   test.setTimeout(60000);
   // Keep the desktop header active so this test can exercise its overflow.
   await page.setViewportSize({ width: 1600, height: 900 });
-  await expect.poll(() => page.evaluate(() => window.innerWidth)).toBe(1600);
+  await expect.poll(() => page.evaluate(() => globalThis.window.innerWidth)).toBe(1600);
   await page.route("**/library-search.json**", async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 3500));
     await route.continue();
@@ -100,7 +100,7 @@ test("retry clears a rejected artifact and succeeds on a fresh request", async (
   await expect(page.getByRole("button", { name: "Retry loading" })).toBeVisible({ timeout: 15000 });
   failing = false;
   await page.getByRole("button", { name: "Retry loading" }).click();
-  await expect(page.getByRole("heading", { name: "Federal cybersecurity, from authority to action" })).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible({ timeout: 15000 });
   expect(requests).toBeGreaterThanOrEqual(3);
 });
 

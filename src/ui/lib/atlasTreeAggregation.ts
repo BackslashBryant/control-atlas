@@ -183,7 +183,7 @@ export function renderedAtlasSet(options: {
   }
 
   const parent = focus.parentId ? model.nodesById.get(focus.parentId) : undefined;
-  const siblings = parent
+  const siblings = parent && focus.level === "area"
     ? technologyGateChildren(
         parent,
         model.childrenByParent.get(parent.id) || [],

@@ -7,7 +7,10 @@ import {
   waitForSkeletonsSettled,
 } from './support.mjs';
 
-const FOCUSED_ATLAS = '/#/explore?node=nist-800-53%3AAC-2';
+const ATLAS_STATES = {
+  overview: '/#/atlas',
+  branch: '/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-COMPLIANCE&atlasFramework=nist-800-53',
+};
 const VIEWPORTS = {
   desktop: { width: 1440, height: 1000 },
   compact: { width: 390, height: 844 },
@@ -35,9 +38,9 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
 });
 
-async function openApprovedComposition(page, viewport, relationshipView) {
+async function openApprovedAtlas(page, viewport, state) {
   await page.setViewportSize(viewport);
-  await page.goto(`${FOCUSED_ATLAS}&relationshipView=${relationshipView}`);
+  await page.goto(ATLAS_STATES[state]);
   await page.addStyleTag({
     content: `
       *, *::before, *::after {
@@ -49,44 +52,28 @@ async function openApprovedComposition(page, viewport, relationshipView) {
       }
     `,
   });
-  await waitForAppReady(page, { allowPartial: true });
+  await waitForAppReady(page);
   await dismissOnboarding(page);
   await page.evaluate(() => globalThis.document.fonts.ready);
 
-  const main = page.locator('.atlas-focused-main');
-  await expect(main).toBeVisible();
-  if (relationshipView === 'map') {
+  const template = page.locator('[data-page-template="canvas"]');
+  await expect(template).toBeVisible();
+  await expect(template.locator('.atlas-tree')).toHaveAttribute('data-layout-status', 'ready');
+  if (viewport.width >= 1024) {
     await expect(
-      main.getByRole('region', { name: 'Relationship map' }),
-    ).toBeVisible();
-    // The map paints once from the neighborhood shard and again once every
-    // counterpart label resolves, so screenshotting on first paint captured
-    // one of two stable layouts at random. Wait for the traffic to stop and
-    // the box to settle before the comparison.
-    await page.waitForLoadState('networkidle');
-    await expect
-      .poll(async () => {
-        const box = await main
-          .getByRole('region', { name: 'Relationship map' })
-          .boundingBox();
-        return Math.round(box?.height ?? 0);
-      })
-      .toBeGreaterThan(0);
-    await expect(
-      page.getByRole('complementary', { name: 'Selected item' }),
+      template.getByRole('application', { name: 'Interactive Atlas map hierarchy' }),
     ).toBeVisible();
   } else {
-    // Re-baselined 2026-08-01 for the Cybersecurity trunk spine. A focused
-    // record's Path is its structural position — the chain from the trunk down
-    // to this record — rather than the retired stage board. The guarantee is
-    // unchanged: the Path shows where you are and where you can go, and never
-    // dumps a grid of records.
     await expect(
-      page.getByRole('navigation', { name: 'Where this sits' }),
+      template.getByRole('tree', { name: 'Atlas map hierarchy' }),
     ).toBeVisible();
-    await expect(main.locator('.atlas-path-record')).toHaveCount(0);
   }
-  return main;
+  if (state === 'branch') {
+    await expect(
+      template.getByRole('navigation', { name: 'Atlas breadcrumb' }),
+    ).toContainText('SP 800-53 Rev. 5 Catalog');
+  }
+  return template;
 }
 
 async function openRouteComposition(page, viewport, path) {
@@ -128,28 +115,19 @@ async function openRouteComposition(page, viewport, path) {
 }
 
 for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
-  for (const relationshipView of ['map', 'path']) {
-    test(`${viewportName} approved ${relationshipView} composition`, async ({ page }) => {
-      const main = await openApprovedComposition(
+  for (const state of Object.keys(ATLAS_STATES)) {
+    test(`${viewportName} approved Atlas ${state} composition`, async ({ page }) => {
+      const template = await openApprovedAtlas(
         page,
         viewport,
-        relationshipView,
+        state,
       );
-      await expect(main).toHaveScreenshot(
-        `atlas-${viewportName}-${relationshipView}.png`,
+      await expect(template).toHaveScreenshot(
+        `atlas-${viewportName}-${state}.png`,
         {
           animations: 'disabled',
           caret: 'hide',
           scale: 'css',
-          // The relationship map lays its nodes out programmatically and
-          // settles on one of a couple of near-identical arrangements, which
-          // moved ~2% of pixels between otherwise identical runs. The budget
-          // sits just above that jitter so the snapshot still catches real
-          // changes — colour, type, spacing, a missing panel — without
-          // failing on node positions.
-          ...(relationshipView === 'map'
-            ? { maxDiffPixelRatio: 0.035 }
-            : {}),
         },
       );
     });

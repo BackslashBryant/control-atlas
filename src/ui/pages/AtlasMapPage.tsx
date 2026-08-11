@@ -21,7 +21,6 @@ import {
   AtlasTree,
   benchmarkChildrenFromNeighborhood,
 } from "../components/AtlasTree";
-import { CanonicalBreadcrumb } from "../components/CanonicalBreadcrumb";
 import { RelationshipGraphTable } from "../components/RelationshipGraphTable";
 import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import {
@@ -42,7 +41,7 @@ import {
 } from "../lib/atlasDrilldown";
 import { catalogProfileFor } from "../lib/catalogProfiles";
 import { resolveAtlasSearchTransition } from "../lib/atlasSearch";
-import { PageHeader, scrollElementBelowHeader } from "../lib/pagePrimitives";
+import { scrollElementBelowHeader } from "../lib/pagePrimitives";
 import { relationshipExplanation } from "../lib/relationshipProvenance";
 import {
   loadAtlasNeighborhood,
@@ -224,58 +223,36 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   return (
     <Panel
       className="atlas-workspace"
+      data-page-template="canvas"
       data-visual-identity="technical-cartography"
       data-route-content-ready={
         recordStatus === "loading" ? "false" : "true"
       }
     >
-      <PageHeader
-        eyebrow={record ? (
-          bundle.runtime
-            .getCatalogs()
-            .find(
-              (catalog: any) =>
-                catalog.id === record.center_node.metadata?.catalog_id,
-            )?.name ||
-          bundle.runtime.getSource(record.center_node.source_id)?.display_name ||
-          record.center_node.metadata?.catalog_id ||
-          ""
-        ) : undefined}
-        primary
-        summary={record ? officialTextPreview(
-          bundle.runtime.getLibraryDocument(record.center_node.id)?.description ||
-            "No narrative description was published for this record.",
-          160,
-        ).preview : "See the full cyber landscape, then zoom into an area, publication, or record."}
-        title={record ? (
-          <RecordLink
-            className="atlas-record-title-link"
-            nodeId={record.center_node.id}
-            onOpenNode={onOpenNode}
-          >
-            {focusedAtlasTitle(record)}
-          </RecordLink>
-        ) : "Atlas map"}
-      />
-
-      <form className="atlas-map-command" onSubmit={submitSearch}>
-        <label className="visually-hidden" htmlFor="atlas-search">
-          Jump to another record
-        </label>
-        <div className="search-input">
-          <IconSearch aria-hidden="true" size={20} stroke={1.8} />
-          <input
-            aria-label="Jump to another record"
-            id="atlas-search"
-            name="query"
-            onChange={(event) => setMapSearchDraft(event.target.value)}
-            placeholder="Jump to another record"
-            type="search"
-            value={mapSearchDraft}
-          />
+      <header className="atlas-canvas-header">
+        <div>
+          <h1 id="atlas-page-title">Atlas</h1>
+          <p>See the landscape, then drill in.</p>
         </div>
-        <button className="visually-hidden" type="submit">Search</button>
-      </form>
+        <form className="atlas-map-command" onSubmit={submitSearch}>
+          <label className="visually-hidden" htmlFor="atlas-search">
+            Jump to a record
+          </label>
+          <div className="search-input">
+            <IconSearch aria-hidden="true" size={20} stroke={1.8} />
+            <input
+              aria-label="Jump to a record"
+              id="atlas-search"
+              name="query"
+              onChange={(event) => setMapSearchDraft(event.target.value)}
+              placeholder="Jump to a record"
+              type="search"
+              value={mapSearchDraft}
+            />
+          </div>
+          <button className="visually-hidden" type="submit">Search</button>
+        </form>
+      </header>
       <span
         aria-atomic="true"
         className="visually-hidden"
@@ -407,7 +384,10 @@ function FocusedAtlas(props: {
   );
   const [selectedRow, setSelectedRow] = useState<AtlasRelationshipRow | null>(null);
   const inspectorRef = useRef<HTMLElement | null>(null);
-  const centerLabel = record.center_node.metadata?.item_id || record.center_node.id;
+  const centerLabel =
+    record.center_node.metadata?.item_id ||
+    record.center_node.metadata?.title ||
+    record.center_node.label;
   // Publication name, never the raw catalog id: `NIST-800-53` is a slug, and
   // the eyebrow printed it verbatim until the catalog lookup was added.
   const centerCatalogId = record.center_node.metadata?.catalog_id || "";
@@ -417,7 +397,7 @@ function FocusedAtlas(props: {
       .find((catalog: any) => catalog.id === centerCatalogId)?.name ||
     bundle.runtime.getSource(record.center_node.source_id)?.display_name ||
     bundle.runtime.getSource(record.center_node.source_id)?.name ||
-    centerCatalogId;
+    "";
   const centerTitle =
     record.center_node.metadata?.title || record.center_node.label || centerLabel;
   const inspectedId = selectedRow?.counterpart.id || record.center_node.id;
@@ -447,19 +427,19 @@ function FocusedAtlas(props: {
       ? bundle.runtime.getNode(`${state.atlasFramework}:CATALOG`)?.metadata
           ?.title ||
         bundle.runtime.getNode(`${state.atlasFramework}:CATALOG`)?.label ||
-        state.atlasFramework
+        ""
       : "",
     state.atlasBaseline
       ? state.atlasBaseline === "all"
         ? "All records"
         : bundle.runtime.getNode(state.atlasBaseline)?.metadata?.title ||
           bundle.runtime.getNode(state.atlasBaseline)?.label ||
-          state.atlasBaseline
+          ""
       : "",
     state.atlasFamily
       ? bundle.runtime.getNode(state.atlasFamily)?.metadata?.title ||
         bundle.runtime.getNode(state.atlasFamily)?.label ||
-        state.atlasFamily
+        ""
       : "",
   ].filter(Boolean);
   const selectedGroup = selectedRow
@@ -506,7 +486,6 @@ function FocusedAtlas(props: {
     });
   }
 
-  const boardView = false;
   // The record workspace always shows Connections. relationshipView now
   // selects which supporting panel is open, so old deep links still resolve.
   const hierarchyOpen = view === "path";
@@ -547,43 +526,11 @@ function FocusedAtlas(props: {
 
   return (
     <div className="atlas-focused-shell">
-      <CanonicalBreadcrumb bundle={bundle} nodeId={record.center_node.id} />
       {/* One record workspace, not three competing modes. Connections is the
           product; Hierarchy and the complete list are supporting panels.
           relationshipView still round-trips through the URL so every existing
           ?relationshipView=path|list deep link keeps working — it now decides
           which panel opens, not which product you get. */}
-      <div className="atlas-focused-toolbar">
-        <h2 className="atlas-workspace-heading">Connections</h2>
-        <div className="atlas-workspace-controls">
-          <button
-            aria-controls="atlas-hierarchy-panel"
-            aria-expanded={hierarchyOpen}
-            className={hierarchyOpen ? "atlas-panel-toggle active" : "atlas-panel-toggle"}
-            onClick={() =>
-              patchAtlas({ relationshipView: hierarchyOpen ? "map" : "path" })
-            }
-            type="button"
-          >
-            <IconRoute aria-hidden="true" size={17} />
-            Hierarchy
-          </button>
-          <button
-            aria-controls="atlas-all-connections"
-            aria-expanded={listOpen}
-            className={listOpen ? "atlas-panel-toggle active" : "atlas-panel-toggle"}
-            onClick={() =>
-              patchAtlas({ relationshipView: listOpen ? "map" : "list" })
-            }
-            type="button"
-          >
-            <IconListDetails aria-hidden="true" size={17} />
-            View all
-          </button>
-          <AtlasFilterBar filters={filters} onChange={updateFilters} options={options} />
-        </div>
-      </div>
-
       {bundle.atlasSpine ? (
         <AtlasTree
           areaId={state.atlasLimb}
@@ -636,6 +583,37 @@ function FocusedAtlas(props: {
       ) : (
         <p role="alert">The Atlas map structure is unavailable. Reload the page to try again.</p>
       )}
+
+      <div className="atlas-focused-toolbar">
+        <h2 className="atlas-workspace-heading">Connections</h2>
+        <div className="atlas-workspace-controls">
+          <button
+            aria-controls="atlas-hierarchy-panel"
+            aria-expanded={hierarchyOpen}
+            className={hierarchyOpen ? "atlas-panel-toggle active" : "atlas-panel-toggle"}
+            onClick={() =>
+              patchAtlas({ relationshipView: hierarchyOpen ? "map" : "path" })
+            }
+            type="button"
+          >
+            <IconRoute aria-hidden="true" size={17} />
+            Hierarchy
+          </button>
+          <button
+            aria-controls="atlas-all-connections"
+            aria-expanded={listOpen}
+            className={listOpen ? "atlas-panel-toggle active" : "atlas-panel-toggle"}
+            onClick={() =>
+              patchAtlas({ relationshipView: listOpen ? "map" : "list" })
+            }
+            type="button"
+          >
+            <IconListDetails aria-hidden="true" size={17} />
+            View all
+          </button>
+          <AtlasFilterBar filters={filters} onChange={updateFilters} options={options} />
+        </div>
+      </div>
 
       {rows.length === 0 ? (
         <div id="atlas-focused-view">
@@ -692,10 +670,12 @@ function FocusedAtlas(props: {
                       )}
                     </dd>
                   </div>
-                  <div>
-                    <dt>Publication</dt>
-                    <dd>{centerPublication}</dd>
-                  </div>
+                  {centerPublication ? (
+                    <div>
+                      <dt>Publication</dt>
+                      <dd>{centerPublication}</dd>
+                    </div>
+                  ) : null}
                   <div>
                     <dt>Identifier</dt>
                     <dd>{centerLabel}</dd>
@@ -751,9 +731,9 @@ function FocusedAtlas(props: {
               </section>
             ) : null}
 
-            {/* The complete relationship set. It supports the map instead of
-                competing with it, and stays the accessible DOM equivalent:
-                same rows, same class labels, same counts, same filters. */}
+            {/* The complete relationship set supports the canvas instead of
+                competing with it: same source-backed rows, classes, counts,
+                and filters. */}
             <section
               className="atlas-all-connections"
               id="atlas-all-connections"
@@ -1035,6 +1015,7 @@ function AtlasGuidedPath(props: {
   function resetDrill(patch: Partial<AtlasMapPageProps["state"]>) {
     patchAtlas({
       atlasAxis: "",
+      atlasLimb: "",
       atlasFramework: "",
       atlasBaseline: "",
       atlasFamily: "",
@@ -1080,8 +1061,6 @@ function AtlasGuidedPath(props: {
 
   return (
     <section className="atlas-ancestry">
-      <ChoiceTrail links={choiceLinks} onOpen={openAncestor} />
-
       {bundle.atlasSpine ? (
         <AtlasTree
           areaId={state.atlasLimb}
@@ -1114,6 +1093,10 @@ function AtlasGuidedPath(props: {
       ) : (
         <p role="alert">The Atlas map structure is unavailable. Reload the page to try again.</p>
       )}
+
+      {axis === "process" ? (
+        <ChoiceTrail links={choiceLinks} onOpen={openAncestor} />
+      ) : null}
 
       {axis === "framework" && !framework ? (
         <>

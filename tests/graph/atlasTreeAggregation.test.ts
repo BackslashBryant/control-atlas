@@ -44,7 +44,7 @@ function benchmarkChildren(benchmarkId: string): AtlasTreeNode[] {
 
 test("real spine focus states stay within the 120-node render budget", () => {
   const maximum = maxRenderedAtlasNodes(model);
-  assert.equal(maximum, 33);
+  assert.equal(maximum, 28);
   assert.ok(maximum <= ATLAS_RENDER_NODE_CAP);
   const overview = renderedAtlasSet({ model });
   assert.equal(overview.length, 13);
@@ -78,7 +78,7 @@ test("technology gate is general and matches the real DISA branches", () => {
   );
 });
 
-test("the real 448-rule benchmark buckets as a pure function of sorted input", () => {
+test("the real 448-rule benchmark buckets as a pure function of sorted input", async () => {
   const benchmarkId = "disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG";
   const children = benchmarkChildren(benchmarkId);
   assert.equal(children.length, 448);
@@ -96,7 +96,7 @@ test("the real 448-rule benchmark buckets as a pure function of sorted input", (
   });
   assert.equal(rendered.length, 16);
   assert.deepEqual(
-    atlasTreeCollisions(layoutAtlasTree({ model, rendered, focusId: benchmarkId })),
+    atlasTreeCollisions(await layoutAtlasTree({ model, rendered, focusId: benchmarkId })),
     [],
   );
 });
@@ -104,4 +104,16 @@ test("the real 448-rule benchmark buckets as a pure function of sorted input", (
 test("the atlas-spine model never renders the full record layer", () => {
   assert.equal(model.nodesById.has("disa-cci:CCI-000366"), false);
   assert.ok(model.nodes.length < 1_000);
+});
+
+test("a drilled publication keeps its ancestry and children without sibling publications", () => {
+  const publicationId = "nist-800-53:CATALOG";
+  const rendered = renderedAtlasSet({ model, focusId: publicationId });
+  const ids = new Set(rendered.map((node) => node.id));
+
+  assert.equal(ids.has("atlas:TRUNK"), true);
+  assert.equal(ids.has("atlas:LIMB-COMPLIANCE"), true);
+  assert.equal(ids.has(publicationId), true);
+  assert.equal(ids.has("nist-800-53:FAMILY-AC"), true);
+  assert.equal(ids.has("fedramp-rev5:CATALOG"), false);
 });
