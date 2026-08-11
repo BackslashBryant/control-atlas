@@ -23,7 +23,7 @@ import {
   TEMPLATE_CATEGORIES,
 } from "../lib/catalogGroups.mjs";
 
-import { PRELAUNCH_REVIEW_NOTICE } from "../../shared/disclaimer.mjs";
+import { STARTER_DOCUMENT_REVIEW_NOTICE } from "../../shared/disclaimer.mjs";
 import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
 import { BuildLocalNav } from "../components/BuildLocalNav";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
@@ -568,7 +568,7 @@ function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) 
           Starter document. The selected inputs and cited sources appear in the file.
         </p>
         <p className="template-document-preview-disclaimer">
-          {PRELAUNCH_REVIEW_NOTICE}
+          {STARTER_DOCUMENT_REVIEW_NOTICE}
         </p>
         {(doc.sections || []).map((section: any) => (
           <section className="template-document-preview-section" key={section.heading}>
@@ -1010,7 +1010,7 @@ export function TemplatesPage(props: {
         summary={buildOverview
           ? SITE_COPY.routes.documents.purpose
           : documentBrowser || selectedTemplate
-          ? "Review a starter document and its public references before you adapt it."
+          ? "Choose a starter document and adapt it to your work."
           : "Pick a task to see its public references and starter documents."}
         title={
           buildOverview
@@ -1243,11 +1243,10 @@ export function TemplatesPage(props: {
                     : "Starter documents"}
                 </h2>
                 <p className="page-summary">
-                  Generate a starter file with its headings, prompts, and source
-                  context ready for your team to complete.
+                  Start with the basic structure and prompts already in place.
                 </p>
                 <p className="template-document-preview-disclaimer">
-                  {PRELAUNCH_REVIEW_NOTICE}
+                  {STARTER_DOCUMENT_REVIEW_NOTICE}
                 </p>
               </div>
             </div>

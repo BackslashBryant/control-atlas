@@ -8,6 +8,7 @@ const read = (path) => readFileSync(path, "utf8");
 const PUBLIC_COPY_FILES = [
   "src/shared/site-copy.mjs",
   "src/shared/home-content.mjs",
+  "src/shared/disclaimer.mjs",
   "src/app/help-data.mjs",
   "src/app/learn-content.mjs",
   "src/app/start-here-guide.mjs",
@@ -70,6 +71,7 @@ test("product-authored route copy excludes banned metaphor and generated guidanc
     /published structure/i,
     /source-backed/i,
     /already represented in (?:the )?Atlas/i,
+    /being reviewed before public launch/i,
     /\b(?:proves?|ensures?|guarantees?|achieves?) compliance\b/i,
     /[\u00c2\u00c3]|\u00e2\u20ac/,
   ];
