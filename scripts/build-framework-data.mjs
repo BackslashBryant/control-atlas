@@ -11,6 +11,7 @@ import {
 import { createHash } from "node:crypto";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildSourceTextPresentation } from "../src/shared/source-text-presentation.mjs";
 import { validateGraphArtifacts } from "../tools/validators/federal-graph.mjs";
 import { loadSourceRegistry } from "../tools/validators/source-registry.mjs";
 import {
@@ -704,6 +705,15 @@ function pushEligibleNode(state, registry, node, sourceId) {
       message: `Node ${node.id} was not published because its defining source is not graph eligible.`,
     });
     return;
+  }
+  if (node.metadata) {
+    const presentation = {};
+    for (const field of ["description", "check_text", "fix_text", "discussion", "procedure_text"]) {
+      if (String(node.metadata[field] || "").trim()) {
+        presentation[field] = buildSourceTextPresentation(node.metadata[field]);
+      }
+    }
+    if (Object.keys(presentation).length) node.metadata.source_text_presentation = presentation;
   }
   attachNodeProvenance(node, sourceId, registry);
   state.nodes.push(node);

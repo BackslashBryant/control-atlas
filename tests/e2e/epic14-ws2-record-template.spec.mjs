@@ -73,6 +73,32 @@ test("WS2 preserves source-specific STIG fields and responsive flow", async ({ p
   await expect(page.locator(".record-template-sidebar")).toHaveCSS("position", "static");
 });
 
+test("WS2 turns clear DISA commands and file procedures into copyable source formatting", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: async (value) => { globalThis.__copiedSourceSnippet = value; } },
+    });
+  });
+  await openRecord(page, "/#/record/disa-stig/V-256609");
+
+  const check = page.locator('[data-source-field="check_text"]');
+  await expect(check.locator("[data-source-code-snippet]")).toHaveCount(1);
+  await check.getByRole("button", { name: "Copy", exact: true }).click();
+  await expect.poll(() => page.evaluate(() => globalThis.__copiedSourceSnippet)).toMatch(/rpm -V VMware-Postgres/);
+
+  const fix = page.locator('[data-source-field="fix_text"]');
+  await expect(fix.locator(".source-procedure-list")).toHaveCount(2);
+  await expect(fix.locator("[data-source-code-snippet]")).toHaveCount(2);
+
+  await page.setViewportSize({ width: 375, height: 812 });
+  const overflow = await page.evaluate(() =>
+    globalThis.document.documentElement.scrollWidth -
+      globalThis.document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(1);
+});
+
 test("WS2 desktop uses the locked two-column reading layout", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await openRecord(page, "/#/record/nist-800-53/AC-2");

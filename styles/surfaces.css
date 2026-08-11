@@ -8219,10 +8219,50 @@ button.atlas-leverage-row:hover {
 
 .record-official-text p,
 .record-official-text ul,
+.record-official-text ol,
 .record-connections p,
 .record-template-sidebar p,
 .record-template-sidebar ul {
   margin-block: 0;
+}
+
+.source-procedure-list {
+  display: grid;
+  gap: var(--ca-space-2);
+  padding-left: var(--ca-space-5);
+}
+
+.source-code-snippet {
+  overflow: hidden;
+  border: 1px solid var(--ca-border-strong);
+  border-radius: var(--ca-radius-sm);
+  background: var(--ca-surface);
+}
+
+.source-code-snippet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ca-space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border-bottom: 1px solid var(--ca-border);
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+  font-weight: 700;
+}
+
+.source-code-snippet__header .button {
+  min-height: 32px;
+}
+
+.source-code-snippet pre {
+  overflow-x: auto;
+  margin: 0;
+  padding: var(--ca-space-3);
+  font-family: var(--ca-font-mono);
+  font-size: var(--ca-text-sm);
+  line-height: 1.55;
+  white-space: pre;
 }
 
 .record-connection-groups {

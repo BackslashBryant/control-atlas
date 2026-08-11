@@ -38,6 +38,20 @@ function stripMarkup(value = '') {
     .trim();
 }
 
+function preserveSourceText(value = '') {
+  const text = String(value)
+    .replace(/<!\[CDATA\[|\]\]>/g, '')
+    .replace(/<\/?(?:br|p|div|li)\b[^>]*>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/\r\n?/g, '\n');
+  const lines = text.split('\n');
+  while (lines.length && !lines[0].trim()) lines.shift();
+  while (lines.length && !lines.at(-1).trim()) lines.pop();
+  const indents = lines.filter((line) => line.trim()).map((line) => line.match(/^\s*/)?.[0].length || 0);
+  const commonIndent = indents.length ? Math.min(...indents) : 0;
+  return lines.map((line) => line.slice(commonIndent).replace(/[ \t]+$/g, '')).join('\n').trim();
+}
+
 function extractSection(value, tagName) {
   const match = String(value).match(new RegExp(`<${tagName}>([\\s\\S]*?)</${tagName}>`, 'i'));
   return match ? stripMarkup(match[1]) : '';
@@ -69,7 +83,7 @@ function getCheckText(rule) {
     .flatMap((entry) => asArray(entry?.['check-content']))
     .map(textValue)
     .find(Boolean);
-  return stripMarkup(content);
+  return preserveSourceText(content);
 }
 
 function detectCatalogKind(benchmark, hintKind) {
@@ -130,7 +144,7 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKin
         vuln_id: vulnId,
         stig_id: textValue(rule.version) || textValue(group.title),
         check_text: getCheckText(rule),
-        fix_text: stripMarkup(textValue(rule.fixtext)),
+        fix_text: preserveSourceText(textValue(rule.fixtext)),
         references: parseReferences(rule),
         source: {
           key: sourceKey,

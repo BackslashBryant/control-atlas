@@ -1,10 +1,14 @@
-import { Fragment, type ReactNode } from "react";
+import { Fragment, useState, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import {
   missingRequiredRecordFields,
   recordPresentationProfile,
 } from "../../shared/record-presentation.mjs";
+import {
+  buildSourceTextPresentation,
+  isValidSourceTextPresentation,
+} from "../../shared/source-text-presentation.mjs";
 import authoritySpine from "../../../data/curated/authority-spine.json";
 import { AcronymText } from "../components/AccessibleTerm";
 import { AppLink } from "../components/AppLink";
@@ -55,7 +59,54 @@ function renderOdpText(text: string): ReactNode {
   return nodes;
 }
 
-function SourceSectionContent(props: { kind: string; value: any }) {
+function CopyableCodeSnippet(props: { value: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <div className="source-code-snippet" data-source-code-snippet>
+      <div className="source-code-snippet__header">
+        <span>Command or configuration</span>
+        <Button
+          onClick={() => {
+            void copyText(props.value).then(() => {
+              setCopied(true);
+              window.setTimeout(() => setCopied(false), 1800);
+            });
+          }}
+          type="button"
+          variant="secondary"
+        >
+          {copied ? "Copied" : "Copy"}
+        </Button>
+      </div>
+      <pre><code>{props.value}</code></pre>
+    </div>
+  );
+}
+
+function SourceTextBlocks(props: { value: string; presentation?: any }) {
+  const text = String(props.value || "");
+  const resolvedPresentation = isValidSourceTextPresentation(text, props.presentation)
+    ? props.presentation
+    : buildSourceTextPresentation(text);
+  return (
+    <>
+      {resolvedPresentation.blocks.map((block: any, index: number) => {
+        if (block.kind === "code") {
+          return <CopyableCodeSnippet key={`code-${block.start}-${index}`} value={text.slice(block.start, block.end)} />;
+        }
+        if (block.kind === "list") {
+          const List = block.ordered ? "ol" : "ul";
+          return <List className="source-procedure-list" key={`list-${index}`}>
+            {block.items.map((item: any, itemIndex: number) => <li key={`${item.start}-${itemIndex}`}>{renderOdpText(text.slice(item.start, item.end))}</li>)}
+          </List>;
+        }
+        return <p key={`paragraph-${block.start}-${index}`}>{renderOdpText(text.slice(block.start, block.end))}</p>;
+      })}
+    </>
+  );
+}
+
+function SourceSectionContent(props: { kind: string; value: any; presentation?: any }) {
   if (props.kind === "list") {
     return <ul>{props.value.map((item: string) => <li key={item}>{renderOdpText(item)}</li>)}</ul>;
   }
@@ -83,7 +134,7 @@ function SourceSectionContent(props: { kind: string; value: any }) {
       </ul>
     );
   }
-  return <p>{renderOdpText(String(props.value))}</p>;
+  return <SourceTextBlocks value={String(props.value)} presentation={props.presentation} />;
 }
 
 export function ObjectDetailPage(props: {
@@ -289,7 +340,11 @@ export function ObjectDetailPage(props: {
                 return (
                   <section data-source-field={section.field} key={section.field}>
                     <h2>{section.heading}</h2>
-                    <SourceSectionContent kind={section.kind} value={value} />
+                    <SourceSectionContent
+                      kind={section.kind}
+                      value={value}
+                      presentation={sourceMetadata.source_text_presentation?.[section.field]}
+                    />
                   </section>
                 );
               })}

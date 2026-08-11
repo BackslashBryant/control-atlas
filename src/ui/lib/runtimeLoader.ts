@@ -181,6 +181,13 @@ export type AtlasNeighborhoodNode = {
     implementation_examples?: string[];
     assessment_objectives?: Array<Record<string, unknown>>;
     assessment_method_details?: Array<Record<string, unknown>>;
+    source_text_presentation?: Record<string, {
+      version: 1;
+      blocks: Array<
+        | { kind: "paragraph" | "code"; start: number; end: number; language?: string }
+        | { kind: "list"; ordered: boolean; items: Array<{ start: number; end: number }> }
+      >;
+    }>;
   };
 };
 
