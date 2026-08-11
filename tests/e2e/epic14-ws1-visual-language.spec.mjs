@@ -13,9 +13,8 @@ test("WS1 Home uses neutral bucket tags with nine labelled area dots", async ({ 
   await waitForAppReady(page, { allowPartial: true });
 
   const bucketTags = page.locator(".home-ecosystem-areas .bucket-tag");
-  const lineTags = page.locator(".home-ecosystem-authorities .line-tag");
   await expect(bucketTags).toHaveCount(9);
-  await expect(lineTags).toHaveCount(3);
+  await expect(page.locator(".home-ecosystem-authorities, .home-ecosystem")).toHaveCount(0);
 
   const styles = await bucketTags.evaluateAll((tags) => tags.map((tag) => {
     const dot = tag.querySelector(".bucket-tag__dot");

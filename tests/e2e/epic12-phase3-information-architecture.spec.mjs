@@ -183,18 +183,13 @@ test("Phase 3 List and Map preserve Library state and never drop non-empty resul
   await expect(page.getByRole("group", { name: "Library view" })).toBeVisible();
 });
 
-test("Phase 3 task taxonomy is shared verbatim and obsolete home map copy is absent", async ({ page }) => {
+test("Template B keeps three destination cards and retires the Start card", async ({ page }) => {
   await gotoApp(page, "/#/");
   await waitForAppReady(page, { allowPartial: true });
   const homeTaxonomy = await page.locator(".home-secondary-action strong").allTextContents();
-  expect(homeTaxonomy).toHaveLength(7);
+  expect(homeTaxonomy).toEqual(["Explore the Atlas", "Search the Library", "Browse Resources"]);
   await expect(page.locator(".home-work-map span")).toHaveCount(0);
-
-  await gotoApp(page, "/#/start");
-  await waitForAppReady(page, { allowPartial: true });
-  await expect(page.locator(".start-here-choice-grid button").first()).toBeVisible();
-  const startTaxonomy = await page.locator(".start-here-choice-grid button span").allTextContents();
-  expect(startTaxonomy).toEqual(homeTaxonomy);
+  await expect(page.getByText("Start with your work", { exact: true })).toHaveCount(0);
 });
 
 test("Phase 3 record actions and global footer expose the required hierarchy", async ({ page }) => {

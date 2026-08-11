@@ -1,4 +1,19 @@
-import { IconArrowRight, IconBook2, IconExternalLink } from "@tabler/icons-react";
+import {
+  IconActivityHeartbeat,
+  IconAlertTriangle,
+  IconArrowRight,
+  IconArrowsExchange,
+  IconChecklist,
+  IconCloud,
+  IconExternalLink,
+  IconFiles,
+  IconFlag,
+  IconHierarchy3,
+  IconRoute,
+  IconSearch,
+  IconSettings,
+  IconShieldCheck,
+} from "@tabler/icons-react";
 
 import {
   learnArticleById,
@@ -6,9 +21,28 @@ import {
 } from "../../app/learn-content.mjs";
 import { Panel } from "../components/lsm";
 import { AppLink } from "../components/AppLink";
+import { BucketTag } from "../components/TaxonomyTag";
 import { PageHeader, SummaryCard } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
+
+const GUIDE_PRESENTATION: Record<
+  string,
+  { area: string; Icon: typeof IconFlag }
+> = Object.freeze({
+  "starting-an-authorization": { area: "Governance", Icon: IconFlag },
+  "understanding-rmf": { area: "Governance", Icon: IconRoute },
+  "selecting-controls": { area: "Compliance", Icon: IconChecklist },
+  "implementing-controls": { area: "Implementation", Icon: IconSettings },
+  "preparing-evidence": { area: "Assessment", Icon: IconFiles },
+  "conducting-assessments": { area: "Assessment", Icon: IconSearch },
+  "managing-findings": { area: "Operations", Icon: IconAlertTriangle },
+  "continuous-monitoring": { area: "Operations", Icon: IconActivityHeartbeat },
+  "inheritance-and-common-controls": { area: "Architecture", Icon: IconHierarchy3 },
+  reciprocity: { area: "Governance", Icon: IconArrowsExchange },
+  "cloud-and-shared-responsibility": { area: "Architecture", Icon: IconCloud },
+  "stig-lifecycle": { area: "Implementation", Icon: IconShieldCheck },
+});
 
 export function PlaybooksPage(props: {
   bundle: RuntimeBundle | null;
@@ -22,28 +56,50 @@ export function PlaybooksPage(props: {
 
   if (!selected) {
     return (
-      <Panel data-visual-identity="practitioner-field-manual">
+      <section
+        aria-labelledby="guides-title"
+        className="ca-page guides-directory"
+        data-page-template="directory"
+        data-template="F"
+        data-visual-identity="practitioner-field-manual"
+      >
         <PageHeader
           primary
-          summary="Practitioner guides for authorization, control selection, assessment, findings, and monitoring."
-          title="Guides"
+          summary="Plain-language guides to federal authorization and security work."
+          title={<span id="guides-title">Guides</span>}
         />
         <section aria-label="Practitioner guides" className="learn-article-grid">
-          {practitionerGuides.map((article) => (
-            <AppLink
-              key={article.id}
-              onNavigate={onNavigate}
-              patch={{ pattern: article.id }}
-              view="patterns"
-            >
-              <IconBook2 aria-hidden="true" size={20} />
-              <span>
-                <strong>{article.title}</strong>
-                <small>{article.summary}</small>
-              </span>
-              <IconArrowRight aria-hidden="true" size={18} />
-            </AppLink>
-          ))}
+          {practitionerGuides.map((article, index) => {
+            const presentation = GUIDE_PRESENTATION[article.id];
+            if (!presentation) {
+              throw new Error(`Missing Guide presentation for ${article.id}.`);
+            }
+            const { Icon } = presentation;
+            return (
+              <AppLink
+                className="guide-card"
+                data-guide-area={presentation.area}
+                data-guide-step={index + 1}
+                key={article.id}
+                onNavigate={onNavigate}
+                patch={{ pattern: article.id }}
+                view="patterns"
+              >
+                <span aria-hidden="true" className="guide-card__icon">
+                  <Icon size={22} stroke={1.8} />
+                </span>
+                <span className="guide-card__body">
+                  <span className="guide-card__meta">
+                    <span className="guide-card__step">Step {String(index + 1).padStart(2, "0")}</span>
+                    <BucketTag area={presentation.area}>{presentation.area}</BucketTag>
+                  </span>
+                  <strong>{article.title}</strong>
+                  <small>{article.summary}</small>
+                </span>
+                <IconArrowRight aria-hidden="true" className="guide-card__arrow" size={18} />
+              </AppLink>
+            );
+          })}
         </section>
 
         <div className="card-actions">
@@ -51,7 +107,7 @@ export function PlaybooksPage(props: {
             How to use Control Atlas
           </AppLink>
         </div>
-      </Panel>
+      </section>
     );
   }
 

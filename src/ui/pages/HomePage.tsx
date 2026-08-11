@@ -1,21 +1,15 @@
 import {
   IconArrowRight,
   IconBooks,
-  IconCompass,
-  IconRoute,
   IconSearch,
   IconTopologyStar3,
   IconUsersGroup,
 } from "@tabler/icons-react";
 
-import {
-  HOME_ATLAS_AREAS,
-  HOME_AUTHORITY_GROUPS,
-  HOME_CONTENT,
-  HOME_DESTINATIONS,
-} from "../../shared/home-content.mjs";
+import { HOME_CONTENT, HOME_DESTINATIONS } from "../../shared/home-content.mjs";
 import { AppLink } from "../components/AppLink";
-import { BucketTag, LineTag } from "../components/TaxonomyTag";
+import { BucketTag } from "../components/TaxonomyTag";
+import { AREA_PRESENTATIONS } from "../lib/areaVisualLanguage";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
@@ -27,7 +21,6 @@ const DESTINATION_ICONS = {
   atlas: IconTopologyStar3,
   library: IconBooks,
   resources: IconUsersGroup,
-  start: IconRoute,
 } as const;
 
 export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
@@ -35,6 +28,7 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
     <section
       aria-labelledby="home-title"
       className="home-entry"
+      data-template="B"
       data-visual-identity="universal-front-door"
     >
       <div className="home-hero">
@@ -43,7 +37,6 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
             <p className="eyebrow">{HOME_CONTENT.eyebrow}</p>
             <h1 id="home-title">{HOME_CONTENT.headline}</h1>
             <p className="home-product-identity">{HOME_CONTENT.definition}</p>
-            <p className="home-brand-line">{HOME_CONTENT.support}</p>
           </header>
 
           <button
@@ -57,44 +50,7 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
             <span className="home-search-trigger__action">Search</span>
           </button>
 
-          <div className="home-primary-actions">
-            <AppLink
-              className="home-start-here"
-              onNavigate={onNavigate}
-              variant="primary"
-              view="atlas-map"
-            >
-              <IconTopologyStar3 aria-hidden="true" size={20} stroke={1.8} />
-              Explore the Atlas
-            </AppLink>
-            <AppLink
-              className="home-inline-link"
-              onNavigate={onNavigate}
-              view="search"
-            >
-              Search the Library
-            </AppLink>
-          </div>
         </div>
-
-        <aside aria-label="Federal cybersecurity ecosystem preview" className="home-ecosystem">
-          <header>
-            <p className="eyebrow">The ecosystem at a glance</p>
-            <h2>From authority to action</h2>
-          </header>
-          <div className="home-ecosystem-authorities" aria-label="Authority groups">
-            {HOME_AUTHORITY_GROUPS.map((group) => <LineTag key={group}>{group}</LineTag>)}
-          </div>
-          <div className="home-ecosystem-trunk">
-            <IconCompass aria-hidden="true" size={19} stroke={1.8} />
-            <strong>Control Atlas</strong>
-            <small>connected reference system</small>
-          </div>
-          <div className="home-ecosystem-areas" aria-label="Cybersecurity areas">
-            {HOME_ATLAS_AREAS.map((area) => <BucketTag area={area} key={area}>{area}</BucketTag>)}
-          </div>
-          <p>Zoom from the whole landscape to the source, relationship, or record you need.</p>
-        </aside>
       </div>
 
       <nav aria-label="Choose a Control Atlas destination" className="home-secondary-grid">
@@ -116,6 +72,23 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
             </AppLink>
           );
         })}
+      </nav>
+
+      <nav aria-labelledby="home-area-heading" className="home-area-browse">
+        <h2 id="home-area-heading">Browse by area</h2>
+        <div className="home-ecosystem-areas">
+          {AREA_PRESENTATIONS.map((area) => (
+            <AppLink
+              className="home-area-link"
+              key={area.id}
+              onNavigate={onNavigate}
+              patch={{ area: area.id }}
+              view="search"
+            >
+              <BucketTag area={area.id}>{area.label}</BucketTag>
+            </AppLink>
+          ))}
+        </div>
       </nav>
 
       <aside className="home-trust-boundary">

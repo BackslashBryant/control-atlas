@@ -1,10 +1,8 @@
 export const HOME_CONTENT = Object.freeze({
   eyebrow: "Federal cybersecurity, connected",
-  headline: "See the landscape. Trace the source. Move the work forward.",
+  headline: "Federal cybersecurity requirements, sources, and how they connect.",
   definition:
-    "Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.",
-  support:
-    "Start with the whole ecosystem, search the official corpus, or go directly to the practical resources that help you do the work.",
+    "Search official requirements and controls, see how they map across frameworks, and open the source.",
   searchPlaceholder:
     "Search requirements, controls, guidance, tools, or communities…",
   trust:
@@ -33,29 +31,4 @@ export const HOME_DESTINATIONS = Object.freeze([
     view: "commons",
     href: "#/resources",
   },
-  {
-    id: "start",
-    label: "Start with your work",
-    description: "Tell Control Atlas what you are trying to do and get a focused next step.",
-    view: "start-here",
-    href: "#/start",
-  },
-]);
-
-export const HOME_AUTHORITY_GROUPS = Object.freeze([
-  "Law & regulation",
-  "Policy & directives",
-  "Standards & guidance",
-]);
-
-export const HOME_ATLAS_AREAS = Object.freeze([
-  "Governance",
-  "Risk",
-  "Compliance",
-  "Architecture",
-  "Implementation",
-  "Assessment",
-  "Operations",
-  "Threats & defense",
-  "Knowledge",
 ]);

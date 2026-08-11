@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
-import { readGeneratedCollection } from '../scripts/lib/generated-graph-artifacts.mjs';
 import { dirname, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
@@ -238,9 +237,10 @@ test('Home is an entry surface, not a lesson about the data model', () => {
   const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
   const homeContent = readFileSync('src/shared/home-content.mjs', 'utf8');
   const viteConfig = readFileSync('vite.config.ts', 'utf8');
-  assert.match(homeContent, /See the landscape\. Trace the source\. Move the work forward\./);
+  assert.match(homeContent, /Federal cybersecurity requirements, sources, and how they connect\./);
   assert.match(homePage, /HOME_CONTENT\.headline/);
-  assert.match(homePage, /home-ecosystem/);
+  assert.match(homePage, /home-area-browse/);
+  assert.doesNotMatch(homePage, /home-ecosystem-authorities|Federal cybersecurity ecosystem preview/);
   assert.match(viteConfig, /renderStaticHome/);
   for (const path of ['src/ui/pages/HomePage.tsx', 'src/index.html']) {
     const home = readFileSync(path, 'utf8');
@@ -253,16 +253,6 @@ test('Home is an entry surface, not a lesson about the data model', () => {
     assert.doesNotMatch(home, /Find a requirement/, `${path} duplicates the search entrance`);
     assert.doesNotMatch(home, /guidance that applies to your work/, `${path} implies an applicability decision`);
   }
-});
-
-test('Home capability previews use real records without hard-coded graph edges', async () => {
-  const { readFileSync: read } = await import('node:fs');
-  const library = readGeneratedCollection('.', 'library-search').library_search.documents;
-  const ids = new Set(library.map((record) => record.id));
-  assert.ok(ids.has('nist-800-171:3.17.1'));
-  assert.ok(ids.has('mitre-attack:T1195.002'));
-  const preview = read('src/ui/components/HomeCapabilityPreviews.tsx', 'utf8');
-  assert.doesNotMatch(preview, /source_node_id|target_node_id|relationship_type/);
 });
 
 test('retired surface labels never return to rendered copy', () => {

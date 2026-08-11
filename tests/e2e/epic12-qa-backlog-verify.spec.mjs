@@ -58,7 +58,7 @@ test('B5: the hero has no reserved-but-empty second column', async ({ page }) =>
   expect(await hero.evaluate((el) => el.children.length)).toBe(1);
 });
 
-test('B6: the entrances grid leaves no empty slot (centred flex-wrap, uniform cards)', async ({ page }) => {
+test('B6: the Template B destination grid has three uniform cards', async ({ page }) => {
   await page.goto('/#/');
   const grid = page.locator('.home-secondary-grid');
   await expect(grid).toBeVisible();
@@ -67,13 +67,15 @@ test('B6: the entrances grid leaves no empty slot (centred flex-wrap, uniform ca
     const kids = /** @type {HTMLElement[]} */ ([...el.children]);
     return {
       display: cs.display,
-      justifyContent: cs.justifyContent,
+      columns: cs.gridTemplateColumns.split(/\s+/).length,
+      count: kids.length,
       first: kids[0].getBoundingClientRect().width,
       last: kids[kids.length - 1].getBoundingClientRect().width,
     };
   });
-  expect(info.display).toBe('flex');
-  expect(info.justifyContent).toBe('center');
+  expect(info.display).toBe('grid');
+  expect(info.columns).toBe(3);
+  expect(info.count).toBe(3);
   expect(Math.abs(info.last - info.first)).toBeLessThanOrEqual(2);
 });
 

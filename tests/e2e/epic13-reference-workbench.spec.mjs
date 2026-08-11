@@ -10,10 +10,11 @@ test("homepage reads as a connected federal cybersecurity reference system", asy
   await page.setViewportSize({ width: 1440, height: 1000 });
   await gotoApp(page, "/");
 
-  await expect(page.getByRole("heading", { name: "See the landscape. Trace the source. Move the work forward." })).toBeVisible();
-  await expect(page.getByText("Control Atlas brings the federal cybersecurity landscape together in one place", { exact: false })).toBeVisible();
-  await expect(page.getByLabel("Federal cybersecurity ecosystem preview")).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Choose a Control Atlas destination" }).getByRole("link")).toHaveCount(4);
+  await expect(page.getByRole("heading", { name: "Federal cybersecurity requirements, sources, and how they connect." })).toBeVisible();
+  await expect(page.getByText("Search official requirements and controls", { exact: false })).toBeVisible();
+  await expect(page.locator(".home-ecosystem")).toHaveCount(0);
+  await expect(page.getByRole("navigation", { name: "Choose a Control Atlas destination" }).getByRole("link")).toHaveCount(3);
+  await expect(page.getByRole("navigation", { name: "Browse by area" }).getByRole("link")).toHaveCount(9);
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Resources", exact: true })).toBeVisible();
   await expect(page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.document.documentElement.clientWidth)).resolves.toBe(true);
 
@@ -53,8 +54,8 @@ test("mobile homepage preserves the product story without horizontal overflow", 
   await page.setViewportSize({ width: 390, height: 844 });
   await gotoApp(page, "/");
 
-  await expect(page.getByRole("heading", { name: "See the landscape. Trace the source. Move the work forward." })).toBeVisible();
-  await expect(page.getByLabel("Federal cybersecurity ecosystem preview")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Federal cybersecurity requirements, sources, and how they connect." })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Browse by area" }).getByRole("link")).toHaveCount(9);
   await expect(page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.document.documentElement.clientWidth)).resolves.toBe(true);
   await page.screenshot({ path: testInfo.outputPath("epic13-home-mobile.png"), fullPage: true });
 });

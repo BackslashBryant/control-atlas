@@ -218,21 +218,19 @@ test("search and glossary dialogs expose accessible control names", () => {
   assert.match(glossaryDrawer, /id="glossary-search"/);
 });
 
-test("Home leads with Atlas, retains direct Search, and keeps four accessible entrances", () => {
+test("Template B Home exposes one search, three destinations, and labelled area navigation", () => {
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
-  assert.match(homePage, /className="home-start-here"/);
-  assert.match(
-    homePage,
-    /<AppLink\s+className="home-start-here"[\s\S]*?view="atlas-map"/,
-  );
+  assert.match(homePage, /data-template="B"/);
   assert.match(homePage, /className="home-search home-search-trigger"/);
   assert.match(homePage, /onClick=\{onOpenSearch\}/);
   assert.match(homePage, /Search Control Atlas/);
   assert.match(homePage, /HOME_DESTINATIONS\.map/);
   assert.match(homePage, /aria-label="Choose a Control Atlas destination"/);
-  assert.match(homePage, /home-ecosystem-authorities/);
+  assert.match(homePage, /aria-labelledby="home-area-heading"/);
+  assert.match(homePage, /AREA_PRESENTATIONS\.map/);
   assert.match(homePage, /home-ecosystem-areas/);
-  assert.equal((homePage.match(/variant="primary"/g) || []).length, 1);
+  assert.equal((homePage.match(/onOpenSearch/g) || []).length >= 2, true);
+  assert.doesNotMatch(homePage, /home-ecosystem-authorities|home-start-here/);
   assert.doesNotMatch(homePage, /RMF|Risk Management Framework/);
   assert.doesNotMatch(homePage, /Choose a starting point/);
 });

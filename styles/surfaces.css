@@ -6672,34 +6672,28 @@ button.atlas-leverage-row:hover {
    that can outgrow its box clipped the first rows, which read as cramped. */
 .home-entry {
   display: grid;
-  align-content: center;
+  align-content: start;
   gap: var(--ca-space-6);
-  width: min(100%, 1240px);
-  min-height: calc(100dvh - var(--ca-header-height, 0px));
+  width: min(100%, 1200px);
   margin: 0 auto;
-  padding: var(--ca-space-8) var(--ca-space-7, 28px);
+  padding: var(--ca-space-8) var(--ca-space-6);
 }
 
-/* The hero and the published-chain preview share the first screen: the claim
-   and the proof of the claim, side by side. Stacked below 1000px. */
 .home-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
-  gap: var(--ca-space-6);
-  align-items: stretch;
+  width: 100%;
 }
 
 .home-hero-lead {
   display: grid;
   gap: var(--ca-space-6);
-  align-content: start;
-  max-width: 68ch;
+  width: min(100%, 720px);
+  margin: 0 auto;
 }
 
 .home-entry-header {
   display: grid;
   gap: var(--ca-space-3);
-  max-width: 62ch;
+  max-width: 720px;
 }
 
 .home-entry-header h1 {
@@ -6737,191 +6731,13 @@ button.atlas-leverage-row:hover {
   max-width: 64ch;
 }
 
-.home-primary-actions {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-.home-inline-link {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--ca-secondary);
-  cursor: pointer;
-  font: inherit;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.home-inline-link:hover,
-.home-inline-link:focus-visible {
-  color: var(--ca-text);
-}
-
-/* The one focal object on Home: a real record and what connects to it. It is
-   the proof of the headline, so it carries more weight than any other block. */
-.home-chain {
-  position: relative;
-  display: grid;
-  gap: var(--ca-space-4);
-  padding: var(--ca-space-6);
-  border: 1px solid color-mix(in srgb, var(--ca-secondary) 34%, var(--ca-border-strong));
-  border-radius: var(--radius-lg);
-  background:
-    radial-gradient(
-      120% 90% at 100% 0%,
-      color-mix(in srgb, var(--ca-secondary) 12%, transparent),
-      transparent 62%
-    ),
-    var(--ca-surface-raised);
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--ca-secondary) 22%, transparent) inset,
-    0 18px 40px -28px color-mix(in srgb, var(--ca-shadow-color) 85%, transparent);
-}
-
-.home-chain-title {
-  margin: 0;
-  color: var(--ca-text-muted);
-  font: 600 var(--ca-text-xs) / 1.4 var(--ca-font-mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.home-chain-path {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--ca-space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-family: var(--font-display);
-  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-}
-
-.home-chain-path > li {
-  color: var(--ca-text-muted);
-}
-
-.home-chain-path > li[aria-hidden="true"] {
-  display: inline-flex;
-  color: var(--ca-border-strong);
-}
-
-.home-chain-subject {
-  padding: 2px 10px;
-  border-radius: 3px;
-  background: color-mix(in srgb, var(--ca-secondary) 16%, transparent);
-  color: var(--ca-text) !important;
-  font-weight: 600;
-}
-
-.home-chain-branches {
-  display: grid;
-  gap: var(--ca-space-3);
-  margin: 0;
-  padding: var(--ca-space-1, 4px) 0 0 var(--ca-space-6);
-  list-style: none;
-}
-
-/* Each connection hangs off the subject above it on a drawn elbow, so the
-   card reads as a chain rather than a definition list. */
-.home-chain-branches > li {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--ca-space-2);
-}
-
-.home-chain-branches > li::before {
-  content: "";
-  position: absolute;
-  inset-block-start: -0.65rem;
-  inset-inline-start: calc(var(--ca-space-6) * -1 + 2px);
-  width: calc(var(--ca-space-4));
-  height: 1.35rem;
-  border-inline-start: 1px solid var(--ca-border-strong);
-  border-block-end: 1px solid var(--ca-border-strong);
-  border-end-start-radius: 6px;
-}
-
-.home-chain-branches > li:not(:first-child)::after {
-  content: "";
-  position: absolute;
-  inset-block-start: -1.75rem;
-  inset-inline-start: calc(var(--ca-space-6) * -1 + 2px);
-  height: 1.2rem;
-  border-inline-start: 1px solid var(--ca-border-strong);
-}
-
-.home-chain-relation {
-  min-width: 10rem;
-  color: var(--ca-text-muted);
-  font: 600 var(--ca-text-xs) / 1.4 var(--ca-font-mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.home-chain-target {
-  color: var(--ca-text);
-  font-weight: 600;
-}
-
-.home-chain-open {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ca-space-2);
-  justify-self: start;
-  min-height: 44px;
-  padding-inline: var(--ca-space-4);
-  border: 1px solid var(--ca-border-strong);
-  border-radius: 3px;
-  background: var(--ca-surface);
-  color: var(--ca-text);
-  cursor: pointer;
-  font: inherit;
-  font-weight: 600;
-}
-
-.home-chain-open:hover,
-.home-chain-open:focus-visible {
-  border-color: var(--ca-secondary);
-}
-
-@media (max-width: 767px) {
-  .home-chain {
-    padding: var(--ca-space-4);
-  }
-
-  .home-chain-relation {
-    min-width: 0;
-  }
-}
-
-.home-start-here {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.home-start-here-hint {
-  margin: 0;
-  color: var(--ca-text-muted);
-  font-size: var(--ca-text-sm);
-  line-height: 1.4;
-  max-width: 46ch;
-}
-
 .home-search {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
-  max-width: 760px;
+  width: 100%;
+  max-width: 720px;
   padding: 8px 8px 8px 16px;
   border: 1px solid var(--ca-border-strong);
   border-radius: 6px;
@@ -6936,24 +6752,20 @@ button.atlas-leverage-row:hover {
   box-shadow: none;
 }
 
-/* Flex-wrap, not a fixed column count: the trailing row centres so an odd
-   number of entrances never leaves an empty grid slot. */
 .home-secondary-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ca-space-6);
 }
 
-/* Three different jobs, not three identical slabs: each carries its own
-   accent rule and its icon sits in a tinted well so the row scans quickly. */
 .home-secondary-action {
   position: relative;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: start;
-  gap: 12px;
+  gap: var(--ca-space-3);
   min-height: 118px;
-  padding: 18px 18px 18px 20px;
+  padding: var(--ca-space-6);
   overflow: hidden;
   text-align: left;
   color: var(--ca-text);
@@ -6969,27 +6781,15 @@ button.atlas-leverage-row:hover {
   inset-block: 0;
   inset-inline-start: 0;
   width: 3px;
-  background: var(--home-action-accent, var(--ca-secondary));
+  background: var(--ca-accent);
 }
 
 .home-secondary-action > svg {
   padding: 7px;
   border-radius: 4px;
-  background: color-mix(in srgb, var(--home-action-accent, var(--ca-secondary)) 16%, transparent);
-  color: var(--home-action-accent, var(--ca-secondary));
+  background: color-mix(in srgb, var(--ca-accent) 16%, transparent);
+  color: var(--ca-accent);
   box-sizing: content-box;
-}
-
-.home-secondary-grid > :nth-child(1) {
-  --home-action-accent: var(--ca-secondary);
-}
-
-.home-secondary-grid > :nth-child(2) {
-  --home-action-accent: var(--ca-accent, var(--ca-primary));
-}
-
-.home-secondary-grid > :nth-child(3) {
-  --home-action-accent: var(--ca-primary);
 }
 
 .home-secondary-action strong {
@@ -6998,7 +6798,7 @@ button.atlas-leverage-row:hover {
 
 .home-secondary-action:hover,
 .home-secondary-action:focus-visible {
-  border-color: var(--home-action-accent, var(--ca-accent));
+  border-color: var(--ca-accent);
   background: var(--ca-surface-raised);
   transform: translateY(-1px);
 }
@@ -7027,227 +6827,45 @@ button.atlas-leverage-row:hover {
   box-sizing: border-box;
 }
 
-.home-ecosystem {
-  position: relative;
+.home-area-browse {
   display: grid;
-  align-content: center;
-  gap: 14px;
-  min-height: 390px;
-  padding: 24px;
-  overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--ca-secondary) 32%, var(--ca-border));
-  border-radius: var(--radius-lg);
-  background:
-    radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--ca-secondary) 13%, transparent), transparent 36%),
-    linear-gradient(color-mix(in srgb, var(--ca-border) 22%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ca-border) 22%, transparent) 1px, transparent 1px),
-    var(--ca-surface-raised);
-  background-size: auto, 28px 28px, 28px 28px, auto;
+  gap: var(--ca-space-3);
+  justify-items: center;
 }
 
-.home-ecosystem::before,
-.home-ecosystem::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  z-index: 0;
-  width: 1px;
-  background: color-mix(in srgb, var(--ca-secondary) 48%, var(--ca-border));
-}
-
-.home-ecosystem::before {
-  top: 105px;
-  height: 62px;
-}
-
-.home-ecosystem::after {
-  top: 218px;
-  height: 48px;
-}
-
-.home-ecosystem > * {
-  position: relative;
-  z-index: 1;
-}
-
-.home-ecosystem header,
-.home-ecosystem header p,
-.home-ecosystem header h2,
-.home-ecosystem > p {
-  margin: 0;
-}
-
-.home-ecosystem header h2 {
-  margin-top: 3px;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-}
-
-.home-ecosystem-authorities,
-.home-ecosystem-areas {
-  display: grid;
-  gap: 7px;
-}
-
-.home-ecosystem-authorities {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.home-ecosystem-authorities .line-tag,
-.home-ecosystem-areas .bucket-tag {
-  justify-content: center;
-  width: 100%;
-  min-height: 36px;
-  text-align: center;
-}
-
-.home-ecosystem-trunk {
-  display: grid;
-  grid-template-columns: auto auto;
-  align-items: center;
-  justify-content: center;
-  gap: 0 8px;
-  width: max-content;
-  max-width: 100%;
-  margin: 10px auto;
-  padding: 12px 18px;
-  border: 1px solid var(--ca-secondary);
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--ca-secondary) 12%, var(--ca-surface));
-  box-shadow: 0 0 26px color-mix(in srgb, var(--ca-secondary) 12%, transparent);
-}
-
-.home-ecosystem-trunk small {
-  grid-column: 1 / -1;
-  color: var(--ca-text-muted);
-  text-align: center;
-}
-
-.home-ecosystem-areas {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.home-ecosystem > p {
-  color: var(--ca-text-muted);
-  font-size: var(--ca-text-sm);
-  line-height: 1.45;
-  text-align: center;
-}
-
-@media (max-width: 1100px) {
-  .home-hero {
-    grid-template-columns: 1fr;
-  }
-
-  .home-ecosystem {
-    min-height: 360px;
-  }
-
-  .home-secondary-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.home-secondary-action small {
-  color: var(--ca-text-muted);
-  line-height: 1.35;
-}
-
-/* Home's preview of the Part A trunk/limb spine. Deliberately quiet: it is a
-   map legend, not a third call to action, so it borrows the muted card border
-   rather than the accent treatment used by .home-secondary-action. */
-.home-spine {
-  display: grid;
-  gap: 10px;
-  padding: 16px 18px;
-  border: 1px solid var(--ca-border);
-  border-top: 1px solid color-mix(in srgb, var(--ca-primary) 30%, transparent);
-  border-radius: 4px;
-  background: var(--ca-surface);
-}
-
-.home-spine h2 {
-  margin: 0;
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-body);
-  font-size: var(--ca-text-sm);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.home-spine h2 strong {
-  color: var(--ca-text);
-}
-
-.home-spine > p {
-  margin: 0;
-  color: var(--ca-text-muted);
-  font-size: var(--ca-text-sm);
-  line-height: 1.5;
-}
-
-.home-spine-limbs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.home-spine-limbs button {
-  padding: 6px 12px;
-  color: var(--ca-text);
-  font-size: var(--ca-text-sm);
-  border: 1px solid var(--ca-border);
-  border-radius: 999px;
-  background: var(--ca-surface-raised);
-}
-
-.home-spine-limbs button:hover,
-.home-spine-limbs button:focus-visible {
-  border-color: var(--ca-accent);
-  color: var(--ca-text);
-}
-
-/* The thesis section is prose, not a card — it sits below the area chips as
-   an explanation, not a fourth call to action. */
-.home-thesis {
-  display: grid;
-  gap: 10px;
-  max-width: 68ch;
-}
-
-.home-thesis h2 {
+.home-area-browse h2 {
   margin: 0;
   color: var(--ca-text);
   font-family: var(--font-display);
   font-size: var(--ca-text-lg);
 }
 
-.home-thesis p {
-  margin: 0;
+.home-ecosystem-areas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--ca-space-2);
+}
+
+.home-area-link {
+  border-radius: var(--radius-md);
+}
+
+.home-area-link:hover .bucket-tag,
+.home-area-link:focus-visible .bucket-tag {
+  border-color: var(--ca-accent);
+  background: var(--ca-surface-raised);
+}
+
+@media (max-width: 1023px) {
+  .home-secondary-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+.home-secondary-action small {
   color: var(--ca-text-muted);
-  line-height: 1.55;
-}
-
-.home-thesis-example {
-  padding: 10px 14px;
-  border-left: 3px solid var(--ca-accent);
-  background: var(--ca-surface-subtle);
-  font-size: var(--ca-text-sm);
-}
-
-.home-thesis-link {
-  justify-self: start;
-  padding: 0;
-  color: var(--ca-link);
-  font-size: var(--ca-text-sm);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  background: none;
-  border: 0;
+  line-height: 1.35;
 }
 
 /* One quiet line, not another bordered panel competing with the cards. */
@@ -7270,17 +6888,6 @@ button.atlas-leverage-row:hover {
   color: var(--ca-link);
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-
-/* Context-aware Home: the compact work map gives breadth a single visual
-   grammar, while each capability preview uses a different information shape. */
-.home-brand-line {
-  color: var(--ca-text-muted) !important;
-  font-size: var(--ca-text-sm) !important;
-}
-
-.home-secondary-action {
-  flex: 0 1 272px;
 }
 
 .typeahead-filter {
@@ -7392,116 +6999,6 @@ button.atlas-leverage-row:hover {
   margin-block: 0 16px;
   color: var(--ca-text-muted);
   font-size: var(--ca-text-sm);
-}
-
-.home-secondary-grid > :nth-child(4),
-.home-secondary-grid > :nth-child(7) {
-  --home-action-accent: var(--ca-secondary);
-}
-
-.home-secondary-grid > :nth-child(5) {
-  --home-action-accent: var(--ca-warning);
-}
-
-.home-secondary-grid > :nth-child(6) {
-  --home-action-accent: var(--ca-primary);
-}
-
-.home-capability-previews {
-  display: grid;
-  gap: 16px;
-  padding-block: var(--ca-space-4);
-  border-block: 1px solid var(--ca-border);
-}
-
-.home-capability-header h2,
-.home-capability-header p,
-.home-capability-copy h3,
-.home-capability-copy p,
-.home-capability-copy small {
-  margin: 0;
-}
-
-.home-capability-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.home-capability-preview {
-  position: relative;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 12px;
-  align-content: start;
-  min-height: 250px;
-  padding: 20px;
-  overflow: hidden;
-  background: var(--ca-surface);
-}
-
-.home-capability-preview--source-chain {
-  border-left: 4px solid var(--ca-secondary);
-}
-
-.home-capability-preview--threat-defense {
-  border: 1px solid var(--ca-border-strong);
-  background:
-    repeating-linear-gradient(135deg, transparent 0 16px, color-mix(in srgb, var(--ca-warning) 7%, transparent) 16px 17px),
-    var(--ca-surface);
-}
-
-.home-capability-preview--working-output {
-  border-top: 4px solid var(--ca-primary);
-  box-shadow: 6px 6px 0 var(--ca-surface-subtle);
-}
-
-.home-capability-icon {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--ca-border-strong);
-  color: var(--ca-secondary);
-}
-
-.home-capability-copy {
-  display: grid;
-  gap: 8px;
-}
-
-.home-capability-preview > .home-capability-copy:first-child {
-  grid-column: 1 / -1;
-}
-
-.home-capability-eyebrow {
-  color: var(--ca-text-muted);
-  font: 650 var(--ca-text-xs) / 1.3 var(--ca-font-mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.home-capability-copy p,
-.home-capability-copy small {
-  color: var(--ca-text-muted);
-  line-height: 1.45;
-}
-
-.home-capability-action {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  grid-column: 1 / -1;
-  align-self: end;
-  min-height: 44px;
-  padding: 8px 0;
-  border: 0;
-  border-top: 1px solid var(--ca-border);
-  background: transparent;
-  color: var(--ca-link);
-  font: inherit;
-  font-weight: 650;
-  text-align: left;
 }
 
 /* Record context is a rail, not another copy of the main-column cards. */
@@ -7933,35 +7430,83 @@ button.atlas-leverage-row:hover {
   list-style: none;
 }
 
+.guides-directory {
+  display: grid;
+  gap: var(--ca-space-6);
+  width: min(100%, 1200px);
+  margin-inline: auto;
+}
+
 .learn-article-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--ca-space-6);
 }
 
 .learn-article-grid > a {
+  position: relative;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: start;
-  gap: 10px;
-  min-height: 112px;
-  padding: 14px;
+  gap: var(--ca-space-3);
+  min-height: 176px;
+  padding: var(--ca-space-6);
   text-align: left;
   color: var(--ca-text);
   border: 1px solid var(--ca-border);
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   background: var(--ca-surface);
+  transition: border-color 120ms ease, background 120ms ease, transform 120ms ease;
+}
+
+.learn-article-grid > a::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 3px;
+  background: var(--ca-accent);
 }
 
 .learn-article-grid > a:hover,
 .learn-article-grid > a:focus-visible {
   border-color: var(--ca-accent);
   background: var(--ca-surface-raised);
+  transform: translateY(-1px);
 }
 
-.learn-article-grid span {
+.guide-card__body {
   display: grid;
-  gap: 5px;
+  gap: var(--ca-space-2);
+}
+
+.guide-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-2);
+}
+
+.guide-card__step {
+  color: var(--ca-text-muted);
+  font: 600 var(--ca-text-xs) / 1.4 var(--ca-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.guide-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ca-space-2);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--ca-accent) 16%, transparent);
+  color: var(--ca-accent);
+}
+
+.guide-card__arrow {
+  align-self: center;
+  color: var(--ca-text-muted);
 }
 
 .learn-article-grid small {
@@ -8106,38 +7651,13 @@ button.atlas-leverage-row:hover {
     width: 100%;
   }
 
-  .home-primary-actions {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .home-start-here {
-    width: 100%;
-    justify-content: center;
-  }
-
   .home-secondary-grid {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: var(--ca-space-3);
   }
 
-  .home-ecosystem {
-    min-height: 0;
-    padding: 18px 14px;
-  }
-
-  .home-ecosystem::before,
-  .home-ecosystem::after {
-    display: none;
-  }
-
-  .home-capability-grid {
+  .learn-article-grid {
     grid-template-columns: 1fr;
-  }
-
-  .home-capability-preview {
-    min-height: 0;
   }
 
   .home-secondary-action {

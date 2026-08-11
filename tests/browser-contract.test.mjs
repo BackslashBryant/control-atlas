@@ -31,7 +31,7 @@ const graphLayout = existsSync('src/ui/lib/graphLayout.ts')
 test('shell identifies Control Atlas and progressively boots the React workspace', () => {
   assert.match(html, /Control Atlas/);
   assert.match(html, /name="application-name" content="Control Atlas"/);
-  assert.match(html, new RegExp(HOME_CONTENT.definition.split('—')[0]));
+  assert.match(html, /Control Atlas brings the federal cybersecurity landscape together in one place/);
   assert.match(html, /understand how it connects, and get to the next step faster/);
   assert.match(html, /id="root"/);
   assert.ok(existsSync('src/main.tsx'), 'src/main.tsx must exist');
@@ -338,19 +338,32 @@ test('landing page states what the product is before asking for action', () => {
   const homeContent = readFileSync('src/shared/home-content.mjs', 'utf8');
   const viteConfig = readFileSync('vite.config.ts', 'utf8');
   assert.match(homePage, /HOME_CONTENT\.definition/);
-  assert.match(homeContent, /See the landscape\. Trace the source\. Move the work forward\./);
-  assert.equal(HOME_CONTENT.definition.includes('requirements, frameworks, controls, mappings'), true);
+  assert.match(homeContent, /Federal cybersecurity requirements, sources, and how they connect\./);
+  assert.equal(HOME_CONTENT.definition, 'Search official requirements and controls, see how they map across frameworks, and open the source.');
   assert.match(homePage, /aria-label="Search Control Atlas"/);
+  assert.match(homePage, /data-template="B"/);
   assert.match(html, /CONTROL_ATLAS_HOME/);
   assert.match(viteConfig, /renderStaticHome\(\)/);
   assert.match(viteConfig, /html\.replace\('<!-- CONTROL_ATLAS_HOME -->'/);
-  assert.equal(HOME_DESTINATIONS.length, 4);
+  assert.equal(HOME_DESTINATIONS.length, 3);
   assert.deepEqual(HOME_DESTINATIONS.map(({ label }) => label), [
-    'Explore the Atlas', 'Search the Library', 'Browse Resources', 'Start with your work',
+    'Explore the Atlas', 'Search the Library', 'Browse Resources',
   ]);
-  assert.match(homePage, /home-ecosystem-authorities/);
+  assert.doesNotMatch(homePage, /home-ecosystem-authorities|home-start-here/);
+  assert.match(homePage, /AREA_PRESENTATIONS\.map/);
   assert.match(homePage, /home-ecosystem-areas/);
   assert.doesNotMatch(homePage, /source-backed/i);
+});
+
+test('Guides implement the numbered Template F directory contract', () => {
+  const playbooksPage = readFileSync('src/ui/pages/PlaybooksPage.tsx', 'utf8');
+  assert.match(playbooksPage, /data-template="F"/);
+  assert.match(playbooksPage, /data-page-template="directory"/);
+  assert.match(playbooksPage, /practitionerGuides\.map\(\(article, index\)/);
+  assert.match(playbooksPage, /className="guide-card"/);
+  assert.match(playbooksPage, /Step \{String\(index \+ 1\)\.padStart\(2, "0"\)\}/);
+  assert.match(playbooksPage, /<BucketTag area=\{presentation\.area\}/);
+  assert.match(playbooksPage, /const \{ Icon \} = presentation/);
 });
 
 test('skip links focus the workspace without turning the target into an application route', () => {

@@ -22,16 +22,16 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   }
   await expect(
     page.getByRole("heading", {
-      name: "See the landscape. Trace the source. Move the work forward.",
+      name: "Federal cybersecurity requirements, sources, and how they connect.",
     }),
   ).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Search Control Atlas" })).toBeVisible();
-  await expect(page.locator(".home-secondary-action")).toHaveCount(4);
+  await expect(page.locator(".home-secondary-action")).toHaveCount(3);
   await expect(page.locator(".site-header .brand-key-word")).toBeVisible();
   await expect(page.locator(".home-product-identity")).toContainText(
-    "Control Atlas brings the federal cybersecurity landscape together in one place",
+    "Search official requirements and controls",
   );
-  await expect(page.locator(".home-ecosystem-areas > .bucket-tag")).toHaveCount(9);
+  await expect(page.locator(".home-ecosystem-areas .bucket-tag")).toHaveCount(9);
   await expect(page.locator(".home-trust-boundary")).toContainText(
     "Official material stays source-traceable",
   );

@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("landing presents universal search, task entrances, and real capability previews", async ({
+test("landing presents Template B search, three destinations, and area browsing", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -19,21 +19,19 @@ test("landing presents universal search, task entrances, and real capability pre
 
   await expect(
     page.getByRole("heading", {
-      name: /Find the source\. See what connects/,
+      name: "Federal cybersecurity requirements, sources, and how they connect.",
     }),
   ).toBeVisible();
 
-  await expect(page.getByRole("search").first()).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "Search Control Atlas" })).toBeVisible();
   // The brand keycap lives in the persistent header, which Home now shares.
   await expect(page.locator(".site-header .brand-kbd")).toBeVisible();
   // Pinned to the shape, not the literal: the word list is product copy and
   // has been trimmed before. src/shared/brand-rotation.ts owns the order.
   await expect(page.locator("[data-brand-word]")).toHaveText(/^[A-Z][a-z]+$/);
-  await expect(page.getByRole("button", { name: /Understand a requirement/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Operate or defend/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Produce a document/ })).toBeVisible();
-  await expect(page.locator(".home-secondary-action")).toHaveCount(7);
-  await expect(page.locator(".home-capability-preview")).toHaveCount(3);
+  await expect(page.locator(".home-secondary-action")).toHaveCount(3);
+  await expect(page.locator(".home-ecosystem-areas .bucket-tag")).toHaveCount(9);
+  await expect(page.locator(".home-ecosystem, .home-capability-preview")).toHaveCount(0);
 
   const urlBeforeSkip = page.url();
   await page.locator(".skip-link").focus();
@@ -70,21 +68,21 @@ test("protected Ctrl+Alt slogan rotates and native Home history remains coherent
     })
     .not.toBe(firstWord);
 
-  await page.getByRole("link", { name: /^Browse official publications$/ }).click();
+  await page.getByRole("link", { name: /Search the Library/ }).click();
   await waitForAppReady(page);
-  await expect(page).toHaveURL(/#\/catalog/);
+  await expect(page).toHaveURL(/#\/library/);
 
   await page.goBack();
   await waitForAppReady(page);
   await expect(
     page.getByRole("heading", {
-      name: /Find the source\. See what connects/,
+      name: "Federal cybersecurity requirements, sources, and how they connect.",
     }),
   ).toBeVisible();
 
   await page.goForward();
   await waitForAppReady(page);
-  await expect(page).toHaveURL(/#\/catalog/);
+  await expect(page).toHaveURL(/#\/library/);
 });
 
 test("landing search and brand-home flow work without legacy onboarding surfaces", async ({
@@ -105,7 +103,7 @@ test("landing search and brand-home flow work without legacy onboarding surfaces
     .click();
   await expect(
     page.getByRole("heading", {
-      name: /Find the source\. See what connects/,
+      name: "Federal cybersecurity requirements, sources, and how they connect.",
     }),
   ).toBeVisible({
     timeout: 15000,

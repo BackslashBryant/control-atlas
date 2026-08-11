@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("critical path: landing hero and primary entry cards are visible", async ({
+test("critical path: Template B landing hero and three entry cards are visible", async ({
   page,
 }) => {
   await gotoApp(page, "/");
@@ -19,17 +19,14 @@ test("critical path: landing hero and primary entry cards are visible", async ({
 
   await expect(
     page.getByRole("heading", {
-      name: /Find the source\. See what connects/,
+      name: "Federal cybersecurity requirements, sources, and how they connect.",
     }),
   ).toBeVisible();
 
-  await expect(page.getByRole("search").first()).toBeVisible();
-  await expect(page.getByRole("button", { name: /Understand a requirement/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Operate or defend/ })).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: /Produce a document/ }),
-  ).toBeVisible();
-  await expect(page.locator(".home-secondary-action")).toHaveCount(7);
+  await expect(page.getByRole("searchbox", { name: "Search Control Atlas" })).toBeVisible();
+  await expect(page.locator('[data-template="B"]')).toBeVisible();
+  await expect(page.locator(".home-secondary-action")).toHaveCount(3);
+  await expect(page.locator(".home-ecosystem-areas .bucket-tag")).toHaveCount(9);
 });
 
 test("critical path: the Atlas Path walks to a published connected record", async ({
