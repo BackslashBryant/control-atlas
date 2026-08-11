@@ -13,12 +13,7 @@ test("V1 workflow 01 — find a known identifier", async ({ page }) => {
   await page.getByRole("searchbox", { name: "Search Control Atlas" }).fill("AC-2");
   await page.getByRole("search").getByRole("button", { name: "Search" }).click();
   await expect(page).toHaveURL(/#\/library\?q=AC-2/);
-  await expect(
-    page.getByRole("article", {
-      name: "AC-2 — Account Management",
-      exact: true,
-    }),
-  ).toBeVisible();
+  await expect(page.locator('[data-record-id="nist-800-53:AC-2"]')).toBeVisible();
 });
 
 test("V1 workflow 02 — search a topic without an identifier", async ({ page }) => {
@@ -26,28 +21,23 @@ test("V1 workflow 02 — search a topic without an identifier", async ({ page })
   await expect(page.getByLabel("Filter results by ID, title, or topic")).toHaveValue(
     "account management",
   );
-  await expect(page.locator("#library-results .search-result-row").first()).toBeVisible();
+  await expect(page.locator("#library-results .workspace-result-row").first()).toBeVisible();
 });
 
 test("V1 workflow 03 — distinguish exact, ambiguous, and honest zero results", async ({
   page,
 }) => {
   await open(page, "/#/search?q=AC-2");
-  await expect(
-    page.getByRole("article", {
-      name: "AC-2 — Account Management",
-      exact: true,
-    }),
-  ).toBeVisible();
+  await expect(page.locator('[data-record-id="nist-800-53:AC-2"]')).toBeVisible();
 
   await open(page, "/#/search?q=account");
   await expect
-    .poll(() => page.locator("#library-results .search-result-row").count())
+    .poll(() => page.locator("#library-results .workspace-result-row").count())
     .toBeGreaterThan(1);
 
   await open(page, "/#/search?q=qzxv9417nohit");
   await expect(
-    page.getByRole("heading", { name: "No matching results found." }),
+    page.getByRole("heading", { name: "No matching records found." }),
   ).toBeVisible();
 });
 
@@ -68,13 +58,7 @@ test("V1 workflow 05 — follow a record and return without losing search state"
   page,
 }) => {
   await open(page, "/#/search?q=AC-2");
-  await page
-    .getByRole("article", {
-      name: "AC-2 — Account Management",
-      exact: true,
-    })
-    .getByRole("link", { name: "AC-2 — Account Management" })
-    .click();
+  await page.locator('[data-record-id="nist-800-53:AC-2"] .workspace-result-row__link').click();
   await expect(page).toHaveURL(/#\/record\/nist-800-53\/AC-2/);
   await page.goBack();
   await expect(page).toHaveURL(/#\/library\?q=AC-2/);
@@ -145,9 +129,9 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
 test("V1 workflow 09 — find an external tool or starter resource", async ({ page }) => {
   await open(page, "/#/resources?q=OSCAL");
   await expect(page).toHaveURL(/#\/resources\?q=OSCAL/);
-  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Resources", level: 1 })).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Find resources" })).toHaveValue("OSCAL");
-  await expect(page.locator(".resource-card").first()).toBeVisible();
+  await expect(page.locator(".workspace-result-row--resource").first()).toBeVisible();
 });
 
 test("V1 workflow 10 — recover from invalid settings, missing records, and empty filters", async ({
@@ -163,17 +147,17 @@ test("V1 workflow 11 — refresh and browser history preserve valid URL state", 
   page,
 }) => {
   await open(page, "/#/library?q=AC-2&kind=requirements&sort=identifier");
-  const kindFilter = page.getByLabel("Content kind");
-  const sort = page.getByLabel("Sort search results");
-  await expect(kindFilter).toHaveValue("requirements");
+  const kindFilter = page.getByRole("group", { name: "Content kind" }).getByRole("checkbox", { name: /Requirements/ });
+  const sort = page.getByLabel("Sort Library results");
+  await expect(kindFilter).toBeChecked();
   await expect(sort).toHaveValue("identifier");
   await page.reload();
-  await expect(kindFilter).toHaveValue("requirements");
+  await expect(kindFilter).toBeChecked();
   await expect(sort).toHaveValue("identifier");
   await sort.selectOption("title");
   await expect(page).toHaveURL(/sort=title/);
   await page.goBack();
-  await expect(kindFilter).toHaveValue("requirements");
+  await expect(kindFilter).toBeChecked();
   await expect(sort).toHaveValue("identifier");
 });
 

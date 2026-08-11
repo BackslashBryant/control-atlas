@@ -75,7 +75,7 @@ test("Resources dataset failure is isolated from the rest of the product", async
   });
 
   await gotoApp(page, "/#/resources");
-  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work" })).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole("heading", { name: "Resources", level: 1 })).toBeVisible({ timeout: 15000 });
   await expect(page.getByRole("heading", { name: "The resource directory did not load." })).toBeVisible();
   await page.getByRole("navigation", { name: "Primary navigation" })
     .getByRole("link", { name: "Library", exact: true })
@@ -116,7 +116,7 @@ test("a lazy route crash preserves navigation and isolates the failed workspace"
   await expect(primaryNav.getByRole("link", { name: "Resources", exact: true })).toBeVisible();
   await primaryNav.getByRole("link", { name: "Resources", exact: true }).click();
   await expect(page).toHaveURL(/#\/resources/);
-  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work" })).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole("heading", { name: "Resources", level: 1 })).toBeVisible({ timeout: 15000 });
 });
 
 test("staged library search enables results before detail pages", async ({
@@ -139,13 +139,13 @@ test("staged library search enables results before detail pages", async ({
     timeout: 15000,
   });
   await expect(
-    page.locator("#library-results .search-result-row").first(),
+    page.locator("#library-results .workspace-result-row").first(),
   ).toBeVisible({
     timeout: 15000,
   });
   expect(detailRequests).toBe(0);
   const openDetail = page
-    .locator("#library-results .search-result-primary")
+    .locator("#library-results .workspace-result-row__link")
     .first();
   await expect(openDetail).toBeEnabled();
   await openDetail.click();

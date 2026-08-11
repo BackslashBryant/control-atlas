@@ -66,6 +66,7 @@ export type ViewState =
       sort: string;
       viewMode: "list" | "map";
       collection: string;
+      area: string;
     }
   | {
       view: "catalog-detail";
@@ -152,6 +153,7 @@ export type ViewState =
       costType: string;
       sort: string;
       showAll: string;
+      viewMode: "list" | "map";
     }
   | {
       view: "commons-detail";
@@ -184,6 +186,7 @@ function searchState(): ViewState {
     sort: "relevance",
     viewMode: "list",
     collection: "",
+    area: "",
   };
 }
 
@@ -407,18 +410,19 @@ export function parseViewState(search: string): ViewState {
     return {
       view,
       query: params.get("q") || params.get("query") || "",
-      lane: params.get("lane") || "all",
-      framework: params.get("framework") || "",
-      lifecycle: params.get("lifecycle") || "",
-      audience: params.get("audience") || "",
-      accessType: params.get("accessType") || "",
+      lane: "all",
+      framework: "",
+      lifecycle: "",
+      audience: "",
+      accessType: "",
       resourceType: params.get("resourceType") || "",
-      category: params.get("category") || "",
+      category: "",
       collection: params.get("collection") || "",
       owner: params.get("owner") || "",
-      costType: params.get("costType") || "",
+      costType: "",
       sort: params.get("sort") || "relevance",
       showAll: params.get("showAll") === "true" ? "true" : "",
+      viewMode: params.get("viewMode") === "map" ? "map" : "list",
     };
   }
 
@@ -451,16 +455,17 @@ export function parseViewState(search: string): ViewState {
     filter: params.get("filter") || "",
     publisher: params.get("publisher") || "",
     kind: params.get("kind") || "",
-    objectType: params.get("objectType") || "",
-    sourceClass: params.get("sourceClass") || "",
-    controlFamily: params.get("controlFamily") || "",
-    severity: params.get("severity") || "",
+    objectType: "",
+    sourceClass: "",
+    controlFamily: "",
+    severity: "",
     connectedOnly: params.get("connectedOnly") === "true" ? "true" : "",
     sort: ["relevance", "identifier", "title", "publication"].includes(params.get("sort") || "")
       ? params.get("sort") || "relevance"
       : "relevance",
     viewMode: params.get("view") === "map" ? "map" : "list",
-    collection: params.get("collection") || "",
+    collection: "",
+    area: params.get("area") || "",
   };
 }
 
@@ -585,18 +590,19 @@ export function normalizeViewState(
     return {
       view,
       query: incoming.query || "",
-      lane: incoming.lane || "all",
-      framework: incoming.framework || "",
-      lifecycle: incoming.lifecycle || "",
-      audience: incoming.audience || "",
-      accessType: incoming.accessType || "",
+      lane: "all",
+      framework: "",
+      lifecycle: "",
+      audience: "",
+      accessType: "",
       resourceType: incoming.resourceType || "",
-      category: incoming.category || "",
+      category: "",
       collection: incoming.collection || "",
       owner: incoming.owner || "",
-      costType: incoming.costType || "",
+      costType: "",
       sort: incoming.sort || "relevance",
       showAll: incoming.showAll === "true" ? "true" : "",
+      viewMode: incoming.viewMode === "map" ? "map" : "list",
     };
   }
 
@@ -638,6 +644,11 @@ export function normalizeViewState(
     ...base,
     ...incoming,
     view: "search",
+    objectType: "",
+    sourceClass: "",
+    controlFamily: "",
+    severity: "",
+    collection: "",
   };
 }
 
@@ -697,14 +708,10 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "filter", state.filter);
     setIfValue(params, "publisher", state.publisher);
     setIfValue(params, "kind", state.kind);
-    setIfValue(params, "objectType", state.objectType);
-    setIfValue(params, "sourceClass", state.sourceClass);
-    setIfValue(params, "controlFamily", state.controlFamily);
-    setIfValue(params, "severity", state.severity);
     setIfValue(params, "connectedOnly", state.connectedOnly);
     if (state.sort !== "relevance") setIfValue(params, "sort", state.sort);
     if (state.viewMode === "map") setIfValue(params, "view", "map");
-    setIfValue(params, "collection", state.collection);
+    setIfValue(params, "area", state.area);
   } else if (state.view === "catalog-detail") {
     params.set("view", state.view);
     setIfValue(params, "catalog", state.catalog);
@@ -786,18 +793,12 @@ export function serializeViewState(state: ViewState): string {
   } else if (state.view === "commons") {
     params.set("view", state.view);
     setIfValue(params, "q", state.query);
-    if (state.lane && state.lane !== "all") setIfValue(params, "lane", state.lane);
-    setIfValue(params, "framework", state.framework);
-    setIfValue(params, "lifecycle", state.lifecycle);
-    setIfValue(params, "audience", state.audience);
-    setIfValue(params, "accessType", state.accessType);
     setIfValue(params, "resourceType", state.resourceType);
-    setIfValue(params, "category", state.category);
     setIfValue(params, "collection", state.collection);
     setIfValue(params, "owner", state.owner);
-    setIfValue(params, "costType", state.costType);
     if (state.sort && state.sort !== "relevance") setIfValue(params, "sort", state.sort);
     setIfValue(params, "showAll", state.showAll);
+    if (state.viewMode === "map") setIfValue(params, "viewMode", "map");
   } else if (state.view === "commons-detail") {
     params.set("view", state.view);
     setIfValue(params, "id", state.id);

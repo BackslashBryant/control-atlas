@@ -39,11 +39,9 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   await gotoApp(page, "/#/library?q=AC-2");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  const controlResult = page
-    .getByRole("article", { name: /AC-2.*Account Management/i })
-    .filter({ hasNotText: "Assessment Procedure" });
+  const controlResult = page.locator('[data-record-id="nist-800-53:AC-2"]');
   await expect(controlResult).toBeVisible({ timeout: 30000 });
-  await controlResult.locator(".search-result-primary").click();
+  await controlResult.locator(".workspace-result-row__link").click();
   await expect(page.locator("main")).toHaveCount(1);
   await expect(page.locator('[data-template="E"]')).toBeVisible({ timeout: 30000 });
   await expect(
@@ -67,9 +65,9 @@ test("live smoke: Resources and Atlas workbench are first-class routes", async (
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page).toHaveURL(/#\/resources\?q=OSCAL/);
-  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Resources", level: 1 })).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Find resources" })).toHaveValue("OSCAL");
-  await expect(page.locator(".resource-card").first()).toBeVisible();
+  await expect(page.locator(".workspace-result-row--resource").first()).toBeVisible();
 
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);

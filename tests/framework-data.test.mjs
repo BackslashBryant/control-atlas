@@ -14,6 +14,7 @@ import {
 } from "../scripts/build-framework-data.mjs";
 import { readGeneratedCollection } from "../scripts/lib/generated-graph-artifacts.mjs";
 import { evaluateTrunkReachability } from "../scripts/hierarchy-derivation.mjs";
+import { atlasNeighborhoodShardId } from "../src/app/atlas-neighborhood.mjs";
 
 const generated = (name) => readGeneratedCollection(".", name);
 const sourceRegistry = JSON.parse(readFileSync("data/source-registry.json", "utf8"));
@@ -512,7 +513,38 @@ test("epic 2 graph build emits a complete bounded library search artifact", () =
       edge.publication_status === "published" &&
       (edge.source_node_id === ac2.id || edge.target_node_id === ac2.id),
     ).length,
-    "the search artifact must carry the same published connection total as the record graph",
+    "the search artifact must preserve the neighborhood's total published connection count",
+  );
+  const ac2Neighborhood = JSON.parse(readFileSync(
+    join("data", "generated", "atlas-neighborhood", `${atlasNeighborhoodShardId(ac2.id)}.json`),
+    "utf8",
+  )).atlas_neighborhood_shard.records[ac2.id];
+  assert.equal(
+    ac2.published_connection_count,
+    ac2Neighborhood.published_connection_count,
+    "search and record-detail artifacts must keep the same total published connection count",
+  );
+  assert.equal(
+    ac2.published_cross_catalog_connection_count,
+    edges.filter((edge) => {
+      if (
+        edge.publication_status !== "published" ||
+        !edge.relationship_type ||
+        !edge.provenance_class
+      ) return false;
+      const counterpartId = edge.source_node_id === ac2.id
+        ? edge.target_node_id
+        : edge.target_node_id === ac2.id
+          ? edge.source_node_id
+          : "";
+      if (!counterpartId) return false;
+      const counterpart = nodes.find((node) => node.id === counterpartId);
+      return Boolean(
+        counterpart?.metadata?.catalog_id &&
+        counterpart.metadata.catalog_id !== ac2.catalog_id,
+      );
+    }).length,
+    "the search artifact must separately count only published cross-catalog mappings",
   );
   assert.equal(ac2.source_class, "federal_published");
   assert.equal(ac2.control_family, "Access Control");

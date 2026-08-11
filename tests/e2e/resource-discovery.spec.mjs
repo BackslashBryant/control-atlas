@@ -30,11 +30,7 @@ test("Resources is reachable from primary navigation and global search reaches c
     .getByRole("link", { name: "Resources", exact: true })
     .click();
   await waitForAppReady(page);
-  const resourceFilters = page.getByRole("region", {
-    name: "Resource filters",
-  });
-  await expect(resourceFilters).toBeHidden();
-  await page.getByRole("button", { name: "Filters" }).click();
+  const resourceFilters = page.getByRole("complementary", { name: "Resource filters" });
   await expect(resourceFilters).toBeVisible();
 
   await page.getByRole("button", { name: "Open search" }).click();
@@ -50,12 +46,10 @@ test("Resources is reachable from primary navigation and global search reaches c
     }),
   ).toBeVisible();
 
-  await search.press("Enter");
-  await waitForAppReady(page);
-  await expect(page).toHaveURL(/#\/library\?q=NISTControls/);
-  await expect(page.locator('[data-result-class="resource"]')).toBeVisible();
-
-  await page.locator('[data-result-class="resource"]').getByRole("link").click();
+  await page.getByRole("link", {
+    name: "Reddit /r/NISTControls Practitioner Community",
+    exact: true,
+  }).click();
   await waitForAppReady(page);
   await expect(page).toHaveURL(
     /#\/resources\/community-reddit-nistcontrols$/,

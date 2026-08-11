@@ -1933,6 +1933,7 @@ function buildLibraryDocuments(graph) {
   );
   const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const publishedConnectionCounts = new Map();
+  const publishedCrossCatalogConnectionCounts = new Map();
   const publishedConnectionCatalogs = new Map();
   for (const edge of graph.edges) {
     if (edge.publication_status && edge.publication_status !== "published") continue;
@@ -1940,14 +1941,25 @@ function buildLibraryDocuments(graph) {
       [edge.source_node_id, edge.target_node_id],
       [edge.target_node_id, edge.source_node_id],
     ]) {
-      publishedConnectionCounts.set(nodeId, (publishedConnectionCounts.get(nodeId) || 0) + 1);
+      const center = nodeById.get(nodeId);
       const counterpart = nodeById.get(counterpartId);
-      const catalogId = counterpart?.metadata?.catalog_id || counterpart?.source_id;
-      if (catalogId) {
-        const catalogs = publishedConnectionCatalogs.get(nodeId) || new Set();
-        catalogs.add(catalogId);
-        publishedConnectionCatalogs.set(nodeId, catalogs);
-      }
+      const centerCatalogId = center?.metadata?.catalog_id;
+      const counterpartCatalogId = counterpart?.metadata?.catalog_id;
+      publishedConnectionCounts.set(nodeId, (publishedConnectionCounts.get(nodeId) || 0) + 1);
+      if (
+        !centerCatalogId ||
+        !counterpartCatalogId ||
+        centerCatalogId === counterpartCatalogId ||
+        !edge.relationship_type ||
+        !edge.provenance_class
+      ) continue;
+      publishedCrossCatalogConnectionCounts.set(
+        nodeId,
+        (publishedCrossCatalogConnectionCounts.get(nodeId) || 0) + 1,
+      );
+      const catalogs = publishedConnectionCatalogs.get(nodeId) || new Set();
+      catalogs.add(counterpartCatalogId);
+      publishedConnectionCatalogs.set(nodeId, catalogs);
     }
   }
   return graph.nodes.map((node) => {
@@ -1969,6 +1981,8 @@ function buildLibraryDocuments(graph) {
       control_family: node.metadata?.family || "",
       severity: node.metadata?.severity || "",
       published_connection_count: publishedConnectionCounts.get(node.id) || 0,
+      published_cross_catalog_connection_count:
+        publishedCrossCatalogConnectionCounts.get(node.id) || 0,
       published_connection_catalog_count:
         publishedConnectionCatalogs.get(node.id)?.size || 0,
     };

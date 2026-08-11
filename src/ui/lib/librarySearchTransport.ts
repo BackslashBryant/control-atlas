@@ -13,6 +13,7 @@ export const LIBRARY_DOCUMENT_FIELDS = [
   "control_family",
   "severity",
   "published_connection_count",
+  "published_cross_catalog_connection_count",
   "published_connection_catalog_count",
 ] as const;
 

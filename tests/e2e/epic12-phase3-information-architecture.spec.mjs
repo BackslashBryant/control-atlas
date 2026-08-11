@@ -73,7 +73,7 @@ test("Epic 14 header has three primary destinations and one overflow from 1024px
   }
 });
 
-test("Phase 3 Library uses one field for records, resources, and sources", async ({ page }) => {
+test("Phase 3 Library searches published records while Resources stays first-class", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await gotoApp(page, "/#/library?q=NIST");
   await waitForAppReady(page, { allowPartial: true });
@@ -81,20 +81,17 @@ test("Phase 3 Library uses one field for records, resources, and sources", async
     await page.getByRole("button", { name: "Show 25 more" }).click();
   }
   await expect(page.locator('[data-result-class="published-record"]').first()).toBeVisible();
-  await expect(page.locator('[data-result-class="resource"]').first()).toBeVisible();
-  await expect(page.locator('[data-result-class="source"]').first()).toBeVisible();
+  await expect(page.locator('[data-result-class="resource"]')).toHaveCount(0);
+  await expect(page.locator('[data-result-class="source"]')).toHaveCount(0);
   await expect(page.getByRole("searchbox", { name: "Filter results by ID, title, or topic" })).toHaveValue("NIST");
 
-  /** @type {Array<[string, RegExp]>} */
-  const redirects = [
-    ["/#/catalog", /#\/library$/],
-    ["/#/resources", /#\/library\?kind=tools-communities$/],
-    ["/#/resources/official-nist-oscal?from=commons", /#\/library\/resource\/official-nist-oscal$/],
-  ];
-  for (const [legacy, canonical] of redirects) {
-    await gotoApp(page, legacy);
-    await expect(page).toHaveURL(canonical);
-  }
+  await gotoApp(page, "/#/catalog");
+  await expect(page).toHaveURL(/#\/library$/);
+  await gotoApp(page, "/#/resources");
+  await expect(page).toHaveURL(/#\/resources$/);
+  await expect(page.locator('[data-browse-state="resources"]')).toBeVisible();
+  await gotoApp(page, "/#/resources/official-nist-oscal");
+  await expect(page).toHaveURL(/#\/resources\/official-nist-oscal$/);
 });
 
 test("Phase 3 filters stay stable, bounded, and free of hierarchy node types", async ({ page }) => {
@@ -103,26 +100,21 @@ test("Phase 3 filters stay stable, bounded, and free of hierarchy node types", a
   for (const query of ["access control", "Platform One"]) {
     await gotoApp(page, `/#/library?q=${encodeURIComponent(query)}`);
     await waitForAppReady(page, { allowPartial: true });
-    const rail = page.locator(".search-filter-rail");
+    const rail = page.locator(".workspace-facet-rail");
     await expect(rail).toBeVisible();
-    renderedSets.push(await rail.locator("label > span").allTextContents());
-    for (const select of await rail.locator("select").all()) {
-      expect(await select.locator("option").count()).toBeLessThanOrEqual(10);
-      expect(await select.locator("option:not([value=''])").count()).toBeGreaterThanOrEqual(2);
-    }
+    renderedSets.push(await rail.locator("fieldset legend, .workspace-typeahead > span").allTextContents());
     const datalistSizes = await rail.locator("datalist").evaluateAll((lists) => lists.map((list) => list.querySelectorAll("option").length));
     expect(datalistSizes.every((size) => size >= 2), datalistSizes.join(",")).toBe(true);
     await expect(rail).not.toContainText(/\b(?:Limb|Trunk|Group)\b/);
   }
   expect(renderedSets[1]).toEqual(renderedSets[0]);
-  const kindLabels = await page.getByLabel("Content kind").locator("option:not([value=''])").allTextContents();
-  expect(kindLabels.map((label) => label.replace(/ \(\d+\)$/, ""))).toEqual([
+  const kindLabels = await page.getByRole("group", { name: "Content kind" }).locator("label > span").allTextContents();
+  expect(kindLabels.sort()).toEqual([
     "Baselines & profiles",
     "Process & methods",
     "Requirements",
     "Technical rules",
     "Threats & defenses",
-    "Tools & communities",
   ]);
 });
 
@@ -139,7 +131,7 @@ test("Phase 3 record identity is canonical across Library, Atlas, and direct pat
 
   await gotoApp(page, "/#/library?q=AC-2");
   await waitForAppReady(page, { allowPartial: true });
-  await page.locator('[data-record-id="nist-800-53:AC-2"] .search-result-primary').click();
+  await page.locator('[data-record-id="nist-800-53:AC-2"] .workspace-result-row__link').click();
   await waitForAppReady(page, { allowPartial: true });
   await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", canonicalBreadcrumb);
   await expect(page.locator('header.site-header nav a[aria-current="page"]')).toHaveCount(0);
@@ -164,9 +156,9 @@ test("Phase 3 List and Map preserve Library state and never drop non-empty resul
   await waitForAppReady(page);
   await expect(page.locator(".route-transition")).toBeHidden();
   await expect(page.getByRole("group", { name: "Library view" })).toBeVisible();
-  const resultCount = Number((await page.locator(".search-result-count").textContent())?.match(/\d+/)?.[0] || 0);
+  const resultCount = Number((await page.locator(".workspace-result-count").textContent())?.match(/\d+/)?.[0] || 0);
   expect(resultCount).toBeGreaterThan(0);
-  const mapButton = page.getByRole("button", { name: "Atlas map", exact: true });
+  const mapButton = page.getByRole("button", { name: "Map", exact: true });
   await page.evaluate(() => globalThis.scrollTo(0, 320));
   const before = await page.evaluate(() => globalThis.scrollY);
   await mapButton.dispatchEvent("click");
@@ -178,7 +170,7 @@ test("Phase 3 List and Map preserve Library state and never drop non-empty resul
   await expect(page).toHaveURL(/#\/library\?q=access%20control&kind=requirements&sort=identifier$|#\/library\?q=access\+control&kind=requirements&sort=identifier$/);
   await expect(page.getByRole("article").first()).toBeVisible();
   await expect.poll(() => page.evaluate(() => globalThis.scrollY)).toBeGreaterThanOrEqual(Math.max(0, before - 2));
-  await page.getByRole("button", { name: "Atlas map", exact: true }).dispatchEvent("click");
+  await page.getByRole("button", { name: "Map", exact: true }).dispatchEvent("click");
   await expect(page.locator(".library-atlas-map")).toHaveAttribute("data-map-node-count", String(resultCount));
   await page.getByRole("link", { name: /Open Atlas map overview/ }).click();
   await expect(page).toHaveURL(/#\/atlas$/);

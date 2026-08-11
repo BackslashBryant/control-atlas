@@ -23,6 +23,7 @@ test("library search transport preserves every result-answer field", async () =>
     control_family: "Access Control",
     severity: "",
     published_connection_count: 7,
+    published_cross_catalog_connection_count: 5,
     published_connection_catalog_count: 4,
   };
   const artifact = {

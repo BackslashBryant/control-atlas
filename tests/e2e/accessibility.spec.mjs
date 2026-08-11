@@ -40,7 +40,7 @@ const ROUTES = [
   },
   { label: "resources", path: "/#/resources" },
   // Deep card grid (opened via a lane) is where badge/tag contrast lives.
-  { label: "resources directory", path: "/#/resources?lane=official" },
+  { label: "resources directory", path: "/#/resources?collection=official-portals" },
   {
     label: "resource detail",
     path: "/#/resources/official-nist-oscal",

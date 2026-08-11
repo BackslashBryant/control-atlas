@@ -21,21 +21,25 @@ test("Phase 2 search results answer access-control questions before the click", 
   await gotoApp(page, QUERY_ROUTE);
   await waitForAppReady(page, { allowPartial: true });
 
-  const rows = page.locator(".search-result-row");
+  const rows = page.locator(".workspace-result-row");
   await expect(rows).toHaveCount(25, { timeout: 60_000 });
   await expect(page.getByRole("button", { name: "Show 25 more" })).toBeVisible();
 
   const rendered = await rows.evaluateAll((elements) =>
     elements.map((element) => ({
-      excerpt: element.querySelector(".search-result-row__excerpt")?.textContent?.trim() || "",
-      publisher: element.getAttribute("data-publisher") || "",
-      subtitle: element.querySelector(".search-result-row__source")?.textContent?.trim() || "",
+      excerpt: element.querySelector(".workspace-result-row__snippet")?.textContent?.trim() || "",
+      identifier: element.querySelector(".workspace-result-row__meta strong")?.textContent?.trim() || "",
+      publisher: element.querySelector(".workspace-result-row__meta span:last-child")?.textContent?.trim() || "",
+      recordId: element.getAttribute("data-record-id") || "",
+      subtitle: element.querySelector(".workspace-result-row__meta")?.textContent?.trim() || "",
       title: element.querySelector("h3")?.textContent?.trim() || "",
     })),
   );
-  expect(new Set(rendered.map(({ title, subtitle }) => `${title}\n${subtitle}`)).size)
+  expect(new Set(rendered.map(({ recordId }) => recordId)).size)
     .toBe(rendered.length);
   for (const result of rendered) {
+    expect(result.identifier, JSON.stringify(result)).not.toBe("");
+    expect(result.recordId, JSON.stringify(result)).not.toBe("");
     expect(result.publisher, JSON.stringify(result)).not.toBe("");
     expect(result.publisher, JSON.stringify(result)).not.toMatch(/unavailable/i);
     expect(result.excerpt, JSON.stringify(result)).not.toBe("");
@@ -47,7 +51,7 @@ test("Phase 2 search results answer access-control questions before the click", 
   expect(await rows.locator("mark").count()).toBeGreaterThan(0);
   await expect(page.getByRole("button", { name: /open (record|in atlas)/i })).toHaveCount(0);
 
-  const rail = page.locator(".search-filter-rail");
+  const rail = page.locator(".workspace-facet-rail");
   await expect(rail).toBeVisible();
   const railBox = await rail.boundingBox();
   expect(railBox).not.toBeNull();
@@ -61,42 +65,30 @@ test("Phase 2 search results answer access-control questions before the click", 
   await expect(rows).toHaveCount(50);
 });
 
-test("Phase 2 search connection totals agree with the first ten record pages", async ({ page }) => {
+test("Phase 2 search renders source-backed cross-framework totals on the first ten rows", async ({ page }) => {
   test.setTimeout(300_000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await gotoApp(page, QUERY_ROUTE);
   await waitForAppReady(page, { allowPartial: true });
 
-  const recordRows = page.locator('.search-result-row[data-result-class="published-record"]');
+  const recordRows = page.locator('.workspace-result-row[data-result-class="published-record"]');
   await expect(recordRows).toHaveCount(25, { timeout: 60_000 });
   const expected = await recordRows.evaluateAll((elements) =>
     elements.slice(0, 10).map((element) => ({
-      count: Number(element.getAttribute("data-published-connection-count")),
+      count: Number(element.getAttribute("data-published-mapping-count")),
       id: element.getAttribute("data-record-id") || "",
+      signal: element.querySelector(".workspace-result-row__signals")?.textContent?.trim() || "",
     })),
   );
   expect(expected).toHaveLength(10);
   expect(expected.every(({ count, id }) => Number.isFinite(count) && id.includes(":"))).toBe(true);
-
-  await waitForAppReady(page);
   for (const result of expected) {
-    const separator = result.id.indexOf(":");
-    const catalog = result.id.slice(0, separator);
-    const item = result.id.slice(separator + 1);
-    await page.evaluate(
-      ({ nextCatalog, nextItem }) => {
-        globalThis.location.hash = `#/record/${encodeURIComponent(nextCatalog)}/${encodeURIComponent(nextItem)}`;
-      },
-      { nextCatalog: catalog, nextItem: item },
-    );
-    const count = page.locator(
-      '[data-record-section="connections"] [data-published-connection-count]',
-    );
-    await expect(count).toHaveAttribute(
-      "data-published-connection-count",
-      String(result.count),
-      { timeout: 30_000 },
-    );
+    const expectedLabel = result.count === 0
+      ? "No published mappings yet"
+      : result.count === 1
+        ? "1 published mapping"
+        : `${result.count.toLocaleString()} published mappings`;
+    expect(result.signal).toContain(expectedLabel);
   }
 });
 

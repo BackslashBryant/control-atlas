@@ -46,7 +46,7 @@ test('legacy public aliases canonicalize while retired structural aliases remain
   await expect(page).toHaveURL(/#\/atlas-map/);
   await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
 
-  await gotoApp(page, '/#/explore?q=AC-2&objectType=control');
+  await gotoApp(page, '/#/library?q=AC-2&kind=controls-requirements');
   await expect(page).toHaveURL(/#\/atlas$/);
   await expect(page.getByRole('application', { name: 'Interactive Atlas map hierarchy' })).toBeVisible();
 

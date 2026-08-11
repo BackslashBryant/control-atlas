@@ -19,7 +19,7 @@ const ROUTE_COMPOSITIONS = [
   { slug: 'catalog', path: '/#/catalog' },
   { slug: 'record', path: '/#/record/nist-800-53/AC-2' },
   { slug: 'compare', path: '/#/compare' },
-  { slug: 'resources', path: '/#/resources?lane=official' },
+  { slug: 'resources', path: '/#/resources' },
   {
     slug: 'resource-detail',
     path: '/#/resources/official-nist-oscal',

@@ -124,7 +124,7 @@ const ATLAS_PARAMS = new Set([
   "atlasStage", "relationshipGroup", "sourceView", "showSupportingReferences",
   "showDraftOrLegacy", "showRegistryOnly",
 ]);
-const SEARCH_PARAMS = new Set(["q", "filter", "publisher", "kind", "objectType", "controlFamily", "connectedOnly", "sort", "view", "collection"]);
+const SEARCH_PARAMS = new Set(["q", "filter", "publisher", "kind", "connectedOnly", "sort", "view", "area"]);
 const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "area", "publisher", "lifecycle", "page"]);
 const DETAIL_PARAMS = new Set<string>();
 const START_PARAMS = new Set(["goal", "context"]);
@@ -132,7 +132,7 @@ const COMPARE_PARAMS = new Set(["crosswalk", "workbench", "source", "target", "i
 const LEARN_PARAMS = new Set(["pattern"]);
 const BUILD_PARAMS = new Set(["templateType", "framework", "format", "environment", "baseline", "controlFamily", "category", "q"]);
 const SOURCE_PARAMS = new Set(["q", "source", "publisher", "provenance", "eligibility", "lifecycle", "access"]);
-const RESOURCE_PARAMS = new Set(["q", "lane", "framework", "lifecycle", "kind", "collection", "owner", "costType", "sort", "showAll"]);
+const RESOURCE_PARAMS = new Set(["q", "resourceType", "collection", "owner", "sort", "showAll", "viewMode"]);
 const RETIRED_PARAMS = new Set(["q"]);
 
 function normalizedPath(input: string): { path: string; params: URLSearchParams } {
@@ -176,6 +176,10 @@ function permittedParams(params: URLSearchParams, permitted: Set<string>): { par
       continue;
     }
     if (key === "view" && value !== "map") {
+      discarded = true;
+      continue;
+    }
+    if (key === "viewMode" && value !== "map") {
       discarded = true;
       continue;
     }

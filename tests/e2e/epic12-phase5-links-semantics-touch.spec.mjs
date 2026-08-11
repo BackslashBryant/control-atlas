@@ -32,7 +32,7 @@ async function openReady(page, route, options = {}) {
     await expect(page.getByRole("link", { name: "Open official source", exact: true }).first()).toBeVisible({ timeout: 60_000 });
   }
   if (options.settleResults) {
-    await expect(page.locator(".search-result-row").first()).toBeVisible({ timeout: 60_000 });
+    await expect(page.locator(".workspace-result-row").first()).toBeVisible({ timeout: 60_000 });
   }
 }
 
@@ -41,7 +41,7 @@ test("Phase 5 renders canonical destinations as native links with working modifi
   await page.setViewportSize({ width: 1440, height: 900 });
   await openReady(page, "/#/library?q=AC-2", { settleResults: true });
 
-  const recordLinks = page.locator('[data-result-class="published-record"] .search-result-primary');
+  const recordLinks = page.locator('[data-result-class="published-record"] .workspace-result-row__link');
   expect(await recordLinks.count()).toBeGreaterThan(0);
   for (const link of await recordLinks.all()) {
     await expect(link).toHaveJSProperty("tagName", "A");
@@ -85,7 +85,7 @@ test("Phase 5 renders canonical destinations as native links with working modifi
     "button.brand",
     "header.site-header nav button:not([aria-controls])",
     "footer.site-footer button[role=link]",
-    "button.search-result-primary",
+    "button.workspace-result-row__link",
     "button.catalog-record-title",
     "button.catalog-index-row",
     "button.relationship-card",
@@ -130,7 +130,7 @@ test("Phase 5 exposes one main, one h1, semantic result lists, and distinct comb
   }
 
   await openReady(page, "/#/library?q=access+control", { settleResults: true });
-  const resultList = page.locator("ul.search-result-list");
+  const resultList = page.locator("ul.workspace-result-list");
   await expect(resultList).toBeVisible();
   expect(await resultList.locator(":scope > li").count()).toBeGreaterThan(0);
   await expect(resultList.locator(":scope > li article h3").first()).toBeVisible();

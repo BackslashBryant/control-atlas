@@ -12,10 +12,10 @@ test("Resources filters resync after browser Back", async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole("button", { name: /Filters/ }).click();
   const ownerFilter = page.getByRole("combobox", { name: "Owner" });
   await expect(ownerFilter).toHaveValue(owner);
-  await ownerFilter.selectOption("");
+  await ownerFilter.fill("");
+  await ownerFilter.press("Tab");
   await expect(page).not.toHaveURL(/owner=/);
   await page.goBack();
 

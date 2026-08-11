@@ -43,8 +43,8 @@ for (const viewport of [
 }
 
 for (const viewport of [
-  { label: "375px", width: 375, height: 812, columns: 1 },
-  { label: "768px", width: 768, height: 1024, columns: 3 },
+  { label: "375px", width: 375, height: 812 },
+  { label: "768px", width: 768, height: 1024 },
 ]) {
   test(`Resources categories and filters remain discoverable at ${viewport.label}`, async ({ page }) => {
     await page.setViewportSize(viewport);
@@ -53,29 +53,28 @@ for (const viewport of [
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
-    const collections = page.locator(".resource-collection-grid button");
+    const collections = page.locator(".workspace-browse-card--collection");
     await expect(collections).toHaveCount(8);
     await expectNoPageOverflow(page, `Resources at ${viewport.label}`);
 
-    const filters = page.getByRole("button", { name: /^Filters/ });
+    const filters = page.getByRole("button", { name: "Filters", exact: true });
     await expect(filters).toHaveAttribute("aria-expanded", "false");
     await filters.press("Enter");
     await expect(filters).toHaveAttribute("aria-expanded", "true");
-    const panel = page.getByRole("region", { name: "Resource filters" });
+    const panel = page.getByRole("dialog");
     await expect(panel).toBeVisible();
-    await expect(panel.locator("select").first()).toBeVisible();
+    await expect(panel.getByRole("group", { name: "Collection" })).toBeVisible();
+    await expect(panel.getByRole("group", { name: "Type" })).toBeVisible();
 
-    const columns = await panel.evaluate((element) =>
-      globalThis.getComputedStyle(element).gridTemplateColumns.split(" ").length,
-    );
-    expect(columns).toBe(viewport.columns);
-
-    await page.getByRole("combobox", { name: "Owner" }).selectOption("National Institute of Standards and Technology");
+    const owner = panel.getByRole("combobox", { name: "Owner" });
+    await owner.fill("National Institute of Standards and Technology");
+    await owner.press("Tab");
     await expect(page).toHaveURL(/owner=National(?:%20|\+)Institute/);
-    await expect(page.locator("#resources-results .resource-card").first()).toBeVisible();
+    await expect(panel).toHaveCount(0);
+    await expect(page.locator("#resources-results .workspace-result-row").first()).toBeVisible();
 
     const results = await new AxeBuilder({ page })
-      .include("#resources-filter-panel")
+      .include("#resources-results")
       .withTags(["wcag2a", "wcag2aa"])
       .analyze();
     expect(

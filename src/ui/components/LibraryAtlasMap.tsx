@@ -16,8 +16,19 @@ export type LibraryMapItem = {
 };
 
 export function LibraryAtlasMap(props: {
+  ariaLabel?: string;
+  description?: string;
+  eyebrow?: string;
+  emptyMessage?: string;
+  groupOverflowLabel?: string;
+  heading?: string;
   items: LibraryMapItem[];
   onNavigate: AppNavigate;
+  overviewAction?: {
+    label: string;
+    patch?: Partial<ViewState>;
+    view: ViewState["view"];
+  } | null;
 }) {
   const groups = new Map<string, LibraryMapItem[]>();
   for (const item of props.items) {
@@ -26,16 +37,23 @@ export function LibraryAtlasMap(props: {
   }
 
   return (
-    <section aria-label="Atlas map of Library results" className="library-atlas-map" data-map-node-count={props.items.length}>
+    <section aria-label={props.ariaLabel || "Map of Library results"} className="library-atlas-map" data-map-node-count={props.items.length}>
       <header className="library-atlas-map__header">
         <div>
-          <p className="eyebrow">Atlas map</p>
-          <h2>{props.items.length.toLocaleString()} mapped result{props.items.length === 1 ? "" : "s"}</h2>
-          <p>The current Library query is grouped by publication or source. Open any record to expand its immediate Atlas neighborhood.</p>
+          <p className="eyebrow">{props.eyebrow || "Map"}</p>
+          <h2>{props.heading || `${props.items.length.toLocaleString()} mapped result${props.items.length === 1 ? "" : "s"}`}</h2>
+          <p>{props.description || "The current Library query is grouped by publication. Open any record to see its details."}</p>
         </div>
-        <AppLink className="button button--secondary" onNavigate={props.onNavigate} view="atlas-map">
-          <IconMap aria-hidden="true" size={17} /> Open Atlas map overview
-        </AppLink>
+        {props.overviewAction === null ? null : (
+          <AppLink
+            className="button button--secondary"
+            onNavigate={props.onNavigate}
+            patch={props.overviewAction?.patch}
+            view={props.overviewAction?.view || "atlas-map"}
+          >
+            <IconMap aria-hidden="true" size={17} /> {props.overviewAction?.label || "Open Atlas map overview"}
+          </AppLink>
+        )}
       </header>
       {props.items.length ? (
         <div className="library-atlas-map__groups">
@@ -54,12 +72,12 @@ export function LibraryAtlasMap(props: {
                   );
                 })}
               </div>
-              {items.length > 100 ? <p className="muted">Showing 100 of {items.length.toLocaleString()} in this publication.</p> : null}
+              {items.length > 100 ? <p className="muted">Showing 100 of {items.length.toLocaleString()} in this {props.groupOverflowLabel || "publication"}.</p> : null}
             </section>
           ))}
         </div>
       ) : (
-        <p className="empty-state">No records match this Library view.</p>
+        <p className="empty-state">{props.emptyMessage || "No records match this Library view."}</p>
       )}
     </section>
   );

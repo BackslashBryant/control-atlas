@@ -2,14 +2,23 @@ import {
   IconArrowRight,
   IconFlag,
   IconFolders,
+  IconGitCompare,
+  IconList,
+  IconMap,
   IconPlus,
-  IconSearch,
   IconX,
 } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 
 import "../../../styles/resources.css";
-import { CommonsResourceCard } from "../components/CommonsResourceCard";
+import { AppLink } from "../components/AppLink";
+import { LibraryAtlasMap, type LibraryMapItem } from "../components/LibraryAtlasMap";
+import { ResourceTypeIcon } from "../components/ResourceTypeIcon";
+import {
+  CheckboxFacet,
+  TypeaheadFacet,
+  WorkspaceTemplate,
+} from "../components/WorkspaceTemplate";
 import { Button } from "../components/lsm";
 import type { CommonsCollection, CommonsResource } from "../lib/commonsTypes";
 import { resourceAccessLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
@@ -18,7 +27,6 @@ import {
   searchDirectoryResources,
   sortDirectoryResources,
 } from "../lib/resourcesDirectory.mjs";
-import { WorkbenchControlSurface } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
@@ -39,16 +47,11 @@ const EMPTY_STATE: CommonsState = {
   costType: "",
   sort: "relevance",
   showAll: "",
+  viewMode: "list",
 };
 
 function unique(values: string[]) {
   return [...new Set(values.filter(Boolean))].sort((left, right) => left.localeCompare(right));
-}
-
-function workStageLabel(value: string): string {
-  return value
-    ? `${value.slice(0, 1).toUpperCase()}${value.slice(1).toLowerCase()}`
-    : value;
 }
 
 export function CommonsPage(props: {
@@ -58,8 +61,9 @@ export function CommonsPage(props: {
 }) {
   const { bundle, viewState, onNavigate } = props;
   const state = viewState.view === "commons" ? viewState : EMPTY_STATE;
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const [queryDraft, setQueryDraft] = useState(state.query);
+  const [compareMode, setCompareMode] = useState(false);
+  const [selectedResourceIds, setSelectedResourceIds] = useState<string[]>([]);
   const directoryAvailable = Boolean(bundle?.commonsDataset);
   const resources = (bundle?.commonsDataset?.resources || []) as CommonsResource[];
   const collections = (bundle?.commonsDataset?.collections || []) as CommonsCollection[];
@@ -70,128 +74,245 @@ export function CommonsPage(props: {
   const filtered = useMemo(() => {
     const eligible = filterDirectoryResources(resources, {
       collection: state.collection,
-      lane: state.lane,
       owner: state.owner,
-      framework: state.framework,
-      lifecycle: state.lifecycle,
-      audience: state.audience,
       resourceType: state.resourceType,
-      accessType: state.accessType,
-      costType: state.costType,
     });
     return sortDirectoryResources(searchDirectoryResources(eligible, state.query), state.sort);
-  }, [resources, state]);
+  }, [resources, state.collection, state.owner, state.query, state.resourceType, state.sort]);
 
-  const resourceTypes = unique(resources.map((resource) => resource.resourceType));
-  const owners = unique(resources.map((resource) => resource.publisher));
-  const lifecycleStages = unique(
-    resources.flatMap((resource) => resource.lifecycleStages).map(workStageLabel),
-  );
-  const audiences = unique(resources.flatMap((resource) => resource.audiences));
-  const accessTypes = unique(resources.map((resource) => resource.accessType));
-  const costTypes = unique(resources.map((resource) => resource.costType));
-  const activeFilterCount = [
-    state.collection,
-    state.resourceType,
-    state.owner,
-    state.lifecycle,
-    state.audience,
-    state.accessType,
-    state.costType,
-  ].filter(Boolean).length;
-  const resultsVisible = Boolean(state.showAll || state.query || activeFilterCount);
-  const selectedCollection = collections.find((collection) => collection.id === state.collection);
+  const resourceTypes = useMemo(() => unique(resources.map((resource) => resource.resourceType)), [resources]);
+  const owners = useMemo(() => unique(resources.map((resource) => resource.publisher)), [resources]);
+  const activeFilters = [
+    state.collection && { key: "collection", label: collections.find((collection) => collection.id === state.collection)?.title || state.collection },
+    state.resourceType && { key: "resourceType", label: resourceTypeLabel(state.resourceType) },
+    state.owner && { key: "owner", label: state.owner },
+  ].filter(Boolean) as Array<{ key: keyof CommonsState; label: string }>;
+  const resultsVisible = Boolean(state.showAll || state.query.trim() || activeFilters.length);
+  const selectedResources = resources.filter((resource) => selectedResourceIds.includes(resource.id));
+  const collectionTitles = useMemo(() => new Map(collections.map((collection) => [collection.id, collection.title])), [collections]);
+  const mapItems: LibraryMapItem[] = useMemo(() => state.viewMode !== "map" ? [] : filtered.map((resource) => ({
+    id: resource.id,
+    kind: resourceTypeLabel(resource.resourceType),
+    label: resource.name,
+    group: resource.featuredCollections?.map((id) => collectionTitles.get(id)).find(Boolean) || resource.publisher,
+    destination: { view: "commons-detail" as const, patch: { id: resource.id } },
+  })), [collectionTitles, filtered, state.viewMode]);
 
-  const reset = () => update({ ...EMPTY_STATE });
-
-  return (
-    <div className="commons-page resources-ecosystem-page" data-visual-identity="ecosystem-directory">
-      <div className="ca-content-container resources-directory">
-        <header className="resources-directory-header" data-route-primary-header="true">
-          <div data-route-primary-copy="true">
-            <p className="eyebrow">Resources</p>
-            <h1>Find the ecosystem around the work</h1>
-            <p>
-              Search official portals, tools, services, training, product directories, and practitioner communities. Publications stay in Library.
-            </p>
-          </div>
-          <div className="resources-directory-actions" data-route-primary-support="true">
-            <a href="https://github.com/BackslashBryant/control-atlas/issues/new?template=submit-resource.yml" rel="noopener noreferrer" target="_blank"><IconPlus aria-hidden="true" size={16} />Submit resource</a>
-            <a href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank"><IconFlag aria-hidden="true" size={16} />Report a problem</a>
-          </div>
-        </header>
-
-        <WorkbenchControlSurface className="resources-control-surface" label="Find resources" targetId="resources-results">
-          <form className="resources-search" onSubmit={(event) => { event.preventDefault(); const query = queryDraft.trim(); if (query !== state.query) update({ query }); }} role="search">
-            <IconSearch aria-hidden="true" size={22} />
-            <input aria-label="Find resources" id="resources-query" onChange={(event) => setQueryDraft(event.target.value)} placeholder="Try OSCAL, 8140, ATO reuse, Iron Bank, CMMC, or STIG scanner" type="search" value={queryDraft} />
-            <span className="resources-search-actions">
-              {queryDraft ? <button aria-label="Clear resource search" onClick={() => { setQueryDraft(""); update({ query: "" }); }} type="button"><IconX aria-hidden="true" size={18} /></button> : null}
-              <button className="resources-search-submit" type="submit">Search resources</button>
-            </span>
-          </form>
-          <div className="resources-facets">
-            <button aria-controls="resources-filter-panel" aria-expanded={filtersOpen} className="resources-filter-toggle" onClick={() => setFiltersOpen((open) => !open)} type="button">
-              Filters{activeFilterCount ? ` (${activeFilterCount})` : ""}
-            </button>
-            <div aria-label="Resource filters" className="resources-facet-grid" hidden={!filtersOpen} id="resources-filter-panel" role="region">
-              <ResourceSelect label="Collection" onChange={(collection) => update({ collection, showAll: collection ? "true" : state.showAll })} options={collections.map((collection) => ({ value: collection.id, label: collection.title }))} value={state.collection} />
-              <ResourceSelect label="Type" onChange={(resourceType) => update({ resourceType })} options={resourceTypes.map((value) => ({ value, label: resourceTypeLabel(value) }))} value={state.resourceType} />
-              <ResourceSelect label="Owner" onChange={(owner) => update({ owner })} options={owners.map((value) => ({ value, label: value }))} value={state.owner} />
-              <ResourceSelect label="Access" onChange={(accessType) => update({ accessType })} options={accessTypes.map((value) => ({ value, label: resourceAccessLabel({ accessType: value } as CommonsResource) }))} value={state.accessType} />
-              <ResourceSelect label="Cost" onChange={(costType) => update({ costType })} options={costTypes.map((value) => ({ value, label: value.replaceAll("_", " ") }))} value={state.costType} />
-              <ResourceSelect label="Audience" onChange={(audience) => update({ audience })} options={audiences.map((value) => ({ value, label: value }))} value={state.audience} />
-              <ResourceSelect label="Work stage" onChange={(lifecycle) => update({ lifecycle })} options={lifecycleStages.map((value) => ({ value, label: value }))} value={state.lifecycle} />
-              <ResourceSelect label="Sort" onChange={(sort) => update({ sort })} options={[{ value: "relevance", label: "Relevance" }, { value: "name", label: "Name" }, { value: "checked", label: "Recently checked" }]} value={state.sort} emptyLabel={null} />
-            </div>
-          </div>
-        </WorkbenchControlSurface>
-
-        {!directoryAvailable ? (
-          <section className="empty-state" data-control-results id="resources-results">
-            <h2>The resource directory did not load.</h2>
-            <p>The rest of Control Atlas still works. Reload to try this separate public dataset again.</p>
-            <Button onClick={() => window.location.reload()} type="button" variant="secondary">Reload the directory</Button>
-          </section>
-        ) : !resultsVisible ? (
-          <section aria-labelledby="resource-collections-heading" className="resource-collections" id="resources-results">
-            <div className="resource-section-heading">
-              <div><p className="eyebrow">Practical starting points</p><h2 id="resource-collections-heading">Browse eight practical collections</h2></div>
-              <button onClick={() => update({ showAll: "true" })} type="button">Browse all {resources.length} resources <IconArrowRight aria-hidden="true" size={16} /></button>
-            </div>
-            <div className="resource-collection-grid">
-              {collections.map((collection) => (
-                <button className="resource-collection-card" key={collection.id} onClick={() => update({ collection: collection.id, showAll: "true" })} type="button">
-                  <span className="resource-collection-icon"><IconFolders aria-hidden="true" size={22} /></span>
-                  <span className="resource-collection-copy"><strong>{collection.title}</strong><span>{collection.summary}</span><small>{collection.resourceIds.length} resources</small></span>
-                  <IconArrowRight aria-hidden="true" className="resource-collection-arrow" size={18} />
-                </button>
-              ))}
-            </div>
-          </section>
-        ) : filtered.length ? (
-          <section aria-label="Resource results" data-control-results id="resources-results">
-            <div className="resource-section-heading resources-result-heading">
-              <div><p className="eyebrow">{selectedCollection ? "Collection" : "Directory"}</p><h2>{selectedCollection?.title || "All matching resources"}</h2>{selectedCollection ? <p>{selectedCollection.whyCurated}</p> : null}</div>
-              <div className="resources-result-status"><p aria-live="polite" role="status">Showing {filtered.length} of {resources.length}</p><button onClick={reset} type="button">Back to collections</button></div>
-            </div>
-            <ul className="resources-result-grid">
-              {filtered.map((resource) => <li key={resource.id}><CommonsResourceCard onNavigate={onNavigate} resource={resource} /></li>)}
-            </ul>
-          </section>
-        ) : (
-          <section className="empty-state" data-control-results id="resources-results">
-            <h2>No resources match that combination.</h2>
-            <p>Clear the filters or search for an owner, acronym, tool, or job.</p>
-            <button onClick={reset} type="button">Back to collections</button>
-          </section>
-        )}
-      </div>
+  const reset = () => {
+    setQueryDraft("");
+    setCompareMode(false);
+    setSelectedResourceIds([]);
+    update({ ...EMPTY_STATE });
+  };
+  const switchView = (viewMode: string) => update({ viewMode: viewMode === "map" ? "map" : "list" });
+  const renderFacets = (scope: "desktop" | "mobile") => (
+    <div className="workspace-facet-controls" data-facet-set="collection,type,owner">
+      <CheckboxFacet
+        label="Collection"
+        onChange={(collection) => update({ collection, showAll: collection ? "true" : state.showAll })}
+        options={collections.map((collection) => ({
+          count: collection.resourceIds.length,
+          label: collection.title,
+          textLabel: collection.title,
+          value: collection.id,
+        }))}
+        value={state.collection}
+      />
+      <CheckboxFacet
+        label="Type"
+        onChange={(resourceType) => update({ resourceType })}
+        options={resourceTypes.map((resourceType) => ({
+          count: resources.filter((resource) => resource.resourceType === resourceType).length,
+          label: resourceTypeLabel(resourceType),
+          textLabel: resourceTypeLabel(resourceType),
+          value: resourceType,
+        }))}
+        value={state.resourceType}
+      />
+      <TypeaheadFacet
+        id={`resources-${scope}-owner`}
+        label="Owner"
+        onChange={(owner) => update({ owner })}
+        options={owners.map((owner) => ({ label: owner, value: owner }))}
+        value={state.owner}
+      />
+      {activeFilters.length ? <button className="workspace-clear-filters" onClick={() => update({ collection: "", owner: "", resourceType: "" })} type="button">Clear all filters</button> : null}
     </div>
   );
-}
 
-function ResourceSelect(props: { label: string; value: string; options: Array<{ value: string; label: string }>; emptyLabel?: string | null; onChange: (value: string) => void }) {
-  const { label, value, options, emptyLabel = "All", onChange } = props;
-  return <label><span>{label}</span><select aria-label={label} onChange={(event) => onChange(event.target.value)} value={value}>{emptyLabel === null ? null : <option value="">{emptyLabel}</option>}{options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>;
+  if (!directoryAvailable) {
+    return (
+      <section className="workspace-template">
+        <header className="page-header" data-route-primary-header="true"><div className="page-header-title"><h1>Resources</h1></div></header>
+        <section className="empty-state" data-control-results id="resources-results">
+          <h2>The resource directory did not load.</h2>
+          <p>The rest of Control Atlas still works. Reload to try this separate public dataset again.</p>
+          <Button onClick={() => window.location.reload()} type="button" variant="secondary">Reload the directory</Button>
+        </section>
+      </section>
+    );
+  }
+
+  return (
+    <WorkspaceTemplate
+      activeFilters={activeFilters.length ? (
+        <div aria-label="Active filters" className="active-filter-row">
+          {activeFilters.map((filter) => (
+            <button className="active-filter-chip" key={filter.key} onClick={() => update({ [filter.key]: "" })} type="button">
+              {filter.label}<IconX aria-hidden="true" size={13} />
+            </button>
+          ))}
+          <button className="clear-filter-link" onClick={() => update({ collection: "", owner: "", resourceType: "" })} type="button">Clear all</button>
+        </div>
+      ) : null}
+      compareControl={(
+        <button
+          aria-pressed={compareMode}
+          className="button button--secondary"
+          onClick={() => {
+            setCompareMode((value) => !value);
+            setSelectedResourceIds([]);
+            if (state.viewMode === "map") switchView("list");
+          }}
+          type="button"
+        >
+          <IconGitCompare aria-hidden="true" size={17} />Compare
+        </button>
+      )}
+      facetLabel="Resource filters"
+      headerAction={(
+        <div className="workspace-header-actions">
+          <a href="https://github.com/BackslashBryant/control-atlas/issues/new?template=submit-resource.yml" rel="noopener noreferrer" target="_blank"><IconPlus aria-hidden="true" size={16} />Submit resource</a>
+          <a href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank"><IconFlag aria-hidden="true" size={16} />Report a problem</a>
+        </div>
+      )}
+      onClearQuery={() => {
+        setQueryDraft("");
+        update({ query: "", showAll: activeFilters.length ? state.showAll : "" });
+      }}
+      onQueryDraftChange={setQueryDraft}
+      onSearch={() => update({ query: queryDraft.trim(), showAll: queryDraft.trim() ? "true" : state.showAll })}
+      onSortChange={(sort) => update({ sort })}
+      onViewChange={switchView}
+      purpose="Official portals, tools, training, and communities."
+      queryDraft={queryDraft}
+      renderFacets={renderFacets}
+      resultCountLabel={`${filtered.length.toLocaleString()} result${filtered.length === 1 ? "" : "s"}`}
+      resultsId="resources-results"
+      searchLabel="Find resources"
+      searchPlaceholder="Search by name, topic, or owner"
+      showResultBar={resultsVisible}
+      sortLabel="Sort Resource results"
+      sortOptions={[
+        { label: "Relevance", value: "relevance" },
+        { label: "Name", value: "name" },
+        { label: "Recently checked", value: "checked" },
+      ]}
+      sortValue={state.sort}
+      title="Resources"
+      viewLabel="Resources view"
+      viewOptions={[
+        { icon: <IconList aria-hidden="true" size={16} />, label: "List", value: "list" },
+        { icon: <IconMap aria-hidden="true" size={16} />, label: "Map", value: "map" },
+      ]}
+      viewValue={state.viewMode}
+    >
+      {!resultsVisible ? (
+        <section aria-labelledby="resource-collections-heading" className="workspace-browse-state" data-browse-state="resources">
+          <div className="workspace-browse-heading">
+            <div><p className="eyebrow">Practical starting points</p><h2 id="resource-collections-heading">Browse eight practical collections</h2></div>
+            <button onClick={() => update({ showAll: "true" })} type="button">Browse all {resources.length} resources <IconArrowRight aria-hidden="true" size={16} /></button>
+          </div>
+          <div className="workspace-browse-grid">
+            {collections.map((collection) => (
+              <button className="workspace-browse-card workspace-browse-card--collection" key={collection.id} onClick={() => update({ collection: collection.id, showAll: "true" })} type="button">
+                <IconFolders aria-hidden="true" size={22} />
+                <strong>{collection.title}</strong>
+                <span>{collection.summary}</span>
+                <small>{collection.resourceIds.length} resources</small>
+              </button>
+            ))}
+          </div>
+        </section>
+      ) : state.viewMode === "map" ? (
+        <LibraryAtlasMap
+          ariaLabel="Map of Resource results"
+          description="Results are grouped by collection or owner."
+          emptyMessage="No resources match this view."
+          eyebrow="Resource map"
+          groupOverflowLabel="group"
+          items={mapItems}
+          onNavigate={onNavigate}
+          overviewAction={null}
+        />
+      ) : filtered.length ? (
+        <>
+          {compareMode && selectedResources.length >= 2 ? (
+            <section aria-labelledby="resource-comparison-heading" className="resource-comparison">
+              <h2 id="resource-comparison-heading">Selected resources</h2>
+              <div className="resource-comparison__scroll">
+                <table>
+                  <thead><tr><th scope="col">Field</th>{selectedResources.map((resource) => <th key={resource.id} scope="col">{resource.name}</th>)}</tr></thead>
+                  <tbody>
+                    <tr><th scope="row">Type</th>{selectedResources.map((resource) => <td key={resource.id}>{resourceTypeLabel(resource.resourceType)}</td>)}</tr>
+                    <tr><th scope="row">Owner</th>{selectedResources.map((resource) => <td key={resource.id}>{resource.publisher}</td>)}</tr>
+                    <tr><th scope="row">Access</th>{selectedResources.map((resource) => <td key={resource.id}>{resourceAccessLabel(resource)}</td>)}</tr>
+                    <tr><th scope="row">Maintenance</th>{selectedResources.map((resource) => <td key={resource.id}>{resource.maintenanceStatus.replaceAll("_", " ")}</td>)}</tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ) : null}
+          <ul aria-label="Resource results" className="workspace-result-list">
+            {filtered.map((resource) => {
+              const selected = selectedResourceIds.includes(resource.id);
+              return (
+                <li key={resource.id}>
+                  <article className="workspace-result-row workspace-result-row--resource" data-resource-id={resource.id} data-result-class="resource">
+                    {compareMode ? (
+                      <label className="workspace-result-select">
+                        <input
+                          aria-label={`Select ${resource.name} for comparison`}
+                          checked={selected}
+                          onChange={() => setSelectedResourceIds((ids) => selected ? ids.filter((id) => id !== resource.id) : [...ids, resource.id])}
+                          type="checkbox"
+                        />
+                      </label>
+                    ) : null}
+                    <AppLink
+                      aria-label={`Open ${resource.name}`}
+                      className="workspace-result-row__link"
+                      onNavigate={onNavigate}
+                      patch={{ id: resource.id }}
+                      view="commons-detail"
+                    >
+                      <div className="workspace-resource-row__identity"><ResourceTypeIcon resourceType={resource.resourceType} /></div>
+                      <div className="workspace-result-row__content">
+                        <div className="workspace-result-row__meta">
+                          <span className="workspace-kind-tag">{resourceTypeLabel(resource.resourceType)}</span>
+                          <span>{resource.publisher}</span>
+                        </div>
+                        <h3>{resource.name}</h3>
+                        <p className="workspace-result-row__snippet">{resource.cardPurpose || resource.summary}</p>
+                        <div className="workspace-result-row__signals">
+                          <span>{resourceAccessLabel(resource)}</span>
+                          <span>{resource.maintenanceStatus.replaceAll("_", " ")}</span>
+                        </div>
+                      </div>
+                    </AppLink>
+                  </article>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      ) : (
+        <section className="empty-state" data-control-results>
+          <h2>No resources match that combination.</h2>
+          <p>Clear the filters or search for an owner, acronym, tool, or job.</p>
+          <button onClick={reset} type="button">Back to collections</button>
+        </section>
+      )}
+    </WorkspaceTemplate>
+  );
 }

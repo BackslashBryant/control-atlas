@@ -33,14 +33,14 @@ test("resource ecosystem visual evidence", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await open(page, "#/resources");
   await expect(page.getByRole("heading", { name: "Browse eight practical collections" })).toBeVisible();
-  await expect(page.locator(".resource-collection-card")).toHaveCount(8);
-  await expect(page.locator(".resources-result-grid")).toHaveCount(0);
+  await expect(page.locator(".workspace-browse-card--collection")).toHaveCount(8);
+  await expect(page.locator(".workspace-result-list")).toHaveCount(0);
   await shot(page, "01-landing-collections");
 
   for (let index = 0; index < collections.length; index += 1) {
     const id = collections[index];
     await open(page, `#/resources?collection=${id}&showAll=true`);
-    await expect(page.locator(".resources-result-grid")).toBeVisible();
+    await expect(page.locator(".workspace-result-list")).toBeVisible();
     await shot(page, `${String(index + 2).padStart(2, "0")}-collection-${id}`);
   }
 
@@ -48,12 +48,13 @@ test("resource ecosystem visual evidence", async ({ page }) => {
   await expect(page.getByText("DoD Platform One Iron Bank Container Registry", { exact: true }).first()).toBeVisible();
   await shot(page, "10-search-alias-repo-one");
 
-  await open(page, "#/resources?resourceType=template&accessType=public&showAll=true");
-  await expect(page.locator(".resources-result-grid")).toBeVisible();
-  await shot(page, "11-filtered-public-templates");
+  await open(page, "#/resources?resourceType=template&showAll=true");
+  await expect(page.locator(".workspace-result-list")).toBeVisible();
+  await expect(page.locator('[data-result-class="resource"] .workspace-kind-tag')).toContainText("Template");
+  await shot(page, "11-filtered-templates");
 
   await open(page, "#/resources?showAll=true");
-  await expect(page.locator(".resources-result-grid")).toBeVisible();
+  await expect(page.locator(".workspace-result-list")).toBeVisible();
   await shot(page, "11b-browse-all");
 
   const detailCases = [
@@ -90,8 +91,8 @@ test("resource dataset error is honest", async ({ page }) => {
 
 test("identity marks never depend on remote images", async ({ page }) => {
   await open(page, "#/resources?showAll=true");
-  await expect(page.locator(".resource-brand-mark img")).toHaveCount(0);
-  await expect(page.locator(".resource-brand-mark").first()).toBeVisible();
+  await expect(page.locator(".resource-type-icon img")).toHaveCount(0);
+  await expect(page.locator(".resource-type-icon").first()).toBeVisible();
 });
 
 test("resource ecosystem remains usable at 320 pixels", async ({ page }) => {
@@ -99,7 +100,7 @@ test("resource ecosystem remains usable at 320 pixels", async ({ page }) => {
 
   await open(page, "#/resources");
   await expect(page.getByRole("heading", { name: "Browse eight practical collections" })).toBeVisible();
-  await expect(page.locator(".resource-collection-card")).toHaveCount(8);
+  await expect(page.locator(".workspace-browse-card--collection")).toHaveCount(8);
   await shot(page, "23-mobile-landing-320");
 
   await open(page, "#/resources/portal-cis-workbench?from=commons");

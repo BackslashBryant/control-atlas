@@ -91,18 +91,12 @@ test("critical path: browser back returns from a record to the original search",
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page
-    .getByRole("article", {
-      name: "AC-2 — Account Management",
-      exact: true,
-    })
-    .locator(".search-result-primary")
-    .click();
+  await page.locator('[data-record-id="nist-800-53:AC-2"] .workspace-result-row__link').click();
   await expect(page.locator(".detail-page")).toBeVisible();
   await page.goBack();
 
-  await expect(page).toHaveURL(/#\/search\?q=AC-2/);
-  await expect(page.getByLabel("Search by ID, title, or topic")).toHaveValue(
+  await expect(page).toHaveURL(/#\/library\?q=AC-2/);
+  await expect(page.getByLabel("Filter results by ID, title, or topic")).toHaveValue(
     "AC-2",
   );
 });
@@ -196,12 +190,12 @@ test("critical path: MITRE library search returns technique with plain-language 
   await dismissOnboarding(page);
 
   await expect(
-    page.locator("#library-results .search-result-primary").first(),
+    page.locator("#library-results .workspace-result-row__link").first(),
   ).toBeVisible({
     timeout: 90000,
   });
   await page
-    .locator("#library-results .search-result-primary")
+    .locator("#library-results .workspace-result-row__link")
     .first()
     .click();
   await expect(page).toHaveURL(/record\/mitre-attack|library-detail/);

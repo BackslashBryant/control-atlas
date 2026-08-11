@@ -1,30 +1,31 @@
 import { expect, test } from '@playwright/test';
 
 // Regression guard for the epic-12 QA backlog fixes (2026-08-10):
-// B1/B2 default browse + map, B3 tools reachability, B5/B6 landing,
+// B1/B2 Template-C browse + map, B3 tools reachability, B5/B6 landing,
 // B9/B10/B11 search polish, B13 no page overflow, B14 select label, B16 links.
 
-test('B1: Library opens with a non-empty, browsable result set', async ({ page }) => {
+test('B1: Library opens with a curated browse state instead of ranked rows', async ({ page }) => {
   await page.goto('/#/library');
-  await expect(page.locator('#library-results .search-result-row').first()).toBeVisible({ timeout: 15000 });
-  expect(await page.locator('#library-results .search-result-row').count()).toBeGreaterThan(0);
-  expect(await page.locator('#library-results a[href]').count()).toBeGreaterThan(0);
-  expect(await page.locator('.search-result-count').innerText()).toMatch(/[0-9]/);
+  await expect(page.locator('[data-browse-state="library"]')).toBeVisible({ timeout: 15000 });
+  expect(await page.locator('.workspace-browse-card').count()).toBeGreaterThan(0);
+  expect(await page.locator('.workspace-area-card').count()).toBeGreaterThan(0);
+  await expect(page.locator('.workspace-result-row')).toHaveCount(0);
+  await expect(page.locator('.workspace-result-count')).toHaveCount(0);
   await expect(page.locator('.empty-state')).toHaveCount(0);
 });
 
-test('B1: filters narrow the default set', async ({ page }) => {
+test('B1: a query replaces browse cards with ranked rows', async ({ page }) => {
   await page.goto('/#/library?q=access+control');
-  await expect(page.locator('#library-results .search-result-row').first()).toBeVisible({ timeout: 15000 });
-  const narrowed = Number((await page.locator('.search-result-count').innerText()).replace(/[^0-9]/g, ''));
+  await expect(page.locator('#library-results .workspace-result-row').first()).toBeVisible({ timeout: 15000 });
+  const narrowed = Number((await page.locator('.workspace-result-count').innerText()).replace(/[^0-9]/g, ''));
+  expect(narrowed).toBeGreaterThan(0);
   await page.goto('/#/library');
-  await expect(page.locator('#library-results .search-result-row').first()).toBeVisible({ timeout: 15000 });
-  const full = Number((await page.locator('.search-result-count').innerText()).replace(/[^0-9]/g, ''));
-  expect(full).toBeGreaterThan(narrowed);
+  await expect(page.locator('[data-browse-state="library"]')).toBeVisible({ timeout: 15000 });
+  await expect(page.locator('.workspace-result-count')).toHaveCount(0);
 });
 
-test('B2: the Atlas map toggle renders nodes while the corpus is non-empty', async ({ page }) => {
-  await page.goto('/#/library?view=map');
+test('B2: the Map toggle renders nodes for a non-empty query', async ({ page }) => {
+  await page.goto('/#/library?q=access&view=map');
   await expect(page.locator('.library-atlas-map')).toBeVisible({ timeout: 20000 });
   await expect(page.locator('.library-map-node').first()).toBeVisible({ timeout: 20000 });
   expect(await page.locator('.library-map-node').count()).toBeGreaterThan(0);
@@ -33,11 +34,11 @@ test('B2: the Atlas map toggle renders nodes while the corpus is non-empty', asy
 
 test('B3: Tools & communities is reachable from home in <=2 clicks', async ({ page }) => {
   await page.goto('/#/');
-  const direct = page.locator('a[href*="kind=tools-communities"]');
-  await expect(direct.first()).toBeVisible();
-  await direct.first().click();
-  await expect(page).toHaveURL(/kind=tools-communities/);
-  await expect(page.locator('#library-results .search-result-row, .search-result-row').first()).toBeVisible({ timeout: 15000 });
+  const direct = page.locator('.home-secondary-action[href="#/resources"]');
+  await expect(direct).toBeVisible();
+  await direct.click();
+  await expect(page).toHaveURL(/#\/resources/);
+  await expect(page.locator('[data-browse-state="resources"], .workspace-result-row').first()).toBeVisible({ timeout: 15000 });
 });
 
 test('B4: the Atlas map is reachable from home in one click', async ({ page }) => {
@@ -103,9 +104,9 @@ test('B10: overlay header has one clear and one close affordance, distinct', asy
 
 test('B11: the in-page Library search input sits symmetrically in its box', async ({ page }) => {
   await page.goto('/#/library?q=access');
-  await page.locator('.catalog-search.search-results-query input').first().waitFor({ timeout: 15000 });
+  await page.locator('.workspace-search input').first().waitFor({ timeout: 15000 });
   const diff = await page.evaluate(() => {
-    const box = document.querySelector('.catalog-search.search-results-query');
+    const box = document.querySelector('.workspace-search > label');
     const input = box.querySelector('input');
     const b = box.getBoundingClientRect();
     const i = input.getBoundingClientRect();
@@ -126,7 +127,7 @@ test('B13: the Atlas page does not overflow horizontally at the document level',
 
 test('B14: every Library select exposes a non-empty accessible name', async ({ page }) => {
   await page.goto('/#/library?q=access');
-  await expect(page.locator('#library-results .search-result-row').first()).toBeVisible({ timeout: 15000 });
+  await expect(page.locator('#library-results .workspace-result-row').first()).toBeVisible({ timeout: 15000 });
   const unnamed = await page.evaluate(() => {
     const selects = Array.from(document.querySelectorAll('select'));
     return selects.filter((s) => {

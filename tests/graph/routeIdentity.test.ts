@@ -45,6 +45,14 @@ test("unsupported state and arrival-state parameters are stripped", () => {
   );
   assert.equal(record.canonicalPath, "/record/nist-800-53/AC-2");
   assert.match(record.recoveryMessage, /removed/i);
+
+  const retiredWorkspaceFilters = [
+    canonicalizeHashLocation("/library?q=AC-2&objectType=control&controlFamily=AC&collection=legacy"),
+    canonicalizeHashLocation("/resources?q=oscal&lane=official&framework=nist&lifecycle=active&kind=tool&costType=free"),
+  ];
+  assert.equal(retiredWorkspaceFilters[0].canonicalPath, "/library?q=AC-2");
+  assert.equal(retiredWorkspaceFilters[1].canonicalPath, "/resources?q=oscal");
+  for (const result of retiredWorkspaceFilters) assert.match(result.recoveryMessage, /removed/i);
 });
 
 test("invalid comparison and Library boolean state still fail closed", () => {
@@ -68,7 +76,7 @@ test("Build and former Build-resource bookmarks retain their durable content", (
   );
   assert.equal(
     canonicalizeHashLocation("/build/resources?category=tools&lane=open_source").canonicalPath,
-    "/resources?lane=open_source",
+    "/resources",
   );
 });
 
@@ -147,7 +155,6 @@ test("durable Phase 3 view fields survive canonicalization", () => {
     ["/library", {
       q: "access control",
       kind: "requirements",
-      objectType: "control",
       publisher: "National Institute of Standards and Technology",
       connectedOnly: "true",
       sort: "identifier",

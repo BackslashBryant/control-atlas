@@ -464,17 +464,13 @@ test('route interactions keep canonical context and synchronize visible state', 
   assert.match(atlasMap, /buildStructuralChildren\(record\)/);
   assert.match(atlasMap, /relationshipGroup/);
   assert.doesNotMatch(atlasMap, /RelationshipExplorer/);
-  assert.match(explore, /unifiedResults\.slice\(0, visibleCount\)/);
-  assert.match(explore, /searchExploreResources/);
-  assert.match(explore, /searchResourceDocuments/);
-  assert.match(explore, /onNavigate\("commons-detail"/);
-  assert.match(explore, /kind: "record"/);
-  assert.match(explore, /kind: "resource"/);
+  assert.match(explore, /<WorkspaceTemplate/);
+  assert.match(explore, /rows\.slice\(0, visibleCount\)/);
+  assert.match(explore, /familyQualifiedRecordId/);
+  assert.match(explore, /plainEnglishRecordName/);
+  assert.match(explore, /areaPresentationForCatalog/);
   assert.match(explore, /data-result-class="published-record"/);
-  assert.match(explore, /item\.resourceType === "community_forum"/);
-  assert.match(explore, /resourceTypeLabel\(item\.resourceType\)/);
-  assert.match(explore, /resourceAccessLabel\(item\)/);
-  assert.doesNotMatch(explore, /item\.resourceType\.replaceAll/);
+  assert.doesNotMatch(explore, /searchExploreResources|searchResourceDocuments/);
   assert.match(searchOverlay, /Search Control Atlas/);
   assert.match(searchOverlay, /Published records/);
   assert.match(searchOverlay, /Tools and resources/);
@@ -484,8 +480,9 @@ test('route interactions keep canonical context and synchronize visible state', 
   assert.match(searchOverlay, /resourceAccessLabel\(doc\)/);
   assert.doesNotMatch(searchOverlay, /doc\.resourceLane\.replaceAll/);
   assert.doesNotMatch(searchOverlay, />\{doc\.resourceType\}</);
-  assert.match(explore, /One ranked view across published records/);
-  assert.match(explore, /No matching results found/);
+  assert.match(explore, /Search every published record and its sources/);
+  assert.match(explore, /Browse the Library/);
+  assert.match(explore, /No matching records found/);
 });
 
 test('template options use collapsed progressive disclosure and associated hints', () => {

@@ -193,7 +193,7 @@ test("global Search handles empty, IME, exact-ID, Enter, Clear, Close, and Escap
   await search.press("Enter");
   await expect(page).toHaveURL(/#\/search\?q=T1195\.002/);
   await waitForReady(page);
-  const title = await page.locator('.search-result-row[data-result-class="published-record"] h2').first().innerText();
+  const title = await page.locator('.workspace-result-row[data-result-class="published-record"] h3').first().innerText();
   expect((title.match(/T1195\.002/gi) || []).length).toBe(1);
   await page.getByRole("button", { name: "Open search" }).click();
   await page.getByRole("dialog", { name: "Search Control Atlas" }).getByRole("searchbox").fill("access control");
@@ -203,16 +203,16 @@ test("global Search handles empty, IME, exact-ID, Enter, Clear, Close, and Escap
 
 test("ranked search exposes desktop filters, sort, active chips, and mobile drawer", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/#/search?q=access&objectType=control&sort=identifier");
+  await page.goto("/#/search?q=access&kind=requirements&sort=identifier");
   await waitForReady(page);
-  await expect(page.locator(".search-filter-rail")).toBeVisible();
-  await expect(page.locator(".search-result-count")).toContainText(/result/);
-  await expect(page.getByLabel("Sort search results")).toHaveValue("identifier");
+  await expect(page.locator(".workspace-facet-rail")).toBeVisible();
+  await expect(page.locator(".workspace-result-count")).toContainText(/result/);
+  await expect(page.getByLabel("Sort Library results")).toHaveValue("identifier");
   await expect(page.locator(".search-result-groups")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: /Control/ }).first()).toBeVisible();
+  await expect(page.getByRole("button", { name: /Requirements/ }).first()).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole("button", { name: /Filters \(1\)/ }).click();
-  await expect(page.getByRole("dialog", { name: "Filter search results" })).toBeVisible();
+  await page.getByRole("button", { name: "Filters" }).click();
+  await expect(page.getByRole("dialog", { name: "Library filters" })).toBeVisible();
   await page.getByRole("button", { name: "Close filters" }).click();
 });
 

@@ -26,7 +26,8 @@ test("Resources is a first-class durable destination", async ({ page }) => {
   await waitForAppReady(page);
 
   await expect(page).toHaveURL(/#\/resources$/);
-  await expect(page.getByRole("heading", { name: "Find the ecosystem around the work" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Resources", level: 1 })).toBeVisible();
+  await expect(page.locator('[data-page-template="workspace"]')).toBeVisible();
   await expect(page.getByRole("heading", { name: "Browse eight practical collections" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Resources", exact: true })).toHaveAttribute("aria-current", "page");
 });
