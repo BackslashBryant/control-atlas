@@ -366,6 +366,32 @@ function connectStaticHome() {
     ?.setAttribute('data-app-ready', 'true');
 }
 
+function openReactNavigationMenuWhenReady() {
+  const openMenu = () => {
+    const toggle = rootElement.querySelector<HTMLElement>(
+      '[data-react-root] .navigation-menu-toggle',
+    );
+    if (!toggle) return false;
+    toggle.click();
+    return true;
+  };
+  if (openMenu()) return Promise.resolve(true);
+
+  return new Promise<boolean>((resolve) => {
+    const observer = new MutationObserver(() => {
+      if (!openMenu()) return;
+      window.clearTimeout(timeout);
+      observer.disconnect();
+      resolve(true);
+    });
+    const timeout = window.setTimeout(() => {
+      observer.disconnect();
+      resolve(false);
+    }, 3000);
+    observer.observe(reactRootElement, { childList: true, subtree: true });
+  });
+}
+
 function connectStaticHeader() {
   rootElement
     .querySelectorAll<HTMLElement>('[data-static-header] [data-route]')
@@ -377,16 +403,21 @@ function connectStaticHeader() {
         if (target) navigateFromStaticHome(target);
       });
     });
-  rootElement
-    .querySelector<HTMLElement>('[data-static-menu-boot]')
-    ?.addEventListener('click', () => {
+  const staticMenuToggle = rootElement.querySelector<HTMLElement>(
+    '[data-static-menu-boot]',
+  );
+  staticMenuToggle?.setAttribute(
+    'aria-label',
+    window.matchMedia('(max-width: 1023px)').matches
+      ? 'Open navigation menu'
+      : 'Open more pages',
+  );
+  staticMenuToggle?.addEventListener('click', () => {
       if (!beginRouteTransition('Opening navigation', 'static:menu')) return;
-      void bootReactApp().then((booted) => {
+      void bootReactApp().then(async (booted) => {
         if (!booted) return;
+        await openReactNavigationMenuWhenReady();
         completeRouteTransition();
-        rootElement
-          .querySelector<HTMLElement>('[data-react-root] .mobile-nav-toggle')
-          ?.click();
       });
     });
   rootElement
@@ -425,15 +456,9 @@ async function bootReactApp() {
   window.removeEventListener('keydown', onStaticSearchShortcut);
   stopBrandRotation();
   const staticHome = rootElement.querySelector<HTMLElement>('[data-static-home]');
-  staticHome?.setAttribute('hidden', '');
-  const staticHomeApp = staticHome?.querySelector<HTMLElement>('#app');
-  if (staticHomeApp) staticHomeApp.id = 'static-home-app';
-  // #app was already handed over; #workspace was not, so every hydrated route
-  // carried two <main id="workspace"> elements — a duplicate id, a second main
-  // landmark, and an ambiguous target for the skip link.
-  const staticHomeWorkspace =
-    staticHome?.querySelector<HTMLElement>('#workspace');
-  if (staticHomeWorkspace) staticHomeWorkspace.id = 'static-home-workspace';
+  staticHome?.remove();
+  // React owns the complete route once it boots. Removing the static Home node
+  // atomically prevents its landmark from surviving beside the route landmark.
   syncProgressiveShell();
   window.removeEventListener('hashchange', onLocationChange);
   window.removeEventListener('popstate', onLocationChange);
@@ -453,6 +478,10 @@ async function bootReactApp() {
     .catch((error: unknown) => {
       reactBoot = null;
       reactModules = null;
+      const recoveringHome = isHomeHash();
+      if (recoveringHome && staticHome && !staticHome.isConnected) {
+        rootElement.insertBefore(staticHome, reactRootElement);
+      }
       completeRouteTransition();
       const boundary = rootElement.querySelector<HTMLElement>('.home-trust-boundary');
       if (boundary) {
@@ -462,10 +491,8 @@ async function bootReactApp() {
           ' The interactive workspace could not load. Reload this page to try again.',
         );
       }
-      if (isHomeHash()) {
+      if (recoveringHome) {
         staticHome?.removeAttribute('hidden');
-        if (staticHomeApp) staticHomeApp.id = 'app';
-        if (staticHomeWorkspace) staticHomeWorkspace.id = 'workspace';
         rootElement.dataset.reactActive = 'false';
         window.addEventListener('keydown', onStaticSearchShortcut);
         startBrandRotation();

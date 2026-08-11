@@ -43,7 +43,6 @@
             <span class="brand-key">Alt</span>
             <span class="brand-plus">+</span>
             <span class="brand-key brand-key--active">
-              <span class="brand-key-sizer">Crosswalk</span>
               <span class="brand-key-word word-enter" data-brand-word>Explore</span>
             </span>
           </span>
@@ -53,18 +52,20 @@
         <a data-route="#/atlas" href="#/atlas">Atlas</a>
         <a data-route="#/library" href="#/library">Library</a>
         <a data-route="#/resources" href="#/resources">Resources</a>
-        <a data-route="#/guides" href="#/guides">Guides</a>
       </nav>
       <div class="header-actions">
         <button aria-label="Open search" class="button button--secondary header-search-trigger" data-static-search-open type="button"><svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><span>Search</span></button>
-        <nav aria-label="Utility navigation" class="header-actions-text">
-          <a data-route="#/sources" href="#/sources">Sources</a>
-          <a data-route="#/about" href="#/about">About</a>
-        </nav>
-        <button aria-label="Open navigation menu" class="mobile-nav-toggle" data-static-menu-boot type="button">
-          <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="20">
-            <path d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
+        <button aria-label="Open more pages" class="navigation-menu-toggle" data-static-menu-boot type="button">
+          <span aria-hidden="true" class="navigation-menu-icon navigation-menu-icon--desktop">
+            <svg fill="currentColor" height="20" viewBox="0 0 24 24" width="20">
+              <circle cx="5" cy="12" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="19" cy="12" r="1.6"></circle>
+            </svg>
+          </span>
+          <span aria-hidden="true" class="navigation-menu-icon navigation-menu-icon--mobile">
+            <svg fill="none" height="20" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="20">
+              <path d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </span>
         </button>
       </div>
     </header>

@@ -53,7 +53,7 @@ test('shell identifies Control Atlas and progressively boots the React workspace
   assert.equal(packageJson.dependencies['react-router'], undefined);
 });
 
-test('shell exposes four product entrances and two subordinate utilities', () => {
+test('shell exposes three primary destinations and three overflow pages', () => {
   assert.doesNotMatch(html, /btn-toggle-mode/);
   assert.doesNotMatch(html, /Plain labels/);
   assert.doesNotMatch(html, /Technical labels/);
@@ -68,7 +68,12 @@ test('shell exposes four product entrances and two subordinate utilities', () =>
   assert.match(routeIdentity, /Sources/);
   assert.match(routeIdentity, /About/);
   assert.match(navigation, /PRIMARY_SECTION_LABEL = "Explore Control Atlas"/);
-  assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "atlas-map"[\s\S]*view: "search"[\s\S]*view: "commons"[\s\S]*view: "patterns"/);
+  assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "atlas-map"[\s\S]*view: "search"[\s\S]*view: "commons"/);
+  assert.doesNotMatch(
+    navigation.match(/PRIMARY_NAV_ITEMS:[\s\S]*?\n\];/)?.[0] || "",
+    /view: "patterns"/,
+  );
+  assert.match(navigation, /OVERFLOW_NAV_ITEMS[\s\S]*GUIDES_NAV_ITEM[\s\S]*UTILITY_NAV_ITEMS/);
   assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
   assert.doesNotMatch(navigation, /view: "start-here"|view: "matrix"|view: "templates"/);
   assert.doesNotMatch(navigation, /The framework/);

@@ -1,0 +1,157 @@
+import { expect, test } from "@playwright/test";
+
+import {
+  attachPageDiagnostics,
+  gotoApp,
+  waitForAppReady,
+} from "./support.mjs";
+
+test.beforeEach(async ({ page }) => {
+  attachPageDiagnostics(page);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+});
+
+test("WS0 direct routes own exactly one main landmark without Home stacked above them", async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+
+  const routes = [
+    { path: "/#/", view: "home", marker: page.locator(".home-entry") },
+    { path: "/#/atlas", view: "atlas-map", marker: page.getByRole("application", { name: "Interactive Atlas map hierarchy" }) },
+    { path: "/#/library", view: "search", marker: page.getByRole("heading", { name: "Library", exact: true }) },
+    { path: "/#/resources", view: "commons", marker: page.locator(".resources-directory-header") },
+    { path: "/#/guides", view: "patterns", marker: page.getByRole("heading", { name: "Guides", exact: true }) },
+    { path: "/#/record/nist-800-53/AC-2", view: "library-detail", marker: page.locator("#workspace h1") },
+    { path: "/#/compare", view: "matrix" },
+    { path: "/#/build", view: "templates" },
+    { path: "/#/sources", view: "sources" },
+    { path: "/#/about", view: "about" },
+    { path: "/#/start", view: "start-here" },
+  ];
+
+  for (const { path, view, marker } of routes) {
+    await gotoApp(page, path);
+    await page.reload();
+    await waitForAppReady(page, { allowPartial: true });
+
+    await expect(page.locator("main")).toHaveCount(1);
+    await expect(page.locator("main#workspace")).toHaveCount(1);
+    await expect(page.locator("#app")).toHaveAttribute("data-view", view);
+    await expect(page.locator(".home-entry")).toHaveCount(
+      view === "home" ? 1 : 0,
+    );
+    await expect(page.locator("[data-static-home]")).toHaveCount(
+      view === "home" ? 1 : 0,
+    );
+    if (!marker) continue;
+
+    await expect(marker).toBeVisible({ timeout: 30_000 });
+
+    const top = await marker.evaluate((element) =>
+      element.getBoundingClientRect().top
+    );
+    expect(top, `${path} content must begin in the first viewport`).toBeLessThan(900);
+  }
+});
+
+test("WS0 desktop header has three primary destinations, Search, and one overflow", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await gotoApp(page, "/#/library");
+  await waitForAppReady(page, { allowPartial: true });
+
+  const primary = page.getByRole("navigation", { name: "Primary navigation" });
+  await expect(primary.getByRole("link")).toHaveText([
+    "Atlas",
+    "Library",
+    "Resources",
+  ]);
+  await expect(page.getByRole("button", { name: "Open search" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open navigation menu" })).toHaveCount(0);
+  await expect(page.locator(".brand-key-sizer")).toHaveCount(0);
+  await expect(page.locator("header.site-header .brand-key-word:visible")).toHaveCount(1);
+
+  await page.getByRole("button", { name: "Open more pages" }).click();
+  const overflow = page.getByRole("navigation", { name: "More pages" });
+  await expect(overflow).toBeVisible();
+  await expect(overflow.getByRole("link")).toHaveText([
+    "Guides",
+    "Sources",
+    "About",
+  ]);
+});
+
+test("WS0 static Home hands its one menu control to the responsive React header", async ({
+  page,
+}) => {
+  for (const { width, openLabel, navigationLabel } of [
+    { width: 1440, openLabel: "Open more pages", navigationLabel: "More pages" },
+    { width: 800, openLabel: "Open navigation menu", navigationLabel: "Primary navigation (mobile)" },
+  ]) {
+    await page.setViewportSize({ width, height: 900 });
+    await gotoApp(page, "/#/");
+    await page.reload();
+    await expect(page.locator("#root")).toHaveAttribute("data-react-active", "false");
+    await expect(page.locator("main")).toHaveCount(1);
+
+    await page.getByRole("button", { name: openLabel }).click();
+    await expect(page.getByRole("navigation", { name: navigationLabel })).toBeVisible({
+      timeout: 10_000,
+    });
+    await expect(page.locator("main")).toHaveCount(1);
+  }
+});
+
+test("WS0 restores an interactive Home landmark when React boot fails", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.route(/\/assets\/App-[^/]+\.js$/, (route) => route.abort());
+  await gotoApp(page, "/#/");
+  await page.reload();
+
+  await page.getByRole("button", { name: "Open more pages" }).click();
+  const homeMain = page.locator("[data-static-home] main#workspace");
+  await expect(homeMain).toBeVisible({ timeout: 10_000 });
+  await expect(homeMain).not.toHaveAttribute("inert", "");
+  await expect(homeMain).not.toHaveAttribute("aria-busy", "true");
+  await expect(page.locator(".home-trust-boundary")).toContainText(
+    "The interactive workspace could not load",
+  );
+  await expect(page.locator("main")).toHaveCount(1);
+});
+
+test("WS0 tablet and mobile use one navigation control with every destination", async ({
+  page,
+}) => {
+  for (const width of [800, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await gotoApp(page, "/#/about");
+    await waitForAppReady(page, { allowPartial: true });
+
+    await expect(
+      page.getByRole("navigation", { name: "Primary navigation" }),
+    ).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Open more pages" })).toHaveCount(0);
+
+    const menuButton = page.getByRole("button", { name: "Open navigation menu" });
+    await expect(menuButton).toBeVisible();
+    await menuButton.click();
+
+    const sheet = page.getByRole("navigation", { name: "Primary navigation (mobile)" });
+    await expect(sheet).toBeVisible();
+    await expect(sheet.getByRole("link")).toHaveText([
+      "Atlas",
+      "Library",
+      "Resources",
+      "Guides",
+      "Sources",
+      "About",
+    ]);
+    await page.keyboard.press("Escape");
+    await expect(sheet).toHaveCount(0);
+  }
+});

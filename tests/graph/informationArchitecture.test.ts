@@ -8,18 +8,23 @@ import {
   libraryKindForRawType,
   rawTypesForKind,
 } from "../../src/ui/lib/informationArchitecture";
-import { PRIMARY_NAV_ITEMS, UTILITY_NAV_ITEMS } from "../../src/ui/lib/navigation";
+import {
+  OVERFLOW_NAV_ITEMS,
+  PRIMARY_NAV_ITEMS,
+  UTILITY_NAV_ITEMS,
+} from "../../src/ui/lib/navigation";
 
-test("Epic 13 exposes the four product entrances and two utilities", () => {
+test("Epic 14 exposes three primary destinations and three overflow pages", () => {
   assert.deepEqual(
     PRIMARY_NAV_ITEMS.map(({ label, path }) => [label, path]),
-    [["Atlas", "/atlas"], ["Library", "/library"], ["Resources", "/resources"], ["Guides", "/guides"]],
+    [["Atlas", "/atlas"], ["Library", "/library"], ["Resources", "/resources"]],
   );
   assert.deepEqual(
-    UTILITY_NAV_ITEMS.map(({ label, path }) => [label, path]),
-    [["Sources", "/sources"], ["About", "/about"]],
+    OVERFLOW_NAV_ITEMS.map(({ label, path }) => [label, path]),
+    [["Guides", "/guides"], ["Sources", "/sources"], ["About", "/about"]],
   );
-  assert.equal(new Set([...PRIMARY_NAV_ITEMS, ...UTILITY_NAV_ITEMS].map(({ path }) => path)).size, 6);
+  assert.deepEqual(UTILITY_NAV_ITEMS.map(({ label }) => label), ["Sources", "About"]);
+  assert.equal(new Set([...PRIMARY_NAV_ITEMS, ...OVERFLOW_NAV_ITEMS].map(({ path }) => path)).size, 6);
 });
 
 test("Library uses the canonical two-tier taxonomy", () => {

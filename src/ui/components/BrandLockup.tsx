@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import {
   BRAND_ACTIONS,
-  LONGEST_BRAND_WORD,
   subscribeBrandRotation,
 } from "../../shared/brand-rotation";
 
@@ -47,7 +46,6 @@ export function BrandFlourish() {
         <span className="brand-key">Alt</span>
         <span className="brand-plus">+</span>
         <span className="brand-key brand-key--active">
-          <span className="brand-key-sizer">{LONGEST_BRAND_WORD}</span>
           <span className="brand-key-word">{word}</span>
         </span>
       </span>

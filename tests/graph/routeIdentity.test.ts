@@ -93,7 +93,7 @@ test("every app state has one approved display identity", () => {
   assert.equal(routeIdentityFor("about").path, "/about");
 });
 
-test("the four product entrances and two utilities own consistent active navigation", () => {
+test("the three primary destinations and three overflow pages own consistent active navigation", () => {
   assert.equal(selectedNavFor("start-here"), null);
   for (const view of ["search", "catalog-detail", "matrix"] as const) {
     assert.equal(selectedNavFor(view), "search", view);

@@ -1720,15 +1720,76 @@ details > summary {
   font: 400 var(--ca-text-sm) / 1.5 var(--ca-font-body);
 }
 
-/* Epic 12's three primary doors and two utilities fit from 1024px upward.
-   Keep this breakpoint aligned with TopNav.tsx. */
+/* The three primary destinations fit from 1024px upward. Below that, one
+   navigation sheet owns both primary destinations and overflow pages. */
 @media (max-width: 1023px) {
+  .site-header {
+    backdrop-filter: none;
+  }
+
   .site-header .primary-nav {
     display: none;
   }
 
   .header-actions .mobile-nav-toggle {
     display: inline-flex;
+  }
+
+  .navigation-menu-icon--desktop {
+    display: none;
+  }
+
+  .navigation-menu-icon--mobile {
+    display: inline-flex;
+  }
+
+  .mobile-nav-sheet {
+    position: fixed;
+    top: var(--ca-header-height);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 40;
+    display: grid;
+    padding: var(--ca-space-4);
+    padding-bottom: calc(var(--ca-space-4) + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--ca-border);
+    background: var(--ca-surface-deep);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .mobile-nav-sheet nav,
+  .mobile-nav-sheet-group {
+    display: grid;
+    align-content: start;
+    gap: var(--ca-space-2);
+  }
+
+  .mobile-nav-sheet-group + .mobile-nav-sheet-group {
+    margin-top: var(--ca-space-4);
+  }
+
+  .mobile-nav-sheet-group-label {
+    padding: 0 var(--ca-space-3);
+  }
+
+  .mobile-nav-sheet nav a {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    gap: var(--ca-space-2);
+    padding: var(--ca-space-2) var(--ca-space-3);
+    border: 1px solid transparent;
+    border-radius: var(--ca-radius-sm);
+    color: var(--ca-text);
+    text-decoration: none;
+  }
+
+  .mobile-nav-sheet nav a:is(:hover, :focus-visible, .active),
+  .mobile-nav-sheet nav a[aria-current="page"] {
+    border-color: var(--ca-border-strong);
+    background: color-mix(in srgb, var(--ca-primary) 10%, transparent);
   }
 }
 
@@ -1772,14 +1833,8 @@ details > summary {
   }
 
   .mobile-nav-sheet {
-    /* This rule wins the cascade over the equal-specificity `.mobile-nav-sheet`
-       rule in surfaces.css (same file load order), so its sizing is what
-       actually governs. The old `bottom: auto` shrink-wrapped to content
-       height — with 5 nav items post-Commons-fold (W4) that no longer
-       reached the viewport edge the way `max-height: calc(100dvh - 76px)`
-       alone implied. An explicit height (not just top+bottom inset, which
-       measured short on this grid container) guarantees full-page coverage
-       regardless of item count. */
+    /* At narrow widths, align the sheet with the inset header. An explicit
+       height guarantees full-page coverage regardless of item count. */
     inset: 64px var(--ca-space-3) 0;
     height: calc(100dvh - 64px);
     overflow-y: auto;

@@ -3,11 +3,12 @@ import { expect, test } from "@playwright/test";
 import { attachPageDiagnostics, gotoApp, waitForAppReady } from "./support.mjs";
 
 const NAV = [
-  { label: "Start here", path: "/start" },
-  { label: "Library", path: "/library" },
-  { label: "Guides", path: "/guides" },
-  { label: "Sources", path: "/sources" },
-  { label: "About", path: "/about" },
+  { label: "Atlas", path: "/atlas", placement: "primary" },
+  { label: "Library", path: "/library", placement: "primary" },
+  { label: "Resources", path: "/resources", placement: "primary" },
+  { label: "Guides", path: "/guides", placement: "overflow" },
+  { label: "Sources", path: "/sources", placement: "overflow" },
+  { label: "About", path: "/about", placement: "overflow" },
 ];
 
 test.beforeEach(async ({ page }) => {
@@ -15,7 +16,7 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
-test("Phase 3 header has three primary doors, two utilities, and no overflow from 1024px", async ({ page }) => {
+test("Epic 14 header has three primary destinations and one overflow from 1024px", async ({ page }) => {
   test.setTimeout(120_000);
   for (const width of [1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
@@ -23,11 +24,16 @@ test("Phase 3 header has three primary doors, two utilities, and no overflow fro
     await waitForAppReady(page, { allowPartial: true });
 
     const primary = page.locator('header.site-header nav[aria-label="Primary navigation"]');
-    const utility = page.locator('header.site-header nav[aria-label="Utility navigation"]');
     await expect(primary.locator("a[href]")).toHaveCount(3);
-    await expect(utility.locator("a[href]")).toHaveCount(2);
-    await expect(primary.locator("a[href]")).toHaveText(["Start here", "Library", "Guides"]);
-    await expect(utility.locator("a[href]")).toHaveText(["Sources", "About"]);
+    await expect(primary.locator("a[href]")).toHaveText(["Atlas", "Library", "Resources"]);
+    await expect(page.locator('header.site-header nav[aria-label="Utility navigation"]')).toHaveCount(0);
+    await page.getByRole("button", { name: "Open more pages" }).click();
+    await expect(page.getByRole("navigation", { name: "More pages" }).getByRole("link")).toHaveText([
+      "Guides",
+      "Sources",
+      "About",
+    ]);
+    await page.keyboard.press("Escape");
     const geometry = await page.locator("header.site-header").evaluate((header) => ({
       clientWidth: header.clientWidth,
       fontSizes: [...header.querySelectorAll('nav[aria-label="Primary navigation"] a[href]')].map((link) => globalThis.getComputedStyle(link).fontSize),
@@ -42,13 +48,28 @@ test("Phase 3 header has three primary doors, two utilities, and no overflow fro
   await waitForAppReady(page, { allowPartial: true });
   await expect(page.locator(".route-transition")).toBeHidden();
   for (const destination of NAV) {
-    const navigationName = ["Sources", "About"].includes(destination.label)
-      ? "Utility navigation"
-      : "Primary navigation";
-    await page.locator(`header.site-header nav[aria-label="${navigationName}"]`).getByRole("link", { name: destination.label, exact: true }).click();
+    if (destination.placement === "overflow") {
+      await page.getByRole("button", { name: "Open more pages" }).click();
+      await page.getByRole("navigation", { name: "More pages" })
+        .getByRole("link", { name: destination.label, exact: true })
+        .click();
+    } else {
+      await page.getByRole("navigation", { name: "Primary navigation" })
+        .getByRole("link", { name: destination.label, exact: true })
+        .click();
+    }
     await expect(page).toHaveURL(new RegExp(`#${destination.path}$`));
-    await expect(page.locator("#workspace h1")).toHaveText(destination.label);
-    await expect(page.locator(`header.site-header nav[aria-label="${navigationName}"]`).getByRole("link", { name: destination.label, exact: true })).toHaveAttribute("aria-current", "page");
+    if (destination.placement === "overflow") {
+      await page.getByRole("button", { name: "Open more pages" }).click();
+      await expect(page.getByRole("navigation", { name: "More pages" })
+        .getByRole("link", { name: destination.label, exact: true }))
+        .toHaveAttribute("aria-current", "page");
+      await page.keyboard.press("Escape");
+    } else {
+      await expect(page.getByRole("navigation", { name: "Primary navigation" })
+        .getByRole("link", { name: destination.label, exact: true }))
+        .toHaveAttribute("aria-current", "page");
+    }
   }
 });
 

@@ -14,10 +14,7 @@ test("load resilience shows Search skeleton and allows offline navigation", asyn
   page,
 }) => {
   test.setTimeout(60000);
-  // 2026-08-03: utility navigation grew to 5 items — see the compactNavigation
-  // breakpoint comment in styles/orbital.css. The bare Playwright default
-  // (1280x720) now renders the (correctly) collapsed mobile-sheet header
-  // instead of the primary nav this test exercises directly.
+  // Keep the desktop header active so this test can exercise its overflow.
   await page.setViewportSize({ width: 1600, height: 900 });
   await expect.poll(() => page.evaluate(() => window.innerWidth)).toBe(1600);
   await page.route("**/library-search.json**", async (route) => {
@@ -28,10 +25,8 @@ test("load resilience shows Search skeleton and allows offline navigation", asyn
   await gotoApp(page, "/#/search");
   await expect(page.locator("#root")).toHaveAttribute("data-react-active", "true", { timeout: 15000 });
   await expect(page.locator(".skeleton-card").first()).toBeVisible();
-  const primaryNav = page.getByRole("navigation", {
-    name: "Primary navigation",
-  });
-  await primaryNav
+  await page.getByRole("button", { name: "Open more pages" }).click();
+  await page.getByRole("navigation", { name: "More pages" })
     .getByRole("link", { name: "Guides", exact: true })
     .click();
   await expect(page).toHaveURL(/#\/guides/);
