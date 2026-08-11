@@ -49,6 +49,9 @@ test("Template D keeps the Atlas canvas first and honors the locked dock geometr
   await expect(page.getByText("See the landscape, then drill in.", { exact: true })).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Jump to a record" })).toBeVisible();
   await expect(template.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
+  await expect(inspector.getByText("Atlas overview", { exact: true })).toBeVisible();
+  await expect(inspector).toContainText("A single view of the cybersecurity areas and the publications organized within them.");
+  await expect(template).not.toContainText(/\b(?:trunks?|limbs?|twigs?|acorns?)\b/i);
   await expect(template.locator(".atlas-ancestry > .atlas-choice-trail")).toHaveCount(0);
   await expect(workbench).toBeVisible();
   await expect(canvas.getByRole("application", { name: "Interactive Atlas map hierarchy" })).toBeVisible();
@@ -114,6 +117,7 @@ test("compact Atlas preserves direct keyboard drill without horizontal overflow"
   const tree = page.getByRole("tree", { name: "Atlas map hierarchy" });
   await expect(tree).toBeVisible();
   await expect(tree.getByRole("treeitem")).toHaveCount(13);
+  await expect(tree.getByRole("treeitem", { name: /Statutes 7 instruments/ })).toBeVisible();
   await expect(tree.getByRole("treeitem", { name: /Operations/ })).toBeDisabled();
   const compliance = tree.getByRole("treeitem", { name: /Compliance/ });
   await compliance.focus();

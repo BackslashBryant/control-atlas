@@ -241,6 +241,11 @@ function CompactAtlasTree(props: {
       {props.nodes.map((flowNode) => {
         const node = flowNode.data.node;
         const empty = flowNode.data.empty;
+        const detail = empty
+          ? "Nothing mapped yet."
+          : node.nodeType === "authority_aggregate"
+            ? `${node.childCount.toLocaleString()} instruments`
+            : `${node.descendantRecordCount.toLocaleString()} records`;
         const level = node.level === "area" ? 2 : node.level === "publication" ? 3 : node.level === "summary" ? 4 : 1;
         return (
           <button
@@ -256,7 +261,7 @@ function CompactAtlasTree(props: {
             type="button"
           >
             <strong>{node.label}</strong>
-            <span>{empty ? "Nothing mapped yet." : `${node.descendantRecordCount.toLocaleString()} records`}</span>
+            <span>{detail}</span>
           </button>
         );
       })}
@@ -430,6 +435,7 @@ export function AtlasTree(props: AtlasTreeProps) {
 
   const focusedNode = focusId ? model.nodesById.get(focusId) || null : null;
   const selectedNode = rendered.find((node) => node.id === selectedId) || focusedNode || model.trunk;
+  const selectedNodeIsRoot = selectedNode.id === model.trunk.id;
   const selectedMembers = isAggregate(selectedNode)
     ? selectedNode.memberIds.map((id) => model.nodesById.get(id)).filter((node): node is AtlasModelNode => Boolean(node))
     : [];
@@ -609,9 +615,9 @@ export function AtlasTree(props: AtlasTreeProps) {
         </div>
 
         <aside aria-labelledby="atlas-inspector-title" className="atlas-tree__dock atlas-tree__inspector">
-          <p className="eyebrow">{nodeKind(selectedNode).replaceAll("-", " ")}</p>
+          <p className="eyebrow">{selectedNodeIsRoot ? "Atlas overview" : nodeKind(selectedNode).replaceAll("-", " ")}</p>
           <h3 id="atlas-inspector-title">{selectedNode.label}</h3>
-          <p>{selectedNode.blurb}</p>
+          <p>{selectedNodeIsRoot ? "A single view of the cybersecurity areas and the publications organized within them." : selectedNode.blurb}</p>
           {selectedNode.level === "area" && selectedNode.descendantRecordCount === 0 ? (
             <p className="atlas-tree__empty-state" role="status">Nothing mapped yet.</p>
           ) : null}
