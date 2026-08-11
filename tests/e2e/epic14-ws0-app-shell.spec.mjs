@@ -21,7 +21,7 @@ test("WS0 direct routes own exactly one main landmark without Home stacked above
     { path: "/#/", view: "home", marker: page.locator(".home-entry") },
     { path: "/#/atlas", view: "atlas-map", marker: page.getByRole("application", { name: "Interactive Atlas map hierarchy" }) },
     { path: "/#/library", view: "search", marker: page.getByRole("heading", { name: "Library", exact: true }) },
-    { path: "/#/resources", view: "commons", marker: page.locator(".resources-directory-header") },
+    { path: "/#/resources", view: "commons", marker: page.getByRole("heading", { name: "Resources", exact: true, level: 1 }) },
     { path: "/#/guides", view: "patterns", marker: page.getByRole("heading", { name: "Guides", exact: true }) },
     { path: "/#/record/nist-800-53/AC-2", view: "library-detail", marker: page.locator("#workspace h1") },
     { path: "/#/compare", view: "matrix" },

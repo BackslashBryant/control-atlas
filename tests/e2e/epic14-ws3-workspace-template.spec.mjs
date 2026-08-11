@@ -109,7 +109,7 @@ test("WS3 compact Library rows preserve a readable vertical information hierarch
     ];
     const boxes = selectors.map((selector) => element.querySelector(selector)?.getBoundingClientRect());
     return {
-      direction: getComputedStyle(element).flexDirection,
+      direction: element.ownerDocument.defaultView.getComputedStyle(element).flexDirection,
       overlaps: boxes.slice(1).some((box, index) => Boolean(
         box && boxes[index] && box.top < boxes[index].bottom - 1,
       )),

@@ -391,6 +391,7 @@ test('result-affecting controls have one visible workbench owner', () => {
     'utf8',
   );
   const resources = readFileSync('src/ui/pages/CommonsPage.tsx', 'utf8');
+  const workspaceTemplate = readFileSync('src/ui/components/WorkspaceTemplate.tsx', 'utf8');
   const sources = readFileSync('src/ui/pages/SourcesPage.tsx', 'utf8');
   const record = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
   const surfaces = readFileSync('styles/surfaces.css', 'utf8');
@@ -403,13 +404,15 @@ test('result-affecting controls have one visible workbench owner', () => {
 
   for (const [source, target] of [
     [catalog, 'catalog-inventory-results'],
-    [resources, 'resources-results'],
     [sources, 'source-register-results'],
   ]) {
     assert.match(source, new RegExp(`targetId="${target}"`));
     assert.match(source, new RegExp(`id="${target}"`));
     assert.match(source, /data-control-results/);
   }
+  assert.match(resources, /resultsId="resources-results"/);
+  assert.match(workspaceTemplate, /id=\{props\.resultsId\}/);
+  assert.match(resources, /data-control-results/);
 
   assert.match(catalog, /targetId="catalog-record-results"/);
   assert.match(
@@ -440,7 +443,7 @@ test('Build stays locally coherent while Resources owns resource discovery', () 
   assert.match(buildPage, /<BuildLocalNav/);
   assert.doesNotMatch(resourcesPage, /BuildLocalNav/);
   assert.doesNotMatch(resourceDetail, /BuildLocalNav/);
-  assert.match(resourcesPage, /<p className="eyebrow">Resources<\/p>/);
+  assert.match(resourcesPage, /title="Resources"/);
   assert.match(
     resourceDetail,
     /<AppLink onNavigate=\{onNavigate\} view="commons"><IconArrowLeft[^>]+\/>Back<\/AppLink>/,

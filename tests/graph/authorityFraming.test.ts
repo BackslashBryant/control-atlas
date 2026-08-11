@@ -37,7 +37,7 @@ test("curated organization is positively attributed to Control Atlas", () => {
 });
 
 test("Atlas names the product surface consistently", () => {
-  assert.match(explorePage, />Atlas map<\/button>/);
+  assert.match(explorePage, /label: "Map", value: "map"/);
   assert.match(objectDetailPage, /See in Atlas/);
   assert.match(atlasPage, /: "Atlas map"/);
   assert.match(routeIdentity, /label: "Atlas"/);
