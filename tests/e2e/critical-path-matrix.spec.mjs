@@ -164,8 +164,11 @@ test("critical path: record reading page uses a list and keeps the graph in Atla
 
   const connections = page.locator('[data-record-section="connections"]');
   await expect(connections).toBeVisible();
-  await expect(connections.locator("ul")).toBeVisible();
+  expect(await connections.locator("ul").count()).toBeGreaterThan(0);
+  await expect(connections.locator("ul").first()).toBeVisible();
   await expect(page.locator(".record-template .react-flow")).toHaveCount(0);
+  await page.locator(".record-actions-menu summary").click();
+  await expect(page.locator(".record-actions-menu")).toHaveAttribute("open", "");
   await expect(page.getByRole("link", { name: "See in Atlas", exact: true })).toBeVisible();
 });
 

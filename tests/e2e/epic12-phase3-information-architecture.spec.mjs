@@ -143,12 +143,14 @@ test("Phase 3 record identity is canonical across Library, Atlas, and direct pat
   await waitForAppReady(page, { allowPartial: true });
   await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", canonicalBreadcrumb);
   await expect(page.locator('header.site-header nav a[aria-current="page"]')).toHaveCount(0);
+  await page.locator(".record-actions-menu summary").click();
+  await expect(page.locator(".record-actions-menu")).toHaveAttribute("open", "");
   await expect(page.getByRole("link", { name: "See in Atlas", exact: true })).toBeVisible();
 
   await gotoApp(page, "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page, { allowPartial: true });
   await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", canonicalBreadcrumb);
-  await expect(page.locator('header.site-header nav[aria-label="Primary navigation"] a[aria-current="page"]')).toHaveText("Library");
+  await expect(page.locator('header.site-header nav[aria-label="Primary navigation"] a[aria-current="page"]')).toHaveText("Atlas");
 
   await gotoApp(page, "/#/record/nist-800-53/AC-2?from=search&returnTo=%2Flibrary");
   await waitForAppReady(page, { allowPartial: true });
