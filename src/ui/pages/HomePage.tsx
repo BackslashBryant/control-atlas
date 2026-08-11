@@ -34,7 +34,6 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
       <div className="home-hero">
         <div className="home-hero-lead">
           <header className="home-entry-header">
-            <p className="eyebrow">{HOME_CONTENT.eyebrow}</p>
             <h1 id="home-title">{HOME_CONTENT.headline}</h1>
             <p className="home-product-identity">{HOME_CONTENT.definition}</p>
           </header>
@@ -91,9 +90,6 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
         </div>
       </nav>
 
-      <aside className="home-trust-boundary">
-        <p>{HOME_CONTENT.trust}</p>
-      </aside>
     </section>
   );
 }

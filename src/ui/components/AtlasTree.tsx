@@ -109,14 +109,14 @@ function AtlasTreeNodeView({ data, selected }: NodeProps<AtlasFlowNode>) {
     ? areaCssVariables(areaPresentation) as CSSProperties
     : undefined;
   const detail = empty
-    ? "Nothing mapped yet."
+    ? "No records yet."
     : semanticLevel === "orientation"
     ? node.nodeType === "authority_aggregate"
       ? `${node.childCount.toLocaleString()} instruments`
       : `${node.descendantRecordCount.toLocaleString()} records`
     : semanticLevel === "discovery"
       ? node.level === "publication"
-        ? `${node.publicationType || "Publication"} · ${node.descendantRecordCount.toLocaleString()} records · ${mappingDegree.toLocaleString()} mapped records`
+        ? `${node.publicationType || "Publication"} · ${node.descendantRecordCount.toLocaleString()} records · ${mappingDegree.toLocaleString()} related records`
         : `${node.childCount.toLocaleString()} direct branches · ${node.descendantRecordCount.toLocaleString()} records`
       : node.mandateNote || node.blurb;
   return (
@@ -242,7 +242,7 @@ function CompactAtlasTree(props: {
         const node = flowNode.data.node;
         const empty = flowNode.data.empty;
         const detail = empty
-          ? "Nothing mapped yet."
+          ? "No records yet."
           : node.nodeType === "authority_aggregate"
             ? `${node.childCount.toLocaleString()} instruments`
             : `${node.descendantRecordCount.toLocaleString()} records`;
@@ -543,7 +543,7 @@ export function AtlasTree(props: AtlasTreeProps) {
                       <i aria-hidden="true" />
                       <span>
                         <strong>{area.label}</strong>
-                        <small>{empty ? "Nothing mapped yet." : `${area.descendantRecordCount.toLocaleString()} records`}</small>
+                        <small>{empty ? "No records yet." : `${area.descendantRecordCount.toLocaleString()} records`}</small>
                       </span>
                     </button>
                   </li>
@@ -555,10 +555,10 @@ export function AtlasTree(props: AtlasTreeProps) {
           <details className="atlas-tree__legend">
             <summary>Legend</summary>
             <div aria-label="Atlas map relationship legend">
-              <span><i className="is-authority" />Authority trace</span>
-              <span><i className="is-organizing" />Control Atlas structure</span>
-              <span><i className="is-published" />Publisher hierarchy</span>
-              <span><i className="is-mapping" />Sideways mapping</span>
+              <span><i className="is-authority" />Authority</span>
+              <span><i className="is-organizing" />Atlas category</span>
+              <span><i className="is-published" />Publication structure</span>
+              <span><i className="is-mapping" />Mappings</span>
             </div>
             {!focusId ? (
               <div aria-label="Publication mandate kinds" className="atlas-tree__mandate-key">
@@ -571,12 +571,12 @@ export function AtlasTree(props: AtlasTreeProps) {
 
           {trace.length ? (
             <details className="atlas-tree__trace" data-authority-trace={trace.map((hop) => hop.id).join(">")}>
-              <summary>Trace back to authority</summary>
+              <summary>Authority</summary>
               <ol>
                 {trace.map((hop) => (
                   <li className={`atlas-tree__trace-hop atlas-tree__trace-hop--${hop.origin}`} key={`${hop.origin}:${hop.id}`}>
                     <strong>{hop.label}</strong>
-                    <span>{hop.origin === "authority" ? "Authority" : hop.origin === "organizing" ? "Control Atlas structure" : "Publisher hierarchy"}</span>
+                    <span>{hop.origin === "authority" ? "Authority" : hop.origin === "organizing" ? "Topic structure" : "Publication structure"}</span>
                     {hop.rationale ? <p>{hop.rationale}</p> : null}
                   </li>
                 ))}
@@ -598,7 +598,7 @@ export function AtlasTree(props: AtlasTreeProps) {
         {compact || layoutStatus === "error" || collisions.length ? (
           <CompactAtlasTree nodes={identity.nodes} onSelectNode={activateNode} />
         ) : layoutStatus === "loading" ? (
-          <div className="atlas-tree__layout-status" role="status">Arranging the Atlas map…</div>
+          <div className="atlas-tree__layout-status" role="status">Arranging the Atlas…</div>
         ) : (
           <ReactFlowProvider>
             <AtlasTreeStage
@@ -617,9 +617,9 @@ export function AtlasTree(props: AtlasTreeProps) {
         <aside aria-labelledby="atlas-inspector-title" className="atlas-tree__dock atlas-tree__inspector">
           <p className="eyebrow">{selectedNodeIsRoot ? "Atlas overview" : nodeKind(selectedNode).replaceAll("-", " ")}</p>
           <h3 id="atlas-inspector-title">{selectedNode.label}</h3>
-          <p>{selectedNodeIsRoot ? "A single view of the cybersecurity areas and the publications organized within them." : selectedNode.blurb}</p>
+          <p>{selectedNodeIsRoot ? "Browse cybersecurity areas and the publications under them." : selectedNode.blurb}</p>
           {selectedNode.level === "area" && selectedNode.descendantRecordCount === 0 ? (
-            <p className="atlas-tree__empty-state" role="status">Nothing mapped yet.</p>
+            <p className="atlas-tree__empty-state" role="status">No records yet.</p>
           ) : null}
           <dl>
             {selectedNode.nodeType === "authority_aggregate" ? (
@@ -642,7 +642,7 @@ export function AtlasTree(props: AtlasTreeProps) {
           {technologyParent ? (
             <section aria-labelledby="atlas-technology-picker-title" className="atlas-tree__technology-picker">
               <h3 id="atlas-technology-picker-title">Choose a technology</h3>
-              <p>{technologyParent.childCount.toLocaleString()} publisher benchmarks are available. Selecting one adds exactly that branch.</p>
+              <p>{technologyParent.childCount.toLocaleString()} benchmarks are available.</p>
               <label>
                 Search technologies
                 <input onChange={(event) => setTechnologyQuery(event.target.value)} type="search" value={technologyQuery} />
@@ -661,12 +661,12 @@ export function AtlasTree(props: AtlasTreeProps) {
 
           {props.focusedRecord ? (
             <button aria-pressed={overlayEnabled} onClick={() => setOverlayEnabled((value) => !value)} type="button">
-              {overlayEnabled ? "Hide mapping overlay" : "Show mapping overlay"}
+              {overlayEnabled ? "Hide connections" : "Show connections"}
             </button>
           ) : null}
           {overlayEnabled && overlay ? (
             <section aria-labelledby="atlas-overlay-title" className="atlas-tree__overlay">
-              <h3 id="atlas-overlay-title">Published connections</h3>
+              <h3 id="atlas-overlay-title">Related records</h3>
               <ul>{overlay.highlights.map((entry) => <li className="atlas-tree__overlay-highlight" key={entry.node.id}>{entry.node.metadata?.title || entry.node.label}</li>)}</ul>
               {overlay.summaryChip ? <button onClick={props.onOpenCompare} type="button">{overlay.summaryChip.label} · open Compare</button> : null}
             </section>
@@ -695,7 +695,7 @@ export function benchmarkChildrenFromNeighborhood(record: AtlasNeighborhoodRecor
       id: node.id,
       itemId,
       label,
-      blurb: node.metadata?.description || "Publisher record.",
+      blurb: node.metadata?.description || "",
       nodeType: node.node_type || "record",
       parentId: centerId,
       childCount: 0,
@@ -703,7 +703,7 @@ export function benchmarkChildrenFromNeighborhood(record: AtlasNeighborhoodRecor
       level: "summary" as const,
       alsoRequiredBy: [],
       sourceRefs: [],
-      rationale: node.metadata?.description || "Publisher record.",
+      rationale: node.metadata?.description || "",
     }];
   });
 }

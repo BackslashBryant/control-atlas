@@ -77,63 +77,61 @@ const RECORD_LABELS: Record<string, string> = {
 // on every catalog said nothing.
 const SYNOPSES: Record<string, string> = {
   "nist-800-53":
-    "The federal control catalog. Federal agency systems select from it; almost every other framework on this site points back into it.",
+    "A catalog of security and privacy controls for information systems and organizations.",
   "nist-800-53b":
-    "The Low, Moderate, and High baselines: which 800-53 controls you start with once the system has been categorized.",
+    "Control baselines for low-, moderate-, and high-impact systems, with tailoring guidance.",
   "fedramp-rev5":
-    "What a cloud service must meet to be authorized for federal use, expressed as 800-53 plus FedRAMP's own additions and parameters.",
+    "FedRAMP control baselines and parameters for cloud service authorization.",
   "nist-800-171":
-    "Revision 3: what a non-federal organization must do to protect controlled unclassified information on its own systems.",
+    "Requirements for protecting Controlled Unclassified Information in nonfederal systems and organizations.",
   "nist-800-171-rev2":
-    "The revision most DoD contracts still cite for protecting controlled unclassified information outside federal systems.",
+    "Revision 2 requirements for protecting Controlled Unclassified Information in nonfederal systems and organizations.",
   "nist-800-172":
-    "Extra requirements layered on 800-171 when the threat is an advanced persistent adversary rather than ordinary risk.",
+    "Enhanced requirements for protecting Controlled Unclassified Information from advanced persistent threats.",
   "csf-2":
-    "Outcomes, not controls. Useful for talking about a security program with people who do not read control catalogs.",
+    "Cybersecurity outcomes organized by function, category, and subcategory.",
   "cmmc-2":
-    "The assessment program that decides whether a defense contractor may hold controlled unclassified information at all.",
+    "The Department of Defense program for assessing contractor cybersecurity requirements.",
   "cui-policy":
-    "The executive-branch rules governing what counts as controlled unclassified information and how it must be marked and handled.",
+    "Federal policy for identifying, marking, safeguarding, and handling Controlled Unclassified Information.",
   "nist-ssdf":
-    "Practices for building software so the things you ship are defensible, aimed at development teams rather than system owners.",
+    "Secure software development practices organized by outcome.",
   "nist-ai-rmf":
-    "How to identify and manage risk in an AI system across its life cycle, for teams fielding models rather than servers.",
+    "Actions for managing risk across an artificial intelligence system's life cycle.",
   "dod-rai":
-    "The Department of Defense's own conditions on building and fielding AI, layered on top of the civil AI guidance.",
+    "Department of Defense guidance for developing and using artificial intelligence responsibly.",
   "nist-800-37":
-    "The Risk Management Framework itself: the seven steps and the roles that sign at each one.",
+    "The Risk Management Framework process for managing security and privacy risk.",
   "fips-200":
-    "The mandatory minimum security requirements for federal information systems — the floor 800-53 fills in.",
+    "Minimum security requirements for federal information and information systems.",
   "fips-199":
-    "How to categorize a system as low, moderate, or high impact. This is the decision every baseline downstream depends on.",
+    "Standards for categorizing federal information and systems by potential impact.",
   "disa-cci":
-    "The identifiers that connect a control's individual statements to the specific settings that satisfy them.",
+    "Identifiers for individual security requirements and their referenced controls.",
   "disa-srg":
-    "Requirements for a class of technology — a web server, a database — before any specific product is named.",
+    "Security requirements for classes of technology.",
   "disa-stig":
-    "The settings themselves: what must be configured, how to check it, and how to fix it when it is wrong.",
+    "Configuration rules for specific technologies, with discussion, check, and fix text.",
   "nist-800-53a":
-    "The procedures an assessor follows to decide whether a control is actually working, control by control.",
+    "Assessment procedures for NIST SP 800-53 controls.",
   "mitre-attack":
-    "What adversaries actually do once they are inside, catalogued from observed intrusions.",
+    "Documented adversary tactics and techniques for enterprise environments.",
   "mitre-attack-ics":
-    "The same adversary behavior catalogue, for industrial control and operational technology environments.",
+    "Documented adversary tactics and techniques for industrial control systems.",
   "mitre-d3fend":
-    "Defensive countermeasures, described precisely enough to be matched against specific attacker techniques.",
+    "Defensive cybersecurity techniques and their relationships to offensive techniques.",
   "dod-zt":
-    "The Department of Defense's target architecture: the capabilities and activities a zero trust environment has to reach.",
+    "Department of Defense zero trust capabilities, activities, and target outcomes.",
 };
 
 export function catalogProfileFor(
   catalogId: string,
-  catalogName = "this catalog",
+  _catalogName = "this catalog",
 ): CatalogProfile {
   return {
-    synopsis:
-      SYNOPSES[catalogId] ||
-      `${catalogName}, published by the source cited on every record below.`,
+    synopsis: SYNOPSES[catalogId] || "",
     recordLabel: RECORD_LABELS[catalogId] || "Records",
-    publicationKind: PUBLICATION_KINDS[catalogId] || "Published structure",
+    publicationKind: PUBLICATION_KINDS[catalogId] || "Publication",
     area: catalogAreaFor(catalogId),
   };
 }

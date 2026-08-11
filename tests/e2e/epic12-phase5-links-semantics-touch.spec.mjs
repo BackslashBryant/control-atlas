@@ -29,7 +29,7 @@ async function openReady(page, route, options = {}) {
   await waitForAppReady(page, { allowPartial: true });
   await expect(page.locator("#workspace h1")).toHaveCount(1, { timeout: 60_000 });
   if (route.startsWith("/#/record/")) {
-    await expect(page.getByRole("link", { name: "Open official source", exact: true }).first()).toBeVisible({ timeout: 60_000 });
+    await expect(page.getByRole("link", { name: "View official source", exact: true }).first()).toBeVisible({ timeout: 60_000 });
   }
   if (options.settleResults) {
     await expect(page.locator(".workspace-result-row").first()).toBeVisible({ timeout: 60_000 });
@@ -72,14 +72,12 @@ test("Phase 5 renders canonical destinations as native links with working modifi
   expect(await publicationLinks.count()).toBeGreaterThan(0);
 
   await openReady(page, REPRESENTATIVE_RECORD);
-  const officialSourceLinks = page.getByRole("link", { name: "Open official source", exact: true });
+  const officialSourceLinks = page.getByRole("link", { name: "View official source", exact: true });
   expect(await officialSourceLinks.count()).toBeGreaterThan(0);
   for (const link of await officialSourceLinks.all()) {
     await expect(link).toHaveAttribute("href", /^https:\/\//);
   }
-  await page.locator(".record-actions-menu summary").click();
-  await expect(page.locator(".record-actions-menu")).toHaveAttribute("open", "");
-  await expect(page.getByRole("link", { name: "See in Atlas", exact: true })).toHaveAttribute("href", /^#\/atlas\?/);
+  await expect(page.getByRole("link", { name: "See connections", exact: true })).toHaveAttribute("href", /^#\/atlas\?/);
 
   const destinationButtons = page.locator([
     "button.brand",

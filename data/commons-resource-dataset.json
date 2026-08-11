@@ -1,11 +1,11 @@
 {
   "schemaVersion": "3.0",
-  "lastUpdated": "2026-08-03",
+  "lastUpdated": "2026-08-11",
   "collections": [
     {
       "id": "dod-cybersecurity-portals",
       "title": "DoD cybersecurity portals",
-      "summary": "Start with the official portals behind DoD cyber policy, implementation, workforce, connections, and services.",
+      "summary": "Find official DoD cybersecurity portals.",
       "whyCurated": "Keeps related DoD destinations together without turning external portals into Atlas parents.",
       "icon": "shield-network",
       "libraryLinks": [
@@ -36,7 +36,7 @@
     {
       "id": "reciprocity-authorization-reuse",
       "title": "Reciprocity and authorization reuse",
-      "summary": "Find package access, reuse, inheritance, common-control, shared-responsibility, and reciprocity destinations.",
+      "summary": "Find resources for reusing authorization work.",
       "whyCurated": "Separates reusable material from the independent decision each authorizing official still makes.",
       "icon": "arrows-exchange",
       "libraryLinks": [
@@ -66,7 +66,7 @@
     {
       "id": "implementation-assessment-tools",
       "title": "Implementation and assessment tools",
-      "summary": "Find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers.",
+      "summary": "Find tools for implementing and assessing security controls.",
       "whyCurated": "Groups tools by the work they support while keeping publisher claims and access limits visible.",
       "icon": "tool",
       "libraryLinks": [
@@ -132,7 +132,7 @@
     {
       "id": "product-assurance-approved-products",
       "title": "Product assurance and approved products",
-      "summary": "Find international certification, U.S. evaluation, cryptographic validation, classified-solution, and cloud marketplaces.",
+      "summary": "Find directories for product assurance and approved products.",
       "whyCurated": "Distinguishes programs that answer different product-assurance questions instead of treating every list as equivalent.",
       "icon": "certificate",
       "libraryLinks": [
@@ -163,7 +163,7 @@
     {
       "id": "cloud-devsecops-software-factories",
       "title": "Cloud, DevSecOps, and software factories",
-      "summary": "Find Platform One, software-factory, container, cloud-security, collaboration, and delivery resources.",
+      "summary": "Find tools and services for secure software delivery.",
       "whyCurated": "Presents Platform One as an ecosystem and separates its child services by actual job.",
       "icon": "cloud-code",
       "libraryLinks": [
@@ -198,7 +198,7 @@
     {
       "id": "cmmc-defense-industrial-base",
       "title": "CMMC and the defense industrial base",
-      "summary": "Find official program material, reporting systems, assistance, accreditation directories, CUI, and NISP resources.",
+      "summary": "Find CMMC program resources for defense contractors.",
       "whyCurated": "Separates DoD policy, government-supported help, accreditation services, commercial providers, and unofficial communities.",
       "icon": "building-factory",
       "libraryLinks": [
@@ -229,7 +229,7 @@
     {
       "id": "cyber-workforce-training",
       "title": "Cyber workforce and training",
-      "summary": "Find DoD 8140, DCWF, NICE, qualification, training, and career-development destinations.",
+      "summary": "Find federal cybersecurity workforce and training resources.",
       "whyCurated": "Connects workforce roles and qualification resources without duplicating the governing publications.",
       "icon": "users",
       "libraryLinks": [
@@ -258,7 +258,7 @@
     {
       "id": "practitioner-communities",
       "title": "Practitioner communities",
-      "summary": "Find public or documented communities for federal cyber, CMMC, FedRAMP, GRC, DevSecOps, and implementation tools.",
+      "summary": "Find practitioner communities and discussion forums.",
       "whyCurated": "Gives practitioners discussion paths while clearly labeling unofficial and account-based communities.",
       "icon": "messages",
       "libraryLinks": [],

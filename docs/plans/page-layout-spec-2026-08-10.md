@@ -29,18 +29,19 @@ conflicts, these win.
      lead-blocks per-area — that's the rainbow to avoid.
    - **Area appears as a small colored dot** on an otherwise-neutral bucket-tag
      (neutral body, area-hue dot only) — in Library rows + the Area facet, the Record
-     header, and "Classified under". Never a filled colored block repeated down a list.
+     `About This Record`. Never a filled colored block repeated down a list.
    - Full area fills are reserved for **Atlas nodes** and small legend/list swatches.
-2. **Family-qualified identifiers.** Records show the family-qualified ID
-   (`AC-3.1.1`), never the bare `3.1.1`. Applies in Library rows, breadcrumb, and
-   the record title.
-3. **Records lead with plain language.** The record MAIN opens with three
-   plain-English blocks — **What this is / What you need to do / How to satisfy it**
-   (as applicable) — *before* the official source text, which becomes a collapsible.
-   This is the newbie-facing standard for every record. (See §5.)
-4. **"Atlas structure" is retired as a user-facing label.** Replace with a
-   **"Classified under"** tag group (Area bucket-tag + family + publication). The
-   internal trunk/limb vocabulary never appears on screen.
+2. **Publisher + source-native category + ID record titles.** Record titles use the compact
+   identity `{publisher} {category} {official ID}` (`NIST AC 3.1.1`). If the
+   identifier already carries the family, do not repeat it (`NIST AC-2`, not
+   `NIST AC AC-2`). The breadcrumb ends with the unchanged official ID.
+3. **Records lead with the real text.** The record MAIN opens with the complete
+   published description, followed by publisher-supplied discussion, check, fix, or
+   assessment fields when available. Do not manufacture generic explanation or
+   action blocks, and do not derive a record name from body text. (See §5.)
+4. **"Atlas structure" is retired as a user-facing label.** Put neutral kind,
+   category, area, and publication tags in **About This Record**. The internal
+   trunk/limb vocabulary never appears on screen.
 5. **Atlas is a click-to-drill tree/network graph.** The main view is a hierarchical
    graph (colored area nodes, curved edges). **Clicking a node drills in
    automatically** — no select-then-button step. A live breadcrumb climbs back.
@@ -138,15 +139,14 @@ template. Exact order, single centered column (max 1200, hero text max 720):
 
 ```
 ┌─ HERO ─────────────────────────────────────────────┐
-│ eyebrow: "Federal cybersecurity, connected"         │
-│ H1 (one line): "See the landscape…"                 │
-│ 1 sentence subhead                                  │
+│ H1: "Make federal cybersecurity compliance make sense."    │
+│ "Understand what applies, what it means, and what to do next." │
 │ [ ⌕ big search field .......................... ]   │  ← single primary action
 └─────────────────────────────────────────────────────┘
 ┌─ HUB CARDS (3, equal) ──────────────────────────────┐
-│ [ Explore the Atlas ] [ Search the Library ] [ Browse Resources ] │
+│ [ Browse the Atlas ] [ Search the Library ] [ Browse Resources ] │
 └─────────────────────────────────────────────────────┘
-   one-line trust/provenance disclaimer
+   no trust or provenance note in the Home hero
 ```
 
 Changes from live:
@@ -213,7 +213,7 @@ the §1 one-`<main>` rule so the canvas is the first thing in the viewport.
 
 ```
 ┌───────────── slim page header (full width, 1 row) ─────────────────┐
-│ H1 "Atlas"  ·  "See the landscape, then drill in."  [⌕ jump to record]│
+│ H1 "Atlas"  ·  "Browse requirements by topic."  [⌕ jump to record]│
 ├────────────┬────────────────────────────────────────┬──────────────┤
 │ LEFT DOCK  │            GRAPH CANVAS (full-bleed)    │  INSPECTOR   │
 │ 280px      │                                         │  320px       │
@@ -228,10 +228,8 @@ the §1 one-`<main>` rule so the canvas is the first thing in the viewport.
 Layout rules (not data — data fixes are in the sniff-test doc):
 - Canvas is the hero. Totals, mandate-kind chips, and the legend move **into the
   left dock**, not stacked above the canvas eating vertical space.
-- Node inspector is the **right dock**, appears on selection, with a single clear
-  "drill into this" affordance. Today the inspector copy ("Select a node to inspect…
-  use the action above only when ready to drill") is buried — make the action a
-  button in the dock.
+- Node inspector is the **right dock**, appears on selection, and names the selected
+  item with one clear action to open its details.
 - **Zero-count limbs (Knowledge, Operations) are not rendered as nodes** — or are
   rendered muted with an explicit "nothing mapped yet" so a click doesn't dead-end.
 - Legend docks bottom-left, collapsible.
@@ -263,50 +261,39 @@ directions" instinct, confirmed.
 
 ```
 ┌─ breadcrumb ───────────────────────────────────────────────────────┐
-│ Library › Access Control (AC) › 3.1.1                              │  ← replaces
-├────────────────────────────────────────────────────────────────────┤    "Record/
-│ [Requirement]  3.1.1                                                │    3.1.1/
-│ Limit system access to authorized users…  (plain-English name)     │    Requirement
-│ NIST · SP 800-171 Rev. 2 · v2021-01 · current 2026-08-09           │    /3.1.1")
-│ [ Open official source ]   [ ⋯  Compare · Produce doc · See in Atlas · Copy link ] │  ← 1 primary + menu
+│ Library › Access Control › NIST AC 3.1.1                            │
+├────────────────────────────────────────────────────────────────────┤
+│ NIST AC 3.1.1                                                       │
+│ Publisher-authored name, when it adds information                  │
+│ [ View official source ]   [ See connections ]   [ ⋯ More ]        │
 ├──────────────────────────────────────┬─────────────────────────────┤
 │ MAIN (≈ 66%, max 720 reading width)  │ SIDEBAR (320px, sticky)     │
 │                                       │                             │
-│ ## Official description               │  Where this sits            │
-│ full text, expand/collapse — ONCE     │   Authority:  41 USC 1303,  │
-│                                       │              DFARS 7012     │
-│ ## Connections                        │   Atlas:  Cybersecurity ›   │
-│ real cross-framework mappings only.   │          Compliance         │
-│ If none: "No cross-framework          │   Catalog: 800-171 › AC ›   │
-│ mappings published yet."              │          3.1.1              │
-│ (parent/child structural links do     │                             │
-│  NOT count as connections)            │  Source & provenance        │
-│                                       │   Published by NIST         │
-│                                       │   Connections from: 800-171,│
-│                                       │     CMMC 2.0                │
-│                                       │   [ View data sources ]     │
+│ ## Requirement                        │  About This Record          │
+│ complete publisher text — ONCE        │   Publisher                 │
+│                                       │   Publication               │
+│ ## Discussion                         │   Version                   │
+│ publisher discussion, when present    │   Publication Date          │
+│                                       │   Last Checked              │
+│ ## Crosswalks                         │   neutral classification    │
+│ formal crosswalk records only         │   tags                      │
 ├───────────────────────────────────────┴─────────────────────────────┤
-│ ▸ Developer details (collapsed)   Node ID, source URL — for devs    │  ← full width,
-└──────────────────────────────────────────────────────────────────────┘    collapsed
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 Exact rules:
-- **Title block = breadcrumb + [kind badge] + H1 id + plain-English name + one
-  provenance line.** Delete the doubled id and the free-floating "Record"/"Requirement"
-  labels.
-- **Description appears exactly once** in MAIN. Delete the "Where it appears / Official
-  text" duplicate entirely.
-- **One** "Open official source" link (primary action, title block). Delete the other
-  three CSV links. If "browse catalog" is genuinely different from "open source doc,"
-  keep it as a single secondary link in the sidebar — but they currently point to the
-  identical URL, so it's one link.
-- **The three hierarchy trees collapse into the sidebar "Where this sits"** as three
-  compact breadcrumb rows (Authority / Atlas / Catalog), not three full-width blocks.
-- **Connections = cross-framework only.** Same-catalog parent/child ("Contains
-  FAMILY-ACCESS-CONTROL") is hierarchy, already shown in the sidebar — it must not be
-  counted as a connection. Show an honest empty state when there are no real mappings.
-- **No `.json`, no `#id`, no raw file path, no Node ID in the main flow.** Anything
-  internal goes in the collapsed "Developer details" at the bottom, clearly labeled.
+- **Title block = breadcrumb + publisher/category/official-ID H1 + publisher-authored
+  name when it adds information + actions.** Keep tags and publication facts out of it.
+- **Publisher text appears exactly once** in MAIN under a type-specific source heading.
+  Never generate a name, explanation, or action from body text.
+- **One** `View official source` action in the title block. Use `See connections` for
+  the record-to-Atlas action.
+- Put neutral kind, category, area, and publication tags plus Publisher, Publication,
+  Version, Publication Date, and Last Checked in **About This Record**.
+- **Crosswalks = formal crosswalk records only.** Omit the section when none exist.
+- **No `.json`, no `#id`, no raw file path, and no node ID in the public flow.**
+- Every supported record kind has an approved presentation profile. Missing required
+  publisher fields or an unknown kind fails generation.
 - Sidebar is sticky; MAIN scrolls.
 
 ---
@@ -397,30 +384,34 @@ reference tool should sound like a librarian, not a landing page.
 
 | Where | Live copy (slop) | Why it's slop | Rewrite |
 |---|---|---|---|
-| Home H1 | "See the landscape. Trace the source. Move the work forward." | tricolon slogan | "Federal cybersecurity requirements, sources, and how they connect." |
-| Home subhead | "Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster." | laundry list + tricolon, one breath | "Search official requirements and controls, see how they map across frameworks, and open the source." |
+| Home H1 | "See the landscape. Trace the source. Move the work forward." | tricolon slogan | "Make federal cybersecurity compliance make sense." |
+| Home subhead | "Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster." | laundry list + tricolon, one breath | "Understand what applies, what it means, and what to do next." |
 | Home 3rd line | "…go directly to the practical resources that help you do the work." | "do the work" filler | delete |
 | Home preview | "The ecosystem at a glance" / "From authority to action" | brochure-speak | "How federal cyber material connects" (or cut the panel per §2) |
 | Home card | "Tell Control Atlas what you are trying to do and get a focused next step." | anthropomorphized product | cut the card (§2); if kept: "Search by what you're working on." |
-| Atlas eyebrow | "Federal cybersecurity, from authority to action" | slogan | "Federal cybersecurity, mapped" — or just "Atlas" |
-| Atlas trunk desc | "The cybersecurity discipline itself — the single common ancestor every limb hangs from." | leaked tree metaphor | "The top of the map. Everything else sits under this." |
-| Atlas inspector | "Select a node to inspect it. Use the action above only when you are ready to drill down." | clunky, hedgy | "Select anything to see details. Open it to drill in." |
-| Library subhead | "One ranked view across published records, guides, documents, resources, communities, and sources." | laundry list | "Search every published record and its sources." |
+| Atlas eyebrow | "Federal cybersecurity, from authority to action" | slogan | delete; the H1 already says "Atlas" |
+| Atlas trunk desc | "The cybersecurity discipline itself — the single common ancestor every limb hangs from." | leaked tree metaphor | "Browse cybersecurity areas and the publications under them." |
+| Atlas inspector | "Select a node to inspect it. Use the action above only when you are ready to drill down." | clunky, hedgy | "Select a record to see its details." |
+| Library subhead | "One ranked view across published records, guides, documents, resources, communities, and sources." | laundry list | "Search by identifier, title, or topic." |
 | Resources H1 | "Find the ecosystem around the work" | vague slop | "Resources" (or "Tools, portals, and communities") |
-| Resources subhead | "Search official portals, tools, services, training, product directories, and practitioner communities." | laundry list | "Official portals, tools, training, and communities." |
+| Resources subhead | "Search official portals, tools, services, training, product directories, and practitioner communities." | laundry list | "Find tools, training, and guidance for federal cybersecurity work." |
 
 **Copy rules (hold every string to these):**
 - **Read-aloud test.** If it sounds like a person reading a brochure, cut it.
 - **No tricolons for rhythm.** One clear statement beats three parallel ones.
 - **No laundry lists in prose.** If you must enumerate, use a list/facet UI, not a
   comma run in a sentence.
-- **No first/second-person persona and no anthropomorized product.** No "we/us/our",
-  no "Tell Control Atlas…", no "let us help you."
+- **No anthropomorphized product.** Direct second-person language is allowed when
+  it sounds natural. Never address Control Atlas as a person: no "Tell Control
+  Atlas…" or "let us help you."
 - **No internal metaphors on-screen** (trunk/limb/branch/leaf, "nothing floats loose",
   "aggregation mecca"). Users get plain nouns: area, publication, family, record.
-- **Say the concrete thing.** "Search official requirements and open the source"
-  beats "get to the next step faster."
+- **Say the concrete thing.** "Search by identifier, title, or topic" beats
+  "get to the next step faster."
+- **Keep trust structural.** Preserve source text and show citations where they
+  belong; do not make map, source, publisher, or provenance the product story.
 
 Acceptance: no headline or subhead on any page is a three-part parallel slogan or a
-5+ item comma list; no on-screen string uses first/second-person persona, addresses
-the product as a person, or names the internal tree metaphor.
+5+ item comma list; no on-screen string addresses the product as a person or names
+the internal tree metaphor. Record pages lead with publisher text and contain no
+generic filler blocks.

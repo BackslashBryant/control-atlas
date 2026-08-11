@@ -46,7 +46,4 @@ test("renders transported official descriptions in compact search results", asyn
   await expect(result).toContainText(
     "Potentially adverse events are analyzed to better understand associated activities",
   );
-  await expect(result).not.toContainText(
-    "No narrative description was published for this record.",
-  );
 });

@@ -2,74 +2,46 @@ import { test, expect } from "@playwright/test";
 
 async function open(page, path) {
   await page.goto(path);
-  await expect(page.locator('[data-app-ready="true"]')).toBeVisible({
-    timeout: 30000,
-  });
+  await expect(page.locator('[data-app-ready="true"]')).toBeVisible({ timeout: 30000 });
   if (path.startsWith("/#/record/")) {
     await expect(page.locator('[data-template="E"]')).toBeVisible();
     await expect(page.locator(".route-transition")).toBeHidden();
   }
 }
 
-test("Home is a universal, work-first front door", async ({ page }) => {
+test("Home is a calm, task-focused front door", async ({ page }) => {
   await open(page, "/#/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "Find the source",
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Make federal cybersecurity compliance make sense.",
   );
+  await expect(page.getByText("Understand what applies, what it means, and what to do next.", { exact: true })).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Search Control Atlas" })).toBeVisible();
-  for (const entrance of [
-    "Understand a requirement",
-    "Secure or build a system",
-    "Assess or authorize",
-    "Operate or defend",
-    "Manage risk or supply chain",
-    "Produce a document",
-    "Find a tool, template, portal, training source, or community",
-  ]) {
-    await expect(page.getByRole("button", { name: new RegExp(entrance) })).toBeVisible();
+  await expect(page.locator(".home-search").getByRole("button", { name: "Search" })).toBeVisible();
+  for (const entrance of ["Browse the Atlas", "Search the Library", "Browse Resources"]) {
+    await expect(page.getByRole("link", { name: new RegExp(entrance) })).toBeVisible();
   }
-  await expect(page.getByText("SP 800-171 · Supply Chain Risk Management · 3.17.1")).toBeVisible();
-  await expect(page.getByText("ATT&CK · Initial Access · T1195.002")).toBeVisible();
+  await expect(page.locator(".home-ecosystem-areas .bucket-tag")).toHaveCount(9);
 });
 
-test("record separates Control Atlas guidance from official source text", async ({
-  page,
-}) => {
+test("record leads with publisher text and contains no generated guidance", async ({ page }) => {
   await open(page, "/#/record/nist-800-53/AC-2");
-  await expect(page.getByText("Official source text", { exact: true })).toBeVisible();
-  const editorial = page.locator('[data-editorial-boundary="explicit"]');
-  await expect(editorial).toBeVisible();
-  await expect(editorial.getByText("Control Atlas guidance", { exact: true })).toBeVisible();
-
-  const order = await page.evaluate(() => {
-    const official = globalThis.document.querySelector(".record-template-main .accordion-root");
-    const editorial = globalThis.document.querySelector('[data-editorial-boundary="explicit"]');
-    return Boolean(
-      official &&
-        editorial &&
-        editorial.compareDocumentPosition(official) & globalThis.Node.DOCUMENT_POSITION_FOLLOWING,
-    );
-  });
-  expect(order).toBe(true);
+  await expect(page.getByRole("heading", { name: "Control Statement", exact: true })).toBeVisible();
+  await expect(page.locator('[data-source-field="description"] p')).not.toBeEmpty();
+  await expect(page.locator('[data-editorial-boundary="explicit"]')).toHaveCount(0);
+  await expect(page.getByText(/What this is|What you need to do|How to satisfy it/i)).toHaveCount(0);
 });
 
 test("record template stays inside the mobile viewport", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await open(page, "/#/record/nist-800-53/AC-2");
-
   const overflow = await page.evaluate(() => ({
     body: globalThis.document.body.scrollWidth - globalThis.document.body.clientWidth,
-    document:
-      globalThis.document.documentElement.scrollWidth -
-      globalThis.document.documentElement.clientWidth,
+    document: globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
   }));
-  const templateRegions = page.locator(
-    ".record-template-grid, .record-guidance, .record-connections",
-  );
-
+  const templateRegions = page.locator(".record-template-grid, .record-official-text, .record-connections");
   expect(overflow.body).toBe(0);
   expect(overflow.document).toBe(0);
-  expect(await templateRegions.count()).toBeGreaterThan(0);
+  expect(await templateRegions.count()).toBe(3);
   expect(await templateRegions.evaluateAll((groups) =>
     groups.map((group) => group.scrollWidth - group.clientWidth),
   )).toEqual([0, 0, 0]);
@@ -77,40 +49,35 @@ test("record template stays inside the mobile viewport", async ({ page }) => {
 
 test("record actions preserve durable context across features", async ({ page }) => {
   await open(page, "/#/record/nist-800-53/AC-2");
-  await page.locator(".record-actions-menu summary").click();
-  await expect(page.locator(".record-actions-menu")).toHaveAttribute("open", "");
-  await page.getByRole("link", { name: "See in Atlas", exact: true }).click();
+  await page.getByRole("link", { name: "See connections", exact: true }).click();
   await expect(page).toHaveURL(/#\/atlas\?.*node=nist-800-53%3AAC-2/);
 
   await open(page, "/#/record/nist-800-53/AC-2");
   await page.locator(".record-actions-menu summary").click();
   await expect(page.locator(".record-actions-menu")).toHaveAttribute("open", "");
-  await page.locator(".record-actions-popover").getByRole("link", { name: "Compare", exact: true }).click();
+  await page.locator(".record-actions-popover").getByRole("link", { name: "Compare frameworks", exact: true }).click();
   await expect(page).toHaveURL(/#\/compare\?.*(source=nist-800-53.*items=AC-2|items=AC-2.*source=nist-800-53)/);
 });
 
-test("record types show source-appropriate guidance and omit unsupported action blocks", async ({
-  page,
-}) => {
+test("record types show source-native publisher fields", async ({ page }) => {
   const cases = [
-    ["/#/record/disa-cci/CCI-000001", "What you need to do"],
-    ["/#/record/disa-stig/V-222387", "How to satisfy it"],
-    ["/#/record/nist-800-171/3.17.1", "What you need to do"],
+    ["/#/record/disa-cci/CCI-000001", "Requirement"],
+    ["/#/record/disa-stig/V-222387", "Discussion"],
+    ["/#/record/nist-800-171/3.17.1", "Requirement"],
+    ["/#/record/mitre-attack/T1195.002", "Technique Description"],
   ];
   for (const [path, section] of cases) {
     await open(page, path);
     await expect(page.getByRole("heading", { name: section, exact: true })).toBeVisible();
+    await expect(page.locator('[data-source-field="description"] p')).not.toBeEmpty();
   }
-
-  await open(page, "/#/record/mitre-attack/T1195.002");
-  await expect(page.getByRole("heading", { name: "What you need to do", exact: true })).toHaveCount(0);
 });
 
-test("universal search keeps result classes visibly distinct", async ({ page }) => {
-  await open(page, "/#/search?q=supply%20chain");
+test("Library and Resources keep their result kinds distinct", async ({ page }) => {
+  await open(page, "/#/library?q=access");
   await expect(page.locator('[data-result-class="published-record"]').first()).toBeVisible();
+  await expect(page.locator('[data-result-class="resource"]')).toHaveCount(0);
 
-  await open(page, "/#/search?q=NISTControls");
+  await open(page, "/#/resources?q=NISTControls");
   await expect(page.locator('[data-result-class="resource"]').first()).toBeVisible();
-  await expect(page.getByText(/Matched community metadata/).first()).toBeVisible();
 });

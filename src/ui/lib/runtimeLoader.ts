@@ -164,8 +164,23 @@ export type AtlasNeighborhoodNode = {
     item_id?: string;
     title?: string;
     description?: string;
+    publication_date?: string;
     catalog_id?: string;
     family?: string;
+    identity_category?: string;
+    classification_provenance?: "publisher" | "referenced" | "inferred";
+    related_categories?: Array<{
+      code: string;
+      label: string;
+      provenance: "referenced" | "inferred";
+      source_ref?: { locator?: string; source_id?: string };
+    }>;
+    check_text?: string;
+    fix_text?: string;
+    discussion?: string;
+    implementation_examples?: string[];
+    assessment_objectives?: Array<Record<string, unknown>>;
+    assessment_method_details?: Array<Record<string, unknown>>;
   };
 };
 

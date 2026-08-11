@@ -1,45 +1,28 @@
 /**
  * Human-first display names for runtime records.
  *
- * Rule (user-locked): lead with the official name + ID the way the source
- * publishes it ("AC-2 — Account Management"), and never surface internal
- * scaffold ids (FAMILY-AC, DOC-STRATEGY, HIGH) as titles on their own.
+ * Rule (user-locked): record identity is publisher + family + official ID
+ * ("NIST AC 3.1.1"). The publisher's record name is supporting text, never a
+ * generated summary. Internal scaffold ids (FAMILY-AC, DOC-STRATEGY, HIGH)
+ * never become record titles on their own.
  */
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import { nistFamilyCode } from "../../shared/nist-families.mjs";
+import { sourceNativeIdentityCategory } from "../../shared/record-identity.mjs";
 import { routeIdentityFor } from "./routeIdentity";
 
 type TitledNode = {
   id: string;
   node_type?: string;
   label?: string;
-  metadata?: { item_id?: string; title?: string; catalog_id?: string };
-};
-
-const NIST_FAMILY_CODES: Record<string, string> = {
-  "access control": "AC",
-  "awareness and training": "AT",
-  "audit and accountability": "AU",
-  "assessment, authorization, and monitoring": "CA",
-  "security assessment": "CA",
-  "security assessment and monitoring": "CA",
-  "configuration management": "CM",
-  "contingency planning": "CP",
-  "identification and authentication": "IA",
-  "incident response": "IR",
-  maintenance: "MA",
-  "media protection": "MP",
-  "physical and environmental protection": "PE",
-  "physical protection": "PE",
-  planning: "PL",
-  "personnel security": "PS",
-  "program management": "PM",
-  "personally identifiable information processing and transparency": "PT",
-  "risk assessment": "RA",
-  "system and services acquisition": "SA",
-  "system and communications protection": "SC",
-  "system and information integrity": "SI",
-  "supply chain risk management": "SR",
+  metadata?: {
+    item_id?: string;
+    title?: string;
+    catalog_id?: string;
+    family?: string;
+    identity_category?: string;
+  };
 };
 
 /** Family-qualify otherwise ambiguous NIST requirement numbers. */
@@ -57,29 +40,89 @@ export function familyQualifiedRecordId(
   ) {
     return identifier;
   }
-  const familyCode = family
-    ? NIST_FAMILY_CODES[family.trim().toLocaleLowerCase()]
-    : undefined;
+  const familyCode = nistFamilyCode(family);
   return familyCode ? `${familyCode}-${identifier}` : identifier;
 }
 
-/**
- * Prefer the publisher's record name. Some catalogs publish only a numeric
- * title; for those, the first complete source sentence is the honest name-like
- * phrase shown beneath the qualified identifier.
- */
-export function plainEnglishRecordName(
-  itemId: string,
-  title: string,
-  description = "",
-): string {
+/** Return only a publisher-authored record name; never turn body text into a title. */
+export function officialRecordName(itemId: string, title: string): string {
   const identifier = itemId.trim();
   const publishedTitle = title.trim();
-  if (publishedTitle && publishedTitle.toLocaleLowerCase() !== identifier.toLocaleLowerCase()) {
-    return publishedTitle;
+  if (!publishedTitle || publishedTitle.toLocaleLowerCase() === identifier.toLocaleLowerCase()) {
+    return "";
   }
-  const firstSentence = description.trim().match(/^.*?[.!?](?:\s|$)/)?.[0]?.trim();
-  return firstSentence || publishedTitle || identifier;
+  const escapedIdentifier = identifier.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return publishedTitle
+    .replace(new RegExp(`^${escapedIdentifier}(?:\\s*[-–—:|]\\s*|\\s+)`, "i"), "")
+    .trim();
+}
+
+function familyIdentity(family: string): string {
+  const label = family.trim();
+  return nistFamilyCode(label) || label;
+}
+
+const GENERIC_PUBLISHER_LABELS = new Set([
+  "other",
+  "publisher unavailable",
+  "source owner",
+  "unavailable",
+]);
+
+/** Prefer an actual organization name over generic catalog buckets. */
+export function recordPublisherName(...values: unknown[]): string {
+  for (const value of values) {
+    const label = String(value || "").trim();
+    if (!label || GENERIC_PUBLISHER_LABELS.has(label.toLocaleLowerCase())) continue;
+    if (/^National Institute of Standards and Technology\b/i.test(label)) return "NIST";
+    if (/^Defense Information Systems Agency\b/i.test(label)) return "DISA";
+    if (/^(?:The )?MITRE(?: Corporation)?\b/i.test(label)) return "MITRE";
+    return label;
+  }
+  return "";
+}
+
+function identifierIncludesFamily(identifier: string, family: string): boolean {
+  if (!identifier || !family) return false;
+  const escapedFamily = family.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?:^|[-.])${escapedFamily}(?:[-.]|$)`, "i").test(identifier);
+}
+
+/**
+ * Build the concise identity shown wherever a record is titled.
+ *
+ * Numeric NIST requirements need their family code ("NIST AC 3.1.1"). IDs
+ * that already carry the family stay intact ("NIST AC-2", not
+ * "NIST AC AC-2"). Other catalogs keep their published family label.
+ */
+export function formatRecordIdentity(
+  publisher: string,
+  family: string,
+  itemId: string,
+): string {
+  const publisherLabel = publisher.trim();
+  const identifier = itemId.trim();
+  const familyLabel = familyIdentity(family);
+  const parts = [publisherLabel];
+  if (familyLabel && !identifierIncludesFamily(identifier, familyLabel)) {
+    parts.push(familyLabel);
+  }
+  if (identifier) parts.push(identifier);
+  return parts.filter(Boolean).join(" ");
+}
+
+export function recordIdentityFor(input: {
+  publisher: string;
+  catalogId: string;
+  itemId: string;
+  family: string;
+  metadata?: TitledNode["metadata"];
+}): string {
+  const category = input.metadata?.identity_category || sourceNativeIdentityCategory({
+    catalogId: input.catalogId,
+    family: input.family,
+  });
+  return formatRecordIdentity(input.publisher, category, input.itemId);
 }
 
 /** Keep only locators that read as public document citations, never file paths or fragments. */
@@ -169,11 +212,11 @@ export function routeDocumentTitle(
     return `${BASE_TITLE} — Public reference for federal cyber requirements`;
   }
   if (state.view === "library-detail") {
-    const recordName = recordDisplayTitle(node) || "Record";
+    const recordName = entityName || recordDisplayTitle(node) || "Record";
     return `${recordName} — ${BASE_TITLE}`;
   }
   if (state.view === "commons-detail") {
-    return `${entityName || routeIdentityFor("commons-detail").title} â€” ${BASE_TITLE}`;
+    return `${entityName || routeIdentityFor("commons-detail").title} — ${BASE_TITLE}`;
   }
   const base = routeIdentityFor(state.view as import("./viewState").AppView).title;
   const label =

@@ -46,11 +46,11 @@ test("Template D keeps the Atlas canvas first and honors the locked dock geometr
 
   await expect(page.locator("main")).toHaveCount(1);
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  await expect(page.getByText("See the landscape, then drill in.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Start with a topic and work toward the details.", { exact: true })).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Jump to a record" })).toBeVisible();
   await expect(template.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
   await expect(inspector.getByText("Atlas overview", { exact: true })).toBeVisible();
-  await expect(inspector).toContainText("A single view of the cybersecurity areas and the publications organized within them.");
+  await expect(inspector).toContainText("Browse cybersecurity areas and the publications under them.");
   await expect(template).not.toContainText(/\b(?:trunks?|limbs?|twigs?|acorns?)\b/i);
   await expect(template.locator(".atlas-ancestry > .atlas-choice-trail")).toHaveCount(0);
   await expect(workbench).toBeVisible();
@@ -71,7 +71,7 @@ test("Template D keeps the Atlas canvas first and honors the locked dock geometr
   await expect(leftDock.locator('[data-area-id][data-empty="true"]')).toHaveCount(2);
   await expect(leftDock.getByRole("button", { name: /Operations/ })).toBeDisabled();
   await expect(leftDock.getByRole("button", { name: /Knowledge/ })).toBeDisabled();
-  await expect(leftDock.getByText("Nothing mapped yet.", { exact: true })).toHaveCount(2);
+  await expect(leftDock.getByText("No records yet.", { exact: true })).toHaveCount(2);
   await expect(page.getByRole("button", { name: /Open this (?:area|publication|branch)/ })).toHaveCount(0);
 });
 
@@ -92,7 +92,7 @@ test("every populated area drills directly and the live breadcrumb reverses the 
   await clickFlowNode(page, "atlas:LIMB-OPERATIONS");
   await expect(page).toHaveURL(/#\/atlas$/);
   await expect(page.locator(".atlas-tree__inspector")).toContainText("Operations");
-  await expect(page.locator(".atlas-tree__inspector")).toContainText("Nothing mapped yet.");
+  await expect(page.locator(".atlas-tree__inspector")).toContainText("No records yet.");
 });
 
 test("a populated node drills two levels without a second confirmation", async ({ page }) => {

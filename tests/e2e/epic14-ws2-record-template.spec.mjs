@@ -15,34 +15,28 @@ test("WS2 record template leads with qualified identity and one source action", 
   const template = page.locator('[data-template="E"]');
   await expect(template).toBeVisible();
   await expect(page.locator("main")).toHaveCount(1);
-  await expect(page.getByRole("heading", { name: "AC-3.1.1", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "NIST AC 3.1.1", level: 1 })).toBeVisible();
   await expect(page.locator("[data-canonical-breadcrumb]"))
-    .toHaveAttribute("data-canonical-breadcrumb", /AC-3\.1\.1$/);
-  await expect(page.locator(".record-plain-name")).toContainText(
+    .toHaveAttribute("data-canonical-breadcrumb", /3\.1\.1$/);
+  await expect(page.locator(".record-official-name")).toHaveCount(0);
+  await expect(template.locator(".bucket-tag")).toHaveCount(1);
+  await expect(template.locator(".bucket-tag")).toContainText("Compliance");
+  await expect(page.locator(".record-classification-tags").locator(":scope > *"))
+    .toHaveCount(4);
+  await expect(page.getByRole("link", { name: "View official source", exact: true })).toHaveCount(1);
+
+  await expect(page.getByRole("heading", { name: "Requirement", level: 2 })).toBeVisible();
+  await expect(page.locator('[data-source-field="description"]')).toContainText(
     /Limit system access to authorized users, processes acting on behalf/,
   );
-  await expect(template.locator(".bucket-tag")).toHaveCount(2);
-  await expect(template.locator(".bucket-tag").first()).toContainText("Compliance");
-  await expect(page.locator(".record-classification-tags").locator(":scope > *"))
-    .toHaveCount(3);
-  await expect(page.getByRole("link", { name: "Open official source", exact: true })).toHaveCount(1);
-
-  const headings = await template.locator("h2").allTextContents();
-  expect(headings.slice(0, 3)).toEqual([
-    "What this is",
-    "What you need to do",
-    "How to satisfy it",
-  ]);
-  await expect(page.getByText("Official source text", { exact: true })).toBeVisible();
-  await expect(page.getByText("Classified under", { exact: true })).toBeVisible();
-  await expect(page.getByText("Comes from", { exact: true })).toBeVisible();
-  await expect(page.getByText("Source & provenance", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "About This Record", exact: true })).toBeVisible();
+  await expect(page.getByText(/What this is|What you need to do|How to satisfy it/i)).toHaveCount(0);
 });
 
-test("WS2 connections exclude structural parents and developer fields stay collapsed", async ({ page }) => {
+test("WS2 crosswalks exclude structural parents and public pages expose no developer fields", async ({ page }) => {
   await openRecord(page, "/#/record/nist-800-53/AC-2");
 
-  const connections = page.locator('[data-record-section="connections"]');
+  const connections = page.locator('[data-record-section="crosswalks"]');
   await expect(connections).toBeVisible();
   await expect(connections).not.toContainText("Contains");
   await expect(connections).not.toContainText("FAMILY-ACCESS-CONTROL");
@@ -60,16 +54,17 @@ test("WS2 connections exclude structural parents and developer fields stay colla
   const visibleText = await page.locator("main").innerText();
   expect(visibleText).not.toContain("nist-800-53:AC-2");
   expect(visibleText).not.toMatch(/\.json#|\/data\/|Node ID/);
-  await expect(page.getByText("Developer details", { exact: true })).toBeVisible();
-  await expect(page.getByText("nist-800-53:AC-2", { exact: true })).toBeHidden();
+  await expect(page.getByText("Developer details", { exact: true })).toHaveCount(0);
 });
 
-test("WS2 preserves source-specific implementation guidance and responsive flow", async ({ page }) => {
+test("WS2 preserves source-specific STIG fields and responsive flow", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await openRecord(page, "/#/record/disa-stig/V-222387");
 
-  await expect(page.getByRole("heading", { name: "How to satisfy it", level: 2 })).toBeVisible();
-  await expect(page.locator(".record-guidance")).toContainText(/Configure|configuration/i);
+  await expect(page.getByRole("heading", { name: "Discussion", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Check", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Fix", level: 2 })).toBeVisible();
+  await expect(page.locator('[data-source-field="fix_text"]')).not.toBeEmpty();
   const overflow = await page.evaluate(() =>
     globalThis.document.documentElement.scrollWidth -
       globalThis.document.documentElement.clientWidth,
@@ -87,4 +82,31 @@ test("WS2 desktop uses the locked two-column reading layout", async ({ page }) =
   );
   expect(columns).toHaveLength(2);
   await expect(page.locator(".record-template-sidebar")).toHaveCSS("position", "sticky");
+});
+
+test("WS6 record identities and derived category explanations stay source-truthful", async ({ page }) => {
+  const identities = [
+    ["/#/record/disa-cci/CCI-000001", "DISA Policy CCI-000001"],
+    ["/#/record/disa-cci/CCI-000015", "DISA Technical CCI-000015"],
+    ["/#/record/disa-cci/CCI-000099", "DISA Policy and Technical CCI-000099"],
+    ["/#/record/mitre-attack/T1195.002", "MITRE Initial Access T1195.002"],
+    ["/#/record/mitre-d3fend/D3-AA", "MITRE Harden D3-AA"],
+    ["/#/record/disa-stig/V-256876", "DISA HMC V-256876"],
+  ];
+  for (const [route, identity] of identities) {
+    await openRecord(page, route);
+    await expect(page.getByRole("heading", { name: identity, level: 1 })).toBeVisible();
+    await expect(page.locator("[data-record-source-error]")).toHaveCount(0);
+  }
+
+  await openRecord(page, "/#/record/disa-cci/CCI-000001");
+  const acronym = page.locator("h1 abbr", { hasText: "DISA" });
+  await acronym.focus();
+  await expect(acronym).toHaveAttribute("data-tooltip", "Defense Information Systems Agency");
+  const referencedCategory = page.locator('.line-tag--explained[data-tooltip="Referenced category."]');
+  await referencedCategory.focus();
+  await expect(referencedCategory).toContainText("Access Control");
+  const inferredArea = page.locator('.bucket-tag--explained[data-tooltip="Inferred category."]');
+  await inferredArea.focus();
+  await expect(inferredArea).toContainText("Implementation");
 });

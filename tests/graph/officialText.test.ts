@@ -31,7 +31,7 @@ test("compact search records use the transported official preview", () => {
   );
   assert.equal(
     officialDescriptionOrStatus({}),
-    "No narrative description was published for this record.",
+    "",
   );
   assert.equal(
     officialDescriptionOrStatus({ description: "Publisher wording." }),

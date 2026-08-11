@@ -135,9 +135,7 @@ test("Phase 3 record identity is canonical across Library, Atlas, and direct pat
   await waitForAppReady(page, { allowPartial: true });
   await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", canonicalBreadcrumb);
   await expect(page.locator('header.site-header nav a[aria-current="page"]')).toHaveCount(0);
-  await page.locator(".record-actions-menu summary").click();
-  await expect(page.locator(".record-actions-menu")).toHaveAttribute("open", "");
-  await expect(page.getByRole("link", { name: "See in Atlas", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "See connections", exact: true })).toBeVisible();
 
   await gotoApp(page, "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page, { allowPartial: true });
@@ -187,7 +185,7 @@ test("Template B keeps three destination cards and retires the Start card", asyn
   await gotoApp(page, "/#/");
   await waitForAppReady(page, { allowPartial: true });
   const homeTaxonomy = await page.locator(".home-secondary-action strong").allTextContents();
-  expect(homeTaxonomy).toEqual(["Explore the Atlas", "Search the Library", "Browse Resources"]);
+  expect(homeTaxonomy).toEqual(["Browse the Atlas", "Search the Library", "Browse Resources"]);
   await expect(page.locator(".home-work-map span")).toHaveCount(0);
   await expect(page.getByText("Start with your work", { exact: true })).toHaveCount(0);
 });
@@ -202,9 +200,9 @@ test("Phase 3 record actions and global footer expose the required hierarchy", a
   await gotoApp(page, "/#/record/nist-800-53/AC-2");
   await waitForAppReady(page, { allowPartial: true });
   const actions = page.locator(".record-title-actions");
-  await expect(actions.getByRole("link", { name: "Open official source", exact: true })).toBeVisible();
+  await expect(actions.getByRole("link", { name: "View official source", exact: true })).toBeVisible();
   await actions.locator("summary", { hasText: "More actions" }).click();
-  await expect(actions.getByRole("link", { name: "See in Atlas", exact: true })).toBeVisible();
+  await expect(actions.getByRole("link", { name: "See connections", exact: true })).toBeVisible();
   await actions.getByRole("button", { name: "Copy link", exact: true }).click();
   const copied = await page.evaluate(() => globalThis.__copiedRecordUrl);
   expect(copied.replace(/^http:/, "https:")).toMatch(/^https:\/\/[^?]+#\/record\/[^?]+$/);

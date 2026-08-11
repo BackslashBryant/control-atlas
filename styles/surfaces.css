@@ -8149,7 +8149,6 @@ button.atlas-leverage-row:hover {
   border-bottom: 1px solid var(--ca-border);
 }
 
-.record-title-tags,
 .record-title-actions,
 .record-classification-tags {
   display: flex;
@@ -8165,7 +8164,7 @@ button.atlas-leverage-row:hover {
   letter-spacing: -0.03em;
 }
 
-.record-plain-name {
+.record-official-name {
   max-width: 780px;
   margin: 0;
   color: var(--ca-text);
@@ -8173,12 +8172,6 @@ button.atlas-leverage-row:hover {
   font-size: clamp(1.35rem, 2.5vw, 2rem);
   font-weight: 700;
   line-height: var(--line-height-tight);
-}
-
-.record-provenance-line {
-  margin: 0;
-  color: var(--ca-text-muted);
-  font-size: var(--ca-text-sm);
 }
 
 .record-title-actions {
@@ -8199,12 +8192,12 @@ button.atlas-leverage-row:hover {
   gap: var(--ca-space-6);
 }
 
-.record-guidance {
+.record-official-text {
   display: grid;
   gap: var(--ca-space-4);
 }
 
-.record-guidance > section {
+.record-official-text > section {
   padding: var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-left: 3px solid var(--ca-primary);
@@ -8212,27 +8205,26 @@ button.atlas-leverage-row:hover {
   background: var(--ca-surface-raised);
 }
 
-.record-guidance h2,
+.record-official-text h2,
 .record-connections h2,
 .record-template-sidebar h2 {
   margin: 0 0 var(--ca-space-2);
   font-size: var(--ca-text-lg);
 }
 
-.record-guidance h3 {
+.record-official-text h3 {
   margin: var(--ca-space-3) 0 var(--ca-space-2);
   font-size: var(--ca-text-base);
 }
 
-.record-guidance p,
-.record-guidance ul,
+.record-official-text p,
+.record-official-text ul,
 .record-connections p,
 .record-template-sidebar p,
 .record-template-sidebar ul {
   margin-block: 0;
 }
 
-.record-guidance-detail,
 .record-connection-groups {
   display: grid;
   gap: var(--ca-space-4);
@@ -8351,14 +8343,6 @@ button.atlas-leverage-row:hover {
 
 .record-source-facts dd {
   margin: 0;
-}
-
-.record-developer-details {
-  margin-top: var(--ca-space-2);
-}
-
-.record-developer-details .advanced-list dd {
-  overflow-wrap: anywhere;
 }
 
 @media (max-width: 900px) {
@@ -8764,23 +8748,6 @@ button.atlas-leverage-row:hover {
 input[type="checkbox"] {
   width: 24px;
   height: 24px;
-}
-
-.official-description-disclosure {
-  margin-top: var(--ca-space-3);
-}
-
-.official-description-disclosure summary {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  color: var(--ca-link);
-  cursor: pointer;
-  font-weight: 700;
-}
-
-.official-description-disclosure p {
-  margin-top: var(--ca-space-3);
 }
 
 @media (max-width: 720px) {
@@ -9649,6 +9616,16 @@ input[type="checkbox"] {
   color: var(--ca-primary);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.workspace-result-row__official-name {
+  align-self: stretch;
+  margin: 0;
+  color: var(--ca-text);
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.4;
+  text-align: left;
 }
 
 .workspace-result-row__snippet {

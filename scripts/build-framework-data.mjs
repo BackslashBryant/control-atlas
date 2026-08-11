@@ -42,6 +42,13 @@ import {
 } from "./hierarchy-derivation.mjs";
 import { createFederalGraphRuntime } from "../src/app/runtime.mjs";
 import { validateAuthoritySpine } from "../src/app/authority-spine.mjs";
+import { referencedNistFamilies } from "../src/shared/nist-families.mjs";
+import { sourceNativeIdentityCategory } from "../src/shared/record-identity.mjs";
+import {
+  missingRequiredRecordFields,
+  recordPresentationProfile,
+  SUPPORTED_RECORD_TYPES,
+} from "../src/shared/record-presentation.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED = join(ROOT, "data", "generated");
@@ -63,6 +70,43 @@ const GOVERNANCE_FILES = [
   "atlas-neighborhood-manifest.json",
 ];
 const ATLAS_NEIGHBORHOOD_DIR = join(GENERATED, "atlas-neighborhood");
+
+const NON_RECORD_NODE_TYPES = new Set([
+  "limb",
+  "policy_directive",
+  "regulation",
+  "statute",
+  "trunk",
+]);
+
+export function cciClassificationLabel(value = "") {
+  const parts = [...new Set(String(value).split(",").map((part) => part.trim().toLocaleLowerCase()).filter(Boolean))];
+  const unknown = parts.filter((part) => part !== "policy" && part !== "technical");
+  if (unknown.length || parts.length === 0) {
+    throw new Error(`Unsupported DISA CCI classification: ${value || "(missing)"}`);
+  }
+  if (parts.includes("policy") && parts.includes("technical")) return "Policy and Technical";
+  return parts[0] === "policy" ? "Policy" : "Technical";
+}
+
+export function validateRecordPresentation(nodes) {
+  const supported = new Set(SUPPORTED_RECORD_TYPES);
+  const failures = [];
+  for (const node of nodes) {
+    if (NON_RECORD_NODE_TYPES.has(node.node_type)) continue;
+    if (!supported.has(node.node_type)) {
+      failures.push(`${node.id}: missing presentation profile for ${node.node_type}`);
+      continue;
+    }
+    const profile = recordPresentationProfile(node.metadata?.catalog_id || "", node.node_type);
+    const missing = missingRequiredRecordFields(profile, node.metadata || {});
+    if (!String(node.metadata?.family || "").trim()) missing.push("family");
+    if (missing.length) failures.push(`${node.id}: missing ${missing.join(", ")}`);
+  }
+  if (failures.length) {
+    throw new Error(`Record presentation validation failed:\n${failures.slice(0, 25).join("\n")}`);
+  }
+}
 
 const CATALOGS = [
   ["controls-800-53.json", "nist-800-53", "nist-oscal", "control"],
@@ -821,6 +865,25 @@ function buildNodes(registry) {
       }
       const sourceId = identity.publicationSourceId;
       const resolvedTier = tierFor(catalogId, record);
+      const primaryClassification = catalogId === "disa-cci"
+        ? cciClassificationLabel(record.type)
+        : resolvedTier?.title || record.family || record.group || "";
+      const relatedCategories = catalogId === "disa-cci"
+        ? referencedNistFamilies(record.references).map((family) => ({
+            ...family,
+            provenance: "referenced",
+            source_ref: {
+              locator: record.source?.locator || "",
+              source_id: ingestionSourceId,
+            },
+          }))
+        : [];
+      const identityCategory = sourceNativeIdentityCategory({
+        benchmarkId: record.metadata?.benchmark_id,
+        benchmarkTitle: record.metadata?.benchmark_title,
+        catalogId,
+        family: primaryClassification,
+      });
       pushEligibleNode(
         state,
         registry,
@@ -844,14 +907,25 @@ function buildNodes(registry) {
             item_id: record.id,
             title: record.title || record.id,
             description: record.description || "",
+            ...(record.publish_date
+              ? { publication_date: record.publish_date }
+              : {}),
             // A record's grouping label IS its parent tier's title — prefer it
             // over the raw record.family, which for some catalogs (e.g. ATT&CK)
             // is a machine slug ("command-and-control") kept for matching, not
             // display. Catalogs whose tier title already equals record.family
             // (800-53, 800-171, AI-RMF, SSDF, ...) see no change; STIG/SRG,
             // whose raw record.family is empty, keep resolving through the tier.
-            family:
-              resolvedTier?.title || record.family || record.group || "",
+            family: primaryClassification,
+            ...(identityCategory !== primaryClassification
+              ? { identity_category: identityCategory }
+              : {}),
+            ...(catalogId === "disa-cci"
+              ? {
+                  classification_provenance: "publisher",
+                  related_categories: relatedCategories,
+                }
+              : {}),
             severity: nodeSeverity(record),
             baselines:
               record.fedramp_baselines || record.metadata?.baselines || null,
@@ -1979,6 +2053,9 @@ function buildLibraryDocuments(graph) {
       source_class: source?.provenance_class || "",
       catalog_id: node.metadata?.catalog_id || "",
       control_family: node.metadata?.family || "",
+      identity_category: node.metadata?.identity_category || "",
+      classification_provenance: node.metadata?.classification_provenance,
+      related_categories: node.metadata?.related_categories,
       severity: node.metadata?.severity || "",
       published_connection_count: publishedConnectionCounts.get(node.id) || 0,
       published_cross_catalog_connection_count:
@@ -2769,6 +2846,7 @@ export function buildFrameworkData() {
     evidence: edgeState.evidence,
     findings,
   };
+  validateRecordPresentation(graph.nodes);
   const errors = [
     ...validateGraphArtifacts(graph),
     ...validateCatalogPublicationIdentity(graph.nodes, graph.sources),

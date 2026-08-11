@@ -134,11 +134,13 @@ export function CatalogDetailPage(props: {
       </AppLink>
 
       <header className="catalog-detail-hero" data-route-primary-header="true">
-        <p className="eyebrow" data-route-primary-copy="true">Published structure · {catalog.display_group}</p>
+        <p className="eyebrow" data-route-primary-copy="true">Publication</p>
         <h1 data-route-primary-copy="true">{catalog.name}</h1>
-        <p className="catalog-synopsis" data-route-primary-copy="true">
-          Control Atlas note: {profile.synopsis}
-        </p>
+        {profile.synopsis ? (
+          <p className="catalog-synopsis" data-route-primary-copy="true">
+            Control Atlas note: {profile.synopsis}
+          </p>
+        ) : null}
         <div className="catalog-facts" aria-label="Catalog summary" data-route-primary-support="true">
           <span>
             <strong>
@@ -300,10 +302,7 @@ export function CatalogDetailPage(props: {
                         <strong>{itemId}</strong>
                         {title !== itemId ? <span>{title}</span> : null}
                       </AppLink></h3>
-                      <p>
-                        {record.description ||
-                          "No narrative description was published for this record."}
-                      </p>
+                      {record.description ? <p>{record.description}</p> : null}
                       {record.metadata?.family ? (
                         <small>{record.metadata.family}</small>
                       ) : null}
@@ -413,7 +412,7 @@ function CatalogInventory(props: {
       <h2 className="library-browse-heading">Browse publications</h2>
       <WorkbenchControlSurface
         className="catalog-inventory-control-surface"
-        label="Filter published structures"
+        label="Filter publications"
         targetId="catalog-inventory-results"
       >
         <div className="catalog-inventory-controls">
@@ -451,7 +450,7 @@ function CatalogInventory(props: {
         />
         </div>
         <p className="catalog-inventory-total" aria-live="polite">
-          {eligible.length} of {rows.length} published structures
+          {eligible.length} of {rows.length} publications
         </p>
       </WorkbenchControlSurface>
       <div data-control-results id="catalog-inventory-results">
@@ -468,7 +467,7 @@ function CatalogInventory(props: {
               >
                 <span>
                   <h3>{entry.name}</h3>
-                  <small>{profile.synopsis}</small>
+                  {profile.synopsis ? <small>{profile.synopsis}</small> : null}
                   {[publisher, profile.area, lifecycle].filter(Boolean).length ? (
                     <small className="catalog-index-row-meta">
                       {[publisher, profile.area, lifecycle].filter(Boolean).join(" · ")}
@@ -486,7 +485,7 @@ function CatalogInventory(props: {
         ))}
         {eligible.length === 0 ? (
           <div className="empty-state">
-            <h2>No published structures match these filters.</h2>
+            <h2>No publications match these filters.</h2>
             <Button
               onClick={() => onNavigate("catalog-detail", emptyCatalogState())}
               type="button"

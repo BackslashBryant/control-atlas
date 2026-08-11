@@ -884,10 +884,10 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     const hub = {
       id: "starter:hub",
       node_type: "starter_hub",
-      label: "Control landscape",
+      label: "Cybersecurity topics",
       metadata: {
-        item_id: "Control landscape",
-        title: "Control landscape",
+        item_id: "Cybersecurity topics",
+        title: "Cybersecurity topics",
       },
     };
 

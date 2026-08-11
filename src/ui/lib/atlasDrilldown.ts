@@ -219,9 +219,7 @@ function toChoice(node: AtlasDrillNode): AtlasRecordChoice {
     id: node.id,
     itemId,
     label: node.metadata?.title || node.label || itemId,
-    description:
-      node.metadata?.description ||
-      "No narrative description was published for this record.",
+    description: node.metadata?.description || "",
     nodeType: node.node_type || "",
   };
 }

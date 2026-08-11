@@ -117,7 +117,7 @@ test('Start here guides in two steps without making a determination', () => {
   const startHere = readFileSync('src/ui/pages/StartHerePage.tsx', 'utf8');
   assert.match(startHere, /What are you trying to do\?/);
   assert.match(startHere, /What kind of system are you working with\?/);
-  assert.match(startHere, /Control Atlas does not decide\s+what applies to your system/);
+  assert.match(startHere, /SITE_COPY\.product\.boundary/);
   assert.doesNotMatch(startHere, /applicability recommendation|not a framework or baseline/i);
   assert.doesNotMatch(startHere, /System type|Data sensitivity|Operational environment/);
   for (const claim of DETERMINATION_BOUNDARY) {
@@ -237,7 +237,7 @@ test('Home is an entry surface, not a lesson about the data model', () => {
   const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
   const homeContent = readFileSync('src/shared/home-content.mjs', 'utf8');
   const viteConfig = readFileSync('vite.config.ts', 'utf8');
-  assert.match(homeContent, /Federal cybersecurity requirements, sources, and how they connect\./);
+  assert.match(homeContent, /SITE_COPY\.home/);
   assert.match(homePage, /HOME_CONTENT\.headline/);
   assert.match(homePage, /home-area-browse/);
   assert.doesNotMatch(homePage, /home-ecosystem-authorities|Federal cybersecurity ecosystem preview/);
@@ -360,8 +360,10 @@ test('generated templates use plain-language prompts without raw schema slugs', 
 test('react shell footer uses the approved open-source guidance disclaimer', () => {
   const footer = readFileSync('src/ui/components/SiteFooter.tsx', 'utf8');
   const identity = readFileSync('src/shared/product-identity.ts', 'utf8');
+  const siteCopy = readFileSync('src/shared/site-copy.mjs', 'utf8');
   assert.match(footer, /PRODUCT_FOOTER_NOTICE/);
-  assert.match(identity, /Free and open source, not a government system\. Every record keeps its publisher and source attached\./);
+  assert.match(identity, /SITE_COPY\.product\.footer/);
+  assert.match(siteCopy, /Free and open source\. Not a government system\./);
 });
 
 test('starter documents use the same direct decision boundary as the public product', () => {
@@ -373,14 +375,12 @@ test('starter documents use the same direct decision boundary as the public prod
   assert.doesNotMatch(disclaimer, /owns any .* conclusions/i);
 });
 
-test('about page states the exact product boundary and explains hierarchy in user language', () => {
+test('about page states the exact product definition and decision boundary without architecture narration', () => {
   const aboutPage = readFileSync('src/ui/pages/AboutPage.tsx', 'utf8');
   assert.match(appShell, /AboutPage/);
   assert.match(aboutPage, /PRODUCT_DEFINITION/);
   assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
-  assert.match(aboutPage, /Path shows where a publisher placed a record/);
-  assert.match(aboutPage, /Map and List show\s+cited links/);
-  assert.doesNotMatch(aboutPage, /graph parenting|not as parents|focus semantics/i);
+  assert.doesNotMatch(aboutPage, /Path shows|Map and List show|graph parenting|not as parents|focus semantics/i);
   assert.doesNotMatch(aboutPage, /\b(?:Roots|Trunk|Twigs|Leaves|Fruit|Acorns)\b/);
   assert.doesNotMatch(aboutPage, /plain English|right starting point/i);
   // About explains the model once; it is not the keyboard-shortcut page and
@@ -393,7 +393,7 @@ test('about page states the exact product boundary and explains hierarchy in use
   );
 });
 
-test('the hierarchy explanation and the AC-2 example live in exactly one place', () => {
+test('architecture narration and teaching examples stay out of product UI copy', () => {
   const uiFiles = readdirSync('src/ui', { recursive: true })
     .map(String)
     .filter((path) => /\.(?:ts|tsx)$/.test(path))
@@ -404,20 +404,14 @@ test('the hierarchy explanation and the AC-2 example live in exactly one place',
   uiFiles.push(['src/index.html', readFileSync('src/index.html', 'utf8')]);
 
   const withHierarchyExplanation = uiFiles.filter(([, contents]) =>
-    /Path shows where a publisher placed a record/.test(contents),
+    /Path shows where a publisher placed a record|Map and List show\s+cited links/.test(contents),
   );
-  assert.deepEqual(
-    withHierarchyExplanation.map(([path]) => path),
-    ['src/ui/pages/AboutPage.tsx'],
-  );
+  assert.deepEqual(withHierarchyExplanation, []);
 
   // ComparePage uses AC-2 as an input placeholder, not as a lesson; only
   // explanatory prose is restricted.
   const withAcExample = uiFiles.filter(([, contents]) =>
     /AC-2 is selected into|AC-2 lives under/.test(contents),
   );
-  assert.deepEqual(
-    withAcExample.map(([path]) => path),
-    ['src/ui/pages/AboutPage.tsx'],
-  );
+  assert.deepEqual(withAcExample, []);
 });

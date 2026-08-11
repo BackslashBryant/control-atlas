@@ -15,6 +15,18 @@ const provenanceBadge = readFileSync(
   "src/ui/components/ProvenanceBadge.tsx",
   "utf8",
 );
+const accessibleTerm = readFileSync(
+  "src/ui/components/AccessibleTerm.tsx",
+  "utf8",
+);
+
+test("acronyms expose their meaning on hover, focus, and tap without changing the visible identity", () => {
+  assert.match(accessibleTerm, /<abbr/);
+  assert.match(accessibleTerm, /title=\{props\.explanation\}/);
+  assert.match(accessibleTerm, /data-tooltip=\{props\.explanation\}/);
+  assert.match(accessibleTerm, /tabIndex=\{0\}/);
+  assert.doesNotMatch(accessibleTerm, /aria-label=\{props\.explanation\}/);
+});
 
 test("provenance badges always render text labels alongside tone classes", () => {
   const provenanceTerm = readFileSync(

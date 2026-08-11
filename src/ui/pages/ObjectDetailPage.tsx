@@ -1,14 +1,16 @@
-import * as Accordion from "@radix-ui/react-accordion";
 import { Fragment, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
-import { sourceCurrentAsOf } from "../../shared/source-freshness.mjs";
+import {
+  missingRequiredRecordFields,
+  recordPresentationProfile,
+} from "../../shared/record-presentation.mjs";
 import authoritySpine from "../../../data/curated/authority-spine.json";
+import { AcronymText } from "../components/AccessibleTerm";
 import { AppLink } from "../components/AppLink";
 import { CanonicalBreadcrumb } from "../components/CanonicalBreadcrumb";
 import { Button, ButtonLink } from "../components/lsm";
 import { BucketTag, LineTag } from "../components/TaxonomyTag";
-import { catalogMandateLabel } from "../lib/catalogMandate";
 import { catalogProfileFor } from "../lib/catalogProfiles";
 import {
   buildAtlasTreeModel,
@@ -18,17 +20,17 @@ import {
 import { serializeHashUrl } from "../lib/hashRoutes";
 import {
   Badge,
-  DisclosurePanel,
   copyText,
   formatRelationshipLabel,
-  sourceTrustSummary,
 } from "../lib/pagePrimitives";
 import {
   buildRecordConnectionGroups,
-  familyQualifiedRecordId,
+  recordIdentityFor,
   humanReadableEvidenceLocator,
-  plainEnglishRecordName,
+  officialRecordName,
+  recordPublisherName,
 } from "../lib/recordTitle";
+import { recordTagsFor, tagProvenanceExplanation } from "../lib/recordTags";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { normalizeViewState, type ViewState } from "../lib/viewState";
 
@@ -53,65 +55,35 @@ function renderOdpText(text: string): ReactNode {
   return nodes;
 }
 
-function AssessmentProcedure(props: { metadata: any }) {
-  const objectives: any[] = props.metadata?.assessment_objectives || [];
-  const methods: any[] = props.metadata?.assessment_method_details || [];
-  if (!objectives.length && !methods.length) return null;
-  return (
-    <div className="record-guidance-detail">
-      {objectives.length ? (
-        <div className="assessment-objectives">
-          <h3>Objectives</h3>
-          <ul>
-            {objectives.map((objective: any, index: number) => (
-              <li key={objective.id || objective.label || index}>
-                {objective.label ? <strong>{objective.label}</strong> : null}{" "}
-                {renderOdpText(objective.prose)}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-      {methods.length ? (
-        <div className="assessment-methods">
-          <h3>Methods and objects</h3>
-          <ul>
-            {methods.map((method: any, index: number) => (
-              <li key={method.id || method.method || index}>
-                <strong>{method.method}</strong>
-                {method.objects?.length ? `: ${method.objects.join("; ")}` : null}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-function needToDoCopy(nodeType: string) {
-  if (nodeType === "assessment_procedure") {
-    return "Use the published objectives and methods to assess the linked control.";
+function SourceSectionContent(props: { kind: string; value: any }) {
+  if (props.kind === "list") {
+    return <ul>{props.value.map((item: string) => <li key={item}>{renderOdpText(item)}</li>)}</ul>;
   }
-  if (nodeType === "stig_rule" || nodeType === "srg_requirement") {
-    return "Check the applicable system against this rule, apply the published fix when needed, and record the result.";
+  if (props.kind === "objectives") {
+    return (
+      <ul className="assessment-objectives">
+        {props.value.map((objective: any, index: number) => (
+          <li key={objective.id || objective.label || index}>
+            {objective.label ? <strong>{objective.label}</strong> : null}{" "}
+            {renderOdpText(objective.prose)}
+          </li>
+        ))}
+      </ul>
+    );
   }
-  if (nodeType === "attack_technique" || nodeType === "defend_countermeasure") {
-    return "";
+  if (props.kind === "methods") {
+    return (
+      <ul className="assessment-methods">
+        {props.value.map((method: any, index: number) => (
+          <li key={method.id || method.method || index}>
+            <strong>{method.method}</strong>
+            {method.objects?.length ? `: ${method.objects.join("; ")}` : null}
+          </li>
+        ))}
+      </ul>
+    );
   }
-  if (
-    [
-      "control",
-      "control_enhancement",
-      "requirement",
-      "program_requirement",
-      "zt_activity",
-      "zt_capability",
-    ].includes(nodeType)
-  ) {
-    return "If this publication applies to the system, implement the publisher's requirement.";
-  }
-  return "";
+  return <p>{renderOdpText(String(props.value))}</p>;
 }
 
 export function ObjectDetailPage(props: {
@@ -121,15 +93,15 @@ export function ObjectDetailPage(props: {
   onOpenGlossary: (termId?: string) => void;
   onOpenNode: (nodeId: string) => void;
 }) {
-  const { bundle, state, onNavigate, onOpenNode } = props;
+  const { bundle, state, onNavigate } = props;
   const node = bundle.runtime.getNode(state.node);
   const document = bundle.runtime.getLibraryDocument(state.node);
 
   if (!node) {
     return (
       <section className="notice">
-        <h1>Item not found</h1>
-        <p>This deep link does not match a current public library entry.</p>
+        <h1>Record not found</h1>
+        <p>Try another identifier or keyword.</p>
         <AppLink onNavigate={onNavigate} variant="primary" view="search">
           Back to Library
         </AppLink>
@@ -140,11 +112,8 @@ export function ObjectDetailPage(props: {
   if (!document) {
     return (
       <section className="notice">
-        <h1>Record metadata unavailable</h1>
-        <p>
-          This graph record is not present in the current search catalog, so
-          its identity cannot be shown reliably.
-        </p>
+        <h1>Record not found</h1>
+        <p>Try another identifier or keyword.</p>
         <AppLink onNavigate={onNavigate} variant="primary" view="search">
           Back to Library
         </AppLink>
@@ -162,11 +131,22 @@ export function ObjectDetailPage(props: {
   const area = catalogProfile.area;
   const family = document.control_family || node.metadata?.family || "";
   const itemId = node.metadata?.item_id || document.item_id || node.label || "";
-  const displayId = familyQualifiedRecordId(itemId, family, document.catalog_id);
-  const plainName = plainEnglishRecordName(
+  const publisherName = recordPublisherName(
+    document.publisher_name,
+    source?.owner,
+    source?.publisher,
+    catalog?.display_group,
+  );
+  const recordIdentity = recordIdentityFor({
+    publisher: publisherName,
+    catalogId: document.catalog_id,
+    family,
+    itemId,
+    metadata: node.metadata,
+  });
+  const publishedName = officialRecordName(
     itemId,
     node.metadata?.title || document.title || "",
-    document.description || "",
   );
   const kind = displayNameFor("object_type", document.object_type);
   const officialSourceUrl = source?.artifact_url || source?.catalog_browse_url || "";
@@ -196,47 +176,45 @@ export function ObjectDetailPage(props: {
         buildAtlasTreeModel(bundle.atlasSpine, authoritySpine),
         [...displayPath, {
           id: node.id,
-          label: plainName || displayId,
+          label: recordIdentity,
           node_type: node.node_type || document.object_type,
           origin: "structural",
         }] as AtlasTraceHop[],
       )
     : [...displayPath, {
         id: node.id,
-        label: plainName || displayId,
+      label: recordIdentity,
         node_type: node.node_type || document.object_type,
         origin: "structural" as const,
       }];
   const authorityItems = displayedTrace.filter((entry) => entry.origin === "authority");
-  const whatToDo = needToDoCopy(node.node_type || document.object_type);
-  const whatThisIs = family
-    ? `This ${kind.toLocaleLowerCase()} is part of the ${family} family in ${catalogName}.`
-    : `This ${kind.toLocaleLowerCase()} is published in ${catalogName}.`;
-  const implementationExamples: string[] = node.metadata?.implementation_examples || [];
+  const sourceMetadata = {
+    ...node.metadata,
+    description: document.description || node.metadata?.description || "",
+  };
+  const presentation = recordPresentationProfile(document.catalog_id, node.node_type || document.object_type);
+  const missingSourceFields = missingRequiredRecordFields(presentation, sourceMetadata);
+  const recordTags = recordTagsFor({
+    area,
+    category: family,
+    kind,
+    publication: catalogName,
+    relatedCategories: node.metadata?.related_categories,
+  });
 
   return (
     <section className="detail-page record-template" data-template="E">
-      <CanonicalBreadcrumb bundle={bundle} nodeId={node.id} recordLabel={displayId} />
+      <CanonicalBreadcrumb bundle={bundle} nodeId={node.id} recordLabel={itemId} />
 
       <header
         className="record-title-block"
         data-route-primary-header="true"
         data-route-primary-copy="true"
       >
-        <div className="record-title-tags" aria-label="Record classification" role="group">
-          <Badge>{kind}</Badge>
-          {area ? <BucketTag area={area}>{area}</BucketTag> : null}
-          <Badge>{catalogMandateLabel(catalog?.mandate)}</Badge>
-        </div>
-        <h1>{displayId}</h1>
-        {plainName && plainName !== displayId ? (
-          <p className="record-plain-name">{plainName}</p>
+        <h1><AcronymText>{recordIdentity}</AcronymText></h1>
+        {publishedName ? (
+          <p className="record-official-name"><AcronymText>{publishedName}</AcronymText></p>
         ) : null}
-        <p className="record-provenance-line">
-          {[source?.owner || source?.publisher, catalogName, source ? sourceCurrentAsOf(source) : ""]
-            .filter(Boolean)
-            .join(" · ")}
-        </p>
         <div className="record-title-actions" data-route-primary-support="true">
           {officialSourceUrl ? (
             <ButtonLink
@@ -245,9 +223,17 @@ export function ObjectDetailPage(props: {
               target="_blank"
               variant="primary"
             >
-              Open official source
+              View official source
             </ButtonLink>
           ) : null}
+          <AppLink
+            onNavigate={onNavigate}
+            patch={{ node: node.id }}
+            variant="secondary"
+            view="atlas-map"
+          >
+            See connections
+          </AppLink>
           <details className="record-actions-menu">
             <summary>More actions</summary>
             <div className="record-actions-popover">
@@ -257,7 +243,7 @@ export function ObjectDetailPage(props: {
                 variant="secondary"
                 view="matrix"
               >
-                Compare
+                Compare frameworks
               </AppLink>
               <AppLink
                 onNavigate={onNavigate}
@@ -265,15 +251,7 @@ export function ObjectDetailPage(props: {
                 variant="secondary"
                 view="templates"
               >
-                Produce a document
-              </AppLink>
-              <AppLink
-                onNavigate={onNavigate}
-                patch={{ node: node.id }}
-                variant="secondary"
-                view="atlas-map"
-              >
-                See in Atlas
+                Choose a document
               </AppLink>
               <Button
                 onClick={() => {
@@ -298,80 +276,35 @@ export function ObjectDetailPage(props: {
 
       <div className="record-template-grid">
         <article className="record-template-main">
-          <section className="record-guidance" data-editorial-boundary="explicit">
-            <p className="record-guidance-boundary">Control Atlas guidance</p>
-            <section>
-              <h2>What this is</h2>
-              <p>{whatThisIs}</p>
+          {missingSourceFields.length ? (
+            <section className="notice" data-record-source-error role="alert">
+              <h2>Record data unavailable</h2>
+              <p>The published text for this record did not load.</p>
             </section>
-            {whatToDo ? (
-              <section>
-                <h2>What you need to do</h2>
-                <p>{whatToDo}</p>
-              </section>
-            ) : null}
-            {node.metadata?.fix_text ||
-            implementationExamples.length ||
-            node.node_type === "assessment_procedure" ? (
-              <section>
-                <h2>How to satisfy it</h2>
-                {node.metadata?.fix_text ? (
-                  <p>{renderOdpText(node.metadata.fix_text)}</p>
-                ) : implementationExamples.length ? (
-                  <ul>
-                    {implementationExamples.map((example) => (
-                      <li key={example}>{renderOdpText(example)}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <AssessmentProcedure metadata={node.metadata} />
-                )}
-              </section>
-            ) : whatToDo ? (
-              <section>
-                <h2>How to satisfy it</h2>
-                <p>
-                  Assign an implementation owner and keep evidence that shows
-                  the published requirement is operating as intended.
-                </p>
-              </section>
-            ) : null}
-          </section>
-
-          <Accordion.Root className="accordion-root" collapsible type="single">
-            <DisclosurePanel title="Official source text" value="official-source-text">
-              <p className="source-boundary-label">
-                Publisher wording from {source?.display_name || source?.name || catalogName}
-              </p>
-              <p>
-                {document.description
-                  ? renderOdpText(document.description)
-                  : "No narrative description was published for this record."}
-              </p>
-              {node.metadata?.discussion ? (
-                <>
-                  <h3>Publisher context</h3>
-                  <p>{renderOdpText(node.metadata.discussion)}</p>
-                </>
-              ) : null}
-              {node.metadata?.check_text ? (
-                <>
-                  <h3>Published check</h3>
-                  <p>{renderOdpText(node.metadata.check_text)}</p>
-                </>
-              ) : null}
-            </DisclosurePanel>
-          </Accordion.Root>
-
-          <section className="record-connections" data-record-section="connections">
-            <div className="section-header">
-              <div>
-                <h2>Connections</h2>
-                <p>Published links to records in other frameworks.</p>
-              </div>
-              {connectionCount ? <Badge tone="info">{connectionCount}</Badge> : null}
+          ) : (
+            <div className="record-official-text" data-source-text="published">
+              {presentation.sections.map((section) => {
+                const value = sourceMetadata[section.field as keyof typeof sourceMetadata];
+                if (Array.isArray(value) ? value.length === 0 : !String(value || "").trim()) return null;
+                return (
+                  <section data-source-field={section.field} key={section.field}>
+                    <h2>{section.heading}</h2>
+                    <SourceSectionContent kind={section.kind} value={value} />
+                  </section>
+                );
+              })}
             </div>
-            {connectionGroups.length ? (
+          )}
+
+          {connectionGroups.length ? (
+            <section className="record-connections" data-record-section="crosswalks">
+              <div className="section-header">
+                <div>
+                  <h2>Crosswalks</h2>
+                  <p>Formal links to records in other frameworks.</p>
+                </div>
+                <Badge tone="info">{connectionCount}</Badge>
+              </div>
               <div className="record-connection-groups">
                 {connectionGroups.map((group) => (
                   <section key={group.catalogId}>
@@ -432,10 +365,8 @@ export function ObjectDetailPage(props: {
                   </section>
                 ))}
               </div>
-            ) : (
-              <p className="record-empty-state">No cross-framework mappings published yet.</p>
-            )}
-          </section>
+            </section>
+          ) : null}
         </article>
 
         <aside
@@ -443,37 +374,57 @@ export function ObjectDetailPage(props: {
           data-displayed-trace={displayedTrace.map((entry) => entry.id).join(">")}
         >
           <section>
-            <h2>Classified under</h2>
+            <h2>About This Record</h2>
             <div className="record-classification-tags">
-              {area ? <BucketTag area={area}>{area}</BucketTag> : null}
-              {family ? <LineTag>{family}</LineTag> : null}
-              <LineTag>{catalogName}</LineTag>
+              {recordTags.map((tag) => tag.kind === "area" ? (
+                <BucketTag
+                  area={tag.label}
+                  explanation={tagProvenanceExplanation(tag.provenance)}
+                  key={tag.id}
+                >
+                  {tag.label}
+                </BucketTag>
+              ) : (
+                <LineTag explanation={tagProvenanceExplanation(tag.provenance)} key={tag.id}>
+                  <AcronymText>{tag.label}</AcronymText>
+                </LineTag>
+              ))}
             </div>
-          </section>
-          <section>
-            <h2>Comes from</h2>
-            {authorityItems.length ? (
-              <ul className="record-authority-list">
-                {authorityItems.map((authority) => (
-                  <li key={authority.id}>{authority.label}</li>
-                ))}
-              </ul>
-            ) : catalog?.mandate_note ? (
-              <p>{catalog.mandate_note}</p>
-            ) : null}
-          </section>
-          <section>
-            <h2>Source &amp; provenance</h2>
-            <p>{sourceTrustSummary(source)}</p>
             <dl className="record-source-facts">
               <div>
-                <dt>Published by</dt>
-                <dd>{source?.owner || source?.publisher || "Unavailable"}</dd>
+                <dt>Publisher</dt>
+                <dd>{publisherName || "Not recorded"}</dd>
               </div>
-              {source ? (
+              <div>
+                <dt>Publication</dt>
+                <dd>{catalogName}</dd>
+              </div>
+              {source?.version ? (
                 <div>
-                  <dt>Current as of</dt>
-                  <dd>{source.last_checked || "Unavailable"}</dd>
+                  <dt>Version</dt>
+                  <dd>{source.version}</dd>
+                </div>
+              ) : null}
+              {node.metadata?.publication_date ? (
+                <div>
+                  <dt>Publication Date</dt>
+                  <dd>{node.metadata.publication_date}</dd>
+                </div>
+              ) : null}
+              {source?.last_checked || source?.retrieved_at ? (
+                <div>
+                  <dt>Last Checked</dt>
+                  <dd>{source.last_checked || source.retrieved_at}</dd>
+                </div>
+              ) : null}
+              {authorityItems.length ? (
+                <div>
+                  <dt>Authority</dt>
+                  <dd>
+                    <ul className="record-authority-list">
+                      {authorityItems.map((authority) => <li key={authority.id}>{authority.label}</li>)}
+                    </ul>
+                  </dd>
                 </div>
               ) : null}
             </dl>
@@ -482,30 +433,12 @@ export function ObjectDetailPage(props: {
               patch={{ source: source?.id || "" }}
               view="sources"
             >
-              View data sources
+              View source details
             </AppLink>
           </section>
         </aside>
       </div>
 
-      <Accordion.Root className="accordion-root record-developer-details" collapsible type="single">
-        <DisclosurePanel title="Developer details" value="developer-details">
-          <dl className="advanced-list">
-            <div>
-              <dt>Node ID</dt>
-              <dd>{node.id}</dd>
-            </div>
-            <div>
-              <dt>Catalog ID</dt>
-              <dd>{document.catalog_id}</dd>
-            </div>
-            <div>
-              <dt>Source URL</dt>
-              <dd>{officialSourceUrl || "Not recorded"}</dd>
-            </div>
-          </dl>
-        </DisclosurePanel>
-      </Accordion.Root>
     </section>
   );
 }

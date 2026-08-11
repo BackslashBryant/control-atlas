@@ -7,6 +7,7 @@ import {
   IconShieldCheck,
 } from "@tabler/icons-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { SITE_COPY } from "../../shared/site-copy.mjs";
 
 import {
   buildTemplateDocument,
@@ -342,7 +343,7 @@ function OfficialArtifactCard(props: {
             rel="noopener noreferrer"
             target="_blank"
           >
-            {artifact.download_url ? "Open official file" : "Open official source"}
+            {artifact.download_url ? "Download document" : "View official source"}
             <IconExternalLink aria-hidden="true" size={15} stroke={1.8} />
           </ButtonLink>
         ) : null}
@@ -1007,7 +1008,7 @@ export function TemplatesPage(props: {
           ) : undefined
         }
         summary={buildOverview
-          ? "Create a starter document, or work from a task."
+          ? SITE_COPY.routes.documents.purpose
           : documentBrowser || selectedTemplate
           ? "Review a starter document and its public references before you adapt it."
           : "Pick a task to see its public references and starter documents."}

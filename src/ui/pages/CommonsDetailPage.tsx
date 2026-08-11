@@ -80,27 +80,29 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
 
         <div className="resource-detail-grid">
           <div className="resource-detail-main">
-            <DetailSection title="What this is"><p>{resource.summary}</p></DetailSection>
-            <DetailSection title="Useful for"><div className="resource-detail-tags">{usefulFor.map((item) => <span key={item}>{display(item)}</span>)}</div></DetailSection>
+            <DetailSection title="About This Resource"><p>{resource.summary}</p></DetailSection>
+            <DetailSection title="Useful For"><div className="resource-detail-tags">{usefulFor.map((item) => <span key={item}>{display(item)}</span>)}</div></DetailSection>
             <DetailSection title="Access">
               <dl className="resource-detail-facts"><div><dt>Access</dt><dd>{resourceAccessLabel(resource)}</dd></div><div><dt>Cost</dt><dd>{display(resource.costType)}</dd></div><div><dt>Status</dt><dd>{display(resource.officialStatus || resource.resourceLane)}</dd></div></dl>
               <p>{resource.publicAccessNotes}</p>
             </DetailSection>
-            <DetailSection title="Official links">
+            <DetailSection title="Links">
               <ul className="resource-link-list"><li><a href={resource.canonicalUrl} rel="noopener noreferrer" target="_blank">Canonical resource <IconExternalLink aria-hidden="true" size={14} /></a></li>{resource.alternateUrls?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Publisher alternate <IconExternalLink aria-hidden="true" size={14} /></a></li>)}</ul>
             </DetailSection>
-            <DetailSection title="Why it is listed"><p>{resource.whyIncluded}</p></DetailSection>
+            <DetailSection title="Why It Is Listed"><p>{resource.whyIncluded}</p></DetailSection>
           </div>
 
           <aside className="resource-detail-side">
-            <DetailSection title="Ecosystem context">
-              {parent ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ id: parent.id }} view="commons-detail"><span>Parent</span><strong>{parent.name}</strong></AppLink> : <p>This is a top-level resource.</p>}
-              {children.map((child) => <AppLink className="resource-context-link" key={child.id} onNavigate={onNavigate} patch={{ id: child.id }} view="commons-detail"><span>Related service</span><strong>{child.name}</strong></AppLink>)}
-              {collections.map((collection) => <AppLink className="resource-context-link" key={collection.id} onNavigate={onNavigate} patch={{ collection: collection.id, showAll: "true" }} view="commons"><span>Collection</span><strong>{collection.title}</strong></AppLink>)}
-            </DetailSection>
-            <DetailSection title="Related publications">
-              <p>Search Library for governing publications and source records related to this resource.</p>
-              <AppLink className="resource-library-search" onNavigate={onNavigate} patch={{ query: resource.frameworks[0] || resource.programs?.[0] || resource.shortName }} view="search"><IconBook2 aria-hidden="true" size={16} />Search related publications</AppLink>
+            {parent || children.length > 0 || collections.length > 0 ? (
+              <DetailSection title="Related Resources">
+                {parent ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ id: parent.id }} view="commons-detail"><span>Part of</span><strong>{parent.name}</strong></AppLink> : null}
+                {children.map((child) => <AppLink className="resource-context-link" key={child.id} onNavigate={onNavigate} patch={{ id: child.id }} view="commons-detail"><span>Related service</span><strong>{child.name}</strong></AppLink>)}
+                {collections.map((collection) => <AppLink className="resource-context-link" key={collection.id} onNavigate={onNavigate} patch={{ collection: collection.id, showAll: "true" }} view="commons"><span>Collection</span><strong>{collection.title}</strong></AppLink>)}
+              </DetailSection>
+            ) : null}
+            <DetailSection title="Related Publications">
+              <p>Search the Library for publications related to this resource.</p>
+              <AppLink className="resource-library-search" onNavigate={onNavigate} patch={{ query: resource.frameworks[0] || resource.programs?.[0] || resource.shortName }} view="search"><IconBook2 aria-hidden="true" size={16} />Search the Library</AppLink>
             </DetailSection>
             <DetailSection title="Maintenance">
               <dl className="resource-detail-facts stacked"><div><dt>Last checked</dt><dd>{resource.lastCheckedAt}</dd></div><div><dt>Next review</dt><dd>{resource.nextCheckAt || "Not scheduled"}</dd></div><div><dt>Method</dt><dd>{display(resource.verificationMethod || "manual review")}</dd></div></dl>

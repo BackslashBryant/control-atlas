@@ -427,7 +427,10 @@ function connectStaticHeader() {
       void bootReactApp().then((booted) => {
         if (!booted) return;
         completeRouteTransition();
-        window.setTimeout(() => requestSearchOverlayOpen(), 0);
+        // SearchOverlay attaches its event listener from a passive React effect.
+        // Give that effect the same short settling window as the keyboard path
+        // below so a cold Home boot cannot lose the open request.
+        window.setTimeout(() => requestSearchOverlayOpen(), 60);
       });
     });
 }
@@ -483,13 +486,20 @@ async function bootReactApp() {
         rootElement.insertBefore(staticHome, reactRootElement);
       }
       completeRouteTransition();
-      const boundary = rootElement.querySelector<HTMLElement>('.home-trust-boundary');
-      if (boundary) {
-        boundary.setAttribute('role', 'alert');
-        boundary.insertAdjacentText(
-          'beforeend',
-          ' The interactive workspace could not load. Reload this page to try again.',
-        );
+      if (recoveringHome && staticHome) {
+        const homeMain = staticHome.querySelector<HTMLElement>('main');
+        let status = staticHome.querySelector<HTMLElement>('[data-home-boot-status]');
+        if (!status && homeMain) {
+          status = document.createElement('p');
+          status.className = 'home-boot-status';
+          status.dataset.homeBootStatus = 'true';
+          homeMain.append(status);
+        }
+        if (status) {
+          status.textContent =
+            'Interactive features did not load. Reload the page to try again.';
+          status.setAttribute('role', 'alert');
+        }
       }
       if (recoveringHome) {
         staticHome?.removeAttribute('hidden');

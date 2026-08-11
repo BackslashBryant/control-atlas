@@ -1,4 +1,5 @@
 import { IconArrowLeft, IconArrowRight, IconSearch } from "@tabler/icons-react";
+import { SITE_COPY } from "../../shared/site-copy.mjs";
 
 import {
   START_HERE_CONTEXTS,
@@ -52,7 +53,7 @@ export function StartHerePage(props: {
 
   return (
     <Panel className="max-w-[70rem] mx-auto start-here-panel" data-visual-identity="task-intake-compass">
-      <PageHeader primary summary="Answer two quick questions to find the right publication to start with." title="Start here" />
+      <PageHeader primary summary={SITE_COPY.routes.start.purpose} title={SITE_COPY.routes.start.title} />
 
       <ol aria-label="Start Here progress" className="start-here-progress">
         {["Goal", "Context", "Starting plan"].map((label, index) => {
@@ -93,15 +94,15 @@ export function StartHerePage(props: {
         <section aria-labelledby="start-here-plan" className="start-here-step start-here-plan">
           <p className="eyebrow">Your starting plan</p>
           <h2 id="start-here-plan">Start with {publicationName(bundle, plan.startWith.catalogId)}</h2>
-          <p>Because you chose <strong>{labelForGoal(plan.goalId).toLocaleLowerCase()}</strong> for a <strong>{labelForContext(plan.contextId).toLocaleLowerCase()}</strong>, begin with this publication and keep the official source attached.</p>
-          <p className="notice-inline">Control Atlas does not decide what applies to your system.</p>
+          <p>Based on your answers, begin with this publication.</p>
+          <p className="notice-inline">{SITE_COPY.product.boundary}</p>
           <div className="start-here-primary-destination">
-            <span><small>Next destination</small><strong>{publicationName(bundle, plan.startWith.catalogId)} publication view</strong><span>Publisher structure, records, coverage status, and source links.</span></span>
+            <span><small>Next destination</small><strong>{publicationName(bundle, plan.startWith.catalogId)}</strong><span>Open the publication and choose a record.</span></span>
             <AppLink onNavigate={onNavigate} patch={{ catalog: plan.startWith.catalogId }} variant="primary" view="catalog-detail">Open {publicationName(bundle, plan.startWith.catalogId)}<IconArrowRight aria-hidden="true" size={17} /></AppLink>
           </div>
           <div className="start-here-followups">
             <PlanStep bundle={bundle} catalogId={plan.thenReview.catalogId} onNavigate={onNavigate} role="Then review" />
-            <AppLink className="start-here-publication" onNavigate={onNavigate} patch={plan.action.patch as Partial<ViewState> | undefined} view={plan.action.view as ViewState["view"]}><span><small>Then act</small><strong>{plan.action.label}</strong><span>Open the recommended starting point for what you're working on.</span></span><IconArrowRight aria-hidden="true" size={18} /></AppLink>
+            <AppLink className="start-here-publication" onNavigate={onNavigate} patch={plan.action.patch as Partial<ViewState> | undefined} view={plan.action.view as ViewState["view"]}><span><small>Then act</small><strong>{plan.action.label}</strong><span>Open the next step for this task.</span></span><IconArrowRight aria-hidden="true" size={18} /></AppLink>
           </div>
           <div className="card-actions">
             <Button onClick={() => update({ context: "" })} type="button" variant="secondary"><IconArrowLeft aria-hidden="true" size={17} />Back to context</Button>

@@ -8,6 +8,7 @@ import {
   IconPlus,
   IconX,
 } from "@tabler/icons-react";
+import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { useEffect, useMemo, useState } from "react";
 
 import "../../../styles/resources.css";
@@ -145,9 +146,9 @@ export function CommonsPage(props: {
       <section className="workspace-template">
         <header className="page-header" data-route-primary-header="true"><div className="page-header-title"><h1>Resources</h1></div></header>
         <section className="empty-state" data-control-results id="resources-results">
-          <h2>The resource directory did not load.</h2>
-          <p>The rest of Control Atlas still works. Reload to try this separate public dataset again.</p>
-          <Button onClick={() => window.location.reload()} type="button" variant="secondary">Reload the directory</Button>
+          <h2>Resources did not load.</h2>
+          <p>Reload the page to try again.</p>
+          <Button onClick={() => window.location.reload()} type="button" variant="secondary">Reload page</Button>
         </section>
       </section>
     );
@@ -194,7 +195,7 @@ export function CommonsPage(props: {
       onSearch={() => update({ query: queryDraft.trim(), showAll: queryDraft.trim() ? "true" : state.showAll })}
       onSortChange={(sort) => update({ sort })}
       onViewChange={switchView}
-      purpose="Official portals, tools, training, and communities."
+      purpose={SITE_COPY.routes.resources.purpose}
       queryDraft={queryDraft}
       renderFacets={renderFacets}
       resultCountLabel={`${filtered.length.toLocaleString()} result${filtered.length === 1 ? "" : "s"}`}
@@ -220,7 +221,7 @@ export function CommonsPage(props: {
       {!resultsVisible ? (
         <section aria-labelledby="resource-collections-heading" className="workspace-browse-state" data-browse-state="resources">
           <div className="workspace-browse-heading">
-            <div><p className="eyebrow">Practical starting points</p><h2 id="resource-collections-heading">Browse eight practical collections</h2></div>
+            <div><p className="eyebrow">Resources</p><h2 id="resource-collections-heading">Browse by Collection</h2></div>
             <button onClick={() => update({ showAll: "true" })} type="button">Browse all {resources.length} resources <IconArrowRight aria-hidden="true" size={16} /></button>
           </div>
           <div className="workspace-browse-grid">
@@ -308,9 +309,9 @@ export function CommonsPage(props: {
         </>
       ) : (
         <section className="empty-state" data-control-results>
-          <h2>No resources match that combination.</h2>
-          <p>Clear the filters or search for an owner, acronym, tool, or job.</p>
-          <button onClick={reset} type="button">Back to collections</button>
+          <h2>No resources match.</h2>
+          <p>Clear a filter or search by name, topic, or owner.</p>
+          <button onClick={reset} type="button">Clear filters</button>
         </section>
       )}
     </WorkspaceTemplate>

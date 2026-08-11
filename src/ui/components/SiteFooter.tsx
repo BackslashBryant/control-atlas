@@ -1,6 +1,6 @@
 import { ALL_NAV_ITEMS } from "../lib/navigation";
 import sourceRegistry from "../../../data/source-registry.json";
-import { PRODUCT_FOOTER_NOTICE } from "../../shared/product-identity";
+import { PRODUCT_DEFINITION, PRODUCT_FOOTER_NOTICE } from "../../shared/product-identity";
 import type { ViewState } from "../lib/viewState";
 import { AppLink } from "./AppLink";
 
@@ -19,7 +19,7 @@ export function SiteFooter(props: {
       <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-[48px] w-full max-w-[1280px] mx-auto mb-[48px]">
         <div>
           <strong className="block font-mono uppercase tracking-wider text-[11px] mb-[12px] text-[var(--ca-text)]">Control Atlas</strong>
-          <p className="text-[var(--ca-text-muted)] text-[13px] max-w-[400px]">Public federal cybersecurity records, source text, and published relationships.</p>
+          <p className="text-[var(--ca-text-muted)] text-[13px] max-w-[400px]">{PRODUCT_DEFINITION}</p>
         </div>
         <div>
           <strong className="block font-mono uppercase tracking-wider text-[11px] mb-[16px] text-[var(--ca-text)]">Navigate</strong>

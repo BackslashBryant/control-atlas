@@ -37,6 +37,16 @@
     }
   }
 
+  function sharedCopy(key) {
+    var node = document.getElementById("control-atlas-copy");
+    if (!node) return null;
+    try {
+      return JSON.parse(node.textContent || "{}")[key] || null;
+    } catch {
+      return null;
+    }
+  }
+
   function routeIdentity() {
     var raw = window.location.hash.replace(/^#/, "") || "/";
     var routeUrl = new URL(raw, window.location.origin);
@@ -45,95 +55,104 @@
     var query = routeUrl.searchParams;
 
     if (route === "atlas") {
+      var atlasCopy = sharedCopy("atlas") || { eyebrow: "Atlas", summary: "Start with a topic and work toward the details.", title: "Atlas" };
       var rawNode = query.get("node") || "";
       var nodeParts = decode(rawNode).split(":");
       var identifier = nodeParts[nodeParts.length - 1] || "";
       return identifier
         ? {
-            eyebrow: "Atlas record",
+            eyebrow: atlasCopy.eyebrow,
             kind: "atlas",
-            summary: "Published structure and cited connections around this record.",
+            summary: atlasCopy.summary,
             title: identifier
           }
         : {
-            eyebrow: "Atlas",
+            eyebrow: atlasCopy.eyebrow,
             kind: "atlas",
-            summary: "Pick an area, then a publication, then a record.",
-            title: "Atlas map"
+            summary: atlasCopy.summary,
+            title: atlasCopy.title
           };
     }
     if (route === "library") {
+      var libraryCopy = sharedCopy("library") || { eyebrow: "Library", summary: "Search by identifier, title, or topic.", title: "Library" };
       var catalogId = segments[1] === "publication" ? decode(segments[2] || "") : "";
       return catalogId
         ? {
-            eyebrow: "Published structure",
+            eyebrow: libraryCopy.eyebrow,
             kind: "catalog",
-            summary: "Publisher records, source identity, and structural groups.",
+            summary: libraryCopy.summary,
             title: CATALOG_NAMES[catalogId] || catalogId
           }
         : {
-            eyebrow: "Library",
+            eyebrow: libraryCopy.eyebrow,
             kind: "catalog",
-            summary: "Browse official publications and open their published records.",
-            title: "Library"
+            summary: libraryCopy.summary,
+            title: libraryCopy.title
           };
     }
     if (route === "record") {
+      var recordCopy = sharedCopy("record") || { eyebrow: "Record", summary: "Read the published text and record details.", title: "Record" };
       return {
-        eyebrow: "Official publisher record",
+        eyebrow: recordCopy.eyebrow,
         kind: "record",
-        summary: "Official content, structural location, provenance, and source-linked next steps.",
-        title: decode(segments.slice(2).join("/")) || "Record"
+        summary: recordCopy.summary,
+        title: decode(segments.slice(2).join("/")) || recordCopy.title
       };
     }
     if (route === "compare") {
+      var compareCopy = sharedCopy("compare") || { eyebrow: "Compare", summary: "Compare frameworks and related records.", title: "Compare" };
       return {
-        eyebrow: "Compare",
+        eyebrow: compareCopy.eyebrow,
         kind: "compare",
-        summary: "Align published structures, mappings, evidence, and gaps.",
-        title: "What do you want to compare?"
+        summary: compareCopy.summary,
+        title: compareCopy.title
       };
     }
     if (route === "build") {
+      var documentsCopy = sharedCopy("documents") || { eyebrow: "Documents", summary: "Choose what you need to produce.", title: "Documents" };
       return {
-        eyebrow: "Documents",
+        eyebrow: documentsCopy.eyebrow,
         kind: "documents",
-        summary: "Choose a task or starter document, then keep its public references attached.",
-        title: segments[1] === "tasks" ? "Tasks" : "Documents"
+        summary: documentsCopy.summary,
+        title: segments[1] === "tasks" ? "Tasks" : documentsCopy.title
       };
     }
     if (route === "sources") {
       if (query.get("source")) return null;
+      var sourcesCopy = sharedCopy("sources") || { eyebrow: "Sources", summary: "Check publication ownership, version, and update status.", title: "Sources" };
       return {
-        eyebrow: "Sources",
+        eyebrow: sourcesCopy.eyebrow,
         kind: "sources",
-        summary: "Publisher, coverage, version, and last-checked date for every publication.",
-        title: "Sources"
+        summary: sourcesCopy.summary,
+        title: sourcesCopy.title
       };
     }
     if (route === "start") {
+      var startCopy = sharedCopy("start") || { eyebrow: "Start here", summary: "Not sure where to begin? Start here.", title: "Start here" };
       return {
-        eyebrow: "Start here",
+        eyebrow: startCopy.eyebrow,
         kind: "start",
-        summary: "Answer two questions to get a starting point in the public material.",
-        title: "Start here"
+        summary: startCopy.summary,
+        title: startCopy.title
       };
     }
     if (route === "guides") {
       if (query.get("pattern")) return null;
+      var guidesCopy = sharedCopy("guides") || { eyebrow: "Guides", summary: "Follow step-by-step guidance for common federal cybersecurity work.", title: "Guides" };
       return {
-        eyebrow: "Guides",
+        eyebrow: guidesCopy.eyebrow,
         kind: "guides",
-        summary: "Field guidance for finding, reading, and using public cybersecurity material.",
-        title: "Practitioner guides"
+        summary: guidesCopy.summary,
+        title: guidesCopy.title
       };
     }
     if (route === "about") {
+      var aboutCopy = sharedCopy("about") || { eyebrow: "About", summary: "About Control Atlas.", title: "About" };
       return {
-        eyebrow: "About",
+        eyebrow: aboutCopy.eyebrow,
         kind: "about",
-        summary: "A public-source workbench for governing, securing, assessing, operating, and defending systems.",
-        title: "About"
+        summary: aboutCopy.summary,
+        title: aboutCopy.title
       };
     }
     return null;

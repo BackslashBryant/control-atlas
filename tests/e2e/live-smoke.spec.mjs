@@ -22,19 +22,18 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   }
   await expect(
     page.getByRole("heading", {
-      name: "Federal cybersecurity requirements, sources, and how they connect.",
+      name: "Make federal cybersecurity compliance make sense.",
     }),
   ).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Search Control Atlas" })).toBeVisible();
+  await expect(page.locator(".home-search").getByRole("button", { name: "Search" })).toBeVisible();
   await expect(page.locator(".home-secondary-action")).toHaveCount(3);
   await expect(page.locator(".site-header .brand-key-word")).toBeVisible();
-  await expect(page.locator(".home-product-identity")).toContainText(
-    "Search official requirements and controls",
+  await expect(page.locator(".home-product-identity")).toHaveText(
+    "Understand what applies, what it means, and what to do next.",
   );
   await expect(page.locator(".home-ecosystem-areas .bucket-tag")).toHaveCount(9);
-  await expect(page.locator(".home-trust-boundary")).toContainText(
-    "Official material stays source-traceable",
-  );
+  await expect(page.locator(".home-trust-boundary")).toHaveCount(0);
 
   await gotoApp(page, "/#/library?q=AC-2");
   await waitForAppReady(page);
@@ -45,15 +44,12 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   await expect(page.locator("main")).toHaveCount(1);
   await expect(page.locator('[data-template="E"]')).toBeVisible({ timeout: 30000 });
   await expect(
-    page.getByRole("heading", { name: "AC-2", exact: true, level: 1 }),
+    page.getByRole("heading", { name: "NIST AC-2", exact: true, level: 1 }),
   ).toBeVisible();
-  const guidanceBoundary = page.locator('[data-editorial-boundary="explicit"]');
-  await expect(guidanceBoundary).toBeVisible();
-  await expect(guidanceBoundary.locator(".record-guidance-boundary")).toHaveText(
-    "Control Atlas guidance",
-  );
+  await expect(page.getByRole("heading", { name: "Control Statement", exact: true })).toBeVisible();
+  await expect(page.locator('[data-editorial-boundary="explicit"]')).toHaveCount(0);
   const officialSource = page.getByRole("link", {
-    name: "Open official source",
+    name: "View official source",
     exact: true,
   });
   await expect(officialSource).toHaveCount(1);
@@ -83,9 +79,8 @@ test("live smoke: compare hub loads", async ({ page }) => {
   await gotoApp(page, "/#/compare");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(
-    page.getByRole("heading", { name: "What do you want to compare?" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Compare", level: 1 })).toBeVisible();
+  await expect(page.getByText("Compare frameworks and related records.", { exact: true })).toBeVisible();
 });
 
 test("live smoke: deployed runtime cache version matches source", async ({

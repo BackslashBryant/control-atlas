@@ -19,11 +19,12 @@ test("landing presents Template B search, three destinations, and area browsing"
 
   await expect(
     page.getByRole("heading", {
-      name: "Federal cybersecurity requirements, sources, and how they connect.",
+      name: "Make federal cybersecurity compliance make sense.",
     }),
   ).toBeVisible();
 
   await expect(page.getByRole("searchbox", { name: "Search Control Atlas" })).toBeVisible();
+  await expect(page.locator(".home-search").getByRole("button", { name: "Search" })).toBeVisible();
   // The brand keycap lives in the persistent header, which Home now shares.
   await expect(page.locator(".site-header .brand-kbd")).toBeVisible();
   // Pinned to the shape, not the literal: the word list is product copy and
@@ -76,7 +77,7 @@ test("protected Ctrl+Alt slogan rotates and native Home history remains coherent
   await waitForAppReady(page);
   await expect(
     page.getByRole("heading", {
-      name: "Federal cybersecurity requirements, sources, and how they connect.",
+      name: "Make federal cybersecurity compliance make sense.",
     }),
   ).toBeVisible();
 
@@ -103,7 +104,7 @@ test("landing search and brand-home flow work without legacy onboarding surfaces
     .click();
   await expect(
     page.getByRole("heading", {
-      name: "Federal cybersecurity requirements, sources, and how they connect.",
+      name: "Make federal cybersecurity compliance make sense.",
     }),
   ).toBeVisible({
     timeout: 15000,

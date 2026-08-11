@@ -7,6 +7,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { LibraryAtlasMap, type LibraryMapItem } from "../components/LibraryAtlasMap";
 import { AppLink } from "../components/AppLink";
 import { BucketTag } from "../components/TaxonomyTag";
@@ -23,14 +24,14 @@ import {
 import { buildCatalogCoverageList, catalogCoverageForId, isLowCatalogCoverage } from "../lib/catalogCoverage";
 import { LIBRARY_KINDS, libraryKindForRawType, libraryKindLabel } from "../lib/informationArchitecture";
 import {
-  familyQualifiedRecordId,
-  plainEnglishRecordName,
+  recordIdentityFor,
+  officialRecordName,
+  recordPublisherName,
 } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import {
   connectionSummary,
   MarkedSearchText,
-  publisherPublicationLabel,
   searchPreviewText,
 } from "../lib/searchPresentation";
 import type { ViewState } from "../lib/viewState";
@@ -46,7 +47,7 @@ function matchReasonFor(document: any, query: string): string {
   if (title === needle) return "Exact title";
   if (itemId.startsWith(needle)) return "Identifier match";
   if (title.includes(needle)) return "Title match";
-  return "Official text match";
+  return "Text match";
 }
 
 const RELEVANCE_ORDER: Record<string, number> = {
@@ -54,7 +55,7 @@ const RELEVANCE_ORDER: Record<string, number> = {
   "Exact title": 1,
   "Identifier match": 2,
   "Title match": 3,
-  "Official text match": 4,
+  "Text match": 4,
   "Matches active filters": 5,
 };
 
@@ -120,27 +121,33 @@ export function ExplorePage(props: {
       const relationshipCount = Number(document.published_connection_count || 0);
       const crossFrameworkCount = Number(document.published_cross_catalog_connection_count || 0);
       const crossFrameworkCatalogCount = Number(document.published_connection_catalog_count || 0);
-      const identifier = familyQualifiedRecordId(
-        String(document.item_id || document.id || ""),
-        document.control_family,
-        document.catalog_id,
+      const itemId = String(document.item_id || document.id || "");
+      const source = bundle.runtime.getSource(document.source_id);
+      const publisher = recordPublisherName(
+        document.publisher_name,
+        source?.owner,
+        source?.publisher,
       );
+      const identity = recordIdentityFor({
+        publisher,
+        catalogId: document.catalog_id || "",
+        family: document.control_family || "",
+        itemId,
+        metadata: { identity_category: document.identity_category || "" },
+      });
       return {
         area: areaPresentationForCatalog(document.catalog_id),
         crossFrameworkCatalogCount,
         crossFrameworkCount,
         document,
-        identifier,
+        identifier: itemId,
+        identity,
         lowCoverage: isLowCatalogCoverage(catalogCoverageForId(catalogCoverage, document.catalog_id)),
         matchReason: matchReasonFor(document, state.query),
         publication: catalogNames.get(document.catalog_id) || document.catalog_name || "Publication unavailable",
-        publisherPublication: publisherPublicationLabel(document),
+        publisher,
         relationshipCount,
-        title: plainEnglishRecordName(
-          String(document.item_id || document.id || ""),
-          String(document.title || ""),
-          String(document.description || ""),
-        ),
+        title: officialRecordName(itemId, String(document.title || "")),
       };
     }).filter((row: any) => !connectedOnly || row.relationshipCount > 0);
     const by = (key: "identifier" | "title" | "publication") => (left: any, right: any) =>
@@ -150,7 +157,7 @@ export function ExplorePage(props: {
     if (state.sort === "publication") return prepared.sort(by("publication"));
     return prepared.sort((left: any, right: any) =>
       (RELEVANCE_ORDER[left.matchReason] ?? 9) - (RELEVANCE_ORDER[right.matchReason] ?? 9) || by("title")(left, right));
-  }, [catalogCoverage, catalogNames, connectedOnly, documents, state.query, state.sort]);
+  }, [bundle.runtime, catalogCoverage, catalogNames, connectedOnly, documents, state.query, state.sort]);
 
   const publishers = useMemo<string[]>(() => [...new Set<string>(allDocuments
     .map((document: any) => String(document.publisher_name || ""))
@@ -158,11 +165,15 @@ export function ExplorePage(props: {
   const topCatalogs = useMemo(() => runtimeCatalogs
     .map((catalog: any) => ({
       ...catalog,
-      publisher: allDocuments.find((document: any) => document.catalog_id === catalog.id)?.publisher_name || "Publisher unavailable",
+      publisher: recordPublisherName(
+        allDocuments.find((document: any) => document.catalog_id === catalog.id)?.publisher_name,
+        catalog.source_id ? bundle.runtime.getSource(catalog.source_id)?.owner : "",
+        catalog.display_group,
+      ),
     }))
     .filter((catalog: any) => catalog.leaf_record_count > 0)
     .sort((left: any, right: any) => right.leaf_record_count - left.leaf_record_count || left.name.localeCompare(right.name))
-    .slice(0, 6), [allDocuments, runtimeCatalogs]);
+    .slice(0, 6), [allDocuments, bundle.runtime, runtimeCatalogs]);
   const areaCounts = useMemo(() => AREA_PRESENTATIONS.map((area) => ({
     ...area,
     count: allDocuments.filter((document: any) => areaPresentationForCatalog(document.catalog_id)?.id === area.id).length,
@@ -175,7 +186,7 @@ export function ExplorePage(props: {
   const mapItems: LibraryMapItem[] = useMemo(() => state.viewMode !== "map" ? [] : rows.map((row: any) => ({
     id: row.document.id,
     kind: displayNameFor("object_type", row.document.object_type),
-    label: `${row.identifier} — ${row.title}`,
+    label: row.identity,
     group: row.publication,
     destination: { view: "library-detail" as const, patch: { node: row.document.id } },
   })), [rows, state.viewMode]);
@@ -293,13 +304,13 @@ export function ExplorePage(props: {
       }}
       onSortChange={(sort) => onNavigate("search", { sort })}
       onViewChange={switchView}
-      purpose="Search every published record and its sources."
+      purpose={SITE_COPY.routes.library.purpose}
       queryDraft={queryDraft}
       renderFacets={renderFacets}
       resultCountLabel={`${rows.length.toLocaleString()} result${rows.length === 1 ? "" : "s"}`}
       resultsId="library-results"
       searchLabel="Filter results by ID, title, or topic"
-      searchPlaceholder="Filter results by identifier, title, or topic"
+      searchPlaceholder={SITE_COPY.product.searchPlaceholder}
       showResultBar={searchStarted}
       sortLabel="Sort Library results"
       sortOptions={[
@@ -368,7 +379,7 @@ export function ExplorePage(props: {
                   {compareMode ? (
                     <label className="workspace-result-select">
                       <input
-                        aria-label={`Select ${row.identifier} for comparison`}
+                        aria-label={`Select ${row.identity} for comparison`}
                         checked={selected}
                         onChange={() => setSelectedRecords((items) => selected ? items.filter((id) => id !== row.document.item_id) : [...items, row.document.item_id])}
                         type="checkbox"
@@ -376,18 +387,18 @@ export function ExplorePage(props: {
                     </label>
                   ) : null}
                   <AppLink
-                    aria-label={`Open ${row.identifier} — ${row.title}`}
+                    aria-label={`Open ${row.identity}`}
                     className="workspace-result-row__link"
                     onNavigate={onNavigate}
                     patch={{ node: row.document.id }}
                     view="library-detail"
                   >
                     <div className="workspace-result-row__meta">
-                      <strong>{row.identifier}</strong>
                       <span className="workspace-kind-tag">{recordType}</span>
-                      <span>{row.document.publisher_name || row.publisherPublication}</span>
+                      <span>{row.publication}</span>
                     </div>
-                    <h3><MarkedSearchText query={state.query} text={row.title} /></h3>
+                    <h3><MarkedSearchText query={state.query} text={row.identity} /></h3>
+                    {row.title ? <p className="workspace-result-row__official-name"><MarkedSearchText query={state.query} text={row.title} /></p> : null}
                     {detailsReady ? <p className="workspace-result-row__snippet"><MarkedSearchText query={state.query} text={searchPreviewText(row.document)} /></p> : null}
                     {detailsReady ? (
                       <div className="workspace-result-row__signals">
@@ -405,7 +416,7 @@ export function ExplorePage(props: {
             <li className="workspace-result-list__action"><Button onClick={() => setVisibleCount((count) => count + 25)} type="button" variant="secondary">Show 25 more</Button></li>
           ) : null}
           {rows.length === 0 ? (
-            <li><section className="empty-state"><h2>No matching records found.</h2><p>Try a different identifier, title, topic, or filter.</p><Button onClick={() => onNavigate("search", { area: "", connectedOnly: "", filter: "", kind: "", publisher: "", query: "", sort: "relevance", viewMode: "list" })} type="button" variant="primary">Clear search</Button></section></li>
+            <li><section className="empty-state"><h2>{hasFilters ? "Nothing matches these filters." : "No records found."}</h2><p>{hasFilters ? "Clear one and try again." : "Try another identifier or keyword."}</p><Button onClick={() => onNavigate("search", { area: "", connectedOnly: "", filter: "", kind: "", publisher: "", query: "", sort: "relevance", viewMode: "list" })} type="button" variant="primary">{hasFilters ? "Clear filters" : "Clear search"}</Button></section></li>
           ) : null}
         </ul>
       )}

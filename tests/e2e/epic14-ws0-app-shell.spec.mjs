@@ -118,8 +118,8 @@ test("WS0 restores an interactive Home landmark when React boot fails", async ({
   await expect(homeMain).toBeVisible({ timeout: 10_000 });
   await expect(homeMain).not.toHaveAttribute("inert", "");
   await expect(homeMain).not.toHaveAttribute("aria-busy", "true");
-  await expect(page.locator(".home-trust-boundary")).toContainText(
-    "The interactive workspace could not load",
+  await expect(page.locator("[data-home-boot-status]")).toHaveText(
+    "Interactive features did not load. Reload the page to try again.",
   );
   await expect(page.locator("main")).toHaveCount(1);
 });

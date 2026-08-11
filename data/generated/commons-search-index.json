@@ -1,11 +1,11 @@
 {
-  "builtAt": "2026-08-03T00:00:00.000Z",
+  "builtAt": "2026-08-11T00:00:00.000Z",
   "totalCount": 114,
   "collections": [
     {
       "id": "dod-cybersecurity-portals",
       "title": "DoD cybersecurity portals",
-      "summary": "Start with the official portals behind DoD cyber policy, implementation, workforce, connections, and services.",
+      "summary": "Find official DoD cybersecurity portals.",
       "whyCurated": "Keeps related DoD destinations together without turning external portals into Atlas parents.",
       "icon": "shield-network",
       "libraryLinks": [
@@ -36,7 +36,7 @@
     {
       "id": "reciprocity-authorization-reuse",
       "title": "Reciprocity and authorization reuse",
-      "summary": "Find package access, reuse, inheritance, common-control, shared-responsibility, and reciprocity destinations.",
+      "summary": "Find resources for reusing authorization work.",
       "whyCurated": "Separates reusable material from the independent decision each authorizing official still makes.",
       "icon": "arrows-exchange",
       "libraryLinks": [
@@ -66,7 +66,7 @@
     {
       "id": "implementation-assessment-tools",
       "title": "Implementation and assessment tools",
-      "summary": "Find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers.",
+      "summary": "Find tools for implementing and assessing security controls.",
       "whyCurated": "Groups tools by the work they support while keeping publisher claims and access limits visible.",
       "icon": "tool",
       "libraryLinks": [
@@ -132,7 +132,7 @@
     {
       "id": "product-assurance-approved-products",
       "title": "Product assurance and approved products",
-      "summary": "Find international certification, U.S. evaluation, cryptographic validation, classified-solution, and cloud marketplaces.",
+      "summary": "Find directories for product assurance and approved products.",
       "whyCurated": "Distinguishes programs that answer different product-assurance questions instead of treating every list as equivalent.",
       "icon": "certificate",
       "libraryLinks": [
@@ -163,7 +163,7 @@
     {
       "id": "cloud-devsecops-software-factories",
       "title": "Cloud, DevSecOps, and software factories",
-      "summary": "Find Platform One, software-factory, container, cloud-security, collaboration, and delivery resources.",
+      "summary": "Find tools and services for secure software delivery.",
       "whyCurated": "Presents Platform One as an ecosystem and separates its child services by actual job.",
       "icon": "cloud-code",
       "libraryLinks": [
@@ -198,7 +198,7 @@
     {
       "id": "cmmc-defense-industrial-base",
       "title": "CMMC and the defense industrial base",
-      "summary": "Find official program material, reporting systems, assistance, accreditation directories, CUI, and NISP resources.",
+      "summary": "Find CMMC program resources for defense contractors.",
       "whyCurated": "Separates DoD policy, government-supported help, accreditation services, commercial providers, and unofficial communities.",
       "icon": "building-factory",
       "libraryLinks": [
@@ -229,7 +229,7 @@
     {
       "id": "cyber-workforce-training",
       "title": "Cyber workforce and training",
-      "summary": "Find DoD 8140, DCWF, NICE, qualification, training, and career-development destinations.",
+      "summary": "Find federal cybersecurity workforce and training resources.",
       "whyCurated": "Connects workforce roles and qualification resources without duplicating the governing publications.",
       "icon": "users",
       "libraryLinks": [
@@ -258,7 +258,7 @@
     {
       "id": "practitioner-communities",
       "title": "Practitioner communities",
-      "summary": "Find public or documented communities for federal cyber, CMMC, FedRAMP, GRC, DevSecOps, and implementation tools.",
+      "summary": "Find practitioner communities and discussion forums.",
       "whyCurated": "Gives practitioners discussion paths while clearly labeling unofficial and account-based communities.",
       "icon": "messages",
       "libraryLinks": [],
@@ -326,7 +326,7 @@
         "Grype Vulnerability Scanner"
       ],
       "searchKeywords": [],
-      "searchableText": "anchore grype vulnerability scanner grype vulnerability scanner vulnerability scanner for container images and filesystems designed to work seamlessly with syft sboms. vulnerability scanner for container images and filesystems designed to work seamlessly with syft sboms. fast open-source vulnerability scanner specifically built to scan sbom files for known cves. anchore tool government_or_organization public free community cve sbom vulnerability scanning supply chain devsecops devsecops vulnerability analyst implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. grype vulnerability scanner"
+      "searchableText": "anchore grype vulnerability scanner grype vulnerability scanner vulnerability scanner for container images and filesystems designed to work seamlessly with syft sboms. vulnerability scanner for container images and filesystems designed to work seamlessly with syft sboms. fast open-source vulnerability scanner specifically built to scan sbom files for known cves. anchore tool government_or_organization public free community cve sbom vulnerability scanning supply chain devsecops devsecops vulnerability analyst implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. grype vulnerability scanner"
     },
     {
       "id": "tool-syft-sbom-generator",
@@ -378,7 +378,7 @@
         "Syft SBOM Generator"
       ],
       "searchKeywords": [],
-      "searchableText": "anchore syft sbom generator syft sbom generator cli tool and library for generating a software bill of materials (sbom) from container images and filesystems. cli tool and library for generating a software bill of materials (sbom) from container images and filesystems. open-source sbom generation tool supporting cyclonedx and spdx output formats. anchore tool government_or_organization public free community sbom cyclonedx spdx sbom container security devsecops developer implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. syft sbom generator"
+      "searchableText": "anchore syft sbom generator syft sbom generator cli tool and library for generating a software bill of materials (sbom) from container images and filesystems. cli tool and library for generating a software bill of materials (sbom) from container images and filesystems. open-source sbom generation tool supporting cyclonedx and spdx output formats. anchore tool government_or_organization public free community sbom cyclonedx spdx sbom container security devsecops developer implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. syft sbom generator"
     },
     {
       "id": "tool-ansible-lockdown",
@@ -429,7 +429,7 @@
         "Ansible Lockdown"
       ],
       "searchKeywords": [],
-      "searchableText": "ansible lockdown hardening roles ansible lockdown curated open-source ansible roles for applying disa stig and cis hardening baselines across rhel, ubuntu, and windows. curated open-source ansible roles for applying disa stig and cis hardening baselines across rhel, ubuntu, and windows. automated configuration management playbooks for applying os hardening controls. ansible lockdown project tool government_or_organization public free community disa stig cis benchmarks ansible hardening system administrator devsecops engineer implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. ansible lockdown"
+      "searchableText": "ansible lockdown hardening roles ansible lockdown curated open-source ansible roles for applying disa stig and cis hardening baselines across rhel, ubuntu, and windows. curated open-source ansible roles for applying disa stig and cis hardening baselines across rhel, ubuntu, and windows. automated configuration management playbooks for applying os hardening controls. ansible lockdown project tool government_or_organization public free community disa stig cis benchmarks ansible hardening system administrator devsecops engineer implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. ansible lockdown"
     },
     {
       "id": "tool-awesome-oscal",
@@ -478,7 +478,7 @@
         "Awesome OSCAL"
       ],
       "searchKeywords": [],
-      "searchableText": "awesome oscal curated resources awesome oscal community-maintained list of oscal tools, libraries, sdks, schemas, and adoption guides. community-maintained list of oscal tools, libraries, sdks, schemas, and adoption guides. central directory of community open-source projects supporting nist oscal implementation. oscal community tool government_or_organization public free community oscal oscal community developer data architect isso implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. awesome oscal"
+      "searchableText": "awesome oscal curated resources awesome oscal community-maintained list of oscal tools, libraries, sdks, schemas, and adoption guides. community-maintained list of oscal tools, libraries, sdks, schemas, and adoption guides. central directory of community open-source projects supporting nist oscal implementation. oscal community tool government_or_organization public free community oscal oscal community developer data architect isso implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. awesome oscal"
     },
     {
       "id": "commercial-aws-govcloud-docs",
@@ -529,7 +529,7 @@
         "AWS GovCloud Guide"
       ],
       "searchKeywords": [],
-      "searchableText": "aws govcloud (us) compliance & user guide aws govcloud guide technical documentation and compliance alignment guides for architecting fedramp high and dod il5 workloads on aws. technical documentation and compliance alignment guides for architecting fedramp high and dod il5 workloads on aws. vendor documentation for configuring aws govcloud services to meet federal compliance controls. amazon web services documentation commercial public free commercial publisher fedramp high dod il5 nist sp 800-53 aws govcloud cloud architect isso engineer implement assess general_it cloud-devsecops-software-factories cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. aws govcloud guide"
+      "searchableText": "aws govcloud (us) compliance & user guide aws govcloud guide technical documentation and compliance alignment guides for architecting fedramp high and dod il5 workloads on aws. technical documentation and compliance alignment guides for architecting fedramp high and dod il5 workloads on aws. vendor documentation for configuring aws govcloud services to meet federal compliance controls. amazon web services documentation commercial public free commercial publisher fedramp high dod il5 nist sp 800-53 aws govcloud cloud architect isso engineer implement assess general_it cloud-devsecops-software-factories cloud, devsecops, and software factories find tools and services for secure software delivery. aws govcloud guide"
     },
     {
       "id": "training-cdse",
@@ -574,7 +574,7 @@
         "security training"
       ],
       "searchKeywords": [],
-      "searchableText": "cdse cybersecurity training cdse find defense cybersecurity courses, curricula, job aids, and professional development resources. find defense cybersecurity courses, curricula, job aids, and professional development resources. it provides defense security training adjacent to cyber, cui, industrial security, and authorization work. defense counterintelligence and security agency defense counterintelligence and security agency training government access_varies free official cdse federal cybersecurity practitioners prepare industrial security cybersecurity training cyber-workforce-training cmmc-defense-industrial-base cmmc and the defense industrial base find official program material, reporting systems, assistance, accreditation directories, cui, and nisp resources. cyber workforce and training find dod 8140, dcwf, nice, qualification, training, and career-development destinations. cdse security training"
+      "searchableText": "cdse cybersecurity training cdse find defense cybersecurity courses, curricula, job aids, and professional development resources. find defense cybersecurity courses, curricula, job aids, and professional development resources. it provides defense security training adjacent to cyber, cui, industrial security, and authorization work. defense counterintelligence and security agency defense counterintelligence and security agency training government access_varies free official cdse federal cybersecurity practitioners prepare industrial security cybersecurity training cyber-workforce-training cmmc-defense-industrial-base cmmc and the defense industrial base find cmmc program resources for defense contractors. cyber workforce and training find federal cybersecurity workforce and training resources. cdse security training"
     },
     {
       "id": "tool-checkov",
@@ -626,7 +626,7 @@
         "Checkov IaC Scanner"
       ],
       "searchKeywords": [],
-      "searchableText": "checkov infrastructure as code scanner checkov iac scanner static code analysis tool for infrastructure-as-code (terraform, cloudformation, helm, kubernetes). static code analysis tool for infrastructure-as-code (terraform, cloudformation, helm, kubernetes). open-source tool for catching misconfigurations in iac before deployment to cloud environments. palo alto networks / bridgecrew tool government_or_organization public free community nist sp 800-53 cis benchmarks iac scanning terraform devsecops cloud engineer developer implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. checkov iac scanner"
+      "searchableText": "checkov infrastructure as code scanner checkov iac scanner static code analysis tool for infrastructure-as-code (terraform, cloudformation, helm, kubernetes). static code analysis tool for infrastructure-as-code (terraform, cloudformation, helm, kubernetes). open-source tool for catching misconfigurations in iac before deployment to cloud environments. palo alto networks / bridgecrew tool government_or_organization public free community nist sp 800-53 cis benchmarks iac scanning terraform devsecops cloud engineer developer implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. checkov iac scanner"
     },
     {
       "id": "commercial-cis-benchmarks-free",
@@ -677,7 +677,7 @@
         "CIS Benchmarks Free"
       ],
       "searchKeywords": [],
-      "searchableText": "cis benchmarks free pdf community edition cis benchmarks free consensus-developed secure configuration benchmarks for os, cloud, and network platforms. consensus-developed secure configuration benchmarks for os, cloud, and network platforms. commercial security benchmarks freely available for personal and internal organizational use. center for internet security (cis) catalog nonprofit free_account free nonprofit publisher cis benchmarks nist sp 800-53 cis hardening security engineer system administrator implement assess general_it product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. cis benchmarks free"
+      "searchableText": "cis benchmarks free pdf community edition cis benchmarks free consensus-developed secure configuration benchmarks for os, cloud, and network platforms. consensus-developed secure configuration benchmarks for os, cloud, and network platforms. commercial security benchmarks freely available for personal and internal organizational use. center for internet security (cis) catalog nonprofit free_account free nonprofit publisher cis benchmarks nist sp 800-53 cis hardening security engineer system administrator implement assess general_it product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. cis benchmarks free"
     },
     {
       "id": "portal-cis-workbench",
@@ -722,7 +722,7 @@
         "CIS community"
       ],
       "searchKeywords": [],
-      "searchableText": "cis workbench cis workbench participate in cis benchmark development and access community benchmark resources. participate in cis benchmark development and access community benchmark resources. it is cis's account-based collaboration surface for benchmark content and practitioner participation. center for internet security center for internet security community_forum nonprofit free_account free publisher-operated community cis benchmarks federal cybersecurity practitioners implement assess secure configuration implementation-assessment-tools practitioner-communities implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. practitioner communities find public or documented communities for federal cyber, cmmc, fedramp, grc, devsecops, and implementation tools. cis workbench cis community"
+      "searchableText": "cis workbench cis workbench participate in cis benchmark development and access community benchmark resources. participate in cis benchmark development and access community benchmark resources. it is cis's account-based collaboration surface for benchmark content and practitioner participation. center for internet security center for internet security community_forum nonprofit free_account free publisher-operated community cis benchmarks federal cybersecurity practitioners implement assess secure configuration implementation-assessment-tools practitioner-communities implementation and assessment tools find tools for implementing and assessing security controls. practitioner communities find practitioner communities and discussion forums. cis workbench cis community"
     },
     {
       "id": "tool-cisa-cset",
@@ -766,7 +766,7 @@
         "Cyber Security Evaluation Tool"
       ],
       "searchKeywords": [],
-      "searchableText": "cisa cyber security evaluation tool cset conduct structured it and operational-technology cybersecurity self-assessments with locally managed data. conduct structured it and operational-technology cybersecurity self-assessments with locally managed data. cisa and inl publish this free assessment workspace for repeatable cybersecurity evaluations. cybersecurity and infrastructure security agency cybersecurity and infrastructure security agency tool government public free official open-source cset federal cybersecurity practitioners assess it operational technology implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. cset cyber security evaluation tool"
+      "searchableText": "cisa cyber security evaluation tool cset conduct structured it and operational-technology cybersecurity self-assessments with locally managed data. conduct structured it and operational-technology cybersecurity self-assessments with locally managed data. cisa and inl publish this free assessment workspace for repeatable cybersecurity evaluations. cybersecurity and infrastructure security agency cybersecurity and infrastructure security agency tool government public free official open-source cset federal cybersecurity practitioners assess it operational technology implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. cset cyber security evaluation tool"
     },
     {
       "id": "official-cisa-services-catalog",
@@ -957,7 +957,7 @@
         "federal virtual training"
       ],
       "searchKeywords": [],
-      "searchableText": "cisa learning cisa learning access cisa's current cybersecurity training service for eligible government, public-sector, and partner learners. access cisa's current cybersecurity training service for eligible government, public-sector, and partner learners. it is the current successor to fedvte and retains a no-cost federal cybersecurity training path. cybersecurity and infrastructure security agency cybersecurity and infrastructure security agency training government free_account no_cost official cisa learning federal cybersecurity practitioners prepare cybersecurity training cyber-workforce-training cyber workforce and training find dod 8140, dcwf, nice, qualification, training, and career-development destinations. cisa learning fedvte federal virtual training"
+      "searchableText": "cisa learning cisa learning access cisa's current cybersecurity training service for eligible government, public-sector, and partner learners. access cisa's current cybersecurity training service for eligible government, public-sector, and partner learners. it is the current successor to fedvte and retains a no-cost federal cybersecurity training path. cybersecurity and infrastructure security agency cybersecurity and infrastructure security agency training government free_account no_cost official cisa learning federal cybersecurity practitioners prepare cybersecurity training cyber-workforce-training cyber workforce and training find federal cybersecurity workforce and training resources. cisa learning fedvte federal virtual training"
     },
     {
       "id": "official-niccs-training-catalog",
@@ -1011,7 +1011,7 @@
         "cyber training catalog"
       ],
       "searchKeywords": [],
-      "searchableText": "cisa national initiative for cybersecurity careers & studies (niccs) cisa niccs portal central hub for cybersecurity education, training courses, and nice framework mapping resources. central hub for cybersecurity education, training courses, and nice framework mapping resources. public federal training directory for mapping cybersecurity workforce skill sets to nice roles. cisa niccs training government_or_organization public free current nice framework dod 8140 niccs workforce cybersecurity professional isso manager implement assess general_it cyber-workforce-training cyber workforce and training find dod 8140, dcwf, nice, qualification, training, and career-development destinations. cisa niccs portal niccs cyber training catalog"
+      "searchableText": "cisa national initiative for cybersecurity careers & studies (niccs) cisa niccs portal central hub for cybersecurity education, training courses, and nice framework mapping resources. central hub for cybersecurity education, training courses, and nice framework mapping resources. public federal training directory for mapping cybersecurity workforce skill sets to nice roles. cisa niccs training government_or_organization public free current nice framework dod 8140 niccs workforce cybersecurity professional isso manager implement assess general_it cyber-workforce-training cyber workforce and training find federal cybersecurity workforce and training resources. cisa niccs portal niccs cyber training catalog"
     },
     {
       "id": "tool-cisa-scubagear",
@@ -1059,7 +1059,7 @@
         "Secure Cloud Business Applications"
       ],
       "searchKeywords": [],
-      "searchableText": "cisa scubagear scubagear assess microsoft 365 tenant settings against cisa secure cloud business applications baselines. assess microsoft 365 tenant settings against cisa secure cloud business applications baselines. cisa maintains this open-source assessment tool with html, json, and csv results. cybersecurity and infrastructure security agency cybersecurity and infrastructure security agency tool government public free official open-source scuba federal cybersecurity practitioners assess monitor microsoft 365 cloud configuration implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. scubagear scuba scuba secure cloud business applications"
+      "searchableText": "cisa scubagear scubagear assess microsoft 365 tenant settings against cisa secure cloud business applications baselines. assess microsoft 365 tenant settings against cisa secure cloud business applications baselines. cisa maintains this open-source assessment tool with html, json, and csv results. cybersecurity and infrastructure security agency cybersecurity and infrastructure security agency tool government public free official open-source scuba federal cybersecurity practitioners assess monitor microsoft 365 cloud configuration implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find tools for implementing and assessing security controls. cloud, devsecops, and software factories find tools and services for secure software delivery. scubagear scuba scuba secure cloud business applications"
     },
     {
       "id": "tool-cloud-custodian",
@@ -1112,7 +1112,7 @@
         "Cloud Custodian"
       ],
       "searchKeywords": [],
-      "searchableText": "cloud custodian rules engine cloud custodian rules engine for managing public cloud accounts and enforcing security, compliance, and cost policies. rules engine for managing public cloud accounts and enforcing security, compliance, and cost policies. open-source policy-as-code engine for real-time auto-remediation of cloud compliance drift. cncf incubating tool government_or_organization public free community nist sp 800-53 fedramp policy as code cloud guardrails devsecops cloud architect isso implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. cloud custodian"
+      "searchableText": "cloud custodian rules engine cloud custodian rules engine for managing public cloud accounts and enforcing security, compliance, and cost policies. rules engine for managing public cloud accounts and enforcing security, compliance, and cost policies. open-source policy-as-code engine for real-time auto-remediation of cloud compliance drift. cncf incubating tool government_or_organization public free community nist sp 800-53 fedramp policy as code cloud guardrails devsecops cloud architect isso implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find tools for implementing and assessing security controls. cloud, devsecops, and software factories find tools and services for secure software delivery. cloud custodian"
     },
     {
       "id": "directory-common-criteria-schemes",
@@ -1156,7 +1156,7 @@
         "Common Criteria schemes"
       ],
       "searchKeywords": [],
-      "searchableText": "common criteria certification schemes cc schemes find participating national certification schemes and their current status. find participating national certification schemes and their current status. it identifies the schemes that issue certificates in the international ecosystem. common criteria recognition arrangement common criteria recognition arrangement product_directory international_program public free official common criteria federal cybersecurity practitioners assess certification schemes product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. cc schemes cc schemes common criteria schemes"
+      "searchableText": "common criteria certification schemes cc schemes find participating national certification schemes and their current status. find participating national certification schemes and their current status. it identifies the schemes that issue certificates in the international ecosystem. common criteria recognition arrangement common criteria recognition arrangement product_directory international_program public free official common criteria federal cybersecurity practitioners assess certification schemes product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. cc schemes cc schemes common criteria schemes"
     },
     {
       "id": "directory-common-criteria-products",
@@ -1200,7 +1200,7 @@
         "CPL"
       ],
       "searchKeywords": [],
-      "searchableText": "common criteria certified products list cc products search products certified by participating common criteria schemes. search products certified by participating common criteria schemes. it is the international evaluated-product listing, not the u.s.-only niap product compliant list. common criteria recognition arrangement common criteria recognition arrangement product_directory international_program public free official common criteria federal cybersecurity practitioners select evaluated products product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. cc products common criteria certified products cpl"
+      "searchableText": "common criteria certified products list cc products search products certified by participating common criteria schemes. search products certified by participating common criteria schemes. it is the international evaluated-product listing, not the u.s.-only niap product compliant list. common criteria recognition arrangement common criteria recognition arrangement product_directory international_program public free official common criteria federal cybersecurity practitioners select evaluated products product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. cc products common criteria certified products cpl"
     },
     {
       "id": "directory-common-criteria-labs",
@@ -1244,7 +1244,7 @@
         "licensed laboratories"
       ],
       "searchKeywords": [],
-      "searchableText": "common criteria licensed laboratories cc laboratories find licensed laboratories recognized by participating common criteria certification schemes. find licensed laboratories recognized by participating common criteria certification schemes. it separates evaluation laboratories from certification schemes and product listings. common criteria recognition arrangement common criteria recognition arrangement product_directory international_program public free official common criteria federal cybersecurity practitioners assess evaluation laboratories product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. cc laboratories common criteria labs licensed laboratories"
+      "searchableText": "common criteria licensed laboratories cc laboratories find licensed laboratories recognized by participating common criteria certification schemes. find licensed laboratories recognized by participating common criteria certification schemes. it separates evaluation laboratories from certification schemes and product listings. common criteria recognition arrangement common criteria recognition arrangement product_directory international_program public free official common criteria federal cybersecurity practitioners assess evaluation laboratories product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. cc laboratories common criteria labs licensed laboratories"
     },
     {
       "id": "ecosystem-common-criteria",
@@ -1289,7 +1289,7 @@
         "CCRA"
       ],
       "searchKeywords": [],
-      "searchableText": "common criteria portal common criteria navigate the international certification arrangement, products, protection profiles, schemes, and laboratories. navigate the international certification arrangement, products, protection profiles, schemes, and laboratories. it is the international common criteria ecosystem and must remain distinct from the u.s. niap scheme. common criteria recognition arrangement common criteria recognition arrangement ecosystem international_program public free official common criteria federal cybersecurity practitioners select assess product assurance product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. common criteria cc portal ccra"
+      "searchableText": "common criteria portal common criteria navigate the international certification arrangement, products, protection profiles, schemes, and laboratories. navigate the international certification arrangement, products, protection profiles, schemes, and laboratories. it is the international common criteria ecosystem and must remain distinct from the u.s. niap scheme. common criteria recognition arrangement common criteria recognition arrangement ecosystem international_program public free official common criteria federal cybersecurity practitioners select assess product assurance product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. common criteria cc portal ccra"
     },
     {
       "id": "directory-common-criteria-profiles",
@@ -1334,7 +1334,7 @@
         "PP library"
       ],
       "searchKeywords": [],
-      "searchableText": "common criteria protection profiles cc protection profiles search certified protection profiles across participating common criteria schemes. search certified protection profiles across participating common criteria schemes. it provides the international protection-profile library used to state product security requirements. common criteria recognition arrangement common criteria recognition arrangement product_directory international_program public free official common criteria federal cybersecurity practitioners select assess protection profiles product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. cc protection profiles protection profiles pp library"
+      "searchableText": "common criteria protection profiles cc protection profiles search certified protection profiles across participating common criteria schemes. search certified protection profiles across participating common criteria schemes. it provides the international protection-profile library used to state product security requirements. common criteria recognition arrangement common criteria recognition arrangement product_directory international_program public free official common criteria federal cybersecurity practitioners select assess protection profiles product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. cc protection profiles protection profiles pp library"
     },
     {
       "id": "community-complianceascode-discussions",
@@ -1379,7 +1379,7 @@
         "CaC discussions"
       ],
       "searchKeywords": [],
-      "searchableText": "complianceascode discussions complianceascode community discuss security-content development, profiles, remediations, testing, and supported platforms. discuss security-content development, profiles, remediations, testing, and supported platforms. it is the maintained project's public discussion space for implementation and contribution questions. complianceascode project complianceascode project community_forum open_source_project free_account free project-operated community federal cybersecurity practitioners implement assess scap linux hardening practitioner-communities implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. practitioner communities find public or documented communities for federal cyber, cmmc, fedramp, grc, devsecops, and implementation tools. complianceascode community complianceascode community cac discussions"
+      "searchableText": "complianceascode discussions complianceascode community discuss security-content development, profiles, remediations, testing, and supported platforms. discuss security-content development, profiles, remediations, testing, and supported platforms. it is the maintained project's public discussion space for implementation and contribution questions. complianceascode project complianceascode project community_forum open_source_project free_account free project-operated community federal cybersecurity practitioners implement assess scap linux hardening practitioner-communities implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. practitioner communities find practitioner communities and discussion forums. complianceascode community complianceascode community cac discussions"
     },
     {
       "id": "tool-compliance-as-code",
@@ -1437,7 +1437,7 @@
         "ComplianceAsCode",
         "OpenSCAP STIG"
       ],
-      "searchableText": "complianceascode/content hardening engine complianceascode/content open-source scap and ansible content repository providing automated security profiles for linux and cloud os. open-source scap and ansible content repository providing automated security profiles for linux and cloud os. open-source engine for generating disa stig, nist sp 800-53, and cis scap benchmarks and ansible playbooks. complianceascode project tool government_or_organization public free community disa stig nist sp 800-53 cis benchmarks scap openscap security engineer devsecops administrator implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. complianceascode/content automated stig scanner complianceascode openscap stig"
+      "searchableText": "complianceascode/content hardening engine complianceascode/content open-source scap and ansible content repository providing automated security profiles for linux and cloud os. open-source scap and ansible content repository providing automated security profiles for linux and cloud os. open-source engine for generating disa stig, nist sp 800-53, and cis scap benchmarks and ansible playbooks. complianceascode project tool government_or_organization public free community disa stig nist sp 800-53 cis benchmarks scap openscap security engineer devsecops administrator implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. complianceascode/content automated stig scanner complianceascode openscap stig"
     },
     {
       "id": "tool-cyclonedx-cli",
@@ -1490,7 +1490,7 @@
         "CycloneDX CLI"
       ],
       "searchKeywords": [],
-      "searchableText": "cyclonedx sbom command line tool cyclonedx cli official utility for analyzing, merging, diffing, and validating cyclonedx software bill of materials (sbom). official utility for analyzing, merging, diffing, and validating cyclonedx software bill of materials (sbom). open-source utility for federal sbom validation under executive order 14028. owasp cyclonedx tool government_or_organization public free community cyclonedx sbom eo 14028 sbom supply chain developer devsecops isso implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. cyclonedx cli"
+      "searchableText": "cyclonedx sbom command line tool cyclonedx cli official utility for analyzing, merging, diffing, and validating cyclonedx software bill of materials (sbom). official utility for analyzing, merging, diffing, and validating cyclonedx software bill of materials (sbom). open-source utility for federal sbom validation under executive order 14028. owasp cyclonedx tool government_or_organization public free community cyclonedx sbom eo 14028 sbom supply chain developer devsecops isso implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. cyclonedx cli"
     },
     {
       "id": "portal-dcsa-nisp-cybersecurity",
@@ -1541,7 +1541,7 @@
         "NISP Cybersecurity Office"
       ],
       "searchKeywords": [],
-      "searchableText": "dcsa nisp cybersecurity office ncso find cleared-industry authorization, daag, nisp emass, account, and cybersecurity resources. find cleared-industry authorization, daag, nisp emass, account, and cybersecurity resources. it is the official public access-information portal for dcsa nisp authorization work. defense counterintelligence and security agency defense counterintelligence and security agency government_portal government access_varies free official nisp nisp emass federal cybersecurity practitioners prepare authorize monitor classified systems industrial security reciprocity-authorization-reuse cmmc-defense-industrial-base dod-cybersecurity-portals dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. reciprocity and authorization reuse find package access, reuse, inheritance, common-control, shared-responsibility, and reciprocity destinations. cmmc and the defense industrial base find official program material, reporting systems, assistance, accreditation directories, cui, and nisp resources. ncso dcsa ncso daag nisp cybersecurity office"
+      "searchableText": "dcsa nisp cybersecurity office ncso find cleared-industry authorization, daag, nisp emass, account, and cybersecurity resources. find cleared-industry authorization, daag, nisp emass, account, and cybersecurity resources. it is the official public access-information portal for dcsa nisp authorization work. defense counterintelligence and security agency defense counterintelligence and security agency government_portal government access_varies free official nisp nisp emass federal cybersecurity practitioners prepare authorize monitor classified systems industrial security reciprocity-authorization-reuse cmmc-defense-industrial-base dod-cybersecurity-portals dod cybersecurity portals find official dod cybersecurity portals. reciprocity and authorization reuse find resources for reusing authorization work. cmmc and the defense industrial base find cmmc program resources for defense contractors. ncso dcsa ncso daag nisp cybersecurity office"
     },
     {
       "id": "portal-software-af",
@@ -1588,7 +1588,7 @@
         "USAF software factory"
       ],
       "searchKeywords": [],
-      "searchableText": "department of the air force software ecosystem software.af.mil find air force software-factory, devsecops, platform, policy, and community destinations. find air force software-factory, devsecops, platform, policy, and community destinations. it is the public entry point for the air force software-factory ecosystem surrounding platform one. department of the air force department of the air force government_portal government public free official usaf software factories federal cybersecurity practitioners implement operate software delivery devsecops cloud-devsecops-software-factories dod-cybersecurity-portals dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. software.af.mil software factory usaf software factory"
+      "searchableText": "department of the air force software ecosystem software.af.mil find air force software-factory, devsecops, platform, policy, and community destinations. find air force software-factory, devsecops, platform, policy, and community destinations. it is the public entry point for the air force software-factory ecosystem surrounding platform one. department of the air force department of the air force government_portal government public free official usaf software factories federal cybersecurity practitioners implement operate software delivery devsecops cloud-devsecops-software-factories dod-cybersecurity-portals dod cybersecurity portals find official dod cybersecurity portals. cloud, devsecops, and software factories find tools and services for secure software delivery. software.af.mil software factory usaf software factory"
     },
     {
       "id": "legacy-diacap-transition",
@@ -1684,7 +1684,7 @@
         "network connections"
       ],
       "searchKeywords": [],
-      "searchableText": "disa connect disa connect discover disa services, network connections, onboarding paths, support, and training. discover disa services, network connections, onboarding paths, support, and training. it gives practitioners a public service catalog and honest path into account-based disa services. defense information systems agency defense information systems agency service_portal government access_varies free official disa services federal cybersecurity practitioners prepare implement operate disa services dod networks dod-cybersecurity-portals cloud-devsecops-software-factories dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. disa connect disa services network connections"
+      "searchableText": "disa connect disa connect discover disa services, network connections, onboarding paths, support, and training. discover disa services, network connections, onboarding paths, support, and training. it gives practitioners a public service catalog and honest path into account-based disa services. defense information systems agency defense information systems agency service_portal government access_varies free official disa services federal cybersecurity practitioners prepare implement operate disa services dod networks dod-cybersecurity-portals cloud-devsecops-software-factories dod cybersecurity portals find official dod cybersecurity portals. cloud, devsecops, and software factories find tools and services for secure software delivery. disa connect disa services network connections"
     },
     {
       "id": "portal-disa-servicenow",
@@ -1733,7 +1733,7 @@
         "NIPRNet",
         "support request"
       ],
-      "searchableText": "disa servicenow service portal disa servicenow open and track support requests for authorized disa services from a dod network. open and track support requests for authorized disa services from a dod network. it is disa's official ticketing destination for practitioners who already use supported disa services. defense information systems agency defense information systems agency service_portal government dod_network_required free official disa services authorized dod practitioners operate disa services dod networks dod-cybersecurity-portals dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. disa servicenow disa service now disa ticketing niprnet support portal niprnet support request"
+      "searchableText": "disa servicenow service portal disa servicenow open and track support requests for authorized disa services from a dod network. open and track support requests for authorized disa services from a dod network. it is disa's official ticketing destination for practitioners who already use supported disa services. defense information systems agency defense information systems agency service_portal government dod_network_required free official disa services authorized dod practitioners operate disa services dod networks dod-cybersecurity-portals dod cybersecurity portals find official dod cybersecurity portals. disa servicenow disa service now disa ticketing niprnet support portal niprnet support request"
     },
     {
       "id": "tool-disa-scap-compliance-checker",
@@ -1779,7 +1779,7 @@
         "SCAP checker"
       ],
       "searchKeywords": [],
-      "searchableText": "disa scap compliance checker scc evaluate supported scap content and produce configuration compliance results. evaluate supported scap content and produce configuration compliance results. disa distributes scc as an official tool for supported scap benchmark evaluation workflows. defense information systems agency defense information systems agency tool government access_varies free official scap disa stig federal cybersecurity practitioners assess secure configuration implementation-assessment-tools dod-cybersecurity-portals dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. scc scap compliance checker scap checker"
+      "searchableText": "disa scap compliance checker scc evaluate supported scap content and produce configuration compliance results. evaluate supported scap content and produce configuration compliance results. disa distributes scc as an official tool for supported scap benchmark evaluation workflows. defense information systems agency defense information systems agency tool government access_varies free official scap disa stig federal cybersecurity practitioners assess secure configuration implementation-assessment-tools dod-cybersecurity-portals dod cybersecurity portals find official dod cybersecurity portals. implementation and assessment tools find tools for implementing and assessing security controls. scc scap compliance checker scap checker"
     },
     {
       "id": "portal-dod-stig-srg",
@@ -1829,7 +1829,7 @@
         "STIG downloads"
       ],
       "searchKeywords": [],
-      "searchableText": "disa stig and srg portal stigs and srgs browse disa security guidance, tools, downloads, automation content, and supporting notices. browse disa security guidance, tools, downloads, automation content, and supporting notices. it is the official portal around stig and srg publications already represented in library. defense information systems agency defense information systems agency government_portal government public free official disa stig disa srg dod cyber exchange federal cybersecurity practitioners implement assess secure configuration dod-cybersecurity-portals implementation-assessment-tools dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. stigs and srgs stig portal srg portal stig downloads"
+      "searchableText": "disa stig and srg portal stigs and srgs browse disa security guidance, tools, downloads, automation content, and supporting notices. browse disa security guidance, tools, downloads, automation content, and supporting notices. it is the official portal around stig and srg publications already represented in library. defense information systems agency defense information systems agency government_portal government public free official disa stig disa srg dod cyber exchange federal cybersecurity practitioners implement assess secure configuration dod-cybersecurity-portals implementation-assessment-tools dod cybersecurity portals find official dod cybersecurity portals. implementation and assessment tools find tools for implementing and assessing security controls. stigs and srgs stig portal srg portal stig downloads"
     },
     {
       "id": "official-dod-8140-matrix",
@@ -1886,7 +1886,7 @@
         "DoDCW"
       ],
       "searchKeywords": [],
-      "searchableText": "dod 8140 cyber workforce qualification matrices dod 8140 matrices workforce qualification requirements mapping certifications, degrees, and training to dcwf work roles. workforce qualification requirements mapping certifications, degrees, and training to dcwf work roles. published workforce mandate replacing dod 8570 for defense cybersecurity personnel qualification. dod cio matrix government_or_organization public free current dod 8140 dcwf nice dod 8140 isso issm cybersecurity specialist hr implement assess general_it cyber-workforce-training cyber workforce and training find dod 8140, dcwf, nice, qualification, training, and career-development destinations. dod 8140 matrices 8140 dod 8140 qualification matrix dodcw"
+      "searchableText": "dod 8140 cyber workforce qualification matrices dod 8140 matrices workforce qualification requirements mapping certifications, degrees, and training to dcwf work roles. workforce qualification requirements mapping certifications, degrees, and training to dcwf work roles. published workforce mandate replacing dod 8570 for defense cybersecurity personnel qualification. dod cio matrix government_or_organization public free current dod 8140 dcwf nice dod 8140 isso issm cybersecurity specialist hr implement assess general_it cyber-workforce-training cyber workforce and training find federal cybersecurity workforce and training resources. dod 8140 matrices 8140 dod 8140 qualification matrix dodcw"
     },
     {
       "id": "portal-dod-cio-library",
@@ -1936,7 +1936,7 @@
         "cATO memo"
       ],
       "searchKeywords": [],
-      "searchableText": "dod cio library cio library find current dod cio policy, strategy, workforce, reciprocity, cloud, and authorization publications. find current dod cio policy, strategy, workforce, reciprocity, cloud, and authorization publications. it is the official publisher portal for dod cio material linked from resources collections and library. department of defense chief information officer department of defense chief information officer government_portal government public free official dod cio federal cybersecurity practitioners prepare authorize policy cybersecurity dod-cybersecurity-portals reciprocity-authorization-reuse cyber-workforce-training dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. reciprocity and authorization reuse find package access, reuse, inheritance, common-control, shared-responsibility, and reciprocity destinations. cyber workforce and training find dod 8140, dcwf, nice, qualification, training, and career-development destinations. cio library dod cio library dow cio library cybersecurity reciprocity playbook cato memo"
+      "searchableText": "dod cio library cio library find current dod cio policy, strategy, workforce, reciprocity, cloud, and authorization publications. find current dod cio policy, strategy, workforce, reciprocity, cloud, and authorization publications. it is the official publisher portal for dod cio material linked from resources collections and library. department of defense chief information officer department of defense chief information officer government_portal government public free official dod cio federal cybersecurity practitioners prepare authorize policy cybersecurity dod-cybersecurity-portals reciprocity-authorization-reuse cyber-workforce-training dod cybersecurity portals find official dod cybersecurity portals. reciprocity and authorization reuse find resources for reusing authorization work. cyber workforce and training find federal cybersecurity workforce and training resources. cio library dod cio library dow cio library cybersecurity reciprocity playbook cato memo"
     },
     {
       "id": "portal-dod-cmmc",
@@ -1983,7 +1983,7 @@
         "CMMC assessment guides"
       ],
       "searchKeywords": [],
-      "searchableText": "dod cmmc resources cmmc find official cmmc program status, scoping, assessment, implementation, faq, and outreach resources. find official cmmc program status, scoping, assessment, implementation, faq, and outreach resources. it is the official dod program portal and separates current implementation status from third-party services. department of defense chief information officer department of defense chief information officer government_portal government public free official cmmc federal cybersecurity practitioners prepare assess defense industrial base cui cmmc-defense-industrial-base cmmc and the defense industrial base find official program material, reporting systems, assistance, accreditation directories, cui, and nisp resources. cmmc cmmc resources cmmc documentation cmmc assessment guides"
+      "searchableText": "dod cmmc resources cmmc find official cmmc program status, scoping, assessment, implementation, faq, and outreach resources. find official cmmc program status, scoping, assessment, implementation, faq, and outreach resources. it is the official dod program portal and separates current implementation status from third-party services. department of defense chief information officer department of defense chief information officer government_portal government public free official cmmc federal cybersecurity practitioners prepare assess defense industrial base cui cmmc-defense-industrial-base cmmc and the defense industrial base find cmmc program resources for defense contractors. cmmc cmmc resources cmmc documentation cmmc assessment guides"
     },
     {
       "id": "portal-dod-cmmc-documentation",
@@ -2030,7 +2030,7 @@
         "CMMC scoping guides"
       ],
       "searchKeywords": [],
-      "searchableText": "dod cmmc resources and documentation cmmc documentation browse current cmmc model, scoping, assessment, implementation, and reference documents. browse current cmmc model, scoping, assessment, implementation, and reference documents. it is the official dod documentation index and keeps the program portal distinct from its document catalog. department of defense chief information officer department of defense chief information officer documentation government public free official cmmc federal cybersecurity practitioners prepare assess defense industrial base cui cmmc-defense-industrial-base cmmc and the defense industrial base find official program material, reporting systems, assistance, accreditation directories, cui, and nisp resources. cmmc documentation cmmc docs cmmc assessment guides cmmc scoping guides"
+      "searchableText": "dod cmmc resources and documentation cmmc documentation browse current cmmc model, scoping, assessment, implementation, and reference documents. browse current cmmc model, scoping, assessment, implementation, and reference documents. it is the official dod documentation index and keeps the program portal distinct from its document catalog. department of defense chief information officer department of defense chief information officer documentation government public free official cmmc federal cybersecurity practitioners prepare assess defense industrial base cui cmmc-defense-industrial-base cmmc and the defense industrial base find cmmc program resources for defense contractors. cmmc documentation cmmc docs cmmc assessment guides cmmc scoping guides"
     },
     {
       "id": "ecosystem-dod-cyber-exchange",
@@ -2078,7 +2078,7 @@
         "public.cyber.mil"
       ],
       "searchKeywords": [],
-      "searchableText": "dod cyber exchange cyber exchange public entry point for disa cybersecurity guidance, tools, workforce material, and connection resources. public entry point for disa cybersecurity guidance, tools, workforce material, and connection resources. it is the parent portal for several dod cybersecurity destinations practitioners repeatedly need. defense information systems agency defense information systems agency government_portal government public free official dod cyber exchange federal cybersecurity practitioners prepare implement assess monitor dod cybersecurity dod-cybersecurity-portals dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. cyber exchange cyber.mil dod cyber exchange public.cyber.mil"
+      "searchableText": "dod cyber exchange cyber exchange public entry point for disa cybersecurity guidance, tools, workforce material, and connection resources. public entry point for disa cybersecurity guidance, tools, workforce material, and connection resources. it is the parent portal for several dod cybersecurity destinations practitioners repeatedly need. defense information systems agency defense information systems agency government_portal government public free official dod cyber exchange federal cybersecurity practitioners prepare implement assess monitor dod cybersecurity dod-cybersecurity-portals dod cybersecurity portals find official dod cybersecurity portals. cyber exchange cyber.mil dod cyber exchange public.cyber.mil"
     },
     {
       "id": "official-dcwf-work-roles",
@@ -2132,7 +2132,7 @@
         "work roles"
       ],
       "searchKeywords": [],
-      "searchableText": "dod cyber workforce framework (dcwf) work roles dcwf work roles directory of 54 standardized dod cyber work role definitions, knowledge requirements, and skill descriptions. directory of 54 standardized dod cyber work role definitions, knowledge requirements, and skill descriptions. published taxonomy for dod cybersecurity position coding and workforce management. dod cio catalog government_or_organization public free current dcwf dod 8140 dod cyber workforce cybersecurity manager isso hr implement assess general_it cyber-workforce-training cyber workforce and training find dod 8140, dcwf, nice, qualification, training, and career-development destinations. dcwf work roles dcwf dodcw cyber workforce work roles"
+      "searchableText": "dod cyber workforce framework (dcwf) work roles dcwf work roles directory of 54 standardized dod cyber work role definitions, knowledge requirements, and skill descriptions. directory of 54 standardized dod cyber work role definitions, knowledge requirements, and skill descriptions. published taxonomy for dod cybersecurity position coding and workforce management. dod cio catalog government_or_organization public free current dcwf dod 8140 dod cyber workforce cybersecurity manager isso hr implement assess general_it cyber-workforce-training cyber workforce and training find federal cybersecurity workforce and training resources. dcwf work roles dcwf dodcw cyber workforce work roles"
     },
     {
       "id": "ecosystem-dod-cyber-workforce",
@@ -2183,7 +2183,7 @@
         "qualification matrix"
       ],
       "searchKeywords": [],
-      "searchableText": "dod cyber workforce hub dod cyber workforce find dod workforce policy, framework, qualification, strategy, and work-role resources. find dod workforce policy, framework, qualification, strategy, and work-role resources. it is the parent portal for the dod 8140 and dcwf resources practitioners need together. department of defense chief information officer department of defense chief information officer government_portal government public free official dod 8140 dcwf federal cybersecurity practitioners prepare cyber workforce cyber-workforce-training dod-cybersecurity-portals dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. cyber workforce and training find dod 8140, dcwf, nice, qualification, training, and career-development destinations. dod cyber workforce 8140 dod 8140 dcwf dodcw cyber workforce work roles qualification matrix"
+      "searchableText": "dod cyber workforce hub dod cyber workforce find dod workforce policy, framework, qualification, strategy, and work-role resources. find dod workforce policy, framework, qualification, strategy, and work-role resources. it is the parent portal for the dod 8140 and dcwf resources practitioners need together. department of defense chief information officer department of defense chief information officer government_portal government public free official dod 8140 dcwf federal cybersecurity practitioners prepare cyber workforce cyber-workforce-training dod-cybersecurity-portals dod cybersecurity portals find official dod cybersecurity portals. cyber workforce and training find federal cybersecurity workforce and training resources. dod cyber workforce 8140 dod 8140 dcwf dodcw cyber workforce work roles qualification matrix"
     },
     {
       "id": "portal-dod-policy-guidance",
@@ -2229,7 +2229,7 @@
         "cyber policy"
       ],
       "searchKeywords": [],
-      "searchableText": "dod cybersecurity policy and guidance policy and guidance access dod cybersecurity policy and guidance available to authorized users. access dod cybersecurity policy and guidance available to authorized users. the cyber exchange identifies this as the restricted path to current policy material. defense information systems agency defense information systems agency restricted_service government cac_required free official dod cyber exchange federal cybersecurity practitioners prepare authorize cybersecurity policy dod-cybersecurity-portals dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. policy and guidance dod policy policy guidance cyber policy"
+      "searchableText": "dod cybersecurity policy and guidance policy and guidance access dod cybersecurity policy and guidance available to authorized users. access dod cybersecurity policy and guidance available to authorized users. the cyber exchange identifies this as the restricted path to current policy material. defense information systems agency defense information systems agency restricted_service government cac_required free official dod cyber exchange federal cybersecurity practitioners prepare authorize cybersecurity policy dod-cybersecurity-portals dod cybersecurity portals find official dod cybersecurity portals. policy and guidance dod policy policy guidance cyber policy"
     },
     {
       "id": "portal-dod-enterprise-connections",
@@ -2279,7 +2279,7 @@
         "EC"
       ],
       "searchKeywords": [],
-      "searchableText": "dod enterprise connections enterprise connections find disn connection approval, ppsm, cross-domain, and connection-package guidance. find disn connection approval, ppsm, cross-domain, and connection-package guidance. it provides the official public path into disn connection and package-submission material. defense information systems agency defense information systems agency government_portal government public free official enterprise connections disn federal cybersecurity practitioners prepare authorize network connections disn dod-cybersecurity-portals reciprocity-authorization-reuse dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. reciprocity and authorization reuse find package access, reuse, inheritance, common-control, shared-responsibility, and reciprocity destinations. enterprise connections disn connection approval ppsm ec"
+      "searchableText": "dod enterprise connections enterprise connections find disn connection approval, ppsm, cross-domain, and connection-package guidance. find disn connection approval, ppsm, cross-domain, and connection-package guidance. it provides the official public path into disn connection and package-submission material. defense information systems agency defense information systems agency government_portal government public free official enterprise connections disn federal cybersecurity practitioners prepare authorize network connections disn dod-cybersecurity-portals reciprocity-authorization-reuse dod cybersecurity portals find official dod cybersecurity portals. reciprocity and authorization reuse find resources for reusing authorization work. enterprise connections disn connection approval ppsm ec"
     },
     {
       "id": "tool-platform-one-ironbank",
@@ -2336,7 +2336,7 @@
         "Mattermost"
       ],
       "searchKeywords": [],
-      "searchableText": "dod platform one iron bank container registry platform one iron bank dod repository of hardened, containerized applications accredited for defense department deployment. dod repository of hardened, containerized applications accredited for defense department deployment. public source for pre-hardened, stig-compliant enterprise container images. dod platform one catalog government_or_organization public free current dod hardening container security platform one devsecops devsecops software developer isso implement assess general_it cloud-devsecops-software-factories cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. platform one iron bank p1 platform 1 ironbank iron bank repo one mattermost"
+      "searchableText": "dod platform one iron bank container registry platform one iron bank dod repository of hardened, containerized applications accredited for defense department deployment. dod repository of hardened, containerized applications accredited for defense department deployment. public source for pre-hardened, stig-compliant enterprise container images. dod platform one catalog government_or_organization public free current dod hardening container security platform one devsecops devsecops software developer isso implement assess general_it cloud-devsecops-software-factories cloud, devsecops, and software factories find tools and services for secure software delivery. platform one iron bank p1 platform 1 ironbank iron bank repo one mattermost"
     },
     {
       "id": "service-dod-rmf-knowledge-service",
@@ -2391,7 +2391,7 @@
         "ATO"
       ],
       "searchKeywords": [],
-      "searchableText": "dod rmf knowledge service rmf ks access dod rmf implementation material available to authorized users. access dod rmf implementation material available to authorized users. practitioners use this restricted service for dod rmf guidance that is not fully public elsewhere. department of defense department of defense restricted_service government cac_required no_cost official dod rmf rmf knowledge service federal cybersecurity practitioners prepare categorize select implement assess authorize monitor risk management dod-cybersecurity-portals reciprocity-authorization-reuse dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. reciprocity and authorization reuse find package access, reuse, inheritance, common-control, shared-responsibility, and reciprocity destinations. rmf ks rmf knowledge service dodi 8510.01 rmf ato"
+      "searchableText": "dod rmf knowledge service rmf ks access dod rmf implementation material available to authorized users. access dod rmf implementation material available to authorized users. practitioners use this restricted service for dod rmf guidance that is not fully public elsewhere. department of defense department of defense restricted_service government cac_required no_cost official dod rmf rmf knowledge service federal cybersecurity practitioners prepare categorize select implement assess authorize monitor risk management dod-cybersecurity-portals reciprocity-authorization-reuse dod cybersecurity portals find official dod cybersecurity portals. reciprocity and authorization reuse find resources for reusing authorization work. rmf ks rmf knowledge service dodi 8510.01 rmf ato"
     },
     {
       "id": "directory-dodin-apl",
@@ -2436,7 +2436,7 @@
         "DoD Approved Products List"
       ],
       "searchKeywords": [],
-      "searchableText": "dodin approved products list dodin apl search products approved for specific dodin network infrastructure use cases. search products approved for specific dodin network infrastructure use cases. it is the official dodin product listing; an entry does not imply approval for unrelated uses. defense information systems agency defense information systems agency product_directory government access_varies free official; transition announced dodin apl federal cybersecurity practitioners select network products product-assurance-approved-products dod-cybersecurity-portals dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. dodin apl apl dod approved products list"
+      "searchableText": "dodin approved products list dodin apl search products approved for specific dodin network infrastructure use cases. search products approved for specific dodin network infrastructure use cases. it is the official dodin product listing; an entry does not imply approval for unrelated uses. defense information systems agency defense information systems agency product_directory government access_varies free official; transition announced dodin apl federal cybersecurity practitioners select network products product-assurance-approved-products dod-cybersecurity-portals dod cybersecurity portals find official dod cybersecurity portals. product assurance and approved products find directories for product assurance and approved products. dodin apl apl dod approved products list"
     },
     {
       "id": "portal-dod-enterprise-connections-library",
@@ -2484,7 +2484,7 @@
         "connection package"
       ],
       "searchKeywords": [],
-      "searchableText": "enterprise connections document library ec document library browse public disn connection guides, package-submission material, briefs, and reference documents. browse public disn connection guides, package-submission material, briefs, and reference documents. the library exposes useful connection and authorization-package material without implying approval or reciprocity. defense information systems agency defense information systems agency documentation government public free official enterprise connections disn federal cybersecurity practitioners prepare authorize network connections dod-cybersecurity-portals reciprocity-authorization-reuse dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. reciprocity and authorization reuse find package access, reuse, inheritance, common-control, shared-responsibility, and reciprocity destinations. ec document library disn cpg rmf package submission connection package"
+      "searchableText": "enterprise connections document library ec document library browse public disn connection guides, package-submission material, briefs, and reference documents. browse public disn connection guides, package-submission material, briefs, and reference documents. the library exposes useful connection and authorization-package material without implying approval or reciprocity. defense information systems agency defense information systems agency documentation government public free official enterprise connections disn federal cybersecurity practitioners prepare authorize network connections dod-cybersecurity-portals reciprocity-authorization-reuse dod cybersecurity portals find official dod cybersecurity portals. reciprocity and authorization reuse find resources for reusing authorization work. ec document library disn cpg rmf package submission connection package"
     },
     {
       "id": "tool-falco-runtime-security",
@@ -2536,7 +2536,7 @@
         "Falco Runtime Engine"
       ],
       "searchKeywords": [],
-      "searchableText": "falco cloud-native runtime security falco runtime engine open-source cloud-native runtime security tool for threat detection across kubernetes and linux containers. open-source cloud-native runtime security tool for threat detection across kubernetes and linux containers. open-source cncf runtime threat detection engine for monitoring container syscall anomalies in real time. cncf graduated tool government_or_organization public free community kubernetes security runtime threat detection falco devsecops devsecops kubernetes administrator implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. falco runtime engine"
+      "searchableText": "falco cloud-native runtime security falco runtime engine open-source cloud-native runtime security tool for threat detection across kubernetes and linux containers. open-source cloud-native runtime security tool for threat detection across kubernetes and linux containers. open-source cncf runtime threat detection engine for monitoring container syscall anomalies in real time. cncf graduated tool government_or_organization public free community kubernetes security runtime threat detection falco devsecops devsecops kubernetes administrator implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find tools for implementing and assessing security controls. cloud, devsecops, and software factories find tools and services for secure software delivery. falco runtime engine"
     },
     {
       "id": "template-privacy-impact-assessment",
@@ -2586,7 +2586,7 @@
         "PIA Template"
       ],
       "searchKeywords": [],
-      "searchableText": "federal privacy impact assessment (pia) template pia template standardized questionnaire template for assessing pii processing and privacy compliance under omb m-03-22. standardized questionnaire template for assessing pii processing and privacy compliance under omb m-03-22. template for federal systems collecting or processing personally identifiable information. dhs privacy office template government_or_organization public free current nist privacy framework omb m-03-22 privacy privacy officer isso implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. pia template"
+      "searchableText": "federal privacy impact assessment (pia) template pia template standardized questionnaire template for assessing pii processing and privacy compliance under omb m-03-22. standardized questionnaire template for assessing pii processing and privacy compliance under omb m-03-22. template for federal systems collecting or processing personally identifiable information. dhs privacy office template government_or_organization public free current nist privacy framework omb m-03-22 privacy privacy officer isso implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. pia template"
     },
     {
       "id": "official-fedramp-20x",
@@ -2687,7 +2687,7 @@
         "authorized cloud"
       ],
       "searchKeywords": [],
-      "searchableText": "fedramp marketplace public directory fedramp marketplace public portal listing all authorized, in-process, and ready cloud service offerings (csos) with 3pao contacts. public portal listing all authorized, in-process, and ready cloud service offerings (csos) with 3pao contacts. public database of federal cloud service authorizations and agency reuse documentation. fedramp pmo (gsa) dataset government_or_organization public free current fedramp marketplace fedramp fedramp pmo agency isso procurement officer implement assess general_it product-assurance-approved-products reciprocity-authorization-reuse reciprocity and authorization reuse find package access, reuse, inheritance, common-control, shared-responsibility, and reciprocity destinations. product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. fedramp marketplace package access authorized cloud"
+      "searchableText": "fedramp marketplace public directory fedramp marketplace public portal listing all authorized, in-process, and ready cloud service offerings (csos) with 3pao contacts. public portal listing all authorized, in-process, and ready cloud service offerings (csos) with 3pao contacts. public database of federal cloud service authorizations and agency reuse documentation. fedramp pmo (gsa) dataset government_or_organization public free current fedramp marketplace fedramp fedramp pmo agency isso procurement officer implement assess general_it product-assurance-approved-products reciprocity-authorization-reuse reciprocity and authorization reuse find resources for reusing authorization work. product assurance and approved products find directories for product assurance and approved products. fedramp marketplace package access authorized cloud"
     },
     {
       "id": "guidance-fedramp-20x-package-reuse",
@@ -2738,7 +2738,7 @@
         "shared responsibility"
       ],
       "searchKeywords": [],
-      "searchableText": "fedramp package access and reuse fedramp package reuse understand package access, maintained certification data, reuse, and agency-specific authorization decisions. understand package access, maintained certification data, reuse, and agency-specific authorization decisions. it explains current package reuse without implying automatic acceptance or a shared agency authorization. fedramp fedramp documentation government access_varies free official fedramp 20x fedramp rev. 5 fedramp federal cybersecurity practitioners authorize cloud authorization reciprocity-authorization-reuse cloud-devsecops-software-factories reciprocity and authorization reuse find package access, reuse, inheritance, common-control, shared-responsibility, and reciprocity destinations. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. fedramp package reuse authorization reuse ato reuse reuse package fedramp package access shared responsibility"
+      "searchableText": "fedramp package access and reuse fedramp package reuse understand package access, maintained certification data, reuse, and agency-specific authorization decisions. understand package access, maintained certification data, reuse, and agency-specific authorization decisions. it explains current package reuse without implying automatic acceptance or a shared agency authorization. fedramp fedramp documentation government access_varies free official fedramp 20x fedramp rev. 5 fedramp federal cybersecurity practitioners authorize cloud authorization reciprocity-authorization-reuse cloud-devsecops-software-factories reciprocity and authorization reuse find resources for reusing authorization work. cloud, devsecops, and software factories find tools and services for secure software delivery. fedramp package reuse authorization reuse ato reuse reuse package fedramp package access shared responsibility"
     },
     {
       "id": "template-fedramp-poam-rev5",
@@ -2794,7 +2794,7 @@
         "Plan of Action and Milestones",
         "FedRAMP POAM"
       ],
-      "searchableText": "fedramp plan of action and milestones (poa&m) template fedramp poa&m template official excel spreadsheet template for recording and tracking security vulnerabilities, residual risks, and vendor remediation timelines. official excel spreadsheet template for recording and tracking security vulnerabilities, residual risks, and vendor remediation timelines. published standardized spreadsheet format used for monthly fedramp continuous monitoring submissions. fedramp pmo (gsa) template government_or_organization public free current fedramp rev5 fedramp conmon isso vulnerability manager 3pao implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. fedramp poa&m template fedramp poam template poam poa&m plan of action and milestones fedramp poam"
+      "searchableText": "fedramp plan of action and milestones (poa&m) template fedramp poa&m template official excel spreadsheet template for recording and tracking security vulnerabilities, residual risks, and vendor remediation timelines. official excel spreadsheet template for recording and tracking security vulnerabilities, residual risks, and vendor remediation timelines. published standardized spreadsheet format used for monthly fedramp continuous monitoring submissions. fedramp pmo (gsa) template government_or_organization public free current fedramp rev5 fedramp conmon isso vulnerability manager 3pao implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. fedramp poa&m template fedramp poam template poam poa&m plan of action and milestones fedramp poam"
     },
     {
       "id": "portal-fedramp-rev5-stakeholders",
@@ -2842,7 +2842,7 @@
         "reuse authorization"
       ],
       "searchKeywords": [],
-      "searchableText": "fedramp rev. 5 stakeholder and package-access resources fedramp package access find package-access, authorization-reuse, agency, provider, and assessor resources for rev. 5. find package-access, authorization-reuse, agency, provider, and assessor resources for rev. 5. it provides the official package access and reuse path while agencies retain independent acceptance decisions. fedramp fedramp government_portal government access_varies free official fedramp rev. 5 fedramp federal cybersecurity practitioners authorize cloud authorization reciprocity-authorization-reuse cloud-devsecops-software-factories reciprocity and authorization reuse find package access, reuse, inheritance, common-control, shared-responsibility, and reciprocity destinations. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. fedramp package access package access fedramp reuse reuse authorization"
+      "searchableText": "fedramp rev. 5 stakeholder and package-access resources fedramp package access find package-access, authorization-reuse, agency, provider, and assessor resources for rev. 5. find package-access, authorization-reuse, agency, provider, and assessor resources for rev. 5. it provides the official package access and reuse path while agencies retain independent acceptance decisions. fedramp fedramp government_portal government access_varies free official fedramp rev. 5 fedramp federal cybersecurity practitioners authorize cloud authorization reciprocity-authorization-reuse cloud-devsecops-software-factories reciprocity and authorization reuse find resources for reusing authorization work. cloud, devsecops, and software factories find tools and services for secure software delivery. fedramp package access package access fedramp reuse reuse authorization"
     },
     {
       "id": "template-fedramp-ssp-rev5",
@@ -2898,7 +2898,7 @@
         "System Security Plan",
         "FedRAMP SSP"
       ],
-      "searchableText": "fedramp system security plan (ssp) template (rev. 5) fedramp rev. 5 ssp template official word document template for authoring a fedramp rev. 5 system security plan across low, moderate, and high baselines. word template for a fedramp rev. 5 system security plan across supported impact levels. published baseline artifact structure for cloud service providers seeking fedramp jab or agency authorization. fedramp pmo (gsa) template government_or_organization public free current fedramp rev5 nist sp 800-53 fedramp cloud service provider isso 3pao implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. fedramp rev. 5 ssp template fedramp ssp template ssp system security plan fedramp ssp"
+      "searchableText": "fedramp system security plan (ssp) template (rev. 5) fedramp rev. 5 ssp template official word document template for authoring a fedramp rev. 5 system security plan across low, moderate, and high baselines. word template for a fedramp rev. 5 system security plan across supported impact levels. published baseline artifact structure for cloud service providers seeking fedramp jab or agency authorization. fedramp pmo (gsa) template government_or_organization public free current fedramp rev5 nist sp 800-53 fedramp cloud service provider isso 3pao implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. fedramp rev. 5 ssp template fedramp ssp template ssp system security plan fedramp ssp"
     },
     {
       "id": "tool-gsa-oscal-ssp-word",
@@ -2954,7 +2954,7 @@
         "OSCAL Word Generator",
         "OSCAL to Word"
       ],
-      "searchableText": "gsa oscal ssp to word generator gsa oscal word gen tool for converting machine-readable nist oscal system security plans into human-readable word document packages. tool for converting machine-readable nist oscal system security plans into human-readable word document packages. open-source tool bridging machine-readable oscal json data back into federal word document review packages. gsa technology transformation services tool government_or_organization public free community oscal fedramp ssp oscal fedramp isso developer 3pao implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. gsa oscal word gen oscal xml to word oscal word generator oscal to word"
+      "searchableText": "gsa oscal ssp to word generator gsa oscal word gen tool for converting machine-readable nist oscal system security plans into human-readable word document packages. tool for converting machine-readable nist oscal system security plans into human-readable word document packages. open-source tool bridging machine-readable oscal json data back into federal word document review packages. gsa technology transformation services tool government_or_organization public free community oscal fedramp ssp oscal fedramp isso developer 3pao implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. gsa oscal word gen oscal xml to word oscal word generator oscal to word"
     },
     {
       "id": "tool-hardening-kitty",
@@ -3007,7 +3007,7 @@
         "HardeningKitty",
         "Windows hardening script"
       ],
-      "searchableText": "hardeningkitty powershell windows audit hardeningkitty powershell script for auditing and hardening windows configurations against cis benchmarks and dod guidance. powershell script for auditing and hardening windows configurations against cis benchmarks and dod guidance. open-source powershell script providing detailed scorecards for windows workstation and server hardening. scip ag tool government_or_organization public free community cis benchmarks windows hardening windows security system administrator security auditor implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. hardeningkitty hardeningkitty powershell hardeningkitty windows hardening script"
+      "searchableText": "hardeningkitty powershell windows audit hardeningkitty powershell script for auditing and hardening windows configurations against cis benchmarks and dod guidance. powershell script for auditing and hardening windows configurations against cis benchmarks and dod guidance. open-source powershell script providing detailed scorecards for windows workstation and server hardening. scip ag tool government_or_organization public free community cis benchmarks windows hardening windows security system administrator security auditor implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. hardeningkitty hardeningkitty powershell hardeningkitty windows hardening script"
     },
     {
       "id": "template-i-assure-ssp-worksheet",
@@ -3059,7 +3059,7 @@
         "control family templates"
       ],
       "searchKeywords": [],
-      "searchableText": "i-assure rmf artifact templates i-assure rmf templates no-cost rmf artifact templates organized by nist control subject area. download no-cost rmf artifact templates organized by nist control subject area. the linked page exposes the templates themselves; i-assure consulting and paid service offerings are outside this directory. i-assure template commercial public free commercial publisher; free templates nist sp 800-53 nist rmf fisma isso consultant implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. i-assure rmf templates i-assure rmf artifact templates control family templates"
+      "searchableText": "i-assure rmf artifact templates i-assure rmf templates no-cost rmf artifact templates organized by nist control subject area. download no-cost rmf artifact templates organized by nist control subject area. the linked page exposes the templates themselves; i-assure consulting and paid service offerings are outside this directory. i-assure template commercial public free commercial publisher; free templates nist sp 800-53 nist rmf fisma isso consultant implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. i-assure rmf templates i-assure rmf artifact templates control family templates"
     },
     {
       "id": "tool-compliance-trestle",
@@ -3112,7 +3112,7 @@
         "Compliance-Trestle"
       ],
       "searchKeywords": [],
-      "searchableText": "ibm compliance trestle oscal engine compliance-trestle python framework for orchestrating nist oscal document models, catalog transformations, and ssp generation. python framework for orchestrating nist oscal document models, catalog transformations, and ssp generation. open-source engine for building oscal-native compliance-as-code automation pipelines. ibm open source tool government_or_organization public free community oscal nist sp 800-53 fedramp rev5 oscal compliance as code developer data architect devsecops implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. compliance-trestle"
+      "searchableText": "ibm compliance trestle oscal engine compliance-trestle python framework for orchestrating nist oscal document models, catalog transformations, and ssp generation. python framework for orchestrating nist oscal document models, catalog transformations, and ssp generation. open-source engine for building oscal-native compliance-as-code automation pipelines. ibm open source tool government_or_organization public free community oscal nist sp 800-53 fedramp rev5 oscal compliance as code developer data architect devsecops implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. compliance-trestle"
     },
     {
       "id": "tool-kics",
@@ -3162,7 +3162,7 @@
         "KICS Scanner"
       ],
       "searchKeywords": [],
-      "searchableText": "kics keeping infrastructure as code secure kics scanner open-source static code analysis solution for finding security vulnerabilities, compliance issues, and misconfigurations in iac. open-source static code analysis solution for finding security vulnerabilities, compliance issues, and misconfigurations in iac. open-source iac scanner for terraform, ansible, cloudformation, and dockerfiles. checkmarx tool government_or_organization public free community iac scanning nist sp 800-53 devsecops terraform devsecops cloud architect implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. kics scanner"
+      "searchableText": "kics keeping infrastructure as code secure kics scanner open-source static code analysis solution for finding security vulnerabilities, compliance issues, and misconfigurations in iac. open-source static code analysis solution for finding security vulnerabilities, compliance issues, and misconfigurations in iac. open-source iac scanner for terraform, ansible, cloudformation, and dockerfiles. checkmarx tool government_or_organization public free community iac scanning nist sp 800-53 devsecops terraform devsecops cloud architect implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. kics scanner"
     },
     {
       "id": "tool-kube-bench",
@@ -3213,7 +3213,7 @@
         "kube-bench"
       ],
       "searchKeywords": [],
-      "searchableText": "kube-bench cis kubernetes benchmark scanner kube-bench go application that checks whether kubernetes is deployed securely according to the cis kubernetes benchmark. go application that checks whether kubernetes is deployed securely according to the cis kubernetes benchmark. open-source tool for checking kubernetes cluster master and worker node compliance. aqua security tool government_or_organization public free community cis benchmarks kubernetes security kubernetes cis kubernetes administrator devsecops implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. kube-bench"
+      "searchableText": "kube-bench cis kubernetes benchmark scanner kube-bench go application that checks whether kubernetes is deployed securely according to the cis kubernetes benchmark. go application that checks whether kubernetes is deployed securely according to the cis kubernetes benchmark. open-source tool for checking kubernetes cluster master and worker node compliance. aqua security tool government_or_organization public free community cis benchmarks kubernetes security kubernetes cis kubernetes administrator devsecops implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find tools for implementing and assessing security controls. cloud, devsecops, and software factories find tools and services for secure software delivery. kube-bench"
     },
     {
       "id": "tool-kubescape",
@@ -3263,7 +3263,7 @@
         "Kubescape"
       ],
       "searchKeywords": [],
-      "searchableText": "kubescape kubernetes security platform kubescape open-source kubernetes security platform for risk analysis, security compliance, and rbac visualizer. open-source kubernetes security platform for risk analysis, security compliance, and rbac visualizer. open-source kubernetes scanner evaluating clusters against nsa-cisa kubernetes hardening guidance. cncf sandbox tool government_or_organization public free community nsa-cisa guidance cis benchmarks kubernetes devsecops kubernetes administrator implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. kubescape"
+      "searchableText": "kubescape kubernetes security platform kubescape open-source kubernetes security platform for risk analysis, security compliance, and rbac visualizer. open-source kubernetes security platform for risk analysis, security compliance, and rbac visualizer. open-source kubernetes scanner evaluating clusters against nsa-cisa kubernetes hardening guidance. cncf sandbox tool government_or_organization public free community nsa-cisa guidance cis benchmarks kubernetes devsecops kubernetes administrator implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find tools for implementing and assessing security controls. cloud, devsecops, and software factories find tools and services for secure software delivery. kubescape"
     },
     {
       "id": "tool-lynis",
@@ -3313,7 +3313,7 @@
         "Lynis Hardening Tool"
       ],
       "searchKeywords": [],
-      "searchableText": "lynis system auditing tool lynis hardening tool security auditing tool for unix/linux systems supporting iso 27001 and nist sp 800-53 audits. security auditing tool for unix/linux systems supporting iso 27001 and nist sp 800-53 audits. lightweight shell scanner for local security audits, patch verification, and system hardening checks. cisofoundation / cisophy tool government_or_organization public free community nist sp 800-53 linux security lynis linux audit system administrator auditor implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. lynis hardening tool"
+      "searchableText": "lynis system auditing tool lynis hardening tool security auditing tool for unix/linux systems supporting iso 27001 and nist sp 800-53 audits. security auditing tool for unix/linux systems supporting iso 27001 and nist sp 800-53 audits. lightweight shell scanner for local security audits, patch verification, and system hardening checks. cisofoundation / cisophy tool government_or_organization public free community nist sp 800-53 linux security lynis linux audit system administrator auditor implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. lynis hardening tool"
     },
     {
       "id": "commercial-azure-government-docs",
@@ -3407,7 +3407,7 @@
         "LGPO"
       ],
       "searchKeywords": [],
-      "searchableText": "microsoft security compliance toolkit sct download, compare, edit, and apply microsoft-recommended security configuration baselines. download, compare, edit, and apply microsoft-recommended security configuration baselines. it provides microsoft's supported baseline content and policy-analysis tools for windows environments. microsoft microsoft tool commercial public free commercial publisher federal cybersecurity practitioners implement assess windows group policy implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. sct security compliance toolkit policy analyzer lgpo"
+      "searchableText": "microsoft security compliance toolkit sct download, compare, edit, and apply microsoft-recommended security configuration baselines. download, compare, edit, and apply microsoft-recommended security configuration baselines. it provides microsoft's supported baseline content and policy-analysis tools for windows environments. microsoft microsoft tool commercial public free commercial publisher federal cybersecurity practitioners implement assess windows group policy implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. sct security compliance toolkit policy analyzer lgpo"
     },
     {
       "id": "dataset-mitre-attack-json",
@@ -3557,7 +3557,7 @@
         "eMASS client",
         "mitre emass client"
       ],
-      "searchableText": "mitre emass rest api python client mitre emass client open-source python client wrapper for interacting programmatically with the dod emass rest api. open-source python client wrapper for interacting programmatically with the dod emass rest api. open-source tool for automation engineers pushing assessment results and poa&ms directly into dod emass. mitre tool government_or_organization public free community dod rmf emass api emass automation devsecops isso engineer implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. mitre emass client emass python client emass client mitre emass client"
+      "searchableText": "mitre emass rest api python client mitre emass client open-source python client wrapper for interacting programmatically with the dod emass rest api. open-source python client wrapper for interacting programmatically with the dod emass rest api. open-source tool for automation engineers pushing assessment results and poa&ms directly into dod emass. mitre tool government_or_organization public free community dod rmf emass api emass automation devsecops isso engineer implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. mitre emass client emass python client emass client mitre emass client"
     },
     {
       "id": "tool-mitre-heimdall",
@@ -3612,7 +3612,7 @@
         "Heimdall",
         "MITRE Heimdall"
       ],
-      "searchableText": "mitre heimdall server visualizer heimdall visualizer open-source web application for visualizing security evaluation results from inspec, scap, and vulnerability scanners. open-source web application for visualizing security evaluation results from inspec, scap, and vulnerability scanners. open-source dashboard for presenting automated stig and baseline evaluation results to assessors. mitre tool government_or_organization public free community mitre saf nist sp 800-53 heimdall inspec isso sca issm implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. heimdall visualizer heimdall saf visualizer heimdall mitre heimdall"
+      "searchableText": "mitre heimdall server visualizer heimdall visualizer open-source web application for visualizing security evaluation results from inspec, scap, and vulnerability scanners. open-source web application for visualizing security evaluation results from inspec, scap, and vulnerability scanners. open-source dashboard for presenting automated stig and baseline evaluation results to assessors. mitre tool government_or_organization public free community mitre saf nist sp 800-53 heimdall inspec isso sca issm implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. heimdall visualizer heimdall saf visualizer heimdall mitre heimdall"
     },
     {
       "id": "tool-mitre-saf-cli",
@@ -3664,7 +3664,7 @@
         "MITRE SAF CLI"
       ],
       "searchKeywords": [],
-      "searchableText": "mitre security automation framework (saf) cli mitre saf cli command-line tool for attestation, stig conversion, and streaming vulnerability data into heimdall dashboards. command-line tool for attestation, stig conversion, and streaming vulnerability data into heimdall dashboards. cli tool for converting scap, inspec, and nessus test outputs into unified compliance reports. mitre tool government_or_organization public free community mitre saf nist sp 800-53 disa stig saf heimdall devsecops sca isso implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. mitre saf cli"
+      "searchableText": "mitre security automation framework (saf) cli mitre saf cli command-line tool for attestation, stig conversion, and streaming vulnerability data into heimdall dashboards. command-line tool for attestation, stig conversion, and streaming vulnerability data into heimdall dashboards. cli tool for converting scap, inspec, and nessus test outputs into unified compliance reports. mitre tool government_or_organization public free community mitre saf nist sp 800-53 disa stig saf heimdall devsecops sca isso implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. mitre saf cli"
     },
     {
       "id": "tool-mitre-vulcan",
@@ -3713,7 +3713,7 @@
         "Vulcan SAF"
       ],
       "searchKeywords": [],
-      "searchableText": "mitre vulcan vulcan develop stig-ready guidance and automated validation profiles from srg requirements. develop stig-ready guidance and automated validation profiles from srg requirements. mitre saf maintains vulcan for traceable security-guidance authoring and validation-profile development. mitre mitre tool nonprofit public free open-source project disa stig disa srg mitre saf federal cybersecurity practitioners implement assess stig authoring inspec implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. vulcan mitre vulcan vulcan saf"
+      "searchableText": "mitre vulcan vulcan develop stig-ready guidance and automated validation profiles from srg requirements. develop stig-ready guidance and automated validation profiles from srg requirements. mitre saf maintains vulcan for traceable security-guidance authoring and validation-profile development. mitre mitre tool nonprofit public free open-source project disa stig disa srg mitre saf federal cybersecurity practitioners implement assess stig authoring inspec implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. vulcan mitre vulcan vulcan saf"
     },
     {
       "id": "official-cui-registry",
@@ -3764,7 +3764,7 @@
         "NARA CUI Registry"
       ],
       "searchKeywords": [],
-      "searchableText": "nara national cui registry nara cui registry official federal registry of covered unclassified information (cui) categories, organizational index, and marking rules. official federal registry of covered unclassified information (cui) categories, organizational index, and marking rules. published baseline for identifying cui categories (specified vs basic) and applying federal marking banners. nara catalog government_or_organization public free current cui registry cui nara isso security manager contractor implement assess general_it cmmc-defense-industrial-base cmmc and the defense industrial base find official program material, reporting systems, assistance, accreditation directories, cui, and nisp resources. nara cui registry"
+      "searchableText": "nara national cui registry nara cui registry official federal registry of covered unclassified information (cui) categories, organizational index, and marking rules. official federal registry of covered unclassified information (cui) categories, organizational index, and marking rules. published baseline for identifying cui categories (specified vs basic) and applying federal marking banners. nara catalog government_or_organization public free current cui registry cui nara isso security manager contractor implement assess general_it cmmc-defense-industrial-base cmmc and the defense industrial base find cmmc program resources for defense contractors. nara cui registry"
     },
     {
       "id": "official-niap-ccevs",
@@ -3818,7 +3818,7 @@
         "U.S. Common Criteria scheme"
       ],
       "searchKeywords": [],
-      "searchableText": "niap common criteria evaluation & validation scheme (ccevs) niap common criteria u.s. government scheme for evaluating commercial it products against common criteria protection profiles. u.s. government scheme for evaluating commercial it products against common criteria protection profiles. published certification list for hardware and software cryptographic and boundary protection products. niap catalog government_or_organization public free current niap common criteria fisma dod security engineer procurement officer isso implement assess general_it product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. niap common criteria niap ccevs u.s. common criteria scheme"
+      "searchableText": "niap common criteria evaluation & validation scheme (ccevs) niap common criteria u.s. government scheme for evaluating commercial it products against common criteria protection profiles. u.s. government scheme for evaluating commercial it products against common criteria protection profiles. published certification list for hardware and software cryptographic and boundary protection products. niap catalog government_or_organization public free current niap common criteria fisma dod security engineer procurement officer isso implement assess general_it product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. niap common criteria niap ccevs u.s. common criteria scheme"
     },
     {
       "id": "directory-niap-pcl",
@@ -3863,7 +3863,7 @@
         "NIAP products"
       ],
       "searchKeywords": [],
-      "searchableText": "niap product compliant list niap pcl search products evaluated under the u.s. niap common criteria scheme. search products evaluated under the u.s. niap common criteria scheme. it is the u.s. national evaluated-product listing and is not interchangeable with the international portal. national information assurance partnership national information assurance partnership product_directory government public free official niap ccevs federal cybersecurity practitioners select evaluated products product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. niap pcl pcl product compliant list niap products"
+      "searchableText": "niap product compliant list niap pcl search products evaluated under the u.s. niap common criteria scheme. search products evaluated under the u.s. niap common criteria scheme. it is the u.s. national evaluated-product listing and is not interchangeable with the international portal. national information assurance partnership national information assurance partnership product_directory government public free official niap ccevs federal cybersecurity practitioners select evaluated products product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. niap pcl pcl product compliant list niap products"
     },
     {
       "id": "directory-niap-profiles",
@@ -3908,7 +3908,7 @@
         "NIAP Protection Profiles"
       ],
       "searchKeywords": [],
-      "searchableText": "niap protection profiles niap pps browse u.s. niap protection profiles and supporting documents. browse u.s. niap protection profiles and supporting documents. it provides the u.s. scheme's current security requirement profiles for evaluated technology categories. national information assurance partnership national information assurance partnership product_directory government public free official niap ccevs federal cybersecurity practitioners select assess protection profiles product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. niap pps niap pp niap protection profiles"
+      "searchableText": "niap protection profiles niap pps browse u.s. niap protection profiles and supporting documents. browse u.s. niap protection profiles and supporting documents. it provides the u.s. scheme's current security requirement profiles for evaluated technology categories. national information assurance partnership national information assurance partnership product_directory government public free official niap ccevs federal cybersecurity practitioners select assess protection profiles product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. niap pps niap pp niap protection profiles"
     },
     {
       "id": "portal-nice-framework",
@@ -3955,7 +3955,7 @@
         "NIST 800-181"
       ],
       "searchKeywords": [],
-      "searchableText": "nice framework resource center nice framework browse current nice work roles, components, tools, workforce guidance, and community resources. browse current nice work roles, components, tools, workforce guidance, and community resources. it provides the federal workforce vocabulary that complements dod cyber workforce framework material. national institute of standards and technology national institute of standards and technology government_portal government public free official nice framework nice federal cybersecurity practitioners prepare cyber workforce cyber-workforce-training cyber workforce and training find dod 8140, dcwf, nice, qualification, training, and career-development destinations. nice framework nice nice work roles nist 800-181"
+      "searchableText": "nice framework resource center nice framework browse current nice work roles, components, tools, workforce guidance, and community resources. browse current nice work roles, components, tools, workforce guidance, and community resources. it provides the federal workforce vocabulary that complements dod cyber workforce framework material. national institute of standards and technology national institute of standards and technology government_portal government public free official nice framework nice federal cybersecurity practitioners prepare cyber workforce cyber-workforce-training cyber workforce and training find federal cybersecurity workforce and training resources. nice framework nice nice work roles nist 800-181"
     },
     {
       "id": "service-dcsa-nisp-emass",
@@ -4002,7 +4002,7 @@
         "package submission"
       ],
       "searchKeywords": [],
-      "searchableText": "nisp emass nisp emass manage dcsa-cleared-industry rmf authorization packages through an approved account. manage dcsa-cleared-industry rmf authorization packages through an approved account. it is the system dcsa identifies for nisp authorization guidance, templates, submissions, and account-managed workflows. defense counterintelligence and security agency defense counterintelligence and security agency restricted_service government access_varies no_cost official nisp emass federal cybersecurity practitioners prepare authorize monitor authorization packages reciprocity-authorization-reuse cmmc-defense-industrial-base reciprocity and authorization reuse find package access, reuse, inheritance, common-control, shared-responsibility, and reciprocity destinations. cmmc and the defense industrial base find official program material, reporting systems, assistance, accreditation directories, cui, and nisp resources. nisp emass daag package submission"
+      "searchableText": "nisp emass nisp emass manage dcsa-cleared-industry rmf authorization packages through an approved account. manage dcsa-cleared-industry rmf authorization packages through an approved account. it is the system dcsa identifies for nisp authorization guidance, templates, submissions, and account-managed workflows. defense counterintelligence and security agency defense counterintelligence and security agency restricted_service government access_varies no_cost official nisp emass federal cybersecurity practitioners prepare authorize monitor authorization packages reciprocity-authorization-reuse cmmc-defense-industrial-base reciprocity and authorization reuse find resources for reusing authorization work. cmmc and the defense industrial base find cmmc program resources for defense contractors. nisp emass daag package submission"
     },
     {
       "id": "directory-nist-cavp",
@@ -4046,7 +4046,7 @@
         "algorithm validation"
       ],
       "searchKeywords": [],
-      "searchableText": "nist cryptographic algorithm validation program search cavp search cryptographic algorithm validation records by vendor, implementation, algorithm, and date. find nist cryptographic algorithm validation guidance and certificate-search paths. it validates algorithm implementations, a different job from cmvp module validation. national institute of standards and technology national institute of standards and technology product_directory government public free official cavp federal cybersecurity practitioners select assess cryptographic algorithms product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. cavp algorithm validation"
+      "searchableText": "nist cryptographic algorithm validation program search cavp search cryptographic algorithm validation records by vendor, implementation, algorithm, and date. find nist cryptographic algorithm validation guidance and certificate-search paths. it validates algorithm implementations, a different job from cmvp module validation. national institute of standards and technology national institute of standards and technology product_directory government public free official cavp federal cybersecurity practitioners select assess cryptographic algorithms product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. cavp algorithm validation"
     },
     {
       "id": "portal-nist-cmvp",
@@ -4092,7 +4092,7 @@
         "crypto module validation"
       ],
       "searchKeywords": [],
-      "searchableText": "nist cryptographic module validation program cmvp find cryptographic module validation guidance, laboratories, notices, and certificate searches. find cryptographic module validation guidance, laboratories, notices, and certificate searches. it is the federal program for validating cryptographic modules to fips 140 requirements. national institute of standards and technology national institute of standards and technology government_portal government public free official cmvp fips 140 federal cybersecurity practitioners select assess cryptographic modules product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. cmvp fips 140 crypto module validation"
+      "searchableText": "nist cryptographic module validation program cmvp find cryptographic module validation guidance, laboratories, notices, and certificate searches. find cryptographic module validation guidance, laboratories, notices, and certificate searches. it is the federal program for validating cryptographic modules to fips 140 requirements. national institute of standards and technology national institute of standards and technology government_portal government public free official cmvp fips 140 federal cybersecurity practitioners select assess cryptographic modules product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. cmvp fips 140 crypto module validation"
     },
     {
       "id": "official-nist-nvd-api",
@@ -4239,7 +4239,7 @@
         "OSCAL meetings"
       ],
       "searchKeywords": [],
-      "searchableText": "nist oscal community channels oscal community find official oscal meetings, contribution guidance, chat, and public collaboration channels. find official oscal meetings, contribution guidance, chat, and public collaboration channels. it provides the maintained public path into oscal community participation without guessing a private invite url. national institute of standards and technology national institute of standards and technology community_forum government access_varies free publisher-operated community oscal federal cybersecurity practitioners implement oscal practitioner-communities implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. practitioner communities find public or documented communities for federal cyber, cmmc, fedramp, grc, devsecops, and implementation tools. oscal community oscal slack oscal community oscal meetings"
+      "searchableText": "nist oscal community channels oscal community find official oscal meetings, contribution guidance, chat, and public collaboration channels. find official oscal meetings, contribution guidance, chat, and public collaboration channels. it provides the maintained public path into oscal community participation without guessing a private invite url. national institute of standards and technology national institute of standards and technology community_forum government access_varies free publisher-operated community oscal federal cybersecurity practitioners implement oscal practitioner-communities implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. practitioner communities find practitioner communities and discussion forums. oscal community oscal slack oscal community oscal meetings"
     },
     {
       "id": "official-nist-privacy-framework",
@@ -4332,7 +4332,7 @@
         "CMVP certificates"
       ],
       "searchKeywords": [],
-      "searchableText": "nist validated cryptographic modules validated modules search active, historical, and revoked cryptographic module validation certificates. search active, historical, and revoked cryptographic module validation certificates. it lets practitioners verify the exact module, version, environment, and certificate status behind a fips claim. national institute of standards and technology national institute of standards and technology product_directory government public free official cmvp fips 140 federal cybersecurity practitioners select assess cryptographic modules product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. validated modules fips 140 search validated modules cmvp certificates"
+      "searchableText": "nist validated cryptographic modules validated modules search active, historical, and revoked cryptographic module validation certificates. search active, historical, and revoked cryptographic module validation certificates. it lets practitioners verify the exact module, version, environment, and certificate status behind a fips claim. national institute of standards and technology national institute of standards and technology product_directory government public free official cmvp fips 140 federal cybersecurity practitioners select assess cryptographic modules product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. validated modules fips 140 search validated modules cmvp certificates"
     },
     {
       "id": "official-csfc-capability-packages",
@@ -4386,7 +4386,7 @@
         "capability packages"
       ],
       "searchKeywords": [],
-      "searchableText": "nsa commercial solutions for classified (csfc) capability packages nsa csfc packages architectural capability packages for building double-layer commercial encryption solutions for classified data. architectural capability packages for building double-layer commercial encryption solutions for classified data. published standard for deploying commercial nsa-approved encryption for secret/top secret communication. nsa csfc office catalog government_or_organization public free current csfc nsa classified systems nss network architect isso sca implement assess general_it product-assurance-approved-products product assurance and approved products find international certification, u.s. evaluation, cryptographic validation, classified-solution, and cloud marketplaces. nsa csfc packages csfc capability packages"
+      "searchableText": "nsa commercial solutions for classified (csfc) capability packages nsa csfc packages architectural capability packages for building double-layer commercial encryption solutions for classified data. architectural capability packages for building double-layer commercial encryption solutions for classified data. published standard for deploying commercial nsa-approved encryption for secret/top secret communication. nsa csfc office catalog government_or_organization public free current csfc nsa classified systems nss network architect isso sca implement assess general_it product-assurance-approved-products product assurance and approved products find directories for product assurance and approved products. nsa csfc packages csfc capability packages"
     },
     {
       "id": "tool-disa-stig-viewer",
@@ -4438,7 +4438,7 @@
         "STIG Viewer"
       ],
       "searchKeywords": [],
-      "searchableText": "official disa stig viewer 3.x disa stig viewer java gui application for opening, editing, and managing disa stig xccdf benchmarks and `.ckl` checklist files. java gui application for opening, editing, and managing disa stig xccdf benchmarks and `.ckl` checklist files. a tool used by dod assessors and issos to compile system stig checklists for emass ato submission. disa tool government_or_organization public free current disa stig emass dod stig isso sca system administrator implement assess general_it implementation-assessment-tools dod-cybersecurity-portals dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. disa stig viewer stig viewer"
+      "searchableText": "official disa stig viewer 3.x disa stig viewer java gui application for opening, editing, and managing disa stig xccdf benchmarks and `.ckl` checklist files. java gui application for opening, editing, and managing disa stig xccdf benchmarks and `.ckl` checklist files. a tool used by dod assessors and issos to compile system stig checklists for emass ato submission. disa tool government_or_organization public free current disa stig emass dod stig isso sca system administrator implement assess general_it implementation-assessment-tools dod-cybersecurity-portals dod cybersecurity portals find official dod cybersecurity portals. implementation and assessment tools find tools for implementing and assessing security controls. disa stig viewer stig viewer"
     },
     {
       "id": "tool-open-policy-agent",
@@ -4491,7 +4491,7 @@
         "OPA Engine"
       ],
       "searchKeywords": [],
-      "searchableText": "open policy agent (opa) opa engine general-purpose policy engine that enables unified, context-aware policy enforcement across the entire stack. general-purpose policy engine that enables unified, context-aware policy enforcement across the entire stack. open-source policy-as-code engine for kubernetes admission control, terraform scanning, and api authorization. cncf graduated tool government_or_organization public free community policy as code nist sp 800-53 kubernetes opa devsecops devsecops cloud architect engineer implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. opa engine"
+      "searchableText": "open policy agent (opa) opa engine general-purpose policy engine that enables unified, context-aware policy enforcement across the entire stack. general-purpose policy engine that enables unified, context-aware policy enforcement across the entire stack. open-source policy-as-code engine for kubernetes admission control, terraform scanning, and api authorization. cncf graduated tool government_or_organization public free community policy as code nist sp 800-53 kubernetes opa devsecops devsecops cloud architect engineer implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. opa engine"
     },
     {
       "id": "legacy-opencontrol-compliance-masonry",
@@ -4581,7 +4581,7 @@
         "oscap"
       ],
       "searchKeywords": [],
-      "searchableText": "openscap base scanner openscap evaluate scap content and generate standards-based configuration assessment results. evaluate scap content and generate standards-based configuration assessment results. it is the maintained open-source scap engine beneath command-line and workbench workflows. openscap project openscap project tool open_source_project public free open-source project federal cybersecurity practitioners assess scap linux implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. openscap oscap"
+      "searchableText": "openscap base scanner openscap evaluate scap content and generate standards-based configuration assessment results. evaluate scap content and generate standards-based configuration assessment results. it is the maintained open-source scap engine beneath command-line and workbench workflows. openscap project openscap project tool open_source_project public free open-source project federal cybersecurity practitioners assess scap linux implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. openscap oscap"
     },
     {
       "id": "tool-openscap-workbench",
@@ -4634,7 +4634,7 @@
         "OpenSCAP Workbench"
       ],
       "searchKeywords": [],
-      "searchableText": "openscap workbench gui & scanner openscap workbench graphical utility and scanner for performing scap compliance evaluations on linux systems. graphical utility and scanner for performing scap compliance evaluations on linux systems. open-source scap scanner used across red hat enterprise linux and centos federal systems. openscap project tool government_or_organization public free community scap nist sp 800-53 disa stig openscap rhel linux administrator isso sca implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. openscap workbench"
+      "searchableText": "openscap workbench gui & scanner openscap workbench graphical utility and scanner for performing scap compliance evaluations on linux systems. graphical utility and scanner for performing scap compliance evaluations on linux systems. open-source scap scanner used across red hat enterprise linux and centos federal systems. openscap project tool government_or_organization public free community scap nist sp 800-53 disa stig openscap rhel linux administrator isso sca implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. openscap workbench"
     },
     {
       "id": "tool-openssf-scorecard",
@@ -4686,7 +4686,7 @@
         "OpenSSF Scorecard"
       ],
       "searchKeywords": [],
-      "searchableText": "openssf scorecard automated security tool openssf scorecard automated security tool that assesses open-source projects for risk, maintenance, and security best practices. automated security tool that assesses open-source projects for risk, maintenance, and security best practices. open-source tool for verifying open-source package health and supply chain risk under eo 14028. openssf tool government_or_organization public free community openssf eo 14028 sbom supply chain devsecops developer isso implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. openssf scorecard"
+      "searchableText": "openssf scorecard automated security tool openssf scorecard automated security tool that assesses open-source projects for risk, maintenance, and security best practices. automated security tool that assesses open-source projects for risk, maintenance, and security best practices. open-source tool for verifying open-source package health and supply chain risk under eo 14028. openssf tool government_or_organization public free community openssf eo 14028 sbom supply chain devsecops developer isso implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. openssf scorecard"
     },
     {
       "id": "tool-osquery",
@@ -4737,7 +4737,7 @@
         "osquery"
       ],
       "searchKeywords": [],
-      "searchableText": "osquery sql-based operating system instrumentation osquery os instrumentation framework that exposes operating systems as relational databases for sql queries. os instrumentation framework that exposes operating systems as relational databases for sql queries. open-source security tool for querying system configuration, active processes, and compliance state. linux foundation tool government_or_organization public free community nist sp 800-53 endpoint security osquery sql devsecops security engineer isso implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. osquery"
+      "searchableText": "osquery sql-based operating system instrumentation osquery os instrumentation framework that exposes operating systems as relational databases for sql queries. os instrumentation framework that exposes operating systems as relational databases for sql queries. open-source security tool for querying system configuration, active processes, and compliance state. linux foundation tool government_or_organization public free community nist sp 800-53 endpoint security osquery sql devsecops security engineer isso implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. osquery"
     },
     {
       "id": "tool-dependency-track",
@@ -4790,7 +4790,7 @@
         "OWASP Dependency-Track"
       ],
       "searchKeywords": [],
-      "searchableText": "owasp dependency-track supply chain portal owasp dependency-track intelligent software supply chain component analysis platform that monitors sboms for vulnerabilities. intelligent software supply chain component analysis platform that monitors sboms for vulnerabilities. enterprise open-source platform for continuous sbom monitoring and supply chain vulnerability management. owasp foundation tool government_or_organization public free community cyclonedx sbom vulnerability management supply chain owasp devsecops ciso isso implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. owasp dependency-track"
+      "searchableText": "owasp dependency-track supply chain portal owasp dependency-track intelligent software supply chain component analysis platform that monitors sboms for vulnerabilities. intelligent software supply chain component analysis platform that monitors sboms for vulnerabilities. enterprise open-source platform for continuous sbom monitoring and supply chain vulnerability management. owasp foundation tool government_or_organization public free community cyclonedx sbom vulnerability management supply chain owasp devsecops ciso isso implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. owasp dependency-track"
     },
     {
       "id": "ecosystem-platform-one",
@@ -4839,7 +4839,7 @@
         "software factory"
       ],
       "searchKeywords": [],
-      "searchableText": "platform one p1 explore dod software delivery platforms, containers, collaboration, hosting, and marketplace services. explore dod software delivery platforms, containers, collaboration, hosting, and marketplace services. it is the parent ecosystem for iron bank, big bang, party bus, collabtools, and related services. department of the air force platform one department of the air force platform one ecosystem government access_varies free official platform one federal cybersecurity practitioners implement operate devsecops software factory cloud native cloud-devsecops-software-factories dod-cybersecurity-portals dod cybersecurity portals start with the official portals behind dod cyber policy, implementation, workforce, connections, and services. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. p1 platform 1 platform one software factory"
+      "searchableText": "platform one p1 explore dod software delivery platforms, containers, collaboration, hosting, and marketplace services. explore dod software delivery platforms, containers, collaboration, hosting, and marketplace services. it is the parent ecosystem for iron bank, big bang, party bus, collabtools, and related services. department of the air force platform one department of the air force platform one ecosystem government access_varies free official platform one federal cybersecurity practitioners implement operate devsecops software factory cloud native cloud-devsecops-software-factories dod-cybersecurity-portals dod cybersecurity portals find official dod cybersecurity portals. cloud, devsecops, and software factories find tools and services for secure software delivery. p1 platform 1 platform one software factory"
     },
     {
       "id": "service-platform-one-big-bang",
@@ -4886,7 +4886,7 @@
         "BigBang"
       ],
       "searchKeywords": [],
-      "searchableText": "platform one big bang big bang deploy and manage a declarative devsecops platform using the platform one ecosystem. deploy and manage a declarative devsecops platform using the platform one ecosystem. it is a distinct platform one implementation service with public documentation and source material. department of the air force platform one department of the air force platform one tool government access_varies free official platform one big bang federal cybersecurity practitioners implement operate kubernetes devsecops cloud-devsecops-software-factories implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. big bang bigbang"
+      "searchableText": "platform one big bang big bang deploy and manage a declarative devsecops platform using the platform one ecosystem. deploy and manage a declarative devsecops platform using the platform one ecosystem. it is a distinct platform one implementation service with public documentation and source material. department of the air force platform one department of the air force platform one tool government access_varies free official platform one big bang federal cybersecurity practitioners implement operate kubernetes devsecops cloud-devsecops-software-factories implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. cloud, devsecops, and software factories find tools and services for secure software delivery. big bang bigbang"
     },
     {
       "id": "directory-platform-one-marketplace",
@@ -4930,7 +4930,7 @@
         "Platform One Marketplace"
       ],
       "searchKeywords": [],
-      "searchableText": "platform one marketplace p1 marketplace discover platform one products, services, acquisition guidance, and solution providers. discover platform one products, services, acquisition guidance, and solution providers. it is the ecosystem's marketplace surface and does not imply control atlas endorsement of listed offerings. department of the air force platform one department of the air force platform one marketplace government public free official platform one federal cybersecurity practitioners select implement devsecops services cloud-devsecops-software-factories cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. p1 marketplace platform one marketplace"
+      "searchableText": "platform one marketplace p1 marketplace discover platform one products, services, acquisition guidance, and solution providers. discover platform one products, services, acquisition guidance, and solution providers. it is the ecosystem's marketplace surface and does not imply control atlas endorsement of listed offerings. department of the air force platform one department of the air force platform one marketplace government public free official platform one federal cybersecurity practitioners select implement devsecops services cloud-devsecops-software-factories cloud, devsecops, and software factories find tools and services for secure software delivery. p1 marketplace platform one marketplace"
     },
     {
       "id": "portal-platform-one-resources",
@@ -4977,7 +4977,7 @@
         "Resource Center"
       ],
       "searchKeywords": [],
-      "searchableText": "platform one resource center p1 resources browse documentation, onboarding, release notes, guides, and service-specific reference material. browse documentation, onboarding, release notes, guides, and service-specific reference material. it consolidates the public documentation paths for the platform one ecosystem. department of the air force platform one department of the air force platform one documentation government public free official platform one federal cybersecurity practitioners implement operate devsecops cloud native cloud-devsecops-software-factories cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. p1 resources p1 docs platform one docs resource center"
+      "searchableText": "platform one resource center p1 resources browse documentation, onboarding, release notes, guides, and service-specific reference material. browse documentation, onboarding, release notes, guides, and service-specific reference material. it consolidates the public documentation paths for the platform one ecosystem. department of the air force platform one department of the air force platform one documentation government public free official platform one federal cybersecurity practitioners implement operate devsecops cloud native cloud-devsecops-software-factories cloud, devsecops, and software factories find tools and services for secure software delivery. p1 resources p1 docs platform one docs resource center"
     },
     {
       "id": "tool-powerstig",
@@ -5033,7 +5033,7 @@
         "PowerSTIG",
         "Windows 2022 hardening"
       ],
-      "searchableText": "powerstig powershell hardening module powerstig powershell desired state configuration (dsc) module for automating disa stig compliance on windows and active directory. powershell desired state configuration (dsc) module for automating disa stig compliance on windows and active directory. open-source tool for automating windows server, iis, and sql server stig enforcement via powershell dsc. microsoft open source tool government_or_organization public free community disa stig nist sp 800-53 stig automation windows windows administrator engineer isso implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. powerstig windows server hardening powerstig windows 2022 hardening"
+      "searchableText": "powerstig powershell hardening module powerstig powershell desired state configuration (dsc) module for automating disa stig compliance on windows and active directory. powershell desired state configuration (dsc) module for automating disa stig compliance on windows and active directory. open-source tool for automating windows server, iis, and sql server stig enforcement via powershell dsc. microsoft open source tool government_or_organization public free community disa stig nist sp 800-53 stig automation windows windows administrator engineer isso implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. powerstig windows server hardening powerstig windows 2022 hardening"
     },
     {
       "id": "portal-project-spectrum",
@@ -5080,7 +5080,7 @@
         "DIB cybersecurity"
       ],
       "searchKeywords": [],
-      "searchableText": "project spectrum project spectrum access cybersecurity education, assessments, resources, and support for defense suppliers. access cybersecurity education, assessments, resources, and support for defense suppliers. it is a dod-supported assistance portal for small and medium defense industrial base businesses. department of defense office of small business programs department of defense office of small business programs service_portal government_supported free_account no_cost government-supported project spectrum cmmc federal cybersecurity practitioners prepare assess implement defense industrial base cui cmmc-defense-industrial-base cmmc and the defense industrial base find official program material, reporting systems, assistance, accreditation directories, cui, and nisp resources. project spectrum dib cybersecurity"
+      "searchableText": "project spectrum project spectrum access cybersecurity education, assessments, resources, and support for defense suppliers. access cybersecurity education, assessments, resources, and support for defense suppliers. it is a dod-supported assistance portal for small and medium defense industrial base businesses. department of defense office of small business programs department of defense office of small business programs service_portal government_supported free_account no_cost government-supported project spectrum cmmc federal cybersecurity practitioners prepare assess implement defense industrial base cui cmmc-defense-industrial-base cmmc and the defense industrial base find cmmc program resources for defense contractors. project spectrum dib cybersecurity"
     },
     {
       "id": "tool-prowler-cloud-security",
@@ -5139,7 +5139,7 @@
         "multi cloud audit",
         "Prowler"
       ],
-      "searchableText": "prowler multi-cloud security engine prowler security open-source security assessment tool for aws, azure, gcp, and kubernetes aligned with nist sp 800-53 and cis. open-source security assessment tool for aws, azure, gcp, and kubernetes aligned with nist sp 800-53 and cis. open-source cli scanner for multi-cloud federal compliance auditing. prowler open source tool government_or_organization public free community nist sp 800-53 cis benchmarks fedramp cloud security aws azure cloud engineer isso devsecops implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. prowler security multi cloud security audit multi cloud audit prowler"
+      "searchableText": "prowler multi-cloud security engine prowler security open-source security assessment tool for aws, azure, gcp, and kubernetes aligned with nist sp 800-53 and cis. open-source security assessment tool for aws, azure, gcp, and kubernetes aligned with nist sp 800-53 and cis. open-source cli scanner for multi-cloud federal compliance auditing. prowler open source tool government_or_organization public free community nist sp 800-53 cis benchmarks fedramp cloud security aws azure cloud engineer isso devsecops implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find tools for implementing and assessing security controls. cloud, devsecops, and software factories find tools and services for secure software delivery. prowler security multi cloud security audit multi cloud audit prowler"
     },
     {
       "id": "community-reddit-cmmc",
@@ -5192,7 +5192,7 @@
         "r/CMMC Forum"
       ],
       "searchKeywords": [],
-      "searchableText": "reddit /r/cmmc defense contractor community r/cmmc forum dedicated community for defense industrial base contractors, c3paos, and consultants navigating cmmc 2.0. dedicated community for defense industrial base contractors, c3paos, and consultants navigating cmmc 2.0. public practitioner community for real-world cmmc 32 cfr 170 compliance discussions and assessment lessons learned. reddit / community community_forum government_or_organization public free community cmmc 2.0 nist sp 800-171 cmmc dfars defense contractor 3pao isso implement assess general_it practitioner-communities practitioner communities find public or documented communities for federal cyber, cmmc, fedramp, grc, devsecops, and implementation tools. r/cmmc forum"
+      "searchableText": "reddit /r/cmmc defense contractor community r/cmmc forum dedicated community for defense industrial base contractors, c3paos, and consultants navigating cmmc 2.0. dedicated community for defense industrial base contractors, c3paos, and consultants navigating cmmc 2.0. public practitioner community for real-world cmmc 32 cfr 170 compliance discussions and assessment lessons learned. reddit / community community_forum government_or_organization public free community cmmc 2.0 nist sp 800-171 cmmc dfars defense contractor 3pao isso implement assess general_it practitioner-communities practitioner communities find practitioner communities and discussion forums. r/cmmc forum"
     },
     {
       "id": "community-reddit-fedramp",
@@ -5244,7 +5244,7 @@
         "r/FedRAMP Forum"
       ],
       "searchKeywords": [],
-      "searchableText": "reddit /r/fedramp cloud authorization forum r/fedramp forum community for cloud service providers, 3paos, and federal consultants working on fedramp authorizations. community for cloud service providers, 3paos, and federal consultants working on fedramp authorizations. active forum for practical fedramp jab vs agency ato advice and 20x modernization discussions. reddit / community community_forum government_or_organization public free community fedramp fedramp cloud service provider 3pao isso implement assess general_it practitioner-communities cloud-devsecops-software-factories cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. practitioner communities find public or documented communities for federal cyber, cmmc, fedramp, grc, devsecops, and implementation tools. r/fedramp forum"
+      "searchableText": "reddit /r/fedramp cloud authorization forum r/fedramp forum community for cloud service providers, 3paos, and federal consultants working on fedramp authorizations. community for cloud service providers, 3paos, and federal consultants working on fedramp authorizations. active forum for practical fedramp jab vs agency ato advice and 20x modernization discussions. reddit / community community_forum government_or_organization public free community fedramp fedramp cloud service provider 3pao isso implement assess general_it practitioner-communities cloud-devsecops-software-factories cloud, devsecops, and software factories find tools and services for secure software delivery. practitioner communities find practitioner communities and discussion forums. r/fedramp forum"
     },
     {
       "id": "community-reddit-nistcontrols",
@@ -5301,7 +5301,7 @@
         "r/NISTControls"
       ],
       "searchKeywords": [],
-      "searchableText": "reddit /r/nistcontrols practitioner community r/nistcontrols active public forum for federal cybersecurity practitioners, issos, and contractors discussing nist sp 800-53 and 800-171. active public forum for federal cybersecurity practitioners, issos, and contractors discussing nist sp 800-53 and 800-171. public community for practical advice, ato hurdles, stig interpretation, and cmmc preparation. reddit / community community_forum government_or_organization public free community nist sp 800-53 nist sp 800-171 cmmc fisma cmmc rmf isso issm defense contractor consultant implement assess general_it practitioner-communities practitioner communities find public or documented communities for federal cyber, cmmc, fedramp, grc, devsecops, and implementation tools. r/nistcontrols"
+      "searchableText": "reddit /r/nistcontrols practitioner community r/nistcontrols active public forum for federal cybersecurity practitioners, issos, and contractors discussing nist sp 800-53 and 800-171. active public forum for federal cybersecurity practitioners, issos, and contractors discussing nist sp 800-53 and 800-171. public community for practical advice, ato hurdles, stig interpretation, and cmmc preparation. reddit / community community_forum government_or_organization public free community nist sp 800-53 nist sp 800-171 cmmc fisma cmmc rmf isso issm defense contractor consultant implement assess general_it practitioner-communities practitioner communities find practitioner communities and discussion forums. r/nistcontrols"
     },
     {
       "id": "community-reddit-devsecops",
@@ -5345,7 +5345,7 @@
         "DevSecOps subreddit"
       ],
       "searchKeywords": [],
-      "searchableText": "reddit r/devsecops r/devsecops discuss secure software delivery, automation, pipelines, containers, cloud, and policy-as-code. discuss secure software delivery, automation, pipelines, containers, cloud, and policy-as-code. it provides practitioner discussion around the implementation tools and software-factory ecosystem listed here. reddit community reddit community community_forum community public free unofficial community federal cybersecurity practitioners implement operate devsecops cloud native practitioner-communities cloud-devsecops-software-factories cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. practitioner communities find public or documented communities for federal cyber, cmmc, fedramp, grc, devsecops, and implementation tools. r/devsecops devsecops subreddit"
+      "searchableText": "reddit r/devsecops r/devsecops discuss secure software delivery, automation, pipelines, containers, cloud, and policy-as-code. discuss secure software delivery, automation, pipelines, containers, cloud, and policy-as-code. it provides practitioner discussion around the implementation tools and software-factory ecosystem listed here. reddit community reddit community community_forum community public free unofficial community federal cybersecurity practitioners implement operate devsecops cloud native practitioner-communities cloud-devsecops-software-factories cloud, devsecops, and software factories find tools and services for secure software delivery. practitioner communities find practitioner communities and discussion forums. r/devsecops devsecops subreddit"
     },
     {
       "id": "community-reddit-grc",
@@ -5390,7 +5390,7 @@
         "GRC subreddit"
       ],
       "searchKeywords": [],
-      "searchableText": "reddit r/grc r/grc discuss governance, risk, compliance, audit, tooling, careers, and implementation questions. discuss governance, risk, compliance, audit, tooling, careers, and implementation questions. it provides broad practitioner discussion that complements narrower federal and cmmc communities. reddit community reddit community community_forum community public free unofficial community federal cybersecurity practitioners prepare assess monitor governance risk compliance practitioner-communities practitioner communities find public or documented communities for federal cyber, cmmc, fedramp, grc, devsecops, and implementation tools. r/grc grc subreddit"
+      "searchableText": "reddit r/grc r/grc discuss governance, risk, compliance, audit, tooling, careers, and implementation questions. discuss governance, risk, compliance, audit, tooling, careers, and implementation questions. it provides broad practitioner discussion that complements narrower federal and cmmc communities. reddit community reddit community community_forum community public free unofficial community federal cybersecurity practitioners prepare assess monitor governance risk compliance practitioner-communities practitioner communities find practitioner communities and discussion forums. r/grc grc subreddit"
     },
     {
       "id": "template-sans-security-policy",
@@ -5441,7 +5441,7 @@
         "SANS Policy Templates"
       ],
       "searchKeywords": [],
-      "searchableText": "sans information security policy templates sans policy templates consensus-developed security policy templates covering acceptable use, incident response, access control, and data protection. consensus-developed security policy templates covering acceptable use, incident response, access control, and data protection. public free security policy templates easily customized for federal and defense enterprise policies. sans institute template government_or_organization public free community nist sp 800-53 sans top 20 policy governance isso issm policy writer implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. sans policy templates"
+      "searchableText": "sans information security policy templates sans policy templates consensus-developed security policy templates covering acceptable use, incident response, access control, and data protection. consensus-developed security policy templates covering acceptable use, incident response, access control, and data protection. public free security policy templates easily customized for federal and defense enterprise policies. sans institute template government_or_organization public free community nist sp 800-53 sans top 20 policy governance isso issm policy writer implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. sans policy templates"
     },
     {
       "id": "tool-scoutsuite",
@@ -5493,7 +5493,7 @@
         "Scout Suite"
       ],
       "searchKeywords": [],
-      "searchableText": "scout suite multi-cloud auditing tool scout suite open-source multi-cloud security auditing tool for aws, azure, gcp, alibaba, and oracle cloud. open-source multi-cloud security auditing tool for aws, azure, gcp, alibaba, and oracle cloud. multi-cloud audit tool producing self-contained offline html assessment reports. ncc group tool government_or_organization public free community nist sp 800-53 cis multi-cloud auditing cloud auditor isso sca implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. cloud, devsecops, and software factories find platform one, software-factory, container, cloud-security, collaboration, and delivery resources. scout suite"
+      "searchableText": "scout suite multi-cloud auditing tool scout suite open-source multi-cloud security auditing tool for aws, azure, gcp, alibaba, and oracle cloud. open-source multi-cloud security auditing tool for aws, azure, gcp, alibaba, and oracle cloud. multi-cloud audit tool producing self-contained offline html assessment reports. ncc group tool government_or_organization public free community nist sp 800-53 cis multi-cloud auditing cloud auditor isso sca implement assess general_it implementation-assessment-tools cloud-devsecops-software-factories implementation and assessment tools find tools for implementing and assessing security controls. cloud, devsecops, and software factories find tools and services for secure software delivery. scout suite"
     },
     {
       "id": "service-sprs-cyber-reports",
@@ -5540,7 +5540,7 @@
         "NIST score"
       ],
       "searchKeywords": [],
-      "searchableText": "sprs cyber reports sprs enter and review authorized cmmc and nist sp 800-171 assessment records. enter and review authorized cmmc and nist sp 800-171 assessment records. it is the official reporting destination with public access guidance and role requirements. defense logistics agency defense logistics agency restricted_service government access_varies no_cost official sprs cmmc federal cybersecurity practitioners assess defense industrial base assessment reporting cmmc-defense-industrial-base cmmc and the defense industrial base find official program material, reporting systems, assistance, accreditation directories, cui, and nisp resources. sprs supplier performance risk system cmmc cyber reports nist score"
+      "searchableText": "sprs cyber reports sprs enter and review authorized cmmc and nist sp 800-171 assessment records. enter and review authorized cmmc and nist sp 800-171 assessment records. it is the official reporting destination with public access guidance and role requirements. defense logistics agency defense logistics agency restricted_service government access_varies no_cost official sprs cmmc federal cybersecurity practitioners assess defense industrial base assessment reporting cmmc-defense-industrial-base cmmc and the defense industrial base find cmmc program resources for defense contractors. sprs supplier performance risk system cmmc cyber reports nist score"
     },
     {
       "id": "tool-steampipe",
@@ -5592,7 +5592,7 @@
         "Steampipe Engine"
       ],
       "searchKeywords": [],
-      "searchableText": "steampipe sql infrastructure auditing engine steampipe engine open-source sql engine for querying cloud apis, kubernetes, and security tools like postgresql tables. open-source sql engine for querying cloud apis, kubernetes, and security tools like postgresql tables. open-source sql tool allowing compliance engineers to write sql queries against aws, azure, and github controls. turbot tool government_or_organization public free community nist sp 800-53 cis benchmarks compliance sql cloud audit cloud engineer isso devsecops implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. steampipe engine"
+      "searchableText": "steampipe sql infrastructure auditing engine steampipe engine open-source sql engine for querying cloud apis, kubernetes, and security tools like postgresql tables. open-source sql engine for querying cloud apis, kubernetes, and security tools like postgresql tables. open-source sql tool allowing compliance engineers to write sql queries against aws, azure, and github controls. turbot tool government_or_organization public free community nist sp 800-53 cis benchmarks compliance sql cloud audit cloud engineer isso devsecops implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. steampipe engine"
     },
     {
       "id": "tool-stig-manager",
@@ -5645,7 +5645,7 @@
         "STIG Manager"
       ],
       "searchKeywords": [],
-      "searchableText": "stig manager orchestration system stig manager open-source web application for managing disa stig assessments, ckl files, and emass authorization metrics. open-source web application for managing disa stig assessments, ckl files, and emass authorization metrics. enterprise open-source server for collaboration across cybersecurity teams managing stig checklists. naval undersea warfare center tool government_or_organization public free community disa stig dod rmf stig management emass isso issm sca devsecops implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. stig manager"
+      "searchableText": "stig manager orchestration system stig manager open-source web application for managing disa stig assessments, ckl files, and emass authorization metrics. open-source web application for managing disa stig assessments, ckl files, and emass authorization metrics. enterprise open-source server for collaboration across cybersecurity teams managing stig checklists. naval undersea warfare center tool government_or_organization public free community disa stig dod rmf stig management emass isso issm sca devsecops implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. stig manager"
     },
     {
       "id": "tool-terrascan",
@@ -5695,7 +5695,7 @@
         "Terrascan"
       ],
       "searchKeywords": [],
-      "searchableText": "terrascan iac security scanner terrascan static code analyzer for infrastructure as code with 500+ out-of-the-box policies written in rego (opa). static code analyzer for infrastructure as code with 500+ out-of-the-box policies written in rego (opa). open-source iac scanner for detecting compliance violations prior to cloud provisioning. tenable open source tool government_or_organization public free community iac scanning cis benchmarks devsecops opa devsecops engineer implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. terrascan"
+      "searchableText": "terrascan iac security scanner terrascan static code analyzer for infrastructure as code with 500+ out-of-the-box policies written in rego (opa). static code analyzer for infrastructure as code with 500+ out-of-the-box policies written in rego (opa). open-source iac scanner for detecting compliance violations prior to cloud provisioning. tenable open source tool government_or_organization public free community iac scanning cis benchmarks devsecops opa devsecops engineer implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. terrascan"
     },
     {
       "id": "ecosystem-cyber-ab",
@@ -5740,7 +5740,7 @@
         "CMMC accreditation body"
       ],
       "searchKeywords": [],
-      "searchableText": "the cyber ab cyber ab find cmmc accreditation-ecosystem information, registered practitioners, assessors, training, and organizations. find cmmc accreditation-ecosystem information, registered practitioners, assessors, training, and organizations. it operates the cmmc accreditation ecosystem under contract but is distinct from official dod policy. the cyber ab the cyber ab ecosystem accreditation_organization public free accreditation ecosystem cmmc federal cybersecurity practitioners prepare assess cmmc accreditation cmmc-defense-industrial-base cmmc and the defense industrial base find official program material, reporting systems, assistance, accreditation directories, cui, and nisp resources. cyber ab cmmc ab cmmc accreditation body"
+      "searchableText": "the cyber ab cyber ab find cmmc accreditation-ecosystem information, registered practitioners, assessors, training, and organizations. find cmmc accreditation-ecosystem information, registered practitioners, assessors, training, and organizations. it operates the cmmc accreditation ecosystem under contract but is distinct from official dod policy. the cyber ab the cyber ab ecosystem accreditation_organization public free accreditation ecosystem cmmc federal cybersecurity practitioners prepare assess cmmc accreditation cmmc-defense-industrial-base cmmc and the defense industrial base find cmmc program resources for defense contractors. cyber ab cmmc ab cmmc accreditation body"
     },
     {
       "id": "directory-cyber-ab-marketplace",
@@ -5788,7 +5788,7 @@
         "assessor directory"
       ],
       "searchKeywords": [],
-      "searchableText": "the cyber ab catalog cmmc catalog search cmmc assessors, c3paos, training providers, consultants, and credentialed professionals. search cmmc assessors, c3paos, training providers, consultants, and credentialed professionals. it is the accreditation ecosystem's directory, not an official dod endorsement of listed providers. the cyber ab the cyber ab marketplace accreditation_organization public free accreditation ecosystem cmmc federal cybersecurity practitioners prepare assess cmmc services cmmc-defense-industrial-base cmmc and the defense industrial base find official program material, reporting systems, assistance, accreditation directories, cui, and nisp resources. cmmc catalog cmmc marketplace cyber ab catalog c3pao directory cca directory assessor directory"
+      "searchableText": "the cyber ab catalog cmmc catalog search cmmc assessors, c3paos, training providers, consultants, and credentialed professionals. search cmmc assessors, c3paos, training providers, consultants, and credentialed professionals. it is the accreditation ecosystem's directory, not an official dod endorsement of listed providers. the cyber ab the cyber ab marketplace accreditation_organization public free accreditation ecosystem cmmc federal cybersecurity practitioners prepare assess cmmc services cmmc-defense-industrial-base cmmc and the defense industrial base find cmmc program resources for defense contractors. cmmc catalog cmmc marketplace cyber ab catalog c3pao directory cca directory assessor directory"
     },
     {
       "id": "tool-trivy",
@@ -5841,7 +5841,7 @@
         "Trivy Scanner"
       ],
       "searchKeywords": [],
-      "searchableText": "trivy vulnerability & misconfiguration scanner trivy scanner comprehensive security scanner for container images, file systems, git repositories, and kubernetes. comprehensive security scanner for container images, file systems, git repositories, and kubernetes. open-source container and sbom vulnerability scanner used in federal devsecops pipelines. aqua security tool government_or_organization public free community cve nist sp 800-53 sbom container security devsecops devsecops container administrator isso implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. trivy scanner"
+      "searchableText": "trivy vulnerability & misconfiguration scanner trivy scanner comprehensive security scanner for container images, file systems, git repositories, and kubernetes. comprehensive security scanner for container images, file systems, git repositories, and kubernetes. open-source container and sbom vulnerability scanner used in federal devsecops pipelines. aqua security tool government_or_organization public free community cve nist sp 800-53 sbom container security devsecops devsecops container administrator isso implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. trivy scanner"
     },
     {
       "id": "community-wazuh",
@@ -5886,7 +5886,7 @@
         "Wazuh Slack"
       ],
       "searchKeywords": [],
-      "searchableText": "wazuh community wazuh community find wazuh forums, slack, mailing lists, events, and contribution channels. find wazuh forums, slack, mailing lists, events, and contribution channels. it is the project's documented support and practitioner ecosystem for deployment and detection questions. wazuh wazuh community_forum commercial_open_source access_varies free project-operated community federal cybersecurity practitioners implement operate monitor security monitoring siem practitioner-communities implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. practitioner communities find public or documented communities for federal cyber, cmmc, fedramp, grc, devsecops, and implementation tools. wazuh community wazuh slack"
+      "searchableText": "wazuh community wazuh community find wazuh forums, slack, mailing lists, events, and contribution channels. find wazuh forums, slack, mailing lists, events, and contribution channels. it is the project's documented support and practitioner ecosystem for deployment and detection questions. wazuh wazuh community_forum commercial_open_source access_varies free project-operated community federal cybersecurity practitioners implement operate monitor security monitoring siem practitioner-communities implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. practitioner communities find practitioner communities and discussion forums. wazuh community wazuh slack"
     },
     {
       "id": "tool-wazuh-siem",
@@ -5939,7 +5939,7 @@
         "Wazuh SIEM & XDR"
       ],
       "searchKeywords": [],
-      "searchableText": "wazuh open source security platform wazuh siem & xdr free open-source siem, security monitoring, and regulatory compliance assessment engine. free open-source siem, security monitoring, and regulatory compliance assessment engine. open-source siem for active log monitoring, file integrity monitoring, and nist sp 800-53 audit compliance. wazuh inc. tool government_or_organization public free community nist sp 800-53 siem log auditing wazuh fim isso soc analyst system administrator implement assess general_it implementation-assessment-tools implementation and assessment tools find scanners, audit content, templates, hardening automation, assessment workspaces, and result viewers. wazuh siem & xdr"
+      "searchableText": "wazuh open source security platform wazuh siem & xdr free open-source siem, security monitoring, and regulatory compliance assessment engine. free open-source siem, security monitoring, and regulatory compliance assessment engine. open-source siem for active log monitoring, file integrity monitoring, and nist sp 800-53 audit compliance. wazuh inc. tool government_or_organization public free community nist sp 800-53 siem log auditing wazuh fim isso soc analyst system administrator implement assess general_it implementation-assessment-tools implementation and assessment tools find tools for implementing and assessing security controls. wazuh siem & xdr"
     }
   ]
 }

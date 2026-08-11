@@ -7,6 +7,7 @@ import {
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { ExpandableControlList } from "../components/ExpandableRelationshipGroup";
 import { CompareResultsPanel } from "../components/CompareResultsPanel";
 import { CompareExportDisclosure } from "../components/LoadStatusPanel";
@@ -471,8 +472,8 @@ export function ComparePage(props: {
       <PageHeader
         eyebrow="Compare"
         primary
-        summary="Pick the kind of comparison, then choose the two things to line up."
-        title="What do you want to compare?"
+        summary={SITE_COPY.routes.compare.purpose}
+        title={SITE_COPY.routes.compare.title}
       />
       {selectedCatalogVersion ? (
         <CatalogVersionChip label="Active" version={selectedCatalogVersion} />
@@ -542,8 +543,8 @@ export function ComparePage(props: {
             {state.intent === "item-mapping" ? (
               <>
                 <SelectField
-                  hint="Required so identifiers such as AC-2 are resolved inside one named published structure."
-                  label="Published structure"
+                  hint="Required so identifiers such as AC-2 are resolved inside one publication."
+                  label="Publication"
                   onChange={(source) =>
                     onNavigate("matrix", {
                       crosswalk,
@@ -578,8 +579,8 @@ export function ComparePage(props: {
               <>
             <div className="field-stack">
               <SelectField
-                hint="The first published catalog, framework, or program structure."
-                label="Published structure A"
+                hint="Choose the first publication or framework."
+                label="Publication A"
                 onChange={(value) =>
                   onNavigate("matrix", {
                     crosswalk,
@@ -602,8 +603,8 @@ export function ComparePage(props: {
             </div>
             <div className="field-stack">
               <SelectField
-                hint="The second published catalog, framework, or program structure."
-                label="Published structure B"
+                hint="Choose the second publication or framework."
+                label="Publication B"
                 onChange={(value) =>
                   onNavigate("matrix", {
                     crosswalk,

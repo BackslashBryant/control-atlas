@@ -160,6 +160,53 @@
   background: var(--ca-accent);
 }
 
+.accessible-term,
+.accessible-term__label,
+.bucket-tag--explained,
+.line-tag--explained {
+  position: relative;
+}
+
+.accessible-term__label {
+  color: inherit;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--ca-text-muted);
+  text-underline-offset: 0.18em;
+  cursor: help;
+}
+
+.accessible-term__label::after,
+.bucket-tag--explained::after,
+.line-tag--explained::after {
+  position: absolute;
+  z-index: 50;
+  bottom: calc(100% + var(--ca-space-2));
+  left: 50%;
+  display: none;
+  width: max-content;
+  max-width: min(18rem, 80vw);
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border: 1px solid var(--ca-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--ca-surface-raised);
+  box-shadow: var(--shadow-md);
+  color: var(--ca-text);
+  content: attr(data-tooltip);
+  font: 500 var(--ca-text-xs) / 1.35 var(--ca-font-sans);
+  text-align: left;
+  white-space: normal;
+  transform: translateX(-50%);
+}
+
+.accessible-term__label:hover::after,
+.accessible-term__label:focus-visible::after,
+.bucket-tag--explained:hover::after,
+.bucket-tag--explained:focus-visible::after,
+.line-tag--explained:hover::after,
+.line-tag--explained:focus-visible::after {
+  display: block;
+}
+
 /* ── Confidence pip ── */
 .ca-confidence {
   display: inline-flex;

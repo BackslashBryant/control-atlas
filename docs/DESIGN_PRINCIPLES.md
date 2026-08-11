@@ -29,15 +29,15 @@ public source, and a practical next step.
 5. **Design for constrained teams.** Assume limited time, limited staffing, imperfect data, and competing priorities.
 6. **Separate published source material from interpretation.** Make clear what is known, what is inferred, and what is recommended.
 7. **Prefer usable systems over impressive systems.** A smaller workflow that people actually trust and use is better than a powerful one they avoid.
-8. **Every output should answer:** What is this? Why does it matter? What should I do with it?
+8. **Answer the task in front of the user.** Do not force every surface into a three-part explanation.
 
 ## What this means in practice (Control Atlas)
 
-1. **Use plain operational language first, formal source language second.** Lead with what to do; cite official IDs and framework terms on drill-down.
-2. **Show how things connect, not just that they exist.** Surfaces should emphasize relationships (Library → Sources → Crosswalks), not isolated feature lists.
-3. **Make every crosswalk traceable back to authoritative sources.** Point users to Sources and provenance; never imply magic linkage.
+1. **Use plain operational language for product instructions.** On record pages, lead with the complete published text rather than invented guidance.
+2. **Show useful connections in context.** Relationships support the task; they are not the headline or the product story on every surface.
+3. **Keep evidence available without narrating it repeatedly.** Crosswalk citations, publication details, and official links provide traceability where it matters.
 4. **Treat mappings as decision support, not magic automation.** Disclaimers stay visible; no compliant / not compliant framing.
-5. **Help users move from "What does this mean?" to "What do I need to do next?"** Every major surface should suggest a concrete next step.
+5. **Help users complete the task in front of them.** Suggest a next step only when the product can support it honestly.
 6. **Design for small teams without assuming dedicated compliance staff.** Progressive disclosure, short first screens, no jargon walls on entry.
 7. **Preserve rigor without making the user speak in framework jargon.** Approachable entry points; depth behind search and detail views.
 8. **No raw identifiers in user-facing copy.** Every `source_id`, `canonical_id`, or schema enum in a label, filter, or button must resolve through a `display_name`.
@@ -53,7 +53,7 @@ Before shipping UI copy or a new surface, confirm:
 - Would a constrained team understand the first screen (rule 5)?
 - Is published source material separated from interpretation (rule 6)?
 - Is this the simplest workflow people will actually use (rule 7)?
-- Does it answer: What is this? Why does it matter? What should I do with it (rule 8)?
+- Does it answer the task in front of the user without invented interpretation (rule 8)?
 - Can the user trace back to an authoritative source?
 
 ## Related docs

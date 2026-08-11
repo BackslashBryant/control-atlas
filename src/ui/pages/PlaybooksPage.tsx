@@ -19,6 +19,7 @@ import {
   learnArticleById,
   practitionerGuides,
 } from "../../app/learn-content.mjs";
+import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { Panel } from "../components/lsm";
 import { AppLink } from "../components/AppLink";
 import { BucketTag } from "../components/TaxonomyTag";
@@ -65,7 +66,7 @@ export function PlaybooksPage(props: {
       >
         <PageHeader
           primary
-          summary="Plain-language guides to federal authorization and security work."
+          summary={SITE_COPY.routes.guides.purpose}
           title={<span id="guides-title">Guides</span>}
         />
         <section aria-label="Practitioner guides" className="learn-article-grid">

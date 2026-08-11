@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import { useId, type CSSProperties, type ReactNode } from "react";
 
 import {
   areaCssVariables,
@@ -11,7 +11,9 @@ export function BucketTag(props: {
   area: string;
   children?: ReactNode;
   className?: string;
+  explanation?: string;
 }) {
+  const descriptionId = useId();
   const presentation = areaPresentationFor(props.area);
   const style = presentation
     ? (areaCssVariables(presentation) as CustomProperties)
@@ -19,12 +21,17 @@ export function BucketTag(props: {
 
   return (
     <span
-      className={`bucket-tag${presentation ? "" : " bucket-tag--neutral"}${props.className ? ` ${props.className}` : ""}`}
+      aria-describedby={props.explanation ? descriptionId : undefined}
+      className={`bucket-tag${presentation ? "" : " bucket-tag--neutral"}${props.explanation ? " bucket-tag--explained" : ""}${props.className ? ` ${props.className}` : ""}`}
+      data-tooltip={props.explanation || undefined}
       data-area-id={presentation?.id}
       style={style}
+      tabIndex={props.explanation ? 0 : undefined}
+      title={props.explanation}
     >
       {presentation ? <span aria-hidden="true" className="bucket-tag__dot" /> : null}
       <span>{props.children ?? presentation?.label ?? props.area}</span>
+      {props.explanation ? <span className="visually-hidden" id={descriptionId}>{props.explanation}</span> : null}
     </span>
   );
 }
@@ -32,11 +39,20 @@ export function BucketTag(props: {
 export function LineTag(props: {
   children: ReactNode;
   className?: string;
+  explanation?: string;
 }) {
+  const descriptionId = useId();
   return (
-    <span className={`line-tag${props.className ? ` ${props.className}` : ""}`}>
+    <span
+      aria-describedby={props.explanation ? descriptionId : undefined}
+      className={`line-tag${props.explanation ? " line-tag--explained" : ""}${props.className ? ` ${props.className}` : ""}`}
+      data-tooltip={props.explanation || undefined}
+      tabIndex={props.explanation ? 0 : undefined}
+      title={props.explanation}
+    >
       <span aria-hidden="true" className="line-tag__line" />
       <span>{props.children}</span>
+      {props.explanation ? <span className="visually-hidden" id={descriptionId}>{props.explanation}</span> : null}
     </span>
   );
 }

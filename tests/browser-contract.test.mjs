@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
 import { HOME_CONTENT, HOME_DESTINATIONS } from '../src/shared/home-content.mjs';
+import { SITE_COPY } from '../src/shared/site-copy.mjs';
 
 const html = readFileSync('src/index.html', 'utf8');
 const css = readFileSync('styles/tokens.css', 'utf8');
@@ -31,8 +32,8 @@ const graphLayout = existsSync('src/ui/lib/graphLayout.ts')
 test('shell identifies Control Atlas and progressively boots the React workspace', () => {
   assert.match(html, /Control Atlas/);
   assert.match(html, /name="application-name" content="Control Atlas"/);
-  assert.match(html, /Control Atlas brings the federal cybersecurity landscape together in one place/);
-  assert.match(html, /understand how it connects, and get to the next step faster/);
+  assert.match(html, /CONTROL_ATLAS_PRODUCT_DESCRIPTION/);
+  assert.equal(SITE_COPY.product.definition, 'Control Atlas is a public research tool for federal cybersecurity requirements, controls, techniques, and guidance.');
   assert.match(html, /id="root"/);
   assert.ok(existsSync('src/main.tsx'), 'src/main.tsx must exist');
   assert.ok(existsSync('src/ui/App.tsx'), 'src/ui/App.tsx must exist');
@@ -236,8 +237,9 @@ test('persistent footer uses the approved short disclaimer', () => {
   const footer = readFileSync('src/ui/components/SiteFooter.tsx', 'utf8');
   const identity = readFileSync('src/shared/product-identity.ts', 'utf8');
   assert.match(footer, /PRODUCT_FOOTER_NOTICE/);
-  assert.match(identity, /Free and open source, not a government system\. Every record keeps its publisher and source attached\./);
-  assert.match(html, /Free and open source, not a government system\. Every record keeps its publisher and source attached\./);
+  assert.match(identity, /SITE_COPY\.product\.footer/);
+  assert.equal(SITE_COPY.product.footer, 'Free and open source. Not a government system.');
+  assert.match(html, /Free and open source\. Not a government system\./);
 });
 
 test('query-string deep link compatibility moves into typed React adapters', () => {
@@ -338,16 +340,17 @@ test('landing page states what the product is before asking for action', () => {
   const homeContent = readFileSync('src/shared/home-content.mjs', 'utf8');
   const viteConfig = readFileSync('vite.config.ts', 'utf8');
   assert.match(homePage, /HOME_CONTENT\.definition/);
-  assert.match(homeContent, /Federal cybersecurity requirements, sources, and how they connect\./);
-  assert.equal(HOME_CONTENT.definition, 'Search official requirements and controls, see how they map across frameworks, and open the source.');
+  assert.match(homeContent, /SITE_COPY\.home/);
+  assert.equal(HOME_CONTENT.headline, 'Make federal cybersecurity compliance make sense.');
+  assert.equal(HOME_CONTENT.definition, 'Understand what applies, what it means, and what to do next.');
   assert.match(homePage, /aria-label="Search Control Atlas"/);
   assert.match(homePage, /data-template="B"/);
   assert.match(html, /CONTROL_ATLAS_HOME/);
   assert.match(viteConfig, /renderStaticHome\(\)/);
-  assert.match(viteConfig, /html\.replace\('<!-- CONTROL_ATLAS_HOME -->'/);
+  assert.match(viteConfig, /\.replace\('<!-- CONTROL_ATLAS_HOME -->'/);
   assert.equal(HOME_DESTINATIONS.length, 3);
   assert.deepEqual(HOME_DESTINATIONS.map(({ label }) => label), [
-    'Explore the Atlas', 'Search the Library', 'Browse Resources',
+    'Browse the Atlas', 'Search the Library', 'Browse Resources',
   ]);
   assert.doesNotMatch(homePage, /home-ecosystem-authorities|home-start-here/);
   assert.match(homePage, /AREA_PRESENTATIONS\.map/);
@@ -378,8 +381,9 @@ test('skip links focus the workspace without turning the target into an applicat
 test('mounted record surfaces render official descriptions rather than synthetic translations', () => {
   const detailPage = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
   const surfaces = [detailPage, readFileSync('src/ui/pages/CatalogDetailPage.tsx', 'utf8'), readFileSync('src/ui/pages/AtlasMapPage.tsx', 'utf8'), readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8'), readFileSync('src/ui/components/SearchOverlay.tsx', 'utf8')].join('\n');
-  assert.match(detailPage, /Official source text/);
-  assert.match(surfaces, /No narrative description was published for this record/);
+  assert.match(detailPage, /recordPresentationProfile/);
+  assert.match(detailPage, /data-source-text="published"/);
+  assert.doesNotMatch(surfaces, /No narrative description was published for this record/);
   assert.doesNotMatch(surfaces, /plain_language_summary|plain_action/);
 });
 
@@ -482,13 +486,12 @@ test('route interactions keep canonical context and synchronize visible state', 
   assert.doesNotMatch(atlasMap, /RelationshipExplorer/);
   assert.match(explore, /<WorkspaceTemplate/);
   assert.match(explore, /rows\.slice\(0, visibleCount\)/);
-  assert.match(explore, /familyQualifiedRecordId/);
-  assert.match(explore, /plainEnglishRecordName/);
+  assert.match(explore, /recordIdentityFor/);
   assert.match(explore, /areaPresentationForCatalog/);
   assert.match(explore, /data-result-class="published-record"/);
   assert.doesNotMatch(explore, /searchExploreResources|searchResourceDocuments/);
   assert.match(searchOverlay, /Search Control Atlas/);
-  assert.match(searchOverlay, /Published records/);
+  assert.match(searchOverlay, /Records \(\{results\.libraryResults\.length\}\)/);
   assert.match(searchOverlay, /Tools and resources/);
   assert.match(searchOverlay, /Communities/);
   assert.match(searchOverlay, /document\.resourceType === "community_forum"/);
@@ -496,9 +499,10 @@ test('route interactions keep canonical context and synchronize visible state', 
   assert.match(searchOverlay, /resourceAccessLabel\(doc\)/);
   assert.doesNotMatch(searchOverlay, /doc\.resourceLane\.replaceAll/);
   assert.doesNotMatch(searchOverlay, />\{doc\.resourceType\}</);
-  assert.match(explore, /Search every published record and its sources/);
+  assert.match(explore, /SITE_COPY\.routes\.library\.purpose/);
   assert.match(explore, /Browse the Library/);
-  assert.match(explore, /No matching records found/);
+  assert.match(explore, /Nothing matches these filters\./);
+  assert.match(explore, /No records found\./);
 });
 
 test('template options use collapsed progressive disclosure and associated hints', () => {
@@ -524,6 +528,7 @@ test('Guides remain explanatory while product help is consolidated into About', 
   const glossary = readFileSync('src/ui/components/GlossaryDrawer.tsx', 'utf8');
   const about = readFileSync('src/ui/pages/AboutPage.tsx', 'utf8');
   assert.doesNotMatch(glossary, /learnArticles\.map|<Dialog\.Title>Help|>Help</);
-  assert.match(about, /Help using Control Atlas/);
+  assert.match(about, /PRODUCT_DEFINITION/);
+  assert.match(about, /PRODUCT_DECISION_BOUNDARY/);
   assert.doesNotMatch(playbooksPage, /Recommended for new users|No public playbooks are available yet/);
 });

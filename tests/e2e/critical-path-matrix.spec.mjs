@@ -19,11 +19,12 @@ test("critical path: Template B landing hero and three entry cards are visible",
 
   await expect(
     page.getByRole("heading", {
-      name: "Federal cybersecurity requirements, sources, and how they connect.",
+      name: "Make federal cybersecurity compliance make sense.",
     }),
   ).toBeVisible();
 
   await expect(page.getByRole("searchbox", { name: "Search Control Atlas" })).toBeVisible();
+  await expect(page.locator(".home-search").getByRole("button", { name: "Search" })).toBeVisible();
   await expect(page.locator('[data-template="B"]')).toBeVisible();
   await expect(page.locator(".home-secondary-action")).toHaveCount(3);
   await expect(page.locator(".home-ecosystem-areas .bucket-tag")).toHaveCount(9);
@@ -131,7 +132,7 @@ test("critical path: library detail connections show meaning and source trust te
   await dismissOnboarding(page);
 
   await expect(
-    page.getByRole("heading", { name: "Connections" }).first(),
+    page.getByRole("heading", { name: "Crosswalks" }).first(),
   ).toBeVisible();
   const relationshipCard = page.locator("[data-record-connection-id]").first();
   await expect(relationshipCard).toBeVisible();
@@ -153,14 +154,12 @@ test("critical path: record reading page uses a list and keeps the graph in Atla
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const connections = page.locator('[data-record-section="connections"]');
+  const connections = page.locator('[data-record-section="crosswalks"]');
   await expect(connections).toBeVisible();
   expect(await connections.locator("ul").count()).toBeGreaterThan(0);
   await expect(connections.locator("ul").first()).toBeVisible();
   await expect(page.locator(".record-template .react-flow")).toHaveCount(0);
-  await page.locator(".record-actions-menu summary").click();
-  await expect(page.locator(".record-actions-menu")).toHaveAttribute("open", "");
-  await expect(page.getByRole("link", { name: "See in Atlas", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "See connections", exact: true })).toBeVisible();
 });
 
 test("critical path: STIG chain summary table is labeled for screen readers", async ({
@@ -199,8 +198,7 @@ test("critical path: MITRE library search returns technique with plain-language 
   await expect(
     page.getByRole("heading", { name: /T1033/, level: 1 }),
   ).toBeVisible();
-  await expect(page.getByText("Official source text", { exact: true })).toBeVisible();
-  await expect(page.getByText("What this is", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Requirement", exact: true })).toBeVisible();
 });
 
 test("critical path: threat chain summary table is labeled for screen readers", async ({

@@ -22,10 +22,13 @@ test("WS5 Home implements Template B with one search, three cards, and nine area
   await expect(template.locator(".home-search")).toHaveCount(1);
   await expect(template.locator(".home-secondary-action")).toHaveCount(3);
   await expect(template.locator(".home-secondary-action strong")).toHaveText([
-    "Explore the Atlas",
+    "Browse the Atlas",
     "Search the Library",
     "Browse Resources",
   ]);
+  await expect(template.getByRole("heading", { name: "Make federal cybersecurity compliance make sense.", level: 1 })).toBeVisible();
+  await expect(template.getByText("Understand what applies, what it means, and what to do next.", { exact: true })).toBeVisible();
+  await expect(template.getByText(/publisher|provenance|mapping/i)).toHaveCount(0);
   await expect(template.locator(".home-ecosystem, .home-primary-actions")).toHaveCount(0);
   await expect(template.getByText("Start with your work", { exact: true })).toHaveCount(0);
 
@@ -39,6 +42,19 @@ test("WS5 Home implements Template B with one search, three cards, and nine area
     cards.map((card) => globalThis.getComputedStyle(card, "::before").backgroundColor)
   ));
   expect(new Set(accentColors).size).toBe(1);
+});
+
+test("WS6 About states the research boundary exactly", async ({ page }) => {
+  await gotoApp(page, "/#/about");
+  await waitForAppReady(page);
+  await expect(page.getByText(
+    "Control Atlas is a public research tool for federal cybersecurity requirements, controls, techniques, and guidance.",
+    { exact: true },
+  )).toBeVisible();
+  await expect(page.getByText(
+    "Use Control Atlas for research, not compliance or authorization decisions.",
+    { exact: true },
+  )).toBeVisible();
 });
 
 test("WS5 Guides implements a numbered, icon-bearing, whole-card Template F directory", async ({ page }) => {

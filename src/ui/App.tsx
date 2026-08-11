@@ -36,7 +36,12 @@ import {
 import { normalizeViewState, type ViewState } from "./lib/viewState";
 import { parseHashLocation, serializeHashLocation } from "./lib/hashRoutes";
 import { canonicalizeHashLocation } from "./lib/routeIdentity";
-import { recordDisplayTitle, routeDocumentTitle } from "./lib/recordTitle";
+import {
+  recordIdentityFor,
+  recordDisplayTitle,
+  recordPublisherName,
+  routeDocumentTitle,
+} from "./lib/recordTitle";
 import {
   beginRouteTransition,
   completeRouteTransition,
@@ -426,12 +431,38 @@ export function App() {
   // with record pages resolving to the official record name once the graph is
   // loaded.
   const routeEntityName = (() => {
+    const activeNodeId =
+      viewState.view === "library-detail" || viewState.view === "atlas-map"
+        ? viewState.node
+        : "";
     const node =
-      (viewState.view === "library-detail" || viewState.view === "atlas-map") &&
-      viewState.node && bundle
-        ? bundle.runtime.getNode(viewState.node)
+      activeNodeId && bundle
+        ? bundle.runtime.getNode(activeNodeId)
         : null;
-    if (node) return recordDisplayTitle(node);
+    if (node && bundle && activeNodeId) {
+      const document = bundle.runtime.getLibraryDocument(activeNodeId);
+      if (document) {
+        const source = bundle.runtime.getSource(document.source_id || node.source_id);
+        const catalog = bundle.runtime
+          .getCatalogs()
+          .find((entry: any) => entry.id === document.catalog_id);
+        return recordIdentityFor({
+          publisher: recordPublisherName(
+            document.publisher_name,
+            source?.owner,
+            source?.publisher,
+            catalog?.display_group,
+          ),
+          catalogId: document.catalog_id || node.metadata?.catalog_id || "",
+          family: document.control_family || node.metadata?.family || "",
+          itemId: document.item_id || node.metadata?.item_id || node.label || "",
+          metadata: {
+            identity_category: document.identity_category || node.metadata?.identity_category,
+          },
+        });
+      }
+      return recordDisplayTitle(node);
+    }
     if (viewState.view === "commons-detail") {
       return bundle?.commonsDataset?.resources.find((resource) => resource.id === viewState.id)?.name || "";
     }
@@ -462,10 +493,10 @@ export function App() {
     );
     if (!status) return;
     status.textContent = loadError
-      ? "The published record index is unavailable. Use the retry control below."
+      ? "Library data is unavailable. Try again below."
       : bundle
-        ? "Search is ready. Opening a record loads connection data when you need it."
-        : "Loading the published record index…";
+        ? "Search is ready."
+        : "Loading the Library…";
   }, [bundle, loadError, viewState.view]);
 
   useEffect(() => {
@@ -912,8 +943,8 @@ function AppContent(props: {
     }
     return (
       <section className="notice">
-        <h1>No public map entry for "{state.query}"</h1>
-        <p>Try Search or Start to find the closest path.</p>
+        <h1>Record not found: {state.query}</h1>
+        <p>Try a different identifier or keyword.</p>
         <div className="card-actions">
           <AppLink onNavigate={onNavigate} patch={{ query: state.query }} variant="primary" view="search">
             Search records
@@ -949,37 +980,37 @@ function routeLoadingCopy(view: ViewState["view"]) {
       return {
         title: "Loading comparison data",
         description:
-          "Loading the public mappings needed to compare frameworks, baselines, and threat paths.",
+          "Loading the comparison.",
       };
     case "catalog-detail":
       return {
         title: "Loading the Library",
         description:
-          "Loading the selected catalog, its public records, and source details.",
+          "Loading the selected publication.",
       };
     case "sources":
       return {
         title: "Loading Sources",
         description:
-          "Loading publisher details, source status, and known coverage gaps.",
+          "Loading publication details.",
       };
     case "templates":
       return {
         title: "Loading document tasks",
         description:
-          "Preparing starter documents and the official sources that support them.",
+          "Loading document options.",
       };
     case "atlas-map":
       return {
         title: "Loading the Atlas",
         description:
-          "Preparing the selected record and its published connections.",
+          "Loading the selected record.",
       };
     default:
       return {
         title: "Loading connection data",
         description:
-          "This page needs the public mapping data. Wait a moment or retry if loading failed.",
+          "Loading data. Try again if this takes too long.",
       };
   }
 }

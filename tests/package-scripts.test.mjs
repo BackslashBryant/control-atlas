@@ -227,8 +227,21 @@ test('nightly full verification builds once and shards browser coverage', () => 
   assert.match(nightlyQualityWorkflow, /npm run test:visual/);
   assert.match(nightlyQualityWorkflow, /name: nightly-visual-evidence/);
   assert.match(nightlyQualityWorkflow, /needs: \[e2e, accessibility, visual-review\]/);
-  assert.equal((nightlyQualityWorkflow.match(/playwright install chromium/g) ?? []).length, 1);
-  assert.match(nightlyQualityWorkflow, /visual-review:[\s\S]*mcr\.microsoft\.com\/playwright:v1\.60\.0-noble[\s\S]*Install package-matched Chromium/);
+  assert.equal((nightlyQualityWorkflow.match(/playwright install --with-deps chromium/g) ?? []).length, 3);
+  assert.doesNotMatch(nightlyQualityWorkflow, /container:|mcr\.microsoft\.com\/playwright/);
+  assert.match(nightlyQualityWorkflow, /visual-review:[\s\S]*Install package-matched Chromium and system dependencies/);
+});
+
+test('browser workflows install Playwright on hosted Ubuntu without containers', () => {
+  for (const path of [
+    '.github/workflows/nightly-quality.yml',
+    '.github/workflows/pages-live-smoke.yml',
+    '.github/workflows/update-visual-baselines.yml',
+  ]) {
+    const workflow = readFileSync(path, 'utf8');
+    assert.doesNotMatch(workflow, /container:|mcr\.microsoft\.com\/playwright/);
+    assert.match(workflow, /playwright install --with-deps chromium/);
+  }
 });
 
 test('npm-backed workflows use the official setup-node dependency cache', () => {
@@ -242,6 +255,7 @@ test('npm-backed workflows use the official setup-node dependency cache', () => 
     '.github/workflows/oscal-validation.yml',
     '.github/workflows/pages-live-smoke.yml',
     '.github/workflows/pages.yml',
+    '.github/workflows/update-visual-baselines.yml',
   ]) {
     const workflow = readFileSync(path, 'utf8');
     const setupCount = (workflow.match(/actions\/setup-node@v6/g) ?? []).length;

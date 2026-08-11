@@ -12,7 +12,7 @@ export const START_HERE_GOALS = Object.freeze([
   { id: "operate", label: "Operate or defend" },
   { id: "risk", label: "Manage risk or supply chain" },
   { id: "document", label: "Produce a document" },
-  { id: "tools", label: "Find a tool, template, portal, training source, or community" },
+  { id: "tools", label: "Find a resource" },
 ]);
 
 export const START_HERE_CONTEXTS = Object.freeze([
@@ -69,7 +69,7 @@ const GOAL_STEPS = {
   },
   implement: {
     thenReview: "disa-stig",
-    action: { label: "Trace connections in the Atlas", view: "atlas-map" },
+    action: { label: "See related records", view: "atlas-map" },
   },
   assess: {
     thenReview: "nist-800-53a",
@@ -77,7 +77,7 @@ const GOAL_STEPS = {
   },
   operate: {
     thenReview: "nist-800-37",
-    action: { label: "Trace connections in the Atlas", view: "atlas-map" },
+    action: { label: "See related records", view: "atlas-map" },
   },
   risk: {
     thenReview: "nist-800-171-rev2",

@@ -32,7 +32,7 @@ test("WS3 Library uses Template C browse, facets, and fully linked record rows",
   await expect(page.locator('[data-result-bar-order="count,sort,view,compare"]')).toBeVisible();
   const row = page.locator('[data-result-class="published-record"]').first();
   await expect(row).toBeVisible();
-  await expect(row.locator(".workspace-result-row__meta strong")).toHaveText(/^[A-Z]{2}-3\.1\.1$/);
+  await expect(row.getByRole("heading", { level: 3 })).toHaveText(/^NIST AC 3\.1\.1$/);
   const recordRows = page.locator('[data-result-class="published-record"]');
   await expect(row.locator(".bucket-tag")).toBeVisible();
   expect(await recordRows.count()).toBeGreaterThan(0);

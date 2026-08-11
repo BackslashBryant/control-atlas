@@ -156,27 +156,15 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
-test("record template puts guidance before official text and connections", async ({ page }) => {
+test("record template leads with publisher text and omits generated guidance", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await gotoApp(page, "/#/record/fips-200/AC");
+  await gotoApp(page, "/#/record/nist-800-53/AC-2");
   await waitForAppReady(page, { allowPartial: true });
   await expect(page.locator('[data-template="E"]')).toBeVisible({ timeout: 15_000 });
 
-  const positions = await page.evaluate(() =>
-    [
-      ["guidance", ".record-guidance"],
-      ["official", ".record-template-main .accordion-root"],
-      ["connections", '[data-record-section="connections"]'],
-      ["developer", ".record-developer-details"],
-    ].map(([section, selector]) => ({
-      section,
-      y: globalThis.document.querySelector(selector)?.getBoundingClientRect().y ?? null,
-    })),
-  );
-
-  expect(positions.every(({ y }) => y !== null), JSON.stringify(positions)).toBe(true);
-  expect(
-    positions.map(({ y }) => y),
-    JSON.stringify(positions),
-  ).toEqual([...positions.map(({ y }) => y)].sort((a, b) => a - b));
+  const firstMainSection = page.locator(".record-template-main > .record-official-text > section").first();
+  await expect(firstMainSection).toHaveAttribute("data-source-field", "description");
+  await expect(firstMainSection.getByRole("heading", { name: "Control Statement" })).toBeVisible();
+  await expect(page.locator(".record-guidance, .record-developer-details")).toHaveCount(0);
+  await expect(page.locator('[data-record-section="crosswalks"]')).toBeVisible();
 });

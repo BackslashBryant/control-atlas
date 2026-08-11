@@ -549,7 +549,7 @@ function generateSTIGEvidenceChecklist(options) {
         "- **Rule Title** — the rule's short name from the benchmark.",
         "- **Check / Fix text** — what the check verifies and the required configuration; summarize in Notes if a rule needs context.",
         "- **CCI Refs / Related Controls** — the CCIs the rule references and the NIST controls they map to.",
-        "- **Evidence** — the artifact that proves compliance: scan output, configuration export, interview record.",
+        "- **Evidence** — the artifact that supports the recorded result: scan output, configuration export, or interview record.",
         "- **Validation Method** — how you validated: automated scan, manual review, or interview.",
         "- **N/A Justification** — if a rule does not apply, record why in Notes.",
         "- **Deviation** — if deviating from the STIG, record the approved exception and compensating control in Notes.",
@@ -561,7 +561,7 @@ function generateSTIGEvidenceChecklist(options) {
   return appendSourceMetadata(
     {
       title: "STIG Evidence Checklist",
-      description: "Blank checklist for STIG rule compliance evidence.",
+      description: "Blank checklist for recording STIG rule results and evidence.",
       sections,
     },
     options,

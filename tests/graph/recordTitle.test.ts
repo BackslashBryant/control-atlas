@@ -6,8 +6,10 @@ import {
   familyQualifiedRecordId,
   formatRecordTitle,
   humanReadableEvidenceLocator,
-  plainEnglishRecordName,
+  officialRecordName,
+  recordIdentityFor,
   recordDisplayTitle,
+  recordPublisherName,
 } from "../../src/ui/lib/recordTitle";
 
 test("shared record titles do not repeat leading official identifiers", () => {
@@ -76,19 +78,30 @@ test("record template qualifies ambiguous numeric identifiers without changing o
   );
 });
 
-test("record template derives a source-backed plain name only when the title is the identifier", () => {
+test("record template never derives a record name from body text", () => {
   assert.equal(
-    plainEnglishRecordName(
-      "3.1.1",
-      "3.1.1",
-      "Limit system access to authorized users. More publisher detail follows.",
-    ),
-    "Limit system access to authorized users.",
+    officialRecordName("3.1.1", "3.1.1"),
+    "",
   );
   assert.equal(
-    plainEnglishRecordName("AC-2", "Account Management", "Official text."),
+    officialRecordName("AC-2", "Account Management"),
     "Account Management",
   );
+});
+
+test("record identities use publisher, source-native category, and official identifier", () => {
+  assert.equal(recordIdentityFor({ publisher: "NIST", catalogId: "nist-800-53", family: "Access Control", itemId: "AC-2" }), "NIST AC-2");
+  assert.equal(recordIdentityFor({ publisher: "NIST", catalogId: "nist-800-171", family: "Access Control", itemId: "3.1.1" }), "NIST AC 3.1.1");
+  assert.equal(recordIdentityFor({ publisher: "MITRE", catalogId: "mitre-attack", family: "Initial Access", itemId: "T1195.002" }), "MITRE Initial Access T1195.002");
+  assert.equal(recordIdentityFor({ publisher: "MITRE", catalogId: "mitre-d3fend", family: "Harden", itemId: "D3-AA" }), "MITRE Harden D3-AA");
+  assert.equal(recordIdentityFor({ publisher: "DISA", catalogId: "disa-cci", family: "Policy and Technical", itemId: "CCI-000001" }), "DISA Policy and Technical CCI-000001");
+  assert.equal(recordIdentityFor({ publisher: "DISA", catalogId: "disa-stig", family: "IBM Hardware Management Console Security Technical Implementation Guide", itemId: "V-256876", metadata: { identity_category: "HMC" } }), "DISA HMC V-256876");
+});
+
+test("record publisher names use official compact forms", () => {
+  assert.equal(recordPublisherName("National Institute of Standards and Technology"), "NIST");
+  assert.equal(recordPublisherName("Defense Information Systems Agency"), "DISA");
+  assert.equal(recordPublisherName("The MITRE Corporation"), "MITRE");
 });
 
 test("record citations suppress file, path, fragment, and internal-id locators", () => {

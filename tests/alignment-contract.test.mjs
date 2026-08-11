@@ -32,15 +32,15 @@ test('alignment deliverables exist', () => {
 
 test('public product surfaces share one canonical identity and decision boundary', () => {
   const definition =
-    'Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.';
+    'Control Atlas is a public research tool for federal cybersecurity requirements, controls, techniques, and guidance.';
   const boundary =
-    'Control Atlas keeps the public material and its sources together. The people doing the work decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO.';
+    'Use Control Atlas for research, not compliance or authorization decisions.';
 
-  for (const path of ['README.md', 'CONTRIBUTING.md', 'src/index.html']) {
+  for (const path of ['README.md', 'CONTRIBUTING.md', 'src/shared/site-copy.mjs']) {
     const content = readFileSync(path, 'utf8');
     assert.match(content, new RegExp(definition.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
-  for (const path of ['README.md', 'CONTRIBUTING.md', 'src/shared/product-identity.ts']) {
+  for (const path of ['README.md', 'CONTRIBUTING.md', 'src/shared/site-copy.mjs']) {
     const content = readFileSync(path, 'utf8');
     assert.match(content, new RegExp(boundary.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
@@ -55,14 +55,11 @@ test('public product surfaces share one canonical identity and decision boundary
   // Home and the static shell consume one shared homepage content contract.
   assert.match(homePage, /HOME_CONTENT\.definition/);
   assert.doesNotMatch(homePage, /PRODUCT_DEFINITION/);
-  // The full decision boundary lives on About and the footer only; Home
-  // states a one-line trust fact instead of repeating it.
+  // The full decision boundary lives on About; Home stays task-focused.
   assert.doesNotMatch(homePage, /PRODUCT_DECISION_BOUNDARY/);
   const identity = readFileSync('src/shared/product-identity.ts', 'utf8');
-  const heroMatch = identity.match(/PRODUCT_HERO\s*=\s*\n?\s*"([^"]+)"/);
-  assert.ok(heroMatch, 'product-identity.ts must export PRODUCT_HERO');
-  assert.notEqual(heroMatch[1], definition);
-  assert.notEqual(heroMatch[1], packageManifest.description);
+  assert.match(identity, /PRODUCT_HERO = SITE_COPY\.home\.definition/);
+  assert.notEqual('Understand what applies, what it means, and what to do next.', definition);
 
   const index = readFileSync('src/index.html', 'utf8');
   assert.match(index, /name="application-name" content="Control Atlas"/);
@@ -149,7 +146,8 @@ test('translation-first governance docs and templates enforce clarity and action
   assert.doesNotMatch(context, /Epic 2 is active/i);
 
   const designPrinciples = readFileSync('docs/DESIGN_PRINCIPLES.md', 'utf8');
-  assert.match(designPrinciples, /What is this\? Why does it matter\? What should I do with it\?/i);
+  assert.match(designPrinciples, /Answer the task in front of the user/i);
+  assert.match(designPrinciples, /lead with the complete published text rather than invented guidance/i);
 
   const prd = readFileSync('docs/PRD.md', 'utf8');
   assert.match(prd, /\| \*\*Compare\*\* \|/);

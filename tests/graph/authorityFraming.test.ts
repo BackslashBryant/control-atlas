@@ -15,7 +15,7 @@ test("the Atlas canvas uses the locked slim purpose line without a competing int
 
   assert.equal(atlasTree.split(explanation).length - 1, 0);
   assert.match(atlasPage, /<h1 id="atlas-page-title">Atlas<\/h1>/);
-  assert.match(atlasPage, /See the landscape, then drill in\./);
+  assert.match(atlasPage, /SITE_COPY\.routes\.atlas\.purpose/);
   assert.doesNotMatch(
     atlasTree,
     /The roots show why the work exists; the canopy shows where the work lives\./,
@@ -40,7 +40,7 @@ test("curated organization is positively attributed to Control Atlas", () => {
 
 test("Atlas names the product surface consistently", () => {
   assert.match(explorePage, /label: "Map", value: "map"/);
-  assert.match(objectDetailPage, /See in Atlas/);
+  assert.match(objectDetailPage, /See connections/);
   assert.match(atlasPage, /<h1 id="atlas-page-title">Atlas<\/h1>/);
   assert.match(routeIdentity, /label: "Atlas"/);
   assert.doesNotMatch(atlasTree, /Federal cybersecurity, from authority to action/);

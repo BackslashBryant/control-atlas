@@ -6,15 +6,15 @@
   <meta name="referrer" content="no-referrer">
   <meta name="application-name" content="Control Atlas">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <meta name="description" content="Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.">
+  <meta name="description" content="CONTROL_ATLAS_PRODUCT_DESCRIPTION">
   <meta property="og:title" content="Control Atlas">
-  <meta property="og:description" content="Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.">
+  <meta property="og:description" content="CONTROL_ATLAS_PRODUCT_DESCRIPTION">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://backslashbryant.github.io/control-atlas/">
   <meta property="og:image" content="https://backslashbryant.github.io/control-atlas/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Control Atlas">
-  <meta name="twitter:description" content="Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.">
+  <meta name="twitter:description" content="CONTROL_ATLAS_PRODUCT_DESCRIPTION">
   <meta name="twitter:image" content="https://backslashbryant.github.io/control-atlas/og-image.png">
   <title>Control Atlas</title>
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
@@ -86,7 +86,7 @@
       </section>
     </main>
     <footer class="home-footer">
-      <p>Free and open source, not a government system. Every record keeps its publisher and source attached. Last updated August 7, 2026.</p>
+      <p>Free and open source. Not a government system.</p>
     </footer>
     </div>
     <section
@@ -101,7 +101,7 @@
           <div>
             <h1 id="static-route-title" data-static-route-title>Opening workspace</h1>
             <p class="page-summary static-route-summary" data-static-route-summary>
-              Loading published records and their sources.
+              Opening the page.
             </p>
           </div>
         </div>
@@ -117,23 +117,23 @@
         <div class="page-header-row">
           <div>
             <h1 id="static-search-title">Library</h1>
-            <p class="page-summary">Search every published record, or browse the publications they come from.</p>
+            <p class="page-summary">Search by identifier, title, or topic.</p>
           </div>
           <div class="page-header-action">
             <button class="button button--secondary" data-static-search-catalog type="button">Browse publications</button>
           </div>
         </div>
       </header>
-      <p class="notice-inline" data-static-search-status role="status">Loading the published record index…</p>
+      <p class="notice-inline" data-static-search-status role="status">Loading the Library…</p>
       <form class="static-search-form" data-static-search-form>
         <label>
-          <span>Search by ID, title, or topic</span>
+          <span>Search by identifier, title, or topic</span>
           <input
-            aria-label="Search by ID, title, or topic"
+            aria-label="Search by identifier, title, or topic"
             data-static-search-input
             id="static-library-search"
             name="query"
-            placeholder="encryption, access control, passwords"
+            placeholder="Search by topic, title, or identifier."
             type="search"
           >
         </label>
@@ -154,11 +154,12 @@
           <path d="M 31 31 L 53 40 L 43 43 L 40 53 Z" fill="currentColor"></path>
         </svg>
       </span>
-      <span data-route-transition-status>Opening the next workspace</span>
+      <span data-route-transition-status>Opening the page</span>
     </div>
     <div data-react-root></div>
   </div>
-  <noscript>Control Atlas needs JavaScript to load the public compliance workspace.</noscript>
+  <noscript>Control Atlas needs JavaScript to load.</noscript>
+  <!-- CONTROL_ATLAS_COPY -->
   <script src="./progressive-shell.js"></script>
   <script type="module" src="./main.tsx"></script>
 </body>

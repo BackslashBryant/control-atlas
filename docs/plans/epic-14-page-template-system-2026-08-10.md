@@ -34,7 +34,7 @@ new features land.
   name (`*.json`, `#id`, `mode=`, "Atlas structure") appears in the main flow.
 - The area color system and bucket-tags are applied consistently across Library,
   Record, Atlas, Home, Resources, Guides.
-- Records lead with plain-language *What it is / What to do / How to satisfy it*.
+- Records lead with their complete published text and publisher-supplied supporting fields.
 - Atlas is a click-to-drill tree with a live breadcrumb.
 - A first-time user can click any primary nav item and land directly on that page's
   real content, above the fold.
@@ -42,8 +42,8 @@ new features land.
 ## Locked design decisions
 
 Carried from the spec's "Locked decisions" section — do not re-litigate:
-meaningful area color as bucket-tags · family-qualified IDs (`AC-3.1.1`) ·
-plain-language-first records · "Classified under" replaces "Atlas structure" ·
+meaningful area color as bucket-tags · publisher + source-native category + official ID titles
+(`NIST AC 3.1.1`) · publisher-text-first records · classification and publication facts in `About This Record` ·
 click-to-drill Atlas graph · typed icons on Guides/Resources · plain
 librarian-not-salesperson copy.
 
@@ -80,20 +80,20 @@ The single highest-impact fix: kill the route-stacking bug and slim the header.
   themes legible; no hardcoded per-page colors.
 
 ### WS2 — Template E: Record  · P0 (content) + highest-traffic deep page
-- Title block: breadcrumb + kind/area/mandate tags + family-qualified `AC-3.1.1` +
-  plain-English name + one provenance line.
-- MAIN leads with **What this is / What you need to do / How to satisfy it**
-  (as applicable); official source text demoted to a collapsible.
-- **Connections = real cross-framework only** — exclude same-catalog parent/child
-  structural links; honest empty state when none.
-- Sidebar: **Classified under** tag group (Area + family + publication),
-  **Comes from (authority)**, **Source & provenance**.
-- One "Open official source" (delete the other three CSV links). No `*.json`, `#id`,
-  Node ID, or raw file path in the main flow — all internal fields in a collapsed
-  **Developer details** drawer.
-- **Acceptance:** description appears once; one source link; connections exclude the
-  parent folder; no internal identifiers in rendered body; plain-language blocks
-  present and lead the page.
+- Title block: breadcrumb + publisher/source-native category/official ID identity
+  (`NIST AC 3.1.1`) + publisher-authored name when it adds information.
+- MAIN leads with complete publisher text under a type-specific heading, followed
+  by publisher-supplied discussion, check, fix, implementation examples, or assessment
+  procedure fields when supplied. No generated explanation or generic action guidance.
+- **Crosswalks = formal published crosswalk records only** — exclude same-catalog
+  structure and omit the section when none exists.
+- Sidebar: **About This Record** with neutral kind, category, area, and publication
+  tags plus Publisher, Publication, Version, Publication Date, and Last Checked.
+- One `View official source` action. No `*.json`, `#id`, node ID, or raw file path
+  in the public flow.
+- **Acceptance:** complete publisher text appears once; one official-source action;
+  no fabricated names or guidance; no internal identifiers; every public type has
+  a checked presentation profile and required source fields.
 
 ### WS3 — Template C: Workspace (Library + Resources unified)  · P1
 - One skeleton for both: persistent left **facet rail** (no "Filters" button at
@@ -123,18 +123,28 @@ The single highest-impact fix: kill the route-stacking bug and slim the header.
 
 ### WS5 — Templates B & F: Home + Guides  · P1
 - Home: one hero, one search, **three** cards (retire the 4th "Start" card and the
-  competing ecosystem-preview panel), plus a colored **"browse by area"** chip row.
-- Guides: hold the card-grid directory; add a **per-step icon** and area color; keep
+  competing ecosystem-preview panel), plus neutral area tags with small dots.
+- Guides: hold the card-grid directory; add a **per-step icon** and neutral area tag; keep
   numbered steps (the lifecycle is a real sequence).
 - **Acceptance:** Home has one hero and three cards; Guides cards carry icons and are
   fully clickable.
 
-### WS6 — Copy pass  · P1 · runs alongside every WS
-- Strip the four slop patterns (tricolon slogans, laundry lists, anthropomorphized
-  product, leaked tree metaphors) per spec §10's offender→rewrite table.
-- Every record conforms to the ratified plain-language voice.
-- **Acceptance:** no headline/subhead is a 3-part slogan or 5+ item comma list; no
-  first/second-person persona; no internal metaphor on screen.
+### WS6 — Sitewide Copy and Record Truth Reset  · P1
+- Enforce one calm, direct, grounded, task-focused voice. Give each major route one
+  useful task sentence; use no institutional “we” and no metaphorical Atlas prose.
+- Centralize stable route copy and check product-authored headlines, task lines,
+  cards, help, errors, and empty states for prohibited architecture narration.
+- Every record leads with complete publisher text under a type-specific heading.
+  No sentence-extracted name, generated summary, placeholder, or generic advice may
+  fill a missing field.
+- Add a checked presentation profile for every supported public record kind. Fail
+  generation when a kind is unprofiled or loses required publisher fields.
+- Normalize DISA CCI identity from DISA's Policy/Technical classification and retain
+  referenced NIST categories as supporting tags with explicit provenance.
+- **Acceptance:** exact approved Home, route, About, search, and boundary anchors;
+  no brochure slogan, anthropomorphized product, internal metaphor, or unsupported
+  product claim; record titles use publisher + source-native category + official ID;
+  acronym and derived-tag explanations work on hover, focus, and tap.
 
 ### WS7 — URL hygiene  · P1
 - Remove `mode=` from URLs; collapse duplicate params (`crosswalk` vs `workbench`);
@@ -148,7 +158,7 @@ The single highest-impact fix: kill the route-stacking bug and slim the header.
 The mockup showed populated states the live **data** does not yet support. These are
 separate efforts; the templates ship first and improve as data lands.
 
-- **DD1 — Crosswalk enrichment.** `AC-3.1.1` currently has 2 "connections" (one its
+- **DD1 — Crosswalk enrichment.** `NIST AC 3.1.1` currently has 2 "connections" (one its
   own parent). Real cross-framework mappings (800-171 ↔ 800-53 ↔ CMMC ↔ CSF) must be
   populated for the Connections section to carry weight. Ties to the open
   source-completeness gaps in the provenance-refactor work.

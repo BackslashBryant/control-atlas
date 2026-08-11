@@ -61,15 +61,18 @@ jobs:
   e2e:
     needs: prepare
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.61.1-noble
     strategy:
       fail-fast: false
       matrix:
         shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
       - run: npm ci
+      - run: npx playwright install --with-deps chromium
       - uses: actions/download-artifact@v8
         with:
           name: nightly-site-build
@@ -90,11 +93,14 @@ jobs:
   accessibility:
     needs: prepare
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.61.1-noble
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
       - run: npm ci
+      - run: npx playwright install --with-deps chromium
       - uses: actions/download-artifact@v8
         with:
           name: nightly-site-build
@@ -113,15 +119,15 @@ jobs:
   visual-review:
     needs: prepare
     runs-on: ubuntu-latest
-    container:
-      # Keep pixel comparisons aligned with the environment that produces the
-      # reviewed Linux baselines in update-visual-baselines.yml.
-      image: mcr.microsoft.com/playwright:v1.60.0-noble
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
       - run: npm ci
-      - name: Install package-matched Chromium
-        run: npx playwright install chromium
+      - name: Install package-matched Chromium and system dependencies
+        run: npx playwright install --with-deps chromium
       - uses: actions/download-artifact@v8
         with:
           name: nightly-site-build

@@ -7,6 +7,7 @@ import {
   sourceCurrentAsOf,
   sourceFreshness,
 } from "../../shared/source-freshness.mjs";
+import { AcronymText } from "../components/AccessibleTerm";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { ButtonLink } from "../components/lsm/Button";
 import type { ViewState } from "./viewState";
@@ -218,17 +219,17 @@ export function PageHeader(props: {
         <div className="page-header-title" data-route-primary-copy="true">
           {props.eyebrow ? (
             <span className="eyebrow page-header-eyebrow">
-              {props.eyebrow}
+              <AcronymText>{props.eyebrow}</AcronymText>
             </span>
           ) : null}
-          <h1>{props.title}</h1>
+          <h1>{typeof props.title === "string" ? <AcronymText>{props.title}</AcronymText> : props.title}</h1>
         </div>
       </header>
       {props.summary || props.action ? (
         <div className="page-header-support">
           {props.summary ? (
             <p className="page-summary" data-route-primary-copy="true">
-              {props.summary}
+              <AcronymText>{props.summary}</AcronymText>
             </p>
           ) : null}
           {props.action ? (

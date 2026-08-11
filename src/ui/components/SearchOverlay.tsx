@@ -6,10 +6,13 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import { practitionerGuides } from "../../app/learn-content.mjs";
 import { requestSearchResultsFocus } from "../../shared/navigation-events";
 import { GLOBAL_SEARCH_PLACEHOLDER } from "../../shared/product-identity";
-import { recordDisplayTitle } from "../lib/recordTitle";
+import {
+  recordIdentityFor,
+  officialRecordName,
+  recordPublisherName,
+} from "../lib/recordTitle";
 import {
   MarkedSearchText,
-  publisherPublicationLabel,
   searchPreviewText,
 } from "../lib/searchPresentation";
 import {
@@ -224,10 +227,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
           {!bundle ? (
             <p className="field-hint">Loading public data…</p>
           ) : !query.trim() ? (
-            <p className="field-hint">
-              Type to search records, templates, tools, and Resources. Press
-              Enter for the full results page.
-            </p>
+            <p className="field-hint">{GLOBAL_SEARCH_PLACEHOLDER}</p>
           ) : results.libraryResults.length === 0 && results.resourceResults.length === 0 && results.communityResults.length === 0 && results.guideResults.length === 0 && results.sourceResults.length === 0 ? (
             <p className="field-hint">
               No records or resources match &quot;{query.trim()}&quot;.
@@ -237,20 +237,32 @@ export function SearchOverlay(props: SearchOverlayProps) {
               {results.libraryResults.length > 0 ? (
                 <div>
                   <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-text-muted)] mb-2 px-3">
-                    Published records ({results.libraryResults.length})
+                    Records ({results.libraryResults.length})
                   </div>
                   <ul className="search-overlay-results">
                     {results.libraryResults.map((document: any) => {
                       const index = suggestionIndex("library", document.id);
-                      const title = `${publisherPublicationLabel(document)} · ${recordDisplayTitle({
-                        id: document.id,
-                        node_type: document.object_type,
-                        metadata: { item_id: document.item_id, title: document.title },
-                      })}`;
+                      const source = bundle?.runtime.getSource(document.source_id);
+                      const publisher = recordPublisherName(
+                        document.publisher_name,
+                        source?.owner,
+                        source?.publisher,
+                      );
+                      const title = recordIdentityFor({
+                        publisher,
+                        catalogId: document.catalog_id || "",
+                        family: document.control_family || "",
+                        itemId: document.item_id || "",
+                        metadata: { identity_category: document.identity_category || "" },
+                      });
+                      const publishedName = officialRecordName(
+                        document.item_id || "",
+                        document.title || "",
+                      );
                       return (
                         <li key={document.id}>
                           <AppLink
-                            aria-label={document.title || document.item_id}
+                            aria-label={title}
                             className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
                             id={`search-suggestion-${index}`}
                             onFocus={() => setHighlightedIndex(index)}
@@ -263,8 +275,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                               <MarkedSearchText query={query} text={title} />
                             </h3>
                             <span className="search-overlay-result-meta">
-                              <code>{document.item_id}</code>
-                              {" · "}
+                              {publishedName ? `${publishedName} · ` : ""}
                               {displayNameFor("object_type", document.object_type)}
                             </span>
                             <span className="search-overlay-result-summary">
@@ -297,8 +308,8 @@ export function SearchOverlay(props: SearchOverlayProps) {
                           patch={{ pattern: guide.id }}
                           view="patterns"
                         >
-                          <h3 className="search-overlay-result-title"><MarkedSearchText query={query} text={`Control Atlas · ${guide.title}`} /></h3>
-                          <span className="search-overlay-result-meta">Control Atlas guide · topic match</span>
+                          <h3 className="search-overlay-result-title"><MarkedSearchText query={query} text={guide.title} /></h3>
+                          <span className="search-overlay-result-meta">Guide</span>
                           <span className="search-overlay-result-summary"><MarkedSearchText query={query} text={guide.summary} /></span>
                         </AppLink>
                       </li>;
@@ -315,7 +326,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                   <ul className="search-overlay-results">
                     {results.sourceResults.map((source: any) => {
                       const index = suggestionIndex("source", source.id);
-                      const publisher = source.publisher || source.agency || source.display_group || source.owner || "Source owner";
+                      const publisher = recordPublisherName(source.publisher, source.agency, source.owner, source.display_group);
                       return <li key={source.id}>
                         <AppLink
                           aria-label={source.display_name || source.name || source.id}
@@ -328,10 +339,10 @@ export function SearchOverlay(props: SearchOverlayProps) {
                           view="sources"
                         >
                           <h3 className="search-overlay-result-title">
-                            <MarkedSearchText query={query} text={`${publisher} · ${source.display_name || source.name || source.id}`} />
+                            <MarkedSearchText query={query} text={source.display_name || source.name || source.id} />
                           </h3>
                           <span className="search-overlay-result-meta">
-                            {publisher} · identity match
+                            {publisher}
                           </span>
                         </AppLink>
                       </li>;
@@ -360,15 +371,13 @@ export function SearchOverlay(props: SearchOverlayProps) {
                           view="commons-detail"
                         >
                           <h3 className="search-overlay-result-title flex items-center justify-between">
-                            <span><MarkedSearchText query={query} text={`${doc.publisher} · ${doc.name}`} /></span>
+                            <span><MarkedSearchText query={query} text={doc.name} /></span>
                             <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] text-[var(--ca-primary)] border border-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)]">
                               {resourceTypeLabel(doc.resourceType)}
                             </span>
                           </h3>
                           <span className="search-overlay-result-meta">
-                            <code>{doc.publisher}</code>
-                            {" · "}
-                            {resourceAccessLabel(doc)}
+                            {resourceTypeLabel(doc.resourceType)} · {resourceAccessLabel(doc)}
                           </span>
                           <span className="search-overlay-result-summary">
                             <MarkedSearchText query={query} text={doc.summary} />
@@ -400,12 +409,10 @@ export function SearchOverlay(props: SearchOverlayProps) {
                           view="commons-detail"
                         >
                           <h3 className="search-overlay-result-title">
-                            <MarkedSearchText query={query} text={`${doc.publisher} · ${doc.name}`} />
+                            <MarkedSearchText query={query} text={doc.name} />
                           </h3>
                           <span className="search-overlay-result-meta">
-                            <code>{doc.publisher}</code>
-                            {" · "}
-                            {resourceAccessLabel(doc)}
+                            {resourceTypeLabel(doc.resourceType)} · {resourceAccessLabel(doc)}
                           </span>
                           <span className="search-overlay-result-summary">
                             <MarkedSearchText query={query} text={doc.summary} />
@@ -422,7 +429,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
           {query.trim() ? (
             <div className="card-actions flex gap-2">
               <AppLink onNavigate={onNavigate} patch={{ query: query.trim() }} variant="secondary" view="search">
-                View all search results
+                Search the Library
               </AppLink>
             </div>
           ) : null}

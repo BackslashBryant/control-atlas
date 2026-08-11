@@ -28,7 +28,7 @@ export const BUILD_LANES = Object.freeze([
   {
     id: "tasks",
     label: "Tasks",
-    description: "Start from a defined work activity and review its source-backed inputs.",
+    description: "Start with a task and review what it requires.",
   },
   {
     id: "documents",

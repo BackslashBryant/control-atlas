@@ -38,7 +38,7 @@ test("Atlas map branches down, gates technology, restores the URL, and honors hi
 
   const tree = page.locator(".atlas-tree");
   await expect(tree).toHaveAttribute("data-tree-node-count", "13");
-  await expect(page.getByText("See the landscape, then drill in.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Start with a topic and work toward the details.", { exact: true })).toBeVisible();
   await expect(tree.locator('[data-atlas-node-id="atlas:TRUNK"]')).toBeVisible();
   await expect(tree.locator('[data-atlas-node-id^="authority-aggregate:"]')).toHaveCount(3);
   await expect(tree.locator('[data-atlas-node-id^="atlas:LIMB-"]')).toHaveCount(9);
@@ -107,12 +107,12 @@ test("focused trace matches the record rail and overlay preserves tree identity 
   await expect.poll(() => tree.locator(".react-flow__node").count()).toBeGreaterThan(0);
   const nodeIdsBefore = await tree.locator(".react-flow__node").evaluateAll((nodes) => nodes.map((node) => node.getAttribute("data-id")));
   const edgeIdsBefore = await tree.locator(".react-flow__edge").evaluateAll((edges) => edges.map((edge) => edge.getAttribute("data-id")));
-  await page.getByRole("button", { name: "Show mapping overlay" }).click();
+  await page.getByRole("button", { name: "Show connections" }).click();
   await expect(tree.locator(".atlas-tree__overlay-highlight")).toHaveCount(24);
   await expect(tree.getByRole("button", { name: /3,467 more .* open Compare/ })).toBeVisible();
   expect(await tree.locator(".react-flow__node").evaluateAll((nodes) => nodes.map((node) => node.getAttribute("data-id")))).toEqual(nodeIdsBefore);
   expect(await tree.locator(".react-flow__edge").evaluateAll((edges) => edges.map((edge) => edge.getAttribute("data-id")))).toEqual(edgeIdsBefore);
-  await page.getByRole("button", { name: "Hide mapping overlay" }).click();
+  await page.getByRole("button", { name: "Hide connections" }).click();
   await expect.poll(
     () => tree.locator(".react-flow__node").evaluateAll((nodes) => nodes.map((node) => node.getAttribute("data-id"))),
   ).toEqual(nodeIdsBefore);

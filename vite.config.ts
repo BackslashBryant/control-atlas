@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'node:path';
 import { RUNTIME_CACHE_VERSION } from './src/shared/runtime-cache-version.mjs';
 import { HOME_CONTENT, HOME_DESTINATIONS } from './src/shared/home-content.mjs';
+import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from './src/shared/site-copy.mjs';
 import { AREA_PRESENTATIONS } from './src/ui/lib/areaVisualLanguage';
 
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
@@ -29,7 +30,6 @@ function renderStaticHome() {
     <div class="home-hero">
       <div class="home-hero-lead">
         <header class="home-entry-header">
-          <p class="eyebrow">${escapeHtml(HOME_CONTENT.eyebrow)}</p>
           <h1 id="home-title">${escapeHtml(HOME_CONTENT.headline)}</h1>
           <p class="home-product-identity">${escapeHtml(HOME_CONTENT.definition)}</p>
         </header>
@@ -45,7 +45,6 @@ function renderStaticHome() {
       <h2 id="home-area-heading">Browse by area</h2>
       <div class="home-ecosystem-areas">${areas}</div>
     </nav>
-    <aside class="home-trust-boundary"><p>${escapeHtml(HOME_CONTENT.trust)}</p></aside>
   </section>`;
 }
 
@@ -57,7 +56,13 @@ export default defineConfig({
       name: 'control-atlas-runtime-cache-version',
       transformIndexHtml(html) {
         return {
-          html: html.replace('<!-- CONTROL_ATLAS_HOME -->', renderStaticHome()),
+          html: html
+            .replace('<!-- CONTROL_ATLAS_HOME -->', renderStaticHome())
+            .replace(
+              '<!-- CONTROL_ATLAS_COPY -->',
+              `<script id="control-atlas-copy" type="application/json">${JSON.stringify(FIRST_PAINT_ROUTE_COPY).replace(/</g, '\\u003c')}</script>`,
+            )
+            .replaceAll('CONTROL_ATLAS_PRODUCT_DESCRIPTION', escapeHtml(SITE_COPY.product.definition)),
           tags: [
           {
             tag: 'meta',

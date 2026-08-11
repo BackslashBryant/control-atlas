@@ -2,6 +2,7 @@ import { IconSearch } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
+import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { sourceLinkFor } from "../graph/sourceLinks";
 import connectionInventoryArtifact from "../../../data/generated/connection-inventory.json";
 import catalogBootstrapArtifact from "../../../data/generated/catalog-bootstrap.json";
@@ -126,7 +127,7 @@ export function SourcesPage(props: {
         <PageHeader
           eyebrow="Source detail"
           primary
-          summary="Identity, coverage, and freshness for this source."
+          summary="Details for this source."
           title={selectedSource.display_name || selectedSource.name}
         />
         <SourceSummaryCard source={selectedSource} />
@@ -167,14 +168,14 @@ export function SourcesPage(props: {
       <PageHeader
         eyebrow="Sources"
         primary
-        summary="Publisher, coverage, version, and last-checked date for every publication."
-        title="Sources"
+        summary={SITE_COPY.routes.sources.purpose}
+        title={SITE_COPY.routes.sources.title}
       />
 
       <p className="sources-resource-boundary">
-        Tools, templates, datasets, training, and communities are a Library facet.{" "}
-        <AppLink onNavigate={onNavigate} patch={{ kind: "tools-communities" }} view="search">
-          Open Tools &amp; communities
+        Looking for tools or training?{" "}
+        <AppLink onNavigate={onNavigate} view="commons">
+          Browse Resources
         </AppLink>
       </p>
 
@@ -186,8 +187,7 @@ export function SourcesPage(props: {
         <summary>Official source links</summary>
         <div className="disclosure-content">
           <p>
-            Direct links to the primary publications behind the controls,
-            mappings, and threat and defensive references in Control Atlas.
+            Direct links to selected primary publications.
           </p>
           <ul>
             {[

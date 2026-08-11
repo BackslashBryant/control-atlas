@@ -21,6 +21,15 @@ test("library search transport preserves every result-answer field", async () =>
     source_class: "federal_published",
     catalog_id: "nist-800-53",
     control_family: "Access Control",
+    identity_category: "",
+    classification_provenance: "publisher",
+    related_categories: [
+      {
+        code: "AC",
+        label: "Access Control",
+        provenance: "referenced",
+      },
+    ],
     severity: "",
     published_connection_count: 7,
     published_cross_catalog_connection_count: 5,

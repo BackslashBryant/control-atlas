@@ -1,7 +1,5 @@
 const OFFICIAL_TEXT_PREVIEW_LIMIT = 700;
 
-const NO_DESCRIPTION = "No narrative description was published for this record.";
-
 /**
  * Prefer full record text when loaded, then the compact official preview carried
  * by search. A boolean availability flag must never become withheld-content copy.
@@ -12,7 +10,7 @@ export function officialDescriptionOrStatus(record: {
 }): string {
   if (record.description?.trim()) return record.description;
   if (record.official_text_preview?.trim()) return record.official_text_preview;
-  return NO_DESCRIPTION;
+  return "";
 }
 
 export function officialTextPreview(

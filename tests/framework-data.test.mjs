@@ -10,7 +10,9 @@ import {
 } from "../tools/relationship-builders/olir-adapter.mjs";
 import {
   buildFrameworkData,
+  cciClassificationLabel,
   lifecycleStatus,
+  validateRecordPresentation,
 } from "../scripts/build-framework-data.mjs";
 import { readGeneratedCollection } from "../scripts/lib/generated-graph-artifacts.mjs";
 import { evaluateTrunkReachability } from "../scripts/hierarchy-derivation.mjs";
@@ -38,6 +40,47 @@ test("CCI adapter preserves official bridge requirements and references", () => 
       (item) => item.evidence_source === "disa-cci-nist-references",
     ),
   );
+});
+
+test("CCI classification is publisher-native and rejects unknown values", () => {
+  assert.equal(cciClassificationLabel("policy"), "Policy");
+  assert.equal(cciClassificationLabel("technical"), "Technical");
+  assert.equal(
+    cciClassificationLabel("policy,technical"),
+    "Policy and Technical",
+  );
+  assert.throws(
+    () => cciClassificationLabel("operational"),
+    /Unsupported DISA CCI classification/,
+  );
+});
+
+test("generated CCI records retain DISA classification and referenced NIST categories", () => {
+  const nodes = generated("nodes").nodes;
+  const expected = new Map([
+    ["disa-cci:CCI-000001", "Policy"],
+    ["disa-cci:CCI-000015", "Technical"],
+    ["disa-cci:CCI-000099", "Policy and Technical"],
+  ]);
+  for (const [id, classification] of expected) {
+    const node = nodes.find((entry) => entry.id === id);
+    assert.equal(node?.metadata?.family, classification, id);
+    assert.equal(node?.metadata?.classification_provenance, "publisher", id);
+    assert.ok(node?.metadata?.description?.trim(), `${id} missing publisher text`);
+    assert.ok(
+      node?.metadata?.related_categories?.some(
+        (category) =>
+          category.code === "AC" &&
+          category.label === "Access Control" &&
+          category.provenance === "referenced",
+      ),
+      `${id} missing referenced Access Control category`,
+    );
+  }
+});
+
+test("every public record has an approved presentation profile and required source text", () => {
+  assert.doesNotThrow(() => validateRecordPresentation(generated("nodes").nodes));
 });
 
 test("OLIR adapter preserves source and target identifiers", () => {

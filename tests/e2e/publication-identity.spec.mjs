@@ -80,6 +80,6 @@ test("a missing publication identity fails closed without guessed attribution", 
   ).toBeVisible();
   await expect(page.getByText(/Source excerpt from/i)).toHaveCount(0);
   await expect(
-    page.getByRole("link", { name: /open official source/i }),
+    page.getByRole("link", { name: /view official source/i }),
   ).toHaveCount(0);
 });

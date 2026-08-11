@@ -18,6 +18,12 @@ import {
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import {
+  recordPresentationProfile,
+  SUPPORTED_RECORD_TYPES,
+} from "../../shared/record-presentation.mjs";
+import { SITE_COPY } from "../../shared/site-copy.mjs";
+import { AcronymText } from "../components/AccessibleTerm";
+import {
   AtlasTree,
   benchmarkChildrenFromNeighborhood,
 } from "../components/AtlasTree";
@@ -49,8 +55,12 @@ import {
   type RuntimeBundle,
 } from "../lib/runtimeLoader";
 import { nodeIdFromItemId, type ViewState } from "../lib/viewState";
-import { officialTextPreview } from "../lib/officialText";
-import { recordDisplayTitle } from "../lib/recordTitle";
+import {
+  officialRecordName,
+  recordDisplayTitle,
+  recordIdentityFor,
+  recordPublisherName,
+} from "../lib/recordTitle";
 
 import { Button, Panel } from "../components/lsm";
 import { AppLink, shouldInterceptAppLink } from "../components/AppLink";
@@ -96,8 +106,21 @@ function requestedNodeId(bundle: RuntimeBundle, rawNode: string) {
   return node.includes(":") ? node : "";
 }
 
-function focusedAtlasTitle(record: AtlasNeighborhoodRecord) {
-  return recordDisplayTitle(record.center_node) || "Selected record";
+function focusedAtlasTitle(bundle: RuntimeBundle, record: AtlasNeighborhoodRecord) {
+  const node = record.center_node;
+  const document = bundle.runtime.getLibraryDocument(node.id);
+  const source = bundle.runtime.getSource(document?.source_id || node.source_id);
+  return recordIdentityFor({
+    publisher: recordPublisherName(
+      document?.publisher_name,
+      source?.owner,
+      source?.publisher,
+    ),
+    catalogId: document?.catalog_id || node.metadata?.catalog_id || "",
+    family: document?.control_family || node.metadata?.family || "",
+    itemId: document?.item_id || node.metadata?.item_id || recordDisplayTitle(node),
+    metadata: node.metadata,
+  }) || "Selected record";
 }
 
 export function AtlasMapPage(props: AtlasMapPageProps) {
@@ -189,9 +212,9 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       "[data-static-route-title]",
     );
     if (progressiveTitle) {
-      progressiveTitle.textContent = focusedAtlasTitle(record);
+      progressiveTitle.textContent = focusedAtlasTitle(bundle, record);
     }
-  }, [record]);
+  }, [bundle, record]);
 
   function patchAtlas(patch: Partial<typeof state>) {
     onNavigate("atlas-map", patch);
@@ -232,7 +255,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       <header className="atlas-canvas-header">
         <div>
           <h1 id="atlas-page-title">Atlas</h1>
-          <p>See the landscape, then drill in.</p>
+          <p>{SITE_COPY.routes.atlas.purpose}</p>
         </div>
         <form className="atlas-map-command" onSubmit={submitSearch}>
           <label className="visually-hidden" htmlFor="atlas-search">
@@ -263,14 +286,14 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       {noMatchQuery ? (
         <div className="atlas-search-recovery">
           <p>
-            No Atlas record matches <strong>{noMatchQuery}</strong>.
+            No record matches <strong>{noMatchQuery}</strong>.
           </p>
           <div className="card-actions">
             <AppLink onNavigate={onNavigate} patch={{ query: noMatchQuery }} variant="secondary" view="search">
               Search all records
             </AppLink>
             <AppLink onNavigate={onNavigate} variant="secondary" view="search">
-              Browse the Catalog
+              Browse the Library
             </AppLink>
           </div>
         </div>
@@ -320,12 +343,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       ) : recordStatus === "idle" ? (
         <div className="atlas-loading" role="status">
           <div aria-hidden="true" className="atlas-loading-block" />
-          Preparing the Atlas map…
+          Preparing the Atlas…
         </div>
       ) : null}
       {benchmarkStatus === "error" ? (
         <p className="atlas-load-inline-error" role="alert">
-          This benchmark branch could not be loaded. Choose another technology or return to the Atlas map overview.
+          This benchmark could not be loaded. Choose another technology or return to the Atlas overview.
         </p>
       ) : null}
       </div>
@@ -417,10 +440,30 @@ function FocusedAtlas(props: {
     inspectedTitle.trim().toLocaleLowerCase() !==
     inspectedItemId.trim().toLocaleLowerCase();
   const inspectedSynopsis =
-    inspectedDocument?.description ||
-    inspectedNode?.metadata?.description ||
-    "No narrative description was published for this record.";
-  const inspectedSynopsisPreview = officialTextPreview(inspectedSynopsis);
+    inspectedDocument?.description || inspectedNode?.metadata?.description || "";
+  const inspectedSource = bundle.runtime.getSource(
+    inspectedDocument?.source_id || inspectedNode?.source_id || "",
+  );
+  const inspectedPublisher = recordPublisherName(
+    inspectedDocument?.publisher_name,
+    inspectedSource?.owner,
+    inspectedSource?.publisher,
+  );
+  const inspectedIdentity = recordIdentityFor({
+    publisher: inspectedPublisher,
+    catalogId: inspectedDocument?.catalog_id || inspectedNode?.metadata?.catalog_id || "",
+    family: inspectedDocument?.control_family || inspectedNode?.metadata?.family || "",
+    itemId: inspectedItemId,
+    metadata: inspectedNode?.metadata,
+  });
+  const inspectedOfficialName = officialRecordName(inspectedItemId, inspectedTitle);
+  const inspectedType = inspectedDocument?.object_type || inspectedNode?.node_type || "";
+  const inspectedPresentation = SUPPORTED_RECORD_TYPES.includes(inspectedType)
+    ? recordPresentationProfile(
+        inspectedDocument?.catalog_id || inspectedNode?.metadata?.catalog_id || "",
+        inspectedType,
+      )
+    : null;
   const selectedSource = selectedRow?.edge.source_refs?.[0];
   const choiceLabels = [
     state.atlasFramework
@@ -516,8 +559,8 @@ function FocusedAtlas(props: {
         }
       />
       {choiceLabels.length ? (
-        <nav aria-label="Your choices" className="atlas-choice-trail">
-          <strong>Your choices</strong>
+        <nav aria-label="Current selection" className="atlas-choice-trail">
+          <strong>Current selection</strong>
           <span>{choiceLabels.join(" > ")}</span>
         </nav>
       ) : null}
@@ -581,7 +624,7 @@ function FocusedAtlas(props: {
           summaryId={state.atlasFamily}
         />
       ) : (
-        <p role="alert">The Atlas map structure is unavailable. Reload the page to try again.</p>
+        <p role="alert">The Atlas view is unavailable. Reload the page to try again.</p>
       )}
 
       <div className="atlas-focused-toolbar">
@@ -704,14 +747,13 @@ function FocusedAtlas(props: {
                         ))}
                       </ul>
                       <p className="muted">
-                        {structuralChildren.length} published child record
+                        {structuralChildren.length} child record
                         {structuralChildren.length === 1 ? "" : "s"}.
                       </p>
                     </>
                   ) : (
                     <p className="muted">
-                      The publisher does not break this record into smaller
-                      parts.
+                      This record has no child records.
                     </p>
                   )}
                 </section>
@@ -725,15 +767,14 @@ function FocusedAtlas(props: {
                     See connections
                   </Button>
                   <AppLink onNavigate={onNavigate} patch={{ source: record.center_node.source_id }} variant="secondary" view="sources">
-                    Review official source
+                    View official source
                   </AppLink>
                 </div>
               </section>
             ) : null}
 
             {/* The complete relationship set supports the canvas instead of
-                competing with it: same source-backed rows, classes, counts,
-                and filters. */}
+                competing with it: same rows, classes, counts, and filters. */}
             <section
               className="atlas-all-connections"
               id="atlas-all-connections"
@@ -764,7 +805,7 @@ function FocusedAtlas(props: {
                 own decomposition, not a connection. */}
             {structuralChildren.length ? (
               <section className="atlas-workspace-children">
-                <h3>Published children</h3>
+                <h3>Child records</h3>
                 <ul className="atlas-path-child-list">
                   {structuralChildren.slice(0, 12).map((child) => (
                     <li key={child.id}>
@@ -819,22 +860,20 @@ function FocusedAtlas(props: {
                         nodeId={inspectedId}
                         onOpenNode={onOpenNode}
                       >
-                        {inspectedItemId}
+                        <AcronymText>{inspectedIdentity}</AcronymText>
                       </RecordLink>
                     </h2>
-                    {showInspectedTitle ? <p>{inspectedTitle}</p> : null}
+                    {showInspectedTitle && inspectedOfficialName ? (
+                      <p><AcronymText>{inspectedOfficialName}</AcronymText></p>
+                    ) : null}
                   </div>
 
-                  <section className="atlas-inspector-synopsis">
-                    <h3>Official description</h3>
-                    <p>{inspectedSynopsisPreview.preview}</p>
-                    {inspectedSynopsisPreview.truncated ? (
-                      <details className="official-description-disclosure">
-                        <summary>Read full official description</summary>
-                        <p>{inspectedSynopsis}</p>
-                      </details>
-                    ) : null}
-                  </section>
+                  {inspectedSynopsis && inspectedPresentation ? (
+                    <section className="atlas-inspector-synopsis">
+                      <h3>{inspectedPresentation.sections[0].heading}</h3>
+                      <p>{inspectedSynopsis}</p>
+                    </section>
+                  ) : null}
 
                   <section>
                     <h3>{relationshipExplanation(selectedRow.edge).label}</h3>
@@ -876,7 +915,7 @@ function FocusedAtlas(props: {
                     view="atlas-map"
                   >
                     <IconMap aria-hidden="true" size={18} />
-                    Explore from this record
+                    See this record's connections
                   </AppLink>
                 ) : null}
                 {selectedRow ? (
@@ -887,7 +926,7 @@ function FocusedAtlas(props: {
                     view="sources"
                   >
                     <IconFolderOpen aria-hidden="true" size={18} />
-                    View source
+                    View official source
                   </AppLink>
                 ) : null}
               </div>
@@ -1091,7 +1130,7 @@ function AtlasGuidedPath(props: {
           summaryId={state.atlasFamily}
         />
       ) : (
-        <p role="alert">The Atlas map structure is unavailable. Reload the page to try again.</p>
+        <p role="alert">The Atlas view is unavailable. Reload the page to try again.</p>
       )}
 
       {axis === "process" ? (
@@ -1105,8 +1144,8 @@ function AtlasGuidedPath(props: {
               ? `${
                   model.frameworkGroups.find((group) => group.id === openLimbId)
                     ?.label ?? "This area"
-                }: which catalog do you want to open?`
-              : "Which published structure do you want to trace?"}
+                }: choose a publication.`
+              : "Choose a publication."}
           </p>
           <ul className="atlas-path-stage-list">
             {(openLimbId
@@ -1149,7 +1188,7 @@ function AtlasGuidedPath(props: {
       !state.atlasBaseline ? (
         <>
           <p className="atlas-path-prompt">
-            Optional display filter: which published baseline selection should narrow the records?
+            Optional: filter these records by baseline.
           </p>
           <ul className="atlas-path-stage-list">
             <li>
@@ -1201,7 +1240,7 @@ function AtlasGuidedPath(props: {
       !family ? (
         <>
           <p className="atlas-path-prompt">
-            Which publisher group do you want to open?
+            Choose a family or group.
           </p>
           <div className="atlas-ancestry-family-grid">
             {frameworkUnits.map((choice) => (
@@ -1312,11 +1351,11 @@ function AtlasGuidedPath(props: {
       {axis === "process" && rmfStep ? (
         <div className="atlas-rmf-results">
           <header>
-            <p className="eyebrow">Published relationships</p>
+            <p className="eyebrow">Related records</p>
             <h2>{rmfStep.label}</h2>
             <p>
-              Published sources link these records to this step. A program may
-              require additional work products.
+              These records are linked to this step. A program may require
+              additional work products.
             </p>
           </header>
           {rmfStep.results.length ? (
@@ -1342,15 +1381,14 @@ function AtlasGuidedPath(props: {
             </ul>
           ) : (
             <p className="muted">
-              No direct published result is mapped to this step yet.
+              No records are connected to this step.
             </p>
           )}
           <aside className="atlas-rmf-template-note">
             <div>
               <strong>Need a document or work product?</strong>
               <p>
-                Choose from the Word and Excel templates based on your program,
-                not an invented one-template-per-step rule.
+                Templates are organized by program and task.
               </p>
             </div>
             <AppLink onNavigate={onNavigate} variant="secondary" view="templates">
@@ -1484,11 +1522,11 @@ function AtlasNoConnections(props: {
   return (
     <section className="atlas-no-connections" role="status">
       <IconMap aria-hidden="true" size={28} />
-      <h2>No published connections to show.</h2>
+      <h2>No connections found.</h2>
       <p>
         {props.filtersActive
-          ? "The current filters remove every published connection."
-          : "Control Atlas does not currently have a published relationship for this item."}
+          ? "No connections match the current filters."
+          : "No relationships are available for this record."}
       </p>
       <div className="card-actions">
         {props.filtersActive ? (
@@ -1499,8 +1537,7 @@ function AtlasNoConnections(props: {
             Show {props.candidateCount} candidate links
           </Button>
         ) : null}
-        <AppLink onNavigate={props.onNavigate} patch={{ query: props.query }} variant="secondary" view="search">Search Atlas</AppLink>
-        <AppLink onNavigate={props.onNavigate} variant="secondary" view="sources">View sources</AppLink>
+        <AppLink onNavigate={props.onNavigate} patch={{ query: props.query }} variant="secondary" view="search">Search the Library</AppLink>
       </div>
     </section>
   );
@@ -1513,11 +1550,10 @@ function AtlasLoadFailure(props: {
 }) {
   return (
     <section className="atlas-no-connections" role="alert">
-      <h2>{props.error ? "Connections could not be loaded." : "This record is not in the Atlas."}</h2>
-      <p>{props.error ? "The connection list did not load. Try again or continue through Search." : "The link may be stale or the record may not have a cited Atlas connection."}</p>
+      <h2>{props.error ? "Connections could not be loaded." : "Record not found."}</h2>
+      <p>{props.error ? "Try again or search the Library." : "This record is not in the current Library index."}</p>
       <div className="card-actions">
         <AppLink onNavigate={props.onNavigate} patch={{ query: props.query }} variant="primary" view="search">Search records</AppLink>
-        <AppLink onNavigate={props.onNavigate} variant="secondary" view="sources">View sources</AppLink>
       </div>
     </section>
   );

@@ -10,8 +10,11 @@ async function open(page, route) {
 
 test("V1 workflow 01 — find a known identifier", async ({ page }) => {
   await open(page, "/#/");
-  await page.getByRole("searchbox", { name: "Search Control Atlas" }).fill("AC-2");
-  await page.getByRole("search").getByRole("button", { name: "Search" }).click();
+  await page.getByRole("button", { name: "Open search" }).click();
+  const search = page.getByRole("dialog", { name: "Search Control Atlas" })
+    .getByRole("searchbox", { name: "Search Control Atlas" });
+  await search.fill("AC-2");
+  await search.press("Enter");
   await expect(page).toHaveURL(/#\/library\?q=AC-2/);
   await expect(page.locator('[data-record-id="nist-800-53:AC-2"]')).toBeVisible();
 });
@@ -37,21 +40,23 @@ test("V1 workflow 03 — distinguish exact, ambiguous, and honest zero results",
 
   await open(page, "/#/search?q=qzxv9417nohit");
   await expect(
-    page.getByRole("heading", { name: "No matching records found." }),
+    page.getByRole("heading", { name: "No records found." }),
   ).toBeVisible();
 });
 
 test("V1 workflow 04 — verify official record identity and source", async ({ page }) => {
   await open(page, "/#/record/nist-800-53/AC-2");
   await expect(
-    page.getByRole("heading", { name: "AC-2", level: 1 }),
+    page.getByRole("heading", { name: "NIST AC-2", level: 1 }),
   ).toBeVisible();
-  await expect(page.locator(".record-plain-name")).toHaveText("Account Management");
-  await expect(page.getByText("Official source text", { exact: true })).toBeVisible();
-  await expect(page.locator(".record-provenance-line")).toContainText("NIST");
-  const provenance = await page.locator(".record-provenance-line").innerText();
-  expect(provenance.match(/Revision 5/g)).toHaveLength(1);
-  expect(provenance.match(/Current as of/g)).toHaveLength(1);
+  await expect(page.locator(".record-official-name")).toHaveText("Account Management");
+  await expect(page.getByRole("heading", { name: "Control Statement", exact: true })).toBeVisible();
+  const facts = page.locator(".record-source-facts");
+  await expect(facts).toContainText("Publisher");
+  await expect(facts).toContainText("NIST");
+  await expect(facts).toContainText("Version");
+  await expect(facts).toContainText(/Revision 5|Rev\. 5/);
+  await expect(facts).toContainText("Last Checked");
 });
 
 test("V1 workflow 05 — follow a record and return without losing search state", async ({
@@ -140,7 +145,7 @@ test("V1 workflow 10 — recover from invalid settings, missing records, and emp
   await open(page, "/#/explore?relationshipView=unsupported&bogus=value");
   await expect(page.locator(".route-recovery")).toContainText("unsupported link settings");
   await open(page, "/#/record/nist-800-53/NOT-A-REAL-CONTROL");
-  await expect(page.getByRole("heading", { name: "Item not found" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Record not found" })).toBeVisible();
 });
 
 test("V1 workflow 11 — refresh and browser history preserve valid URL state", async ({

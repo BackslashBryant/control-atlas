@@ -2,12 +2,12 @@
 
 **Ctrl+Alt+Trace · Search · Explore · Compare · Build**
 
-Control Atlas brings the federal cybersecurity landscape together in one place—requirements, frameworks, controls, mappings, official guidance, tools, and practitioner resources—so you can see what applies, understand how it connects, and get to the next step faster.
+Control Atlas is a public research tool for federal cybersecurity requirements, controls, techniques, and guidance.
 
 Uses public NIST, DISA, FedRAMP, MITRE, and CISA data only.
 No login. No evidence upload. No organizational data stored.
 
-Control Atlas keeps the public material and its sources together. The people doing the work decide what applies, which baseline to use, and what counts for compliance, inheritance, authorization, or an ATO.
+Use Control Atlas for research, not compliance or authorization decisions.
 
 ## Source-First Product Standard
 

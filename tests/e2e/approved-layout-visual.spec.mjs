@@ -50,6 +50,9 @@ async function openApprovedAtlas(page, viewport, state) {
         transition-delay: 0s !important;
         transition-duration: 0s !important;
       }
+      .site-header {
+        position: static !important;
+      }
     `,
   });
   await waitForAppReady(page);
@@ -87,6 +90,9 @@ async function openRouteComposition(page, viewport, path) {
         caret-color: transparent !important;
         transition-delay: 0s !important;
         transition-duration: 0s !important;
+      }
+      .site-header {
+        position: static !important;
       }
     `,
   });
