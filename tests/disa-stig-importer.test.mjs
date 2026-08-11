@@ -121,6 +121,27 @@ test('DISA XCCDF parser normalizes SRG requirements with CCI relationships', () 
   );
 });
 
+test('DISA XCCDF parser preserves source line structure in Check and Fix text', () => {
+  const xml = sampleStigXml
+    .replace(
+      'If the account management policy is disabled, this is a finding.',
+      'Run the following command:\n# systemctl status account-policy\nIf the service is disabled, this is a finding.',
+    )
+    .replace(
+      'Enable the required account management policy.',
+      '1. Open the policy file.\n2. Set the required value.\n# systemctl restart account-policy',
+    );
+  const result = parseDisaXccdf(xml, {
+    sourceKey: 'disa-stig-library',
+    artifactUrl: 'https://example.test/U_STIG_Library.zip',
+    entryPath: 'U_STIG_Library/Windows_11_STIG/Windows_11_STIG_Benchmark.xml',
+  });
+
+  assert.match(result.records[0].check_text, /\n# systemctl status/);
+  assert.match(result.records[0].fix_text, /^1\. Open the policy file\.\n2\. Set the required value\./);
+  assert.match(result.records[0].fix_text, /\n# systemctl restart account-policy$/);
+});
+
 test('DISA XCCDF parser rejects malformed or metadata-poor benchmarks', () => {
   assert.throws(
     () => parseDisaXccdf('<Benchmark></Benchmark>', {
