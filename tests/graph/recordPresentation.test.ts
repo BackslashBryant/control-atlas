@@ -12,7 +12,9 @@ test("record presentation profiles use source-native headings", () => {
   assert.equal(recordPresentationProfile("disa-stig", "stig_rule").sections[0].heading, "Discussion");
   assert.equal(recordPresentationProfile("mitre-attack", "attack_technique").sections[0].heading, "Technique Description");
   assert.equal(recordPresentationProfile("mitre-d3fend", "defend_countermeasure").sections[0].heading, "Countermeasure Description");
-  assert.equal(recordPresentationProfile("nist-800-53a", "assessment_procedure").sections[0].heading, "Assessment Procedure");
+  const assessmentProfile = recordPresentationProfile("nist-800-53a", "assessment_procedure");
+  assert.equal(assessmentProfile.sections[0].heading, "Assessment Procedure");
+  assert.equal(assessmentProfile.sections[0].field, "procedure_text");
 });
 
 test("record presentation rejects unknown kinds and missing required source fields", () => {

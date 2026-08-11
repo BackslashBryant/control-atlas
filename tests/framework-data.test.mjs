@@ -514,10 +514,37 @@ test("epic 2 graph build emits a complete bounded library search artifact", () =
   const artifact = generated("library-search");
   const edges = generated("edges").edges;
   const nodes = generated("nodes").nodes;
+  const structuralTypes = new Set([
+    "benchmark",
+    "catalog",
+    "category",
+    "family",
+    "function",
+    "group",
+    "limb",
+    "policy_directive",
+    "regulation",
+    "statute",
+    "tactic",
+    "trunk",
+  ]);
+  const publicRecordCount = nodes.filter((node) => !structuralTypes.has(node.node_type)).length;
 
   assert.equal(artifact.schema_version, "1.0");
-  assert.equal(artifact.library_search.document_count, buildResult.nodes);
+  assert.equal(artifact.library_search.document_count, publicRecordCount);
   assert.ok(Array.isArray(artifact.library_search.documents));
+  assert.ok(
+    artifact.library_search.documents.every(
+      (document) => !structuralTypes.has(document.object_type),
+    ),
+    "Library search must contain publisher records, not synthetic grouping nodes",
+  );
+  assert.ok(
+    artifact.library_search.documents.every(
+      (document) => !/^(?:Catalog summary for|Assessment procedures for)\b/i.test(document.official_text_preview || ""),
+    ),
+    "Library previews must come from publisher text, never generated filler",
+  );
   assert.equal(
     artifact.library_search.serialized_index,
     undefined,

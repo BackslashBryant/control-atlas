@@ -27,6 +27,20 @@ const structuralEdges = (nodes, edges) => {
   const nodeById = new Map(nodes.map((node) => [node.id, node]));
   return edges.filter((edge) => isNativeStructuralEdge(edge, nodeById));
 };
+const SYNTHETIC_STRUCTURE_NODE_TYPES = new Set([
+  'benchmark',
+  'catalog',
+  'category',
+  'family',
+  'function',
+  'group',
+  'limb',
+  'policy_directive',
+  'regulation',
+  'statute',
+  'tactic',
+  'trunk',
+]);
 const expectedArtifacts = ['sources', 'nodes', 'edges', 'evidence', 'graph-health'];
 const retiredArtifacts = [
   'bootstrap',
@@ -333,7 +347,11 @@ test('declared parent tiers materialize real tier nodes with plain-language titl
     for (const node of tierNodes) {
       assert.ok(node.label?.trim(), `${node.id} needs a label`);
       assert.ok(node.metadata?.title?.trim(), `${node.id} needs a title`);
-      assert.ok(node.metadata?.description?.trim(), `${node.id} needs a description`);
+      assert.equal(
+        node.metadata?.description,
+        undefined,
+        `${node.id} must not invent a description for a grouping node`,
+      );
       assert.ok(
         (childCount.get(node.id) ?? 0) > 0,
         `${node.id} is a tier node with no children, so it should not exist`,
@@ -703,6 +721,7 @@ test('every catalog stays within its documented description-completeness budget'
   const EXCEPTIONS = {};
   const byCatalog = new Map();
   for (const node of nodes) {
+    if (SYNTHETIC_STRUCTURE_NODE_TYPES.has(node.node_type)) continue;
     const catalogId = node.metadata?.catalog_id;
     if (!catalogId) continue;
     const bucket = byCatalog.get(catalogId) || [];

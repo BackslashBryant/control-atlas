@@ -37,6 +37,7 @@ const PUBLIC_COPY_FILES = [
   "src/ui/lib/pagePrimitives.tsx",
   "src/ui/lib/recordTitle.ts",
   "src/shared/product-identity.ts",
+  "data/curated/authority-spine.json",
 ];
 
 test("site copy keeps every approved anchor exact", () => {
@@ -68,6 +69,7 @@ test("product-authored route copy excludes banned metaphor and generated guidanc
     /assign an implementation owner/i,
     /published structure/i,
     /source-backed/i,
+    /already represented in (?:the )?Atlas/i,
     /\b(?:proves?|ensures?|guarantees?|achieves?) compliance\b/i,
     /[\u00c2\u00c3]|\u00e2\u20ac/,
   ];
@@ -94,6 +96,11 @@ test("record page is profile-driven and contains no generic source or advice fal
   assert.match(recordPage, /About This Record/);
   assert.doesNotMatch(recordPage, />Official text</i);
   assert.doesNotMatch(recordPage, /What this is|What you need to do|How to satisfy it/i);
+});
+
+test("generation excludes structural scaffolding from public records", () => {
+  const generator = read("scripts/build-framework-data.mjs");
+  assert.match(generator, /filter\(\(node\) => !NON_RECORD_NODE_TYPES\.has\(node\.node_type\)\)/);
 });
 
 test("Home has one centralized React and first-paint copy source", () => {

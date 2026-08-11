@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-11T13:30:52.183Z",
+  "generated_at": "2026-08-11T14:10:50.889Z",
   "atlas_neighborhood_manifest": {
     "shard_count": 128,
     "hash_algorithm": "fnv1a-32",
@@ -10,769 +10,769 @@
         "shard_id": "00",
         "record_count": 221,
         "path": "atlas-neighborhood/00.json",
-        "bytes": 1808829
+        "bytes": 1763548
       },
       {
         "shard_id": "01",
         "record_count": 223,
         "path": "atlas-neighborhood/01.json",
-        "bytes": 2672906
+        "bytes": 2626569
       },
       {
         "shard_id": "02",
         "record_count": 214,
         "path": "atlas-neighborhood/02.json",
-        "bytes": 1678464
+        "bytes": 1621664
       },
       {
         "shard_id": "03",
         "record_count": 238,
         "path": "atlas-neighborhood/03.json",
-        "bytes": 2233508
+        "bytes": 2183053
       },
       {
         "shard_id": "04",
         "record_count": 227,
         "path": "atlas-neighborhood/04.json",
-        "bytes": 2186083
+        "bytes": 2150396
       },
       {
         "shard_id": "05",
         "record_count": 230,
         "path": "atlas-neighborhood/05.json",
-        "bytes": 1708807
+        "bytes": 1661283
       },
       {
         "shard_id": "06",
         "record_count": 218,
         "path": "atlas-neighborhood/06.json",
-        "bytes": 1945791
+        "bytes": 1891583
       },
       {
         "shard_id": "07",
         "record_count": 226,
         "path": "atlas-neighborhood/07.json",
-        "bytes": 1889817
+        "bytes": 1845581
       },
       {
         "shard_id": "08",
         "record_count": 236,
         "path": "atlas-neighborhood/08.json",
-        "bytes": 1923886
+        "bytes": 1869308
       },
       {
         "shard_id": "09",
         "record_count": 234,
         "path": "atlas-neighborhood/09.json",
-        "bytes": 2101018
+        "bytes": 2050699
       },
       {
         "shard_id": "0a",
         "record_count": 236,
         "path": "atlas-neighborhood/0a.json",
-        "bytes": 1803934
+        "bytes": 1750287
       },
       {
         "shard_id": "0b",
         "record_count": 237,
         "path": "atlas-neighborhood/0b.json",
-        "bytes": 2499754
+        "bytes": 2445410
       },
       {
         "shard_id": "0c",
         "record_count": 233,
         "path": "atlas-neighborhood/0c.json",
-        "bytes": 2819528
+        "bytes": 2776179
       },
       {
         "shard_id": "0d",
         "record_count": 234,
         "path": "atlas-neighborhood/0d.json",
-        "bytes": 2061541
+        "bytes": 2024804
       },
       {
         "shard_id": "0e",
         "record_count": 215,
         "path": "atlas-neighborhood/0e.json",
-        "bytes": 1901194
+        "bytes": 1858861
       },
       {
         "shard_id": "0f",
         "record_count": 224,
         "path": "atlas-neighborhood/0f.json",
-        "bytes": 2358565
+        "bytes": 2308772
       },
       {
         "shard_id": "10",
         "record_count": 226,
         "path": "atlas-neighborhood/10.json",
-        "bytes": 1890589
+        "bytes": 1828824
       },
       {
         "shard_id": "11",
         "record_count": 241,
         "path": "atlas-neighborhood/11.json",
-        "bytes": 2543151
+        "bytes": 2496931
       },
       {
         "shard_id": "12",
         "record_count": 252,
         "path": "atlas-neighborhood/12.json",
-        "bytes": 2376596
+        "bytes": 2328251
       },
       {
         "shard_id": "13",
         "record_count": 211,
         "path": "atlas-neighborhood/13.json",
-        "bytes": 2645632
+        "bytes": 2604521
       },
       {
         "shard_id": "14",
         "record_count": 247,
         "path": "atlas-neighborhood/14.json",
-        "bytes": 2018443
+        "bytes": 1969401
       },
       {
         "shard_id": "15",
         "record_count": 214,
         "path": "atlas-neighborhood/15.json",
-        "bytes": 1458194
+        "bytes": 1400378
       },
       {
         "shard_id": "16",
         "record_count": 250,
         "path": "atlas-neighborhood/16.json",
-        "bytes": 1654922
+        "bytes": 1604315
       },
       {
         "shard_id": "17",
         "record_count": 226,
         "path": "atlas-neighborhood/17.json",
-        "bytes": 2310992
+        "bytes": 2267487
       },
       {
         "shard_id": "18",
         "record_count": 236,
         "path": "atlas-neighborhood/18.json",
-        "bytes": 2301279
+        "bytes": 2246847
       },
       {
         "shard_id": "19",
         "record_count": 214,
         "path": "atlas-neighborhood/19.json",
-        "bytes": 1477506
+        "bytes": 1426565
       },
       {
         "shard_id": "1a",
         "record_count": 234,
         "path": "atlas-neighborhood/1a.json",
-        "bytes": 2022010
+        "bytes": 1977145
       },
       {
         "shard_id": "1b",
         "record_count": 241,
         "path": "atlas-neighborhood/1b.json",
-        "bytes": 2445068
+        "bytes": 2400986
       },
       {
         "shard_id": "1c",
         "record_count": 220,
         "path": "atlas-neighborhood/1c.json",
-        "bytes": 2553747
+        "bytes": 2507849
       },
       {
         "shard_id": "1d",
         "record_count": 238,
         "path": "atlas-neighborhood/1d.json",
-        "bytes": 1602013
+        "bytes": 1550770
       },
       {
         "shard_id": "1e",
         "record_count": 229,
         "path": "atlas-neighborhood/1e.json",
-        "bytes": 1804030
+        "bytes": 1753517
       },
       {
         "shard_id": "1f",
         "record_count": 232,
         "path": "atlas-neighborhood/1f.json",
-        "bytes": 1743716
+        "bytes": 1703257
       },
       {
         "shard_id": "20",
         "record_count": 249,
         "path": "atlas-neighborhood/20.json",
-        "bytes": 2206200
+        "bytes": 2155504
       },
       {
         "shard_id": "21",
         "record_count": 204,
         "path": "atlas-neighborhood/21.json",
-        "bytes": 1806485
+        "bytes": 1766129
       },
       {
         "shard_id": "22",
         "record_count": 219,
         "path": "atlas-neighborhood/22.json",
-        "bytes": 1981059
+        "bytes": 1935053
       },
       {
         "shard_id": "23",
         "record_count": 224,
         "path": "atlas-neighborhood/23.json",
-        "bytes": 2018591
+        "bytes": 1970405
       },
       {
         "shard_id": "24",
         "record_count": 253,
         "path": "atlas-neighborhood/24.json",
-        "bytes": 2156905
+        "bytes": 2105802
       },
       {
         "shard_id": "25",
         "record_count": 247,
         "path": "atlas-neighborhood/25.json",
-        "bytes": 2438017
+        "bytes": 2399670
       },
       {
         "shard_id": "26",
         "record_count": 219,
         "path": "atlas-neighborhood/26.json",
-        "bytes": 1576788
+        "bytes": 1525336
       },
       {
         "shard_id": "27",
         "record_count": 239,
         "path": "atlas-neighborhood/27.json",
-        "bytes": 1813014
+        "bytes": 1761175
       },
       {
         "shard_id": "28",
         "record_count": 218,
         "path": "atlas-neighborhood/28.json",
-        "bytes": 2012192
+        "bytes": 1981567
       },
       {
         "shard_id": "29",
         "record_count": 258,
         "path": "atlas-neighborhood/29.json",
-        "bytes": 1785392
+        "bytes": 1722902
       },
       {
         "shard_id": "2a",
         "record_count": 239,
         "path": "atlas-neighborhood/2a.json",
-        "bytes": 2436299
+        "bytes": 2392599
       },
       {
         "shard_id": "2b",
         "record_count": 231,
         "path": "atlas-neighborhood/2b.json",
-        "bytes": 1804060
+        "bytes": 1756746
       },
       {
         "shard_id": "2c",
         "record_count": 223,
         "path": "atlas-neighborhood/2c.json",
-        "bytes": 1732723
+        "bytes": 1683622
       },
       {
         "shard_id": "2d",
         "record_count": 235,
         "path": "atlas-neighborhood/2d.json",
-        "bytes": 1986378
+        "bytes": 1943519
       },
       {
         "shard_id": "2e",
         "record_count": 234,
         "path": "atlas-neighborhood/2e.json",
-        "bytes": 3144606
+        "bytes": 3102456
       },
       {
         "shard_id": "2f",
         "record_count": 222,
         "path": "atlas-neighborhood/2f.json",
-        "bytes": 1870041
+        "bytes": 1818430
       },
       {
         "shard_id": "30",
         "record_count": 221,
         "path": "atlas-neighborhood/30.json",
-        "bytes": 1580838
+        "bytes": 1525500
       },
       {
         "shard_id": "31",
         "record_count": 222,
         "path": "atlas-neighborhood/31.json",
-        "bytes": 1527531
+        "bytes": 1483201
       },
       {
         "shard_id": "32",
         "record_count": 222,
         "path": "atlas-neighborhood/32.json",
-        "bytes": 2344621
+        "bytes": 2295331
       },
       {
         "shard_id": "33",
         "record_count": 247,
         "path": "atlas-neighborhood/33.json",
-        "bytes": 2666353
+        "bytes": 2609920
       },
       {
         "shard_id": "34",
         "record_count": 240,
         "path": "atlas-neighborhood/34.json",
-        "bytes": 2255567
+        "bytes": 2192882
       },
       {
         "shard_id": "35",
         "record_count": 227,
         "path": "atlas-neighborhood/35.json",
-        "bytes": 1881972
+        "bytes": 1836007
       },
       {
         "shard_id": "36",
         "record_count": 239,
         "path": "atlas-neighborhood/36.json",
-        "bytes": 1666309
+        "bytes": 1605660
       },
       {
         "shard_id": "37",
         "record_count": 239,
         "path": "atlas-neighborhood/37.json",
-        "bytes": 2091527
+        "bytes": 2036139
       },
       {
         "shard_id": "38",
         "record_count": 227,
         "path": "atlas-neighborhood/38.json",
-        "bytes": 2461779
+        "bytes": 2414786
       },
       {
         "shard_id": "39",
         "record_count": 218,
         "path": "atlas-neighborhood/39.json",
-        "bytes": 1768143
+        "bytes": 1713668
       },
       {
         "shard_id": "3a",
         "record_count": 232,
         "path": "atlas-neighborhood/3a.json",
-        "bytes": 2291616
+        "bytes": 2243388
       },
       {
         "shard_id": "3b",
         "record_count": 215,
         "path": "atlas-neighborhood/3b.json",
-        "bytes": 1687822
+        "bytes": 1663965
       },
       {
         "shard_id": "3c",
         "record_count": 241,
         "path": "atlas-neighborhood/3c.json",
-        "bytes": 1819535
+        "bytes": 1772876
       },
       {
         "shard_id": "3d",
         "record_count": 239,
         "path": "atlas-neighborhood/3d.json",
-        "bytes": 2442984
+        "bytes": 2396195
       },
       {
         "shard_id": "3e",
         "record_count": 237,
         "path": "atlas-neighborhood/3e.json",
-        "bytes": 1704738
+        "bytes": 1648358
       },
       {
         "shard_id": "3f",
         "record_count": 233,
         "path": "atlas-neighborhood/3f.json",
-        "bytes": 1847663
+        "bytes": 1792417
       },
       {
         "shard_id": "40",
         "record_count": 215,
         "path": "atlas-neighborhood/40.json",
-        "bytes": 1594968
+        "bytes": 1559036
       },
       {
         "shard_id": "41",
         "record_count": 233,
         "path": "atlas-neighborhood/41.json",
-        "bytes": 2855246
+        "bytes": 2820312
       },
       {
         "shard_id": "42",
         "record_count": 230,
         "path": "atlas-neighborhood/42.json",
-        "bytes": 1778914
+        "bytes": 1722432
       },
       {
         "shard_id": "43",
         "record_count": 220,
         "path": "atlas-neighborhood/43.json",
-        "bytes": 1658420
+        "bytes": 1602773
       },
       {
         "shard_id": "44",
         "record_count": 235,
         "path": "atlas-neighborhood/44.json",
-        "bytes": 2743323
+        "bytes": 2683269
       },
       {
         "shard_id": "45",
         "record_count": 221,
         "path": "atlas-neighborhood/45.json",
-        "bytes": 1578786
+        "bytes": 1531278
       },
       {
         "shard_id": "46",
         "record_count": 237,
         "path": "atlas-neighborhood/46.json",
-        "bytes": 3744454
+        "bytes": 3691420
       },
       {
         "shard_id": "47",
         "record_count": 234,
         "path": "atlas-neighborhood/47.json",
-        "bytes": 2307117
+        "bytes": 2248685
       },
       {
         "shard_id": "48",
         "record_count": 220,
         "path": "atlas-neighborhood/48.json",
-        "bytes": 1648892
+        "bytes": 1588985
       },
       {
         "shard_id": "49",
         "record_count": 242,
         "path": "atlas-neighborhood/49.json",
-        "bytes": 1795096
+        "bytes": 1737501
       },
       {
         "shard_id": "4a",
         "record_count": 228,
         "path": "atlas-neighborhood/4a.json",
-        "bytes": 1937985
+        "bytes": 1890318
       },
       {
         "shard_id": "4b",
         "record_count": 222,
         "path": "atlas-neighborhood/4b.json",
-        "bytes": 1933219
+        "bytes": 1898784
       },
       {
         "shard_id": "4c",
         "record_count": 217,
         "path": "atlas-neighborhood/4c.json",
-        "bytes": 1462738
+        "bytes": 1415033
       },
       {
         "shard_id": "4d",
         "record_count": 223,
         "path": "atlas-neighborhood/4d.json",
-        "bytes": 1513496
+        "bytes": 1469553
       },
       {
         "shard_id": "4e",
         "record_count": 219,
         "path": "atlas-neighborhood/4e.json",
-        "bytes": 2287887
+        "bytes": 2246179
       },
       {
         "shard_id": "4f",
         "record_count": 236,
         "path": "atlas-neighborhood/4f.json",
-        "bytes": 1994328
+        "bytes": 1947569
       },
       {
         "shard_id": "50",
         "record_count": 226,
         "path": "atlas-neighborhood/50.json",
-        "bytes": 1704061
+        "bytes": 1654252
       },
       {
         "shard_id": "51",
         "record_count": 223,
         "path": "atlas-neighborhood/51.json",
-        "bytes": 1726749
+        "bytes": 1680940
       },
       {
         "shard_id": "52",
         "record_count": 239,
         "path": "atlas-neighborhood/52.json",
-        "bytes": 1983646
+        "bytes": 1921475
       },
       {
         "shard_id": "53",
         "record_count": 227,
         "path": "atlas-neighborhood/53.json",
-        "bytes": 2265919
+        "bytes": 2228849
       },
       {
         "shard_id": "54",
         "record_count": 242,
         "path": "atlas-neighborhood/54.json",
-        "bytes": 2240259
+        "bytes": 2189535
       },
       {
         "shard_id": "55",
         "record_count": 236,
         "path": "atlas-neighborhood/55.json",
-        "bytes": 6093250
+        "bytes": 6033692
       },
       {
         "shard_id": "56",
         "record_count": 210,
         "path": "atlas-neighborhood/56.json",
-        "bytes": 1800137
+        "bytes": 1767430
       },
       {
         "shard_id": "57",
         "record_count": 229,
         "path": "atlas-neighborhood/57.json",
-        "bytes": 1847142
+        "bytes": 1790696
       },
       {
         "shard_id": "58",
         "record_count": 248,
         "path": "atlas-neighborhood/58.json",
-        "bytes": 1803736
+        "bytes": 1739581
       },
       {
         "shard_id": "59",
         "record_count": 244,
         "path": "atlas-neighborhood/59.json",
-        "bytes": 2535441
+        "bytes": 2484446
       },
       {
         "shard_id": "5a",
         "record_count": 215,
         "path": "atlas-neighborhood/5a.json",
-        "bytes": 2673570
+        "bytes": 2623465
       },
       {
         "shard_id": "5b",
         "record_count": 224,
         "path": "atlas-neighborhood/5b.json",
-        "bytes": 1872539
+        "bytes": 1816662
       },
       {
         "shard_id": "5c",
         "record_count": 224,
         "path": "atlas-neighborhood/5c.json",
-        "bytes": 1944393
+        "bytes": 1891564
       },
       {
         "shard_id": "5d",
         "record_count": 228,
         "path": "atlas-neighborhood/5d.json",
-        "bytes": 1867531
+        "bytes": 1821853
       },
       {
         "shard_id": "5e",
         "record_count": 237,
         "path": "atlas-neighborhood/5e.json",
-        "bytes": 2467124
+        "bytes": 2418298
       },
       {
         "shard_id": "5f",
         "record_count": 231,
         "path": "atlas-neighborhood/5f.json",
-        "bytes": 2006061
+        "bytes": 1953873
       },
       {
         "shard_id": "60",
         "record_count": 223,
         "path": "atlas-neighborhood/60.json",
-        "bytes": 1608725
+        "bytes": 1554505
       },
       {
         "shard_id": "61",
         "record_count": 222,
         "path": "atlas-neighborhood/61.json",
-        "bytes": 1683592
+        "bytes": 1644613
       },
       {
         "shard_id": "62",
         "record_count": 234,
         "path": "atlas-neighborhood/62.json",
-        "bytes": 1861105
+        "bytes": 1814722
       },
       {
         "shard_id": "63",
         "record_count": 224,
         "path": "atlas-neighborhood/63.json",
-        "bytes": 2496829
+        "bytes": 2454221
       },
       {
         "shard_id": "64",
         "record_count": 208,
         "path": "atlas-neighborhood/64.json",
-        "bytes": 1568894
+        "bytes": 1527440
       },
       {
         "shard_id": "65",
         "record_count": 233,
         "path": "atlas-neighborhood/65.json",
-        "bytes": 1802144
+        "bytes": 1740968
       },
       {
         "shard_id": "66",
         "record_count": 206,
         "path": "atlas-neighborhood/66.json",
-        "bytes": 2796384
+        "bytes": 2760128
       },
       {
         "shard_id": "67",
         "record_count": 242,
         "path": "atlas-neighborhood/67.json",
-        "bytes": 2606877
+        "bytes": 2554771
       },
       {
         "shard_id": "68",
         "record_count": 213,
         "path": "atlas-neighborhood/68.json",
-        "bytes": 1884145
+        "bytes": 1837883
       },
       {
         "shard_id": "69",
         "record_count": 220,
         "path": "atlas-neighborhood/69.json",
-        "bytes": 1582061
+        "bytes": 1538616
       },
       {
         "shard_id": "6a",
         "record_count": 230,
         "path": "atlas-neighborhood/6a.json",
-        "bytes": 1821926
+        "bytes": 1762312
       },
       {
         "shard_id": "6b",
         "record_count": 252,
         "path": "atlas-neighborhood/6b.json",
-        "bytes": 1968129
+        "bytes": 1906526
       },
       {
         "shard_id": "6c",
         "record_count": 249,
         "path": "atlas-neighborhood/6c.json",
-        "bytes": 2857482
+        "bytes": 2802923
       },
       {
         "shard_id": "6d",
         "record_count": 197,
         "path": "atlas-neighborhood/6d.json",
-        "bytes": 1518487
+        "bytes": 1471745
       },
       {
         "shard_id": "6e",
         "record_count": 217,
         "path": "atlas-neighborhood/6e.json",
-        "bytes": 1761081
+        "bytes": 1714451
       },
       {
         "shard_id": "6f",
         "record_count": 222,
         "path": "atlas-neighborhood/6f.json",
-        "bytes": 1953219
+        "bytes": 1896833
       },
       {
         "shard_id": "70",
         "record_count": 242,
         "path": "atlas-neighborhood/70.json",
-        "bytes": 2112209
+        "bytes": 2065272
       },
       {
         "shard_id": "71",
         "record_count": 235,
         "path": "atlas-neighborhood/71.json",
-        "bytes": 2293082
+        "bytes": 2240421
       },
       {
         "shard_id": "72",
         "record_count": 230,
         "path": "atlas-neighborhood/72.json",
-        "bytes": 2928225
+        "bytes": 2887187
       },
       {
         "shard_id": "73",
         "record_count": 221,
         "path": "atlas-neighborhood/73.json",
-        "bytes": 1957901
+        "bytes": 1899590
       },
       {
         "shard_id": "74",
         "record_count": 230,
         "path": "atlas-neighborhood/74.json",
-        "bytes": 2309700
+        "bytes": 2262506
       },
       {
         "shard_id": "75",
         "record_count": 247,
         "path": "atlas-neighborhood/75.json",
-        "bytes": 1959609
+        "bytes": 1909377
       },
       {
         "shard_id": "76",
         "record_count": 228,
         "path": "atlas-neighborhood/76.json",
-        "bytes": 2154256
+        "bytes": 2099159
       },
       {
         "shard_id": "77",
         "record_count": 213,
         "path": "atlas-neighborhood/77.json",
-        "bytes": 1478581
+        "bytes": 1436449
       },
       {
         "shard_id": "78",
         "record_count": 222,
         "path": "atlas-neighborhood/78.json",
-        "bytes": 2225526
+        "bytes": 2178206
       },
       {
         "shard_id": "79",
         "record_count": 209,
         "path": "atlas-neighborhood/79.json",
-        "bytes": 1909204
+        "bytes": 1868602
       },
       {
         "shard_id": "7a",
         "record_count": 228,
         "path": "atlas-neighborhood/7a.json",
-        "bytes": 1682324
+        "bytes": 1640014
       },
       {
         "shard_id": "7b",
         "record_count": 220,
         "path": "atlas-neighborhood/7b.json",
-        "bytes": 2336027
+        "bytes": 2286332
       },
       {
         "shard_id": "7c",
         "record_count": 230,
         "path": "atlas-neighborhood/7c.json",
-        "bytes": 1623904
+        "bytes": 1572654
       },
       {
         "shard_id": "7d",
         "record_count": 235,
         "path": "atlas-neighborhood/7d.json",
-        "bytes": 2021903
+        "bytes": 1966868
       },
       {
         "shard_id": "7e",
         "record_count": 242,
         "path": "atlas-neighborhood/7e.json",
-        "bytes": 1865956
+        "bytes": 1823752
       },
       {
         "shard_id": "7f",
         "record_count": 258,
         "path": "atlas-neighborhood/7f.json",
-        "bytes": 2417454
+        "bytes": 2226386
       }
     ]
   }

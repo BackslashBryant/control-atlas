@@ -72,10 +72,17 @@ const GOVERNANCE_FILES = [
 const ATLAS_NEIGHBORHOOD_DIR = join(GENERATED, "atlas-neighborhood");
 
 const NON_RECORD_NODE_TYPES = new Set([
+  "benchmark",
+  "catalog",
+  "category",
+  "family",
+  "function",
+  "group",
   "limb",
   "policy_directive",
   "regulation",
   "statute",
+  "tactic",
   "trunk",
 ]);
 
@@ -431,8 +438,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "nist-800-53",
       title: "SP 800-53 Rev. 5 Catalog",
-      description:
-        "Catalog summary for NIST SP 800-53 Rev. 5 security and privacy controls.",
     },
   ],
   [
@@ -440,8 +445,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "nist-csf-2",
       title: "CSF 2.0 Catalog",
-      description:
-        "Catalog summary for the NIST Cybersecurity Framework 2.0 Functions, Categories, and Subcategories.",
     },
   ],
   [
@@ -449,8 +452,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "disa-stig-library",
       title: "DISA STIG Catalog",
-      description:
-        "Catalog summary for the DISA Security Technical Implementation Guide library.",
     },
   ],
   [
@@ -458,8 +459,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "disa-srg-library",
       title: "DISA SRG Catalog",
-      description:
-        "Catalog summary for the DISA Security Requirements Guide library.",
     },
   ],
   [
@@ -467,8 +466,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "mitre-attack-enterprise",
       title: "MITRE ATT&CK Enterprise Catalog",
-      description:
-        "Catalog summary for the MITRE ATT&CK Enterprise adversary tactics and techniques knowledge base.",
     },
   ],
   [
@@ -476,8 +473,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "mitre-attack-ics",
       title: "MITRE ATT&CK ICS Catalog",
-      description:
-        "Catalog summary for the MITRE ATT&CK for Industrial Control Systems knowledge base.",
     },
   ],
   [
@@ -485,8 +480,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "mitre-d3fend-ontology",
       title: "MITRE D3FEND Catalog",
-      description:
-        "Catalog summary for the MITRE D3FEND defensive technique ontology.",
     },
   ],
   [
@@ -494,8 +487,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "nist-ai-rmf-playbook",
       title: "NIST AI RMF Playbook Catalog",
-      description:
-        "Catalog summary for the NIST AI Risk Management Framework Playbook.",
     },
   ],
   [
@@ -503,8 +494,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "nist-ssdf",
       title: "NIST SSDF Catalog",
-      description:
-        "Catalog summary for NIST SP 800-218, the Secure Software Development Framework.",
     },
   ],
   [
@@ -512,8 +501,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "dod-rai-toolkit",
       title: "DoD Responsible AI Catalog",
-      description:
-        "Catalog summary for the DoD Responsible AI Toolkit.",
     },
   ],
   [
@@ -521,8 +508,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "nist-800-171-rev2",
       title: "SP 800-171 Rev. 2 Catalog",
-      description:
-        "Catalog summary for NIST SP 800-171 Rev. 2 controlled unclassified information security requirements.",
     },
   ],
   [
@@ -530,8 +515,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "nist-800-171",
       title: "SP 800-171 Rev. 3 Catalog",
-      description:
-        "Catalog summary for NIST SP 800-171 Rev. 3 controlled unclassified information security requirements.",
     },
   ],
   [
@@ -539,8 +522,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "nist-800-172-rev3",
       title: "SP 800-172 Rev. 3 Catalog",
-      description:
-        "Catalog summary for NIST SP 800-172 Rev. 3 enhanced CUI security requirements.",
     },
   ],
   [
@@ -548,8 +529,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "dod-cmmc-rule",
       title: "CMMC 2.0 Catalog",
-      description:
-        "Catalog summary for the Cybersecurity Maturity Model Certification 2.0 program levels.",
     },
   ],
   [
@@ -557,8 +536,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "isoo-cui-regulation",
       title: "CUI Program Catalog",
-      description:
-        "Catalog summary for the Controlled Unclassified Information program's designation categories.",
     },
   ],
   [
@@ -566,8 +543,6 @@ const CATALOG_SUMMARIES = new Map([
     {
       sourceId: "dod-zt-reference-architecture-v2",
       title: "DoD Zero Trust Catalog",
-      description:
-        "DoD Zero Trust tenets, pillars, capabilities, activities, and control overlays from official DoD CIO publications.",
     },
   ],
 ]);
@@ -751,8 +726,7 @@ function buildAssessmentNode(record, ingestionSourceId) {
       ingestion_source_id: ingestionSourceId,
       item_id: record.id,
       title: `${record.title || record.id} Assessment Procedure`,
-      description:
-        `Assessment procedures for ${record.id} ${record.title || ""}`.trim(),
+      description: assessment.procedure_text || "",
       family: record.family || "",
       type: "assessment_procedure",
       assessment_methods: assessment.methods.map((entry) => entry.method),
@@ -783,7 +757,6 @@ function buildCatalogSummaryNode(
       ingestion_source_id: ingestionSourceId,
       item_id: "CATALOG",
       title: summary.title,
-      description: summary.description,
       family: "Catalog",
       baselines: null,
       nist_800_53b_baselines: null,
@@ -826,7 +799,6 @@ function registerTierNode(
       ingestion_source_id: ingestionSourceId,
       item_id: itemId,
       title,
-      description: tier.description(record, title),
       family: title,
       baselines: null,
       nist_800_53b_baselines: null,
@@ -2036,7 +2008,7 @@ function buildLibraryDocuments(graph) {
       publishedConnectionCatalogs.set(nodeId, catalogs);
     }
   }
-  return graph.nodes.map((node) => {
+  return graph.nodes.filter((node) => !NON_RECORD_NODE_TYPES.has(node.node_type)).map((node) => {
     const source = sourceById.get(node.source_id);
     const itemId = node.metadata?.item_id || node.id;
     const title = node.metadata?.title || node.label;

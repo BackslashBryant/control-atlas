@@ -3,11 +3,11 @@ const DESCRIPTION = Object.freeze({ field: "description", heading: "Requirement"
 const BASE_PROFILES = Object.freeze({
   assessment_procedure: Object.freeze({
     sections: Object.freeze([
-      Object.freeze({ field: "description", heading: "Assessment Procedure", kind: "text" }),
+      Object.freeze({ field: "procedure_text", heading: "Assessment Procedure", kind: "text" }),
       Object.freeze({ field: "assessment_objectives", heading: "Objectives", kind: "objectives" }),
       Object.freeze({ field: "assessment_method_details", heading: "Methods", kind: "methods" }),
     ]),
-    required: Object.freeze(["description", "assessment_objectives", "assessment_method_details"]),
+    required: Object.freeze(["procedure_text", "assessment_objectives", "assessment_method_details"]),
   }),
   attack_technique: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Technique Description", kind: "text" })]), required: Object.freeze(["description"]) }),
   baseline: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Baseline", kind: "text" })]), required: Object.freeze(["description"]) }),
