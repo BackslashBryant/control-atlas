@@ -31,7 +31,7 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   await expect(page.locator(".home-product-identity")).toContainText(
     "Control Atlas brings the federal cybersecurity landscape together in one place",
   );
-  await expect(page.locator(".home-ecosystem-areas span")).toHaveCount(9);
+  await expect(page.locator(".home-ecosystem-areas > .bucket-tag")).toHaveCount(9);
   await expect(page.locator(".home-trust-boundary")).toContainText(
     "Official material stays source-traceable",
   );
