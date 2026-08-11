@@ -178,7 +178,7 @@ test('Start here plans are traceable to real publications and routes', async () 
   assert.equal(guide.startingPlanFor('not-a-goal', 'federal'), null);
 });
 
-test('primary navigation exposes Atlas, Library, Resources, and Guides', () => {
+test('navigation keeps Atlas, Library, and Resources primary with Guides in overflow', () => {
   const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
   for (const [view, label] of [
     ['start-here', 'Start here'],
@@ -196,10 +196,21 @@ test('primary navigation exposes Atlas, Library, Resources, and Guides', () => {
   assert.match(routeIdentity, /search: "search"/);
 
   const navigation = readFileSync('src/ui/lib/navigation.ts', 'utf8');
-  const primaryViews = [...navigation.matchAll(/view: "([a-z-]+)",\n\s+path: routeIdentityFor/g)].map(
+  const primaryItems = navigation.match(
+    /export const PRIMARY_NAV_ITEMS: NavItem\[\] = \[(.*?)\n\];/s,
+  );
+  assert.ok(primaryItems, 'primary navigation items must remain explicitly declared');
+  const primaryViews = [...primaryItems[1].matchAll(/view: "([a-z-]+)"/g)].map(
     (match) => match[1],
   );
-  assert.deepEqual(primaryViews.slice(0, 4), ['atlas-map', 'search', 'commons', 'patterns']);
+  assert.deepEqual(primaryViews, ['atlas-map', 'search', 'commons']);
+
+  const overflowItems = navigation.match(
+    /export const OVERFLOW_NAV_ITEMS: NavItem\[\] = \[(.*?)\n\];/s,
+  );
+  assert.ok(overflowItems, 'overflow navigation items must remain explicitly declared');
+  assert.match(overflowItems[1], /GUIDES_NAV_ITEM/);
+  assert.match(overflowItems[1], /\.\.\.UTILITY_NAV_ITEMS/);
   assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
   assert.doesNotMatch(navigation, /view: "matrix"|view: "templates"/);
 });
