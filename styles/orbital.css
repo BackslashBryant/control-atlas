@@ -1083,7 +1083,7 @@ details > summary {
   display: grid;
   align-content: center;
   justify-items: stretch;
-  gap: var(--ca-space-5);
+  gap: var(--ca-space-6);
   width: 100%;
   /* Reserves room for the minimal site-footer notice rendered right after
      this section on the home route, so hero + footer together fit one
@@ -1179,7 +1179,7 @@ details > summary {
 
 .landing-brand-row {
   align-items: center;
-  gap: var(--ca-space-5);
+  gap: var(--ca-space-6);
 }
 
 .landing-brand .brand-icon-mark {
@@ -1213,8 +1213,8 @@ details > summary {
 
 .landing-signal-panel {
   display: grid;
-  gap: var(--ca-space-5);
-  padding: var(--ca-space-5);
+  gap: var(--ca-space-6);
+  padding: var(--ca-space-6);
   border: 1px solid color-mix(in srgb, var(--ca-priority) 62%, transparent);
   background: color-mix(in srgb, var(--ca-surface-deep) 74%, transparent);
   box-shadow: var(--ca-elev-1);
@@ -1376,7 +1376,7 @@ details > summary {
   align-items: flex-start;
   width: auto;
   min-height: 7rem;
-  padding: var(--ca-space-5);
+  padding: var(--ca-space-6);
   border: 0;
   border-radius: 0;
   background: var(--ca-surface);
@@ -1442,13 +1442,13 @@ details > summary {
 }
 
 .landing-registration-mark--north {
-  top: var(--ca-space-5);
+  top: var(--ca-space-6);
   left: var(--ca-space-4);
 }
 
 .landing-registration-mark--south {
   right: var(--ca-space-4);
-  bottom: var(--ca-space-5);
+  bottom: var(--ca-space-6);
 }
 
 /* Footer */

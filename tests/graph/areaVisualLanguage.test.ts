@@ -1,0 +1,144 @@
+import assert from "node:assert/strict";
+import { readFileSync, readdirSync } from "node:fs";
+import { extname, join } from "node:path";
+import test from "node:test";
+
+import treeSpine from "../../data/curated/tree-spine.json";
+import {
+  AREA_IDS,
+  AREA_PRESENTATIONS,
+  AUTHORITY_PRESENTATION,
+  areaCssVariables,
+  areaPresentationFor,
+  areaPresentationForCatalog,
+} from "../../src/ui/lib/areaVisualLanguage";
+
+const tokens = readFileSync("styles/tokens.css", "utf8");
+const components = readFileSync("styles/components.css", "utf8");
+const surfaces = readFileSync("styles/surfaces.css", "utf8");
+const tagComponent = readFileSync("src/ui/components/TaxonomyTag.tsx", "utf8");
+
+const LOCKED_HUES = {
+  governance: ["#5a63d6", "#8791f0"],
+  assessment: ["#1c8fb2", "#45b6d6"],
+  risk: ["#c87a24", "#e0a24a"],
+  operations: ["#61748a", "#8496a8"],
+  compliance: ["#2e9b6e", "#4fc38e"],
+  "threats-defense": ["#ce463f", "#f0736b"],
+  architecture: ["#8a57cc", "#b085ec"],
+  knowledge: ["#3e9b78", "#5fc79c"],
+  implementation: ["#2e6fe0", "#5b96f5"],
+  authority: ["#b07a1e", "#e0b15a"],
+} as const;
+
+function tokenValue(name: string, seen = new Set<string>()): string {
+  assert.ok(!seen.has(name), `Circular token reference at ${name}`);
+  seen.add(name);
+  const match = tokens.match(new RegExp(`${name}:\\s*([^;]+);`, "i"));
+  assert.ok(match, `Missing ${name}`);
+  const value = match[1].trim().toLowerCase();
+  const alias = value.match(/^var\((--[a-z0-9-]+)\)$/);
+  return alias ? tokenValue(alias[1], seen) : value;
+}
+
+function luminance(hex: string) {
+  const channels = [1, 3, 5].map((start) => Number.parseInt(hex.slice(start, start + 2), 16) / 255)
+    .map((value) => value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+
+function contrast(left: string, right: string) {
+  const values = [luminance(left), luminance(right)].sort((a, b) => b - a);
+  return (values[0] + 0.05) / (values[1] + 0.05);
+}
+
+function sourceFiles(root: string): string[] {
+  return readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(root, entry.name);
+    if (entry.isDirectory()) return sourceFiles(path);
+    return [".css", ".html", ".mjs", ".ts", ".tsx"].includes(extname(entry.name)) ? [path] : [];
+  });
+}
+
+test("area presentation registry exactly follows the canonical nine-area spine", () => {
+  assert.deepEqual(AREA_IDS, treeSpine.limbs.map((limb) => limb.id));
+  assert.equal(AREA_PRESENTATIONS.length, 9);
+  assert.equal(new Set(AREA_PRESENTATIONS.map((area) => area.token)).size, 9);
+  assert.equal(AUTHORITY_PRESENTATION.token, "--ca-area-authority");
+
+  for (const area of AREA_PRESENTATIONS) {
+    assert.equal(areaPresentationFor(area.id), area);
+    assert.equal(areaPresentationFor(area.label), area);
+    assert.equal(areaPresentationFor(area.slug), area);
+    assert.deepEqual(areaCssVariables(area), {
+      "--ca-area-color": `var(${area.token})`,
+      "--ca-area-color-on-light": `var(${area.token}-on-light)`,
+      "--ca-area-color-on-dark": `var(${area.token}-on-dark)`,
+    });
+  }
+  assert.equal(areaPresentationFor("not-an-area"), null);
+});
+
+test("catalogs and their families inherit one canonical area mapping", () => {
+  for (const [catalogId, areaId] of Object.entries(treeSpine.catalogLimbs)) {
+    assert.equal(areaPresentationForCatalog(catalogId)?.id, areaId);
+  }
+  for (const catalog of treeSpine.syntheticCatalogs) {
+    assert.equal(areaPresentationForCatalog(catalog.catalog_id)?.id, catalog.limb);
+  }
+  assert.equal(areaPresentationForCatalog("unknown-catalog"), null);
+});
+
+test("locked area hue pairs and global layout tokens are exact", () => {
+  for (const [slug, [onLight, onDark]] of Object.entries(LOCKED_HUES)) {
+    assert.equal(tokenValue(`--ca-area-${slug}-on-light`), onLight);
+    assert.equal(tokenValue(`--ca-area-${slug}-on-dark`), onDark);
+    assert.match(tokens, new RegExp(`--ca-area-${slug}:\\s*var\\(--ca-area-${slug}-on-dark\\)`));
+    assert.ok(contrast(onLight, tokenValue("--ca-paper")) >= 3, `${slug} must remain visible on light surfaces`);
+    assert.ok(contrast(onDark, tokenValue("--ca-surface")) >= 3, `${slug} must remain visible on dark surfaces`);
+  }
+
+  assert.match(tokens, /--ca-content-max:\s*75rem/);
+  assert.match(tokens, /--ca-reading-measure:\s*45rem/);
+  assert.match(tokens, /--ca-grid-gutter:\s*var\(--ca-space-6\)/);
+  assert.match(tokens, /--ca-section-gap:\s*var\(--ca-space-12\)/);
+  assert.match(tokens, /--ca-card-min:\s*17\.5rem/);
+  assert.match(tokens, /--ca-facet-rail-width:\s*17\.5rem/);
+  assert.match(tokens, /--ca-record-rail-width:\s*20rem/);
+  assert.match(tokens, /--ca-atlas-rail-width:\s*20rem/);
+  assert.doesNotMatch(tokens, /--ca-space-(?:5|10|20|24|32):/);
+});
+
+test("decorative color resolves to one teal accent", () => {
+  assert.equal(tokenValue("--ca-accent"), "#4fb3a5");
+  for (const alias of [
+    "--ca-primary",
+    "--ca-secondary",
+    "--ca-link",
+    "--ca-priority",
+    "--ca-editorial",
+    "--ca-info",
+  ]) {
+    assert.equal(tokenValue(alias), "#4fb3a5", `${alias} must resolve to the one accent`);
+  }
+});
+
+test("bucket tags stay neutral and area fills remain inside Atlas", () => {
+  assert.match(tagComponent, /aria-hidden="true" className="bucket-tag__dot"/);
+  assert.match(tagComponent, /presentation\?\.label/);
+  assert.match(components, /\.bucket-tag,[\s\S]*background:\s*var\(--ca-surface\)/);
+  assert.match(components, /\.bucket-tag__dot\s*\{[\s\S]*background:\s*var\(--ca-area-color\)/);
+  assert.doesNotMatch(components, /\.bucket-tag\s*\{[^}]*background:[^;}]*--ca-area-color/s);
+  assert.match(surfaces, /\.atlas-tree-node--area\s*\{[^}]*background:[^;}]*--ca-area-color/s);
+  assert.match(surfaces, /\.atlas-tree-node--authority\s*\{[^}]*background:[^;}]*--ca-area-color/s);
+});
+
+test("route and component sources contain no authored color literals", () => {
+  const offenders = [...sourceFiles("src"), ...sourceFiles("styles")]
+    .filter((path) => !path.endsWith(join("styles", "tokens.css")))
+    .flatMap((path) => {
+      const matches = readFileSync(path, "utf8").match(/#[0-9a-f]{3,8}\b|\brgba?\(|\bhsla?\(/gi);
+      return matches ? [`${path}: ${matches.join(", ")}`] : [];
+    });
+  assert.deepEqual(offenders, []);
+});

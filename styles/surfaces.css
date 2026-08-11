@@ -21,16 +21,16 @@ body {
   overflow-x: hidden;
   color: var(--ca-text);
   background:
-    linear-gradient(rgba(37, 99, 235, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37, 99, 235, 0.06) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--ca-accent) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ca-accent) 6%, transparent) 1px, transparent 1px),
     radial-gradient(
       circle at 18% 15%,
-      rgba(34, 211, 238, 0.14),
+      color-mix(in srgb, var(--ca-accent) 14%, transparent),
       transparent 22%
     ),
     radial-gradient(
       circle at 82% 10%,
-      rgba(13, 148, 136, 0.12),
+      color-mix(in srgb, var(--ca-accent) 12%, transparent),
       transparent 22%
     ),
     var(--ca-bg);
@@ -85,7 +85,7 @@ a {
   border: 0;
   color: var(--ca-text);
   background:
-    radial-gradient(circle at center, rgba(37, 99, 235, 0.28), transparent 42%),
+    radial-gradient(circle at center, color-mix(in srgb, var(--ca-accent) 28%, transparent), transparent 42%),
     var(--ca-bg);
   cursor: pointer;
   animation: brand-entrance-exit 1s var(--motion-ease) both;
@@ -132,7 +132,7 @@ a {
   position: absolute;
   width: min(24rem, 78vw);
   aspect-ratio: 1;
-  border: 1px solid rgba(34, 211, 238, 0.38);
+  border: 1px solid color-mix(in srgb, var(--ca-accent) 38%, transparent);
   border-radius: 50%;
   animation: brand-orbit 1s linear infinite;
 }
@@ -174,8 +174,8 @@ a {
   justify-content: space-between;
   gap: var(--ca-space-4);
   padding: var(--ca-space-4) max(var(--ca-space-4), calc((100vw - 1240px) / 2));
-  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-  background: rgba(11, 16, 32, 0.9);
+  border-bottom: 1px solid color-mix(in srgb, var(--ca-border-strong) 18%, transparent);
+  background: color-mix(in srgb, var(--ca-bg) 90%, transparent);
   backdrop-filter: blur(16px);
 }
 
@@ -190,7 +190,7 @@ a {
 /* Atlas universe shared heading and totals. */
 .atlas-universe {
   display: grid;
-  gap: var(--ca-space-5);
+  gap: var(--ca-space-6);
 }
 
 .atlas-universe__intro {
@@ -456,16 +456,18 @@ a {
 .atlas-tree-node--root .atlas-tree-node__terminal { display: none; }
 .atlas-tree-node--area {
   padding-left: 1.35rem;
-  border-color: transparent;
-  background: color-mix(in srgb, var(--ca-surface-deep) 42%, transparent);
-  box-shadow: none;
+  border-color: color-mix(in srgb, var(--ca-area-color) 88%, var(--ca-border));
+  background: color-mix(in srgb, var(--ca-area-color) 32%, var(--ca-surface-deep));
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--ca-area-color) 16%, transparent);
 }
+.atlas-tree-node--area .atlas-tree-node__terminal { border-color: var(--ca-area-color); }
 .atlas-tree-node--area strong { font-size: 0.9rem; }
 .react-flow__node:focus-visible .atlas-tree-node--area,
 .react-flow__node:hover .atlas-tree-node--area,
 .atlas-tree-node--area.is-selected {
-  border-color: color-mix(in srgb, var(--ca-accent) 66%, transparent);
-  background: color-mix(in srgb, var(--ca-surface-raised) 78%, transparent);
+  border-color: var(--ca-area-color);
+  background: color-mix(in srgb, var(--ca-area-color) 42%, var(--ca-surface-deep));
+  box-shadow: 0 0 0 1px var(--ca-area-color), 0 0 28px color-mix(in srgb, var(--ca-area-color) 24%, transparent);
 }
 .atlas-tree-node--publication { border-color: color-mix(in srgb, var(--ca-primary) 58%, var(--ca-border)); }
 .atlas-tree-node--unit { border-color: color-mix(in srgb, var(--ca-accent) 50%, var(--ca-border)); }
@@ -609,7 +611,7 @@ a {
   display: flex;
   align-items: end;
   justify-content: space-between;
-  gap: var(--ca-space-5);
+  gap: var(--ca-space-6);
 }
 
 .atlas-tree__intro h2 { margin-block: 0 var(--ca-space-2); }
@@ -682,7 +684,7 @@ a {
   align-content: start;
   gap: var(--ca-space-4);
   min-width: 0;
-  padding: var(--ca-space-5);
+  padding: var(--ca-space-6);
   border: 1px solid var(--ca-border);
   border-radius: var(--ca-radius-md);
   background: var(--ca-surface-raised);
@@ -768,8 +770,11 @@ a {
 .atlas-tree__edge--authority .react-flow__edge-path { stroke: var(--ca-warning); stroke-dasharray: 7 5; }
 .atlas-tree__edge--organizing .react-flow__edge-path { stroke: var(--ca-primary); }
 .atlas-tree__edge--structural .react-flow__edge-path { stroke: var(--ca-accent); }
-.atlas-tree-node--authority { border-color: color-mix(in srgb, var(--ca-warning) 70%, var(--ca-border)); }
-.atlas-tree-node--authority .atlas-tree-node__terminal { border-color: var(--ca-warning); }
+.atlas-tree-node--authority {
+  border-color: color-mix(in srgb, var(--ca-area-color) 78%, var(--ca-border));
+  background: color-mix(in srgb, var(--ca-area-color) 18%, var(--ca-surface-deep));
+}
+.atlas-tree-node--authority .atlas-tree-node__terminal { border-color: var(--ca-area-color); }
 .atlas-tree-node--summary { border-color: color-mix(in srgb, var(--ca-accent) 48%, var(--ca-border)); }
 .atlas-tree-node--aggregate,
 .atlas-tree-node--technology-gate { border-style: dashed; }
@@ -1233,7 +1238,7 @@ a {
 }
 
 .search-filter-drawer > header {
-  margin-bottom: var(--ca-space-5);
+  margin-bottom: var(--ca-space-6);
   padding-bottom: var(--ca-space-3);
   border-bottom: 1px solid var(--ca-border);
 }
@@ -1255,7 +1260,7 @@ a {
 
 .search-filter-drawer > footer {
   flex-wrap: wrap;
-  margin-top: var(--ca-space-5);
+  margin-top: var(--ca-space-6);
   padding-top: var(--ca-space-3);
   border-top: 1px solid var(--ca-border);
 }
@@ -1338,9 +1343,9 @@ a {
 }
 .brand-key--active {
   background: var(--ca-primary);
-  border-color: color-mix(in srgb, var(--ca-primary) 70%, #000);
-  border-bottom-color: color-mix(in srgb, var(--ca-primary) 50%, #000);
-  color: #fff;
+  border-color: color-mix(in srgb, var(--ca-primary) 70%, var(--ca-ink));
+  border-bottom-color: color-mix(in srgb, var(--ca-primary) 50%, var(--ca-ink));
+  color: var(--ca-paper);
   min-inline-size: 9ch;
   text-align: center;
 }
@@ -1551,8 +1556,8 @@ a {
 }
 
 .drawer-item-focused {
-  border-color: rgba(34, 211, 238, 0.45);
-  box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.25);
+  border-color: color-mix(in srgb, var(--ca-accent) 45%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ca-accent) 25%, transparent);
 }
 
 .app-shell,
@@ -1654,7 +1659,7 @@ li {
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-xl);
   background: color-mix(in srgb, var(--ca-surface) 92%, transparent);
-  box-shadow: 0 20px 55px rgba(2, 6, 23, 0.38);
+  box-shadow: 0 20px 55px color-mix(in srgb, var(--ca-shadow-color) 38%, transparent);
 }
 
 .panel,
@@ -1786,10 +1791,10 @@ li {
   display: flex;
   align-items: center;
   gap: var(--ca-space-2);
-  border: 1px solid rgba(148, 163, 184, 0.24);
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 24%, transparent);
   border-radius: var(--radius-lg);
   padding: 0 var(--ca-space-3);
-  background: rgba(15, 23, 42, 0.88);
+  background: color-mix(in srgb, var(--ca-surface-deep) 88%, transparent);
 }
 
 .search-input input,
@@ -1870,7 +1875,7 @@ li {
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background: var(--ca-surface-raised);
-  box-shadow: 0 18px 48px rgba(2, 6, 23, 0.42);
+  box-shadow: 0 18px 48px color-mix(in srgb, var(--ca-shadow-color) 42%, transparent);
 }
 
 .result-card {
@@ -1938,24 +1943,24 @@ li {
   align-items: center;
   border-radius: 999px;
   padding: var(--ca-space-1) var(--ca-space-3);
-  background: rgba(37, 99, 235, 0.18);
+  background: color-mix(in srgb, var(--ca-accent) 18%, transparent);
   color: var(--ca-text);
   font-size: var(--font-size-xs);
   font-weight: 800;
 }
 
 .badge.tone-info {
-  background: rgba(34, 211, 238, 0.2);
+  background: color-mix(in srgb, var(--ca-accent) 20%, transparent);
   color: var(--ca-badge-info-text);
 }
 
 .badge.tone-warning {
-  background: rgba(245, 158, 11, 0.22);
+  background: color-mix(in srgb, var(--ca-warning) 22%, transparent);
   color: var(--ca-badge-warning-text);
 }
 
 .badge.tone-success {
-  background: rgba(22, 163, 74, 0.22);
+  background: color-mix(in srgb, var(--ca-success) 22%, transparent);
   color: var(--ca-badge-success-text);
 }
 
@@ -2087,8 +2092,8 @@ li {
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   box-shadow:
-    inset 10px 0 8px -10px rgba(0, 0, 0, 0.45),
-    inset -10px 0 8px -10px rgba(0, 0, 0, 0.45);
+    inset 10px 0 8px -10px color-mix(in srgb, var(--ca-shadow-color) 45%, transparent),
+    inset -10px 0 8px -10px color-mix(in srgb, var(--ca-shadow-color) 45%, transparent);
 }
 
 .compare-table-scroll .detail-table {
@@ -2123,7 +2128,7 @@ li {
 .intent-card {
   display: grid;
   gap: var(--ca-space-3);
-  padding: var(--ca-space-5) var(--ca-space-6);
+  padding: var(--ca-space-6) var(--ca-space-6);
 }
 
 /* Was clamp(1.5rem, 3vw, 2rem): a 32px title over 13px body inside the same
@@ -2153,8 +2158,8 @@ li {
 
 .intent-card-button:hover,
 .intent-card-button:focus-visible {
-  border-color: rgba(34, 211, 238, 0.45);
-  box-shadow: 0 16px 40px rgba(2, 6, 23, 0.45);
+  border-color: color-mix(in srgb, var(--ca-accent) 45%, transparent);
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--ca-shadow-color) 45%, transparent);
 }
 
 .intent-card-action-hint {
@@ -2178,7 +2183,7 @@ li {
   max-width: 16rem;
   height: 0.35rem;
   border-radius: 999px;
-  background: rgba(148, 163, 184, 0.25);
+  background: color-mix(in srgb, var(--ca-border-strong) 25%, transparent);
   overflow: hidden;
 }
 
@@ -2229,11 +2234,11 @@ li {
 
 .template-document-preview {
   overflow: hidden;
-  margin-top: var(--ca-space-5);
+  margin-top: var(--ca-space-6);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
-  background: #fff;
-  box-shadow: 0 14px 28px rgb(15 23 42 / 12%);
+  background: var(--ca-paper);
+  box-shadow: 0 14px 28px color-mix(in srgb, var(--ca-surface-deep) 12%, transparent);
 }
 
 .template-document-preview-header {
@@ -2241,9 +2246,9 @@ li {
   align-items: start;
   justify-content: space-between;
   gap: var(--ca-space-4);
-  padding: var(--ca-space-5);
-  color: #fff;
-  background: linear-gradient(120deg, #17365d, #0d6f76);
+  padding: var(--ca-space-6);
+  color: var(--ca-paper);
+  background: linear-gradient(120deg, var(--ca-document-accent), var(--ca-accent));
 }
 
 .template-document-preview-header p,
@@ -2266,7 +2271,7 @@ li {
 .template-document-preview-header > span {
   flex: 0 0 auto;
   padding: 0.3rem 0.6rem;
-  border: 1px solid rgb(255 255 255 / 45%);
+  border: 1px solid color-mix(in srgb, var(--ca-paper) 45%, transparent);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
   font-weight: 700;
@@ -2275,13 +2280,13 @@ li {
 .template-document-preview-body {
   display: grid;
   gap: var(--ca-space-4);
-  padding: var(--ca-space-5);
-  color: #20242c;
+  padding: var(--ca-space-6);
+  color: var(--ca-document-text);
 }
 
 .template-document-preview-description {
   margin: 0;
-  color: #475467;
+  color: var(--ca-document-text-muted);
   font-size: 1.05rem;
 }
 
@@ -2296,7 +2301,7 @@ li {
 
 .template-document-preview-section h4 {
   margin: 0 0 var(--ca-space-2);
-  color: #17365d;
+  color: var(--ca-document-accent);
   font-size: 1rem;
 }
 
@@ -2308,7 +2313,7 @@ li {
 
 .template-document-preview-table-wrap {
   overflow-x: auto;
-  border: 1px solid #d6dee8;
+  border: 1px solid var(--ca-document-border);
 }
 
 .template-document-preview table {
@@ -2321,26 +2326,26 @@ li {
 .template-document-preview th,
 .template-document-preview td {
   padding: 0.55rem 0.7rem;
-  border-right: 1px solid #d6dee8;
-  border-bottom: 1px solid #d6dee8;
+  border-right: 1px solid var(--ca-document-border);
+  border-bottom: 1px solid var(--ca-document-border);
   text-align: left;
   vertical-align: top;
   overflow-wrap: anywhere;
 }
 
 .template-document-preview th {
-  color: #fff;
-  background: #17365d;
+  color: var(--ca-paper);
+  background: var(--ca-document-accent);
   font-weight: 700;
 }
 
 .template-document-preview tr:nth-child(even) td {
-  background: #f8fafc;
+  background: var(--ca-paper-subtle);
 }
 
 .template-document-preview-more {
   margin: var(--ca-space-2) 0 0;
-  color: #667085;
+  color: var(--ca-document-text-subtle);
   font-size: var(--font-size-sm);
   font-style: italic;
 }
@@ -2406,7 +2411,7 @@ li {
 
 .nexus-section + .nexus-section {
   margin-top: var(--ca-space-6);
-  border-top: 1px solid rgba(148, 163, 184, 0.16);
+  border-top: 1px solid color-mix(in srgb, var(--ca-border-strong) 16%, transparent);
 }
 
 .nexus-section-header {
@@ -2431,7 +2436,7 @@ li {
   display: grid;
   gap: var(--ca-space-3);
   margin-top: var(--ca-space-6);
-  padding-left: var(--ca-space-5);
+  padding-left: var(--ca-space-6);
   border-left: 1px solid var(--ca-border-subtle);
 }
 
@@ -2721,7 +2726,7 @@ button.atlas-path-crumb-authority:focus-visible {
   width: 100%;
   height: 100%;
   min-height: 7rem;
-  padding: var(--ca-space-4) var(--ca-space-5);
+  padding: var(--ca-space-4) var(--ca-space-6);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background: var(--ca-surface);
@@ -2942,9 +2947,9 @@ button.atlas-path-crumb-authority:focus-visible {
   justify-content: space-between;
   gap: var(--ca-space-4);
   padding: var(--ca-space-4);
-  border: 1px solid rgba(34, 211, 238, 0.3);
+  border: 1px solid color-mix(in srgb, var(--ca-accent) 30%, transparent);
   border-radius: var(--radius-md);
-  background: rgba(37, 99, 235, 0.08);
+  background: color-mix(in srgb, var(--ca-accent) 8%, transparent);
 }
 
 /* "Clear task" was wrapping into a cramped two-line pill. */
@@ -3019,7 +3024,7 @@ button.atlas-path-crumb-authority:focus-visible {
   padding: var(--ca-space-3);
   border-radius: var(--radius-md);
   color: var(--ca-text-muted);
-  background: rgba(245, 158, 11, 0.1);
+  background: color-mix(in srgb, var(--ca-warning) 10%, transparent);
   font-size: var(--font-size-sm);
 }
 
@@ -3084,10 +3089,10 @@ button.atlas-path-crumb-authority:focus-visible {
   display: grid;
   gap: var(--ca-space-4);
   padding: var(--ca-space-6);
-  border: 1px solid rgba(34, 211, 238, 0.38);
+  border: 1px solid color-mix(in srgb, var(--ca-accent) 38%, transparent);
   border-radius: var(--radius-xl);
   background:
-    linear-gradient(135deg, rgba(34, 211, 238, 0.11), transparent 55%),
+    linear-gradient(135deg, color-mix(in srgb, var(--ca-accent) 11%, transparent), transparent 55%),
     color-mix(in srgb, var(--ca-surface) 94%, transparent);
 }
 
@@ -3118,9 +3123,9 @@ button.atlas-path-crumb-authority:focus-visible {
   display: grid;
   gap: var(--ca-space-2);
   padding: var(--ca-space-3);
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 18%, transparent);
   border-radius: var(--radius-md);
-  background: rgba(15, 23, 42, 0.2);
+  background: color-mix(in srgb, var(--ca-surface-deep) 20%, transparent);
 }
 
 .fedramp-truth-grid span {
@@ -3189,8 +3194,8 @@ button.atlas-path-crumb-authority:focus-visible {
 }
 
 .nexus-workflow-selected {
-  border-color: rgba(34, 211, 238, 0.55);
-  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.16);
+  border-color: color-mix(in srgb, var(--ca-accent) 55%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ca-accent) 16%, transparent);
 }
 
 .workflow-detail:focus {
@@ -3211,9 +3216,9 @@ button.atlas-path-crumb-authority:focus-visible {
   grid-template-columns: auto minmax(0, 1fr);
   gap: var(--ca-space-3);
   padding: var(--ca-space-4);
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 18%, transparent);
   border-radius: var(--radius-lg);
-  background: rgba(15, 23, 42, 0.52);
+  background: color-mix(in srgb, var(--ca-surface-deep) 52%, transparent);
 }
 
 .workflow-step-number {
@@ -3223,7 +3228,7 @@ button.atlas-path-crumb-authority:focus-visible {
   height: 2rem;
   border-radius: 999px;
   color: var(--ca-text);
-  background: rgba(37, 99, 235, 0.25);
+  background: color-mix(in srgb, var(--ca-accent) 25%, transparent);
   font-weight: 800;
 }
 
@@ -3252,9 +3257,9 @@ button.atlas-path-crumb-authority:focus-visible {
 }
 
 .compare-step.active {
-  border-color: rgba(34, 211, 238, 0.45);
+  border-color: color-mix(in srgb, var(--ca-accent) 45%, transparent);
   color: var(--ca-text);
-  background: rgba(37, 99, 235, 0.16);
+  background: color-mix(in srgb, var(--ca-accent) 16%, transparent);
 }
 
 .compare-step.complete {
@@ -3267,7 +3272,7 @@ button.atlas-path-crumb-authority:focus-visible {
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 999px;
-  background: rgba(37, 99, 235, 0.25);
+  background: color-mix(in srgb, var(--ca-accent) 25%, transparent);
   font-weight: 800;
 }
 
@@ -3296,7 +3301,7 @@ button.atlas-path-crumb-authority:focus-visible {
   place-items: center;
   border-radius: var(--radius-md);
   color: var(--ca-secondary);
-  background: rgba(37, 99, 235, 0.18);
+  background: color-mix(in srgb, var(--ca-accent) 18%, transparent);
 }
 
 .relationship-card,
@@ -3310,10 +3315,10 @@ button.atlas-path-crumb-authority:focus-visible {
   gap: var(--ca-space-3);
   width: 100%;
   padding: var(--ca-space-3);
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 18%, transparent);
   border-radius: var(--radius-lg);
   color: inherit;
-  background: rgba(15, 23, 42, 0.72);
+  background: color-mix(in srgb, var(--ca-surface-deep) 72%, transparent);
   text-align: left;
 }
 
@@ -3328,7 +3333,7 @@ button.atlas-path-crumb-authority:focus-visible {
 }
 
 .accordion-item + .accordion-item {
-  border-top: 1px solid rgba(148, 163, 184, 0.16);
+  border-top: 1px solid color-mix(in srgb, var(--ca-border-strong) 16%, transparent);
 }
 
 .accordion-trigger {
@@ -3369,13 +3374,13 @@ button.atlas-path-crumb-authority:focus-visible {
 .detail-table {
   width: 100%;
   border-collapse: collapse;
-  background: rgba(15, 23, 42, 0.72);
+  background: color-mix(in srgb, var(--ca-surface-deep) 72%, transparent);
 }
 
 .detail-table th,
 .detail-table td {
   padding: var(--ca-space-3);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  border-bottom: 1px solid color-mix(in srgb, var(--ca-border-strong) 16%, transparent);
   text-align: left;
   vertical-align: top;
 }
@@ -3406,7 +3411,7 @@ button.atlas-path-crumb-authority:focus-visible {
   gap: var(--ca-space-2);
   padding: var(--ca-space-3);
   border-radius: var(--radius-lg);
-  background: rgba(245, 158, 11, 0.08);
+  background: color-mix(in srgb, var(--ca-warning) 8%, transparent);
 }
 
 .warning-list p,
@@ -3428,7 +3433,7 @@ button.atlas-path-crumb-authority:focus-visible {
   position: fixed;
   inset: 0;
   z-index: 40;
-  background: rgba(11, 16, 32, 0.7);
+  background: color-mix(in srgb, var(--ca-bg) 70%, transparent);
 }
 
 .drawer-content {
@@ -3475,7 +3480,7 @@ button.atlas-path-crumb-authority:focus-visible {
   display: grid;
   gap: var(--ca-space-2);
   padding-bottom: var(--ca-space-4);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  border-bottom: 1px solid color-mix(in srgb, var(--ca-border-strong) 14%, transparent);
 }
 
 .drawer-expansion {
@@ -3500,7 +3505,7 @@ button.atlas-path-crumb-authority:focus-visible {
   padding: var(--ca-space-1) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   color: inherit;
-  background: rgba(15, 23, 42, 0.72);
+  background: color-mix(in srgb, var(--ca-surface-deep) 72%, transparent);
 }
 
 .grow {
@@ -3523,8 +3528,8 @@ button.atlas-path-crumb-authority:focus-visible {
 }
 
 .workbench-toggle button.active {
-  border-color: rgba(34, 211, 238, 0.5);
-  background: rgba(37, 99, 235, 0.16);
+  border-color: color-mix(in srgb, var(--ca-accent) 50%, transparent);
+  background: color-mix(in srgb, var(--ca-accent) 16%, transparent);
 }
 
 .compare-mode-header {
@@ -3549,7 +3554,7 @@ button.atlas-path-crumb-authority:focus-visible {
 .workflow-reference {
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
-  background: rgba(15, 23, 42, 0.38);
+  background: color-mix(in srgb, var(--ca-surface-deep) 38%, transparent);
 }
 
 .workflow-reference > summary {
@@ -3664,7 +3669,7 @@ button.atlas-path-crumb-authority:focus-visible {
   padding: var(--ca-space-3) var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
-  background: rgba(15, 23, 42, 0.4);
+  background: color-mix(in srgb, var(--ca-surface-deep) 40%, transparent);
 }
 
 .start-here-answer > span {
@@ -4114,7 +4119,7 @@ button.atlas-path-crumb-authority:focus-visible {
   .relationship-card:hover,
   .link-action:hover {
     border-color: var(--ca-secondary);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--ca-shadow-color) 25%, transparent);
   }
 }
 
@@ -4123,7 +4128,7 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 a:focus-visible {
-  outline: 3px solid rgba(34, 211, 238, 0.85);
+  outline: 3px solid color-mix(in srgb, var(--ca-accent) 85%, transparent);
   outline-offset: 3px;
 }
 
@@ -4157,7 +4162,7 @@ a:focus-visible {
 
   .build-resource-rail {
     margin-top: 0;
-    padding-top: var(--ca-space-5);
+    padding-top: var(--ca-space-6);
     padding-left: 0;
     border-top: 1px solid var(--ca-border-subtle);
     border-left: 0;
@@ -4244,8 +4249,8 @@ a:focus-visible {
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background:
-    linear-gradient(rgba(37, 99, 235, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37, 99, 235, 0.04) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--ca-accent) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ca-accent) 4%, transparent) 1px, transparent 1px),
     var(--ca-surface-raised);
   background-size:
     24px 24px,
@@ -4340,7 +4345,7 @@ a:focus-visible {
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: rgba(11, 16, 32, 0.6);
+  background: color-mix(in srgb, var(--ca-bg) 60%, transparent);
 }
 
 .relationship-graph-stage {
@@ -4363,7 +4368,7 @@ a:focus-visible {
   padding: var(--ca-space-4);
   text-align: center;
   color: var(--ca-text);
-  background: rgba(11, 16, 32, 0.72);
+  background: color-mix(in srgb, var(--ca-bg) 72%, transparent);
 }
 
 .cluster-collapse-row {
@@ -4376,15 +4381,15 @@ a:focus-visible {
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-md);
   background:
-    linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.1), transparent),
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--ca-accent) 10%, transparent), transparent),
     radial-gradient(
       circle at 30% 35%,
-      rgba(37, 99, 235, 0.28) 0 5px,
+      color-mix(in srgb, var(--ca-accent) 28%, transparent) 0 5px,
       transparent 6px
     ),
     radial-gradient(
       circle at 62% 55%,
-      rgba(34, 211, 238, 0.28) 0 6px,
+      color-mix(in srgb, var(--ca-accent) 28%, transparent) 0 6px,
       transparent 7px
     ),
     var(--ca-surface);
@@ -4836,8 +4841,8 @@ a:focus-visible {
   border-radius: var(--radius-lg);
   overflow: hidden;
   background:
-    linear-gradient(rgba(37, 99, 235, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37, 99, 235, 0.035) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--ca-accent) 3.5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ca-accent) 3.5%, transparent) 1px, transparent 1px),
     var(--ca-surface-raised);
   background-size: 24px 24px, 24px 24px, auto;
 }
@@ -5554,13 +5559,13 @@ a:focus-visible {
   border-color: transparent;
   border-bottom: 2px solid var(--ca-secondary);
   border-radius: 0;
-  background: rgba(37, 99, 235, 0.22);
+  background: color-mix(in srgb, var(--ca-accent) 22%, transparent);
   font-weight: 700;
 }
 
 .primary-nav a:hover:not(.nav-active) {
-  border-color: rgba(148, 163, 184, 0.35);
-  background: rgba(15, 23, 42, 0.55);
+  border-color: color-mix(in srgb, var(--ca-border-strong) 35%, transparent);
+  background: color-mix(in srgb, var(--ca-surface-deep) 55%, transparent);
 }
 
 .connection-rollup {
@@ -5633,9 +5638,9 @@ a:focus-visible {
   gap: var(--ca-space-3);
   padding: var(--ca-space-3) var(--ca-space-4);
   padding-bottom: calc(var(--ca-space-3) + env(safe-area-inset-bottom, 0px));
-  border-top: 1px solid rgba(148, 163, 184, 0.25);
-  background: rgba(11, 16, 32, 0.96);
-  box-shadow: 0 -12px 40px rgba(2, 6, 23, 0.35);
+  border-top: 1px solid color-mix(in srgb, var(--ca-border-strong) 25%, transparent);
+  background: color-mix(in srgb, var(--ca-bg) 96%, transparent);
+  box-shadow: 0 -12px 40px color-mix(in srgb, var(--ca-shadow-color) 35%, transparent);
 }
 
 .sticky-detail-label {
@@ -5773,7 +5778,7 @@ a:focus-visible {
   border: 1px solid var(--ca-border);
   border-left: 4px solid var(--ca-secondary);
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--ca-shadow-color) 35%, transparent);
   font-size: var(--font-size-sm);
 }
 .atlas-leverage > summary {
@@ -6005,8 +6010,8 @@ button.atlas-leverage-row:hover {
   min-width: 0;
   max-width: 100%;
   box-shadow:
-    inset 10px 0 8px -10px rgba(0, 0, 0, 0.45),
-    inset -10px 0 8px -10px rgba(0, 0, 0, 0.45);
+    inset 10px 0 8px -10px color-mix(in srgb, var(--ca-shadow-color) 45%, transparent),
+    inset -10px 0 8px -10px color-mix(in srgb, var(--ca-shadow-color) 45%, transparent);
 }
 .atlas-matrix table {
   width: 100%;
@@ -6151,8 +6156,8 @@ button.atlas-leverage-row:hover {
   margin: var(--ca-space-2) 0 0;
   padding: var(--ca-space-2) var(--ca-space-3);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(251, 146, 60, 0.35);
-  background: rgba(251, 146, 60, 0.08);
+  border: 1px solid color-mix(in srgb, var(--ca-warning) 35%, transparent);
+  background: color-mix(in srgb, var(--ca-warning) 8%, transparent);
   font-size: var(--font-size-sm);
 }
 
@@ -6170,7 +6175,7 @@ button.atlas-leverage-row:hover {
   margin: 0 0 var(--ca-space-4);
   padding: var(--ca-space-1) var(--ca-space-3);
   border-radius: 999px;
-  background: rgba(148, 163, 184, 0.12);
+  background: color-mix(in srgb, var(--ca-border-strong) 12%, transparent);
   color: var(--ca-text-muted);
   font-size: var(--font-size-xs);
   font-weight: 700;
@@ -6231,7 +6236,7 @@ button.atlas-leverage-row:hover {
 
 .landing-trust-link:hover,
 .landing-trust-link:focus-visible {
-  color: color-mix(in srgb, var(--ca-secondary) 85%, #fff);
+  color: color-mix(in srgb, var(--ca-secondary) 85%, var(--ca-paper));
 }
 
 @media (max-width: 640px) {
@@ -6244,10 +6249,10 @@ button.atlas-leverage-row:hover {
 }
 
 .atlas-selected-panel {
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 20%, transparent);
   border-radius: var(--radius-md);
   padding: var(--ca-space-4);
-  background: rgba(15, 23, 42, 0.55);
+  background: color-mix(in srgb, var(--ca-surface-deep) 55%, transparent);
 }
 
 .atlas-selected-panel.empty {
@@ -6273,7 +6278,7 @@ button.atlas-leverage-row:hover {
 
 .atlas-starter-banner {
   padding: var(--ca-space-3);
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 18%, transparent);
   border-radius: var(--radius-md);
 }
 
@@ -6283,9 +6288,9 @@ button.atlas-leverage-row:hover {
   gap: var(--ca-space-3);
   align-items: end;
   padding: var(--ca-space-3);
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 18%, transparent);
   border-radius: var(--radius-md);
-  background: rgba(15, 23, 42, 0.52);
+  background: color-mix(in srgb, var(--ca-surface-deep) 52%, transparent);
 }
 
 .atlas-map-search-form {
@@ -6306,7 +6311,7 @@ button.atlas-leverage-row:hover {
   width: 0.75rem;
   height: 0.75rem;
   margin-right: 0.35rem;
-  border: 1px solid rgba(148, 163, 184, 0.6);
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 60%, transparent);
   border-radius: 999px;
 }
 
@@ -6316,7 +6321,7 @@ button.atlas-leverage-row:hover {
   border: none;
   border-left: 0.35rem solid transparent;
   border-right: 0.35rem solid transparent;
-  border-bottom: 0.65rem solid rgba(248, 250, 252, 0.85);
+  border-bottom: 0.65rem solid color-mix(in srgb, var(--ca-paper-subtle) 85%, transparent);
   border-radius: 0;
 }
 
@@ -6353,9 +6358,9 @@ button.atlas-leverage-row:hover {
   gap: var(--ca-space-2);
   min-height: 44px;
   padding: var(--ca-space-4);
-  border: 1px solid rgba(34, 211, 238, 0.35);
+  border: 1px solid color-mix(in srgb, var(--ca-accent) 35%, transparent);
   border-radius: var(--radius-lg);
-  background: rgba(37, 99, 235, 0.14);
+  background: color-mix(in srgb, var(--ca-accent) 14%, transparent);
   color: inherit;
   text-align: left;
   cursor: pointer;
@@ -6372,9 +6377,9 @@ button.atlas-leverage-row:hover {
   border-radius: var(--radius-md);
   background: linear-gradient(
     90deg,
-    rgba(148, 163, 184, 0.12) 0%,
-    rgba(148, 163, 184, 0.22) 50%,
-    rgba(148, 163, 184, 0.12) 100%
+    color-mix(in srgb, var(--ca-border-strong) 12%, transparent) 0%,
+    color-mix(in srgb, var(--ca-border-strong) 22%, transparent) 50%,
+    color-mix(in srgb, var(--ca-border-strong) 12%, transparent) 100%
   );
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.4s ease-in-out infinite;
@@ -6456,8 +6461,8 @@ button.atlas-leverage-row:hover {
 }
 
 .chip-filter.active {
-  border-color: rgba(34, 211, 238, 0.55);
-  background: rgba(37, 99, 235, 0.22);
+  border-color: color-mix(in srgb, var(--ca-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--ca-accent) 22%, transparent);
 }
 
 .chip-link:hover,
@@ -6484,7 +6489,7 @@ button.atlas-leverage-row:hover {
   min-height: 44px;
   min-width: 44px;
   padding: var(--ca-space-2) var(--ca-space-4);
-  border: 1px solid rgba(148, 163, 184, 0.25);
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 25%, transparent);
   border-radius: 999px;
   background: transparent;
   color: inherit;
@@ -6492,8 +6497,8 @@ button.atlas-leverage-row:hover {
 }
 
 .drawer-tab.active {
-  border-color: rgba(34, 211, 238, 0.55);
-  background: rgba(37, 99, 235, 0.22);
+  border-color: color-mix(in srgb, var(--ca-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--ca-accent) 22%, transparent);
   font-weight: 700;
 }
 
@@ -6555,9 +6560,9 @@ button.atlas-leverage-row:hover {
 
 .canonical-source-links {
   padding: var(--ca-space-4);
-  border: 1px solid rgba(34, 211, 238, 0.3);
+  border: 1px solid color-mix(in srgb, var(--ca-accent) 30%, transparent);
   border-radius: var(--radius-md);
-  background: rgba(37, 99, 235, 0.08);
+  background: color-mix(in srgb, var(--ca-accent) 8%, transparent);
 }
 
 .canonical-source-links h2 {
@@ -6621,7 +6626,7 @@ button.atlas-leverage-row:hover {
   align-items: flex-start;
   gap: var(--ca-space-3);
   min-height: 8rem;
-  padding: var(--ca-space-5);
+  padding: var(--ca-space-6);
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
   background: var(--ca-surface);
@@ -6686,7 +6691,7 @@ button.atlas-leverage-row:hover {
 
 .home-hero-lead {
   display: grid;
-  gap: var(--ca-space-5);
+  gap: var(--ca-space-6);
   align-content: start;
   max-width: 68ch;
 }
@@ -6774,7 +6779,7 @@ button.atlas-leverage-row:hover {
     var(--ca-surface-raised);
   box-shadow:
     0 1px 0 color-mix(in srgb, var(--ca-secondary) 22%, transparent) inset,
-    0 18px 40px -28px rgb(0 0 0 / 0.85);
+    0 18px 40px -28px color-mix(in srgb, var(--ca-shadow-color) 85%, transparent);
 }
 
 .home-chain-title {
@@ -6818,7 +6823,7 @@ button.atlas-leverage-row:hover {
   display: grid;
   gap: var(--ca-space-3);
   margin: 0;
-  padding: var(--ca-space-1, 4px) 0 0 var(--ca-space-5);
+  padding: var(--ca-space-1, 4px) 0 0 var(--ca-space-6);
   list-style: none;
 }
 
@@ -6836,7 +6841,7 @@ button.atlas-leverage-row:hover {
   content: "";
   position: absolute;
   inset-block-start: -0.65rem;
-  inset-inline-start: calc(var(--ca-space-5) * -1 + 2px);
+  inset-inline-start: calc(var(--ca-space-6) * -1 + 2px);
   width: calc(var(--ca-space-4));
   height: 1.35rem;
   border-inline-start: 1px solid var(--ca-border-strong);
@@ -6848,7 +6853,7 @@ button.atlas-leverage-row:hover {
   content: "";
   position: absolute;
   inset-block-start: -1.75rem;
-  inset-inline-start: calc(var(--ca-space-5) * -1 + 2px);
+  inset-inline-start: calc(var(--ca-space-6) * -1 + 2px);
   height: 1.2rem;
   border-inline-start: 1px solid var(--ca-border-strong);
 }
@@ -6921,7 +6926,7 @@ button.atlas-leverage-row:hover {
   border: 1px solid var(--ca-border-strong);
   border-radius: 6px;
   background: var(--ca-surface-raised);
-  box-shadow: 0 10px 30px rgb(0 0 0 / 14%);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--ca-shadow-color) 14%, transparent);
 }
 
 .home-search input {
@@ -7088,19 +7093,12 @@ button.atlas-leverage-row:hover {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.home-ecosystem-authorities span,
-.home-ecosystem-areas span {
-  display: grid;
-  place-items: center;
+.home-ecosystem-authorities .line-tag,
+.home-ecosystem-areas .bucket-tag {
+  justify-content: center;
+  width: 100%;
   min-height: 36px;
-  padding: 5px 7px;
   text-align: center;
-  border: 1px solid var(--ca-border);
-  border-radius: 999px;
-  background: var(--ca-surface);
-  color: var(--ca-text-muted);
-  font-size: 11px;
-  line-height: 1.2;
 }
 
 .home-ecosystem-trunk {
@@ -8043,7 +8041,7 @@ button.atlas-leverage-row:hover {
   gap: var(--ca-space-2);
   width: auto;
   min-height: 58px;
-  padding: var(--ca-space-4) var(--ca-space-5);
+  padding: var(--ca-space-4) var(--ca-space-6);
   text-align: left;
   color: var(--ca-text);
   border: 1px solid var(--ca-border);
@@ -8338,7 +8336,7 @@ button.atlas-leverage-row:hover {
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-xl);
   padding: var(--ca-space-2) var(--ca-space-2) var(--ca-space-2) var(--ca-space-4);
-  box-shadow: 0 8px 32px rgba(2, 6, 23, 0.4);
+  box-shadow: 0 8px 32px color-mix(in srgb, var(--ca-shadow-color) 40%, transparent);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -8360,7 +8358,7 @@ button.atlas-leverage-row:hover {
   padding: var(--ca-space-3) var(--ca-space-8);
   border-radius: calc(var(--radius-xl) - 4px);
   background: var(--ca-secondary);
-  color: #000;
+  color: var(--ca-ink);
   font-size: var(--font-size-sm);
   font-weight: 700;
 }
@@ -8370,14 +8368,14 @@ button.atlas-leverage-row:hover {
   border-color: var(--ca-secondary);
   outline: none;
   box-shadow:
-    0 8px 32px rgba(2, 6, 23, 0.4),
+    0 8px 32px color-mix(in srgb, var(--ca-shadow-color) 40%, transparent),
     0 0 0 4px color-mix(in srgb, var(--ca-secondary) 15%, transparent);
 }
 
 .landing-search-container.search-focused .home-search {
   border-color: var(--ca-secondary);
   box-shadow:
-    0 8px 32px rgba(2, 6, 23, 0.4),
+    0 8px 32px color-mix(in srgb, var(--ca-shadow-color) 40%, transparent),
     0 0 0 4px color-mix(in srgb, var(--ca-secondary) 15%, transparent);
 }
 
@@ -8404,7 +8402,7 @@ button.atlas-leverage-row:hover {
 .home-search-submit {
   flex-shrink: 0;
   background: var(--ca-secondary);
-  color: #000;
+  color: var(--ca-ink);
   border: none;
   padding: var(--ca-space-3) var(--ca-space-8);
   border-radius: calc(var(--radius-xl) - 4px);
@@ -8416,7 +8414,7 @@ button.atlas-leverage-row:hover {
 
 .home-search-submit:hover,
 .home-search-submit:focus-visible {
-  background: color-mix(in srgb, var(--ca-secondary) 85%, #fff);
+  background: color-mix(in srgb, var(--ca-secondary) 85%, var(--ca-paper));
   outline: none;
 }
 
@@ -8483,12 +8481,12 @@ button.atlas-leverage-row:hover {
   background: radial-gradient(
     circle at 32% 26%,
     color-mix(in srgb, var(--ca-secondary) 22%, transparent),
-    rgba(15, 23, 42, 0.92) 72%
+    color-mix(in srgb, var(--ca-surface-deep) 92%, transparent) 72%
   );
   border: 1px solid color-mix(in srgb, var(--ca-secondary) 40%, transparent);
   box-shadow:
     0 0 44px color-mix(in srgb, var(--ca-secondary) 22%, transparent),
-    inset 0 0 24px rgba(2, 6, 23, 0.55);
+    inset 0 0 24px color-mix(in srgb, var(--ca-shadow-color) 55%, transparent);
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease;
@@ -8505,7 +8503,7 @@ button.atlas-leverage-row:hover {
   transform: scale(1.045);
   box-shadow:
     0 0 64px color-mix(in srgb, var(--ca-secondary) 38%, transparent),
-    inset 0 0 24px rgba(2, 6, 23, 0.55);
+    inset 0 0 24px color-mix(in srgb, var(--ca-shadow-color) 55%, transparent);
 }
 
 .landing-orb:focus-visible {
@@ -8538,12 +8536,12 @@ button.atlas-leverage-row:hover {
   100% {
     box-shadow:
       0 0 38px color-mix(in srgb, var(--ca-secondary) 18%, transparent),
-      inset 0 0 24px rgba(2, 6, 23, 0.55);
+      inset 0 0 24px color-mix(in srgb, var(--ca-shadow-color) 55%, transparent);
   }
   50% {
     box-shadow:
       0 0 58px color-mix(in srgb, var(--ca-secondary) 30%, transparent),
-      inset 0 0 24px rgba(2, 6, 23, 0.55);
+      inset 0 0 24px color-mix(in srgb, var(--ca-shadow-color) 55%, transparent);
   }
 }
 
@@ -8557,7 +8555,7 @@ button.atlas-leverage-row:hover {
   padding: var(--ca-space-3) var(--ca-space-8);
   border-radius: 999px;
   background: color-mix(in srgb, var(--ca-surface-raised) 72%, transparent);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 20%, transparent);
   cursor: pointer;
   transition:
     border-color 0.2s ease,
@@ -8815,9 +8813,9 @@ button.atlas-leverage-row:hover {
 
 .ca-flow-wrap .react-flow {
   background:
-    linear-gradient(rgba(37, 99, 235, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37, 99, 235, 0.035) 1px, transparent 1px),
-    rgba(11, 16, 32, 0.64);
+    linear-gradient(color-mix(in srgb, var(--ca-accent) 3.5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ca-accent) 3.5%, transparent) 1px, transparent 1px),
+    color-mix(in srgb, var(--ca-bg) 64%, transparent);
   background-size: 24px 24px;
 }
 
@@ -8832,15 +8830,15 @@ button.atlas-leverage-row:hover {
     color-mix(in srgb, var(--ca-flow-node-color) 58%, var(--ca-border));
   border-left: 5px solid var(--ca-flow-node-color);
   border-radius: var(--radius-md);
-  background: rgba(15, 23, 42, 0.94);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  background: color-mix(in srgb, var(--ca-surface-deep) 94%, transparent);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--ca-shadow-color) 22%, transparent);
   color: var(--ca-text);
 }
 
 .ca-flow-node--center {
   border-width: 2px;
   border-left-width: 6px;
-  background: color-mix(in srgb, var(--ca-primary) 20%, rgba(15, 23, 42, 0.94));
+  background: color-mix(in srgb, var(--ca-primary) 20%, color-mix(in srgb, var(--ca-surface-deep) 94%, transparent));
 }
 
 .ca-flow-node--cluster {
@@ -8848,7 +8846,7 @@ button.atlas-leverage-row:hover {
 }
 
 .ca-flow-node--selected {
-  outline: 3px solid rgba(34, 211, 238, 0.65);
+  outline: 3px solid color-mix(in srgb, var(--ca-accent) 65%, transparent);
   outline-offset: 3px;
 }
 
@@ -8879,7 +8877,7 @@ button.atlas-leverage-row:hover {
 .ca-flow-handle {
   width: 7px;
   height: 7px;
-  border: 1px solid rgba(248, 250, 252, 0.62);
+  border: 1px solid color-mix(in srgb, var(--ca-paper-subtle) 62%, transparent);
   background: var(--ca-flow-node-color);
 }
 
@@ -8894,20 +8892,20 @@ button.atlas-leverage-row:hover {
 
 .react-flow__controls,
 .react-flow__minimap {
-  border: 1px solid rgba(148, 163, 184, 0.24);
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 24%, transparent);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  background: rgba(15, 23, 42, 0.94);
+  background: color-mix(in srgb, var(--ca-surface-deep) 94%, transparent);
 }
 
 .react-flow__controls-button {
-  border-bottom-color: rgba(148, 163, 184, 0.2);
-  background: rgba(15, 23, 42, 0.94);
+  border-bottom-color: color-mix(in srgb, var(--ca-border-strong) 20%, transparent);
+  background: color-mix(in srgb, var(--ca-surface-deep) 94%, transparent);
   color: var(--ca-text);
 }
 
 .react-flow__controls-button:hover {
-  background: rgba(37, 99, 235, 0.24);
+  background: color-mix(in srgb, var(--ca-accent) 24%, transparent);
 }
 
 .atlas-workspace.panel {
@@ -9125,7 +9123,7 @@ input[type="checkbox"] {
 
 /* Hierarchy: supporting context, so it reads as a panel rather than a page. */
 .atlas-path-summary {
-  margin-block-end: var(--ca-space-5);
+  margin-block-end: var(--ca-space-6);
   padding: var(--ca-space-4);
   border: 1px solid var(--ca-border);
   border-inline-start: 3px solid var(--ca-secondary);
@@ -9142,7 +9140,7 @@ input[type="checkbox"] {
 .atlas-path-facts {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--ca-space-5);
+  gap: var(--ca-space-6);
   margin: var(--ca-space-4) 0 0;
 }
 
@@ -9203,7 +9201,7 @@ input[type="checkbox"] {
 }
 
 .atlas-all-connections {
-  margin-block-start: var(--ca-space-5);
+  margin-block-start: var(--ca-space-6);
 }
 
 .atlas-all-connections-toggle {
@@ -9242,7 +9240,7 @@ input[type="checkbox"] {
    legacy all-questions-at-once treatment above. */
 .start-here-panel {
   display: grid;
-  gap: clamp(var(--ca-space-5), 4vw, var(--ca-space-8));
+  gap: clamp(var(--ca-space-6), 4vw, var(--ca-space-8));
 }
 
 .start-here-progress {
@@ -9368,8 +9366,8 @@ input[type="checkbox"] {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--ca-space-5);
-  padding: var(--ca-space-5);
+  gap: var(--ca-space-6);
+  padding: var(--ca-space-6);
   border: 1px solid color-mix(in srgb, var(--ca-primary) 58%, var(--ca-border));
   border-radius: var(--ca-radius-md);
   background: linear-gradient(135deg, color-mix(in srgb, var(--ca-primary) 12%, var(--ca-surface-deep)), var(--ca-surface-deep));

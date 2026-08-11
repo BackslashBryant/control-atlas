@@ -107,7 +107,7 @@
 .resources-search .resources-search-submit {
   background: var(--ca-primary);
   border-radius: 0.2rem;
-  color: var(--ca-primary-contrast, #071018);
+  color: var(--ca-primary-contrast, var(--ca-ink));
   font-weight: 700;
   padding-inline: 0.85rem;
   width: auto;

@@ -35,7 +35,7 @@ test("provenance tokens stay distinct from Orbital action and status meanings", 
   // was one way to satisfy the rule this test is named for, but it also meant
   // DISA, FedRAMP and community all rendered colourless, which the owner
   // rejected. Enforce the rule itself: a publisher hue may never reuse an
-  // action (relay) or status (rust/fault) token.
+  // action (teal) or status (rust/fault) token.
   for (const publisher of ["disa", "fedramp", "community", "mitre"]) {
     const value = tokens.match(
       new RegExp(
@@ -45,11 +45,12 @@ test("provenance tokens stay distinct from Orbital action and status meanings", 
     );
     assert.ok(value, `--ca-prov-${publisher} must be defined`);
     assert.ok(
-      !["--lsm-relay", "--lsm-rust", "--lsm-fault"].includes(value[1]),
+      !["--lsm-teal", "--lsm-rust", "--lsm-fault"].includes(value[1]),
       `--ca-prov-${publisher} reuses the action/status token ${value[1]}`,
     );
   }
-  assert.match(tokens, /--ca-primary:\s*var\(--lsm-relay\)/i);
+  assert.match(tokens, /--ca-accent:\s*var\(--lsm-teal\)/i);
+  assert.match(tokens, /--ca-primary:\s*var\(--ca-accent\)/i);
   assert.match(tokens, /--ca-warning:\s*var\(--lsm-rust\)/i);
   assert.match(tokens, /--ca-danger:\s*var\(--lsm-fault\)/i);
   assert.doesNotMatch(tokens, /(?:7c3aed|d8b4fe|6366f1)/i);
@@ -272,7 +273,7 @@ test("sticky surfaces and in-page jumps share one header-safe offset", () => {
   assert.match(tokens, /--ca-header-height:\s*0px;/);
   assert.match(
     tokens,
-    /--ca-header-safe-offset:\s*calc\(var\(--ca-header-height\) \+ var\(--ca-space-3\)\);/,
+    /--ca-header-safe-offset:\s*calc\(var\(--ca-header-height\) \+ var\(--ca-space-4\)\);/,
   );
   assert.match(topNav, /ResizeObserver/);
   assert.match(topNav, /--ca-header-height/);

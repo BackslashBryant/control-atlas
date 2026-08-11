@@ -15,6 +15,7 @@ import {
   HOME_DESTINATIONS,
 } from "../../shared/home-content.mjs";
 import { AppLink } from "../components/AppLink";
+import { BucketTag, LineTag } from "../components/TaxonomyTag";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
@@ -82,7 +83,7 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
             <h2>From authority to action</h2>
           </header>
           <div className="home-ecosystem-authorities" aria-label="Authority groups">
-            {HOME_AUTHORITY_GROUPS.map((group) => <span key={group}>{group}</span>)}
+            {HOME_AUTHORITY_GROUPS.map((group) => <LineTag key={group}>{group}</LineTag>)}
           </div>
           <div className="home-ecosystem-trunk">
             <IconCompass aria-hidden="true" size={19} stroke={1.8} />
@@ -90,7 +91,7 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
             <small>connected reference system</small>
           </div>
           <div className="home-ecosystem-areas" aria-label="Cybersecurity areas">
-            {HOME_ATLAS_AREAS.map((area) => <span key={area}>{area}</span>)}
+            {HOME_ATLAS_AREAS.map((area) => <BucketTag area={area} key={area}>{area}</BucketTag>)}
           </div>
           <p>Zoom from the whole landscape to the source, relationship, or record you need.</p>
         </aside>

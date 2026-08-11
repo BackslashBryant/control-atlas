@@ -10,6 +10,7 @@ import {
   HOME_CONTENT,
   HOME_DESTINATIONS,
 } from './src/shared/home-content.mjs';
+import { areaPresentationFor } from './src/ui/lib/areaVisualLanguage';
 
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
 
@@ -20,8 +21,12 @@ function escapeHtml(value: string) {
 }
 
 function renderStaticHome() {
-  const authorities = HOME_AUTHORITY_GROUPS.map((group) => `<span>${escapeHtml(group)}</span>`).join('');
-  const areas = HOME_ATLAS_AREAS.map((area) => `<span>${escapeHtml(area)}</span>`).join('');
+  const authorities = HOME_AUTHORITY_GROUPS.map((group) => `<span class="line-tag"><span aria-hidden="true" class="line-tag__line"></span><span>${escapeHtml(group)}</span></span>`).join('');
+  const areas = HOME_ATLAS_AREAS.map((area) => {
+    const presentation = areaPresentationFor(area);
+    if (!presentation) throw new Error(`Home area has no visual-language mapping: ${area}`);
+    return `<span class="bucket-tag" data-area-id="${presentation.id}" style="--ca-area-color:var(${presentation.token})"><span aria-hidden="true" class="bucket-tag__dot"></span><span>${escapeHtml(area)}</span></span>`;
+  }).join('');
   const destinations = HOME_DESTINATIONS.map((destination) => `
     <a class="home-secondary-action" data-route="${destination.href}" href="${destination.href}">
       <span><strong>${escapeHtml(destination.label)}</strong><small>${escapeHtml(destination.description)}</small></span>

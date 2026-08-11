@@ -32,6 +32,8 @@
      colour can carry meaning instead of decorating. */
   --lsm-iris: #9d92d6;
   --lsm-teal: #4fb3a5;
+  --lsm-teal-deep: #236b64;
+  --lsm-teal-deep-hover: #286e67;
   --lsm-amber: #e0a44a;
   /* Text tints of the same hues. The fill values above are for rails, dots and
      badge backgrounds; as body/badge TEXT on slate and alloy they fall under
@@ -40,6 +42,18 @@
   --lsm-iris-text: #b6ade9;
   --lsm-teal-text: #74ccbe;
   --lsm-orange-text: #f2a982;
+
+  /* Neutral and document-rendering primitives. Literal colors stay in this
+     token authority rather than leaking into route or component styles. */
+  --ca-shadow-color: #000000;
+  --ca-paper: #ffffff;
+  --ca-paper-subtle: #f8fafc;
+  --ca-ink: #071018;
+  --ca-document-text: #20242c;
+  --ca-document-text-muted: #475467;
+  --ca-document-text-subtle: #667085;
+  --ca-document-border: #d6dee8;
+  --ca-document-accent: var(--lsm-teal-deep);
 
   /* Semantic surfaces.
      Ground is Orbit, not Graphite: with bg=graphite (#253139), surface=slate
@@ -68,28 +82,65 @@
   --ca-text-muted: var(--lsm-dust);
   --ca-text-subtle: var(--lsm-dust);
 
-  /* Operational interaction and editorial hierarchy */
-  --ca-primary: var(--lsm-relay);
-  --ca-primary-hover: color-mix(in srgb, var(--lsm-relay) 84%, var(--lsm-bone));
-  --ca-action-primary: var(--lsm-relay-deep);
-  --ca-action-primary-hover: var(--lsm-relay-deep-hover);
+  /* One authored accent. Decorative interaction, links, cards, icons, and
+     section accents all resolve to teal; status and data colors remain
+     separate because they communicate state rather than decoration. */
+  --ca-accent: var(--lsm-teal);
+  --ca-accent-hover: color-mix(in srgb, var(--ca-accent) 84%, var(--lsm-bone));
+  --ca-primary: var(--ca-accent);
+  --ca-primary-hover: var(--ca-accent-hover);
+  --ca-action-primary: var(--lsm-teal-deep);
+  --ca-action-primary-hover: var(--lsm-teal-deep-hover);
   --ca-on-primary: var(--lsm-bone);
-  --ca-secondary: var(--lsm-teal);
-  --ca-secondary-hover: color-mix(in srgb, var(--lsm-teal) 84%, var(--lsm-bone));
-  --ca-accent: var(--lsm-amber);
-  --ca-link: var(--lsm-relay);
-  --ca-priority: var(--lsm-gold);
-  --ca-editorial: var(--lsm-orange);
-  /* --ca-editorial fails 4.5:1 for normal text on --ca-surface (4.09:1,
-     measured against #253139). Use this for organizing-hop text/labels. */
-  --ca-editorial-text: color-mix(in srgb, var(--lsm-orange) 75%, var(--lsm-bone));
+  --ca-secondary: var(--ca-accent);
+  --ca-secondary-hover: var(--ca-accent-hover);
+  --ca-link: var(--ca-accent);
+  --ca-priority: var(--ca-accent);
+  --ca-editorial: var(--ca-accent);
+  --ca-editorial-text: var(--lsm-teal-text);
+
+  /* Canonical cybersecurity-area palette. The first value in the locked
+     spec is for light surfaces and the second is for dark surfaces. The app
+     currently has a dark visual identity, so the unqualified alias selects
+     the on-dark value. Full fills are reserved for Atlas; other surfaces
+     consume these only through the bucket-tag dot. */
+  --ca-area-governance-on-light: #5a63d6;
+  --ca-area-governance-on-dark: #8791f0;
+  --ca-area-governance: var(--ca-area-governance-on-dark);
+  --ca-area-assessment-on-light: #1c8fb2;
+  --ca-area-assessment-on-dark: #45b6d6;
+  --ca-area-assessment: var(--ca-area-assessment-on-dark);
+  --ca-area-risk-on-light: #c87a24;
+  --ca-area-risk-on-dark: #e0a24a;
+  --ca-area-risk: var(--ca-area-risk-on-dark);
+  --ca-area-operations-on-light: #61748a;
+  --ca-area-operations-on-dark: #8496a8;
+  --ca-area-operations: var(--ca-area-operations-on-dark);
+  --ca-area-compliance-on-light: #2e9b6e;
+  --ca-area-compliance-on-dark: #4fc38e;
+  --ca-area-compliance: var(--ca-area-compliance-on-dark);
+  --ca-area-threats-defense-on-light: #ce463f;
+  --ca-area-threats-defense-on-dark: #f0736b;
+  --ca-area-threats-defense: var(--ca-area-threats-defense-on-dark);
+  --ca-area-architecture-on-light: #8a57cc;
+  --ca-area-architecture-on-dark: #b085ec;
+  --ca-area-architecture: var(--ca-area-architecture-on-dark);
+  --ca-area-knowledge-on-light: #3e9b78;
+  --ca-area-knowledge-on-dark: #5fc79c;
+  --ca-area-knowledge: var(--ca-area-knowledge-on-dark);
+  --ca-area-implementation-on-light: #2e6fe0;
+  --ca-area-implementation-on-dark: #5b96f5;
+  --ca-area-implementation: var(--ca-area-implementation-on-dark);
+  --ca-area-authority-on-light: #b07a1e;
+  --ca-area-authority-on-dark: #e0b15a;
+  --ca-area-authority: var(--ca-area-authority-on-dark);
 
   /* Provenance: always paired with a text label. */
   --ca-prov-official: var(--lsm-relay);
   --ca-prov-dod: var(--lsm-gold);
   --ca-prov-nist: var(--lsm-relay);
   --ca-prov-disa: var(--lsm-iris);
-  --ca-prov-fedramp: var(--lsm-teal);
+  --ca-prov-fedramp: var(--lsm-iris);
   --ca-prov-mitre: var(--lsm-orange);
   --ca-prov-community: var(--lsm-amber);
   --ca-prov-inferred: var(--lsm-rust);
@@ -100,7 +151,7 @@
   --ca-prov-dod-text: var(--lsm-gold);
   --ca-prov-nist-text: var(--lsm-relay);
   --ca-prov-disa-text: var(--lsm-iris-text);
-  --ca-prov-fedramp-text: var(--lsm-teal-text);
+  --ca-prov-fedramp-text: var(--lsm-iris-text);
   --ca-prov-mitre-text: var(--lsm-orange-text);
   --ca-prov-community-text: var(--lsm-amber);
   /* Inferred uses Alert Rust as its border/tone; Bone keeps the label AA-readable. */
@@ -110,7 +161,7 @@
   --ca-prov-active-text: var(--lsm-signal);
 
   /* Status meanings are fixed by the source system. */
-  --ca-info: var(--lsm-relay);
+  --ca-info: var(--ca-accent);
   --ca-success: var(--lsm-signal);
   --ca-warning: var(--lsm-rust);
   --ca-danger: var(--lsm-fault);
@@ -146,23 +197,18 @@
   --ca-lens-cross-framework: var(--lsm-orange);
   --ca-lens-threat: var(--lsm-rust);
 
-  /* 4-point spacing scale */
+  /* Locked 4-point spacing scale: 4, 8, 12, 16, 24, 32, 48, 64. */
   --ca-space-1: 0.25rem;
   --ca-space-2: 0.5rem;
   --ca-space-3: 0.75rem;
   --ca-space-4: 1rem;
-  --ca-space-5: 1.25rem;
   --ca-space-6: 1.5rem;
   --ca-space-8: 2rem;
-  --ca-space-10: 2.5rem;
   --ca-space-12: 3rem;
   --ca-space-16: 4rem;
-  --ca-space-20: 5rem;
-  --ca-space-24: 6rem;
-  --ca-space-32: 8rem;
 
   --ca-header-height: 0px;
-  --ca-header-safe-offset: calc(var(--ca-header-height) + var(--ca-space-3));
+  --ca-header-safe-offset: calc(var(--ca-header-height) + var(--ca-space-4));
 
   /* Minimal tactile geometry */
   --ca-radius-sm: 2px;
@@ -197,19 +243,33 @@
   --ca-control-md: 2.5rem;
   --ca-control-lg: 3rem;
   --ca-touch-target: 2.75rem;
+  /* Locked layout measurements. */
   --ca-content-xs: 20rem;
   --ca-content-sm: 30rem;
-  --ca-content-md: 45rem;
+  --ca-reading-measure: 45rem;
+  --ca-content-md: var(--ca-reading-measure);
   --ca-content-lg: 60rem;
-  --ca-content-xl: 80rem;
-  --ca-content-max: 90rem;
+  --ca-content-max: 75rem;
+  --ca-content-xl: var(--ca-content-max);
+  --ca-grid-gutter: var(--ca-space-6);
+  --ca-section-gap: var(--ca-space-12);
+  --ca-section-inner-gap: var(--ca-space-6);
+  --ca-card-min: 17.5rem;
+  --ca-card-grid: repeat(auto-fill, minmax(var(--ca-card-min), 1fr));
+  --ca-facet-rail-width: 17.5rem;
+  --ca-record-rail-width: 20rem;
+  --ca-atlas-rail-width: 20rem;
+  --ca-sticky-offset: calc(var(--ca-header-height) + var(--ca-space-4));
+  --ca-breakpoint-mobile: 40rem;
+  --ca-breakpoint-desktop: 64rem;
 
   --motion-fast: 120ms;
   --motion-normal: 180ms;
   --motion-slow: 320ms;
   --motion-ease: cubic-bezier(0.2, 0, 0, 1);
 
-  --ca-focus-ring: 0 0 0 3px rgb(84 188 217 / 0.28);
+  --ca-focus: var(--ca-accent);
+  --ca-focus-ring: 0 0 0 3px color-mix(in srgb, var(--ca-accent) 28%, transparent);
   --ca-opacity-disabled: 0.42;
   --ca-opacity-muted: 0.68;
   --ca-opacity-grid: 0.14;

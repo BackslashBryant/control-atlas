@@ -11,7 +11,7 @@ import {
   type NodeProps,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { memo, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { memo, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 
 import authoritySpine from "../../../data/curated/authority-spine.json";
 import type { AtlasSpine } from "../lib/atlasDrilldown";
@@ -37,6 +37,11 @@ import {
   rankAtlasMappingOverlay,
 } from "../lib/atlasTreeOverlay";
 import type { AtlasNeighborhoodRecord } from "../lib/runtimeLoader";
+import {
+  areaCssVariables,
+  areaPresentationFor,
+  AUTHORITY_PRESENTATION,
+} from "../lib/areaVisualLanguage";
 
 type CatalogSummary = {
   id?: string;
@@ -89,6 +94,14 @@ function nodeKind(node: AtlasRenderableNode) {
 function AtlasTreeNodeView({ data, selected }: NodeProps<AtlasFlowNode>) {
   const { node, semanticLevel, mapped, mappingDegree } = data;
   const kind = nodeKind(node);
+  const areaPresentation = kind === "area"
+    ? areaPresentationFor(node.id)
+    : kind === "authority"
+      ? AUTHORITY_PRESENTATION
+      : null;
+  const areaStyle = areaPresentation
+    ? areaCssVariables(areaPresentation) as CSSProperties
+    : undefined;
   const detail = semanticLevel === "orientation"
     ? node.nodeType === "authority_aggregate"
       ? `${node.childCount.toLocaleString()} instruments`
@@ -102,6 +115,8 @@ function AtlasTreeNodeView({ data, selected }: NodeProps<AtlasFlowNode>) {
     <div
       className={`atlas-tree-node atlas-tree-node--${kind}${selected ? " is-selected" : ""}${mapped ? " is-mapping-highlight" : ""}`}
       data-atlas-node-id={node.id}
+      data-area-id={kind === "area" ? node.id : undefined}
+      style={areaStyle}
     >
       <Handle className="atlas-tree-node__handle" isConnectable={false} position={Position.Top} type="target" />
       <span className="atlas-tree-node__terminal" aria-hidden="true" />
@@ -189,7 +204,7 @@ function AtlasTreeStage(props: {
         proOptions={{ hideAttribution: true }}
         zoomOnScroll
       >
-        <Background color="rgba(109, 232, 255, 0.12)" gap={24} />
+        <Background color="var(--ca-border-subtle)" gap={24} />
         <Controls position="bottom-right" showInteractive={false} />
       </ReactFlow>
     </div>

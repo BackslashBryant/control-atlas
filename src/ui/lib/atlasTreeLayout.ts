@@ -2,6 +2,7 @@ import { hierarchy, tree } from "d3-hierarchy";
 
 import type { AtlasRenderableNode } from "./atlasTreeAggregation";
 import type { AtlasTreeModel, AtlasTreeNode } from "./atlasTreeModel";
+import { AREA_IDS } from "./areaVisualLanguage";
 
 export const ATLAS_NODE_WIDTH = 240;
 export const ATLAS_NODE_HEIGHT = 88;
@@ -14,18 +15,6 @@ export type AtlasTreePosition = {
   width: number;
   height: number;
 };
-
-const AREA_ORDER = [
-  "atlas:LIMB-GOVERNANCE",
-  "atlas:LIMB-RISK",
-  "atlas:LIMB-COMPLIANCE",
-  "atlas:LIMB-ARCHITECTURE",
-  "atlas:LIMB-IMPLEMENTATION",
-  "atlas:LIMB-ASSESSMENT",
-  "atlas:LIMB-OPERATIONS",
-  "atlas:LIMB-THREAT",
-  "atlas:LIMB-KNOWLEDGE",
-] as const;
 
 function position(id: string, x: number, y: number): AtlasTreePosition {
   return { id, x, y, width: ATLAS_NODE_WIDTH, height: ATLAS_NODE_HEIGHT };
@@ -53,10 +42,10 @@ export function stableAtlasPositions(model: AtlasTreeModel) {
   result.set(model.trunk.id, position(model.trunk.id, -ATLAS_NODE_WIDTH / 2, -420));
 
   const areaById = new Map(model.areas.map((area) => [area.id, area]));
-  AREA_ORDER.forEach((areaId, index) => {
+  AREA_IDS.forEach((areaId, index) => {
     const area = areaById.get(areaId);
     if (!area) return;
-    const x = centeredX(index, AREA_ORDER.length, 360) - ATLAS_NODE_WIDTH / 2;
+    const x = centeredX(index, AREA_IDS.length, 360) - ATLAS_NODE_WIDTH / 2;
     result.set(area.id, position(area.id, x, -120));
     const publications = (model.childrenByParent.get(area.id) || [])
       .filter((node) => node.level === "publication")
@@ -98,7 +87,7 @@ export function layoutAtlasTree(options: {
   if (!focusId) {
     const authority = rendered
       .filter((node) => node.nodeType === "authority_aggregate");
-    const areas = AREA_ORDER
+    const areas = AREA_IDS
       .map((id) => rendered.find((node) => node.id === id))
       .filter((node): node is AtlasRenderableNode => Boolean(node));
     const overview = new Map<string, AtlasTreePosition>();

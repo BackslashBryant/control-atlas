@@ -591,12 +591,12 @@ const RelationshipGraphInner = forwardRef<
           proOptions={{ hideAttribution: true }}
           zoomOnScroll
         >
-          <Background color="rgba(148, 163, 184, 0.18)" gap={24} />
+          <Background color="var(--ca-border-subtle)" gap={24} />
           <Controls showInteractive={false} />
           {graphData.nodes.length > 14 ? (
             <MiniMap
               ariaLabel="Relationship diagram overview"
-              maskColor="rgba(2, 6, 23, 0.72)"
+              maskColor="color-mix(in srgb, var(--ca-bg) 72%, transparent)"
               nodeColor={(node) =>
                 typeof node.data.color === "string"
                   ? node.data.color

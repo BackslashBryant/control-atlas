@@ -1,4 +1,4 @@
-import treeSpine from "../../../data/curated/tree-spine.json";
+import { areaPresentationForCatalog } from "./areaVisualLanguage";
 
 export type CatalogProfile = {
   synopsis: string;
@@ -41,30 +41,8 @@ const PUBLICATION_KINDS: Record<string, string> = {
   "cui-policy": "Policy and regulation",
 };
 
-const LIMB_AREA_NAMES: Record<string, string> = {
-  "atlas:LIMB-GOVERNANCE": "Governance",
-  "atlas:LIMB-RISK": "Risk",
-  "atlas:LIMB-COMPLIANCE": "Compliance",
-  "atlas:LIMB-ARCHITECTURE": "Architecture",
-  "atlas:LIMB-IMPLEMENTATION": "Implementation",
-  "atlas:LIMB-ASSESSMENT": "Assessment",
-  "atlas:LIMB-OPERATIONS": "Operations",
-  "atlas:LIMB-THREAT": "Threats & Defense",
-  "atlas:LIMB-KNOWLEDGE": "Knowledge",
-};
-
-const CATALOG_LIMBS: Record<string, string> = {
-  ...(treeSpine.catalogLimbs as Record<string, string>),
-  ...Object.fromEntries(
-    (treeSpine.syntheticCatalogs as Array<{ catalog_id: string; limb: string }>).map(
-      (entry) => [entry.catalog_id, entry.limb],
-    ),
-  ),
-};
-
 export function catalogAreaFor(catalogId: string): string {
-  const limbId = CATALOG_LIMBS[catalogId];
-  return (limbId && LIMB_AREA_NAMES[limbId]) || "";
+  return areaPresentationForCatalog(catalogId)?.label || "";
 }
 
 const RECORD_LABELS: Record<string, string> = {

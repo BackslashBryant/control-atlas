@@ -35,7 +35,8 @@ export type GraphData = {
   links: GraphLink[];
 };
 
-function readToken(name: string, fallback: string): string {
+function readToken(name: string): string {
+  const fallback = name ? `var(${name})` : "currentColor";
   if (typeof document === "undefined") {
     return fallback;
   }
@@ -60,7 +61,7 @@ export function provenanceColor(provenanceClass: string): string {
     disa_published: "--ca-prov-disa",
     fedramp_published: "--ca-prov-fedramp",
   };
-  return readToken(map[provenanceClass] ?? "--ca-prov-community", "#98A4AC");
+  return readToken(map[provenanceClass] ?? "--ca-prov-community");
 }
 
 export function provenanceCssVar(provenanceClass: string): string {
@@ -91,10 +92,10 @@ export function linkDashPattern(
 
 export function compareNodeColor(role: CompareRole): string {
   const map: Record<CompareRole, string> = {
-    shared: readToken("--ca-graph-shared", "#7EB79E"),
-    uniqueA: readToken("--ca-graph-unique-a", "#54BCD9"),
-    uniqueB: readToken("--ca-graph-unique-b", "#CBAE67"),
-    neutral: readToken("--ca-graph-neutral", "#98A4AC"),
+    shared: readToken("--ca-graph-shared"),
+    uniqueA: readToken("--ca-graph-unique-a"),
+    uniqueB: readToken("--ca-graph-unique-b"),
+    neutral: readToken("--ca-graph-neutral"),
   };
   return map[role];
 }
@@ -115,19 +116,9 @@ export const RELATIONSHIP_LENS_LEGEND = [
   { key: "threat-defense", label: "Threat & defense", color: "--ca-lens-threat" },
 ] as const;
 
-const LENS_FALLBACK_COLOR: Record<string, string> = {
-  applicability: "#CBAE67",
-  correlation: "#205F78",
-  implementation: "#54BCD9",
-  "assessment-evidence": "#7EB79E",
-  "process-artifacts": "#98A4AC",
-  "cross-framework": "#E76F51",
-  "threat-defense": "#C4645A",
-};
-
 export function lensColor(lens: string): string {
   const entry = RELATIONSHIP_LENS_LEGEND.find((item) => item.key === lens);
-  return readToken(entry?.color ?? "", LENS_FALLBACK_COLOR[lens] ?? "#98A4AC");
+  return readToken(entry?.color ?? "--ca-graph-neutral");
 }
 
 export function nodeColor(
@@ -136,19 +127,19 @@ export function nodeColor(
   highlightIds: Set<string>,
 ): string {
   if (node.compareRole) return compareNodeColor(node.compareRole);
-  if (node.isCluster) return readToken("--ca-graph-cluster", "#98A4AC");
-  if (node.id === selectedId) return readToken("--ca-graph-selected", "#54BCD9");
-  if (node.isCenter) return readToken("--ca-graph-center", "#54BCD9");
+  if (node.isCluster) return readToken("--ca-graph-cluster");
+  if (node.id === selectedId) return readToken("--ca-graph-selected");
+  if (node.isCenter) return readToken("--ca-graph-center");
   if (highlightIds.size && !highlightIds.has(node.id)) {
-    return readToken("--ca-graph-dim", "rgba(152, 164, 172, 0.35)");
+    return readToken("--ca-graph-dim");
   }
-  if (node.graphRole && LENS_FALLBACK_COLOR[node.graphRole]) {
+  if (node.graphRole && RELATIONSHIP_LENS_LEGEND.some((entry) => entry.key === node.graphRole)) {
     return lensColor(node.graphRole);
   }
-  if (node.nodeType === "source") return readToken("--ca-prov-fedramp", "#7EB79E");
-  if (node.nodeType === "template") return readToken("--ca-prov-mitre", "#CBAE67");
-  if (node.nodeType === "pattern") return readToken("--ca-graph-unique-b", "#CBAE67");
-  return readToken("--ca-text", "#E7E1D5");
+  if (node.nodeType === "source") return readToken("--ca-prov-fedramp");
+  if (node.nodeType === "template") return readToken("--ca-prov-mitre");
+  if (node.nodeType === "pattern") return readToken("--ca-graph-unique-b");
+  return readToken("--ca-text");
 }
 
 export function nodeShapeRadius(node: GraphNode): number {
