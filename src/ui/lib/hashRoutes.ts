@@ -52,6 +52,14 @@ const PATH_TO_VIEW: Record<string, AppView> = {
   "/not-found": "not-found",
 };
 
+function routeSegment(value: string): string {
+  return encodeURIComponent(value).replaceAll("%3A", ":");
+}
+
+function readableQuery(params: URLSearchParams): string {
+  return params.toString().replaceAll("%3A", ":");
+}
+
 function parseNodeIdFromPath(pathname: string): {
   basePath: string;
   nodeId: string;
@@ -61,6 +69,30 @@ function parseNodeIdFromPath(pathname: string): {
   documentId: string;
   buildSection: "tasks" | "documents" | "";
 } {
+  const atlasMatch = pathname.match(/^\/atlas\/([^/]+)$/);
+  if (atlasMatch) {
+    return {
+      basePath: "/atlas",
+      nodeId: decodeURIComponent(atlasMatch[1]),
+      catalogId: "",
+      resourceId: "",
+      taskId: "",
+      documentId: "",
+      buildSection: "",
+    };
+  }
+  const compareMatch = pathname.match(/^\/compare\/([^/]+)$/);
+  if (compareMatch) {
+    return {
+      basePath: "/compare",
+      nodeId: "",
+      catalogId: "",
+      resourceId: "",
+      taskId: "",
+      documentId: "",
+      buildSection: "",
+    };
+  }
   const catalogMatch = pathname.match(/^\/library\/publication\/([^/]+)$/);
   if (catalogMatch) {
     return {
@@ -149,6 +181,13 @@ export function parseHashLocation(pathname: string, search: string): ViewState {
   if (view === "library-detail" && nodeId) {
     params.set("node", nodeId);
   }
+  if (view === "atlas-map" && nodeId) {
+    params.set("node", nodeId);
+  }
+  const compareMatch = normalizedPath.match(/^\/compare\/([^/]+)$/);
+  if (view === "matrix" && compareMatch) {
+    params.set("crosswalk", decodeURIComponent(compareMatch[1]));
+  }
   if (view === "catalog-detail" && catalogId) {
     params.set("catalog", catalogId);
   }
@@ -187,15 +226,29 @@ export function serializeHashLocation(state: ViewState): string {
     return `/record/${encodeURIComponent(catalog)}/${encodeURIComponent(item || state.node)}`;
   }
 
+  if (state.view === "atlas-map" && state.node) {
+    params.delete("node");
+    const qs = readableQuery(params);
+    return `/atlas/${routeSegment(state.node)}${qs ? `?${qs}` : ""}`;
+  }
+
+  if (state.view === "matrix") {
+    params.delete("crosswalk");
+    params.delete("workbench");
+    const qs = readableQuery(params);
+    const mode = state.crosswalk === "intent" ? "" : `/${state.crosswalk}`;
+    return `/compare${mode}${qs ? `?${qs}` : ""}`;
+  }
+
   if (state.view === "catalog-detail" && state.catalog) {
     params.delete("catalog");
-    const qs = params.toString();
+    const qs = readableQuery(params);
     return `/library/publication/${encodeURIComponent(state.catalog)}${qs ? `?${qs}` : ""}`;
   }
 
   if (state.view === "commons-detail" && state.id) {
     params.delete("id");
-    const qs = params.toString();
+    const qs = readableQuery(params);
     return `/resources/${encodeURIComponent(state.id)}${qs ? `?${qs}` : ""}`;
   }
 
@@ -204,7 +257,7 @@ export function serializeHashLocation(state: ViewState): string {
   }
 
   if (state.view === "commons") {
-    const qs = params.toString();
+    const qs = readableQuery(params);
     return `/resources${qs ? `?${qs}` : ""}`;
   }
 
@@ -212,7 +265,7 @@ export function serializeHashLocation(state: ViewState): string {
     params.delete("templateType");
     params.delete("task");
     params.delete("buildSection");
-    const qs = params.toString();
+    const qs = readableQuery(params);
     if (state.templateType) {
       return `/build/documents/${encodeURIComponent(state.templateType)}${qs ? `?${qs}` : ""}`;
     }
@@ -225,7 +278,7 @@ export function serializeHashLocation(state: ViewState): string {
       params.delete("environment");
       params.delete("baseline");
       params.delete("controlFamily");
-      return `/build/tasks/${encodeURIComponent(state.task)}`;
+      return `/build/tasks/${routeSegment(state.task)}`;
     }
     if (state.buildSection === "tasks") {
       return `/build/tasks${qs ? `?${qs}` : ""}`;
@@ -233,7 +286,7 @@ export function serializeHashLocation(state: ViewState): string {
   }
 
   const path = VIEW_TO_PATH[state.view] ?? "/";
-  const qs = params.toString();
+  const qs = readableQuery(params);
   return `${path}${qs ? `?${qs}` : ""}`;
 }
 

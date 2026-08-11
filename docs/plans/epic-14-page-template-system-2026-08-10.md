@@ -1,7 +1,7 @@
 # Epic 14 — Page Template System & Visual Language
 
 **Date opened:** 2026-08-10
-**Status:** Approved, ready to sequence
+**Status:** Shipped
 **Owner:** Bryant
 
 ## Why
@@ -39,6 +39,14 @@ new features land.
 - A first-time user can click any primary nav item and land directly on that page's
   real content, above the fold.
 
+## Completion
+
+WS0–WS7 are complete. The six-template system, area-color discipline, publisher-text-first
+records, drillable Atlas, Home and Guides updates, copy reset, and URL hygiene are all
+covered by the Epic 14 browser smoke suite. Public focused Atlas links now use
+`/atlas/{record-id}` and Compare links use `/compare/{comparison}`; old query links
+remain readable and normalize to those routes.
+
 ## Locked design decisions
 
 Carried from the spec's "Locked decisions" section — do not re-litigate:
@@ -53,7 +61,7 @@ librarian-not-salesperson copy.
 
 Ordered by dependency and impact. Each is a shippable increment.
 
-### WS0 — App Shell fix  · P0 · unblocks everything
+### WS0 — App Shell fix  · P0 · shipped
 The single highest-impact fix: kill the route-stacking bug and slim the header.
 - One `<main>` per route; deep routes must not mount the home landing above their
   content.
@@ -64,7 +72,7 @@ The single highest-impact fix: kill the route-stacking bug and slim the header.
   `<main>` with the route's own content first in the viewport. Header shows no
   duplicate nav control and no doubled wordmark word.
 
-### WS1 — Design tokens & area color system  · foundation
+### WS1 — Design tokens & area color system  · shipped
 - Add the 9 area hues + authority hue as tokens (light/dark), plus the neutral,
   accent, spacing, radius, and type tokens from the spec §0.
 - **Color discipline (owner-corrected 2026-08-10):** one accent (teal) is the only
@@ -79,7 +87,7 @@ The single highest-impact fix: kill the route-stacking bug and slim the header.
   reads as a rainbow; the Atlas map is the only surface with full area fills; both
   themes legible; no hardcoded per-page colors.
 
-### WS2 — Template E: Record  · P0 (content) + highest-traffic deep page
+### WS2 — Template E: Record  · P0 (content) + shipped
 - Title block: breadcrumb + publisher/source-native category/official ID identity
   (`NIST AC 3.1.1`) + publisher-authored name when it adds information.
 - MAIN leads with complete publisher text under a type-specific heading, followed
@@ -95,7 +103,7 @@ The single highest-impact fix: kill the route-stacking bug and slim the header.
   no fabricated names or guidance; no internal identifiers; every public type has
   a checked presentation profile and required source fields.
 
-### WS3 — Template C: Workspace (Library + Resources unified)  · P1
+### WS3 — Template C: Workspace (Library + Resources unified)  · shipped
 - One skeleton for both: persistent left **facet rail** (no "Filters" button at
   desktop), result bar (`count · Sort · List/Map · Compare`), full-width result rows.
 - Whole row is the click target — **remove the redundant "Open record" button**;
@@ -108,7 +116,7 @@ The single highest-impact fix: kill the route-stacking bug and slim the header.
   desktop; rows fully clickable with no open-record button; empty query shows browse
   state.
 
-### WS4 — Template D: Atlas canvas  · P1
+### WS4 — Template D: Atlas canvas  · shipped
 - Rebuild as a **click-to-drill tree/network graph**: colored area nodes, curved
   edges, root-on-left (or top) with children branching; clicking a node drills in
   automatically; live breadcrumb climbs back.
@@ -121,7 +129,7 @@ The single highest-impact fix: kill the route-stacking bug and slim the header.
   changes the view to that node; breadcrumb reflects and reverses the path; empty
   limbs cannot dead-end into a blank drill.
 
-### WS5 — Templates B & F: Home + Guides  · P1
+### WS5 — Templates B & F: Home + Guides  · shipped
 - Home: one hero, one search, **three** cards (retire the 4th "Start" card and the
   competing ecosystem-preview panel), plus neutral area tags with small dots.
 - Guides: hold the card-grid directory; add a **per-step icon** and neutral area tag; keep
@@ -129,7 +137,7 @@ The single highest-impact fix: kill the route-stacking bug and slim the header.
 - **Acceptance:** Home has one hero and three cards; Guides cards carry icons and are
   fully clickable.
 
-### WS6 — Sitewide Copy and Record Truth Reset  · P1
+### WS6 — Sitewide Copy and Record Truth Reset  · shipped
 - Enforce one calm, direct, grounded, task-focused voice. Give each major route one
   useful task sentence; use no institutional “we” and no metaphorical Atlas prose.
 - Centralize stable route copy and check product-authored headlines, task lines,
@@ -146,7 +154,7 @@ The single highest-impact fix: kill the route-stacking bug and slim the header.
   product claim; record titles use publisher + source-native category + official ID;
   acronym and derived-tag explanations work on hover, focus, and tap.
 
-### WS7 — URL hygiene  · P1
+### WS7 — URL hygiene  · shipped
 - Remove `mode=` from URLs; collapse duplicate params (`crosswalk` vs `workbench`);
   prefer clean path segments; stop URL-encoding `:` into visible links.
 - **Acceptance:** no `mode=` anywhere; no duplicate-value params; deep links legible.

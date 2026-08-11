@@ -110,7 +110,7 @@ test("V1 workflow 07 — compare with a shareable explicit configuration", async
     page,
     "/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
   );
-  await expect(page).toHaveURL(/workbench=relationships/);
+  await expect(page).toHaveURL(/#\/compare\/relationships\?source=nist-800-53&target=csf-2$/);
   await expect(
     page.getByRole("heading", { name: "Catalog to catalog" }),
   ).toBeVisible();
