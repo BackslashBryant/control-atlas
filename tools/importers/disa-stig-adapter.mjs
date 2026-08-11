@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
+import { parse as parseHtml } from 'node-html-parser';
 import yauzl from 'yauzl';
 import { unzipSync, strFromU8 } from 'fflate';
 
@@ -39,10 +40,9 @@ function stripMarkup(value = '') {
 }
 
 function preserveSourceText(value = '') {
-  const text = String(value)
+  const text = parseHtml(String(value)
     .replace(/<!\[CDATA\[|\]\]>/g, '')
-    .replace(/<\/?(?:br|p|div|li)\b[^>]*>/gi, '\n')
-    .replace(/<[^>]+>/g, '')
+    .replace(/<\/?(?:p|div|li)\b[^>]*>/gi, '<br>')).textContent
     .replace(/\r\n?/g, '\n');
   const lines = text.split('\n');
   while (lines.length && !lines[0].trim()) lines.shift();
