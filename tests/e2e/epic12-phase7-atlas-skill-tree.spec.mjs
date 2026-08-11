@@ -50,7 +50,7 @@ test("Atlas map branches down, gates technology, restores the URL, and honors hi
 
   await drillNode(page, "atlas:LIMB-IMPLEMENTATION");
   await expect(stage).toHaveAttribute("data-semantic-level", "justification");
-  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-IMPLEMENTATION/);
+  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-IMPLEMENTATION/);
   await drillNode(page, "disa-stig:CATALOG");
   await expect(page).toHaveURL(/atlasFramework=disa-stig/);
   await expect(page.getByRole("heading", { name: "Choose a technology" })).toBeVisible();
@@ -59,7 +59,7 @@ test("Atlas map branches down, gates technology, restores the URL, and honors hi
   await page.getByLabel("Search technologies").fill("Oracle Linux 9");
   await expect(picker.locator("option")).toHaveCount(2);
   await picker.selectOption(BENCHMARK_ID);
-  await expect(page).toHaveURL(/atlasBenchmark=disa-stig%3ABENCHMARK-ORACLE-LINUX-9-STIG/);
+  await expect(page).toHaveURL(/atlasBenchmark=disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG/);
   await expect(tree).toHaveAttribute("data-tree-node-count", "16");
   await expect(tree.locator('[data-atlas-node-id^="aggregate:disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG"]')).toHaveCount(12);
 
@@ -78,7 +78,7 @@ test("Atlas map branches down, gates technology, restores the URL, and honors hi
   await gotoApp(page, "/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-THREAT&atlasFramework=mitre-attack");
   await waitForAppReady(page);
   await drillNode(page, "mitre-attack:TACTIC-TA0001");
-  await expect(page).toHaveURL(/atlasFamily=mitre-attack%3ATACTIC-TA0001/);
+  await expect(page).toHaveURL(/atlasFamily=mitre-attack:TACTIC-TA0001/);
   await page.reload();
   await waitForAppReady(page);
   await expect(page.locator('[data-atlas-node-id="mitre-attack:TACTIC-TA0001"]')).toBeVisible();
@@ -138,7 +138,7 @@ test("compact Atlas map keeps equivalent hierarchy, keyboard movement, and techn
   await expect(compliance).not.toBeFocused();
   await compliance.focus();
   await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
   await expect(page.locator("details[data-authority-trace]")).toBeVisible();
   await page.locator("details[data-authority-trace] summary").click();
   await expect(page.locator("details[data-authority-trace]")).toHaveAttribute("open", "");

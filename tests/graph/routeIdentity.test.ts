@@ -13,8 +13,8 @@ import { normalizeViewState } from "../../src/ui/lib/viewState";
 
 test("Phase 3 durable paths and old bookmarks resolve to one canonical IA", () => {
   const cases = [
-    ["/atlas?node=nist-800-53%3AAC-2&relationshipView=map", "/atlas?node=nist-800-53%3AAC-2&relationshipView=map"],
-    ["/explore?node=nist-800-53%3AAC-2&relationshipView=map", "/atlas?node=nist-800-53%3AAC-2&relationshipView=map"],
+    ["/atlas?node=nist-800-53%3AAC-2&relationshipView=map", "/atlas/nist-800-53:AC-2?relationshipView=map"],
+    ["/explore?node=nist-800-53%3AAC-2&relationshipView=map", "/atlas/nist-800-53:AC-2?relationshipView=map"],
     ["/search?q=access+control&connectedOnly=true", "/library?q=access+control&connectedOnly=true"],
     ["/catalog", "/library"],
     ["/catalog/nist-800-53?q=account&family=AC", "/library/publication/nist-800-53?q=account&family=AC"],
@@ -63,6 +63,35 @@ test("invalid comparison and Library boolean state still fail closed", () => {
   const library = canonicalizeHashLocation("/library?q=AC-2&connectedOnly=yes");
   assert.equal(library.canonicalPath, "/library?q=AC-2");
   assert.match(library.recoveryMessage, /removed/i);
+});
+
+test("WS7 promotes record identity and comparison mode into readable path segments", () => {
+  const atlas = canonicalizeHashLocation("/atlas/nist-800-53%3AAC-2?relationshipView=map");
+  assert.equal(atlas.canonicalPath, "/atlas/nist-800-53:AC-2?relationshipView=map");
+
+  const legacyCompare = canonicalizeHashLocation(
+    "/compare?crosswalk=relationships&workbench=relationships&source=nist-800-53&target=csf-2",
+  );
+  assert.equal(legacyCompare.canonicalPath, "/compare/relationships?source=nist-800-53&target=csf-2");
+  assert.equal(legacyCompare.requiresReplace, true);
+
+  const workbenchBookmark = canonicalizeHashLocation("/compare?workbench=threat-chain&chainItem=mitre-attack%3AT1033");
+  assert.equal(workbenchBookmark.canonicalPath, "/compare/threat-chain?chainItem=mitre-attack:T1033");
+
+  const atlasState = normalizeViewState("atlas-map", {
+    view: "atlas-map",
+    node: "nist-800-53:AC-2",
+    relationshipView: "map",
+  });
+  assert.equal(serializeHashLocation(atlasState), "/atlas/nist-800-53:AC-2?relationshipView=map");
+
+  const compareState = normalizeViewState("matrix", {
+    view: "matrix",
+    crosswalk: "relationships",
+    source: "nist-800-53",
+    target: "csf-2",
+  });
+  assert.equal(serializeHashLocation(compareState), "/compare/relationships?source=nist-800-53&target=csf-2");
 });
 
 test("Build and former Build-resource bookmarks retain their durable content", () => {
@@ -167,7 +196,10 @@ test("durable Phase 3 view fields survive canonicalization", () => {
   for (const [path, params] of samples) {
     for (const [key, value] of Object.entries(params)) {
       const canonical = canonicalizeHashLocation(`${path}?${key}=${encodeURIComponent(value)}`);
-      assert.ok(canonical.canonicalPath.includes(`${key}=`), `${key} was stripped from ${path}`);
+      const appearsInPath = path === "/atlas" && key === "node"
+        ? canonical.canonicalPath.startsWith(`/atlas/${value}`)
+        : canonical.canonicalPath.includes(`${key}=`);
+      assert.ok(appearsInPath, `${key} was stripped from ${path}`);
       assert.equal(canonical.recoveryMessage, "", `${key} triggered recovery on ${path}`);
     }
   }

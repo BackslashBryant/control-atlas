@@ -2,7 +2,15 @@
 
 Open gaps only. Shipped epics are summarized in [`docs/Plan.md`](../Plan.md).
 
-**Last synced:** August 10, 2026 (Epic 13 reference-workbench closeout)
+**Last synced:** August 11, 2026 (Epic 14 page-template-system closeout)
+
+## Epic 14 closeout
+
+The page-template system and visual language are complete. WS0–WS7 shipped the
+six canonical page templates, source-first record presentation, drillable Atlas,
+sitewide copy reset, and readable canonical URL paths. No Epic 14 implementation
+residual remains; the external human assistive-technology and physical-device
+evidence rows below remain open.
 
 ## Epic 13 closeout
 

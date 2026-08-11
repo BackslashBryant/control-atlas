@@ -47,11 +47,11 @@ test("WS5 Home implements Template B with one search, three cards, and nine area
 test("WS6 About states the research boundary exactly", async ({ page }) => {
   await gotoApp(page, "/#/about");
   await waitForAppReady(page);
-  await expect(page.getByText(
+  await expect(page.locator("main").getByText(
     "Control Atlas is a public research tool for federal cybersecurity requirements, controls, techniques, and guidance.",
     { exact: true },
   )).toBeVisible();
-  await expect(page.getByText(
+  await expect(page.locator("main").getByText(
     "Use Control Atlas for research, not compliance or authorization decisions.",
     { exact: true },
   )).toBeVisible();

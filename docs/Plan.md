@@ -21,7 +21,7 @@ Agents must not mark work complete in chat without updating **Plan.md** and **pr
 
 ## Active Sprint
 
-**None.** Epic 13 is complete. The prior `v1.0.2` release record remains in
+**None.** Epic 14 is complete. The prior `v1.0.2` release record remains in
 [`docs/audits/v1-0-2-release-2026-07-28.md`](audits/v1-0-2-release-2026-07-28.md).
 Human NVDA/VoiceOver/TalkBack and physical iOS/Android checks remain external
 evidence, not an implementation sprint.
@@ -42,6 +42,7 @@ evidence, not an implementation sprint.
 | 9 — Interactive Relationship Graph   | **Shipped**           | Object-local relationship diagram in Library detail, provenance filters, lazy graph surface, table fallback — [`docs/plans/epic-9-relationship-graph.md`](plans/epic-9-relationship-graph.md), ADR [`0011`](adr/0011-graph-library.md), audit [`docs/audits/live-browser-audit-2026-06-19-epic-9.md`](audits/live-browser-audit-2026-06-19-epic-9.md).                                                                                                                                                            |
 | 10 — Atlas Map-First UX              | **Shipped**           | v2.2 + stability pass + **Frontend Overhaul** + **Frontend Full Review remediation** + Map Foundation v4.0 + **SPR-20260708 remediation** (staged graph bootstrap, sharded library search, live smoke CI, trust/UX polish) — [`docs/plans/epic-10-atlas-map-ux.md`](plans/epic-10-atlas-map-ux.md), [`docs/superpowers/plans/2026-06-22-map-foundation-v4.md`](superpowers/plans/2026-06-22-map-foundation-v4.md), [`docs/audits/frontend-full-review-2026-06-22.md`](audits/frontend-full-review-2026-06-22.md). |
 | 13 — Reference + Workbench           | **Shipped**           | Product-first homepage, first-class Resources routes, bounded runtime failure recovery, and a 13-node aggregated Atlas overview with persistent inspector-led drilldown — [`docs/plans/epic-13-reference-workbench-2026-08-10.md`](plans/epic-13-reference-workbench-2026-08-10.md), ADR [`0015`](adr/0015-atlas-aggregation-workbench.md). |
+| 14 — Page Template System + Visual Language | **Shipped**      | Six canonical page templates, restrained area-color system, publisher-text-first records, drillable Atlas, Home and Guides refresh, sitewide copy reset, and readable canonical URL paths — [`docs/plans/epic-14-page-template-system-2026-08-10.md`](plans/epic-14-page-template-system-2026-08-10.md). |
 
 ## Active Direction
 
@@ -78,6 +79,9 @@ No backend or user, organization, or system data is part of this product directi
   isolated with retry; and Atlas overview aggregates authority into three
   honest presentation groups around the trunk and nine areas with a persistent
   inspector.
+- [x] Epic 14 - Page template system and visual language: all six canonical
+  templates are live, records lead with publisher text, Atlas drills through a
+  live breadcrumb, and legacy URL state normalizes to readable canonical paths.
 - [x] Epic 4 - Record and Build progressive disclosure: record pages place the available record explanation before structural position, Build has subordinate Tasks/Starter documents/Resources navigation, and task/document paths recover invalid state without losing valid configuration.
 - [x] Epic 5 - Source-first record integrity and legacy cleanup: official descriptions and source links are the default record surface; synthetic translation and its curated data are removed; relationships declare published rationale, Navigation note, or absence; Start Here is a source navigator; unsourced Playbooks are absent; and the legacy renderer is deleted.
 - [x] Epic 6 - Responsive and accessibility completion: Compare and Resources retain their meaning and controls at the required narrow/zoom-equivalent widths; the accessibility matrix records automated evidence and the pending human assistive-technology review.

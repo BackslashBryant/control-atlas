@@ -81,7 +81,7 @@ test("every populated area drills directly and the live breadcrumb reverses the 
 
   for (const [id, label] of POPULATED_AREAS) {
     await page.locator(`.atlas-tree__areas [data-area-id="${id}"]`).click();
-    await expect(page).toHaveURL(new RegExp(`atlasLimb=${encodeURIComponent(id)}`));
+    await expect(page).toHaveURL(new RegExp(`atlasLimb=${id}`));
     await expect(breadcrumb.getByText(label, { exact: true })).toHaveAttribute("aria-current", "page");
   }
 
@@ -99,7 +99,7 @@ test("a populated node drills two levels without a second confirmation", async (
   await openAtlas(page);
 
   await clickFlowNode(page, "atlas:LIMB-COMPLIANCE");
-  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
   await expect(page.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
   await clickFlowNode(page, "nist-800-53:CATALOG");
   await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
@@ -107,7 +107,7 @@ test("a populated node drills two levels without a second confirmation", async (
   await expect(breadcrumb).toContainText("Compliance");
   await expect(breadcrumb).toContainText("SP 800-53 Rev. 5 Catalog");
   await breadcrumb.getByRole("button", { name: "Compliance", exact: true }).click();
-  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
   await expect(page).not.toHaveURL(/atlasFramework=/);
 });
 
@@ -122,7 +122,7 @@ test("compact Atlas preserves direct keyboard drill without horizontal overflow"
   const compliance = tree.getByRole("treeitem", { name: /Compliance/ });
   await compliance.focus();
   await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
   await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("Compliance");
   expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBe(0);
 });

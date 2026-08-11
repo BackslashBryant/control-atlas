@@ -143,6 +143,6 @@ test("atlasBenchmark survives parse, serialization, and canonical route handling
   assert.equal(parsed.atlasBenchmark, benchmarkId);
   assert.match(serializeViewState(parsed), /atlasBenchmark=disa-stig%3ABENCHMARK-ORACLE-LINUX-9-STIG/);
   const canonical = canonicalizeHashLocation(`#/atlas?atlasFramework=disa-stig&atlasBenchmark=${benchmarkId}`);
-  assert.match(canonical.canonicalPath, /atlasBenchmark=disa-stig%3ABENCHMARK-ORACLE-LINUX-9-STIG/);
-  assert.equal(canonical.requiresReplace, true);
+  assert.match(canonical.canonicalPath, /atlasBenchmark=disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG/);
+  assert.equal(canonical.requiresReplace, false);
 });

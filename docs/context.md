@@ -23,10 +23,10 @@ publication are complete. `v1.0.2` is the final v1 patch and points to
 pre-hash query-state adapter remains because it preserves application state,
 not a retired route.
 
-**Active sprint:** None. Epic 13 shipped the product-first homepage,
-first-class Resources navigation, isolated runtime recovery, and aggregated
-Atlas workbench. Human NVDA/VoiceOver/TalkBack and physical iOS/Android checks
-remain external evidence.
+**Active sprint:** None. Epic 14 shipped the six-template visual language,
+source-first records, drillable Atlas, Home and Guides refresh, copy reset, and
+readable canonical URLs. Human NVDA/VoiceOver/TalkBack and physical iOS/Android
+checks remain external evidence.
 
 ## Shipped on `main` (do not re-plan)
 
@@ -55,8 +55,8 @@ It must not ingest evidence, accept uploads, connect to operational systems, sto
 
 ## Next
 
-1. Preserve the Epic 13 product definition, canonical Resources routes,
-   failure-isolation contracts, and inspector-led Atlas behavior.
+1. Preserve the Epic 13 product definition, Epic 14 template and URL contracts,
+   canonical Resources routes, failure-isolation contracts, and inspector-led Atlas behavior.
 2. Preserve the v1.0.2 release evidence and the explicit human
    NVDA/VoiceOver/TalkBack/physical-device residual.
 3. Revisit sparse-catalog crosswalks only when an official upstream source

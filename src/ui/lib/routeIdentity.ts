@@ -129,6 +129,7 @@ const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "area", "pub
 const DETAIL_PARAMS = new Set<string>();
 const START_PARAMS = new Set(["goal", "context"]);
 const COMPARE_PARAMS = new Set(["crosswalk", "workbench", "source", "target", "items", "relationshipType", "provenance", "confidence", "includeCandidates", "chainCatalog", "chainBenchmark", "chainItem", "baselineA", "baselineB", "intent", "compareView", "mappingSource", "compareRun"]);
+const COMPARE_MODES = new Set(["intent", "relationships", "stig-chain", "baseline-compare", "threat-chain"]);
 const LEARN_PARAMS = new Set(["pattern"]);
 const BUILD_PARAMS = new Set(["templateType", "framework", "format", "environment", "baseline", "controlFamily", "category", "q"]);
 const SOURCE_PARAMS = new Set(["q", "source", "publisher", "provenance", "eligibility", "lifecycle", "access"]);
@@ -193,8 +194,14 @@ function permittedParams(params: URLSearchParams, permitted: Set<string>): { par
 }
 
 function withParams(path: string, params: URLSearchParams): string {
-  const query = params.toString();
+  // Colons are valid in hash-route path and query components. Keeping them
+  // readable prevents public links from exposing percent-encoded record IDs.
+  const query = params.toString().replaceAll("%3A", ":");
   return query ? `${path}?${query}` : path;
+}
+
+function routeSegment(value: string): string {
+  return encodeURIComponent(value).replaceAll("%3A", ":");
 }
 
 /**
@@ -260,8 +267,45 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
     path = path.replace(/^\/library\/resource/, "/resources");
   }
 
+  // Public links keep identity in the path, not an encoded query value. The
+  // old query shape remains a supported input and is rewritten on arrival.
+  if (path === "/atlas" && params.get("node")) {
+    path = `/atlas/${routeSegment(params.get("node") || "")}`;
+    params.delete("node");
+  }
+  const atlasPath = path.match(/^\/atlas\/([^/]+)$/);
+  if (atlasPath) {
+    path = `/atlas/${routeSegment(decodeURIComponent(atlasPath[1]))}`;
+  }
+
+  if (path === "/compare") {
+    const compareMode = params.get("crosswalk") || params.get("workbench") || "";
+    params.delete("crosswalk");
+    params.delete("workbench");
+    if (compareMode && compareMode !== "intent") {
+      if (COMPARE_MODES.has(compareMode)) {
+        path = `/compare/${compareMode}`;
+      } else {
+        discarded = true;
+      }
+    } else if (compareMode && !COMPARE_MODES.has(compareMode)) {
+      discarded = true;
+    }
+  }
+
+  const comparePath = path.match(/^\/compare\/([^/]+)$/);
+  if (comparePath) {
+    const compareMode = decodeURIComponent(comparePath[1]);
+    if (compareMode === "intent") {
+      path = "/compare";
+    } else if (!COMPARE_MODES.has(compareMode)) {
+      path = "/compare";
+      discarded = true;
+    }
+  }
+
   let permitted: Set<string> | null = null;
-  if (path === "/atlas") permitted = ATLAS_PARAMS;
+  if (path === "/atlas" || /^\/atlas\/[^/]+$/.test(path)) permitted = ATLAS_PARAMS;
   if (path === "/library") permitted = SEARCH_PARAMS;
   if (path === "/resources") permitted = RESOURCE_PARAMS;
   if (/^\/library\/publication\/[^/]+$/.test(path)) permitted = CATALOG_PARAMS;
@@ -269,7 +313,7 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   if (/^\/resources\/[^/]+$/.test(path)) permitted = DETAIL_PARAMS;
   if (path.startsWith("/record/")) permitted = DETAIL_PARAMS;
   if (path === "/start") permitted = START_PARAMS;
-  if (path === "/compare") permitted = COMPARE_PARAMS;
+  if (path === "/compare" || /^\/compare\/[^/]+$/.test(path)) permitted = COMPARE_PARAMS;
   if (path === "/guides") permitted = LEARN_PARAMS;
   if (path === "/build" || /^\/build\/(?:tasks(?:\/[^/]+)?|documents(?:\/[^/]+)?)$/.test(path)) permitted = BUILD_PARAMS;
   if (path === "/sources") permitted = SOURCE_PARAMS;
