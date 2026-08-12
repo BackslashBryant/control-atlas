@@ -38,6 +38,8 @@ export const provenanceDescriptionMap = {
     "Program-specific published baseline or overlay from an official source.",
   federal_referenced:
     "Referenced federal guidance used as supporting public context.",
+  third_party_published:
+    "Published by the named non-government organization.",
   mitre_published:
     "Published MITRE ATT&CK or D3FEND mapping from the official catalog.",
   inferred:

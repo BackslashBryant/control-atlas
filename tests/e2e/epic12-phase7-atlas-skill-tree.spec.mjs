@@ -57,7 +57,7 @@ test("Atlas overview hands off to publisher-native navigation and preserves hist
   await expect(tree.locator("select")).toHaveCount(0);
   await explorer.getByLabel("Search this publication").fill("Oracle Linux 9");
   await explorer.getByRole("button", { name: /Oracle Linux 9/ }).click();
-  await expect(page).toHaveURL(/atlasBenchmark=disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG/);
+  await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG\?/);
   await expect(explorer.getByRole("heading", { name: /Oracle Linux 9/ })).toBeVisible();
 
   await page.reload();
@@ -65,16 +65,16 @@ test("Atlas overview hands off to publisher-native navigation and preserves hist
   await expect(page.locator("[data-atlas-structural-explorer]").getByRole("heading", { name: /Oracle Linux 9/ })).toBeVisible();
 
   await page.goBack();
-  await expect(page).not.toHaveURL(/atlasBenchmark=/);
+  await expect(page).not.toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG/);
   await expect(page.locator("[data-atlas-structural-explorer]").getByRole("heading", { name: "DISA STIG Catalog" })).toBeVisible();
   await page.goForward();
-  await expect(page).toHaveURL(/atlasBenchmark=/);
+  await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG\?/);
   await expect(page.locator("[data-atlas-structural-explorer]").getByRole("heading", { name: /Oracle Linux 9/ })).toBeVisible();
 
   await gotoApp(page, "/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-THREAT&atlasFramework=mitre-attack");
   await waitForAppReady(page);
   await page.locator("[data-atlas-structural-explorer]").getByRole("button", { name: /TA0001/ }).click();
-  await expect(page).toHaveURL(/atlasFamily=mitre-attack:TACTIC-TA0001/);
+  await expect(page).toHaveURL(/\/#\/atlas\/mitre-attack:TACTIC-TA0001\?/);
   await page.reload();
   await waitForAppReady(page);
   await expect(page.locator("[data-atlas-structural-explorer]").getByRole("heading", { name: /Initial Access/ })).toBeVisible();
@@ -136,7 +136,7 @@ test("mobile Atlas keeps keyboard overview navigation and uses a structural Brow
   await expect(browse).toBeVisible();
   await browse.getByLabel("Search this publication").fill("Oracle Linux 9");
   await browse.getByRole("button", { name: /BENCHMARK-ORACLE-LINUX-9-STIG/ }).click();
-  await expect(page).toHaveURL(/atlasBenchmark=/);
+  await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG\?/);
   const reopen = page.getByRole("button", { name: "Browse structure" });
   await expect(reopen).toBeVisible();
   const target = await reopen.evaluate((node) => {

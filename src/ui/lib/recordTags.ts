@@ -1,4 +1,4 @@
-export type RecordTagKind = "area" | "category" | "kind" | "publication";
+export type RecordTagKind = "area" | "asset_class" | "category" | "domain" | "environment" | "kind" | "publication" | "vendor_brand";
 export type RecordTagProvenance = "publisher" | "referenced" | "inferred";
 
 export type RecordTagModel = {
@@ -6,6 +6,7 @@ export type RecordTagModel = {
   kind: RecordTagKind;
   label: string;
   provenance: RecordTagProvenance;
+  basis?: { source_field: string; rule: string };
 };
 
 export function recordTagsFor(input: {
@@ -17,6 +18,13 @@ export function recordTagsFor(input: {
     code?: string;
     label?: string;
     provenance?: "referenced" | "inferred";
+  }>;
+  taxonomyTags?: Array<{
+    id?: string;
+    kind?: RecordTagKind;
+    label?: string;
+    provenance?: RecordTagProvenance;
+    basis?: { source_field: string; rule: string };
   }>;
 }): RecordTagModel[] {
   const tags: RecordTagModel[] = [
@@ -33,6 +41,10 @@ export function recordTagsFor(input: {
     });
   }
   if (input.area) tags.push({ id: `area:${input.area}`, kind: "area", label: input.area, provenance: "inferred" });
+  for (const tag of input.taxonomyTags || []) {
+    if (!tag.id || !tag.kind || !tag.label || tags.some((existing) => existing.id === tag.id)) continue;
+    tags.push({ id: tag.id, kind: tag.kind, label: tag.label, provenance: tag.provenance || "inferred", basis: tag.basis });
+  }
   tags.push({ id: `publication:${input.publication}`, kind: "publication", label: input.publication, provenance: "publisher" });
   return tags;
 }

@@ -66,8 +66,6 @@ export type AuthoritySpineEvidence = {
 };
 
 const AUTHORITY_TYPES = new Set(["statute", "regulation", "policy_directive"]);
-const SUMMARY_TYPES = new Set(["family", "benchmark", "category", "tactic", "group", "function"]);
-
 function itemId(id: string) {
   const separator = id.indexOf(":");
   return separator >= 0 ? id.slice(separator + 1) : id;
@@ -100,17 +98,7 @@ export function buildAtlasTreeModel(
 
   const instrumentEvidence = new Map((evidence.instruments || []).map((entry) => [entry.id, entry]));
   const publicationEvidence = new Map((evidence.publications || []).map((entry) => [`${entry.catalog_id}:CATALOG`, entry]));
-  const nodes = spine.entries
-    .filter((entry) =>
-      AUTHORITY_TYPES.has(entry.node_type) ||
-      entry.id.startsWith("authority:") ||
-      entry.id === ATLAS_TRUNK_ID ||
-      entry.node_type === "trunk" ||
-      entry.node_type === "limb" ||
-      entry.node_type === "catalog" ||
-      SUMMARY_TYPES.has(entry.node_type),
-    )
-    .map((entry) => {
+  const nodes = spine.entries.map((entry) => {
       const instrument = instrumentEvidence.get(entry.id);
       const publication = publicationEvidence.get(entry.id);
       return ({

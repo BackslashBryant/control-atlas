@@ -138,6 +138,20 @@ test("record connections include only published cross-catalog correlations", () 
   assert.deepEqual(groups, [{
     catalogId: "cmmc-2",
     label: "CMMC 2.0",
+    relationshipType: "equivalent_to",
+    items: [{
+      nodeId: "cmmc",
+      itemId: "L2-AC.1.001",
+      title: "Limit system access",
+      relationshipType: "equivalent_to",
+      edgeId: "edge-2",
+      provenanceClass: "federal_referenced",
+      sourceRefs: [{ sourceId: "cmmc-model", sourceName: "CMMC Model", sourceVersion: "2.0", locator: "Table 3", evidenceQuality: "direct" }],
+    }],
+  }, {
+    catalogId: "cmmc-2",
+    label: "CMMC 2.0",
+    relationshipType: "maps_to",
     items: [{
       nodeId: "cmmc",
       itemId: "L2-AC.1.001",
@@ -146,14 +160,6 @@ test("record connections include only published cross-catalog correlations", () 
       edgeId: "edge-1",
       provenanceClass: "federal_published",
       sourceRefs: [{ sourceId: "nist-olir", sourceName: "NIST OLIR", sourceVersion: "2.0", locator: "Relationships#PR.AA-01", evidenceQuality: "publisher asserted" }],
-    }, {
-      nodeId: "cmmc",
-      itemId: "L2-AC.1.001",
-      title: "Limit system access",
-      relationshipType: "equivalent_to",
-      edgeId: "edge-2",
-      provenanceClass: "federal_referenced",
-      sourceRefs: [{ sourceId: "cmmc-model", sourceName: "CMMC Model", sourceVersion: "2.0", locator: "Table 3", evidenceQuality: "direct" }],
     }],
   }]);
 });

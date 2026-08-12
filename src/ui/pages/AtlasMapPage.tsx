@@ -7,7 +7,6 @@ import {
   type FormEvent,
 } from "react";
 import {
-  IconBinaryTree,
   IconChevronRight,
   IconFolderOpen,
   IconListDetails,
@@ -25,7 +24,7 @@ import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
 import {
   AtlasTree,
-  benchmarkChildrenFromNeighborhood,
+  structuralChildrenFromNeighborhood,
 } from "../components/AtlasTree";
 import { RelationshipGraphTable } from "../components/RelationshipGraphTable";
 import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
@@ -43,14 +42,13 @@ import {
   buildAtlasDrilldownModel,
   hydrateAtlasFrameworkRecords,
   type AtlasDrilldownModel,
-  NIST_FRAMEWORK_ID,
 } from "../lib/atlasDrilldown";
-import { catalogProfileFor } from "../lib/catalogProfiles";
 import { resolveAtlasSearchTransition } from "../lib/atlasSearch";
 import { scrollElementBelowHeader } from "../lib/pagePrimitives";
 import { relationshipExplanation } from "../lib/relationshipProvenance";
 import {
   loadAtlasNeighborhood,
+  selectAtlasStructuralPath,
   type AtlasNeighborhoodRecord,
   type RuntimeBundle,
 } from "../lib/runtimeLoader";
@@ -168,7 +166,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       .then((nextRecord) => {
         if (cancelled) return;
         startTransition(() => {
-          setRecord(nextRecord);
+          setRecord(nextRecord ? selectAtlasStructuralPath(nextRecord, state.atlasParent) : null);
           setRecordStatus(nextRecord ? "ready" : "missing");
         });
       })
@@ -178,7 +176,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     return () => {
       cancelled = true;
     };
-  }, [nodeId]);
+  }, [nodeId, state.atlasParent]);
 
   useEffect(() => {
     let cancelled = false;
@@ -237,6 +235,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     setNoMatchQuery("");
     patchAtlas({
       node: transition.nodeId,
+      atlasParent: "",
       relationshipSearch: "",
       relationshipGroup: "",
       atlasStage: "",
@@ -323,7 +322,6 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       {record ? (
         <FocusedAtlas
           bundle={bundle}
-          benchmarkRecord={benchmarkRecord}
           onNavigate={onNavigate}
           onOpenNode={onOpenNode}
           patchAtlas={patchAtlas}
@@ -358,7 +356,6 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
 
 function FocusedAtlas(props: {
   bundle: RuntimeBundle;
-  benchmarkRecord: AtlasNeighborhoodRecord | null;
   record: AtlasNeighborhoodRecord;
   state: AtlasMapPageProps["state"];
   view: AtlasView;
@@ -366,7 +363,7 @@ function FocusedAtlas(props: {
   onNavigate: AtlasMapPageProps["onNavigate"];
   onOpenNode: AtlasMapPageProps["onOpenNode"];
 }) {
-  const { bundle, benchmarkRecord, record, state, view, patchAtlas, onNavigate, onOpenNode } = props;
+  const { bundle, record, state, view, patchAtlas, onNavigate, onOpenNode } = props;
   const filters: AtlasFilterState = {
     relationshipType: state.relationshipType,
     provenance: state.provenance,
@@ -577,7 +574,7 @@ function FocusedAtlas(props: {
       {bundle.atlasSpine ? (
         <AtlasTree
           areaId={state.atlasLimb}
-          benchmarkChildren={benchmarkChildrenFromNeighborhood(benchmarkRecord)}
+          benchmarkChildren={structuralChildrenFromNeighborhood(record)}
           benchmarkId={state.atlasBenchmark}
           catalogSummaries={bundle.catalogSummaries || []}
           focusedRecord={record}
@@ -590,6 +587,7 @@ function FocusedAtlas(props: {
               atlasFamily: "",
               atlasBenchmark: "",
               node: "",
+              atlasParent: "",
             })
           }
           onOpenCompare={() => onNavigate("matrix", { source: centerCatalogId })}
@@ -601,11 +599,13 @@ function FocusedAtlas(props: {
               atlasFamily: "",
               atlasBenchmark: "",
               node: "",
+              atlasParent: "",
             })
           }
-          onOpenSummary={(atlasFamily) =>
-            patchAtlas({ atlasFamily, atlasBenchmark: "", node: "" })
+          onOpenSummary={(node, parentId) =>
+            patchAtlas({ atlasFamily: "", atlasBenchmark: "", node, atlasParent: state.atlasParent || parentId, relationshipView: "path" })
           }
+          onOpenRecord={(node, parentId) => patchAtlas({ node, atlasParent: state.atlasParent || parentId, relationshipView: "path" })}
           onReset={() =>
             patchAtlas({
               atlasAxis: "",
@@ -614,10 +614,11 @@ function FocusedAtlas(props: {
               atlasFamily: "",
               atlasBenchmark: "",
               node: "",
+              atlasParent: "",
             })
           }
           onSelectBenchmark={(atlasBenchmark) =>
-            patchAtlas({ atlasBenchmark, atlasFamily: "", node: "" })
+            patchAtlas({ atlasBenchmark, atlasFamily: "", node: "", atlasParent: "" })
           }
           publicationId={state.atlasFramework}
           spine={bundle.atlasSpine}
@@ -737,7 +738,7 @@ function FocusedAtlas(props: {
                           <li key={child.id}>
                             <AppLink
                               onNavigate={onNavigate}
-                              patch={{ ...state, node: child.id, atlasStage: "", relationshipGroup: "" }}
+                              patch={{ ...state, node: child.id, atlasParent: state.atlasParent || record.center_node.id, atlasStage: "", relationshipGroup: "" }}
                               title={child.title}
                               view="atlas-map"
                             >
@@ -813,6 +814,7 @@ function FocusedAtlas(props: {
                         onClick={() =>
                           patchAtlas({
                             node: child.id,
+                            atlasParent: state.atlasParent || record.center_node.id,
                             atlasStage: "",
                             relationshipGroup: "",
                           })
@@ -910,7 +912,7 @@ function FocusedAtlas(props: {
                     onClick={(event) => {
                       if (shouldInterceptAppLink(event)) setSelectedRow(null);
                     }}
-                    patch={{ ...state, node: selectedRow.counterpart.id, atlasStage: "", relationshipGroup: "", relationshipSearch: "" }}
+                    patch={{ ...state, node: selectedRow.counterpart.id, atlasParent: "", atlasStage: "", relationshipGroup: "", relationshipSearch: "" }}
                     variant="primary"
                     view="atlas-map"
                   >
@@ -965,7 +967,6 @@ function AtlasGuidedPath(props: {
   onOpenNode: AtlasMapPageProps["onOpenNode"];
 }) {
   const { bundle, benchmarkRecord, state, patchAtlas, onNavigate, onOpenNode } = props;
-  const [recordFilter, setRecordFilter] = useState("");
   const axis =
     state.atlasAxis ||
     (state.sourceView === "rmf" ||
@@ -988,32 +989,6 @@ function AtlasGuidedPath(props: {
   useEffect(() => {
     setOpenLimbId(state.atlasLimb || "");
   }, [state.atlasLimb]);
-  const frameworks = model.frameworkGroups.flatMap((group) => group.frameworks);
-  const framework = frameworks.find(
-    (choice) => choice.id === state.atlasFramework,
-  );
-  const baseline = model.baselines.find(
-    (choice) => choice.id === state.atlasBaseline,
-  );
-  const frameworkUnits = useMemo(() => {
-    if (!framework) return [];
-    if (framework.id !== NIST_FRAMEWORK_ID || state.atlasBaseline === "all") {
-      return framework.units;
-    }
-    if (!baseline) return framework.units;
-    const selectedByUnit = new Map(
-      baseline.families.map((unit) => [unit.id, unit.records]),
-    );
-    return framework.units
-      .map((unit) => ({
-        ...unit,
-        records: selectedByUnit.get(unit.id) || [],
-      }))
-      .filter((unit) => unit.records.length > 0);
-  }, [baseline, framework, state.atlasBaseline]);
-  const family = frameworkUnits.find(
-    (choice) => choice.id === state.atlasFamily,
-  );
   const rmfStep = model.rmfSteps.find(
     (choice) => choice.id === state.atlasRmfStep,
   );
@@ -1022,20 +997,6 @@ function AtlasGuidedPath(props: {
     const links = [
       { id: "atlas:root", label: "Atlas map" },
     ];
-    if (axis === "framework") {
-      if (framework) {
-        links.push({
-          id: `framework:${framework.id}`,
-          label: framework.label,
-        });
-      }
-      if (family) {
-        links.push({
-          id: `family:${family.id}`,
-          label: family.label,
-        });
-      }
-    }
     if (axis === "process") {
       links.push({
         id: "process:rmf",
@@ -1049,7 +1010,7 @@ function AtlasGuidedPath(props: {
       }
     }
     return links;
-  }, [axis, family, framework, rmfStep]);
+  }, [axis, rmfStep]);
 
   function resetDrill(patch: Partial<AtlasMapPageProps["state"]>) {
     patchAtlas({
@@ -1061,6 +1022,7 @@ function AtlasGuidedPath(props: {
       atlasBenchmark: "",
       atlasRmfStep: "",
       node: "",
+      atlasParent: "",
       ...patch,
     });
   }
@@ -1071,39 +1033,17 @@ function AtlasGuidedPath(props: {
       resetDrill({});
       return;
     }
-    if (id.startsWith("framework:")) {
-      resetDrill({
-        atlasAxis: "framework",
-        atlasFramework: id.slice("framework:".length),
-      });
-      return;
-    }
-    if (id.startsWith("family:")) {
-      patchAtlas({ atlasFamily: id.slice("family:".length) });
-      return;
-    }
     if (id === "process:rmf") {
       resetDrill({ atlasAxis: "process" });
     }
   }
-
-  const filteredRecords = family
-    ? family.records.filter((record) => {
-        const query = recordFilter.trim().toLowerCase();
-        return (
-          !query ||
-          record.itemId.toLowerCase().includes(query) ||
-          record.label.toLowerCase().includes(query)
-        );
-      })
-    : [];
 
   return (
     <section className="atlas-ancestry">
       {bundle.atlasSpine ? (
         <AtlasTree
           areaId={state.atlasLimb}
-          benchmarkChildren={benchmarkChildrenFromNeighborhood(benchmarkRecord)}
+          benchmarkChildren={structuralChildrenFromNeighborhood(benchmarkRecord)}
           benchmarkId={state.atlasBenchmark}
           catalogSummaries={bundle.catalogSummaries || []}
           onOpenArea={(atlasLimb) => {
@@ -1115,15 +1055,16 @@ function AtlasGuidedPath(props: {
             setOpenLimbId(atlasLimb);
             resetDrill({ atlasAxis: "framework", atlasLimb, atlasFramework });
           }}
-          onOpenSummary={(atlasFamily) =>
-            patchAtlas({ atlasFamily, atlasBenchmark: "", node: "" })
+          onOpenSummary={(node, parentId) =>
+            patchAtlas({ atlasFamily: "", atlasBenchmark: "", node, atlasParent: parentId, relationshipView: "path" })
           }
+          onOpenRecord={(node, parentId) => patchAtlas({ node, atlasParent: parentId, relationshipView: "path" })}
           onReset={() => {
             setOpenLimbId("");
             resetDrill({});
           }}
           onSelectBenchmark={(atlasBenchmark) =>
-            patchAtlas({ atlasBenchmark, atlasFamily: "", node: "" })
+            patchAtlas({ atlasBenchmark, atlasFamily: "", node: "", atlasParent: "" })
           }
           publicationId={state.atlasFramework}
           spine={bundle.atlasSpine}
@@ -1135,191 +1076,6 @@ function AtlasGuidedPath(props: {
 
       {axis === "process" ? (
         <ChoiceTrail links={choiceLinks} onOpen={openAncestor} />
-      ) : null}
-
-      {axis === "framework" && !framework ? (
-        <>
-          <p className="atlas-path-prompt">
-            {openLimbId
-              ? `${
-                  model.frameworkGroups.find((group) => group.id === openLimbId)
-                    ?.label ?? "This area"
-                }: choose a publication.`
-              : "Choose a publication."}
-          </p>
-          <ul className="atlas-path-stage-list">
-            {(openLimbId
-              ? model.frameworkGroups.filter((group) => group.id === openLimbId)
-              : model.frameworkGroups
-            ).flatMap((group) =>
-              group.frameworks.map((choice) => (
-                <li key={choice.id}>
-                  <button
-                    className="atlas-path-stage-option"
-                    onClick={() =>
-                      patchAtlas({
-                        atlasFramework: choice.id,
-                        atlasBaseline: "",
-                        atlasFamily: "",
-                      })
-                    }
-                    type="button"
-                  >
-                    <IconBinaryTree aria-hidden="true" size={20} />
-                    <span className="atlas-path-stage-option-text">
-                      <strong>{choice.label}</strong>
-                      {/* Was the limb's blurb, which repeated verbatim under
-                          every catalog in the limb. Each catalog states what it
-                          actually covers (src/ui/lib/catalogProfiles.ts); the
-                          limb name is already in the prompt above. */}
-                      <small>{catalogProfileFor(choice.id, choice.label).synopsis}</small>
-                    </span>
-                    <IconChevronRight aria-hidden="true" size={20} />
-                  </button>
-                </li>
-              )),
-            )}
-          </ul>
-        </>
-      ) : null}
-
-      {axis === "framework" &&
-      framework?.id === NIST_FRAMEWORK_ID &&
-      !state.atlasBaseline ? (
-        <>
-          <p className="atlas-path-prompt">
-            Optional: filter these records by baseline.
-          </p>
-          <ul className="atlas-path-stage-list">
-            <li>
-              <button
-                className="atlas-path-stage-option"
-                onClick={() =>
-                  patchAtlas({ atlasBaseline: "all", atlasFamily: "" })
-                }
-                type="button"
-              >
-                <IconBinaryTree aria-hidden="true" size={20} />
-                <span className="atlas-path-stage-option-text">
-                  <strong>All SP 800-53 records</strong>
-                  <small>No baseline filter</small>
-                </span>
-                <IconChevronRight aria-hidden="true" size={20} />
-              </button>
-            </li>
-            {model.baselines.map((choice) => (
-              <li key={choice.id}>
-                <button
-                  className="atlas-path-stage-option"
-                  onClick={() =>
-                    patchAtlas({
-                      atlasBaseline: choice.id,
-                      atlasFamily: "",
-                    })
-                  }
-                  type="button"
-                >
-                  <IconBinaryTree aria-hidden="true" size={20} />
-                  <span className="atlas-path-stage-option-text">
-                    <strong>{choice.itemId} impact</strong>
-                    <small>
-                      {choice.recordCount} controls across {choice.families.length} families
-                    </small>
-                  </span>
-                  <IconChevronRight aria-hidden="true" size={20} />
-                </button>
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : null}
-
-      {axis === "framework" &&
-      framework &&
-      (framework.id !== NIST_FRAMEWORK_ID || state.atlasBaseline) &&
-      !family ? (
-        <>
-          <p className="atlas-path-prompt">
-            Choose a family or group.
-          </p>
-          <div className="atlas-ancestry-family-grid">
-            {frameworkUnits.map((choice) => (
-              <button
-                className="atlas-ancestry-family"
-                key={choice.id}
-                onClick={() =>
-                  choice.records.length
-                    ? patchAtlas({ atlasFamily: choice.id })
-                    : patchAtlas({
-                        node: choice.id,
-                        relationshipGroup: "",
-                        relationshipView: "path",
-                      })
-                }
-                type="button"
-              >
-                <span>
-                  <strong>{choice.itemId}</strong>
-                  <small>{choice.label}</small>
-                </span>
-                <span>{choice.records.length}</span>
-              </button>
-            ))}
-          </div>
-        </>
-      ) : null}
-
-      {axis === "framework" && family ? (
-        <>
-          <div className="atlas-ancestry-record-header">
-            <div>
-              <p className="eyebrow">{family.itemId} family</p>
-              <h2>{family.label}</h2>
-              <p>
-                {family.records.length} structural child
-                {family.records.length === 1 ? "" : "ren"}
-                {state.atlasBaseline && state.atlasBaseline !== "all"
-                  ? " shown by this optional baseline filter."
-                  : "."}
-              </p>
-            </div>
-            <label>
-              Filter this family
-              <input
-                onChange={(event) => setRecordFilter(event.target.value)}
-                placeholder="ID or title"
-                type="search"
-                value={recordFilter}
-              />
-            </label>
-          </div>
-          <ul className="atlas-path-record-list">
-            {filteredRecords.map((record) => (
-              <li key={record.id}>
-                <button
-                  className="atlas-path-record"
-                  onClick={() =>
-                    patchAtlas({
-                      node: record.id,
-                      relationshipGroup: "",
-                      relationshipView: "path",
-                    })
-                  }
-                  type="button"
-                >
-                  <span className="atlas-path-record-text">
-                    <strong>{record.itemId}</strong>
-                    <small>{record.label}</small>
-                  </span>
-                  <IconChevronRight aria-hidden="true" size={20} />
-                </button>
-              </li>
-            ))}
-          </ul>
-          {!filteredRecords.length ? (
-            <p className="muted">No structural children match that filter.</p>
-          ) : null}
-        </>
       ) : null}
 
       {axis === "process" && !rmfStep ? (

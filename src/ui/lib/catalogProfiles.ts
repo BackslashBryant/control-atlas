@@ -34,6 +34,10 @@ const PUBLICATION_KINDS: Record<string, string> = {
   "disa-cci": "Implementation standard",
   "nist-ssdf": "Implementation standard",
   "dod-zt": "Implementation standard",
+  "nist-zt": "Architecture and implementation guide",
+  "microsoft-zt-maturity": "Assessment tool",
+  "nist-iot-cybersecurity": "Capability catalog",
+  "nist-mobile-threats": "Threat knowledge base",
   "mitre-attack": "Threat knowledge base",
   "mitre-attack-ics": "Threat knowledge base",
   "mitre-d3fend": "Defensive knowledge base",
@@ -62,6 +66,10 @@ const RECORD_LABELS: Record<string, string> = {
   "cmmc-2": "Program records",
   "cui-policy": "Program records",
   "dod-zt": "Activities",
+  "nist-zt": "Principles, components, and builds",
+  "microsoft-zt-maturity": "Assessment questions",
+  "nist-iot-cybersecurity": "Capabilities and elements",
+  "nist-mobile-threats": "Mobile threats",
   "dod-rai": "Guidance records",
   "nist-ai-rmf": "Practices",
   "nist-ssdf": "Practices",
@@ -121,6 +129,14 @@ const SYNOPSES: Record<string, string> = {
     "Defensive cybersecurity techniques and their relationships to offensive techniques.",
   "dod-zt":
     "Department of Defense zero trust capabilities, activities, and target outcomes.",
+  "nist-zt":
+    "NIST zero trust principles, logical components, and the 19 SP 1800-35 example implementations.",
+  "microsoft-zt-maturity":
+    "Microsoft assessment questions across six zero trust pillars, informed by NIST and CISA guidance.",
+  "nist-iot-cybersecurity":
+    "NIST technical and manufacturer capabilities for securing Internet of Things devices.",
+  "nist-mobile-threats":
+    "NIST mobile threats with exploit examples, CVE references, and possible countermeasures.",
 };
 
 export function catalogProfileFor(

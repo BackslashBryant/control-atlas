@@ -329,6 +329,7 @@ export type CrossFrameworkGroup = {
 export type RecordConnectionGroup = {
   catalogId: string;
   label: string;
+  relationshipType: string;
   items: Array<{
     nodeId: string;
     itemId: string;
@@ -401,14 +402,16 @@ export function buildRecordConnectionGroups(
       !relationshipType ||
       !provenanceClass
     ) continue;
-    if (!groups.has(catalogId)) {
-      groups.set(catalogId, {
+    const groupId = `${catalogId}:${relationshipType}`;
+    if (!groups.has(groupId)) {
+      groups.set(groupId, {
         catalogId,
         label: groupLabel,
+        relationshipType,
         items: [],
       });
     }
-    groups.get(catalogId)!.items.push({
+    groups.get(groupId)!.items.push({
       nodeId: counterpartId,
       itemId,
       title,
@@ -431,7 +434,7 @@ export function buildRecordConnectionGroups(
       ...group,
       items: group.items.sort((a, b) => a.itemId.localeCompare(b.itemId)),
     }))
-    .sort((a, b) => a.label.localeCompare(b.label));
+    .sort((a, b) => a.label.localeCompare(b.label) || a.relationshipType.localeCompare(b.relationshipType));
 }
 
 /**

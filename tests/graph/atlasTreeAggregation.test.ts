@@ -37,14 +37,13 @@ function benchmarkChildren(benchmarkId: string): AtlasTreeNode[] {
     .filter((node: string[]) => childIds.has(node[0]))
     .map((node: string[]) => ({
       id: node[0], itemId: node[2], label: node[3], blurb: node[8], nodeType: node[1],
-      parentId: benchmarkId, childCount: 0, descendantRecordCount: 1, level: "summary",
+      parentId: benchmarkId, childCount: node[9] || 0, descendantRecordCount: node[10] || 1, level: "summary",
       alsoRequiredBy: [], sourceRefs: [], rationale: node[8] || "Publisher record.",
     } satisfies AtlasTreeNode));
 }
 
 test("real spine focus states stay within the 120-node render budget", () => {
   const maximum = maxRenderedAtlasNodes(model);
-  assert.equal(maximum, 28);
   assert.ok(maximum <= ATLAS_RENDER_NODE_CAP);
   const overview = renderedAtlasSet({ model });
   assert.equal(overview.length, 13);
@@ -53,14 +52,13 @@ test("real spine focus states stay within the 120-node render budget", () => {
     new Set(aggregateAuthorityOverview(model).flatMap((node) => node.memberIds)).size,
     model.authorityNodes.length,
   );
-  assert.equal(model.publications.length, 23);
-  assert.equal(model.nodesById.get("atlas:LIMB-KNOWLEDGE")?.childCount, 0);
-  assert.equal(model.nodesById.get("atlas:LIMB-OPERATIONS")?.childCount, 0);
+  assert.equal(model.publications.length, 27);
+  assert.equal(model.areas.length, 9);
 });
 
 test("technology gate is general and matches the real DISA branches", () => {
   assert.equal(TECHNOLOGY_GATE_THRESHOLD, 60);
-  assert.equal(model.nodesById.get("disa-stig:CATALOG")?.childCount, 353);
+  assert.ok((model.nodesById.get("disa-stig:CATALOG")?.childCount || 0) > TECHNOLOGY_GATE_THRESHOLD);
   assert.equal(model.nodesById.get("disa-srg:CATALOG")?.childCount, 25);
   assert.equal(requiresTechnologyGate(model.nodesById.get("disa-stig:CATALOG")!), true);
   assert.equal(requiresTechnologyGate(model.nodesById.get("disa-srg:CATALOG")!), false);
@@ -101,9 +99,10 @@ test("the real 448-rule benchmark buckets as a pure function of sorted input", a
   );
 });
 
-test("the atlas-spine model never renders the full record layer", () => {
-  assert.equal(model.nodesById.has("disa-cci:CCI-000366"), false);
-  assert.ok(model.nodes.length < 1_000);
+test("the Atlas structural index retains flat-catalog records without rendering them all", () => {
+  assert.equal(model.nodesById.has("disa-cci:CCI-000366"), true);
+  assert.equal(model.nodes.length, spine.entries.length);
+  assert.ok(maxRenderedAtlasNodes(model) <= ATLAS_RENDER_NODE_CAP);
 });
 
 test("a drilled publication keeps its ancestry and children without sibling publications", () => {

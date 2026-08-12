@@ -45,19 +45,21 @@ for (const viewport of VIEWPORTS) {
     await dismissOnboarding(page);
 
     await clickAtlasNode(page, viewport, "atlas:LIMB-COMPLIANCE");
-    await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+    await expect(page).toHaveURL(/atlasLimb=atlas(?::|%3A)LIMB-COMPLIANCE/);
     await clickAtlasNode(page, viewport, "nist-800-53:CATALOG");
     await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
     await expect(page).not.toHaveURL(/atlasBaseline=/);
 
-    await clickAtlasNode(page, viewport, "nist-800-53:FAMILY-AC");
-    await expect(page.getByLabel("Filter this family")).toBeVisible();
-    await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("Access Control");
+    const explorer = page.locator("[data-atlas-structural-explorer]");
+    await explorer.getByRole("button", { name: /FAMILY-AC Access Control/ }).click();
+    await expect(explorer.getByLabel("Search this publication")).toBeVisible();
+    await expect(explorer.getByRole("heading", { name: "Access Control" })).toBeVisible();
+    await expect(page.locator(".atlas-tree__mobile-bar")).toContainText("Access Control");
     await expectNoHorizontalOverflow(page);
-    await page.locator(".atlas-path-record").first().click();
-    await expect(page).toHaveURL(/node=nist-800-53/);
+    await explorer.getByLabel("Search this publication").fill("AC-1");
+    await explorer.getByRole("button", { name: /^AC-1\b/ }).click();
+    await expect(page).toHaveURL(/\/#\/atlas\/nist-800-53:AC-1\?/);
     await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-    await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("Access Control");
     // The guided path lands with Hierarchy already open (it sets
     // relationshipView: "path" when a record is chosen) — the visitor just
     // navigated structure to get here, so showing it is the point.
@@ -66,6 +68,9 @@ for (const viewport of VIEWPORTS) {
       "true",
     );
     await expect(page.getByRole("heading", { name: "Where this sits" })).toBeVisible();
+    await expect(
+      page.getByRole("navigation", { name: "Where this sits" }).first(),
+    ).toContainText("Access Control");
     await expect(
       page.getByRole("navigation", { name: "Where this sits" }).first(),
     ).not.toContainText("Low Impact Baseline");
@@ -89,11 +94,9 @@ for (const viewport of VIEWPORTS) {
     ).toBeVisible();
 
     await page.locator(".atlas-rmf-step-list button").first().click();
-    await expect(
-      page.getByText("Published relationships", { exact: true }),
-    ).toBeVisible();
+    await expect(page.getByText("Related records", { exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Prepare", exact: true })).toBeVisible();
     await expect(page.locator(".atlas-choice-trail")).toContainText("PREPARE");
-    await expect(page.locator(".badge.tone-applicability").first()).toBeVisible();
     await expectNoHorizontalOverflow(page);
     await page.screenshot({
       fullPage: true,

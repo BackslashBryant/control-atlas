@@ -31,6 +31,7 @@ export type ViewState =
   | {
       view: "atlas-map";
       node: string;
+      atlasParent: string;
       atlasAxis: string;
       atlasLimb: string;
       atlasFramework: string;
@@ -194,6 +195,7 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
   return {
     view: "atlas-map",
     node: "",
+    atlasParent: "",
     atlasAxis: "",
     atlasLimb: "",
     atlasFramework: "",
@@ -280,6 +282,7 @@ export function parseViewState(search: string): ViewState {
     return {
       view,
       node: params.get("node") || "",
+      atlasParent: params.get("atlasParent") || "",
       atlasAxis: params.get("atlasAxis") || "",
       atlasLimb: params.get("atlasLimb") || "",
       atlasFramework: params.get("atlasFramework") || "",
@@ -666,6 +669,7 @@ export function serializeViewState(state: ViewState): string {
   } else if (state.view === "atlas-map") {
     params.set("view", "atlas-map");
     setIfValue(params, "node", state.node);
+    setIfValue(params, "atlasParent", state.atlasParent);
     setIfValue(params, "atlasAxis", state.atlasAxis);
     setIfValue(params, "atlasLimb", state.atlasLimb);
     setIfValue(params, "atlasFramework", state.atlasFramework);
@@ -818,6 +822,7 @@ export function serializeViewState(state: ViewState): string {
 
 export type AtlasMapUrlOptions = {
   node?: string;
+  atlasParent?: string;
   atlasAxis?: string;
   atlasLimb?: string;
   atlasFramework?: string;
@@ -857,6 +862,7 @@ export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
   const state = normalizeViewState("atlas-map", {
     view: "atlas-map",
     node: options.node || "",
+    atlasParent: options.atlasParent || "",
     atlasAxis: options.atlasAxis || "",
     atlasLimb: options.atlasLimb || "",
     atlasFramework: options.atlasFramework || "",
