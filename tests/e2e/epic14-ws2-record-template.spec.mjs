@@ -90,6 +90,13 @@ test("WS2 turns clear DISA commands and file procedures into copyable source for
   const fix = page.locator('[data-source-field="fix_text"]');
   await expect(fix.locator(".source-procedure-list")).toHaveCount(2);
   await expect(fix.locator("[data-source-code-snippet]")).toHaveCount(2);
+  await expect(fix.locator(".source-procedure-list__code-step > [data-source-code-snippet]")).toHaveCount(2);
+  await expect(fix.locator(":scope > .source-text-blocks > [data-source-code-snippet]")).toHaveCount(0);
+
+  for (const snippet of await page.locator("[data-source-code-snippet] pre").all()) {
+    const snippetOverflow = await snippet.evaluate((element) => element.scrollWidth - element.clientWidth);
+    expect(snippetOverflow).toBeLessThanOrEqual(1);
+  }
 
   await page.setViewportSize({ width: 375, height: 812 });
   const overflow = await page.evaluate(() =>
@@ -97,6 +104,42 @@ test("WS2 turns clear DISA commands and file procedures into copyable source for
       globalThis.document.documentElement.clientWidth,
   );
   expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test("WS2 keeps every published record form readable at compact width", async ({ page }) => {
+  const records = [
+    ["assessment procedure", "/#/record/nist-800-53a/AC-1", "Assessment Procedure"],
+    ["ATT&CK technique", "/#/record/mitre-attack-ics/T0800", "Technique Description"],
+    ["baseline", "/#/record/fedramp-rev5/HIGH", "Baseline"],
+    ["control", "/#/record/nist-800-53/AC-1", "Control Statement"],
+    ["control enhancement", "/#/record/nist-800-53/AC-11.1", "Control Statement"],
+    ["D3FEND countermeasure", "/#/record/mitre-d3fend/D3-AA", "Countermeasure Description"],
+    ["impact category", "/#/record/fips-199/FIPS-199-HIGH", "Impact Category"],
+    ["policy", "/#/record/cui-policy/CATEGORY-ACCIDENT-INVESTIGATION", "Policy Statement"],
+    ["program", "/#/record/cmmc-2/LEVEL-1", "Program Level"],
+    ["requirement", "/#/record/csf-2/DE.AE-02", "Outcome"],
+    ["RMF step", "/#/record/nist-800-37/RMF-ASSESS", "RMF Step"],
+    ["SRG requirement", "/#/record/disa-srg/V-202013", "Discussion"],
+    ["STIG rule", "/#/record/disa-stig/V-213117", "Discussion"],
+    ["Zero Trust activity", "/#/record/dod-zt/ACT-1-1-1", "Activity"],
+    ["Zero Trust capability", "/#/record/dod-zt/CAP-1-1", "Capability"],
+    ["Zero Trust document", "/#/record/dod-zt/DOC-OVERLAYS", "Document Summary"],
+    ["Zero Trust overlay", "/#/record/dod-zt/OVERLAY-APP", "Overlay Section"],
+    ["Zero Trust pillar", "/#/record/dod-zt/PILLAR-1", "Pillar Summary"],
+    ["Zero Trust tenet", "/#/record/dod-zt/TENET-1", "Tenet"],
+  ];
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const [form, route, heading] of records) {
+    await openRecord(page, route);
+    await expect(page.locator("[data-record-source-error]"), `${form} source data`).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: heading, level: 2 }).first(), `${form} heading`).toBeVisible();
+    await expect(page.locator(".record-official-text > section").first(), `${form} published text`).toBeVisible();
+    const overflow = await page.evaluate(() =>
+      globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
+    );
+    expect(overflow, `${form} horizontal overflow`).toBeLessThanOrEqual(1);
+  }
 });
 
 test("WS2 desktop uses the locked two-column reading layout", async ({ page }) => {

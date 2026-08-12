@@ -105,11 +105,13 @@ export function CatalogDetailPage(props: {
           (record: any) => record.metadata?.family === name,
         ).length,
       }));
+  const filteredTierGroups = query && !state.family
+    ? tierGroups.filter((group) => group.name.toLowerCase().includes(query))
+    : tierGroups;
   const showTierBrowser =
     families.length > 1 &&
-    state.browseAll !== "true" &&
     !state.family &&
-    !query;
+    (publishedGroups.length > 0 || (state.browseAll !== "true" && !query));
   const requestedPage = Number.parseInt(state.page || "1", 10);
   const page = paginateCatalogRecords(
     matchingRecords,
@@ -181,7 +183,7 @@ export function CatalogDetailPage(props: {
             </h2>
             <p>
               {showTierBrowser
-                ? `${tierGroups.length} published groups`
+                ? `${filteredTierGroups.length} ${catalog.tier_label_plural || "published groups"}`
                 : `${matchingRecords.length.toLocaleString()} matching records`}
             </p>
           </div>
@@ -220,20 +222,22 @@ export function CatalogDetailPage(props: {
                 </label>
               ) : null}
               <label className="catalog-record-filter catalog-record-search-filter">
-                <span>Search records</span>
+                <span>{showTierBrowser ? `Search ${catalog.tier_label_plural || "published groups"}` : "Search records"}</span>
                 <span className="catalog-search">
                   <IconSearch aria-hidden="true" size={18} />
                   <input
-                    aria-label="Search this catalog"
+                    aria-label={showTierBrowser ? `Search ${catalog.name} ${catalog.tier_label_plural || "published groups"}` : "Search this catalog"}
                     onChange={(event) => setQueryDraft(event.target.value)}
-                    placeholder={`Identifier or title in ${catalog.name}`}
+                    placeholder={showTierBrowser
+                      ? `Benchmark or technology in ${catalog.name}`
+                      : `Identifier or title in ${catalog.name}`}
                     type="search"
                     value={queryDraft}
                   />
                 </span>
               </label>
             </div>
-            <Button type="submit" variant="secondary">Search records</Button>
+            <Button type="submit" variant="secondary">{showTierBrowser ? "Search benchmarks" : "Search records"}</Button>
           </form>
         </WorkbenchControlSurface>
 
@@ -245,9 +249,10 @@ export function CatalogDetailPage(props: {
           ) : showTierBrowser ? (
             <>
               <div className="catalog-index-list">
-                {tierGroups.map((group) => (
+                {filteredTierGroups.map((group) => (
                   <button
                     className="catalog-index-row"
+                    data-published-tier={catalog.tier_label || "group"}
                     key={group.name}
                     onClick={() =>
                       update({
@@ -258,7 +263,10 @@ export function CatalogDetailPage(props: {
                     }
                     type="button"
                   >
-                    <span><strong>{group.name}</strong></span>
+                    <span>
+                      <small>{catalog.tier_label || "Published group"}</small>
+                      <strong>{group.name}</strong>
+                    </span>
                     <span>
                       {group.count.toLocaleString()} {profile.recordLabel}
                     </span>
@@ -274,6 +282,15 @@ export function CatalogDetailPage(props: {
                   Browse all {records.length.toLocaleString()} {profile.recordLabel}
                 </button>
               )}
+              {filteredTierGroups.length === 0 ? (
+                <div className="empty-state">
+                  <h3>No {catalog.tier_label_plural || "published groups"} match this search.</h3>
+                  <p>Try a product, platform, or benchmark name.</p>
+                  <Button onClick={() => update({ query: "", page: "" })} type="button" variant="secondary">
+                    Clear benchmark search
+                  </Button>
+                </div>
+              ) : null}
             </>
           ) : !pageIsValid ? (
             <div className="empty-state">

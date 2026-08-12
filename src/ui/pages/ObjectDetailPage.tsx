@@ -77,6 +77,9 @@ function CopyableCodeSnippet(props: { value: string }) {
         >
           {copied ? "Copied" : "Copy"}
         </Button>
+        <span aria-live="polite" className="visually-hidden">
+          {copied ? "Snippet copied to clipboard" : ""}
+        </span>
       </div>
       <pre><code>{props.value}</code></pre>
     </div>
@@ -88,27 +91,59 @@ function SourceTextBlocks(props: { value: string; presentation?: any }) {
   const resolvedPresentation = isValidSourceTextPresentation(text, props.presentation)
     ? props.presentation
     : buildSourceTextPresentation(text);
+  const blocks = resolvedPresentation.blocks;
+  const rendered: ReactNode[] = [];
+
+  for (let index = 0; index < blocks.length; index += 1) {
+    const block = blocks[index];
+    if (block.kind === "code") {
+      rendered.push(
+        <CopyableCodeSnippet
+          key={`code-${block.start}-${index}`}
+          value={text.slice(block.start, block.end)}
+        />,
+      );
+      continue;
+    }
+    if (block.kind === "list") {
+      const List = block.ordered ? "ol" : "ul";
+      const followingCode = blocks[index + 1]?.kind === "code"
+        ? blocks[index + 1]
+        : null;
+      rendered.push(
+        <List
+          className={`source-procedure-list${followingCode ? " source-procedure-list--with-code" : ""}`}
+          key={`list-${index}`}
+        >
+          {block.items.map((item: any, itemIndex: number) => {
+            const isCodeStep = Boolean(followingCode) && itemIndex === block.items.length - 1;
+            return (
+              <li className={isCodeStep ? "source-procedure-list__code-step" : undefined} key={`${item.start}-${itemIndex}`}>
+                <span>{renderOdpText(text.slice(item.start, item.end))}</span>
+                {isCodeStep && followingCode ? (
+                  <CopyableCodeSnippet value={text.slice(followingCode.start, followingCode.end)} />
+                ) : null}
+              </li>
+            );
+          })}
+        </List>,
+      );
+      if (followingCode) index += 1;
+      continue;
+    }
+    rendered.push(
+      <p key={`paragraph-${block.start}-${index}`}>{renderOdpText(text.slice(block.start, block.end))}</p>,
+    );
+  }
+
   return (
-    <>
-      {resolvedPresentation.blocks.map((block: any, index: number) => {
-        if (block.kind === "code") {
-          return <CopyableCodeSnippet key={`code-${block.start}-${index}`} value={text.slice(block.start, block.end)} />;
-        }
-        if (block.kind === "list") {
-          const List = block.ordered ? "ol" : "ul";
-          return <List className="source-procedure-list" key={`list-${index}`}>
-            {block.items.map((item: any, itemIndex: number) => <li key={`${item.start}-${itemIndex}`}>{renderOdpText(text.slice(item.start, item.end))}</li>)}
-          </List>;
-        }
-        return <p key={`paragraph-${block.start}-${index}`}>{renderOdpText(text.slice(block.start, block.end))}</p>;
-      })}
-    </>
+    <div className="source-text-blocks">{rendered}</div>
   );
 }
 
 function SourceSectionContent(props: { kind: string; value: any; presentation?: any }) {
   if (props.kind === "list") {
-    return <ul>{props.value.map((item: string) => <li key={item}>{renderOdpText(item)}</li>)}</ul>;
+    return <ul className="source-structured-list">{props.value.map((item: string) => <li key={item}>{renderOdpText(item)}</li>)}</ul>;
   }
   if (props.kind === "objectives") {
     return (

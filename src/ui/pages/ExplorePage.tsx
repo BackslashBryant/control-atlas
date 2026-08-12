@@ -335,7 +335,7 @@ export function ExplorePage(props: {
             <h3 id="top-publications-heading">Top publications</h3>
             <div className="workspace-browse-grid">
               {topCatalogs.map((catalog: any) => (
-                <button className="workspace-browse-card" key={catalog.id} onClick={() => onNavigate("search", { filter: catalog.id })} type="button">
+                <button className="workspace-browse-card" key={catalog.id} onClick={() => onNavigate("catalog-detail", { catalog: catalog.id })} type="button">
                   <strong>{catalog.name}</strong>
                   <span>{catalog.publisher}</span>
                   <small>{catalog.leaf_record_count.toLocaleString()} records</small>

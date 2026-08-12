@@ -8226,13 +8226,50 @@ button.atlas-leverage-row:hover {
   margin-block: 0;
 }
 
+.source-text-blocks {
+  display: grid;
+  gap: var(--ca-space-3);
+  min-width: 0;
+}
+
+.source-structured-list,
+.assessment-objectives,
+.assessment-methods,
 .source-procedure-list {
   display: grid;
   gap: var(--ca-space-2);
-  padding-left: var(--ca-space-5);
+  padding-left: var(--ca-space-6);
+}
+
+.source-procedure-list > li,
+.source-structured-list > li,
+.assessment-objectives > li,
+.assessment-methods > li {
+  padding-left: var(--ca-space-1);
+}
+
+.source-procedure-list > li::marker,
+.source-structured-list > li::marker,
+.assessment-objectives > li::marker,
+.assessment-methods > li::marker {
+  color: var(--ca-primary);
+}
+
+.source-procedure-list--with-code {
+  gap: var(--ca-space-3);
+}
+
+.source-procedure-list__code-step {
+  display: grid;
+  gap: var(--ca-space-2);
+}
+
+.source-procedure-list__code-step > .source-code-snippet {
+  margin-top: var(--ca-space-1);
 }
 
 .source-code-snippet {
+  min-width: 0;
   overflow: hidden;
   border: 1px solid var(--ca-border-strong);
   border-radius: var(--ca-radius-sm);
@@ -8256,13 +8293,14 @@ button.atlas-leverage-row:hover {
 }
 
 .source-code-snippet pre {
-  overflow-x: auto;
   margin: 0;
   padding: var(--ca-space-3);
   font-family: var(--ca-font-mono);
   font-size: var(--ca-text-sm);
   line-height: 1.55;
-  white-space: pre;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .record-connection-groups {

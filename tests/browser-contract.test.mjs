@@ -223,6 +223,11 @@ test('static artifact loading caches requests and scopes initial data by route',
   assert.match(runtimeLoader, /catalog-bootstrap\.json/);
   assert.match(runtimeLoader, /catalog-records/);
   assert.match(reactApp, /requiresFullGraph\(viewState\)/);
+  assert.match(
+    reactApp,
+    /viewState\.catalog}:\$\{viewState\.family \|\| "all"}/,
+    'switching a publisher-native group must trigger its scoped artifact load',
+  );
 });
 
 test('secondary route pages are lazy loaded behind a suspense fallback', () => {
@@ -393,7 +398,9 @@ test('Catalog controls stay anchored to the records section', () => {
   assert.match(catalogPage, /aria-label="Catalog record controls"/);
   assert.match(catalogPage, /className="catalog-record-toolbar"/);
   assert.match(catalogPage, />Published group</);
-  assert.match(catalogPage, />Search records</);
+  assert.match(catalogPage, /Search records/);
+  assert.match(catalogPage, /Search benchmarks/);
+  assert.match(catalogPage, /data-published-tier/);
   assert.match(catalogPage, /className="catalog-source-link"/);
   assert.match(surfaces, /\.catalog-record-toolbar\s*\{/);
   assert.match(surfaces, /\.catalog-source-link\s*\{[^}]*justify-self:\s*start;/s);
