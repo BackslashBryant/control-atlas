@@ -9459,7 +9459,7 @@ input[type="checkbox"] {
 
 .workspace-view-toggle button[aria-pressed="true"] {
   background: color-mix(in srgb, var(--ca-primary) 12%, var(--ca-surface-raised));
-  color: var(--ca-primary);
+  color: var(--ca-text);
 }
 
 .workspace-compare-control {
