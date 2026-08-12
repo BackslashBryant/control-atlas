@@ -496,7 +496,7 @@ test("generated AC-2.1 ancestry includes its base control", () => {
   );
 });
 
-test("A.4: a generated CCI now reaches the trunk through its assessment objective", () => {
+test("A.4: a generated CCI reaches the trunk through its own DISA publication", () => {
   const nodes = readGeneratedCollection(".", "nodes").nodes as AncestorNode[];
   const edges = readGeneratedCollection(".", "edges").edges as AncestorEdge[];
 
@@ -504,5 +504,14 @@ test("A.4: a generated CCI now reaches the trunk through its assessment objectiv
   const ids = chain.map((link) => link.id);
   assert.equal(ids[0], "atlas:TRUNK", "CCI chain must reach the trunk");
   assert.equal(ids.at(-1), "disa-cci:CCI-000015");
-  assert.ok(ids.length >= 5, `expected a deep chain, got ${ids.join(" > ")}`);
+  assert.deepEqual(ids, [
+    "atlas:TRUNK",
+    "atlas:LIMB-IMPLEMENTATION",
+    "disa-cci:CATALOG",
+    "disa-cci:CCI-000015",
+  ]);
+  assert.ok(
+    chain.every((link) => !link.id.startsWith("nist-800-53a:")),
+    `CCI containment must not inherit through a foreign publication: ${ids.join(" > ")}`,
+  );
 });

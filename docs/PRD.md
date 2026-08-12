@@ -1,5 +1,9 @@
 # Control Atlas — Product Requirements Document
 
+**Owner:** Product owner
+**Last reviewed:** 2026-08-11
+**Supersession:** Owner-approved product changes update this document directly; newer approved direction replaces conflicting text.
+
 **Version:** 3.0
 **Status:** Active
 **Platform:** GitHub Pages (static)
@@ -564,7 +568,7 @@ The complete canonical values and semantic provenance/status mappings live in `s
 | Layer | Decision | Rationale |
 |---|---|---|
 | Base | Vite + React + TypeScript static app | Keeps full app control while preserving static public-data deployment |
-| Atlas | React Flow viewport + deterministic `d3-hierarchy` aggregation over the compact generated spine, with semantic DOM tree/list alternative | Gives the ecosystem a legible spatial overview without a monolithic graph or inaccessible canvas; see ADR 0015 |
+| Atlas | React Flow + ELK for bounded area/publication overview; semantic DOM Adaptive Explorer below publication level | Preserves a useful spatial overview while respecting every publisher's native containment and mobile navigation |
 | Other relationship diagrams | React Flow + ELK.js, lazy | Retained for existing bounded detail and Compare surfaces pending separate review |
 | Search | MiniSearch | Field-weighted, static-bundle-friendly, handles mixed ID/keyword queries |
 | Validation | Zod (runtime) + JSON Schema export | TypeScript-native with schema portability |

@@ -1,9 +1,18 @@
+export const STRUCTURED_CONTENT_VERSION = 1;
+
+/**
+ * @typedef {{kind: "paragraph", start: number, end: number} |
+ *   {kind: "code", start: number, end: number, language: string} |
+ *   {kind: "list", ordered: boolean, items: Array<{start: number, end: number}>}}
+ *   StructuredContentBlock
+ */
+
 const NUMBERED_ITEM = /^\s*(\d+)[.)]\s+/;
 const BULLETED_ITEM = /^\s*[-*•]\s+/;
 const PROCEDURE_ACTION = /^\s*(?:navigate|open|create|set|run|enter|verify|compare|ensure|restart|configure|add|remove|update|save|select|click|choose)\b/i;
 const SHELL_PROMPT = /^\s*[$#]\s+/;
 const CODE_CONTINUATION = /^\s*(?:[$#]\s+|[A-Za-z_][\w.-]*\s*(?:\(|=)|[)}\]};]|\S.*(?:[=;{}]|\\)$)/;
-const INLINE_COMMAND = /(?:run|execute|enter|use)\b[^.\n]{0,140}?(?:command|following)\s*:\s*([$#]\s+[^\n]*?)(?=\s+(?:if|when|then|verify|compare|ensure)\b|$)/i;
+const INLINE_COMMAND = /(?:run|execute|enter|use)\b[^.\n]{0,140}?(?:command|following)\s*:\s*([$#]\s+[\s\S]*?)(?=\s+(?:if|when|then|verify|compare|ensure)\b|$)/i;
 const INLINE_FILE_PROCEDURE = /Navigate to and open:\s*([\s\S]*?)\s+(Create the file if it does not exist\.)\s+(Set the contents of the file as follows:)\s*/gi;
 
 function lineRanges(text) {
@@ -50,7 +59,7 @@ function inlineCommandPresentation(text) {
     { kind: "code", start: commandStart, end: commandEnd, language: "shell" },
     makeParagraph(commandEnd, text.length),
   ].filter(Boolean);
-  return { version: 1, blocks };
+  return { version: STRUCTURED_CONTENT_VERSION, blocks };
 }
 
 function inlineFileProcedurePresentation(text) {
@@ -84,7 +93,9 @@ function inlineFileProcedurePresentation(text) {
   }
   const tail = makeParagraph(cursor, text.length);
   if (tail) blocks.push(tail);
-  return blocks.some((block) => block.kind === "code") ? { version: 1, blocks } : null;
+  return blocks.some((block) => block.kind === "code")
+    ? { version: STRUCTURED_CONTENT_VERSION, blocks }
+    : null;
 }
 
 /**
@@ -94,11 +105,11 @@ function inlineFileProcedurePresentation(text) {
  */
 export function buildSourceTextPresentation(value) {
   const text = String(value || "");
-  if (!text.trim()) return { version: 1, blocks: [] };
+  if (!text.trim()) return { version: STRUCTURED_CONTENT_VERSION, blocks: [] };
 
   const lines = lineRanges(text);
   if (lines.length === 1) return inlineFileProcedurePresentation(text) || inlineCommandPresentation(text) || {
-    version: 1,
+    version: STRUCTURED_CONTENT_VERSION,
     blocks: [{ kind: "paragraph", start: 0, end: text.length }],
   };
 
@@ -154,12 +165,12 @@ export function buildSourceTextPresentation(value) {
     index = cursor;
   }
 
-  return { version: 1, blocks };
+  return { version: STRUCTURED_CONTENT_VERSION, blocks };
 }
 
 export function isValidSourceTextPresentation(value, presentation) {
   const text = String(value || "");
-  if (!presentation || presentation.version !== 1 || !Array.isArray(presentation.blocks)) return false;
+  if (!presentation || presentation.version !== STRUCTURED_CONTENT_VERSION || !Array.isArray(presentation.blocks)) return false;
   const validRange = (range) => Number.isInteger(range?.start)
     && Number.isInteger(range?.end)
     && range.start >= 0

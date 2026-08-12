@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-11T14:10:50.889Z",
+  "generated_at": "2026-08-12T01:43:31.195Z",
   "source_manifests": [
     {
       "source_id": "artifact-ai-mil-responsible-ai",
@@ -1295,8 +1295,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 10,
-      "relationship_count": 6183,
-      "evidence_count": 6183,
+      "relationship_count": 32,
+      "evidence_count": 32,
       "finding_count": 0
     },
     {
@@ -1401,8 +1401,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 5138,
-      "relationship_count": 1,
-      "evidence_count": 1,
+      "relationship_count": 5138,
+      "evidence_count": 5138,
       "finding_count": 0
     },
     {
@@ -1797,8 +1797,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 713,
-      "relationship_count": 1187,
-      "evidence_count": 1187,
+      "relationship_count": 712,
+      "evidence_count": 712,
       "finding_count": 0
     },
     {
@@ -1823,8 +1823,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 110,
-      "relationship_count": 127,
-      "evidence_count": 127,
+      "relationship_count": 109,
+      "evidence_count": 109,
       "finding_count": 0
     },
     {
@@ -2086,8 +2086,8 @@
       "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 1217,
-      "relationship_count": 2090,
-      "evidence_count": 2090,
+      "relationship_count": 1218,
+      "evidence_count": 1218,
       "finding_count": 0
     },
     {
@@ -2139,9 +2139,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 1015,
-      "relationship_count": 1016,
-      "evidence_count": 1016,
+      "node_count": 1035,
+      "relationship_count": 2050,
+      "evidence_count": 2050,
       "finding_count": 0
     },
     {

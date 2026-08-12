@@ -4,7 +4,6 @@ import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
 const EVIDENCE_PREFIXES = [
-  'docs/audits/',
   'artifacts/audits/',
 ];
 

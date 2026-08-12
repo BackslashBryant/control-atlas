@@ -202,7 +202,7 @@ const BASE_TITLE = "Control Atlas";
 // "atlas-map" -> "Explore" (nav rename); the pre-existing "search"/"browse"
 // view (a distinct, already-shipped full-text results page) is renamed away
 // from its old "Explore" label to "Search results" so the two do not share a
-// name — see PLAN CHANGE in docs/STATE.md.
+// name — see the source-first record contract in docs/PAGE_CONTRACTS.md.
 export function routeDocumentTitle(
   state: { view: string; node?: string; query?: string },
   node?: TitledNode | null,

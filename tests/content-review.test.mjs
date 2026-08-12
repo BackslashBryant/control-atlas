@@ -280,7 +280,7 @@ test('site-wide UI copy rule rejects canned metaphors and compliance-only prompt
   }
 });
 
-// The trunk/limb/twig vocabulary in docs/tree-model.md is how the team reasons
+// The internal structural vocabulary in docs/DATA_POLICY.md is how the team reasons
 // about the corpus. It is not how a visitor talks, and in 2026-08 it leaked
 // into Home, Explore and Start Here as "nine limbs". Internal identifiers keep
 // it (atlas:LIMB-*, class names); rendered text must not.

@@ -1,16 +1,16 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-11T14:10:50.889Z",
+  "generated_at": "2026-08-12T01:43:31.195Z",
   "connection_inventory": {
-    "totalRecords": 29339,
-    "publishedLinks": 67253,
+    "totalRecords": 29359,
+    "publishedLinks": 72059,
     "rows": [
       {
         "id": "requirements",
         "label": "Requirements",
         "totalRecords": 8257,
-        "connectedRecords": 8213,
-        "publishedLinks": 38214,
+        "connectedRecords": 8257,
+        "publishedLinks": 43351,
         "relatedCategories": [
           "Assessment checks",
           "Controls",
@@ -22,7 +22,7 @@
         "label": "Controls",
         "totalRecords": 1196,
         "connectedRecords": 1196,
-        "publishedLinks": 12106,
+        "publishedLinks": 11234,
         "relatedCategories": [
           "Assessment checks",
           "Baselines and impact levels",
@@ -37,7 +37,7 @@
         "label": "Assessment checks",
         "totalRecords": 17891,
         "connectedRecords": 17891,
-        "publishedLinks": 43662,
+        "publishedLinks": 44676,
         "relatedCategories": [
           "Controls",
           "Framework structure",
@@ -49,7 +49,7 @@
         "label": "Threats and defenses",
         "totalRecords": 1065,
         "connectedRecords": 1065,
-        "publishedLinks": 5354,
+        "publishedLinks": 4861,
         "relatedCategories": [
           "Controls",
           "Framework structure"
@@ -80,9 +80,9 @@
       {
         "id": "framework-structure",
         "label": "Framework structure",
-        "totalRecords": 693,
-        "connectedRecords": 693,
-        "publishedLinks": 23150,
+        "totalRecords": 713,
+        "connectedRecords": 713,
+        "publishedLinks": 27956,
         "relatedCategories": [
           "Assessment checks",
           "Baselines and impact levels",

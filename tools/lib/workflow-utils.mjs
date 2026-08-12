@@ -174,7 +174,7 @@ _Source spec: \`.notes/features/${slug}/spec.md\`_
 - Desired Outcome: ${outcome}
 - Success Metrics:
 ${metrics.length > 0 ? metrics.map(item => `  - ${item}`).join('\n') : '  - Confirm slice meets done criteria end-to-end'}
-- Scope guardrail: For GovFrame, align this slice with \`docs/roadmap.md\` phase exit criteria; do not redefine v1.0 as a smaller product.
+- Scope guardrail: Align this slice with \`docs/PRD.md\`; do not redefine the product through a temporary plan.
 
 ## Out-of-scope
 ${(niceToHaves.length > 0 ? niceToHaves : ['Create a new spec for additional scope']).map(item => `- ${item}`).join('\n')}
@@ -206,7 +206,7 @@ ${mustHaves.length > 0 ? mustHaves.map(item => `- [ ] ${item}`).join('\n') : '- 
 
 ## Risks & Open questions
 - Does anything block the Feature DoD or roadmap phase? Capture blockers here.
-- Record research links in \`docs/research.md\` only when current-source research changes the decision.
+- Record decision-relevant research in the issue or pull request; update a canonical document only when durable direction changes.
 `;
 
   writeFile(planPath, planBody);

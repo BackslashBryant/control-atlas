@@ -2,7 +2,14 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
-import { CATALOG_TIERS } from '../scripts/build-framework-data.mjs';
+import {
+  CATALOG_TIERS,
+  validatePublisherNativeContainment,
+} from '../scripts/build-framework-data.mjs';
+import {
+  CATALOG_STRUCTURE_IDS,
+  catalogStructureProfile,
+} from '../src/shared/catalog-structure.mjs';
 import { readGeneratedCollection } from '../scripts/lib/generated-graph-artifacts.mjs';
 import {
   RELATIONSHIP_CLASSES,
@@ -312,7 +319,7 @@ test('every catalog with a declared parent tier has all of its records parented'
   for (const catalogId of Object.keys(CATALOG_TIERS)) {
     // A catalog summary node is the root of its own tree, so it is the one node
     // that legitimately has no parent. Tier nodes are the branches; parenting
-    // those to their catalog is separate outstanding work (see docs/STATE.md).
+    // those to their catalog is enforced by docs/DATA_POLICY.md.
     const records = nodes.filter(
       (node) =>
         node.metadata?.catalog_id === catalogId &&
@@ -327,6 +334,26 @@ test('every catalog with a declared parent tier has all of its records parented'
       `${catalogId} declares a parent tier, so every record must have a structural parent edge`,
     );
   }
+});
+
+test('all 23 publication-native structure profiles reconcile with one containment path per record', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+
+  assert.equal(CATALOG_STRUCTURE_IDS.length, 23);
+  assert.deepEqual(validatePublisherNativeContainment(nodes, edges), []);
+  assert.deepEqual(
+    catalogStructureProfile('disa-stig').paths,
+    [['catalog', 'benchmark', 'stig_rule']],
+  );
+  assert.ok(
+    catalogStructureProfile('mitre-attack').paths.some((path) =>
+      path.join('>') === 'catalog>tactic>attack_technique>attack_technique'),
+  );
+  assert.ok(
+    catalogStructureProfile('nist-800-53').paths.some((path) =>
+      path.join('>') === 'catalog>family>control>control_enhancement'),
+  );
 });
 
 test('declared parent tiers materialize real tier nodes with plain-language titles', () => {
@@ -613,13 +640,16 @@ test('DoD Zero Trust tenets are connected to the catalog, not fabricated as pill
   }
 });
 
-test('assessment procedures remain correlation records rather than structural children of controls', () => {
+test('assessment procedures belong to their 800-53A families and only correlate to 800-53 controls', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
   const procedures = nodes.filter((node) => node.node_type === 'assessment_procedure');
+  const nativeStructure = structuralEdges(nodes, edges);
   assert.equal(procedures.length, 1014, 'assessment procedure count');
   for (const node of procedures) {
-    assert.equal(node.parent_id, undefined, `${node.id} must not acquire a cross-catalog parent`);
+    const parentEdges = nativeStructure.filter((edge) => edge.target_node_id === node.id);
+    assert.equal(parentEdges.length, 1, `${node.id} must have one containment parent`);
+    assert.match(parentEdges[0].source_node_id, /^nist-800-53a:FAMILY-/);
     assert.ok(
       edges.some(
         (edge) =>
@@ -656,13 +686,16 @@ test('CCI mappings remain correlation edges and never become structural parents'
   assert.ok(
     cciEdges.every(
       (edge) =>
+        (edge.relationship_class === RELATIONSHIP_CLASSES.structural &&
+          edge.source_node_id.startsWith('disa-cci:') &&
+          edge.target_node_id.startsWith('disa-cci:')) ||
         edge.relationship_class === RELATIONSHIP_CLASSES.correlation ||
         // Editorial organizing edges (e.g. filing a genuinely-unmappable CCI under
         // a limb for reachability) are explicitly NOT structural ancestry — they
         // are Control Atlas's own badged organizing layer, never a publisher claim.
         edge.relationship_class === RELATIONSHIP_CLASSES.organizing,
     ),
-    'CCI bridge edges must stay out of structural ancestry',
+    'CCI crosswalk edges must stay out of structural ancestry',
   );
 });
 
@@ -713,7 +746,7 @@ test('every blocked graph-health relationship has checked upstream provenance an
 
 test('every catalog stays within its documented description-completeness budget', () => {
   const nodes = generated('nodes').nodes;
-  // Regression guard for docs/plans/full-records-2026-08-02.md: a record
+  // Regression guard for the source-first contract in docs/PAGE_CONTRACTS.md: a record
   // whose description ends in an ellipsis, or is blank, reads as partial
   // where a visitor expects the whole thing. Every catalog defaults to a
   // zero budget; add an entry here ONLY with a written reason the publisher's

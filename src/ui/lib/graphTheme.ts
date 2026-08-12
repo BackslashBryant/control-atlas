@@ -100,7 +100,7 @@ export function compareNodeColor(role: CompareRole): string {
   return map[role];
 }
 
-// Relationship-class colors (docs/tree-model.md's four classes: structural,
+// Relationship-class colors (docs/DATA_POLICY.md: structural,
 // applicability, correlation, organizing). Structural never reaches this
 // component — it renders separately as its own structural-child tag list —
 // so only the remaining classes need a color. One color per class, reused

@@ -2611,8 +2611,8 @@
       "sha256": "sha256:01f37cf90ea99d92242c936cbfbdebcc338eef1f71454e2acac36cc56e9bc062",
       "parser": "oscal-json",
       "parser_version": "1.5.0",
-      "record_count": 2232,
-      "relationship_count": 3102,
+      "record_count": 2252,
+      "relationship_count": 3244,
       "license_or_use": "NIST Computer Security Resource Center Terms of Use"
     },
     {
@@ -3158,7 +3158,7 @@
       "parser": "stix-json",
       "parser_version": "1.0.0",
       "record_count": 713,
-      "relationship_count": 1187,
+      "relationship_count": 712,
       "license_or_use": "MITRE ATT&CK Terms of Use"
     },
     {
@@ -3179,7 +3179,7 @@
       "parser": "stix-json",
       "parser_version": "1.0.0",
       "record_count": 110,
-      "relationship_count": 127,
+      "relationship_count": 109,
       "license_or_use": "MITRE ATT&CK Terms of Use"
     },
     {

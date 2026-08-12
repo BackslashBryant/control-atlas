@@ -1,9 +1,10 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const datasetPath = resolve("data/commons-resource-dataset.json");
 const reportJsonPath = resolve("data/commons-health-report.json");
-const reportMdPath = resolve("docs/COMMONS_HEALTH_REPORT.md");
+const reportMdPath = resolve("artifacts/commons-health-report.md");
+mkdirSync(resolve("artifacts"), { recursive: true });
 const dataset = JSON.parse(readFileSync(datasetPath, "utf8"));
 const checkedAt = new Date().toISOString();
 const restrictedAccess = new Set(["cac_required", "dod_network_required", "invitation_required", "access_varies"]);

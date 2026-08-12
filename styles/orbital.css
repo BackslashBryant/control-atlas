@@ -1012,7 +1012,7 @@ textarea:disabled {
 }
 
 /* Applicability class (selections/overlays) — must never look like
-   correlation (tone-info) per docs/tree-model.md #3. */
+   correlation (tone-info) per docs/DATA_POLICY.md. */
 .badge.tone-applicability {
   border-color: color-mix(in srgb, var(--ca-applicability) 54%, transparent);
   background: color-mix(in srgb, var(--ca-applicability) 10%, transparent);

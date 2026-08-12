@@ -123,6 +123,41 @@ test("compact Atlas preserves direct keyboard drill without horizontal overflow"
   await compliance.focus();
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
-  await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("Compliance");
+  await expect(page.locator(".atlas-tree__mobile-bar")).toContainText("Compliance");
   expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBe(0);
+});
+
+test("Adaptive Explorer is bounded, responsive, and incrementally rendered at every supported width", async ({ page }) => {
+  test.setTimeout(60_000);
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 900 });
+    await gotoApp(page, "/#/atlas?atlasLimb=atlas:LIMB-IMPLEMENTATION&atlasFramework=disa-stig");
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+
+    const explorer = page.locator("[data-atlas-structural-explorer]");
+    await expect(explorer, `${width}px structural explorer`).toBeVisible();
+    await expect(page.locator(".atlas-tree__inspector"), `${width}px permanent inspector`).toHaveCount(0);
+    await expect(page.locator(".atlas-tree select"), `${width}px giant native select`).toHaveCount(0);
+    await expect(page.locator(".atlas-tree .react-flow"), `${width}px unbounded graph`).toHaveCount(0);
+    expect(await explorer.locator(".atlas-publisher-explorer__list > li").count(), `${width}px initial DOM`).toBeLessThanOrEqual(40);
+    expect(
+      await page.locator("html").evaluate((element) => element.scrollWidth - element.clientWidth),
+      `${width}px overflow`,
+    ).toBeLessThanOrEqual(1);
+
+    const explorerBox = await explorer.boundingBox();
+    expect(explorerBox?.y, `${width}px useful content position`).toBeLessThan(600);
+    expect(explorerBox?.width, `${width}px useful content width`).toBeGreaterThan(Math.min(280, width * 0.7));
+
+    const browse = page.getByRole("button", { name: "Browse structure" });
+    if (width < 1200) {
+      await expect(browse).toBeVisible();
+      await browse.click();
+      await expect(page.getByRole("navigation", { name: "Current publication structure" })).toBeVisible();
+      await page.getByRole("button", { name: "Close browse" }).click();
+    } else {
+      await expect(page.getByRole("navigation", { name: "Current publication structure" })).toBeVisible();
+    }
+  }
 });

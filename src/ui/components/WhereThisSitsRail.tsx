@@ -18,7 +18,7 @@ import { RecordLink } from "./RecordLink";
 /**
  * W7.2 — the persistent "Where this sits" tree path. Walks the W1.6
  * structural ancestor chain (the only relationship class this doctrine
- * lets a breadcrumb walk — docs/tree-model.md #3) and renders it
+ * lets a breadcrumb walk — docs/DATA_POLICY.md) and renders it
  * root-first. Reuses the atlas-path-breadcrumb idiom already built for
  * the Atlas decomposition board instead of inventing a new breadcrumb.
  */

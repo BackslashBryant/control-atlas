@@ -10,7 +10,7 @@ import { canonicalizeHashLocation, routeIdentityFor } from "./routeIdentity";
 /**
  * Map internal view keys to hash path segments (user-facing routes).
  * View key "atlas-map" -> user-facing "Explore" nav label (rename kept its
- * existing path — see PLAN CHANGE in docs/STATE.md: "/explore" is already
+ * existing path — see docs/PAGE_CONTRACTS.md: "/explore" is already
  * the ExplorePage's own path). "catalog-detail" -> "Catalog", "patterns" ->
  * "Learn", "templates" -> "Build", and "commons"/"commons-detail" ->
  * "Resources". Internal view keys stay stable while every user-facing route

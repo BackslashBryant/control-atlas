@@ -721,7 +721,7 @@ function getContextualNextSteps() {
 
   // If all setup is done, suggest workflow next steps
   if (failedChecks.length === 0) {
-    nextSteps.push('Ready to code! See docs/agents/KICKOFF.md for workflow');
+    nextSteps.push('Ready to code! See docs/README.md for canonical direction');
   }
 
   return nextSteps;

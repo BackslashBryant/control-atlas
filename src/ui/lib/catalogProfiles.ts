@@ -7,8 +7,7 @@ export type CatalogProfile = {
   area: string;
 };
 
-// W10 — canonical publication-kind classification (docs/plans/audit-
-// alignment-2026-08-02.md Phase 3c). Primary grouping on Catalog used to be
+// Canonical publication-kind classification (docs/DATA_POLICY.md). Primary grouping on Catalog used to be
 // the raw record-type enum below ("STIG rules", "identifiers"), which reads
 // as a schema dump, not a map a newcomer can use to tell FedRAMP from a
 // STIG. "Policy and regulation" is one addition beyond the fix spec's nine

@@ -1,6 +1,6 @@
 /** Derived UI categories for patterns and templates (no schema migration). */
 
-// Work-stage categories (docs/plans/audit-alignment-2026-08-02.md Phase 3b):
+// Work-stage categories follow the ownership boundary in docs/DATA_POLICY.md:
 // Plan/Implement/Assess/Remediate/Monitor, the same five stages RMF's own
 // Categorize+Select, Implement, Assess, and Monitor steps use — not a
 // schema-derived Authorization/Assessment/Evidence/Monitoring taxonomy that

@@ -41,7 +41,7 @@ annotation, or explanation does not.
 
 ## Before Starting
 
-1. Read `docs/PRD.md`, `docs/architecture/ARCHITECTURE.md`, `docs/roadmap.md`, and the relevant ADRs.
+1. Read `docs/README.md` and the canonical contracts relevant to the change.
 2. Work on a branch, not `main`.
 3. Prefer existing runtime, data, shell, and test patterns.
 4. Use public, lawfully usable sources and document provenance.

@@ -269,6 +269,89 @@ function CompactAtlasTree(props: {
   );
 }
 
+function AtlasStructuralExplorer(props: {
+  children: AtlasModelNode[];
+  node: AtlasModelNode;
+  onOpen: (node: AtlasModelNode) => void;
+  onShowConnections: () => void;
+  query: string;
+  setQuery: (value: string) => void;
+  showConnections: boolean;
+}) {
+  const [visibleCount, setVisibleCount] = useState(40);
+  useEffect(() => setVisibleCount(40), [props.node.id, props.query]);
+  const query = props.query.trim().toLowerCase();
+  const matches = props.children.filter((node) =>
+    !query || `${node.itemId} ${node.label}`.toLowerCase().includes(query),
+  );
+  const visible = matches.slice(0, visibleCount);
+  const childLabel = props.node.nodeType === "catalog"
+    ? "Publisher structure"
+    : props.node.nodeType === "benchmark"
+      ? "Vulnerability IDs"
+      : "Records";
+  return (
+    <section className="atlas-publisher-explorer" data-atlas-structural-explorer>
+      <header className="atlas-publisher-explorer__header">
+        <div>
+          <p className="eyebrow">{props.node.nodeType.replaceAll("_", " ")}</p>
+          <h2>{props.node.label}</h2>
+          {props.node.blurb ? <p>{props.node.blurb}</p> : null}
+        </div>
+        <dl>
+          <div><dt>Records below</dt><dd>{props.node.descendantRecordCount.toLocaleString()}</dd></div>
+          <div><dt>Direct branches</dt><dd>{props.children.length.toLocaleString()}</dd></div>
+        </dl>
+      </header>
+      {props.children.length ? (
+        <div className="atlas-publisher-explorer__children">
+          <div className="atlas-publisher-explorer__tools">
+            <div>
+              <p className="eyebrow">{childLabel}</p>
+              <h3>Browse the next level</h3>
+            </div>
+            <label>
+              Search this publication
+              <input
+                onChange={(event) => props.setQuery(event.target.value)}
+                placeholder="ID or title"
+                type="search"
+                value={props.query}
+              />
+            </label>
+          </div>
+          <ul className="atlas-publisher-explorer__list">
+            {visible.map((node) => (
+              <li key={node.id}>
+                <button onClick={() => props.onOpen(node)} type="button">
+                  <span>
+                    <strong>{node.itemId}</strong>
+                    <small>{node.label}</small>
+                  </span>
+                  <span>{node.descendantRecordCount.toLocaleString()}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          {!matches.length ? <p role="status">No records match that search.</p> : null}
+          {visible.length < matches.length ? (
+            <button className="atlas-publisher-explorer__more" onClick={() => setVisibleCount((count) => count + 40)} type="button">
+              Show 40 more · {matches.length - visible.length} remaining
+            </button>
+          ) : null}
+        </div>
+      ) : (
+        <p className="atlas-tree__empty-state">This item has no structural children.</p>
+      )}
+      {props.showConnections ? (
+        <button className="atlas-publisher-explorer__connections" onClick={props.onShowConnections} type="button">
+          Show local connections
+        </button>
+      ) : null}
+    </section>
+  );
+}
+
 export function AtlasTree(props: AtlasTreeProps) {
   const compact = useCompactAtlas();
   const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -299,6 +382,9 @@ export function AtlasTree(props: AtlasTreeProps) {
   const [technologyQuery, setTechnologyQuery] = useState("");
   const [overlayEnabled, setOverlayEnabled] = useState(false);
   const [selectedId, setSelectedId] = useState(focusId || model.trunk.id);
+  const [sidebarOpen, setSidebarOpen] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(min-width: 1200px)").matches,
+  );
   useEffect(() => {
     setSemanticLevel(focusId ? "justification" : "orientation");
     setOverlayEnabled(false);
@@ -450,18 +536,19 @@ export function AtlasTree(props: AtlasTreeProps) {
       ? extendDisplayedAuthorityTrace(model, props.focusPath)
       : atlasDisplayTrace(model, focusId);
   }, [focusId, model, props.focusPath]);
-  const technologyParent = focusedNode?.level === "publication" && requiresTechnologyGate(focusedNode)
-    ? focusedNode
-    : props.benchmarkId
-      ? model.nodesById.get(model.nodesById.get(props.benchmarkId)?.parentId || "") || null
-      : null;
-  const technologyOptions = technologyParent
-    ? (model.childrenByParent.get(technologyParent.id) || [])
-      .filter((node) => {
-        const query = technologyQuery.trim().toLowerCase();
-        return !query || `${node.itemId} ${node.label}`.toLowerCase().includes(query);
-      })
+  const structuralExplorer = Boolean(focusedNode && focusedNode.level !== "area");
+  const structuralChildren = focusedNode
+    ? props.benchmarkId && focusedNode.id === props.benchmarkId
+      ? props.benchmarkChildren || []
+      : model.childrenByParent.get(focusedNode.id) || []
     : [];
+  const structuralParent = focusedNode?.parentId
+    ? model.nodesById.get(focusedNode.parentId) || null
+    : null;
+  const structuralQuery = technologyQuery.trim().toLowerCase();
+  const sidebarChildren = structuralChildren
+    .filter((node) => !structuralQuery || `${node.itemId} ${node.label}`.toLowerCase().includes(structuralQuery))
+    .slice(0, 40);
   const areas = AREA_IDS
     .map((id) => model.nodesById.get(id))
     .filter((node): node is AtlasModelNode => Boolean(node));
@@ -491,13 +578,23 @@ export function AtlasTree(props: AtlasTreeProps) {
   function activateNode(node: AtlasRenderableNode) {
     setSelectedId(node.id);
     if (node.level === "area" && node.descendantRecordCount === 0) return;
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches) {
+      setSidebarOpen(false);
+    }
     openNode(node);
   }
 
   return (
     <section aria-labelledby="atlas-page-title" className="atlas-tree" data-layout-status={layoutStatus} data-tree-edge-count={flowEdges.length} data-tree-node-count={flowNodes.length}>
-      <div className="atlas-tree__workbench">
-        <aside aria-label="Atlas navigation" className="atlas-tree__dock atlas-tree__dock--left">
+      <div className="atlas-tree__mobile-bar">
+        <button aria-controls="atlas-structure-sidebar" aria-expanded={sidebarOpen} onClick={() => setSidebarOpen((open) => !open)} type="button">
+          {sidebarOpen ? "Close browse" : "Browse structure"}
+        </button>
+        <span>{breadcrumb.at(-1)?.label || "Atlas"}</span>
+      </div>
+      {sidebarOpen ? <button aria-label="Close structure browser" className="atlas-tree__scrim" onClick={() => setSidebarOpen(false)} type="button" /> : null}
+      <div className={`atlas-tree__workbench${sidebarOpen ? " has-open-sidebar" : ""}${structuralExplorer ? " is-structural" : " is-overview"}`}>
+        <aside aria-label="Atlas navigation" className="atlas-tree__dock atlas-tree__dock--left" id="atlas-structure-sidebar">
           <nav aria-label="Atlas breadcrumb" className="atlas-tree__breadcrumb">
             <strong>Current path</strong>
             <ol>
@@ -516,6 +613,41 @@ export function AtlasTree(props: AtlasTreeProps) {
               })}
             </ol>
           </nav>
+
+          {structuralExplorer && focusedNode ? (
+            <nav aria-label="Current publication structure" className="atlas-tree__local-navigation">
+              <strong>Browse this publication</strong>
+              {structuralParent ? (
+                <button className="atlas-tree__local-parent" onClick={() => activateNode(structuralParent)} type="button">
+                  <span>Up one level</span>
+                  <strong>{structuralParent.label}</strong>
+                </button>
+              ) : null}
+              <label>
+                Search this publication
+                <input
+                  onChange={(event) => setTechnologyQuery(event.target.value)}
+                  placeholder="ID or title"
+                  type="search"
+                  value={technologyQuery}
+                />
+              </label>
+              <p>{structuralChildren.length.toLocaleString()} immediate children</p>
+              <ul>
+                {sidebarChildren.map((node) => (
+                  <li key={node.id}>
+                    <button onClick={() => activateNode(node)} type="button">
+                      <span>{node.itemId}</span>
+                      <small>{node.descendantRecordCount.toLocaleString()}</small>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              {sidebarChildren.length < structuralChildren.length ? (
+                <small>Refine the search to browse the remaining records.</small>
+              ) : null}
+            </nav>
+          ) : null}
 
           <dl aria-label="Atlas totals" className="atlas-tree__totals">
             <div><dt>Records</dt><dd>{rootRecordCount.toLocaleString()}</dd></div>
@@ -595,7 +727,17 @@ export function AtlasTree(props: AtlasTreeProps) {
         </aside>
 
         <div className="atlas-tree__canvas">
-        {compact || layoutStatus === "error" || collisions.length ? (
+        {structuralExplorer && focusedNode ? (
+          <AtlasStructuralExplorer
+            children={structuralChildren}
+            node={focusedNode}
+            onOpen={activateNode}
+            onShowConnections={() => setOverlayEnabled((value) => !value)}
+            query={technologyQuery}
+            setQuery={setTechnologyQuery}
+            showConnections={Boolean(props.focusedRecord)}
+          />
+        ) : compact || layoutStatus === "error" || collisions.length ? (
           <CompactAtlasTree nodes={identity.nodes} onSelectNode={activateNode} />
         ) : layoutStatus === "loading" ? (
           <div className="atlas-tree__layout-status" role="status">Arranging the Atlas…</div>
@@ -614,7 +756,7 @@ export function AtlasTree(props: AtlasTreeProps) {
         )}
         </div>
 
-        <aside aria-labelledby="atlas-inspector-title" className="atlas-tree__dock atlas-tree__inspector">
+        {!structuralExplorer && !compact ? <aside aria-labelledby="atlas-inspector-title" className="atlas-tree__dock atlas-tree__inspector">
           <p className="eyebrow">{selectedNodeIsRoot ? "Atlas overview" : nodeKind(selectedNode).replaceAll("-", " ")}</p>
           <h3 id="atlas-inspector-title">{selectedNode.label}</h3>
           <p>{selectedNodeIsRoot ? "Browse cybersecurity areas and the publications under them." : selectedNode.blurb}</p>
@@ -639,26 +781,6 @@ export function AtlasTree(props: AtlasTreeProps) {
             </div>
           ) : null}
 
-          {technologyParent ? (
-            <section aria-labelledby="atlas-technology-picker-title" className="atlas-tree__technology-picker">
-              <h3 id="atlas-technology-picker-title">Choose a technology</h3>
-              <p>{technologyParent.childCount.toLocaleString()} benchmarks are available.</p>
-              <label>
-                Search technologies
-                <input onChange={(event) => setTechnologyQuery(event.target.value)} type="search" value={technologyQuery} />
-              </label>
-              <select
-                aria-label={`Technology benchmark, ${technologyParent.childCount.toLocaleString()} available`}
-                onChange={(event) => event.target.value && props.onSelectBenchmark(event.target.value)}
-                value={props.benchmarkId || ""}
-              >
-                <option value="">Choose a benchmark</option>
-                {technologyOptions.map((node) => <option key={node.id} value={node.id}>{node.label} · {node.childCount.toLocaleString()} records</option>)}
-              </select>
-              {technologyOptions.length === 0 ? <p role="status">No technologies match that search.</p> : null}
-            </section>
-          ) : null}
-
           {props.focusedRecord ? (
             <button aria-pressed={overlayEnabled} onClick={() => setOverlayEnabled((value) => !value)} type="button">
               {overlayEnabled ? "Hide connections" : "Show connections"}
@@ -671,7 +793,14 @@ export function AtlasTree(props: AtlasTreeProps) {
               {overlay.summaryChip ? <button onClick={props.onOpenCompare} type="button">{overlay.summaryChip.label} · open Compare</button> : null}
             </section>
           ) : null}
-        </aside>
+        </aside> : null}
+        {structuralExplorer && overlayEnabled && overlay ? (
+          <section aria-labelledby="atlas-main-overlay-title" className="atlas-tree__overlay atlas-tree__overlay--main">
+            <h3 id="atlas-main-overlay-title">Related records</h3>
+            <ul>{overlay.highlights.map((entry) => <li className="atlas-tree__overlay-highlight" key={entry.node.id}>{entry.node.metadata?.title || entry.node.label}</li>)}</ul>
+            {overlay.summaryChip ? <button onClick={props.onOpenCompare} type="button">{overlay.summaryChip.label} · open Compare</button> : null}
+          </section>
+        ) : null}
       </div>
 
     </section>

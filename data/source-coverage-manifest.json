@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0",
-  "generated_at": "2026-08-10T00:09:24.309Z",
+  "generated_at": "2026-08-12T01:54:18.699Z",
   "completeness": {
     "total_publications": 84,
     "total_artifacts": 38,
@@ -382,7 +382,7 @@
       "catalog_id": "nist-800-53",
       "completeness_status": "discovered",
       "expected_records": null,
-      "imported_records": 2232,
+      "imported_records": 2252,
       "excluded_records": 0,
       "missing_records": null,
       "expected_basis": null,
@@ -403,7 +403,7 @@
       "catalog_id": "nist-800-53a",
       "completeness_status": "discovered",
       "expected_records": null,
-      "imported_records": 2232,
+      "imported_records": 2252,
       "excluded_records": 0,
       "missing_records": null,
       "expected_basis": null,
