@@ -386,77 +386,6 @@ export function ObjectDetailPage(props: {
             </div>
           )}
 
-          {connectionGroups.length ? (
-            <section className="record-connections" data-record-section="crosswalks">
-              <div className="section-header">
-                <div>
-                  <h2>Crosswalks</h2>
-                  <p>Formal links to records in other frameworks.</p>
-                </div>
-                <Badge tone="info">{connectionCount}</Badge>
-              </div>
-              <div className="record-connection-groups">
-                {connectionGroups.map((group) => (
-                  <section key={group.catalogId}>
-                    <h3>{group.label}</h3>
-                    <ul>
-                      {group.items.map((item) => {
-                        const sourceLabels = [...new Set(
-                          item.sourceRefs
-                            .map((reference) => {
-                              const sourceRecord = reference.sourceId
-                                ? bundle.runtime.getSource(reference.sourceId)
-                                : null;
-                              const sourceLabel = (
-                                reference.sourceName ||
-                                sourceRecord?.display_name ||
-                                sourceRecord?.name ||
-                                ""
-                              );
-                              const safeLocator = humanReadableEvidenceLocator(
-                                reference.locator,
-                              );
-                              return [
-                                sourceLabel,
-                                reference.sourceVersion,
-                                safeLocator,
-                                reference.evidenceQuality,
-                              ].filter(Boolean).join(" · ");
-                            })
-                            .filter(Boolean),
-                        )];
-                        return (
-                        <li data-record-connection-id={item.edgeId} key={item.edgeId}>
-                          <AppLink
-                            onNavigate={onNavigate}
-                            patch={{ node: item.nodeId }}
-                            view="library-detail"
-                          >
-                            <strong>{item.itemId}</strong>
-                            {item.title !== item.itemId ? ` — ${item.title}` : ""}
-                          </AppLink>
-                          <span className="relationship-meta">
-                            {[
-                              formatRelationshipLabel({ relationship_type: item.relationshipType }),
-                              displayNameFor("provenance_class", item.provenanceClass),
-                            ]
-                              .filter(Boolean)
-                              .join(" · ")}
-                          </span>
-                          {sourceLabels.length ? (
-                            <span className="relationship-citation">
-                              {sourceLabels.join(" · ")}
-                            </span>
-                          ) : null}
-                        </li>
-                        );
-                      })}
-                    </ul>
-                  </section>
-                ))}
-              </div>
-            </section>
-          ) : null}
         </article>
 
         <aside
@@ -527,6 +456,72 @@ export function ObjectDetailPage(props: {
             </AppLink>
           </section>
         </aside>
+
+        {connectionGroups.length ? (
+          <section className="record-connections record-connections--related" data-record-section="related-records">
+            <div className="section-header">
+              <div>
+                <h2>Related records</h2>
+                <p>Formal published links to other publications.</p>
+              </div>
+              <Badge tone="info">{connectionCount}</Badge>
+            </div>
+            <div className="record-connection-groups">
+              {connectionGroups.map((group) => (
+                <section key={group.catalogId}>
+                  <h3>{group.label} · {group.items.length}</h3>
+                  <ul>
+                    {group.items.map((item) => {
+                      const sourceLabels = [...new Set(
+                        item.sourceRefs
+                          .map((reference) => {
+                            const sourceRecord = reference.sourceId
+                              ? bundle.runtime.getSource(reference.sourceId)
+                              : null;
+                            const sourceLabel = (
+                              reference.sourceName ||
+                              sourceRecord?.display_name ||
+                              sourceRecord?.name ||
+                              ""
+                            );
+                            const safeLocator = humanReadableEvidenceLocator(reference.locator);
+                            return [
+                              sourceLabel,
+                              reference.sourceVersion,
+                              safeLocator,
+                              reference.evidenceQuality,
+                            ].filter(Boolean).join(" · ");
+                          })
+                          .filter(Boolean),
+                      )];
+                      return (
+                        <li data-record-connection-id={item.edgeId} key={item.edgeId}>
+                          <AppLink
+                            onNavigate={onNavigate}
+                            patch={{ node: item.nodeId }}
+                            view="library-detail"
+                          >
+                            <strong>{item.itemId}</strong>
+                            {item.title !== item.itemId ? ` — ${item.title}` : ""}
+                          </AppLink>
+                          <span className="relationship-meta">
+                            {[
+                              formatRelationshipLabel({ relationship_type: item.relationshipType }),
+                              displayNameFor("provenance_class", item.provenanceClass),
+                            ].filter(Boolean).join(" · ")}
+                          </span>
+                          {sourceLabels.length ? (
+                            <span className="relationship-citation">{sourceLabels.join(" · ")}</span>
+                          ) : null}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </section>
+              ))}
+            </div>
+          </section>
+        ) : null}
       </div>
 
     </section>

@@ -17,7 +17,8 @@ test("WS7 rewrites legacy Atlas and Compare links into readable canonical routes
   await gotoApp(page, "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=map");
   await waitForAppReady(page, { allowPartial: true });
   await expect(page).toHaveURL(/#\/atlas\/nist-800-53:AC-2\?relationshipView=map$/);
-  await expect(page.getByRole("application", { name: "Interactive Atlas map hierarchy" })).toBeVisible();
+  await expect(page.locator("[data-atlas-structural-explorer]")).toBeVisible();
+  await expect(page.locator(".atlas-tree .react-flow")).toHaveCount(0);
 
   await gotoApp(page, "/#/compare?crosswalk=relationships&workbench=relationships&source=nist-800-53&target=csf-2");
   await waitForAppReady(page, { allowPartial: true });

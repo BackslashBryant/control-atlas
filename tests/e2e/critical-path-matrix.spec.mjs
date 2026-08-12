@@ -132,7 +132,7 @@ test("critical path: library detail connections show meaning and source trust te
   await dismissOnboarding(page);
 
   await expect(
-    page.getByRole("heading", { name: "Crosswalks" }).first(),
+    page.getByRole("heading", { name: "Related records" }).first(),
   ).toBeVisible();
   const relationshipCard = page.locator("[data-record-connection-id]").first();
   await expect(relationshipCard).toBeVisible();

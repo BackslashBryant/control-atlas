@@ -33,11 +33,13 @@ test("WS2 record template leads with qualified identity and one source action", 
   await expect(page.getByText(/What this is|What you need to do|How to satisfy it/i)).toHaveCount(0);
 });
 
-test("WS2 crosswalks exclude structural parents and public pages expose no developer fields", async ({ page }) => {
+test("WS2 related records exclude structural parents and public pages expose no developer fields", async ({ page }) => {
   await openRecord(page, "/#/record/nist-800-53/AC-2");
 
-  const connections = page.locator('[data-record-section="crosswalks"]');
+  const connections = page.locator('[data-record-section="related-records"]');
   await expect(connections).toBeVisible();
+  await expect(connections.getByRole("heading", { name: "Related records", exact: true })).toBeVisible();
+  await expect(connections).toContainText("Formal published links to other publications.");
   await expect(connections).not.toContainText("Contains");
   await expect(connections).not.toContainText("FAMILY-ACCESS-CONTROL");
   const connectionRows = connections.locator("[data-record-connection-id]");
