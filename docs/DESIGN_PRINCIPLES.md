@@ -1,5 +1,10 @@
 # Control Atlas Design Principles
 
+- **Owner:** Product owner and Muse
+- **Status:** Canonical
+- **Last reviewed:** 2026-08-11
+- **Supersession:** New approved principles replace conflicting guidance here rather than creating a parallel design document.
+
 ## Build for translation, not complexity
 
 Every project should reduce the distance between a messy real-world problem and clear user action. The system should organize complexity into plain language, visible relationships, practical workflows, and trustworthy outputs that help users understand what matters, why it matters, and what to do next.
@@ -60,4 +65,4 @@ Before shipping UI copy or a new surface, confirm:
 
 - Product vision: [`vision.md`](vision.md)
 - Requirements: [`PRD.md`](PRD.md)
-- Agent handoff: [`context.md`](context.md)
+- Canonical documentation manifest: [`README.md`](README.md)

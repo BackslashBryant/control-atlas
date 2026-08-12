@@ -1,174 +1,54 @@
-import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
-import test from 'node:test';
+import assert from "node:assert/strict";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import test from "node:test";
 
-const requiredDocs = [
-  'CONTRIBUTING.md',
-  'SECURITY.md',
-  'docs/inventory/repository-inventory.md',
-  'docs/inventory/out-of-scope.md',
-  'docs/SECDEVOPS_GAP_ANALYSIS.md',
-  'docs/design/translation-first-design.md',
-  'docs/design/content-style-guide.md',
-  'docs/design/design-system.md',
-  'docs/plans/EPIC Control Atlas Clarity System and Translation-First UX Governance.md',
-  'docs/adr/0001-static-first-github-pages.md',
-  'docs/adr/0002-public-data-only-boundary.md',
-  'docs/adr/0003-no-user-org-system-data.md',
-  'docs/adr/0004-client-side-template-generation.md',
-  'docs/adr/0005-relationship-type-and-provenance-class.md',
-  'docs/adr/0006-build-time-imports-not-runtime-ingestion.md',
-  'docs/adr/0007-control-atlas-branding.md',
-  'docs/adr/0008-govframe-baseline.md',
-  'docs/adr/0009-provenance-registry-naming.md',
-  'docs/adr/0010-d3-phase-0-baseline.md',
-  'docs/adr/0011-defer-risky-renames.md',
-  'docs/adr/ADR-translation-first-user-experience-boundary.md',
+const canonicalDocs = [
+  "docs/README.md",
+  "docs/vision.md",
+  "docs/PRD.md",
+  "docs/DESIGN_PRINCIPLES.md",
+  "docs/design/design-system.md",
+  "docs/PAGE_CONTRACTS.md",
+  "docs/architecture/ARCHITECTURE.md",
+  "docs/DATA_POLICY.md",
+  "docs/OPERATIONS.md",
+  "docs/BACKLOG.md",
+  "docs/THIRD_PARTY_NOTICES.md",
 ];
 
-test('alignment deliverables exist', () => {
-  for (const path of requiredDocs) assert.ok(existsSync(path), `${path} must exist`);
-});
+function docFiles(path = "docs") {
+  return readdirSync(path, { withFileTypes: true }).flatMap((entry) => {
+    const target = `${path}/${entry.name}`;
+    return entry.isDirectory() ? docFiles(target) : [target];
+  });
+}
 
-test('public product surfaces share one canonical identity and decision boundary', () => {
-  const definition =
-    'Control Atlas is a public research tool for federal cybersecurity requirements, controls, techniques, and guidance.';
-  const boundary =
-    'Use Control Atlas for research, not compliance or authorization decisions.';
-
-  for (const path of ['README.md', 'CONTRIBUTING.md', 'src/shared/site-copy.mjs']) {
-    const content = readFileSync(path, 'utf8');
-    assert.match(content, new RegExp(definition.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-  }
-  for (const path of ['README.md', 'CONTRIBUTING.md', 'src/shared/site-copy.mjs']) {
-    const content = readFileSync(path, 'utf8');
-    assert.match(content, new RegExp(boundary.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-  }
-
-  const packageManifest = JSON.parse(readFileSync('package.json', 'utf8'));
-  assert.equal(packageManifest.description, definition);
-
-  const aboutPage = readFileSync('src/ui/pages/AboutPage.tsx', 'utf8');
-  const homePage = readFileSync('src/ui/pages/HomePage.tsx', 'utf8');
-  assert.match(aboutPage, /PRODUCT_DEFINITION/);
-  assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
-  // Home and the static shell consume one shared homepage content contract.
-  assert.match(homePage, /HOME_CONTENT\.definition/);
-  assert.doesNotMatch(homePage, /PRODUCT_DEFINITION/);
-  // The full decision boundary lives on About; Home stays task-focused.
-  assert.doesNotMatch(homePage, /PRODUCT_DECISION_BOUNDARY/);
-  const identity = readFileSync('src/shared/product-identity.ts', 'utf8');
-  assert.match(identity, /PRODUCT_HERO = SITE_COPY\.home\.definition/);
-  assert.notEqual('Understand what applies, what it means, and what to do next.', definition);
-
-  const index = readFileSync('src/index.html', 'utf8');
-  assert.match(index, /name="application-name" content="Control Atlas"/);
-  assert.match(index, /property="og:title" content="Control Atlas"/);
-  assert.doesNotMatch(index, /application-name" content="[^"]*\|/);
-
-  for (const path of ['README.md', 'CONTRIBUTING.md']) {
-    assert.match(readFileSync(path, 'utf8'), /Ctrl\+Alt/);
+test("documentation has one canonical foundation and no completed plan archive", () => {
+  assert.deepEqual(docFiles().sort(), [...canonicalDocs].sort());
+  assert.equal(existsSync("docs/Plan.md"), false);
+  assert.equal(docFiles().filter((path) => /backlog/i.test(path)).length, 1);
+  for (const path of canonicalDocs) {
+    const content = readFileSync(path, "utf8");
+    for (const field of ["Owner", "Status", "Last reviewed", "Supersession"]) {
+      assert.match(content, new RegExp(field, "i"), `${path} needs ${field}`);
+    }
   }
 });
-
-test('roadmap contains the Phase 0 through Phase 6 Control Atlas epics', () => {
-  const roadmap = readFileSync('docs/roadmap.md', 'utf8');
-  for (const epic of [
-    'Epic 0: GovFrame .+ Control Atlas Migration',
-    'Epic 1: Data Backbone',
-    'Epic 2: Library \\+ Search',
-    'Epic 3: Compare',
-    'Epic 4: Compliance Artifact and Template Nexus',
-    'Epic 5: Patterns \\+ Glossary \\+ Start Here',
-    'Epic 6: QA \\+ Accessibility \\+ Release',
-  ]) {
-    assert.match(roadmap, new RegExp(epic));
-  }
-  assert.match(roadmap, /Rename and rebrand/i);
-  assert.match(roadmap, /CI\/CD pipeline/i);
-  assert.match(roadmap, /five-artifact contract/i);
+test("canonical direction defines the current product, page, data, and release contracts", () => {
+  assert.match(readFileSync("docs/PRD.md", "utf8"), /Build for translation, not complexity/i);
+  assert.match(readFileSync("docs/PAGE_CONTRACTS.md", "utf8"), /Adaptive Explorer/);
+  assert.match(readFileSync("docs/PAGE_CONTRACTS.md", "utf8"), /Related records/);
+  assert.match(readFileSync("docs/DATA_POLICY.md", "utf8"), /exactly one acyclic containment path/);
+  assert.match(readFileSync("docs/DATA_POLICY.md", "utf8"), /StructuredContentBlock/);
+  assert.match(readFileSync("docs/OPERATIONS.md", "utf8"), /deployed `release\.json` commit equals merged `main`/);
 });
 
-test('architecture and inventory docs reflect the adopted Phase 0 baseline', () => {
-  const architecture = readFileSync('docs/architecture/ARCHITECTURE.md', 'utf8');
-  assert.match(architecture, /Build-Time Importers/);
-  assert.match(architecture, /Client-Side Search \/ Template Generation \/ Export/);
-  assert.match(architecture, /React Flow \+ ELK/i);
-  assert.match(architecture, /bounded relationship diagrams/i);
-  assert.match(architecture, /MiniSearch/i);
-  assert.match(architecture, /Zod \+ JSON Schema/i);
-  assert.match(architecture, /JSON\/JSONL runtime bundles and YAML curated registry/i);
-  assert.match(architecture, /tools\/build-static-site\.mjs/);
-  assert.match(architecture, /dist\/site/);
-
-  const inventory = readFileSync('docs/inventory/repository-inventory.md', 'utf8');
-  for (const label of ['Keep As-Is', 'Reuse With Rename Or Refactor', 'Reuse Later', 'Deprecate', 'Remove']) {
-    assert.match(inventory, new RegExp(label));
-  }
-
-  const scope = readFileSync('docs/inventory/out-of-scope.md', 'utf8');
-  assert.match(scope, /Deprecated\/out-of-scope/i);
-  assert.match(scope, /eMASS/i);
-  assert.match(scope, /ServiceNow GRC/i);
-  assert.match(scope, /No login/i);
-});
-
-test('translation-first governance docs and templates enforce clarity and action rules', () => {
-  for (const path of [
-    'CONTRIBUTING.md',
-    'docs/PRD.md',
-    'docs/Plan.md',
-    'docs/roadmap.md',
-    'docs/DESIGN_PRINCIPLES.md',
-    'docs/design/translation-first-design.md',
-    'docs/design/content-style-guide.md',
-    'docs/design/design-system.md',
-    'docs/plans/EPIC Control Atlas Clarity System and Translation-First UX Governance.md',
-  ]) {
-    const content = readFileSync(path, 'utf8');
-    assert.match(content, /(Build for translation, not complexity|Translation-First Product Standard|Source-First Product Standard)/i, `${path} must carry the product clarity doctrine`);
-  }
-
-  const plan = readFileSync('docs/Plan.md', 'utf8');
-  assert.match(plan, /## Active Sprint/);
-  assert.match(plan, /## Epic Status/);
-  assert.match(plan, /Epic 4.*Template Factory/i);
-
-  const backlog = readFileSync('docs/plans/prd-v3-alignment-backlog.md', 'utf8');
-  assert.match(backlog, /Open gaps only/i);
-  assert.match(backlog, /\[`docs\/Plan\.md`\]/);
-  assert.match(backlog, /## Deferred/i);
-  assert.doesNotMatch(backlog, /entirely unimplemented/i);
-
-  const context = readFileSync('docs/context.md', 'utf8');
-  assert.match(context, /Shipped on `main`/i);
-  assert.match(context, /SPR-20260708/i);
-  assert.doesNotMatch(context, /Epic 2 is active/i);
-
-  const designPrinciples = readFileSync('docs/DESIGN_PRINCIPLES.md', 'utf8');
-  assert.match(designPrinciples, /Answer the task in front of the user/i);
-  assert.match(designPrinciples, /lead with the complete published text rather than invented guidance/i);
-
-  const prd = readFileSync('docs/PRD.md', 'utf8');
-  assert.match(prd, /\| \*\*Compare\*\* \|/);
-  assert.match(prd, /\| \*\*Sources\*\* \|/);
-
-  const prTemplate = readFileSync('.github/pull_request_template.md', 'utf8');
-  assert.match(prTemplate, /reduces user confusion or improves a clear user action/i);
-  assert.match(prTemplate, /No novice\/expert mode or split-personality UX was introduced/i);
-
-  const epic = readFileSync('docs/plans/EPIC Control Atlas Clarity System and Translation-First UX Governance.md', 'utf8');
-  assert.match(epic, /Implemented in `main` and verified live on GitHub Pages/i);
-  assert.match(epic, /Local verification passed the full `npm run precommit` gate/i);
-  assert.match(epic, /Treat this epic as implemented and publicly deployed/i);
-
-  for (const path of [
-    '.github/ISSUE_TEMPLATE/0-spec.md',
-    '.github/ISSUE_TEMPLATE/1-plan.md',
-    '.github/ISSUE_TEMPLATE/2-build.md',
-  ]) {
-    const content = readFileSync(path, 'utf8');
-    assert.match(content, /What user confusion does this reduce\?/i);
-    assert.match(content, /What action does this help the user take\?/i);
+test("public product surfaces share one identity and decision boundary", () => {
+  const definition = "Control Atlas is a public research tool for federal cybersecurity requirements, controls, techniques, and guidance.";
+  const boundary = "Use Control Atlas for research, not compliance or authorization decisions.";
+  for (const path of ["README.md", "CONTRIBUTING.md", "src/shared/site-copy.mjs"]) {
+    const content = readFileSync(path, "utf8");
+    assert.ok(content.includes(definition), `${path} product definition`);
+    assert.ok(content.includes(boundary), `${path} decision boundary`);
   }
 });

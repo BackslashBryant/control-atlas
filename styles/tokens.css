@@ -166,7 +166,7 @@
   --ca-warning: var(--lsm-rust);
   --ca-danger: var(--lsm-fault);
   /* Applicability (selections/overlays) must read as visually distinct from
-     correlation (tone-info) per docs/tree-model.md #3 — gold is otherwise
+     correlation (tone-info) per docs/DATA_POLICY.md — gold is otherwise
      unused as a badge tone. */
   --ca-applicability: var(--lsm-gold);
   --ca-badge-info-text: var(--lsm-bone);
@@ -185,7 +185,7 @@
   --ca-graph-dim: color-mix(in srgb, var(--lsm-dust) 35%, transparent);
 
   /* Relationship-class colors for the record-neighborhood map: one hue per
-     class (docs/tree-model.md), reused for both nodes and edges of that
+     class (docs/DATA_POLICY.md), reused for both nodes and edges of that
      class so the kind of relationship reads from color, not only the text
      label. Structural never reaches this map (rendered separately as its
      own structural-child tag list), so it has no color here. */

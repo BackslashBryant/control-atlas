@@ -40,7 +40,7 @@ console.log("  ✓ Schema Validation Passed");
 // 2026-08-02: 13 official-lane resources removed — each duplicated a
 // publication already canonically ingested as its own Catalog/Source
 // (SP 800-53/53A/53B/37/171/172, CSF 2.0, AI RMF, SSDF, DISA STIG/SRG, CMMC
-// rule, FedRAMP baselines). See docs/plans/audit-alignment-2026-08-02.md
+// rule, FedRAMP baselines). See docs/DATA_POLICY.md
 // Phase 2a — an ingested publication must not also render as an ordinary
 // Resource card.
 assert.ok(dataset.resources.length >= 83, `Expected >= 83 resources, found ${dataset.resources.length}`);
@@ -133,7 +133,7 @@ for (const removedId of [
 console.log("  ✓ Accessible Artifact Boundary Passed (no paywalled product cards)");
 
 // 3b. Ownership: an ingested Catalog publication must not also render as an
-// ordinary Resource (docs/tree-model.md ownership rule; audit-alignment
+// ordinary Resource (docs/DATA_POLICY.md ownership rule;
 // 2026-08-02 Phase 2a / Workstream 4). Each pattern is a distinctive token
 // from a real ingested catalog's own name — specific enough that only a
 // genuine duplicate-identity Resource would carry it too. Tool/template

@@ -71,7 +71,7 @@ Write-Host "  1. Update the project name and description in package.json" -Foreg
 Write-Host "  2. Configure your repository settings in .cursor/mcp.json" -ForegroundColor White
 Write-Host "  3. Export GITHUB_TOKEN (repo + workflow scopes) and run npm run github:labels" -ForegroundColor White
 Write-Host "  4. Run npm run agents:prompt -- list to copy prompts into Cursor agents" -ForegroundColor White
-Write-Host "  5. Kick off a feature using docs/agents/KICKOFF.md" -ForegroundColor White
+Write-Host "  5. Read docs/README.md and create docs/Plan.md only while work is active" -ForegroundColor White
 Write-Host ""
 Write-Host "Available commands:" -ForegroundColor Blue
 Write-Host "  npm run preflight        - Validate agent workflow scaffolding" -ForegroundColor White
@@ -82,10 +82,8 @@ Write-Host "  npm run github:issue -- kickoff \"Title\" - Open issues from the C
 Write-Host "  npm run verify           - Run verify-all once your stack adds scripts" -ForegroundColor White
 Write-Host ""
 Write-Host "Documentation:" -ForegroundColor Blue
-Write-Host "  docs/agents/README.md   - Agent roster and run order" -ForegroundColor White
-Write-Host "  docs/agents/SETUP.md    - Agent provisioning checklist" -ForegroundColor White
-Write-Host "  docs/agents/KICKOFF.md  - Kickoff template + sanity test" -ForegroundColor White
-Write-Host "  docs/github/README.md   - GitHub workflow checklist" -ForegroundColor White
-Write-Host "  docs/PRD.md             - Product requirements placeholder" -ForegroundColor White
+Write-Host "  docs/README.md          - Canonical documentation manifest" -ForegroundColor White
+Write-Host "  docs/PRD.md             - Product requirements" -ForegroundColor White
+Write-Host "  docs/OPERATIONS.md      - Verification and release contract" -ForegroundColor White
 Write-Host ""
 Write-Host "Happy coding!" -ForegroundColor Green

@@ -18,7 +18,7 @@ const resources = dataset.resources;
 test("CA-RES-001/002: Resources retains its directory identity, eight collections, and complete browse taxonomy", () => {
   // 2026-08-02: 96 -> 83. 13 official-lane resources removed — each
   // duplicated a publication already canonically ingested as its own
-  // Catalog/Source (docs/plans/audit-alignment-2026-08-02.md Phase 2a).
+  // Catalog/Source (docs/DATA_POLICY.md).
   assert.equal(resources.length, 114);
   assert.equal(dataset.collections.length, 8);
   const categories = resources.map(primaryBrowseCategory);

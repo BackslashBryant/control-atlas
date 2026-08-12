@@ -902,91 +902,91 @@
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
       "disposition": "rejected",
       "evidence": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "NIST SP 800-53A Rev. 5 Assessing Security and Privacy Controls",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-53a/rev-5/final",
       "disposition": "rejected",
       "evidence": "https://csrc.nist.gov/publications/detail/sp/800-53a/rev-5/final",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "NIST SP 800-53B Control Baselines for Information Systems",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-53b/final",
       "disposition": "rejected",
       "evidence": "https://csrc.nist.gov/publications/detail/sp/800-53b/final",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "NIST SP 800-37 Rev. 2 Risk Management Framework for Information Systems",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-37/rev-2/final",
       "disposition": "rejected",
       "evidence": "https://csrc.nist.gov/publications/detail/sp/800-37/rev-2/final",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "NIST SP 800-171 Rev. 2 Protecting CUI in Nonfederal Systems",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-171/rev-2/final",
       "disposition": "rejected",
       "evidence": "https://csrc.nist.gov/publications/detail/sp/800-171/rev-2/final",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "NIST SP 800-172 Enhanced Security Requirements for CUI",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-172/final",
       "disposition": "rejected",
       "evidence": "https://csrc.nist.gov/publications/detail/sp/800-172/final",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "NIST SP 800-218 Secure Software Development Framework (SSDF)",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/800-218/final",
       "disposition": "rejected",
       "evidence": "https://csrc.nist.gov/publications/detail/sp/800-218/final",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "DISA Security Technical Implementation Guides (STIGs)",
       "canonicalUrl": "https://public.cyber.mil/stigs/downloads/",
       "disposition": "rejected",
       "evidence": "https://public.cyber.mil/stigs/downloads/",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "DISA Security Requirements Guides (SRGs)",
       "canonicalUrl": "https://public.cyber.mil/stigs/srgs/",
       "disposition": "rejected",
       "evidence": "https://public.cyber.mil/stigs/srgs/",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "CMMC Program 32 CFR Part 170 Final Rule",
       "canonicalUrl": "https://www.ecfr.gov/current/title-32/child-main/chapter-I/subchapter-G/part-170",
       "disposition": "rejected",
       "evidence": "https://www.ecfr.gov/current/title-32/child-main/chapter-I/subchapter-G/part-170",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "NIST Cybersecurity Framework (CSF) 2.0",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/1280/final",
       "disposition": "rejected",
       "evidence": "https://csrc.nist.gov/publications/detail/sp/1280/final",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "NIST Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
       "canonicalUrl": "https://csrc.nist.gov/publications/detail/sp/1270/final",
       "disposition": "rejected",
       "evidence": "https://csrc.nist.gov/publications/detail/sp/1270/final",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "FedRAMP Security Controls Baselines (Rev. 5)",
       "canonicalUrl": "https://www.fedramp.gov/baselines/",
       "disposition": "rejected",
       "evidence": "https://www.fedramp.gov/baselines/",
-      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/tree-model.md ownership rule)."
+      "actionTaken": "Already canonically represented as an ingested Catalog/Source publication with its own records; kept as one identity instead of duplicating it as an ordinary external Resource (docs/DATA_POLICY.md ownership rule)."
     },
     {
       "candidate": "NIST SP 800-171A Assessing Security Requirements for CUI",

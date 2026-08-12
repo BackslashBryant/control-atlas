@@ -18,7 +18,7 @@ import { platform } from 'node:os';
 
 if (process.env.GITHUB_TOKEN) {
   console.log(
-    '[warn] GITHUB_TOKEN is set. Unset it so gh uses keyring credentials (see docs/audits/branch-protection-verification-2026-06-19.md).',
+    '[warn] GITHUB_TOKEN is set. Unset it so gh uses keyring credentials (see docs/OPERATIONS.md).',
   );
 }
 

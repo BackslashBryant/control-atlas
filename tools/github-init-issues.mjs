@@ -88,8 +88,8 @@ const DEFAULT_ISSUES = [
     labels: ['status:plan', 'agent:vector'],
     body: `## Goal
 - Document vision in docs/vision.md
-- Align docs/roadmap.md and docs/PRD.md for full v1.0
-- Seed Feature DoD in .notes/features/<slug>/spec.md or per-issue plan under docs/plans/
+- Align the feature with docs/PRD.md
+- Seed Feature DoD in .notes/features/<slug>/spec.md and use only docs/Plan.md while work is active
 
 ## Checklist
 - [ ] Vision drafted
@@ -117,7 +117,7 @@ const DEFAULT_ISSUES = [
     body: `## Goal
 - Work checkpoint-by-checkpoint
 - Run targeted tests after each change
-- Update docs/ConnectionGuide.md when services change
+- Update docs/OPERATIONS.md when durable service or release policy changes
 
 ## Checklist
 - [ ] Checkpoint 1 complete
@@ -134,8 +134,8 @@ const DEFAULT_ISSUES = [
 
 ## Checklist
 - [ ] Tests GREEN
-- [ ] docs/context.md updated when useful
-- [ ] docs/ConnectionGuide.md reflects final state
+- [ ] docs/Plan.md deleted in the shipping change
+- [ ] Canonical docs reflect any durable direction change
 - [ ] Branch pushed and merged to main when ready`,
   },
 ];
@@ -169,7 +169,7 @@ async function main() {
   console.log('\nStarter issues ready.');
   console.log('Next steps:');
   console.log(' 1. Open the Spec issue and fill in the docs referenced.');
-  console.log(' 2. Keep docs/context.md current when a handoff needs it.');
+  console.log(' 2. Keep temporary status in the issue or pull request, not a permanent handoff document.');
   console.log(' 3. Progress issues as checkpoints turn GREEN.');
 }
 

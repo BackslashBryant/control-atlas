@@ -1,6 +1,6 @@
 /**
- * Practitioner guides — the primary Learn surface (docs/plans/audit-alignment
- * -2026-08-02.md Phase 3a). Each answers a real federal-cybersecurity-work
+ * Practitioner guides follow the directory contract in docs/PAGE_CONTRACTS.md.
+ * Each answers a real federal-cybersecurity-work
  * question, not a product-interface question. `explanation` states only
  * well-established, citable fact about the concept; `limitations` states
  * what Control Atlas does not decide. Every citation points to the same

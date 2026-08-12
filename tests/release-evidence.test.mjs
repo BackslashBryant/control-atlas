@@ -1,34 +1,16 @@
-import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
-import test from 'node:test';
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
 
-const evidencePath =
-  'docs/audits/control-atlas-v1-holistic-correction-local-evidence-2026-07-28.md';
+test("release evidence is owned by executable gates and keeps external proof boundaries honest", () => {
+  const operations = readFileSync("docs/OPERATIONS.md", "utf8");
+  const packageManifest = JSON.parse(readFileSync("package.json", "utf8"));
 
-test('current release evidence retains its artifacts and honest external boundaries', () => {
-  const evidence = readFileSync(evidencePath, 'utf8');
-  const artifactPaths = [
-    ...evidence.matchAll(/^- [^:\n]+: `([^`]+)`$/gm),
-  ].map((match) => match[1]);
-
-  assert.ok(artifactPaths.length >= 10, 'release packet must enumerate its artifacts');
-  for (const path of artifactPaths) {
-    if (!path.startsWith('artifacts/')) {
-      assert.ok(existsSync(path), `missing release evidence artifact: ${path}`);
-    }
+  for (const script of ["precommit", "checks:wait", "ship:main", "test:e2e:live:smoke"]) {
+    assert.ok(packageManifest.scripts[script], `missing ${script} release gate`);
   }
-
-  for (const pending of [
-    'Five-practitioner validation and replay.',
-    'Human editorial sign-off.',
-    'Human NVDA desktop session.',
-    'Human VoiceOver or TalkBack mobile session.',
-    'Physical phone and tablet checks.',
-    'Actual browser 200% zoom session.',
-    'Owner review and final `GO` or `NO-GO`.',
-  ]) {
-    assert.match(evidence, new RegExp(`- ${pending.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`));
-  }
-
-  assert.doesNotMatch(evidence, /^\|[^|\n]*\|\s*Not tested\s*\|/gmi);
+  assert.match(operations, /CI artifacts, the pull request, and the release/);
+  assert.match(operations, /Automated browser emulation is not physical-device evidence/);
+  assert.match(operations, /Automated axe is not hands-on NVDA, VoiceOver, or TalkBack evidence/);
+  assert.doesNotMatch(operations, /docs\/audits/);
 });

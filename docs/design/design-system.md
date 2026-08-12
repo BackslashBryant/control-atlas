@@ -1,5 +1,10 @@
 # Control Atlas Design System
 
+- **Owner:** Muse
+- **Status:** Canonical
+- **Last reviewed:** 2026-08-11
+- **Supersession:** Approved visual-system changes replace the affected rule here and its component or visual tests in the same change.
+
 Control Atlas adapts **Orbital Archive No. 01 v1.7.0** as its visual and interaction system. The product principle remains: build for translation, not complexity.
 
 ## Foundations

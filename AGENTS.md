@@ -2,11 +2,11 @@
 
 ## Product Scope
 
-**Control Atlas** v1.0 is the full product in `docs/PRD.md` and `docs/roadmap.md`. Build all six epics unless the user explicitly narrows a task.
+**Control Atlas** is defined by `docs/PRD.md`; `docs/README.md` is the canonical documentation manifest.
 
-**Delivery status:** Epics 0–10 shipped (`v1.0.0-rc.1`). Open gaps: [`docs/plans/prd-v3-alignment-backlog.md`](docs/plans/prd-v3-alignment-backlog.md).
+**Delivery status:** The current deployed release and open external verification gaps are tracked through releases and `docs/BACKLOG.md`.
 
-**Active sprint:** None — Epic 10 complete (zero residuals). See [`docs/Plan.md`](docs/Plan.md).
+**Active initiative:** At most one temporary `docs/Plan.md` may exist while work is active. Delete it in the shipping change.
 
 ## Design principle
 

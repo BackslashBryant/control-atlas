@@ -7,7 +7,7 @@
  * only SP 800-53 Revision 3/4 — DISA's own list was never re-issued against
  * Revision 5 for those items. Measured before this script existed, they were the
  * single largest block of isolated nodes in the graph
- * (docs/audits/grc-hierarchy-audit-2026-07-25.md). The gap is closed with
+ * (docs/DATA_POLICY.md). The gap is closed with
  * published federal documents only; nothing here is inferred or scored:
  *
  *   1. Carried forward — the Rev 4 control id still exists in the Rev 5 catalog

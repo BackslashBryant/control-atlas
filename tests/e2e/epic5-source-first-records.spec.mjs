@@ -10,7 +10,7 @@ const records = [
   ["assessment procedure", "/#/record/nist-800-53a/AC-1", "AC-1", "Assessment Procedure"],
   // D3-AA was the last record type with an empty description (MITRE D3FEND
   // technique/all.json omits d3f:definition; the full ontology graph carries
-  // it — docs/plans/full-records-2026-08-02.md). No graph node currently has
+  // it — docs/PAGE_CONTRACTS.md). No graph node currently has
   // an empty description, so there is no real fixture left for the
   // "no narrative description" fallback branch in ObjectDetailPage.tsx.
   ["MITRE D3FEND countermeasure", "/#/record/mitre-d3fend/D3-AA", "D3-AA", "Countermeasure Description"],

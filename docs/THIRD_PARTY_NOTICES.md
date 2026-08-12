@@ -1,5 +1,10 @@
 # Third-Party and Government Source Notices
 
+- **Owner:** Sentinel
+- **Status:** Canonical
+- **Last reviewed:** 2026-08-11
+- **Supersession:** Dependency or attribution changes update this file in the same release.
+
 Control Atlas catalogs authoritative government resources and open-source tools so users can reach the original source before using a companion artifact. Catalog links do not imply endorsement by the publisher, maintainer, or United States Government.
 
 The Phase 7 registries added on 2026-07-16 contain metadata and links only. They do not vendor the referenced applications, templates, schemas, logos, or source code. If source material is incorporated later, its file-level license and notice requirements must be reviewed and preserved at that time.

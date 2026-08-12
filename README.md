@@ -58,7 +58,7 @@ Live site target: https://backslashbryant.github.io/control-atlas/
 - Current D3-based relationship visualization foundation for the Epic 0 provenance filter surface and later roadmap work
 - Contract, browser, runtime, and data tests enforcing the public-data-only boundary
 
-See `docs/PRD.md`, `docs/architecture/ARCHITECTURE.md`, `docs/roadmap.md`, `docs/inventory/repository-inventory.md`, and `docs/PRODUCTION_READINESS.md`.
+Start with `docs/README.md`, which points to the canonical product, page, architecture, data, operations, and backlog contracts.
 
 ## Commands
 

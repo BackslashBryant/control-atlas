@@ -1,5 +1,10 @@
 # Control Atlas Product Vision
 
+- **Owner:** Product owner
+- **Status:** Canonical
+- **Last reviewed:** 2026-08-11
+- **Supersession:** Owner-approved vision changes replace this document; historical wording remains in Git.
+
 **Ctrl+Alt+Comply**
 
 **Federal cybersecurity reference and practitioner workbench.**

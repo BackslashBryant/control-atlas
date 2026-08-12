@@ -55,7 +55,7 @@ test("internal hierarchy nodes never become user-facing type refinements", () =>
   }
 });
 
-test("the permanent placement rule and complete relocation audit stay in repository guidance", () => {
+test("the permanent placement and page-job rules stay in canonical guidance", () => {
   const contributing = readFileSync("CONTRIBUTING.md", "utf8");
   for (const rule of [
     "New content becomes a Library facet value.",
@@ -67,26 +67,14 @@ test("the permanent placement rule and complete relocation audit stay in reposit
     assert.match(contributing, new RegExp(rule.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
 
-  const plan = readFileSync("docs/plans/epic-12-first-click-clarity-2026-08-08.md", "utf8");
-  const movedSurfaces = [
-    "Atlas overview",
-    "Atlas record focus",
-    "Compare",
-    "Documents",
-    "Tasks",
-    "Resources directory",
-    "Curated resource collections",
-    "Resource detail",
-    "Catalog",
-    "Publication detail",
-    "Search",
-    "Help",
-    "Guides",
-  ];
-  assert.match(plan, /\| Moved surface \| Old route \| New home \| Redirect \| Tested click path \|/);
-  for (const surface of movedSurfaces) {
-    const row = plan.split("\n").find((line) => line.startsWith(`| ${surface} |`));
-    assert.ok(row, `${surface} must appear in the permanent relocation audit`);
-    assert.equal(row.split("|").slice(1, -1).every((cell) => cell.trim().length > 0), true, `${surface} must keep a tested click path`);
-  }
+  const contracts = readFileSync("docs/PAGE_CONTRACTS.md", "utf8");
+  for (const pageJob of [
+    "Landing",
+    "Workspace",
+    "Adaptive Explorer",
+    "Record detail",
+    "Directory",
+    "Focused workbench",
+  ]) assert.match(contracts, new RegExp(pageJob));
+  assert.match(contracts, /A route renders one `<main>`/);
 });

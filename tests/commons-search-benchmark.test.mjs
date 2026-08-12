@@ -61,7 +61,7 @@ function executeSearch(queryStr) {
 // 27 Standardized Benchmark Queries
 // 2026-08-02: SP 800-53, DISA STIG, CMMC 2.0, and FedRAMP baselines are
 // canonical Catalog/Source publications now, not ordinary Resources (see
-// docs/plans/audit-alignment-2026-08-02.md Phase 2a). Rows that used to
+// docs/DATA_POLICY.md). Rows that used to
 // target those removed Resource IDs now target the remaining Resources a
 // user searching those terms should actually land on.
 const benchmarkQueries = [

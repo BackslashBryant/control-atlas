@@ -71,7 +71,7 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         depth: 1,
         mode: "operational",
         // Renamed from "Explore" so it no longer shares a name with the
-        // atlas-map nav item (see PLAN CHANGE in docs/STATE.md).
+        // atlas-map nav item (see docs/PAGE_CONTRACTS.md).
         label: routeIdentityFor("search").contextLabel,
         scope: state.query,
       };

@@ -3,7 +3,7 @@
 /**
  * feature-new
  *
- * Interactive helper that creates a new feature spec + plan (optional slice; Control Atlas scope lives in docs/roadmap.md).
+ * Interactive helper that creates a new feature spec and one temporary active plan.
  */
 
 import readline from 'node:readline';
@@ -111,7 +111,7 @@ async function main() {
   console.log('1. Open the spec and fill in any TODOs.');
   console.log('2. Create a GitHub issue using the "0 - Spec" template and paste the spec content.');
   console.log('3. Ask @Vector to read the spec and update docs/Plan.md (use the "1 - Plan" issue template).');
-  console.log('4. Keep implementation limited to the Feature DoD checkboxes (see docs/roadmap.md for full v1.0 scope).');
+  console.log('4. Keep implementation limited to the Feature DoD and docs/PRD.md. Delete docs/Plan.md in the shipping change.');
   console.log('');
   console.log('Need to restart? Run this command again once the current feature ships.');
 

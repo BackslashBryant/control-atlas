@@ -1,5 +1,10 @@
 # Control Atlas Architecture
 
+- **Owner:** Forge
+- **Status:** Canonical
+- **Last reviewed:** 2026-08-11
+- **Supersession:** Approved architecture changes replace the affected section here and update executable contracts in the same change.
+
 ## Product Identity
 
 - Public product name: **Control Atlas**
@@ -76,9 +81,9 @@ Blocked relationships remain graph-health findings and never become displayable 
 
 - `src/` is the source-of-truth application tree and `tools/build-static-site.mjs` stages the deployable site into `dist/site`.
 - React + Vite render the translation-first UI while existing runtime/data contracts remain reusable.
-- The primary Atlas route uses semantic React DOM for Path, bounded Map, and List views over one filtered neighborhood model.
+- The Atlas route uses React Flow and ELK only for the bounded area/publication overview, then switches to semantic DOM for publisher-native levels.
 - Focused Atlas routes load the compact node index plus one incident-edge shard; they do not fetch monolithic `nodes`, `edges`, or `evidence` artifacts.
-- React Flow + ELK remain lazy dependencies for existing bounded relationship diagrams outside the primary Atlas route.
+- React Flow + ELK remain lazy dependencies for bounded overview and local-connection diagrams; they never render an unbounded catalog as a generic graph.
 - Tables, search, filters, and detail pages remain primary browsing models; visual relationships are supporting context, not a giant-canvas navigation system.
 - GitHub Pages remains the deployment target.
 - MiniSearch is the target search pattern.

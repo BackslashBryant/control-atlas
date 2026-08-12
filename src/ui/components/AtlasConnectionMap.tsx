@@ -52,7 +52,7 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
   } = props;
   // Structure (base control / enhancements) is publisher-declared parentage,
   // never a peer of applicability/implementation/cross-framework correlation
-  // (docs/tree-model.md's four relationship classes) — it is hierarchy, not a
+  // (docs/DATA_POLICY.md's relationship classes) — it is hierarchy, not a
   // connection, and the workspace's Hierarchy panel and "Published children"
   // list are its one home. Rendering it a second time here would duplicate
   // that list under a different label.

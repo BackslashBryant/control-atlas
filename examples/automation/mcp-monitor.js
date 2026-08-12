@@ -45,7 +45,7 @@ class MCPMonitor {
       if (!fs.existsSync(this.mcpConfigPath)) {
         this.log('⚠️  MCP configuration not found. This is a scaffold template.');
         this.log('💡 To use MCP monitoring, create .cursor/mcp.json with your MCP server configurations.');
-        this.log('📚 See docs/MCP_SETUP_GUIDE.md for setup instructions.');
+        this.log('📚 See docs/README.md for current project documentation.');
         return {};
       }
       
