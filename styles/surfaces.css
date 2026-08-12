@@ -10113,7 +10113,7 @@ input[type="checkbox"] {
 .atlas-tree__workbench.is-structural {
   grid-template-columns: 17.5rem minmax(0, 1fr);
   height: auto;
-  min-height: 40rem;
+  min-height: 24rem;
   overflow: visible;
 }
 
@@ -10154,7 +10154,7 @@ input[type="checkbox"] {
   display: grid;
   align-content: start;
   gap: var(--ca-space-6);
-  min-height: 40rem;
+  min-height: 24rem;
   padding: clamp(var(--ca-space-4), 3vw, var(--ca-space-8));
   background: var(--ca-surface-deep);
 }
@@ -10624,6 +10624,11 @@ input[type="checkbox"] {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .atlas-tree__mobile-bar button {
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .atlas-tree__drawer-close {

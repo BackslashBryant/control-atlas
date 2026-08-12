@@ -96,6 +96,14 @@ function detectCatalogKind(benchmark, hintKind) {
   return null;
 }
 
+function classifyCompilationEntry(entryPath, hintKind) {
+  const pathLower = entryPath.toLowerCase();
+  if (pathLower.includes('srg')) return { kind: 'srg', basis: 'entry-path-srg' };
+  if (pathLower.includes('stig')) return { kind: 'stig', basis: 'entry-path-stig' };
+  if (hintKind === 'srg' || hintKind === 'stig') return { kind: hintKind, basis: 'explicit-compilation-hint' };
+  return { kind: 'stig', basis: 'public-compilation-default' };
+}
+
 function composeVersion(benchmark) {
   const majorVersion = textValue(benchmark?.version);
   if (/^V\d+R\d+$/i.test(majorVersion)) return majorVersion;
@@ -107,7 +115,7 @@ function composeVersion(benchmark) {
   return majorVersion;
 }
 
-export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKind }) {
+export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKind, classificationBasis }) {
   const validation = XMLValidator.validate(xml);
   if (validation !== true) {
     throw new Error(`Invalid DISA XCCDF structure: ${validation.err?.msg || 'malformed XML'}`);
@@ -169,6 +177,7 @@ export function parseDisaXccdf(xml, { sourceKey, artifactUrl, entryPath, hintKin
 
   return {
     catalogKind,
+    classification_basis: classificationBasis || (hintKind ? 'explicit-hint' : 'benchmark-metadata'),
     source_key: sourceKey,
     source_artifact: artifactUrl,
     source_version: version,
@@ -277,18 +286,18 @@ export function parseDisaCompilationArchive(buffer, { artifactUrl, sourceKeys, h
   for (const entry of walkArchiveEntries(archive)) {
     if (shouldIgnoreEntry(entry.entryPath) || !/\.(xml|xccdf)$/i.test(entry.entryPath)) continue;
     const xml = strFromU8(entry.value);
-    const pathLower = entry.entryPath.toLowerCase();
-    const pathHint = pathLower.includes('srg') ? 'srg' : pathLower.includes('stig') ? 'stig' : hintKind;
+    const classification = classifyCompilationEntry(entry.entryPath, hintKind);
     // A ~2600-entry compilation zip real-world includes non-Benchmark XML
     // (manifests, schemas, malformed one-offs) alongside real STIG/SRG
     // content — spec §6 classifies these as "failed content", not a reason
     // to abort parsing the other 99%+ that IS a valid benchmark.
     try {
       const document = parseDisaXccdf(xml, {
-        sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
+        sourceKey: classification.kind === 'srg' ? sourceKeys.srg : sourceKeys.stig,
         artifactUrl,
         entryPath: entry.entryPath,
-        hintKind: pathHint,
+        hintKind: classification.kind,
+        classificationBasis: classification.basis,
       });
       appendDocument(accumulator, document);
     } catch (error) {
@@ -351,20 +360,21 @@ export async function parseDisaCompilationStream(filePath, { artifactUrl, source
       return;
     }
     const xml = strFromU8(xmlU8);
-    const pathLower = entryPath.toLowerCase();
-    const pathHint = pathLower.includes('srg') ? 'srg' : pathLower.includes('stig') ? 'stig' : hintKind;
+    const classification = classifyCompilationEntry(entryPath, hintKind);
     try {
       const document = parseDisaXccdf(xml, {
-        sourceKey: pathHint === 'srg' ? sourceKeys.srg : sourceKeys.stig,
+        sourceKey: classification.kind === 'srg' ? sourceKeys.srg : sourceKeys.stig,
         artifactUrl,
         entryPath,
-        hintKind: pathHint,
+        hintKind: classification.kind,
+        classificationBasis: classification.basis,
       });
       appendDocument(accumulator, document);
       inventory.push({
         entryPath,
         status: 'ingested',
         catalogKind: document.catalogKind,
+        classificationBasis: document.classification_basis,
         benchmarkId: document.records[0]?.metadata?.benchmark_id || null,
         recordCount: document.records.length,
       });

@@ -81,9 +81,17 @@ test("WS7 promotes record identity and comparison mode into readable path segmen
   const atlasState = normalizeViewState("atlas-map", {
     view: "atlas-map",
     node: "nist-800-53:AC-2",
+    atlasParent: "nist-800-53:FAMILY-AC",
     relationshipView: "map",
   });
-  assert.equal(serializeHashLocation(atlasState), "/atlas/nist-800-53:AC-2?relationshipView=map");
+  assert.equal(serializeHashLocation(atlasState), "/atlas/nist-800-53:AC-2?atlasParent=nist-800-53:FAMILY-AC&relationshipView=map");
+  assert.equal(
+    parseHashLocation(
+      "/atlas/mitre-attack:T1000",
+      "?atlasParent=mitre-attack%3ATACTIC-TA0001",
+    ).atlasParent,
+    "mitre-attack:TACTIC-TA0001",
+  );
 
   const compareState = normalizeViewState("matrix", {
     view: "matrix",

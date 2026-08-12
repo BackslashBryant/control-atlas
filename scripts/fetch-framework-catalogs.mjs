@@ -12,7 +12,11 @@ import {
   buildFips199Catalog,
   buildFips200Catalog,
   buildNist80053BBaselineCatalog,
+  buildNistZeroTrustCatalog,
+  buildNistIoTRequirementCatalog,
+  buildNistMobileThreatCatalog,
   buildRmfCatalog,
+  buildMicrosoftZeroTrustQuestionnaireCatalog,
   parseAiRmfPlaybook,
   parseSsdfCatalog,
 } from '../tools/importers/framework-adapters.mjs';
@@ -137,6 +141,10 @@ const PUBLIC_CATALOGS = [
   ['cui-policy.json', buildCuiPolicyCatalog],
   ['dod-rai.json', buildDodRaiPublicCatalog],
   ['dod-zt.json', (snapshotDate) => buildDodZeroTrustCatalog(snapshotDate, join(ROOT, 'data', 'curated', 'dod-zt'))],
+  ['nist-zt.json', (snapshotDate) => buildNistZeroTrustCatalog(snapshotDate, join(ROOT, 'data', 'curated', 'nist-zt'))],
+  ['microsoft-zt-maturity.json', (snapshotDate) => buildMicrosoftZeroTrustQuestionnaireCatalog(snapshotDate, join(ROOT, 'data', 'curated', 'nist-zt'))],
+  ['nist-iot-cybersecurity.json', (snapshotDate) => buildNistIoTRequirementCatalog(snapshotDate, join(ROOT, 'data', 'curated', 'nist-structured-catalogs'))],
+  ['nist-mobile-threats.json', (snapshotDate) => buildNistMobileThreatCatalog(snapshotDate, join(ROOT, 'data', 'curated', 'nist-structured-catalogs'))],
 ];
 
 function writeCatalog(filename, document) {
@@ -146,8 +154,11 @@ function writeCatalog(filename, document) {
 
 export async function fetchFrameworkCatalogs(options = {}) {
   const only = options.only ? new Set(options.only) : null;
-  const remoteTargets = only ? REMOTE_CATALOGS.filter((target) => only.has(target.id)) : REMOTE_CATALOGS;
-  const publicTargets = only ? [] : PUBLIC_CATALOGS;
+  const onlyPublic = options.onlyPublic ? new Set(options.onlyPublic) : null;
+  const remoteTargets = onlyPublic ? [] : only ? REMOTE_CATALOGS.filter((target) => only.has(target.id)) : REMOTE_CATALOGS;
+  const publicTargets = onlyPublic
+    ? PUBLIC_CATALOGS.filter(([filename]) => onlyPublic.has(filename.replace(/\.json$/, '')))
+    : only ? [] : PUBLIC_CATALOGS;
   const results = [];
   let fedrampMembership = null;
   try {
@@ -186,7 +197,9 @@ export async function fetchFrameworkCatalogs(options = {}) {
 }
 
 if (process.argv[1]?.includes('fetch-framework-catalogs.mjs')) {
-  fetchFrameworkCatalogs()
+  const publicIndex = process.argv.indexOf('--public');
+  const onlyPublic = publicIndex >= 0 ? process.argv.slice(publicIndex + 1) : null;
+  fetchFrameworkCatalogs({ onlyPublic })
     .then((results) => results.forEach((result) => console.log(`Wrote ${result.filename}: ${result.records} records`)))
     .catch((error) => {
       console.error(error.message);

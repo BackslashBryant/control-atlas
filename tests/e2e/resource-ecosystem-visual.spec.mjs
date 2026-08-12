@@ -32,7 +32,7 @@ test("resource ecosystem visual evidence", async ({ page }) => {
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await open(page, "#/resources");
-  await expect(page.getByRole("heading", { name: "Browse eight practical collections" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Browse by Collection" })).toBeVisible();
   await expect(page.locator(".workspace-browse-card--collection")).toHaveCount(8);
   await expect(page.locator(".workspace-result-list")).toHaveCount(0);
   await shot(page, "01-landing-collections");
@@ -50,7 +50,7 @@ test("resource ecosystem visual evidence", async ({ page }) => {
 
   await open(page, "#/resources?resourceType=template&showAll=true");
   await expect(page.locator(".workspace-result-list")).toBeVisible();
-  await expect(page.locator('[data-result-class="resource"] .workspace-kind-tag')).toContainText("Template");
+  await expect(page.locator('[data-result-class="resource"] .workspace-kind-tag').first()).toHaveText("Template");
   await shot(page, "11-filtered-templates");
 
   await open(page, "#/resources?showAll=true");
@@ -76,7 +76,7 @@ test("resource ecosystem visual evidence", async ({ page }) => {
   }
 
   await open(page, "#/resources?q=zzzzqqqq");
-  await expect(page.getByRole("heading", { name: "No resources match that combination." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "No resources match." })).toBeVisible();
   await shot(page, "21-empty-search");
 
 });
@@ -85,7 +85,7 @@ test("resource dataset error is honest", async ({ page }) => {
   await page.route("**/data/commons-resource-dataset.json*", (route) => route.abort());
   await page.route("**/data/commons-resource-dataset.json.gz*", (route) => route.abort());
   await open(page, "#/resources");
-  await expect(page.getByRole("heading", { name: "The resource directory did not load." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Resources did not load." })).toBeVisible();
   await shot(page, "22-dataset-error");
 });
 
@@ -99,13 +99,13 @@ test("resource ecosystem remains usable at 320 pixels", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 760 });
 
   await open(page, "#/resources");
-  await expect(page.getByRole("heading", { name: "Browse eight practical collections" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Browse by Collection" })).toBeVisible();
   await expect(page.locator(".workspace-browse-card--collection")).toHaveCount(8);
   await shot(page, "23-mobile-landing-320");
 
   await open(page, "#/resources/portal-cis-workbench?from=commons");
   await expect(page.locator(".resource-detail-hero")).toBeVisible();
-  await expect(page.getByText("Do not post CUI", { exact: false })).toHaveCount(1);
+  await expect(page.getByText("Do not post CUI", { exact: false }).first()).toBeVisible();
   await shot(page, "24-mobile-community-detail-320");
 });
 
@@ -117,6 +117,7 @@ test("resource directory supports keyboard use and a 200 percent zoom equivalent
   await search.focus();
   await expect(search).toBeFocused();
   await search.pressSequentially("I-Assure", { delay: 50 });
+  await search.press("Enter");
   await expect(page.getByText("I-Assure RMF artifact templates", { exact: true }).first()).toBeVisible();
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

@@ -167,6 +167,8 @@ export type AtlasNeighborhoodNode = {
     publication_date?: string;
     catalog_id?: string;
     family?: string;
+    structural_child_count?: number;
+    structural_descendant_record_count?: number;
     identity_category?: string;
     classification_provenance?: "publisher" | "referenced" | "inferred";
     related_categories?: Array<{
@@ -220,13 +222,19 @@ export type AtlasNeighborhoodRecord = {
     node_type: string;
     origin: "structural" | "organizing" | "authority";
   }>;
+  structural_paths?: Array<Array<{
+    id: string;
+    label: string;
+    node_type: string;
+    origin: "structural" | "organizing" | "authority";
+  }>>;
   published_connection_count: number;
   candidate_connection_count: number;
 };
 
 type AtlasNeighborhoodShardRecord = {
   center_node?: Record<string, unknown>;
-  nodes: Array<[string, string, string, string, string, string, string, string, string]>;
+  nodes: Array<[string, string, string, string, string, string, string, string, string, number, number]>;
   edges: Array<[
     string,
     string,
@@ -239,6 +247,7 @@ type AtlasNeighborhoodShardRecord = {
     Array<[string, string, string]>,
   ]>;
   structural_path: string[];
+  structural_paths?: string[][];
   published_connection_count: number;
   candidate_connection_count: number;
 };
@@ -616,6 +625,8 @@ export async function loadAtlasNeighborhood(
         family,
         parentId,
         description,
+        structuralChildCount,
+        structuralDescendantRecordCount,
       ]) => [
         id,
         {
@@ -629,6 +640,8 @@ export async function loadAtlasNeighborhood(
             description,
             catalog_id: catalogId,
             family,
+            structural_child_count: structuralChildCount,
+            structural_descendant_record_count: structuralDescendantRecordCount,
           },
         } satisfies AtlasNeighborhoodNode,
       ],
@@ -675,7 +688,7 @@ export async function loadAtlasNeighborhood(
     );
     return edge;
   });
-  const structuralPath = (shardRecord.structural_path || []).flatMap((id) => {
+  const decodeStructuralPath = (path: string[]) => path.flatMap((id) => {
     const node = nodeById.get(id);
     if (!node) return [];
     const origin =
@@ -693,6 +706,12 @@ export async function loadAtlasNeighborhood(
       origin,
     }];
   }) satisfies AtlasNeighborhoodRecord["structural_path"];
+  const structuralPath = decodeStructuralPath(shardRecord.structural_path || []);
+  const structuralPaths = (shardRecord.structural_paths?.length
+    ? shardRecord.structural_paths
+    : [shardRecord.structural_path || []])
+    .map(decodeStructuralPath)
+    .filter((path) => path.length > 0);
   centerNode.display_path = structuralPath.slice(0, -1);
   const nodes = [
     centerNode,
@@ -713,8 +732,28 @@ export async function loadAtlasNeighborhood(
     // so origin is derived from node_type rather than carried from the
     // build-time ancestor_path (which isn't present on shard nodes).
     structural_path: structuralPath,
+    structural_paths: structuralPaths,
     published_connection_count: shardRecord.published_connection_count,
     candidate_connection_count: shardRecord.candidate_connection_count,
+  };
+}
+
+export function selectAtlasStructuralPath(
+  record: AtlasNeighborhoodRecord,
+  branchContext: string,
+): AtlasNeighborhoodRecord {
+  const selected = branchContext
+    ? record.structural_paths?.find((path) => path.some((hop) => hop.id === branchContext))
+    : null;
+  const structuralPath = selected || record.structural_path;
+  if (structuralPath === record.structural_path) return record;
+  return {
+    ...record,
+    center_node: {
+      ...record.center_node,
+      display_path: structuralPath.slice(0, -1),
+    },
+    structural_path: structuralPath,
   };
 }
 

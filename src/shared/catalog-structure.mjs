@@ -1,7 +1,8 @@
-const profile = (catalogId, label, paths) => Object.freeze({
+const profile = (catalogId, label, paths, options = {}) => Object.freeze({
   catalogId,
   label,
   paths: Object.freeze(paths.map((path) => Object.freeze([...path]))),
+  multiParentNodeTypes: Object.freeze([...(options.multiParentNodeTypes || [])]),
 });
 
 /**
@@ -27,17 +28,36 @@ export const CATALOG_STRUCTURE_PROFILES = Object.freeze({
     ["catalog", "zt_overlay_section"],
     ["catalog", "requirement"],
   ]),
+  "nist-zt": profile("nist-zt", "NIST Zero Trust", [
+    ["catalog", "zt_publication", "zt_tenet"],
+    ["catalog", "zt_publication", "zt_logical_component"],
+    ["catalog", "zt_publication", "zt_cloud_native_requirement"],
+    ["catalog", "zt_publication", "zt_build"],
+    ["catalog", "zt_publication", "zt_reference_component"],
+    ["catalog", "zt_publication", "zt_mapping_document"],
+    ["catalog", "zt_publication", "zt_collaborator", "zt_product_component"],
+  ]),
+  "microsoft-zt-maturity": profile("microsoft-zt-maturity", "Microsoft Zero Trust Maturity Questionnaire", [
+    ["catalog", "zt_pillar", "zt_assessment_question"],
+  ]),
+  "nist-iot-cybersecurity": profile("nist-iot-cybersecurity", "NIST IoT Device Cybersecurity", [
+    ["catalog", "iot_capability_domain", "iot_capability", "iot_subcapability", "iot_capability_element"],
+    ["catalog", "iot_capability_domain", "iot_capability", "iot_subcapability", "iot_capability_element", "iot_capability_subelement"],
+  ]),
+  "nist-mobile-threats": profile("nist-mobile-threats", "NIST Mobile Threat Catalogue", [
+    ["catalog", "mobile_threat_category", "mobile_threat"],
+  ]),
   "fedramp-rev5": profile("fedramp-rev5", "FedRAMP Rev. 5", [["catalog", "baseline"]]),
   "fips-199": profile("fips-199", "FIPS 199", [["catalog", "impact_category"]]),
   "fips-200": profile("fips-200", "FIPS 200", [["catalog", "requirement"]]),
   "mitre-attack": profile("mitre-attack", "MITRE ATT&CK Enterprise", [
     ["catalog", "tactic", "attack_technique"],
     ["catalog", "tactic", "attack_technique", "attack_technique"],
-  ]),
+  ], { multiParentNodeTypes: ["attack_technique"] }),
   "mitre-attack-ics": profile("mitre-attack-ics", "MITRE ATT&CK for ICS", [
     ["catalog", "tactic", "attack_technique"],
     ["catalog", "tactic", "attack_technique", "attack_technique"],
-  ]),
+  ], { multiParentNodeTypes: ["attack_technique"] }),
   "mitre-d3fend": profile("mitre-d3fend", "MITRE D3FEND", [["catalog", "tactic", "defend_countermeasure"]]),
   "nist-800-171": profile("nist-800-171", "NIST SP 800-171 Rev. 3", [["catalog", "family", "requirement"]]),
   "nist-800-171-rev2": profile("nist-800-171-rev2", "NIST SP 800-171 Rev. 2", [["catalog", "family", "requirement"]]),

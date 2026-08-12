@@ -6,6 +6,7 @@ const DISPLAY_NAMES = {
     federal_program: 'Federal program',
     federal_utilized: 'Federal source',
     federal_referenced: 'Federal reference',
+    third_party_published: 'Publisher source',
     inferred: 'Inferred',
     official: 'Official',
     dod_published: 'DoD published',

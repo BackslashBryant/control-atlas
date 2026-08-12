@@ -17,7 +17,6 @@ import authoritySpine from "../../../data/curated/authority-spine.json";
 import type { AtlasSpine } from "../lib/atlasDrilldown";
 import {
   renderedAtlasSet,
-  requiresTechnologyGate,
   type AtlasAggregateNode,
   type AtlasRenderableNode,
 } from "../lib/atlasTreeAggregation";
@@ -33,6 +32,7 @@ import {
   canonicalAtlasPath,
   extendDisplayedAuthorityTrace,
   type AtlasTraceHop,
+  type AtlasTreeModel,
   type AtlasTreeNode as AtlasModelNode,
 } from "../lib/atlasTreeModel";
 import {
@@ -80,7 +80,8 @@ export type AtlasTreeProps = {
   onReset: () => void;
   onOpenArea: (areaId: string) => void;
   onOpenPublication: (areaId: string, catalogId: string) => void;
-  onOpenSummary: (summaryId: string) => void;
+  onOpenSummary: (summaryId: string, parentId: string) => void;
+  onOpenRecord: (nodeId: string, parentId: string) => void;
   onSelectBenchmark: (benchmarkId: string) => void;
   onOpenCompare: () => void;
 };
@@ -95,6 +96,58 @@ function nodeKind(node: AtlasRenderableNode) {
   if (node.nodeType === "authority_aggregate") return "authority";
   if (isAggregate(node)) return node.nodeType === "technology_gate" ? "technology-gate" : "aggregate";
   return node.level;
+}
+
+function withNeighborhoodStructure(
+  base: AtlasTreeModel,
+  record: AtlasNeighborhoodRecord | null | undefined,
+  immediateChildren: AtlasModelNode[],
+): AtlasTreeModel {
+  if (!record) return base;
+  const nodes = [...base.nodes];
+  const nodesById = new Map(base.nodesById);
+  const neighborhoodById = new Map(record.nodes.map((node) => [node.id, node]));
+  let parentId: string | null = null;
+  for (const hop of record.structural_path.filter((entry) => entry.origin !== "authority")) {
+    const existing = nodesById.get(hop.id);
+    if (existing) {
+      parentId = existing.id;
+      continue;
+    }
+    const source = neighborhoodById.get(hop.id);
+    const node: AtlasModelNode = {
+      id: hop.id,
+      itemId: source?.metadata?.item_id || hop.id.split(":").at(-1) || hop.id,
+      label: source?.metadata?.title || hop.label,
+      blurb: source?.metadata?.description || "",
+      nodeType: source?.node_type || hop.node_type,
+      parentId,
+      childCount: hop.id === record.center_node.id
+        ? immediateChildren.length
+        : source?.metadata?.structural_child_count || 0,
+      descendantRecordCount: source?.metadata?.structural_descendant_record_count || 1,
+      level: "summary",
+      alsoRequiredBy: [],
+      sourceRefs: [],
+      rationale: source?.metadata?.description || "",
+    };
+    nodes.push(node);
+    nodesById.set(node.id, node);
+    parentId = node.id;
+  }
+  for (const child of immediateChildren) {
+    if (nodesById.has(child.id)) continue;
+    nodes.push(child);
+    nodesById.set(child.id, child);
+  }
+  const childrenByParent = new Map<string, AtlasModelNode[]>();
+  for (const node of nodes) {
+    if (!node.parentId) continue;
+    const children = childrenByParent.get(node.parentId) || [];
+    children.push(node);
+    childrenByParent.set(node.parentId, children);
+  }
+  return { ...base, nodes, nodesById, childrenByParent };
 }
 
 function AtlasTreeNodeView({ data, selected }: NodeProps<AtlasFlowNode>) {
@@ -355,9 +408,13 @@ function AtlasStructuralExplorer(props: {
 export function AtlasTree(props: AtlasTreeProps) {
   const compact = useCompactAtlas();
   const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const model = useMemo(
+  const baseModel = useMemo(
     () => buildAtlasTreeModel(props.spine, authoritySpine),
     [props.spine],
+  );
+  const model = useMemo(
+    () => withNeighborhoodStructure(baseModel, props.focusedRecord, props.benchmarkChildren || []),
+    [baseModel, props.benchmarkChildren, props.focusedRecord],
   );
   const rootRecordCount = model.nodes.find(
     (node) => !node.parentId && node.level !== "authority",
@@ -568,11 +625,11 @@ export function AtlasTree(props: AtlasTreeProps) {
       return;
     }
     if (node.nodeType === "technology_gate" || isAggregate(node)) return;
-    if (node.nodeType === "benchmark" && node.parentId && requiresTechnologyGate(model.nodesById.get(node.parentId)!)) {
-      props.onSelectBenchmark(node.id);
+    if (node.childCount > 0) {
+      props.onOpenSummary(node.id, node.parentId || "");
       return;
     }
-    props.onOpenSummary(node.id);
+    props.onOpenRecord(node.id, node.parentId || "");
   }
 
   function activateNode(node: AtlasRenderableNode) {
@@ -810,7 +867,7 @@ export function AtlasTree(props: AtlasTreeProps) {
   );
 }
 
-export function benchmarkChildrenFromNeighborhood(record: AtlasNeighborhoodRecord | null): AtlasModelNode[] {
+export function structuralChildrenFromNeighborhood(record: AtlasNeighborhoodRecord | null): AtlasModelNode[] {
   if (!record) return [];
   const centerId = record.center_node.id;
   const childIds = new Set(
@@ -830,8 +887,8 @@ export function benchmarkChildrenFromNeighborhood(record: AtlasNeighborhoodRecor
       blurb: node.metadata?.description || "",
       nodeType: node.node_type || "record",
       parentId: centerId,
-      childCount: 0,
-      descendantRecordCount: 1,
+      childCount: node.metadata?.structural_child_count || 0,
+      descendantRecordCount: node.metadata?.structural_descendant_record_count || 1,
       level: "summary" as const,
       alsoRequiredBy: [],
       sourceRefs: [],
@@ -839,3 +896,5 @@ export function benchmarkChildrenFromNeighborhood(record: AtlasNeighborhoodRecor
     }];
   });
 }
+
+export const benchmarkChildrenFromNeighborhood = structuralChildrenFromNeighborhood;

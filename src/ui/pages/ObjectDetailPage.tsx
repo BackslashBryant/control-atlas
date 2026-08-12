@@ -6,7 +6,6 @@ import {
   recordPresentationProfile,
 } from "../../shared/record-presentation.mjs";
 import {
-  buildSourceTextPresentation,
   isValidSourceTextPresentation,
 } from "../../shared/source-text-presentation.mjs";
 import authoritySpine from "../../../data/curated/authority-spine.json";
@@ -90,7 +89,7 @@ function SourceTextBlocks(props: { value: string; presentation?: any }) {
   const text = String(props.value || "");
   const resolvedPresentation = isValidSourceTextPresentation(text, props.presentation)
     ? props.presentation
-    : buildSourceTextPresentation(text);
+    : { version: 1, blocks: [{ kind: "paragraph", start: 0, end: text.length }] };
   const blocks = resolvedPresentation.blocks;
   const rendered: ReactNode[] = [];
 
@@ -141,7 +140,39 @@ function SourceTextBlocks(props: { value: string; presentation?: any }) {
   );
 }
 
+function StructuredPublisherSections(props: { value: any[] }) {
+  return (
+    <div className="publisher-structured-sections">
+      {props.value.map((section, sectionIndex) => (
+        <section key={section.id || section.locator || sectionIndex}>
+          {section.title ? <h3>{section.title}</h3> : null}
+          {(section.structured_content || []).map((block: any, blockIndex: number) => {
+            const key = `${section.id || sectionIndex}-${blockIndex}`;
+            if (block.type === "ordered_list" || block.type === "unordered_list") {
+              const List = block.type === "ordered_list" ? "ol" : "ul";
+              return (
+                <List className="source-structured-list" key={key}>
+                  {(block.items || []).map((item: string, itemIndex: number) => (
+                    <li key={`${key}-${itemIndex}`}>{renderOdpText(item)}</li>
+                  ))}
+                </List>
+              );
+            }
+            if (block.type === "code") {
+              return <CopyableCodeSnippet key={key} value={String(block.text || "")} />;
+            }
+            return <p key={key}>{renderOdpText(String(block.text || ""))}</p>;
+          })}
+        </section>
+      ))}
+    </div>
+  );
+}
+
 function SourceSectionContent(props: { kind: string; value: any; presentation?: any }) {
+  if (props.kind === "structured") {
+    return <StructuredPublisherSections value={props.value} />;
+  }
   if (props.kind === "list") {
     return <ul className="source-structured-list">{props.value.map((item: string) => <li key={item}>{renderOdpText(item)}</li>)}</ul>;
   }
@@ -167,6 +198,22 @@ function SourceSectionContent(props: { kind: string; value: any; presentation?: 
           </li>
         ))}
       </ul>
+    );
+  }
+  if (props.kind === "countermeasures") {
+    return (
+      <div className="publisher-structured-sections">
+        {props.value.map((group: any, index: number) => (
+          <section key={`${(group.actors || []).join("-")}-${index}`}>
+            <h3>{(group.actors || ["Unspecified"]).join(" · ")}</h3>
+            <ul className="source-structured-list">
+              {(group.actions || []).map((action: string, actionIndex: number) => (
+                <li key={`${index}-${actionIndex}`}>{renderOdpText(action)}</li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
     );
   }
   return <SourceTextBlocks value={String(props.value)} presentation={props.presentation} />;
@@ -286,6 +333,7 @@ export function ObjectDetailPage(props: {
     kind,
     publication: catalogName,
     relatedCategories: node.metadata?.related_categories,
+    taxonomyTags: node.metadata?.taxonomy_tags,
   });
 
   return (
@@ -468,8 +516,8 @@ export function ObjectDetailPage(props: {
             </div>
             <div className="record-connection-groups">
               {connectionGroups.map((group) => (
-                <section key={group.catalogId}>
-                  <h3>{group.label} · {group.items.length}</h3>
+                <section key={`${group.catalogId}:${group.relationshipType}`}>
+                  <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
                   <ul>
                     {group.items.map((item) => {
                       const sourceLabels = [...new Set(

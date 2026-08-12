@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import test from 'node:test';
-import { COMPLETENESS_STATES, resolveExpectedLocator, classifyCatalog } from '../scripts/lib/completeness.mjs';
+import {
+  COMPLETENESS_STATES,
+  resolveExpectedLocator,
+  classifyCatalog,
+  summarizeCompleteness,
+} from '../scripts/lib/completeness.mjs';
 
 // --- resolveExpectedLocator: authoritative expected count from a locator ---
 
@@ -50,6 +55,17 @@ test('a full inventory with unreal checksums cannot be reconciled', () => {
   assert.equal(r.status, 'partial');
 });
 
+test('overall completeness is independent from manifest integrity', () => {
+  assert.equal(summarizeCompleteness([
+    { completeness_status: 'reconciled' },
+    { completeness_status: 'discovered' },
+  ]).status, 'INCOMPLETE');
+  assert.equal(summarizeCompleteness([
+    { completeness_status: 'reconciled' },
+    { completeness_status: 'reconciled' },
+  ]).status, 'COMPLETE');
+});
+
 test('over-count (imported+excluded exceed expected) flags an inventory error', () => {
   const r = classifyCatalog({ expected: 10, imported: 12, excluded: 0, allChecksumsReal: true, primaryQuarantined: false });
   assert.equal(r.status, 'partial');
@@ -84,6 +100,13 @@ test('every generated catalog participates in the source coverage model', () => 
   assert.deepEqual(covered, generated);
   assert.ok(coverage.catalogs.every((catalog) => ['reconciled', 'discovered', 'partial', 'quarantined'].includes(catalog.completeness_status)),
     'a shipped catalog with records cannot be coverage-unknown');
+});
+
+test('coverage reports integrity and completeness as separate top-level outcomes', () => {
+  const coverage = JSON.parse(readFileSync('data/source-coverage-manifest.json', 'utf8'));
+  assert.match(coverage.integrity_status, /^(PASSED|FAILED)$/);
+  assert.match(coverage.completeness_status, /^(COMPLETE|INCOMPLETE)$/);
+  assert.equal('verification_status' in coverage, false);
 });
 
 test('active canonical source layers never retain manual-seed provenance', () => {

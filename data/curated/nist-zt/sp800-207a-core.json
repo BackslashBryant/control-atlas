@@ -1,0 +1,1218 @@
+{
+  "schema_version": "1.0",
+  "overview": {
+    "title": "NIST SP 800-207A A Zero Trust Architecture Model for Access Control in Cloud-Native Applications in Multi-Location Environments",
+    "description": "One of the basic tenets of zero trust is to remove the implicit trust in users, services, and devices based only on their network location, affiliation, and ownership. NIST Special Publication 800- 207 has laid out a comprehensive set of zero trust principles and referenced zero trust architectures (ZTA) for turning those concepts into reality. A key paradigm shift in ZTAs is the change in focus from security controls based on segmentation and isolation using network parameters (e.g., Internet Protocol (IP) addresses, subnets, perimeter) to identities. From an application security point of view, this requires authentication and authorization policies based on application and service identities in addition to the underlying network parameters and user identities. This in turn requires a platform that consists of Application Programming Interface (API) gateways, sidecar proxies, and application identity infrastructures (e.g., Secure Production Identity Framework for Everyone [SPIFFE]) that can enforce those policies irrespective of the location of the services or applications, whether on-premises or on multiple clouds. The objective of this publication is to provide guidance for realizing an architecture that can enforce granular application-level policies while meeting the runtime requirements of ZTA for multicloud and hybrid environments.",
+    "locator": "NIST.SP.800-207A.pdf#page=5",
+    "source_fragments": [
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          127.644,
+          533.868,
+          139.644
+        ],
+        "text": "One of the basic tenets of zero trust is to remove the implicit trust in users, services, and devices",
+        "checksum": "sha256:95d16e5db016e1544fc0f2fd28057caf27e28d8ee9a03b705c89ef69d29ac35e",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          141.444,
+          530.916,
+          153.444
+        ],
+        "text": "based only on their network location, affiliation, and ownership. NIST Special Publication 800-",
+        "checksum": "sha256:e2def0fa75e23376e90bab81d899e747f502ff5c1e6c56bfb6e521093afdf8cd",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          155.244,
+          481.776,
+          167.244
+        ],
+        "text": "207 has laid out a comprehensive set of zero trust principles and referenced zero trust",
+        "checksum": "sha256:35ba0143beaf9697ecbd65df9aeb4c961557b4d3532fd04cc6d8e534fe487ed8",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          169.044,
+          530.688,
+          181.044
+        ],
+        "text": "architectures (ZTA) for turning those concepts into reality. A key paradigm shift in ZTAs is the",
+        "checksum": "sha256:e8bc2edaf74b28d89cf3b34ef8ffaf2ebfbaec22fff84dfd671b330269c14225",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          182.844,
+          504.6,
+          194.844
+        ],
+        "text": "change in focus from security controls based on segmentation and isolation using network",
+        "checksum": "sha256:e419be64ac2cab9bef3a4b00e73a604be8fa6deb01c275862d1eda5d848d8625",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          196.644,
+          510.12,
+          208.644
+        ],
+        "text": "parameters (e.g., Internet Protocol (IP) addresses, subnets, perimeter) to identities. From an",
+        "checksum": "sha256:af91cdaa977ad2f253474a902c4b6267b9e32455449de74314a3aac1a1f23b55",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          210.444,
+          526.44,
+          222.444
+        ],
+        "text": "application security point of view, this requires authentication and authorization policies based",
+        "checksum": "sha256:88cbefeac7f9197d1c35549062c73c09bbdb5eed024419b8f6915266cfcb5bf0",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          224.244,
+          525.516,
+          236.244
+        ],
+        "text": "on application and service identities in addition to the underlying network parameters and user",
+        "checksum": "sha256:b65116d9fc9936a8ba154ea63925ce863f451c5b797794e188c18638284c5265",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          238.044,
+          521.604,
+          250.044
+        ],
+        "text": "identities. This in turn requires a platform that consists of Application Programming Interface",
+        "checksum": "sha256:80dcabfbda057d57cfa187a442053b2e626b5470f0f2307ef8f737127a022084",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          251.844,
+          535.44,
+          263.844
+        ],
+        "text": "(API) gateways, sidecar proxies, and application identity infrastructures (e.g., Secure Production",
+        "checksum": "sha256:4b5b40ba1e5d33339e243f64495887848817cbc4f2efd5ba6cd96944af302c54",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          265.644,
+          524.615,
+          277.644
+        ],
+        "text": "Identity Framework for Everyone [SPIFFE]) that can enforce those policies irrespective of the",
+        "checksum": "sha256:639a70bca7a8ab3967148b840da6ed0f332099d9aaf15663ae775325949b777c",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          279.444,
+          493.296,
+          291.444
+        ],
+        "text": "location of the services or applications, whether on-premises or on multiple clouds. The",
+        "checksum": "sha256:e5abdd71d9badc9d353a5459f2e998921036305bd3cd8fa91c312c57133de88c",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          293.244,
+          531.047,
+          305.244
+        ],
+        "text": "objective of this publication is to provide guidance for realizing an architecture that can enforce",
+        "checksum": "sha256:7c6034f15a2d89dfab4629b894c98623977d3e24b2d99dcce77b13814ed751ff",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          307.044,
+          519.491,
+          319.044
+        ],
+        "text": "granular application-level policies while meeting the runtime requirements of ZTA for multi-",
+        "checksum": "sha256:7425e144465b1a5cb791dcf615e13b146013bb73a090a0b58dd8678b59a0a96b",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207a",
+        "page": 5,
+        "bbox": [
+          72,
+          320.844,
+          224.64,
+          332.844
+        ],
+        "text": "cloud and hybrid environments.",
+        "checksum": "sha256:fcad644fc2a957557d538cd62a75ec254b96c3fd192635f521cc9e192b43e4bb",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      }
+    ]
+  },
+  "requirements": [
+    {
+      "id": "ID-SEG-REC-1",
+      "title": "Encrypted connection between service endpoints",
+      "description": "Service endpoints can be located in different subnets, different availability zones or regions in a cloud provider environment, in different clouds, or on-premises. Wherever they are located, communication between any two should be encrypted to ensure eavesdropping protection and message authenticity.",
+      "locator": "NIST.SP.800-207A.pdf#page=16",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            90,
+            237.72,
+            529.068,
+            250.764
+          ],
+          "text": "• ID-SEG-REC-1: Encrypted connection between service endpoints — Service endpoints",
+          "checksum": "sha256:0774f89737e759121fb125f00734e83c6fd25a8d2312bc91688a64c2cfc6c023",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            252.564,
+            508.44,
+            264.564
+          ],
+          "text": "can be located in different subnets, different availability zones or regions in a cloud",
+          "checksum": "sha256:64944cf17beffc21addb0436e02328fd99b446214f39101ba9bb05bec124adb5",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            266.364,
+            518.999,
+            278.364
+          ],
+          "text": "provider environment, in different clouds, or on-premises. Wherever they are located,",
+          "checksum": "sha256:50ecde69a735245e98b56f4b85fb84e57f0e15b9a1ba13f4cde8edcbf88a90ae",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            280.164,
+            537.84,
+            292.164
+          ],
+          "text": "communication between any two should be encrypted to ensure eavesdropping protection",
+          "checksum": "sha256:c28d3db52a9e9b22c7f77d25bf584077f4d69d273211e2e4a2d28607328dd12e",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            293.964,
+            231.6,
+            305.964
+          ],
+          "text": "and message authenticity.",
+          "checksum": "sha256:1f2bd3a28ee18637801eef6ba09066e7ba41d6ca5a4470d499066cc930cb5235",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "ID-SEG-REC-2",
+      "title": "Service authentication",
+      "description": "Each service should present a short-lived cryptographically verifiable identity credential to other services that is authenticated per connection and reauthenticated regularly. Note on the above recommendation: In an ideal situation, services would be authenticated for each service request. Since this is highly disruptive from the point of view of application transaction response, this authentication is accomplished at the connection level via mutual Transport Layer Security (mTLS) when a service makes an initial connection establishment as part of its inter-service call. This authentication is not performed again in subsequent calls. However, the security of this operation is ensured by not allowing the connections to be very long (usually as long as the time to live [TTL] of the service’s identity certificate or as short as 15-30 minutes, depending on the configuration).",
+      "locator": "NIST.SP.800-207A.pdf#page=16",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            90,
+            313.56,
+            512.88,
+            326.604
+          ],
+          "text": "• ID-SEG-REC-2: Service authentication — Each service should present a short-lived",
+          "checksum": "sha256:047746ca5df0cd3eb39c0f2b986e61b3dc7866e5814a275308b8762b993bb1ae",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            328.524,
+            530.46,
+            340.524
+          ],
+          "text": "cryptographically verifiable identity credential to other services that is authenticated per",
+          "checksum": "sha256:3e91697d95cf7409c37d2548d5f987c4bb004e51f53b40a5c828ecc0de15384f",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            342.324,
+            306.48,
+            354.324
+          ],
+          "text": "connection and reauthenticated regularly.",
+          "checksum": "sha256:16f02bccd36adf2f59fbc5a5d44fcdae182cd10847c539c2e5c70a61bb564806",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            362.124,
+            539.352,
+            374.124
+          ],
+          "text": "Note on the above recommendation: In an ideal situation, services would be authenticated",
+          "checksum": "sha256:8ad18b07d7faba194e5ae528abd321f6d618c27e44116ca055ced572f1e0cf9e",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            375.924,
+            494.243,
+            387.924
+          ],
+          "text": "for each service request. Since this is highly disruptive from the point of view of",
+          "checksum": "sha256:0d01384b13bd6da5e810cc94d756b1f6adad2cd7b57f47814a56e068bf382301",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            389.604,
+            521.208,
+            401.604
+          ],
+          "text": "application transaction response, this authentication is accomplished at the connection",
+          "checksum": "sha256:9b294358d5aa7d6089268ffa54af6a2f63cf111774821577782775bdf9aa9929",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            403.404,
+            506.832,
+            415.404
+          ],
+          "text": "level via mutual Transport Layer Security (mTLS) when a service makes an initial",
+          "checksum": "sha256:da08803802ffb867bea47c7da249dfbe3accd95d3a9e6dfc4d55cce74d6f7dfa",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            417.204,
+            502.656,
+            429.204
+          ],
+          "text": "connection establishment as part of its inter-service call. This authentication is not",
+          "checksum": "sha256:6a64cf04c19ed9ed01e56cb6084cfb79efe1fb4d887b2cf22480060936d70cc1",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            431.004,
+            525.12,
+            443.004
+          ],
+          "text": "performed again in subsequent calls. However, the security of this operation is ensured",
+          "checksum": "sha256:1d92df9b2b213972b78b10bd6bd50d5c970e1ad48b85ec55d41188e35345357c",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            444.804,
+            536.808,
+            456.804
+          ],
+          "text": "by not allowing the connections to be very long (usually as long as the time to live [TTL]",
+          "checksum": "sha256:cee05f8c852526f6a5d775f66dbd9d7e4cc0e3b7d9ea273e9257763f5b738cd7",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            458.604,
+            498.648,
+            470.604
+          ],
+          "text": "of the service’s identity certificate or as short as 15-30 minutes, depending on the",
+          "checksum": "sha256:385520e53a49924ead86f7a6143ffdd94799a141b39578abb61d25ea0a511376",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            472.404,
+            179.52,
+            484.404
+          ],
+          "text": "configuration).",
+          "checksum": "sha256:c808edaac5af397a4849d1e47c28125a37c94d5da4fec71a57656a0c170e47cc",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "ID-SEG-REC-3",
+      "title": "Service to service authorization",
+      "description": "Services should leverage runtime service identity (ID-SEG-REC-2) to enforce granular policies and have the capability to call external authorization services if the mesh-level proxies are insufficient to enforce dynamic authorization policies.",
+      "locator": "NIST.SP.800-207A.pdf#page=16",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            90,
+            492,
+            520.296,
+            505.044
+          ],
+          "text": "• ID-SEG-REC-3: Service to service authorization — Services should leverage runtime",
+          "checksum": "sha256:72e54143a5a7b6839a4b334c2c1bf76df06591c5b08d21a7abab44610a076de1",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            506.964,
+            530.256,
+            518.964
+          ],
+          "text": "service identity (ID-SEG-REC-2) to enforce granular policies and have the capability to",
+          "checksum": "sha256:8aa961efe44b05d14db6839da6a9653198c63924dd5d7ecfc2c0db369771d767",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            520.764,
+            523.488,
+            532.764
+          ],
+          "text": "call external authorization services if the mesh-level proxies are insufficient to enforce",
+          "checksum": "sha256:327e92a8a73a5e836bc7139736d0868a091f627ac64abcab4399b3ecb42d8387",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            534.564,
+            258.96,
+            546.564
+          ],
+          "text": "dynamic authorization policies.",
+          "checksum": "sha256:a35d1d5d8682cf42b4ae331e22f88f76d1d7f063c0a92e9f7532fa7322836353",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "ID-SEG-REC-4",
+      "title": "End user authentication",
+      "description": "Since all application requests are triggered by user actions, a robust identity management system is required to assign and maintain user identities and enforce robust protocols with phishing-resistant multi-factor authentication (MFA). This system should be used to issue a cryptographically verifiable runtime token that represents the user principal to the rest of the infrastructure (e.g., a JSON Web Token [JWT]), and services should authenticate the credential at each hop. Note on the above recommendation: Authenticating the user in session at every hop is impractical at scale. Therefore, NIST recommends using short-lived end user credentials (e.g., OAuth 2.0 tokens) for external users and exchanging them for a locally authenticatable token, like a JWT, that is authenticated at each hop.",
+      "locator": "NIST.SP.800-207A.pdf#page=16",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            90,
+            554.16,
+            526.438,
+            567.204
+          ],
+          "text": "• ID-SEG-REC-4: End user authentication — Since all application requests are triggered",
+          "checksum": "sha256:5c1cf7737ef6690927f377bb6e1d953d4396c740f651d0bc1c330e71a57d6e6f",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            569.004,
+            529.2,
+            581.004
+          ],
+          "text": "by user actions, a robust identity management system is required to assign and maintain",
+          "checksum": "sha256:c1bd9e46b887ca5043fd4bcedbdf65da27c4f88ef1ee47456f809da5bb134991",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            582.804,
+            487.836,
+            594.804
+          ],
+          "text": "user identities and enforce robust protocols with phishing-resistant multi-factor",
+          "checksum": "sha256:e6213f03f232b79a6306d4a95187337db0ef290723d67e6e725467919057caf0",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            596.604,
+            535.164,
+            608.604
+          ],
+          "text": "authentication (MFA). This system should be used to issue a cryptographically verifiable",
+          "checksum": "sha256:8f138f6a282b1d469a8f1908b293509e022760a2f197604cd6bfcdb6ab6db4a2",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            610.404,
+            518.208,
+            622.404
+          ],
+          "text": "runtime token that represents the user principal to the rest of the infrastructure (e.g., a",
+          "checksum": "sha256:b4181063fef90d40480bd298e375f1771e8185a81b2d4c517a31f89f1b42fd12",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            624.204,
+            523.8,
+            636.204
+          ],
+          "text": "JSON Web Token [JWT]), and services should authenticate the credential at each hop.",
+          "checksum": "sha256:e0991e7f1b889b4fbe132344bea99a15c254dd63fbe4cec742d5c85e2abd6eda",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            644.004,
+            520.788,
+            656.004
+          ],
+          "text": "Note on the above recommendation: Authenticating the user in session at every hop is",
+          "checksum": "sha256:31266b32e1b2136da56643f2d852bb1d11e35910c52f25b8bdc9df43a889dd3b",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            657.804,
+            533.148,
+            669.804
+          ],
+          "text": "impractical at scale. Therefore, NIST recommends using short-lived end user credentials",
+          "checksum": "sha256:d01cf23e202d7884000827d89dfdf032036b47063bae44022e6359d01d92eed5",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            671.604,
+            477.24,
+            683.604
+          ],
+          "text": "(e.g., OAuth 2.0 tokens) for external users and exchanging them for a locally",
+          "checksum": "sha256:bd1abd4182b30124796340bf8c35ffe5c4b02b7da27d3eba5a026ae47f6a20ad",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 16,
+          "bbox": [
+            108,
+            685.404,
+            431.4,
+            697.404
+          ],
+          "text": "authenticatable token, like a JWT, that is authenticated at each hop.",
+          "checksum": "sha256:851f49f2a019d7bcfec89810612fecb8100187d62e974732ca63da13a5d463ed",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "ID-SEG-REC-5",
+      "title": "End user to resource authorization",
+      "description": "As part of each service access request, the system must ensure that the authenticated end user principal (ID-SEG-REC- 4) is authorized to act on the resources designated in the request. This authorization may be performed by the application itself or checked locally (e.g., by checking against a set of claims in a JWT) or externally against an authorization system’s policy decision point. The JWT libraries that process the token must be enabled to both decode (base64url encoding) and verify the signature. Enforcing end user authorization via the service mesh’s sidecar PEP is particularly effective [3].",
+      "locator": "NIST.SP.800-207A.pdf#page=17",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 17,
+          "bbox": [
+            90,
+            84.6,
+            517.092,
+            97.644
+          ],
+          "text": "• ID-SEG-REC-5: End user to resource authorization — As part of each service access",
+          "checksum": "sha256:b6b351727eebaaf234e54b46d35848dea9ee365bbb5885b0ef496200abdee136",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 17,
+          "bbox": [
+            108,
+            99.444,
+            532.476,
+            111.444
+          ],
+          "text": "request, the system must ensure that the authenticated end user principal (ID-SEG-REC-",
+          "checksum": "sha256:5db74b6f9b23805cfeab7edb6aeef1da8dd862cabe93b1df2c90191e6f916fa3",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 17,
+          "bbox": [
+            108,
+            113.244,
+            532.08,
+            125.244
+          ],
+          "text": "4) is authorized to act on the resources designated in the request. This authorization may",
+          "checksum": "sha256:fe4e088dff6f0058b12b18b8f8f260ae09cf8f3ae80678c2849f627854174589",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 17,
+          "bbox": [
+            108,
+            127.044,
+            529.416,
+            139.044
+          ],
+          "text": "be performed by the application itself or checked locally (e.g., by checking against a set",
+          "checksum": "sha256:c2f01c559a288a93a46a758acbc4e27a1a9f1e23ea51ac1a8e4ba4a3679524b7",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 17,
+          "bbox": [
+            108,
+            140.844,
+            536.748,
+            152.844
+          ],
+          "text": "of claims in a JWT) or externally against an authorization system’s policy decision point.",
+          "checksum": "sha256:0da3aaf45b95affab7a04ea95b2bbbbba039f049b6798b48b17f03ef8c002be7",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 17,
+          "bbox": [
+            108,
+            154.644,
+            510.816,
+            166.644
+          ],
+          "text": "The JWT libraries that process the token must be enabled to both decode (base64url",
+          "checksum": "sha256:6cefebb393dc64ba2aca4294b1ca6d4ff41839d3ee5729c5478f3051fe349ba7",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 17,
+          "bbox": [
+            108,
+            168.444,
+            508.488,
+            180.444
+          ],
+          "text": "encoding) and verify the signature. Enforcing end user authorization via the service",
+          "checksum": "sha256:67368de5142fffd94a8a1817027ff7bd7beb19eacc62994f3b4c7500581ba0d1",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 17,
+          "bbox": [
+            108,
+            182.244,
+            336.876,
+            194.244
+          ],
+          "text": "mesh’s sidecar PEP is particularly effective [3].",
+          "checksum": "sha256:e907b18b6613288e6ebd64d50cc84ea7d2d3c12118a6d7d0bd77744f2631d8c8",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "MON-CNA-REQ-1",
+      "title": "Cloud-native monitoring requirement 1",
+      "description": "Resource monitoring should cover all categories of resources, including those that are enterprise-owned, not managed by the enterprise, and personally owned.",
+      "locator": "NIST.SP.800-207A.pdf#page=28",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            90,
+            285,
+            506.04,
+            298.044
+          ],
+          "text": "• MON-CNA-REQ-1: Resource monitoring should cover all categories of resources,",
+          "checksum": "sha256:96306b3296bb7827a97f52f235fc3b0ab58f0ae77155bd99550485a20151f810",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            299.844,
+            533.4,
+            311.844
+          ],
+          "text": "including those that are enterprise-owned, not managed by the enterprise, and personally",
+          "checksum": "sha256:3c0835021a20021a108b81dde975aa1c1b8a02b7328cf9eab2f286d86ecbba6f",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            313.644,
+            142.92,
+            325.644
+          ],
+          "text": "owned.",
+          "checksum": "sha256:f46af9ae9f511497246da27e21a0da9b35053108545fbb16765ee093f88545f8",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "MON-CNA-REQ-2",
+      "title": "Cloud-native monitoring requirement 2",
+      "description": "Monitoring should cover application targets (e.g., containers), application infrastructure elements (e.g., control plane elements of a service mesh), and data plane elements (e.g., sidecar proxies).",
+      "locator": "NIST.SP.800-207A.pdf#page=28",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            90,
+            333.24,
+            506.88,
+            346.284
+          ],
+          "text": "• MON-CNA-REQ-2: Monitoring should cover application targets (e.g., containers),",
+          "checksum": "sha256:a11c8aca13c6819439c8a70030481f4fecf8f39c788169974de5a4c4b1dab133",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            348.084,
+            527.4,
+            360.084
+          ],
+          "text": "application infrastructure elements (e.g., control plane elements of a service mesh), and",
+          "checksum": "sha256:61b5f5ad4c9215b441d5ec809f3ba82b53de4cce7500ebe5340ce731b7eaf737",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            361.884,
+            312.12,
+            373.884
+          ],
+          "text": "data plane elements (e.g., sidecar proxies).",
+          "checksum": "sha256:c5c0e080fb673160867c68d752204aa471a49278482160865795bc5164c7a698",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "MON-CNA-REQ-3",
+      "title": "Cloud-native monitoring requirement 3",
+      "description": "Monitoring should cover every user access request and the subsequent series of service calls needed to complete the user request as in microservices-based applications.",
+      "locator": "NIST.SP.800-207A.pdf#page=28",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            90,
+            381.48,
+            490.968,
+            394.524
+          ],
+          "text": "• MON-CNA-REQ-3: Monitoring should cover every user access request and the",
+          "checksum": "sha256:ce88c5ffa01d8e00c0ea3fd58e9b9e8692d0d10d890d7782e842fe438bdf4241",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            396.324,
+            466.558,
+            408.324
+          ],
+          "text": "subsequent series of service calls needed to complete the user request as in",
+          "checksum": "sha256:c68a4264a458c3036812ec918acc8bcd0322dcb0aa3716ea5e8309e5e472f403",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            410.124,
+            270,
+            422.124
+          ],
+          "text": "microservices-based applications.",
+          "checksum": "sha256:9907ad980fe3f5c3a97edf2c35fb4a16e32b7bcbd87aa6983d1e9042eb544337",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "MON-CNA-REQ-4",
+      "title": "Cloud-native monitoring requirement 4",
+      "description": "Monitoring should cover changes to data in enterprise directories to ensure that all changes to directory entries are associated with valid requests and valid transactions for carrying out the change requests. The monitoring data, derived analytics, and telemetry data should be used in the following ways to realize zero trust principles for cloud-native applications:",
+      "locator": "NIST.SP.800-207A.pdf#page=28",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            90,
+            429.72,
+            534.48,
+            442.764
+          ],
+          "text": "• MON-CNA-REQ-4: Monitoring should cover changes to data in enterprise directories to",
+          "checksum": "sha256:9a572a133d6cf219ae4530ed693a9fc700e4af410c3bfe55b4a7c27c1d15584c",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            444.564,
+            521.592,
+            456.564
+          ],
+          "text": "ensure that all changes to directory entries are associated with valid requests and valid",
+          "checksum": "sha256:cff373f07bf6856b4353e5e9a6e6aebd0df6ce6e83fe23ed074de8b53e97e9b7",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            458.364,
+            343.44,
+            470.364
+          ],
+          "text": "transactions for carrying out the change requests.",
+          "checksum": "sha256:71d427044b06ccbe80f2a77a3db60a701bddaaa4255a6a6aa00201c344c53294",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            72,
+            478.164,
+            533.868,
+            490.164
+          ],
+          "text": "The monitoring data, derived analytics, and telemetry data should be used in the following ways",
+          "checksum": "sha256:f05993dbb9729864f9259a3e40e2a55619a7ebdaf6d456c1378a5200f5fc65cb",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            72,
+            491.964,
+            359.016,
+            503.964
+          ],
+          "text": "to realize zero trust principles for cloud-native applications:",
+          "checksum": "sha256:2bc63d2df5b6d0963fc275e22a75346ec6471d41ab82c2afd0dfddb3242da8e7",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "MON-DATA-USE-1",
+      "title": "Monitoring data use 1",
+      "description": "Access enforcement in the context of identity-tier policies in ZTA should be based on access decisions that rely on assigned permissions as well as the contextual information about each connection or access request. A key piece of contextual information is the behavioral data associated with the user and/or devices from which the request originates. This behavioral data can only be generated from the visibility information on network traffic flows, which help verify that the users and resources are behaving in a way that is consistent with their roles and are, therefore trustworthy.",
+      "locator": "NIST.SP.800-207A.pdf#page=28",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            90,
+            511.56,
+            533.184,
+            524.604
+          ],
+          "text": "• MON-DATA-USE-1: Access enforcement in the context of identity-tier policies in ZTA",
+          "checksum": "sha256:5b407517e28d96a7ddb0914931578363192e1c476183f9752f65f2cee11933e3",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            526.404,
+            510.528,
+            538.404
+          ],
+          "text": "should be based on access decisions that rely on assigned permissions as well as the",
+          "checksum": "sha256:7cfef4b379db5b305c594c5745e9d12346c26b6e054349bc11d5ac8af791f4a2",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            540.204,
+            488.435,
+            552.204
+          ],
+          "text": "contextual information about each connection or access request. A key piece of",
+          "checksum": "sha256:2a8a3ea2d36e4c84c3bb5b747c1424161b64c91e3a72166164c861ce433ff1b7",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            554.004,
+            539.135,
+            566.004
+          ],
+          "text": "contextual information is the behavioral data associated with the user and/or devices from",
+          "checksum": "sha256:7efbb4943086f09b06dd71ca3a5c0f063536a990fb03f35b007b479e5824dab4",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            567.804,
+            499.008,
+            579.804
+          ],
+          "text": "which the request originates. This behavioral data can only be generated from the",
+          "checksum": "sha256:4d3c78e378f7245a75b3538bc0027eef18355d944018fa4e1a47c16519a38caf",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            581.604,
+            506.76,
+            593.604
+          ],
+          "text": "visibility information on network traffic flows, which help verify that the users and",
+          "checksum": "sha256:6a7088bc2a5d338e854e3d5b92026d288054d50ecabd0db1e8b18bf0eba9657a",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            595.404,
+            507.528,
+            607.404
+          ],
+          "text": "resources are behaving in a way that is consistent with their roles and are, therefore",
+          "checksum": "sha256:5687ab49f74edf8cabb4a82a99a898fca937b437820ed6089910669e57625239",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            609.204,
+            166.32,
+            621.204
+          ],
+          "text": "trustworthy.",
+          "checksum": "sha256:49f5bddc0cfb6521bdb3ac1a16e2b9f584f616dbf7bd8f1f99bd3016cddbe336",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "MON-DATA-USE-2",
+      "title": "Monitoring data use 2",
+      "description": "The telemetry data generated from monitoring activity should be used in the following ways: To fine-tune access rights data, such as granting, revoking, and restricting access o [6] To implement step-up authentication by asking for more information from users o or resorting to a stronger form of authentication (e.g., phishing-resistant MFA). This verification establishes trust in them and grants permission to proceed with authorization after their identity is verified.",
+      "locator": "NIST.SP.800-207A.pdf#page=28",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            90,
+            628.8,
+            526.968,
+            641.844
+          ],
+          "text": "• MON-DATA-USE-2: The telemetry data generated from monitoring activity should be",
+          "checksum": "sha256:f3706fb05cf5f8667089fdf352586acf98570c5554d6c8e82262e203c1dde741",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            108,
+            643.644,
+            240.696,
+            655.644
+          ],
+          "text": "used in the following ways:",
+          "checksum": "sha256:7fbda602aa7f38616629a241f510f33313f3a7bd6087a6fef0e20ca0ec073412",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            144,
+            663.444,
+            531.708,
+            675.444
+          ],
+          "text": "To fine-tune access rights data, such as granting, revoking, and restricting access",
+          "checksum": "sha256:ec6aca6cf12c1e9e6abf78e264c4a4a4da39fa5e73e166fdddb2df58fd769675",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            126,
+            667.92,
+            133.2,
+            679.92
+          ],
+          "text": "o",
+          "checksum": "sha256:65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 28,
+          "bbox": [
+            144,
+            677.244,
+            157.956,
+            689.244
+          ],
+          "text": "[6]",
+          "checksum": "sha256:fe94b827f0455bee6f4a6a265286f827f18748ede569565ee827058085bad146",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 29,
+          "bbox": [
+            144,
+            84.804,
+            528.588,
+            96.804
+          ],
+          "text": "To implement step-up authentication by asking for more information from users",
+          "checksum": "sha256:081aff04fa33edb0aa69cb8df5f62d3f1369fe8319283cfb0da462eafa3163b4",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 29,
+          "bbox": [
+            126,
+            89.28,
+            133.2,
+            101.28
+          ],
+          "text": "o",
+          "checksum": "sha256:65c74c15a686187bb6bbf9958f494fc6b80068034a659a9ad44991b08c58f2d2",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 29,
+          "bbox": [
+            144,
+            98.604,
+            524.64,
+            110.604
+          ],
+          "text": "or resorting to a stronger form of authentication (e.g., phishing-resistant MFA).",
+          "checksum": "sha256:2211f54f5a6103d77dcfe624614355f3b7137c1294fd2406af4f24a47c9f0c8d",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 29,
+          "bbox": [
+            144,
+            112.404,
+            528.36,
+            124.404
+          ],
+          "text": "This verification establishes trust in them and grants permission to proceed with",
+          "checksum": "sha256:dc3ee00ea64698c7492ae65f470716ff4048392f96429fd7f6508735424a642c",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207a",
+          "page": 29,
+          "bbox": [
+            144,
+            126.204,
+            351.24,
+            138.204
+          ],
+          "text": "authorization after their identity is verified.",
+          "checksum": "sha256:f5229ac37e78fc06b2d0012be5deba43e75e628e9e8b8dba3c08a7e4396eac6f",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    }
+  ]
+}

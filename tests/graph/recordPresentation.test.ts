@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
@@ -51,8 +52,10 @@ test("every supported record form has a presentation contract", () => {
 });
 
 test("V-256609 formatting keeps exact command and configuration source ranges", () => {
-  const check = 'At the command prompt, run the following command: # rpm -V VMware-Postgres-cis-visl-scripts|grep -E "vmware-services-vmware-vpostgres.conf|vmware-services-vmware-postgres-archiver.conf" | grep "^..5......" If the command returns any output, this is a finding.';
-  const fix = 'Navigate to and open: /etc/vmware-syslog/vmware-services-vmware-vpostgres.conf Create the file if it does not exist. Set the contents of the file as follows: # vmware-vpostgres first logs, before loading configuration input(type="imfile" File="/var/log/vmware/vpostgres/serverlog.std*" Tag="vpostgres-first" Severity="info" Facility="local0") # vmware-vpostgres logs input(type="imfile" File="/var/log/vmware/vpostgres/postgresql-*.log" Tag="vpostgres" Severity="info" Facility="local0") Navigate to and open: /etc/vmware-syslog/vmware-services-vmware-postgres-archiver.conf Create the file if it does not exist. Set the contents of the file as follows: # vmware-postgres-archiver logs input(type="imfile" File="/var/log/vmware/vpostgres/pg_archiver.log.std*" Tag="postgres-archiver" Severity="info" Facility="local0")';
+  const records = JSON.parse(readFileSync("data/stig-rules.json", "utf8")).records;
+  const record = records.find((entry: any) => entry.id === "V-256609");
+  assert.ok(record, "V-256609 must remain in the current DISA corpus");
+  const { check_text: check, fix_text: fix } = record;
 
   for (const text of [check, fix]) {
     const presentation = buildSourceTextPresentation(text);
@@ -64,4 +67,7 @@ test("V-256609 formatting keeps exact command and configuration source ranges", 
       assert.match(text.slice(snippet.start, snippet.end), /^# /);
     }
   }
+  const fixPresentation = buildSourceTextPresentation(fix);
+  assert.equal(fixPresentation.blocks.filter((block) => block.kind === "list").length, 2);
+  assert.equal(fixPresentation.blocks.filter((block) => block.kind === "code").length, 2);
 });

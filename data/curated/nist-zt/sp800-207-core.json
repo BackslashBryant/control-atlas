@@ -1,0 +1,2197 @@
+{
+  "schema_version": "1.0",
+  "overview": {
+    "title": "NIST SP 800-207 Zero Trust Architecture",
+    "description": "Zero trust is a cybersecurity paradigm focused on resource protection and the premise that trust is never granted implicitly but must be continually evaluated. Zero trust architecture is an end-toend approach to enterprise resource and data security that encompasses identity (person and nonperson entities), credentials, access management, operations, endpoints, hosting environments, and the interconnecting infrastructure. The initial focus should be on restricting resources to those with a need to access and grant only the minimum privileges (e.g., read, write, delete) needed to perform the mission. Traditionally, agencies (and enterprise networks in general) have focused on perimeter defense and authenticated subjects are given authorized access to a broad collection of resources once on the internal network. As a result, unauthorized lateral movement within the environment has been one of the biggest challenges for federal agencies. The Trusted Internet Connections (TIC) and agency perimeter firewalls provide strong internet gateways. This helps block attackers from the internet, but the TICs and perimeter firewalls are less useful for detecting and blocking attacks from inside the network and cannot protect subjects outside of the enterprise perimeter (e.g., remote workers, cloud-based services, edge devices, etc.).",
+    "source_key": "nist-sp-800-207",
+    "locator": "NIST.SP.800-207.pdf#page=13",
+    "source_fragments": [
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          105.024,
+          529.176,
+          117.024
+        ],
+        "text": "Zero trust is a cybersecurity paradigm focused on resource protection and the premise that trust",
+        "checksum": "sha256:c65e78f35ce5d8da37889949694cad31dc1d24df8fec5740967d16d393e94df0",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          118.824,
+          538.896,
+          130.824
+        ],
+        "text": "is never granted implicitly but must be continually evaluated. Zero trust architecture is an end-to-",
+        "checksum": "sha256:0721cf2dad17c29a45e58447f3036b2662ecd318156f7a50e2bcaf78d4f02b07",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          132.624,
+          537.456,
+          144.624
+        ],
+        "text": "end approach to enterprise resource and data security that encompasses identity (person and non-",
+        "checksum": "sha256:1377600da60bea1edc537231be0c242e8640669482133a036d74bdbf55b4c277",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          146.424,
+          525.9,
+          158.424
+        ],
+        "text": "person entities), credentials, access management, operations, endpoints, hosting environments,",
+        "checksum": "sha256:08fb9866d9f5a4f1b62a21d62e4c77ba55ba5d8868361c1f14318613c7f933e5",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          160.224,
+          513.72,
+          172.224
+        ],
+        "text": "and the interconnecting infrastructure. The initial focus should be on restricting resources to",
+        "checksum": "sha256:2ecda5c123e614e63cef7775b6c59bd7cb966ceb59c62aea6f6cb7640f94d599",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          173.964,
+          511.764,
+          185.964
+        ],
+        "text": "those with a need to access and grant only the minimum privileges (e.g., read, write, delete)",
+        "checksum": "sha256:cb66eea87048725716ef949a5f463d473570c8285adf456edad8c0e334ba4d44",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          187.764,
+          535.908,
+          199.764
+        ],
+        "text": "needed to perform the mission. Traditionally, agencies (and enterprise networks in general) have",
+        "checksum": "sha256:7c5f7cb5e54bc6b0f9542c524da876385af3a313a70af524e3185eb3e1c62805",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          201.564,
+          527.563,
+          213.564
+        ],
+        "text": "focused on perimeter defense and authenticated subjects are given authorized access to a broad",
+        "checksum": "sha256:db20d1cbf0ca806028dbacd36e850122117b835ce503af2faa05858abbcf11bd",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          215.364,
+          533.496,
+          227.364
+        ],
+        "text": "collection of resources once on the internal network. As a result, unauthorized lateral movement",
+        "checksum": "sha256:7450416be25686ec24dc48aa51b52dc099612be7875fb99c7b678e37b7f9cec5",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          229.164,
+          471.536,
+          241.164
+        ],
+        "text": "within the environment has been one of the biggest challenges for federal agencies.",
+        "checksum": "sha256:3c74112f0b6a9fe5c976b604734835037e9dd33ee33501b864d390977883f702",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          254.964,
+          527.496,
+          266.964
+        ],
+        "text": "The Trusted Internet Connections (TIC) and agency perimeter firewalls provide strong internet",
+        "checksum": "sha256:80a029562f3c1333ba5c1abd491bc53d5188dec75608b18c0538ea57d7545372",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          268.764,
+          529.183,
+          280.764
+        ],
+        "text": "gateways. This helps block attackers from the internet, but the TICs and perimeter firewalls are",
+        "checksum": "sha256:4f09aa0356167a5533d852798648c9323ee4af3c842c0cc46a2b8f523a613137",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          282.564,
+          539.268,
+          294.564
+        ],
+        "text": "less useful for detecting and blocking attacks from inside the network and cannot protect subjects",
+        "checksum": "sha256:ff706408b6903c5fd00cc146799c30619fb1664e09ed95fc9821d7a841c10ac6",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          296.364,
+          518.218,
+          308.364
+        ],
+        "text": "outside of the enterprise perimeter (e.g., remote workers, cloud-based services, edge devices,",
+        "checksum": "sha256:55bb4ea431591f3de642810cd564ff3c925c3df6ec5be83fd2841cedc3cbb72a",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      },
+      {
+        "document_key": "nist-sp-800-207",
+        "page": 13,
+        "bbox": [
+          72,
+          310.164,
+          96.06,
+          322.164
+        ],
+        "text": "etc.).",
+        "checksum": "sha256:bf266204dc1998a629477e58d6e849eeed456d11b385eda49cf3a5c492196d3d",
+        "extraction_method": "pdfplumber-0.11.10-line"
+      }
+    ]
+  },
+  "tenets": [
+    {
+      "id": "SP800207-TENET-1",
+      "number": 1,
+      "title": "All data sources and computing services are considered resources",
+      "description": "All data sources and computing services are considered resources. A network may be composed of multiple classes of devices. A network may also have small footprint devices that send data to aggregators/storage, software as a service (SaaS), systems sending instructions to actuators, and other functions. Also, an enterprise may decide to classify personally owned devices as resources if they can access enterprise-owned resources.",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=15",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            90,
+            249.024,
+            537.478,
+            261.276
+          ],
+          "text": "1. All data sources and computing services are considered resources. A network may be",
+          "checksum": "sha256:5fb6a774ad1841ca5d7a89f69923f05cff247a85df70ee653ab00e618b373721",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            262.824,
+            503.674,
+            274.824
+          ],
+          "text": "composed of multiple classes of devices. A network may also have small footprint",
+          "checksum": "sha256:d53e2ca47e9e8760767a17e7e6284f106f07a48c7fdcd6a748a4320ba6735d7a",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            276.624,
+            506.927,
+            288.624
+          ],
+          "text": "devices that send data to aggregators/storage, software as a service (SaaS), systems",
+          "checksum": "sha256:e212e04d5d18c04989343adcddd8be15e7e9209b4d821cb0c1031052398d6b99",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            290.424,
+            528.18,
+            302.424
+          ],
+          "text": "sending instructions to actuators, and other functions. Also, an enterprise may decide to",
+          "checksum": "sha256:0d752bbb40df74a17573ab04523ca3c81dd16a5daa0c9aa793085f79f4c44158",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            304.224,
+            506.46,
+            316.224
+          ],
+          "text": "classify personally owned devices as resources if they can access enterprise-owned",
+          "checksum": "sha256:1838c872b34b01489d4b3bfc75f1f3abecf5e9e3da3fec7d5defc97cfec83a1a",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            318.024,
+            156.359,
+            330.024
+          ],
+          "text": "resources.",
+          "checksum": "sha256:46d87e8fab2b636fef2b19b15cfd37dc7212980fecad16909c6d107860363057",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-TENET-2",
+      "number": 2,
+      "title": "All communication is secured regardless of network location",
+      "description": "All communication is secured regardless of network location. Network location alone does not imply trust. Access requests from assets located on enterprise-owned network infrastructure (e.g., inside a legacy network perimeter) must meet the same security requirements as access requests and communication from any other nonenterprise-owned network. In other words, trust should not be automatically granted based on the device being on enterprise network infrastructure. All communication should be done in the most secure manner available, protect confidentiality and integrity, and provide source authentication.",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=15",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            90,
+            337.824,
+            535.668,
+            350.076
+          ],
+          "text": "2. All communication is secured regardless of network location. Network location alone",
+          "checksum": "sha256:a6f59a3a8eb1bf7cf4ce91b8404395291d4c73dcd92055b92872833db34bd26e",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            351.624,
+            524.52,
+            363.624
+          ],
+          "text": "does not imply trust. Access requests from assets located on enterprise-owned network",
+          "checksum": "sha256:10b68909efcfd6b79dca44062532ddf30ee884cdd529fecf1b8ffcc287054010",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            365.424,
+            508.5,
+            377.424
+          ],
+          "text": "infrastructure (e.g., inside a legacy network perimeter) must meet the same security",
+          "checksum": "sha256:c89facbe0fa549bcbbc258f81a87ea2e0d37f614247acf67d716c4f11d876ee8",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            379.224,
+            536.28,
+            391.224
+          ],
+          "text": "requirements as access requests and communication from any other nonenterprise-owned",
+          "checksum": "sha256:1f38d06046e6f6c2ae271d3a1122196073f24aa30dda87b4f7213e40dd63b868",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            393.024,
+            522.888,
+            405.024
+          ],
+          "text": "network. In other words, trust should not be automatically granted based on the device",
+          "checksum": "sha256:6f61e8e97f4bdb6a2e6924f4c5c719f32a456defbfa57fc811907e64eb6c2743",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            406.824,
+            514.608,
+            418.824
+          ],
+          "text": "being on enterprise network infrastructure. All communication should be done in the",
+          "checksum": "sha256:568883f93fd9f1e307cbf7568896388f2657ea5a832a549a758f3b21e594604a",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            420.624,
+            523.848,
+            432.624
+          ],
+          "text": "most secure manner available, protect confidentiality and integrity, and provide source",
+          "checksum": "sha256:4cb754ce5ed18621f851cc56cfc286a0a5429dbea68a96254270587d5b3e029e",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            434.424,
+            178.98,
+            446.424
+          ],
+          "text": "authentication.",
+          "checksum": "sha256:f742ea2cd5077a6875d4c7dfeaab4cc10db5fba390c3d8c1af5c22396614e108",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-TENET-3",
+      "number": 3,
+      "title": "Access to individual enterprise resources is granted on a per-session basis",
+      "description": "Access to individual enterprise resources is granted on a per-session basis. Trust in the requester is evaluated before the access is granted. Access should also be granted with the least privileges needed to complete the task. This could mean only “sometime recently” for this particular transaction and may not occur directly before initiating a session or performing a transaction with a resource. However, authentication and authorization to one resource will not automatically grant access to a different resource.",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=15",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            90,
+            454.224,
+            526.98,
+            466.476
+          ],
+          "text": "3. Access to individual enterprise resources is granted on a per-session basis. Trust in",
+          "checksum": "sha256:e6972c024838f3c8f599d32c2bbf487046e1b258dcdb6830394a2ae4a6a974e5",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            468.024,
+            539.506,
+            480.024
+          ],
+          "text": "the requester is evaluated before the access is granted. Access should also be granted with",
+          "checksum": "sha256:92bff15056f7def2568967e9e974176d8e231a4ad8c4d1012df4621049cc716c",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            481.824,
+            499.596,
+            493.824
+          ],
+          "text": "the least privileges needed to complete the task. This could mean only “sometime",
+          "checksum": "sha256:c16dbc3943c50210f418d60198cb34526633fccb9cf079df623f009f8003cd96",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            495.624,
+            513.888,
+            507.624
+          ],
+          "text": "recently” for this particular transaction and may not occur directly before initiating a",
+          "checksum": "sha256:440ca9e38e3a82e25de398527e982b52176ea5b74b79e4bb6305363a131f7faa",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            509.424,
+            497.22,
+            521.424
+          ],
+          "text": "session or performing a transaction with a resource. However, authentication and",
+          "checksum": "sha256:c1aae6f5b5316848c81b80cd9322b0fbbf08372789e875c181cac50d1d399bdb",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            523.224,
+            528.776,
+            535.224
+          ],
+          "text": "authorization to one resource will not automatically grant access to a different resource.",
+          "checksum": "sha256:c97141311e9267d14324f1ac72e0deb6211b8617c163a03cb9d4a3d2b6319f6d",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-TENET-4",
+      "number": 4,
+      "title": "Access to resources is determined by dynamic policy—including the observable state of client identity, application/service, and the requesting asset—and may include other behavioral and environmental attributes",
+      "description": "Access to resources is determined by dynamic policy—including the observable state of client identity, application/service, and the requesting asset—and may include other behavioral and environmental attributes. An organization protects resources by defining what resources it has, who its members are (or ability to authenticate users from a federated community), and what access to resources those members need. For zero trust, client identity can include the user account (or service identity) and any associated attributes assigned by the enterprise to that account or artifacts to authenticate automated tasks. Requesting asset state can include device characteristics such as software versions installed, network location, time/date of request, previously observed behavior, and installed credentials. Behavioral attributes include, but not limited to, automated subject analytics, device analytics, and measured deviations from observed usage patterns. Policy is the set of access rules based on attributes that an organization assigns to a subject, data asset, or application. Environmental attributes may include such factors as requestor network location, time, reported active attacks, etc. These rules and attributes are based on the needs of the business process and acceptable level of risk. Resource access and action permission policies can vary based on the sensitivity of the resource/data. Least privilege principles are applied to restrict both visibility and accessibility.",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=15",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            90,
+            543.024,
+            540.036,
+            555.276
+          ],
+          "text": "4. Access to resources is determined by dynamic policy—including the observable state",
+          "checksum": "sha256:afbad2bc5e535d56550ca85ea0641c68be65fe076741aa4f0ae8577f0ad224e1",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            557.076,
+            518.989,
+            569.076
+          ],
+          "text": "of client identity, application/service, and the requesting asset—and may include",
+          "checksum": "sha256:9088aad3c93258dcd4965ed94a83fb7a4235486cc78867abfb65305987340b72",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            570.624,
+            534,
+            582.876
+          ],
+          "text": "other behavioral and environmental attributes. An organization protects resources by",
+          "checksum": "sha256:4f2a9cea812e1a8929b1710824510c5fdd48c937d7d2184c6e1b8a27c84b53ca",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            584.424,
+            534.816,
+            596.424
+          ],
+          "text": "defining what resources it has, who its members are (or ability to authenticate users from",
+          "checksum": "sha256:0d72f984927f37ac46b7c40f24fec66955e9ad21f361caa981c9cd3e276e9ead",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            598.224,
+            513.896,
+            610.224
+          ],
+          "text": "a federated community), and what access to resources those members need. For zero",
+          "checksum": "sha256:a2f3729c6923600519805290f1b96edd367ddaa5922b9474d88c6ae6a98066f6",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            612.024,
+            531.18,
+            624.024
+          ],
+          "text": "trust, client identity can include the user account (or service identity) and any associated",
+          "checksum": "sha256:86f4d334e6a2320ca6ca7883bbcf929e3233e93d050c14bcbb370fbf34595c1a",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            625.824,
+            534.536,
+            637.824
+          ],
+          "text": "attributes assigned by the enterprise to that account or artifacts to authenticate automated",
+          "checksum": "sha256:ee933d5c0f0f12962f650177cc32be2f39871872c310b8ebc85f8ddc71022147",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            639.624,
+            532.484,
+            651.624
+          ],
+          "text": "tasks. Requesting asset state can include device characteristics such as software versions",
+          "checksum": "sha256:24a36c61f08761b8062b62c10df3be7c5205dee46edfdd85e331263588dc153c",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            653.424,
+            508.2,
+            665.424
+          ],
+          "text": "installed, network location, time/date of request, previously observed behavior, and",
+          "checksum": "sha256:d78dcc372076fe919edfc3c4c273730c488a00229b3209bfabddd7a58505f52c",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            667.224,
+            530.256,
+            679.224
+          ],
+          "text": "installed credentials. Behavioral attributes include, but not limited to, automated subject",
+          "checksum": "sha256:236af062df1133311aac1072c6d4ffe00c9485cd4be39e33eac4faa63a681530",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            681.024,
+            539.04,
+            693.024
+          ],
+          "text": "analytics, device analytics, and measured deviations from observed usage patterns. Policy",
+          "checksum": "sha256:3eb1a6acdbc520f025e0335b696ed7b92f38fa6d15fbf6ad3c2a32f1fa86c53c",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            694.824,
+            535.471,
+            706.824
+          ],
+          "text": "is the set of access rules based on attributes that an organization assigns to a subject, data",
+          "checksum": "sha256:b1c4b51e6b0d3eb66d42843adf9016072fdcf59a0e9f7c145283be7e12ba0ce9",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 15,
+          "bbox": [
+            108,
+            708.624,
+            511.837,
+            720.624
+          ],
+          "text": "asset, or application. Environmental attributes may include such factors as requestor",
+          "checksum": "sha256:3dede65a2c4abb4da09600cb41a6ef8701e18d3d7e871b63a285c564429e453d",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            76.224,
+            527.155,
+            88.224
+          ],
+          "text": "network location, time, reported active attacks, etc. These rules and attributes are based",
+          "checksum": "sha256:a43d42be18e174ce773fcea2b3fc311df8889a3c3842b1add571527ea8048175",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            90.024,
+            520.198,
+            102.024
+          ],
+          "text": "on the needs of the business process and acceptable level of risk. Resource access and",
+          "checksum": "sha256:9e7b7d96cfcbca89e54e8f0c5497093ef8c275783f499877c9ebad10bb7f8fd9",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            103.824,
+            522.21,
+            115.824
+          ],
+          "text": "action permission policies can vary based on the sensitivity of the resource/data. Least",
+          "checksum": "sha256:4c1f0bc5a2e196a00f1b5dac232a7277d32b0c261bd2bda58c52e0d56ee4a37d",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            117.624,
+            461.281,
+            129.624
+          ],
+          "text": "privilege principles are applied to restrict both visibility and accessibility.",
+          "checksum": "sha256:d826ed559eaf860c8278d607751fc95bb49be2ed07b6510a41db66d491bbcccc",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-TENET-5",
+      "number": 5,
+      "title": "The enterprise monitors and measures the integrity and security posture of all owned and associated assets",
+      "description": "The enterprise monitors and measures the integrity and security posture of all owned and associated assets. No asset is inherently trusted. The enterprise evaluates the security posture of the asset when evaluating a resource request. An enterprise implementing a ZTA should establish a continuous diagnostics and mitigation (CDM) or similar system to monitor the state of devices and applications and should apply patches/fixes as needed. Assets that are discovered to be subverted, have known vulnerabilities, and/or are not managed by the enterprise may be treated differently (including denial of all connections to enterprise resources) than devices owned by or associated with the enterprise that are deemed to be in their most secure state. This may also apply to associated devices (e.g., personally owned devices) that may be allowed to access some resources but not others. This, too, requires a robust monitoring and reporting system in place to provide actionable data about the current state of enterprise resources.",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=16",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            90,
+            137.424,
+            507.636,
+            149.676
+          ],
+          "text": "5. The enterprise monitors and measures the integrity and security posture of all",
+          "checksum": "sha256:daf5871e651d98cce6b6fcc83ae9ce7b715ebcc9ee8712ab71020b0d1c88c064",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            151.224,
+            536.626,
+            163.476
+          ],
+          "text": "owned and associated assets. No asset is inherently trusted. The enterprise evaluates the",
+          "checksum": "sha256:cb97d65ba8d817f5f89276db57f9a0626da915541e66d2ebdae85f2c3fa17006",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            164.964,
+            483.887,
+            176.964
+          ],
+          "text": "security posture of the asset when evaluating a resource request. An enterprise",
+          "checksum": "sha256:d1cf59106a84c6b9c9dd754230dc0a09cd60a80f9294d4ff3ae49ae700e43314",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            178.764,
+            534.276,
+            190.764
+          ],
+          "text": "implementing a ZTA should establish a continuous diagnostics and mitigation (CDM) or",
+          "checksum": "sha256:91d9274f78368833d7324be4197e946aafd617909c8acb45a65e35955eff0bb9",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            192.564,
+            491.88,
+            204.564
+          ],
+          "text": "similar system to monitor the state of devices and applications and should apply",
+          "checksum": "sha256:fba470a790b59a5ce715b1886c7a74927472642aa34078b44349e6d3d5f5aee3",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            206.364,
+            492.168,
+            218.364
+          ],
+          "text": "patches/fixes as needed. Assets that are discovered to be subverted, have known",
+          "checksum": "sha256:030abb46e81a6cdcdf39fbdab62c94aa52fcfb3a12362ac59768b2ba691f7df5",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            220.164,
+            505.908,
+            232.164
+          ],
+          "text": "vulnerabilities, and/or are not managed by the enterprise may be treated differently",
+          "checksum": "sha256:ab334336ecfc07bc90d613f0ff6d2c8583db5a031331af3559a06950ee39e248",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            233.964,
+            518.42,
+            245.964
+          ],
+          "text": "(including denial of all connections to enterprise resources) than devices owned by or",
+          "checksum": "sha256:a8dd7a2f4218d9e731eae2464bffee3084bab23fb9ff2c06a412379d1883bf25",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            247.764,
+            528.48,
+            259.764
+          ],
+          "text": "associated with the enterprise that are deemed to be in their most secure state. This may",
+          "checksum": "sha256:b8c1865ff9e90f5552010f53a2054533a98346726c011cf5555c5e3829435f2d",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            261.564,
+            531.18,
+            273.564
+          ],
+          "text": "also apply to associated devices (e.g., personally owned devices) that may be allowed to",
+          "checksum": "sha256:d54cbefa5509779288cae07cb0d27dee74392d2d53eceee21d3ca1dce69804b2",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            275.364,
+            495.66,
+            287.364
+          ],
+          "text": "access some resources but not others. This, too, requires a robust monitoring and",
+          "checksum": "sha256:26f6966415f84534f46ce4b2e12a76285f5cc8c702ef6d204fa71a505c5ec56c",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            289.164,
+            528.823,
+            301.164
+          ],
+          "text": "reporting system in place to provide actionable data about the current state of enterprise",
+          "checksum": "sha256:452aff7110df27c7b47d83e25e3ee77814eed67eb5d7632fc9cfb94f24242183",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            302.964,
+            156.359,
+            314.964
+          ],
+          "text": "resources.",
+          "checksum": "sha256:46d87e8fab2b636fef2b19b15cfd37dc7212980fecad16909c6d107860363057",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-TENET-6",
+      "number": 6,
+      "title": "All resource authentication and authorization are dynamic and strictly enforced before access is allowed",
+      "description": "All resource authentication and authorization are dynamic and strictly enforced before access is allowed. This is a constant cycle of obtaining access, scanning and assessing threats, adapting, and continually reevaluating trust in ongoing communication. An enterprise implementing a ZTA would be expected to have Identity, Credential, and Access Management (ICAM) and asset management systems in place. This includes the use of multifactor authentication (MFA) for access to some or all enterprise resources. Continual monitoring with possible reauthentication and reauthorization occurs throughout user transactions, as defined and enforced by policy (e.g., time-based, new resource requested, resource modification, anomalous subject activity detected) that strives to achieve a balance of security, availability, usability, and cost-efficiency.",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=16",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            90,
+            322.764,
+            517.631,
+            335.016
+          ],
+          "text": "6. All resource authentication and authorization are dynamic and strictly enforced",
+          "checksum": "sha256:574def7ca1044c5c4cef4fd0b3887c5540d307770d2766d79669c1bbf8dc94e0",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            336.564,
+            510.215,
+            348.816
+          ],
+          "text": "before access is allowed. This is a constant cycle of obtaining access, scanning and",
+          "checksum": "sha256:660bc8e8c8aed491a70ed3d49271fee996271d4647f886b9f17c0536f05f082f",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            350.364,
+            537.3,
+            362.364
+          ],
+          "text": "assessing threats, adapting, and continually reevaluating trust in ongoing communication.",
+          "checksum": "sha256:7b84a78cf6bfbd778bff6668c147373725fc34f1f65a1ae9455ee5c359ee8d7b",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            364.164,
+            527.88,
+            376.164
+          ],
+          "text": "An enterprise implementing a ZTA would be expected to have Identity, Credential, and",
+          "checksum": "sha256:a7aec8210134a463b31db30777157fd4078dfeec3bd3e77ae33d1237efff4fcd",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            377.964,
+            530.567,
+            389.964
+          ],
+          "text": "Access Management (ICAM) and asset management systems in place. This includes the",
+          "checksum": "sha256:41f2c644bbb15d31b0a80f55bffa6237b4ebac132f70a60f7268f00edf8fd781",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            391.764,
+            522.242,
+            403.764
+          ],
+          "text": "use of multifactor authentication (MFA) for access to some or all enterprise resources.",
+          "checksum": "sha256:6041dde6217061e0d9e60803aa4086e83d6291b3b1e341e99c90f9cef80c6294",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            405.564,
+            488.928,
+            417.564
+          ],
+          "text": "Continual monitoring with possible reauthentication and reauthorization occurs",
+          "checksum": "sha256:2a12fb1e26f758a94398825994e8c90826be88f2323d5e29718c1decfbab6f50",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            419.364,
+            521.184,
+            431.364
+          ],
+          "text": "throughout user transactions, as defined and enforced by policy (e.g., time-based, new",
+          "checksum": "sha256:fc629642c018b9f9f3518aa20f7c5b87165b13b11bb9d8fef2e09174d7fbb8e6",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            433.164,
+            510.514,
+            445.164
+          ],
+          "text": "resource requested, resource modification, anomalous subject activity detected) that",
+          "checksum": "sha256:b531249621873dccccdd0b4d1ec8df86368f38a283e5508950acae510621d92e",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            446.964,
+            501.179,
+            458.964
+          ],
+          "text": "strives to achieve a balance of security, availability, usability, and cost-efficiency.",
+          "checksum": "sha256:9812aeb63129f95268dbe14859623df0924645a0397c345b35c905f768156234",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-TENET-7",
+      "number": 7,
+      "title": "The enterprise collects as much information as possible about the current state of assets, network infrastructure and communications and uses it to improve its security posture",
+      "description": "The enterprise collects as much information as possible about the current state of assets, network infrastructure and communications and uses it to improve its security posture. An enterprise should collect data about asset security posture, network traffic and access requests, process that data, and use any insight gained to improve policy creation and enforcement. This data can also be used to provide context for access requests from subjects (see Section 3.3.1).",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=16",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            90,
+            466.764,
+            523.291,
+            479.016
+          ],
+          "text": "7. The enterprise collects as much information as possible about the current state of",
+          "checksum": "sha256:5074f94142ea4c3e8cf9d95984c82b55aa6410522c4ea4c2aff7b6853f300ec5",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            480.816,
+            501.763,
+            492.816
+          ],
+          "text": "assets, network infrastructure and communications and uses it to improve its",
+          "checksum": "sha256:a5c54b47a0339fd6038a1c01fd241f345f22f8f9ac855aefb3c16a7b739dad07",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            494.364,
+            534.96,
+            506.616
+          ],
+          "text": "security posture. An enterprise should collect data about asset security posture, network",
+          "checksum": "sha256:9aeafe65cf5e4f638b08249f526a81ef68bb29692c4816787ad35876f2ff0996",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            508.164,
+            508.184,
+            520.164
+          ],
+          "text": "traffic and access requests, process that data, and use any insight gained to improve",
+          "checksum": "sha256:7af92018617296d6109cf05652cf4af24450aa778ddee02aa2e2dc9f2ce3deba",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            521.964,
+            535.548,
+            533.964
+          ],
+          "text": "policy creation and enforcement. This data can also be used to provide context for access",
+          "checksum": "sha256:9d207bc18fadd304162542e83f0c7e8e09308c5c3ab766793251d2c3e618748b",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 16,
+          "bbox": [
+            108,
+            535.764,
+            310.62,
+            547.764
+          ],
+          "text": "requests from subjects (see Section 3.3.1).",
+          "checksum": "sha256:45dd27a373c3cb41a9a797b95fac6e408b607f4ebdbc67375f60aca363a1a0b7",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    }
+  ],
+  "components": [
+    {
+      "id": "SP800207-COMPONENT-POLICY-ENGINE-PE",
+      "title": "Policy engine (PE)",
+      "description": "This component is responsible for the ultimate decision to grant access to a resource for a given subject. The PE uses enterprise policy as well as input from external sources (e.g., CDM systems, threat intelligence services described below) as input to a trust algorithm (see Section 3.3 for more details) to grant, deny, or revoke access to the resource. The PE is paired with the policy administrator component. The policy engine makes and logs the decision (as approved, or denied), and the policy administrator executes the decision.",
+      "component_class": "core",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=18",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            90,
+            473.4,
+            515.292,
+            486.696
+          ],
+          "text": "• Policy engine (PE): This component is responsible for the ultimate decision to grant",
+          "checksum": "sha256:32a8b9b74d5f3d49e5fee6c14a5505664181b20182d439d886d0c29a3b6168c5",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            488.244,
+            520.832,
+            500.244
+          ],
+          "text": "access to a resource for a given subject. The PE uses enterprise policy as well as input",
+          "checksum": "sha256:67f6a527c4999c8bb9369bcb0ce6a3f4edefa7ca3cbfe00e93a105754c9ccce5",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            502.044,
+            529.771,
+            514.044
+          ],
+          "text": "from external sources (e.g., CDM systems, threat intelligence services described below)",
+          "checksum": "sha256:79f85e33a80c4cbaee5069b76d9579c563b3a2324f5b1d509d2d5d7690761f37",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            515.844,
+            523.584,
+            527.844
+          ],
+          "text": "as input to a trust algorithm (see Section 3.3 for more details) to grant, deny, or revoke",
+          "checksum": "sha256:f6647bf912ca82217ac6112a72dc933c0891472eb537992a41d72fd4f35a3831",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            529.644,
+            520.842,
+            541.644
+          ],
+          "text": "access to the resource. The PE is paired with the policy administrator component. The",
+          "checksum": "sha256:123dc10f7e69cc838e5783d4450cbfefa0bc4de2e077ecdd2622e0ede73f14e6",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            543.444,
+            504.24,
+            555.444
+          ],
+          "text": "policy engine makes and logs the decision (as approved, or denied), and the policy",
+          "checksum": "sha256:932bc70ee56a87040e883bf205ceafdf0d1170afc26f729ce238b2a33a5b275e",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            557.244,
+            280.018,
+            569.244
+          ],
+          "text": "administrator executes the decision.",
+          "checksum": "sha256:4ebb622f1bf55e19d3a209de6358aeb282203a8613e81cd4e4c2073e53705173",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-COMPONENT-POLICY-ADMINISTRATOR-PA",
+      "title": "Policy administrator (PA)",
+      "description": "This component is responsible for establishing and/or shutting down the communication path between a subject and a resource (via commands to relevant PEPs). It would generate any session-specific authentication and authentication token or credential used by a client to access an enterprise resource. It is closely tied to the PE and relies on its decision to ultimately allow or deny a session. If the session is authorized and the request authenticated, the PA configures the PEP to allow the session to start. If the session is denied (or a previous approval is countermanded), the PA signals to the PEP to shut down the connection. Some implementations may treat the PE and PA as a single service; here, it is divided into its two logical components. The PA communicates with the PEP when creating the communication path. This communication is done via the control plane.",
+      "component_class": "core",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=18",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            90,
+            576.84,
+            504.936,
+            590.136
+          ],
+          "text": "• Policy administrator (PA): This component is responsible for establishing and/or",
+          "checksum": "sha256:ff3ee7a07a7ba4da2676bcaf4d49cb27669fc06e85da25ed78589a96ef536fe3",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            591.684,
+            532.547,
+            603.684
+          ],
+          "text": "shutting down the communication path between a subject and a resource (via commands",
+          "checksum": "sha256:6898b4f299efa3b1197b109cbc49ba9c1a4c5e5aedf5ec256726ec8c8cf38c79",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            605.484,
+            471.84,
+            617.484
+          ],
+          "text": "to relevant PEPs). It would generate any session-specific authentication and",
+          "checksum": "sha256:aae55f3a18a60e22abf0e1f65f2f5d8585361cdfe739234fd3814da614567580",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            619.284,
+            525.464,
+            631.284
+          ],
+          "text": "authentication token or credential used by a client to access an enterprise resource. It is",
+          "checksum": "sha256:22eba538f66402478051d93aa106bd1ee1d01bfd77a33ec98c63b4c6c27e7d12",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            633.084,
+            524.616,
+            645.084
+          ],
+          "text": "closely tied to the PE and relies on its decision to ultimately allow or deny a session. If",
+          "checksum": "sha256:9a954bf6343ff0e148aa380ec135762f9c5b4cf430942e628a48b597f333e0f0",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            646.884,
+            513.893,
+            658.884
+          ],
+          "text": "the session is authorized and the request authenticated, the PA configures the PEP to",
+          "checksum": "sha256:fa44c6d6ccd671c7d74d366efd0ceabe63c4e70ecd0572b4163143a3c3bdc5d7",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            660.684,
+            466.908,
+            672.684
+          ],
+          "text": "allow the session to start. If the session is denied (or a previous approval is",
+          "checksum": "sha256:6b3dc715c58fe33ce11a793ddc096cc431c719bddbb80a0faebbb8c949f1da8b",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            674.484,
+            486.648,
+            686.484
+          ],
+          "text": "countermanded), the PA signals to the PEP to shut down the connection. Some",
+          "checksum": "sha256:9b60d25868d02db6cbdcc795496f226d7b6077cb0f4b99d174198ed82edeb9ae",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 18,
+          "bbox": [
+            108,
+            688.284,
+            524.927,
+            700.284
+          ],
+          "text": "implementations may treat the PE and PA as a single service; here, it is divided into its",
+          "checksum": "sha256:5d9e0e64af79e240d54926d1fe4813419608bb9f8cba934c380d395ec9334b58",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            76.224,
+            491.808,
+            88.224
+          ],
+          "text": "two logical components. The PA communicates with the PEP when creating the",
+          "checksum": "sha256:be6f125334e532b542e0583fecc917ce47cbceacf69e848a3cb1240bc5ff3aec",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            90.024,
+            453,
+            102.024
+          ],
+          "text": "communication path. This communication is done via the control plane.",
+          "checksum": "sha256:78b1a92fb0b0033a604556465292387c28ad32155aeefaea69b85ae821d317b8",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-COMPONENT-POLICY-ENFORCEMENT-POINT-PEP",
+      "title": "Policy enforcement point (PEP)",
+      "description": "This system is responsible for enabling, monitoring, and eventually terminating connections between a subject and an enterprise resource. The PEP communicates with the PA to forward requests and/or receive policy updates from the PA. This is a single logical component in ZTA but may be broken into two different components: the client (e.g., agent on a laptop) and resource side (e.g., gateway component in front of resource that controls access) or a single portal component that acts as a gatekeeper for communication paths. Beyond the PEP is the trust zone (see Section 2) hosting the enterprise resource. In addition to the core components in an enterprise implementing a ZTA, several data sources provide input and policy rules used by the policy engine when making access decisions. These include local data sources as well as external (i.e., nonenterprise-controlled or -created) data sources. These can include:",
+      "component_class": "core",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=19",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            90,
+            109.62,
+            526.658,
+            122.916
+          ],
+          "text": "• Policy enforcement point (PEP): This system is responsible for enabling, monitoring,",
+          "checksum": "sha256:e13391901f5ce58e49355fcb9a60eb76250610d2bd99eb8e15eb976574c932e6",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            124.464,
+            538.486,
+            136.464
+          ],
+          "text": "and eventually terminating connections between a subject and an enterprise resource. The",
+          "checksum": "sha256:5814d81dbf74a4a0bb038224f8b262fc56ec3bde77a7eb30dd21036ccea288e1",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            138.264,
+            527.257,
+            150.264
+          ],
+          "text": "PEP communicates with the PA to forward requests and/or receive policy updates from",
+          "checksum": "sha256:26671a80b614b38b3da52317a340e448f8b9bcbf4bdf44d8f48b8c57bbb46637",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            152.064,
+            529.536,
+            164.064
+          ],
+          "text": "the PA. This is a single logical component in ZTA but may be broken into two different",
+          "checksum": "sha256:d3b8b025b0656ca2d5849f212874a650c0889b04cd73431de217706e40a36d32",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            165.864,
+            489.84,
+            177.864
+          ],
+          "text": "components: the client (e.g., agent on a laptop) and resource side (e.g., gateway",
+          "checksum": "sha256:1ff9ce49924c837713f1b404a879fdc39c8bef3403324e16bceda85ae41ab75c",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            179.664,
+            539.988,
+            191.664
+          ],
+          "text": "component in front of resource that controls access) or a single portal component that acts",
+          "checksum": "sha256:0d26e44740cc1860f82f8cfa8f42c0ae6e62b836373ac178679d956827b7d250",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            193.464,
+            528.839,
+            205.464
+          ],
+          "text": "as a gatekeeper for communication paths. Beyond the PEP is the trust zone (see Section",
+          "checksum": "sha256:4c0e3ed3b6486bf121f3c3f650b93237da456d7e16cafb1a19c45f44c09c7e03",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            207.264,
+            270.961,
+            219.264
+          ],
+          "text": "2) hosting the enterprise resource.",
+          "checksum": "sha256:b7ff13c7095ff64ba340e336d659fee5d67acadf991d635a1db6f3c6c1333608",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            72,
+            233.064,
+            522.224,
+            245.064
+          ],
+          "text": "In addition to the core components in an enterprise implementing a ZTA, several data sources",
+          "checksum": "sha256:4c367f890506d84ae21d278a90f13205411419fa28c2ad078f51d45369a5a74f",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            72,
+            246.864,
+            525.468,
+            258.864
+          ],
+          "text": "provide input and policy rules used by the policy engine when making access decisions. These",
+          "checksum": "sha256:8b5badd128a1e9fd6b77cc4038bc2c7ae4d56fe2f147c9dc0c18978bfb369a4c",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            72,
+            260.664,
+            514.187,
+            272.664
+          ],
+          "text": "include local data sources as well as external (i.e., nonenterprise-controlled or -created) data",
+          "checksum": "sha256:a7cecb10b808878d9b00e42d17e2156ec2ca224d3c9051a29c5eadafa1ef7f79",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            72,
+            274.464,
+            203.975,
+            286.464
+          ],
+          "text": "sources. These can include:",
+          "checksum": "sha256:29b9f3b16fcc83da25814336a40daede3a0a9ea39bbdf2b0819715dcf56ba6c6",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-COMPONENT-CONTINUOUS-DIAGNOSTICS-AND-MITIGATION-CDM-SYSTEM",
+      "title": "Continuous diagnostics and mitigation (CDM) system",
+      "description": "This gathers information about the enterprise asset’s current state and applies updates to configuration and software components. An enterprise CDM system provides the policy engine with the information about the asset making an access request, such as whether it is running the appropriate patched operating system (OS), the integrity of enterprise-approved software components or presence of non-approved components and whether the asset has any known vulnerabilities. CDM systems are also responsible for identifying and potentially enforcing a subset of polices on nonenterprise devices active on enterprise infrastructure.",
+      "component_class": "supporting",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=19",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            90,
+            300.06,
+            537.696,
+            313.356
+          ],
+          "text": "• Continuous diagnostics and mitigation (CDM) system: This gathers information about",
+          "checksum": "sha256:51799c1927011573413c6b7509f62e73ed3fcaced77fa4ecc54606dcefb19d79",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            314.904,
+            511.543,
+            326.904
+          ],
+          "text": "the enterprise asset’s current state and applies updates to configuration and software",
+          "checksum": "sha256:dfb4ff451bdad797e0ee78bee824906158f421b69d9f189a4e3a27273f6acba1",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            328.704,
+            535.26,
+            340.704
+          ],
+          "text": "components. An enterprise CDM system provides the policy engine with the information",
+          "checksum": "sha256:39beb9b818b5c2216bc20ab1aafa8c0c9f01cabbb85d003ea6e8a07d0b228510",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            342.504,
+            522.223,
+            354.504
+          ],
+          "text": "about the asset making an access request, such as whether it is running the appropriate",
+          "checksum": "sha256:dbe07d35a746c0d9d745d63feb9714e8b46039e0c58dcb69e7ad0b4c74f73a40",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            356.304,
+            537.888,
+            368.304
+          ],
+          "text": "patched operating system (OS), the integrity of enterprise-approved software components",
+          "checksum": "sha256:f593d160a5f36e65bd96d9a2477ccd7bd7cefb37bf7a9be80ea90b34f8285a31",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            370.104,
+            487.547,
+            382.104
+          ],
+          "text": "or presence of non-approved components and whether the asset has any known",
+          "checksum": "sha256:a7d21f95dbd0b2c373edb13dd1bd4a9b8e412cc741a37c69afb307c6f07cb360",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            383.904,
+            496.02,
+            395.904
+          ],
+          "text": "vulnerabilities. CDM systems are also responsible for identifying and potentially",
+          "checksum": "sha256:5bbdd5eb3df7cd196aca5d0a7dec15f8d269d5bd2a8f927a31218e69986b7b66",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            397.704,
+            535.196,
+            409.704
+          ],
+          "text": "enforcing a subset of polices on nonenterprise devices active on enterprise infrastructure.",
+          "checksum": "sha256:54def484e0fe861dc1da0043ba442f17e210295b74677d11c1eba03c00cd0b63",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-COMPONENT-INDUSTRY-COMPLIANCE-SYSTEM",
+      "title": "Industry compliance system",
+      "description": "This ensures that the enterprise remains compliant with any regulatory regime that it may fall under (e.g., FISMA, healthcare or financial industry information security requirements). This includes all the policy rules that an enterprise develops to ensure compliance.",
+      "component_class": "supporting",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=19",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            90,
+            417.3,
+            523.98,
+            430.596
+          ],
+          "text": "• Industry compliance system: This ensures that the enterprise remains compliant with",
+          "checksum": "sha256:2e4bcc27a610568798f1a9e47db948eb3e38503f5b9d60eb17ac4e6041873dd3",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            432.144,
+            497.856,
+            444.144
+          ],
+          "text": "any regulatory regime that it may fall under (e.g., FISMA, healthcare or financial",
+          "checksum": "sha256:bb9bb787f484ff4e18d3a67ee54a59893ac16157d3e2b4950a8271de7571856d",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            445.944,
+            515.342,
+            457.944
+          ],
+          "text": "industry information security requirements). This includes all the policy rules that an",
+          "checksum": "sha256:d555746dab25bd9d01b5a535cf30f0625650668c688bcec94e2da4ad49495847",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            459.744,
+            308.938,
+            471.744
+          ],
+          "text": "enterprise develops to ensure compliance.",
+          "checksum": "sha256:e0bcf4a8e0af0447a632cfbb1caad8f72235deaec5c44fd70deef0e17d39794b",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-COMPONENT-THREAT-INTELLIGENCE-FEED-S",
+      "title": "Threat intelligence feed(s)",
+      "description": "This provides information from internal or external sources that help the policy engine make access decisions. These could be multiple services that take data from internal and/or multiple external sources and provide information about newly discovered attacks or vulnerabilities. This also includes newly discovered flaws in software, newly identified malware, and reported attacks to other assets that the policy engine will want to deny access to from enterprise assets.",
+      "component_class": "supporting",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=19",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            90,
+            479.34,
+            533.149,
+            492.636
+          ],
+          "text": "• Threat intelligence feed(s): This provides information from internal or external sources",
+          "checksum": "sha256:7056941caccdcf2b863d1292b216f01b731d0d4a99ea82d09eaebed2301e561d",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            494.244,
+            529.832,
+            506.244
+          ],
+          "text": "that help the policy engine make access decisions. These could be multiple services that",
+          "checksum": "sha256:a8fcc28e113480da58a36c3ea0fdf71b07f8a533927e17b03b54fabf85e8b151",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            507.984,
+            523.477,
+            519.984
+          ],
+          "text": "take data from internal and/or multiple external sources and provide information about",
+          "checksum": "sha256:bf73edd77f38049178bddb8e1975e5da65c322eca7538208941e9d114d9f5fae",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            521.784,
+            534.576,
+            533.784
+          ],
+          "text": "newly discovered attacks or vulnerabilities. This also includes newly discovered flaws in",
+          "checksum": "sha256:c2d5d3eccaee5c0975519faf426f82d76e6bb54ac088f23c50f44cb044686ce5",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            535.584,
+            523.183,
+            547.584
+          ],
+          "text": "software, newly identified malware, and reported attacks to other assets that the policy",
+          "checksum": "sha256:96a8effac01cd4cd98607ee5d01d6372471218043025ef9446e3267595f3fac6",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            549.384,
+            383.279,
+            561.384
+          ],
+          "text": "engine will want to deny access to from enterprise assets.",
+          "checksum": "sha256:3dbc1c637f8531b7126a108576f2663c9c6a6fa40f2e4351368242519d1256db",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-COMPONENT-NETWORK-AND-SYSTEM-ACTIVITY-LOGS",
+      "title": "Network and system activity logs",
+      "description": "This enterprise system aggregates asset logs, network traffic, resource access actions, and other events that provide real-time (or nearreal-time) feedback on the security posture of enterprise information systems.",
+      "component_class": "supporting",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=19",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            90,
+            568.98,
+            498.311,
+            582.276
+          ],
+          "text": "• Network and system activity logs: This enterprise system aggregates asset logs,",
+          "checksum": "sha256:22ff6700f596ba5b56e23e40c0b855c45335cf130762b651d678bfb671864617",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            583.884,
+            533.112,
+            595.884
+          ],
+          "text": "network traffic, resource access actions, and other events that provide real-time (or near-",
+          "checksum": "sha256:dc8f06ab49ad33d2098a9f4d53322cae2bceddd779a7ab73504f8103f7597b51",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            597.684,
+            480.538,
+            609.684
+          ],
+          "text": "real-time) feedback on the security posture of enterprise information systems.",
+          "checksum": "sha256:2dd06a011a6f37a1667490d8b47b6f6cd28b10dac313ef35f896982ebb07caf7",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-COMPONENT-DATA-ACCESS-POLICIES",
+      "title": "Data access policies",
+      "description": "These are the attributes, rules, and policies about access to enterprise resources. This set of rules could be encoded in (via management interface) or dynamically generated by the policy engine. These policies are the starting point for authorizing access to a resource as they provide the basic access privileges for accounts and applications/services in the enterprise. These policies should be based on the defined mission roles and needs of the organization.",
+      "component_class": "supporting",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=19",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            90,
+            617.28,
+            495.298,
+            630.576
+          ],
+          "text": "• Data access policies: These are the attributes, rules, and policies about access to",
+          "checksum": "sha256:6ed5aee52cc14d2f1ea98d8cb569d267c6af03f3e8fee8d07119123d506477f6",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            632.124,
+            533.851,
+            644.124
+          ],
+          "text": "enterprise resources. This set of rules could be encoded in (via management interface) or",
+          "checksum": "sha256:c233ba0c511443d2f2313021ac572a55292ae0f1ccd15bc6a0c0e6ca3d73dcc4",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            645.924,
+            511.536,
+            657.924
+          ],
+          "text": "dynamically generated by the policy engine. These policies are the starting point for",
+          "checksum": "sha256:ce9932cb18c414b1e476067d89e8cb0fea32b5b3dd2768f6e217f97bf55a9640",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            659.724,
+            528.214,
+            671.724
+          ],
+          "text": "authorizing access to a resource as they provide the basic access privileges for accounts",
+          "checksum": "sha256:7fab53ef95a0429f3801cea3d19919ceee2802e50684231f92bc37fd6befbd03",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            673.524,
+            534.9,
+            685.524
+          ],
+          "text": "and applications/services in the enterprise. These policies should be based on the defined",
+          "checksum": "sha256:31209015d43dcb0d407556ef2d733abfb3084e31dbafc5f4140c1bb283f784a5",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 19,
+          "bbox": [
+            108,
+            687.324,
+            319.02,
+            699.324
+          ],
+          "text": "mission roles and needs of the organization.",
+          "checksum": "sha256:59acd879c3cc660007b0477fee049315fde6ce2f77da93468196d6c9dde5a962",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-COMPONENT-ENTERPRISE-PUBLIC-KEY-INFRASTRUCTURE-PKI",
+      "title": "Enterprise public key infrastructure (PKI)",
+      "description": "This system is responsible for generating and logging certificates issued by the enterprise to resources, subjects, services and applications. This also includes the global certificate authority ecosystem and the Federal PKI,4 which may or may not be integrated with the enterprise PKI. This could also be a PKI that is not built upon X.509 certificates.",
+      "component_class": "supporting",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=20",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            90,
+            76.02,
+            530.578,
+            89.316
+          ],
+          "text": "• Enterprise public key infrastructure (PKI): This system is responsible for generating",
+          "checksum": "sha256:ba0af9d61a8020574147452be299a9d61b11c5046c14bb154a5b97fcea2d5db0",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            90.864,
+            506.996,
+            102.864
+          ],
+          "text": "and logging certificates issued by the enterprise to resources, subjects, services and",
+          "checksum": "sha256:eafae986beec9fbec00b13e59f590f3f0cb38f7bdb4e717303c3702d11b37284",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            104.664,
+            536.554,
+            116.664
+          ],
+          "text": "applications. This also includes the global certificate authority ecosystem and the Federal",
+          "checksum": "sha256:005a96e0fd966ce7a5b2f495f07866efa44a5cf256e2ffcd62bc816f719d5771",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            116.75,
+            527.808,
+            130.464
+          ],
+          "text": "PKI,4 which may or may not be integrated with the enterprise PKI. This could also be a",
+          "checksum": "sha256:0c4f73d0209308b86bca622348e19883b430512dbd9fcc820c73547337a01375",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            132.264,
+            321,
+            144.264
+          ],
+          "text": "PKI that is not built upon X.509 certificates.",
+          "checksum": "sha256:5d1f2d0bc8814ce9309adca8ac876fa33e211f2a0e2c68cbd2509331b2527e48",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-COMPONENT-ID-MANAGEMENT-SYSTEM",
+      "title": "ID management system",
+      "description": "This is responsible for creating, storing, and managing enterprise user accounts and identity records (e.g., lightweight directory access protocol (LDAP) server). This system contains the necessary subject information (e.g., name, email address, certificates) and other enterprise characteristics such as role, access attributes, and assigned assets. This system often utilizes other systems (such as a PKI) for artifacts associated with user accounts. This system may be part of a larger federated community and may include nonenterprise employees or links to nonenterprise assets for collaboration.",
+      "component_class": "supporting",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=20",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            90,
+            151.86,
+            496.68,
+            165.156
+          ],
+          "text": "• ID management system: This is responsible for creating, storing, and managing",
+          "checksum": "sha256:24b9c4f207855fe3c84ee90f14871c03c07b20026aa940c72bccc08f8226fe21",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            166.704,
+            529.476,
+            178.704
+          ],
+          "text": "enterprise user accounts and identity records (e.g., lightweight directory access protocol",
+          "checksum": "sha256:0d223870ec8852664ab5bb94e8318271592f82d17c44ea61bf622845a22fbe84",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            180.504,
+            513.54,
+            192.504
+          ],
+          "text": "(LDAP) server). This system contains the necessary subject information (e.g., name,",
+          "checksum": "sha256:c769fa924e53da6e55a9779156c75c809b1fe4b3259329f8fd95b0652c02fa6d",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            194.304,
+            502.423,
+            206.304
+          ],
+          "text": "email address, certificates) and other enterprise characteristics such as role, access",
+          "checksum": "sha256:79ba37546d7ddf70da6697ec9e67ee196936e4e3fb9c289c6e59f78e13054753",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            208.104,
+            525.515,
+            220.104
+          ],
+          "text": "attributes, and assigned assets. This system often utilizes other systems (such as a PKI)",
+          "checksum": "sha256:c7cd6ba833c46f435704435dffb43154911ed749f7fc2ad3d60fc7cd4c35ff25",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            221.904,
+            531.474,
+            233.904
+          ],
+          "text": "for artifacts associated with user accounts. This system may be part of a larger federated",
+          "checksum": "sha256:a35790db21adcaa9a8fdcc9f53ee9b706bd0f1ad8b4cfa5fc813b0214abef5fc",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            235.704,
+            535.596,
+            247.704
+          ],
+          "text": "community and may include nonenterprise employees or links to nonenterprise assets for",
+          "checksum": "sha256:fc526c091cc41fb0182d1a290d39a199caa0576aa368cb773f7b287c87b83dee",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            249.504,
+            174.3,
+            261.504
+          ],
+          "text": "collaboration.",
+          "checksum": "sha256:1611e56530b3ae09752f5ca4c195747f5f2a502666f2ebce6423f14da266b590",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    },
+    {
+      "id": "SP800207-COMPONENT-SECURITY-INFORMATION-AND-EVENT-MANAGEMENT-SIEM-SYSTEM",
+      "title": "Security information and event management (SIEM) system",
+      "description": "This collects securitycentric information for later analysis. This data is then used to refine policies and warn of possible attacks against enterprise assets.",
+      "component_class": "supporting",
+      "source_key": "nist-sp-800-207",
+      "locator": "NIST.SP.800-207.pdf#page=20",
+      "source_fragments": [
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            90,
+            269.1,
+            528.936,
+            282.396
+          ],
+          "text": "• Security information and event management (SIEM) system: This collects security-",
+          "checksum": "sha256:e33c571e401217e1dd36f6fd446798cb6db910fe1108dd95c16f6d3d73528c5b",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            283.944,
+            537.157,
+            295.944
+          ],
+          "text": "centric information for later analysis. This data is then used to refine policies and warn of",
+          "checksum": "sha256:01d85d16161d35577d024ac4cc17b81b2210cc37bfd1bf5407ac127d4f001219",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        },
+        {
+          "document_key": "nist-sp-800-207",
+          "page": 20,
+          "bbox": [
+            108,
+            297.744,
+            304.979,
+            309.744
+          ],
+          "text": "possible attacks against enterprise assets.",
+          "checksum": "sha256:91847fc72a7be05d9c251fb2ade269194321d51bc64da999939b580ab5729b06",
+          "extraction_method": "pdfplumber-0.11.10-line"
+        }
+      ]
+    }
+  ]
+}

@@ -59,6 +59,8 @@ test("Atlas neighborhood sharding is deterministic and preserves canonical edges
     "Beta's official description.",
     "counterpart descriptions must survive compact neighborhood transport",
   );
+  assert.equal(record.nodes.find((node) => node[0] === "a")[9], 0);
+  assert.equal(record.nodes.find((node) => node[0] === "a")[10], 1);
   assert.deepEqual(record.structural_path, ["a"]);
   assert.deepEqual(record.edges.map((edge) => edge[0]), ["edge:published", "edge:candidate"]);
 
@@ -105,6 +107,30 @@ test("Atlas neighborhood records carry the canonical structural path for cold de
     "x:root",
     "x:family",
     "x:item",
+  ]);
+});
+
+test("Atlas neighborhood records preserve every publisher structural membership path", () => {
+  const graph = {
+    nodes: [
+      { id: "attack:catalog", node_type: "catalog", label: "ATT&CK", metadata: { catalog_id: "attack" } },
+      { id: "attack:tactic-a", node_type: "tactic", label: "Tactic A", metadata: { catalog_id: "attack" } },
+      { id: "attack:tactic-b", node_type: "tactic", label: "Tactic B", metadata: { catalog_id: "attack" } },
+      { id: "attack:T1000", node_type: "attack_technique", label: "Technique", metadata: { catalog_id: "attack" } },
+    ],
+    edges: [
+      { id: "catalog-a", source_node_id: "attack:catalog", target_node_id: "attack:tactic-a", relationship_type: "contains", relationship_class: "structural", publication_status: "published", source_refs: [] },
+      { id: "catalog-b", source_node_id: "attack:catalog", target_node_id: "attack:tactic-b", relationship_type: "contains", relationship_class: "structural", publication_status: "published", source_refs: [] },
+      { id: "a-technique", source_node_id: "attack:tactic-a", target_node_id: "attack:T1000", relationship_type: "contains", relationship_class: "structural", publication_status: "published", source_refs: [] },
+      { id: "b-technique", source_node_id: "attack:tactic-b", target_node_id: "attack:T1000", relationship_type: "contains", relationship_class: "structural", publication_status: "published", source_refs: [] },
+    ],
+  };
+  const record = buildAtlasNeighborhoodShards(graph, 8)
+    .find((shard) => shard.shard_id === atlasNeighborhoodShardId("attack:T1000", 8))
+    .records["attack:T1000"];
+  assert.deepEqual(record.structural_paths, [
+    ["attack:catalog", "attack:tactic-a", "attack:T1000"],
+    ["attack:catalog", "attack:tactic-b", "attack:T1000"],
   ]);
 });
 

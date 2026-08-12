@@ -14,6 +14,10 @@ regexes = [
   # Exact public NIST catalog slug. The generic-api-key heuristic can flag it
   # when it is passed to an identifier-formatting helper in a unit test.
   '''^nist-800-171-rev2$''',
+  # Exact public DoD Zero Trust newsletter source identifier. It is repeated
+  # as document/source provenance across deterministic PDF fragments, so the
+  # generic-api-key heuristic sees the identifier next to `*_key` fields.
+  '''^dod-zt-newsletter-2024-11$''',
 ]
 commits = [
   "8993f4968ef5e019f6cdffe0d6bffec606f30b38",

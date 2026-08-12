@@ -2,4 +2,5 @@
 import { extractDodZeroTrust } from '../tools/importers/dod-zt-extract.mjs';
 
 const result = await extractDodZeroTrust();
-console.log('DoD ZT extraction complete:', result);
+const { taxonomy: _taxonomy, ...summary } = result;
+console.log('DoD ZT extraction complete:', summary);

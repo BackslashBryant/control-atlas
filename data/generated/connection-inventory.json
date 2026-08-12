@@ -1,16 +1,16 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-12T01:43:31.195Z",
+  "generated_at": "2026-08-12T15:36:53.329Z",
   "connection_inventory": {
-    "totalRecords": 29359,
-    "publishedLinks": 72059,
+    "totalRecords": 29615,
+    "publishedLinks": 76778,
     "rows": [
       {
         "id": "requirements",
         "label": "Requirements",
-        "totalRecords": 8257,
-        "connectedRecords": 8257,
-        "publishedLinks": 43351,
+        "totalRecords": 8256,
+        "connectedRecords": 8256,
+        "publishedLinks": 43978,
         "relatedCategories": [
           "Assessment checks",
           "Controls",
@@ -22,7 +22,7 @@
         "label": "Controls",
         "totalRecords": 1196,
         "connectedRecords": 1196,
-        "publishedLinks": 11234,
+        "publishedLinks": 13904,
         "relatedCategories": [
           "Assessment checks",
           "Baselines and impact levels",
@@ -35,9 +35,9 @@
       {
         "id": "assessment-checks",
         "label": "Assessment checks",
-        "totalRecords": 17891,
-        "connectedRecords": 17891,
-        "publishedLinks": 44676,
+        "totalRecords": 18035,
+        "connectedRecords": 18035,
+        "publishedLinks": 44820,
         "relatedCategories": [
           "Controls",
           "Framework structure",
@@ -49,7 +49,7 @@
         "label": "Threats and defenses",
         "totalRecords": 1065,
         "connectedRecords": 1065,
-        "publishedLinks": 4861,
+        "publishedLinks": 4904,
         "relatedCategories": [
           "Controls",
           "Framework structure"
@@ -58,9 +58,9 @@
       {
         "id": "zero-trust",
         "label": "Zero Trust",
-        "totalRecords": 226,
-        "connectedRecords": 226,
-        "publishedLinks": 1036,
+        "totalRecords": 333,
+        "connectedRecords": 333,
+        "publishedLinks": 2300,
         "relatedCategories": [
           "Controls",
           "Framework structure"
@@ -80,9 +80,9 @@
       {
         "id": "framework-structure",
         "label": "Framework structure",
-        "totalRecords": 713,
-        "connectedRecords": 713,
-        "publishedLinks": 27956,
+        "totalRecords": 719,
+        "connectedRecords": 719,
+        "publishedLinks": 28183,
         "relatedCategories": [
           "Assessment checks",
           "Baselines and impact levels",

@@ -172,3 +172,47 @@ export function ancestorChain(nodeId, graph) {
   }
   return chain.reverse();
 }
+
+function parentChoicesWithOrigin(id, graph) {
+  const node = graph.nodesById.get(id);
+  if (node?.parent_id) {
+    const parent = graph.nodesById.get(node.parent_id);
+    if (isValidatedStructuralPointer(node, parent)) {
+      return [{ parentId: node.parent_id, origin: "structural" }];
+    }
+  }
+  const structural = [...new Set(graph.structuralParentsOf.get(id) || [])].sort();
+  if (structural.length) {
+    return structural.map((parentId) => ({ parentId, origin: "structural" }));
+  }
+  return [...new Set(graph.organizingParentsOf?.get(id) || [])]
+    .sort()
+    .map((parentId) => ({ parentId, origin: "organizing" }));
+}
+
+/**
+ * Returns every publisher-declared structural membership path for a node.
+ * Organizing hops are included only above the publication root. The bounded
+ * result prevents malformed input from producing an unbounded path product.
+ */
+export function ancestorChains(nodeId, graph, maximumPaths = 64) {
+  if (!graph.nodesById.get(nodeId)) return [];
+
+  function visit(currentId, visited) {
+    const current = graph.nodesById.get(currentId);
+    if (!current || visited.has(currentId)) return [];
+    const nextVisited = new Set([...visited, currentId]);
+    const parents = parentChoicesWithOrigin(currentId, graph);
+    if (!parents.length) return [[toLink(current, "structural")]];
+    const paths = [];
+    for (const parent of parents) {
+      for (const parentPath of visit(parent.parentId, nextVisited)) {
+        paths.push([...parentPath, toLink(current, parent.origin)]);
+        if (paths.length >= maximumPaths) return paths;
+      }
+    }
+    return paths;
+  }
+
+  return visit(nodeId, new Set());
+}

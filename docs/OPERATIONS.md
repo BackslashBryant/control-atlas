@@ -2,7 +2,7 @@
 
 - **Owner:** Nexus and Pixel
 - **Status:** Canonical
-- **Last reviewed:** 2026-08-11
+- **Last reviewed:** 2026-08-12
 - **Supersession:** Update this contract and the corresponding package scripts or workflows in the same approved change.
 
 ## Local gates
@@ -10,6 +10,8 @@
 - `npm run build:data` rebuilds and reconciles generated source truth.
 - `npm run build:site` produces `dist/site`.
 - `npm run verify:quality` runs discovery, manifest, hygiene, OSCAL, lint, type, unit, browser-contract, DOM, and public-artifact gates.
+- `npm run resources:enrich` refreshes README facts and presentation evidence for supported repositories; `npm run resources:validate-media` verifies attributable image responses.
+- `npm run verify:ingestion` checks the shared ten-stage lifecycle for all catalog artifacts, all publisher catalogs, and all Resources entries.
 - `npm run test:a11y:smoke` checks representative accessibility paths.
 - `npm run test:e2e:smoke` checks representative product workflows.
 - `npm run precommit` is the complete local ship gate.

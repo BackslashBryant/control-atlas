@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -13,6 +14,11 @@ const DOD_RAI_SOURCE = 'dod-rai-toolkit';
 const DOD_ZT_RA_SOURCE = 'dod-zt-reference-architecture-v2';
 const DOD_ZT_CAPABILITIES_SOURCE = 'dod-zt-capabilities';
 const DOD_ZT_OVERLAYS_SOURCE = 'dod-zt-overlays-2024';
+const NIST_ZT_SOURCE = 'nist-sp-800-207';
+const NIST_ZT_IMPLEMENTATION_SOURCE = 'nist-sp-1800-35';
+const MICROSOFT_ZT_SOURCE = 'microsoft-zero-trust-maturity-questionnaire-v1-1';
+const NIST_IOT_SOURCE = 'nist-iot-device-cybersecurity-requirement-catalogs';
+const NIST_MOBILE_THREAT_SOURCE = 'nist-mobile-threat-catalogue';
 const ISOO_CUI_SOURCE = 'isoo-cui-regulation';
 const NARA_CUI_SOURCE = 'nara-cui-registry';
 
@@ -23,6 +29,12 @@ function source(key, snapshotDate, locator) {
 function cleanText(value) {
   if (Array.isArray(value)) return value.map(cleanText).filter(Boolean).join(' ');
   return String(value || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function stableId(prefix, value) {
+  const label = cleanText(value).toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 54);
+  const digest = createHash('sha256').update(String(value)).digest('hex').slice(0, 10).toUpperCase();
+  return `${prefix}-${label}-${digest}`;
 }
 
 export function parseAiRmfPlaybook(playbook, snapshotDate) {
@@ -415,20 +427,6 @@ export function buildDodZeroTrustCatalog(snapshotDate, curatedRoot) {
   const activitiesDoc = readJson('activities.json');
   const records = [];
 
-  records.push({
-    id: 'OVERLAYS-CATALOG',
-    type: 'zt-overlay-catalog',
-    framework: 'dod-zt',
-    title: 'DoD Zero Trust Overlays',
-    family: 'Control Overlays',
-    description: 'DoD control overlays on Zero Trust pillars (RMF overlay sense). Not overlay networks or ZTNA.',
-    locator: 'ZeroTrustOverlays-2024Feb.pdf#executive-summary',
-    source: source(DOD_ZT_OVERLAYS_SOURCE, snapshotDate, 'ZeroTrustOverlays-2024Feb.pdf#executive-summary'),
-    metadata: {
-      disambiguation: 'DoD control overlays on ZT pillars (RMF overlay sense), not overlay networks or ZTNA.',
-    },
-  });
-
   for (const tenet of taxonomy.tenets) {
     records.push({
       id: tenet.id,
@@ -439,6 +437,7 @@ export function buildDodZeroTrustCatalog(snapshotDate, curatedRoot) {
       description: tenet.description,
       locator: tenet.locator,
       source: source(tenet.source_key || DOD_ZT_RA_SOURCE, snapshotDate, tenet.locator),
+      metadata: { source_fragments: tenet.source_fragments || [] },
     });
   }
 
@@ -452,7 +451,10 @@ export function buildDodZeroTrustCatalog(snapshotDate, curatedRoot) {
       description: pillar.description,
       locator: pillar.locator,
       source: source(pillar.source_key || DOD_ZT_RA_SOURCE, snapshotDate, pillar.locator),
-      metadata: { pillar_number: pillar.number || null },
+      metadata: {
+        pillar_number: pillar.number || null,
+        source_fragments: pillar.source_fragments || [],
+      },
     });
   }
 
@@ -474,22 +476,28 @@ export function buildDodZeroTrustCatalog(snapshotDate, curatedRoot) {
     });
   }
 
-  for (const doc of taxonomy.documents) {
+  for (const doc of taxonomy.documents.filter((entry) => entry.atlas_role === 'primary_publication')) {
     records.push({
       id: doc.id,
       type: 'zt_document',
       framework: 'dod-zt',
       title: doc.title,
       family: 'Zero Trust Documents',
-      description: doc.title,
+      description: doc.description,
       locator: doc.locator,
       source: source(doc.source_key, snapshotDate, doc.locator),
       metadata: {
+        atlas_role: doc.atlas_role,
+        document_sections: doc.document_sections || [],
+        source_fragments: doc.description_source_fragments || [],
         disambiguation: doc.disambiguation || null,
         relationships: (doc.relationships || []).map((relationship) => ({
           ...relationship,
           rationale: `${doc.title} references ${relationship.target_id}.`,
         })),
+        page_count: doc.page_count,
+        checksum: doc.checksum,
+        source_url: doc.source_url,
       },
     });
   }
@@ -504,11 +512,15 @@ export function buildDodZeroTrustCatalog(snapshotDate, curatedRoot) {
       family: capability.pillar_name || capability.pillar_id,
       description: [capability.description, capability.outcome, capability.impact].filter(Boolean).join(' '),
       locator: capability.locator,
-      source: source(DOD_ZT_CAPABILITIES_SOURCE, snapshotDate, capability.locator),
+      source: source(capability.source_key || DOD_ZT_CAPABILITIES_SOURCE, snapshotDate, capability.locator),
       metadata: {
         capability_id: capability.id,
         pillar_id: capability.pillar_id,
         level: capability.level,
+        outcome: capability.outcome,
+        impact: capability.impact,
+        associated_activities: capability.associated_activities || [],
+        source_fragments: capability.source_fragments || [],
       },
     });
   }
@@ -521,16 +533,381 @@ export function buildDodZeroTrustCatalog(snapshotDate, curatedRoot) {
       framework: 'dod-zt',
       title: `${activity.id} ${activity.title}`,
       family: 'Zero Trust Activities',
-      description: activity.title,
+      description: [activity.description, activity.outcomes, activity.end_state].filter(Boolean).join('\n\n'),
       locator: activity.locator,
-      source: source(activity.source_key || DOD_ZT_OVERLAYS_SOURCE, snapshotDate, activity.locator),
+      source: source(activity.source_key || DOD_ZT_CAPABILITIES_SOURCE, snapshotDate, activity.locator),
       metadata: {
         activity_id: activity.id,
         capability_id: capabilityId,
         level: activity.level,
+        pillar: activity.pillar,
+        responsibility: activity.responsibility || null,
+        activity_type: activity.activity_type,
+        duration: activity.duration || null,
+        outcomes: activity.outcomes || null,
+        end_state: activity.end_state || null,
+        predecessors: activity.predecessors || [],
+        successors: activity.successors || [],
+        operational_technology: activity.operational_technology === true,
+        source_fragments: activity.source_fragments || [],
       },
     });
   }
 
-  return { schema_version: '1.0', source_key: DOD_ZT_RA_SOURCE, records };
+  return { schema_version: '1.0', source_key: DOD_ZT_RA_SOURCE, record_count: records.length, records };
+}
+
+function normalizedNistTarget(mapping) {
+  if (mapping.mapping_kind === 'csf_2') {
+    return {
+      target_catalog: 'csf-2',
+      target_id: /-\d+$/.test(mapping.target_id) ? mapping.target_id : `CATEGORY-${mapping.target_id}`,
+    };
+  }
+  if (mapping.mapping_kind === 'sp_800_53') {
+    const match = mapping.target_id.match(/^([A-Z]{2,3})-0*(\d+)(?:\(0*(\d+)\))?$/);
+    if (!match) return null;
+    return { target_catalog: 'nist-800-53', target_id: `${match[1]}-${match[2]}${match[3] ? `.${match[3]}` : ''}` };
+  }
+  return null;
+}
+
+function artifactIdsFromFragments(fragments = []) {
+  return [...new Set(
+    fragments
+      .map((fragment) => fragment?.source_key)
+      .filter(Boolean)
+      .map((sourceKey) => `artifact-${sourceKey}`),
+  )];
+}
+
+function nistBuildArtifactIds(build) {
+  const prefix = `artifact-nist-sp-1800-35-${build.code.toLowerCase()}`;
+  return [`${prefix}-architecture`, `${prefix}-guide`];
+}
+
+export function buildNistZeroTrustCatalog(snapshotDate, curatedRoot) {
+  const readJson = (filename) => JSON.parse(readFileSync(join(curatedRoot, filename), 'utf8'));
+  const core = readJson('sp800-207-core.json');
+  const cloudNative = readJson('sp800-207a-core.json');
+  const overview = readJson('sp1800-35-overview.json');
+  const builds = readJson('sp1800-35-builds.json').records;
+  const mappings = readJson('mappings.json').records;
+  const workbookManifest = readJson('structured-source-manifest.json');
+  const records = [
+    {
+      id: 'SP800-207',
+      type: 'zt_publication',
+      framework: 'nist-zt',
+      title: core.overview.title,
+      family: 'NIST Zero Trust Publications',
+      description: core.overview.description,
+      locator: core.overview.locator,
+      source: source(NIST_ZT_SOURCE, snapshotDate, core.overview.locator),
+      metadata: { parent_id: 'CATALOG', source_fragments: core.overview.source_fragments },
+    },
+  ];
+  records.push({
+    id: 'SP800-207A',
+    type: 'zt_publication',
+    framework: 'nist-zt',
+    title: cloudNative.overview.title,
+    family: 'NIST Zero Trust Publications',
+    description: cloudNative.overview.description,
+    locator: cloudNative.overview.locator,
+    source: source('nist-sp-800-207a', snapshotDate, cloudNative.overview.locator),
+    metadata: {
+      parent_id: 'CATALOG',
+      source_fragments: cloudNative.overview.source_fragments,
+      primary_artifact_id: 'artifact-nist-sp-800-207a',
+      relationships: [{
+        target_catalog: 'nist-zt',
+        target_id: 'SP800-207',
+        relationship_type: 'extends',
+        source_id: 'nist-sp-800-207a',
+        source_locator: cloudNative.overview.locator,
+        rationale: 'NIST SP 800-207A applies the SP 800-207 zero trust model to cloud-native applications in multi-location environments.',
+      }],
+    },
+  });
+  const abstractBlocks = overview.sections.flatMap((section) => section.structured_content)
+    .filter((block) => block.type === 'paragraph' && /zero trust architecture/i.test(block.text || ''));
+  records.push({
+    id: 'SP1800-35',
+    type: 'zt_publication',
+    framework: 'nist-zt',
+    title: 'NIST SP 1800-35 Implementing a Zero Trust Architecture',
+    family: 'NIST Zero Trust Publications',
+    description: abstractBlocks.slice(0, 2).map((block) => block.text).join(' '),
+    locator: 'https://pages.nist.gov/zero-trust-architecture/',
+    source: source(NIST_ZT_IMPLEMENTATION_SOURCE, snapshotDate, 'https://pages.nist.gov/zero-trust-architecture/'),
+    metadata: {
+      structured_content: abstractBlocks.slice(0, 2),
+      parent_id: 'CATALOG',
+      source_fragments: overview.sections.flatMap((section) => section.source_fragments)
+        .filter((fragment) => abstractBlocks.some((block) => block.text === fragment.text)),
+    },
+  });
+
+  for (const tenet of core.tenets) {
+    records.push({
+      id: tenet.id,
+      type: 'zt_tenet',
+      framework: 'nist-zt',
+      title: tenet.title,
+      family: 'SP 800-207 Tenets',
+      description: tenet.description,
+      locator: tenet.locator,
+      source: source(NIST_ZT_SOURCE, snapshotDate, tenet.locator),
+      metadata: { parent_id: 'SP800-207', tenet_number: tenet.number, source_fragments: tenet.source_fragments },
+    });
+  }
+  for (const component of core.components) {
+    records.push({
+      id: component.id,
+      type: 'zt_logical_component',
+      framework: 'nist-zt',
+      title: component.title,
+      family: component.component_class === 'core' ? 'Core Logical Components' : 'Supporting Logical Components',
+      description: component.description,
+      locator: component.locator,
+      source: source(NIST_ZT_SOURCE, snapshotDate, component.locator),
+      metadata: { parent_id: 'SP800-207', component_class: component.component_class, source_fragments: component.source_fragments },
+    });
+  }
+  for (const requirement of cloudNative.requirements) {
+    records.push({
+      id: `SP800207A-${requirement.id}`,
+      type: 'zt_cloud_native_requirement',
+      framework: 'nist-zt',
+      title: `${requirement.id} ${requirement.title}`,
+      family: requirement.id.startsWith('ID-SEG')
+        ? 'Identity-Based Segmentation Policies'
+        : requirement.id.startsWith('MON-CNA')
+          ? 'Cloud-Native Monitoring Requirements'
+          : 'Monitoring Data Uses',
+      description: requirement.description,
+      locator: requirement.locator,
+      source: source('nist-sp-800-207a', snapshotDate, requirement.locator),
+      metadata: {
+        parent_id: 'SP800-207A',
+        publisher_identifier: requirement.id,
+        source_fragments: requirement.source_fragments,
+        primary_artifact_id: 'artifact-nist-sp-800-207a',
+      },
+    });
+  }
+  for (const build of builds) {
+    const summary = build.architecture_sections.flatMap((section) => section.structured_content)
+      .find((block) => block.type === 'paragraph' && !/^Note$/.test(block.text || '') && !/supplementary material/.test(block.text || ''));
+    records.push({
+      id: build.id,
+      type: 'zt_build',
+      framework: 'nist-zt',
+      title: build.title,
+      family: 'SP 1800-35 Example Implementations',
+      description: summary?.text || build.title,
+      locator: build.architecture_url,
+      source: source(NIST_ZT_IMPLEMENTATION_SOURCE, snapshotDate, build.architecture_url),
+      metadata: {
+        parent_id: 'SP1800-35',
+        build_code: build.code,
+        architecture_sections: build.architecture_sections,
+        implementation_sections: build.implementation_sections,
+        media: build.media,
+        related_build_codes: build.related_build_codes,
+        implementation_guide_url: build.implementation_guide_url,
+        source_pages: build.source_pages,
+        contributing_artifact_ids: nistBuildArtifactIds(build),
+      },
+    });
+  }
+
+  const aggregate = new Map();
+  for (const mapping of mappings) {
+    const collaborator = mapping.collaborator;
+    const key = collaborator
+      ? `product\0${collaborator}\0${mapping.product}\0${mapping.architecture_component}\0${mapping.component_function}`
+      : `reference\0${mapping.architecture_component}\0${mapping.component_function}`;
+    if (!aggregate.has(key)) {
+      aggregate.set(key, {
+        collaborator,
+        product: mapping.product,
+        architecture_component: mapping.architecture_component,
+        component_function: mapping.component_function,
+        mappings: [],
+        source_fragments: [],
+      });
+    }
+    const entry = aggregate.get(key);
+    entry.mappings.push(mapping);
+    entry.source_fragments.push(...mapping.source_fragments);
+  }
+  const collaborators = new Map();
+  for (const entry of aggregate.values()) {
+    if (!entry.collaborator) continue;
+    const id = stableId('COLLABORATOR', entry.collaborator);
+    if (!collaborators.has(id)) collaborators.set(id, { id, name: entry.collaborator, fragment: entry.source_fragments[0] });
+  }
+  for (const collaborator of collaborators.values()) {
+    records.push({
+      id: collaborator.id,
+      type: 'zt_collaborator',
+      framework: 'nist-zt',
+      title: collaborator.name,
+      family: 'SP 1800-35 Technology Collaborators',
+      description: `${collaborator.name} implementation mappings published with NIST SP 1800-35.`,
+      locator: collaborator.fragment.locator || 'https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html',
+      source: source(NIST_ZT_IMPLEMENTATION_SOURCE, snapshotDate, 'https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html'),
+      metadata: {
+        parent_id: 'SP1800-35',
+        source_fragments: [collaborator.fragment],
+        contributing_artifact_ids: artifactIdsFromFragments([collaborator.fragment]),
+      },
+    });
+  }
+  for (const entry of aggregate.values()) {
+    const valueKey = `${entry.collaborator || 'reference'}\0${entry.product || ''}\0${entry.architecture_component}\0${entry.component_function}`;
+    const id = stableId(entry.collaborator ? 'PRODUCT-COMPONENT' : 'REFERENCE-COMPONENT', valueKey);
+    const parentId = entry.collaborator ? stableId('COLLABORATOR', entry.collaborator) : 'SP1800-35';
+    const relationshipByKey = new Map();
+    for (const mapping of entry.mappings) {
+      const target = normalizedNistTarget(mapping);
+      if (!target) continue;
+      const relationshipType = mapping.direction === 'component_supported_by_target' ? 'supported_by' : 'supports';
+      const key = `${target.target_catalog}\0${target.target_id}\0${relationshipType}`;
+      const sourceId = mapping.source_fragments.find((fragment) => fragment.field === 'relationship')?.source_key || mapping.source_fragments[0]?.source_key;
+      const existing = relationshipByKey.get(key);
+      if (existing) {
+        if (!existing.source_locators.includes(mapping.locator)) existing.source_locators.push(mapping.locator);
+        if (mapping.relationship_explanation && !existing.rationales.includes(mapping.relationship_explanation)) {
+          existing.rationales.push(mapping.relationship_explanation);
+          existing.rationale = existing.rationales.join('\n\n');
+        }
+        continue;
+      }
+      relationshipByKey.set(key, {
+        ...target,
+        relationship_type: relationshipType,
+        rationale: mapping.relationship_explanation,
+        rationales: mapping.relationship_explanation ? [mapping.relationship_explanation] : [],
+        source_id: sourceId,
+        source_locator: mapping.locator,
+        source_locators: [mapping.locator],
+        raw_relationship_type: mapping.raw_relationship_type,
+      });
+    }
+    const relationships = [...relationshipByKey.values()];
+    records.push({
+      id,
+      type: entry.collaborator ? 'zt_product_component' : 'zt_reference_component',
+      framework: 'nist-zt',
+      title: entry.product ? `${entry.product} — ${entry.architecture_component}` : entry.architecture_component,
+      family: entry.collaborator || 'SP 1800-35 Reference Architecture',
+      description: entry.component_function,
+      locator: entry.mappings[0].locator,
+      source: source(NIST_ZT_IMPLEMENTATION_SOURCE, snapshotDate, entry.mappings[0].locator),
+      metadata: {
+        parent_id: parentId,
+        collaborator: entry.collaborator,
+        product: entry.product,
+        architecture_component: entry.architecture_component,
+        mapping_count: entry.mappings.length,
+        mapping_targets: entry.mappings.map((mapping) => ({ kind: mapping.mapping_kind, target_id: mapping.target_id })),
+        relationships,
+        source_fragments: entry.source_fragments,
+        contributing_artifact_ids: artifactIdsFromFragments(entry.source_fragments),
+      },
+    });
+  }
+  for (const workbook of workbookManifest.sources.filter((entry) => entry.mapping_kind)) {
+    records.push({
+      id: stableId('MAPPING-DOCUMENT', workbook.source_key),
+      type: 'zt_mapping_document',
+      framework: 'nist-zt',
+      title: workbook.url.split('/').at(-1).replace(/\.xlsx$/i, '').replace(/([a-z])([A-Z0-9])/g, '$1 $2'),
+      family: 'SP 1800-35 Mapping Workbooks',
+      description: `${workbook.parsed_records} published mapping rows across ${workbook.worksheets.length} worksheets.`,
+      locator: workbook.url,
+      source: source(workbook.source_key, snapshotDate, workbook.url),
+      metadata: { parent_id: 'SP1800-35', checksum: workbook.sha256, byte_length: workbook.byte_length, worksheets: workbook.worksheets },
+    });
+  }
+  return { schema_version: '1.0', source_key: NIST_ZT_SOURCE, records };
+}
+
+export function buildMicrosoftZeroTrustQuestionnaireCatalog(snapshotDate, curatedRoot) {
+  const document = JSON.parse(readFileSync(join(curatedRoot, 'microsoft-questionnaire.json'), 'utf8'));
+  const records = document.records.map((question) => ({
+    id: question.id,
+    type: 'zt_assessment_question',
+    framework: 'microsoft-zt-maturity',
+    title: question.question,
+    family: question.pillar,
+    description: question.more_information,
+    locator: question.locator,
+    source: source(MICROSOFT_ZT_SOURCE, snapshotDate, question.locator),
+    metadata: {
+      pillar: question.pillar,
+      question_number: question.number,
+      category: question.category,
+      answer_options: question.answer_options,
+      link_label: question.link_label,
+      publisher_default_answer: question.publisher_default_answer,
+      source_fragments: question.source_fragments,
+    },
+  }));
+  return { schema_version: '1.0', source_key: MICROSOFT_ZT_SOURCE, records };
+}
+
+export function buildNistIoTRequirementCatalog(snapshotDate, curatedRoot) {
+  const document = JSON.parse(readFileSync(join(curatedRoot, 'iot-requirements.json'), 'utf8'));
+  const records = document.records.map((entry) => {
+    const firstFragment = entry.source_fragments?.[0];
+    const locator = firstFragment?.cell
+      ? `https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/#sheet=${encodeURIComponent(firstFragment.sheet)}&cell=${firstFragment.cell}`
+      : 'https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/';
+    return {
+      id: entry.id,
+      type: entry.type,
+      framework: 'nist-iot-cybersecurity',
+      title: entry.title,
+      family: entry.type === 'iot_capability_domain' ? entry.title : 'IoT Device Cybersecurity Capabilities',
+      description: entry.description,
+      locator,
+      source: source(NIST_IOT_SOURCE, snapshotDate, locator),
+      metadata: {
+        parent_id: entry.parent_id,
+        publisher_status: 'draft',
+        publisher_mappings: entry.publisher_mappings,
+        relationships: entry.relationships,
+        source_fragments: entry.source_fragments,
+        contributing_artifact_ids: artifactIdsFromFragments(entry.source_fragments),
+      },
+    };
+  });
+  return { schema_version: '1.0', source_key: NIST_IOT_SOURCE, records };
+}
+
+export function buildNistMobileThreatCatalog(snapshotDate, curatedRoot) {
+  const document = JSON.parse(readFileSync(join(curatedRoot, 'mobile-threats.json'), 'utf8'));
+  const records = document.records.map((entry) => ({
+    id: entry.id,
+    type: entry.type,
+    framework: 'nist-mobile-threats',
+    title: entry.title,
+    family: entry.category || 'NIST Mobile Threat Catalogue',
+    description: entry.description,
+    locator: entry.locator || 'https://pages.nist.gov/mobile-threat-catalogue/',
+    source: source(NIST_MOBILE_THREAT_SOURCE, snapshotDate, entry.locator || 'https://pages.nist.gov/mobile-threat-catalogue/'),
+    metadata: {
+      parent_id: entry.parent_id,
+      threat_origin: entry.threat_origin || null,
+      exploit_examples: entry.exploit_examples || [],
+      cve_examples: entry.cve_examples || [],
+      countermeasures: entry.countermeasures || [],
+      source_fragments: entry.source_fragments || [],
+    },
+  }));
+  return { schema_version: '1.0', source_key: NIST_MOBILE_THREAT_SOURCE, records };
 }

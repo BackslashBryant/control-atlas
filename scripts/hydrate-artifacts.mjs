@@ -109,17 +109,36 @@ const RESOLUTIONS = [
   { id: 'artifact-nist-csf11-csf20-crosswalk', url: 'https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1.1_to_CSFv2.0_CROSSWALK_20240220.xlsx', format: 'spreadsheet', parser: 'olir-xlsx', parser_version: '1.0.0', count: 'xlsx' },
   { id: 'artifact-nist-olir-csf2-to-sp800-53', url: 'https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx', format: 'spreadsheet', parser: 'olir-xlsx', parser_version: '1.0.0', count: 'xlsx' },
   { id: 'artifact-nist-olir-csf2-to-sp800-171', url: 'https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2.0_Concept_Crosswalk_SP171r3_OLIR.xlsx', format: 'spreadsheet', parser: 'olir-xlsx', parser_version: '1.0.0', count: 'xlsx' },
+  // NIST and Microsoft Zero Trust structured sources.
+  { id: 'artifact-nist-sp-800-207', url: 'https://nvlpubs.nist.gov/nistpubs/specialpublications/NIST.SP.800-207.pdf', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
+  { id: 'artifact-nist-sp-800-207a', url: 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-207A.pdf', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
+  { id: 'artifact-nist-sp-1800-35', url: 'https://pages.nist.gov/zero-trust-architecture/', format: 'html', parser: 'explicit-html-markup', parser_version: '1.0.0' },
+  { id: 'artifact-nist-sp-1800-35-csf2-mappings', url: 'https://pages.nist.gov/zero-trust-architecture/_downloads/01dfaff2b25f0a61f127f06906bc37cc/CSF2.0Mapping.xlsx', format: 'spreadsheet', parser: 'nist-zero-trust-mapping-xlsx', parser_version: '1.0.0' },
+  { id: 'artifact-nist-sp-1800-35-critical-software-mappings', url: 'https://pages.nist.gov/zero-trust-architecture/_downloads/641f02c11e6f71752bb8bc96d96c5f38/NISTCSSMMapping.xlsx', format: 'spreadsheet', parser: 'nist-zero-trust-mapping-xlsx', parser_version: '1.0.0' },
+  { id: 'artifact-nist-sp-1800-35-csf11-mappings', url: 'https://pages.nist.gov/zero-trust-architecture/_downloads/993f56b28d4d113836cb1f1a34146cb3/CSF1.1Mapping.xlsx', format: 'spreadsheet', parser: 'nist-zero-trust-mapping-xlsx', parser_version: '1.0.0' },
+  { id: 'artifact-nist-sp-1800-35-sp80053-mappings', url: 'https://pages.nist.gov/zero-trust-architecture/_downloads/eba81c1a0ca458474b0e9bbdfc888eb5/SP800-53Mapping.xlsx', format: 'spreadsheet', parser: 'nist-zero-trust-mapping-xlsx', parser_version: '1.0.0' },
+  { id: 'artifact-microsoft-zero-trust-maturity-questionnaire-v1-1', url: 'https://download.microsoft.com/download/c/d/3/cd3e0d84-6fdd-4949-b529-73c9c0127b0d/Zero%20Trust%20Maturity%20Questionnaire%20v1.1.xlsx', format: 'spreadsheet', parser: 'zero-trust-questionnaire-xlsx', parser_version: '1.0.0' },
+  // Other structured NIST Pages cybersecurity catalogs.
+  { id: 'artifact-nist-iot-requirements-80053-mapping-draft', url: 'https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_800-53.xlsx', format: 'spreadsheet', parser: 'nist-iot-requirement-xlsx', parser_version: '1.0.0' },
+  { id: 'artifact-nist-iot-requirements-csf11-mapping-draft', url: 'https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_Cybersecurity_Framework.xlsx', format: 'spreadsheet', parser: 'nist-iot-requirement-xlsx', parser_version: '1.0.0' },
+  { id: 'artifact-nist-mobile-threat-catalogue', url: 'https://pages.nist.gov/mobile-threat-catalogue/mtc-data.json', format: 'json', parser: 'nist-mobile-threat-json', parser_version: '1.0.0' },
+  { id: 'artifact-nist-mobile-threat-catalogue-cve-list', url: 'https://pages.nist.gov/mobile-threat-catalogue/mtc-cve-list.csv', format: 'csv', parser: 'nist-mobile-threat-cve-csv', parser_version: '1.0.0', count: 'csv' },
   // DoD Zero Trust source PDFs. dodcio.defense.gov's Akamai WAF blocks the
   // identifying ingestion User-Agent (403) but not an unlabeled request
   // (200) for the same path — same pattern as ai.mil (see dod-rai-toolkit
   // above). ZeroTrustOverlays-2024Feb.pdf now 404s and is no longer listed
   // on the current /library/ index — genuinely retired/superseded, not a
-  // retrieval failure — so it stays quarantined; the filename for
+  // retrieval failure. Its exact previously downloaded bytes remain attested
+  // by the committed page-complete extraction manifest. The filename for
   // Capabilities changed (ZTCapabilitiesActivities -> ZT-CapabilitiesActivities).
-  { id: 'artifact-dod-zt-reference-architecture-v2', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0', noBotUa: true },
-  { id: 'artifact-dod-zt-strategy', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0', noBotUa: true },
-  { id: 'artifact-dod-zt-capabilities', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-CapabilitiesActivities.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0', noBotUa: true },
-  { id: 'artifact-dod-zt-execution-roadmap', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf', format: 'pdf', parser: 'pdf-extract', parser_version: '1.0.0', noBotUa: true },
+  { id: 'artifact-dod-zt-reference-architecture-v2', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf', fragmentManifest: 'data/curated/dod-zt/source-fragments/ra.json', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
+  { id: 'artifact-dod-zt-strategy', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf', fragmentManifest: 'data/curated/dod-zt/source-fragments/strategy.json', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
+  { id: 'artifact-dod-zt-capabilities', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-CapabilitiesActivities.pdf', fragmentManifest: 'data/curated/dod-zt/source-fragments/capabilities.json', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
+  { id: 'artifact-dod-zt-execution-roadmap', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf', fragmentManifest: 'data/curated/dod-zt/source-fragments/roadmap.json', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
+  { id: 'artifact-dod-zt-overlays-2024', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf', fragmentManifest: 'data/curated/dod-zt/source-fragments/overlays.json', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
+  { id: 'artifact-dod-zt-operational-technology', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-OperationalTechnologyActivitiesOutcomes_v2.pdf', fragmentManifest: 'data/curated/dod-zt/source-fragments/ot.json', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
+  { id: 'artifact-dod-zt-newsletter-2024-11', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-NewsletterNov.pdf', fragmentManifest: 'data/curated/dod-zt/source-fragments/newsletter.json', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
+  { id: 'artifact-dod-zt-strategy-placemats', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-StrategyPlacemats.pdf', fragmentManifest: 'data/curated/dod-zt/source-fragments/placemats.json', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
   // DoD RAI Toolkit: rai.acqbot.com is CDAO's own designated public host for
   // the AIA/RAI Toolkit — confirmed by the official ai.mil Responsible-AI
   // initiative page's "SEE THE TOOLKITS" button (href=https://rai.acqbot.com/)
@@ -155,6 +174,26 @@ const RESOLUTIONS = [
   // Control Atlas's own editorial structure spine (hashed from the repo file).
   { id: 'artifact-control-atlas-structure', local: 'data/curated/tree-spine.json', url: 'https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json', format: 'json', parser: 'control-atlas-spine', parser_version: '1.0.0', count: 'jsonld' },
 ];
+
+const nistZeroTrustManifestPath = join(ROOT, 'data', 'curated', 'nist-zt', 'nist-source-manifest.json');
+if (existsSync(nistZeroTrustManifestPath)) {
+  const nistZeroTrustManifest = JSON.parse(readFileSync(nistZeroTrustManifestPath, 'utf8'));
+  const nistRootSource = (nistZeroTrustManifest.sources || []).find((source) => source.source_key === 'nist-sp-1800-35');
+  const nistRootResolution = RESOLUTIONS.find((resolution) => resolution.id === 'artifact-nist-sp-1800-35');
+  if (nistRootSource?.artifact_url && nistRootResolution) nistRootResolution.url = nistRootSource.artifact_url;
+  for (const source of nistZeroTrustManifest.sources || []) {
+    const match = source.source_key?.match(/^SP180035-(.+)-(architecture|implementation_guide)$/);
+    if (!match) continue;
+    const [, buildCode, role] = match;
+    RESOLUTIONS.push({
+      id: `artifact-nist-sp-1800-35-${buildCode.toLowerCase()}-${role === 'implementation_guide' ? 'guide' : role}`,
+      url: source.artifact_url || source.url,
+      format: 'html',
+      parser: 'explicit-html-markup',
+      parser_version: '1.0.0',
+    });
+  }
+}
 
 const COUNTERS = {
   oscal_catalog: (bytes) => countOscalControls(JSON.parse(Buffer.from(bytes).toString('utf8'))),
@@ -211,7 +250,6 @@ async function main() {
   const registry = JSON.parse(readFileSync(REGISTRY, 'utf8'));
   const byId = new Map(registry.artifacts.map((a) => [a.id, a]));
   const today = new Date().toISOString().slice(0, 10);
-  const log = [];
   let changed = 0;
 
   // A transient failure this run (e.g. a source host's momentary 5xx) should
@@ -221,14 +259,66 @@ async function main() {
   // genuine execution rather than only this run's network luck.
   const priorManifest = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : null;
   const priorById = new Map((priorManifest?.results || []).map((r) => [r.id, r]));
+  const onlyPrefixIndex = process.argv.indexOf('--only-prefix');
+  const onlyPrefix = onlyPrefixIndex >= 0 ? process.argv[onlyPrefixIndex + 1] : null;
+  if (onlyPrefixIndex >= 0 && !onlyPrefix) throw new Error('--only-prefix requires an artifact ID prefix');
+  const selectedResolutions = onlyPrefix
+    ? RESOLUTIONS.filter((resolution) => resolution.id.startsWith(onlyPrefix))
+    : RESOLUTIONS;
+  if (onlyPrefix && !selectedResolutions.length) throw new Error(`No artifact resolutions match prefix: ${onlyPrefix}`);
+  const selectedIds = new Set(selectedResolutions.map((resolution) => resolution.id));
+  const log = (priorManifest?.results || []).filter((result) => !selectedIds.has(result.id));
   const disaCompilation = existsSync(join(ROOT, 'data', 'disa-artifact-manifest.json'))
     ? JSON.parse(readFileSync(join(ROOT, 'data', 'disa-artifact-manifest.json'), 'utf8'))
     : null;
 
-  for (const r of RESOLUTIONS) {
+  for (const r of selectedResolutions) {
     const art = byId.get(r.id);
     if (!art) { log.push({ id: r.id, status: 'ERROR', reason: 'artifact id not in registry' }); continue; }
     try {
+      if (r.fragmentManifest) {
+        const extraction = JSON.parse(readFileSync(join(ROOT, r.fragmentManifest), 'utf8'));
+        const extractedSource = extraction?.source || {};
+        const checksum = extractedSource.sha256;
+        const byteLength = extractedSource.byte_length;
+        const retrievedAt = extractedSource.retrieved_at;
+        const pageCount = extractedSource.pages;
+        if (!/^sha256:[a-f0-9]{64}$/i.test(checksum || '')
+          || !Number.isInteger(byteLength) || byteLength <= 0
+          || !Number.isInteger(pageCount) || pageCount <= 0
+          || !/^\d{4}-\d{2}-\d{2}$/.test(retrievedAt || '')) {
+          throw new Error(`invalid committed extraction attestation: ${r.fragmentManifest}`);
+        }
+        if (extraction.document_key !== art.publication_source_id
+          || extraction.reconciliation?.pages_discovered !== pageCount
+          || extraction.reconciliation?.pages_extracted !== pageCount) {
+          throw new Error(`page or publication reconciliation mismatch: ${r.fragmentManifest}`);
+        }
+        art.artifact_url = r.url || extractedSource.url;
+        art.format = r.format;
+        art.parser = r.parser;
+        art.parser_version = r.parser_version;
+        art.sha256 = checksum;
+        art.byte_length = byteLength;
+        art.retrieved_at = retrievedAt;
+        if (typeof art.relationship_count !== 'number') art.relationship_count = 0;
+        changed += 1;
+        log.push({
+          id: r.id,
+          status: 'OK',
+          http: 'committed-extraction',
+          url: art.artifact_url,
+          sha256: checksum,
+          byte_length: byteLength,
+          record_count: art.record_count,
+          retrieved_at: retrievedAt,
+          pages_discovered: pageCount,
+          pages_extracted: pageCount,
+          attestation: 'committed page-complete pdfplumber extraction from previously downloaded publisher PDF',
+        });
+        console.log(`OK  ${r.id}  ${byteLength}B  ${pageCount} pages  committed extraction  ${checksum.slice(0, 22)}…`);
+        continue;
+      }
       if (r.id === 'artifact-disa-compilation-zip') {
         const checksum = disaCompilation?.checksum;
         const byteLength = disaCompilation?.byte_length;
@@ -315,7 +405,7 @@ async function main() {
   if (!existsSync(dirname(OUT))) mkdirSync(dirname(OUT), { recursive: true });
   writeFileSync(OUT, JSON.stringify({ generated_at: new Date().toISOString(), hydrated: changed, removed_orphans: removed, results: log }, null, 2) + '\n', 'utf8');
   writeFileSync(REGISTRY, JSON.stringify(registry, null, 2) + '\n', 'utf8');
-  console.log(`\nHydrated ${changed}/${RESOLUTIONS.length} artifacts. Execution log: data/artifact-hydration-manifest.json`);
+  console.log(`\nHydrated ${changed}/${selectedResolutions.length} selected artifacts (${RESOLUTIONS.length} registered resolutions). Execution log: data/artifact-hydration-manifest.json`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

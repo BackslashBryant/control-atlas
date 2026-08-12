@@ -113,3 +113,27 @@ test('parseEnterpriseAttackStix attaches the resolved tactic title and parent te
   assert.equal(sub.metadata.is_subtechnique, true);
   assert.equal(sub.metadata.parent_technique_id, 'T1059');
 });
+
+test('parseEnterpriseAttackStix preserves every publisher tactic membership', () => {
+  const sample = structuredClone(sampleStixWithTacticsAndSubtechnique);
+  sample.objects.unshift({
+    type: 'x-mitre-tactic',
+    name: 'Defense Evasion',
+    x_mitre_shortname: 'defense-evasion',
+    external_references: [{ source_name: 'mitre-attack', external_id: 'TA0005' }],
+  });
+  sample.objects.find((entry) => entry.id === 'attack-pattern--parent').kill_chain_phases.push(
+    { kill_chain_name: 'mitre-attack', phase_name: 'defense-evasion' },
+  );
+  const document = parseEnterpriseAttackStix(sample, {
+    artifactUrl: 'https://example.test/enterprise-attack.json',
+    version: 'test', snapshotDate: '2026-08-12', checksum: 'sha256:sample',
+  });
+  assert.deepEqual(
+    document.records.find((record) => record.id === 'T1059').metadata.tactic_memberships,
+    [
+      { id: 'TA0002', title: 'Execution', shortname: 'execution' },
+      { id: 'TA0005', title: 'Defense Evasion', shortname: 'defense-evasion' },
+    ],
+  );
+});

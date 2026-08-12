@@ -1,0 +1,392 @@
+{
+  "schema_version": "1.0",
+  "sources": [
+    {
+      "source_key": "nist-sp-1800-35-csf2-mappings",
+      "mapping_kind": "csf_2",
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/01dfaff2b25f0a61f127f06906bc37cc/CSF2.0Mapping.xlsx",
+      "sha256": "sha256:699359d4f16116e6f13e42d1c0ac61a569ed02ac27788012308fa88740fc9702",
+      "byte_length": 294001,
+      "retrieved_at": "2026-08-12T12:15:06.607Z",
+      "worksheets": [
+        {
+          "name": "Google",
+          "rows": 19,
+          "mappings": 18
+        },
+        {
+          "name": "Microsoft",
+          "rows": 159,
+          "mappings": 158
+        },
+        {
+          "name": "AWS",
+          "rows": 19,
+          "mappings": 18
+        },
+        {
+          "name": "F5",
+          "rows": 16,
+          "mappings": 15
+        },
+        {
+          "name": "Mandiant",
+          "rows": 3,
+          "mappings": 2
+        },
+        {
+          "name": "Appgate",
+          "rows": 21,
+          "mappings": 20
+        },
+        {
+          "name": "Zscaler",
+          "rows": 29,
+          "mappings": 28
+        },
+        {
+          "name": "CSF 2.0-to-Reference Arch",
+          "rows": 132,
+          "mappings": 130
+        },
+        {
+          "name": "Digicert",
+          "rows": 3,
+          "mappings": 2
+        },
+        {
+          "name": "Lookout",
+          "rows": 39,
+          "mappings": 38
+        },
+        {
+          "name": "Broadcom (w VMware) & Omnissa",
+          "rows": 84,
+          "mappings": 80
+        },
+        {
+          "name": "Tenable",
+          "rows": 5,
+          "mappings": 4
+        },
+        {
+          "name": "Ivanti",
+          "rows": 21,
+          "mappings": 20
+        },
+        {
+          "name": "Broadcom (w Symantec product)",
+          "rows": 51,
+          "mappings": 50
+        },
+        {
+          "name": "IBM",
+          "rows": 90,
+          "mappings": 88
+        },
+        {
+          "name": "Radiant Logic",
+          "rows": 3,
+          "mappings": 2
+        }
+      ],
+      "parsed_records": 673
+    },
+    {
+      "source_key": "nist-sp-1800-35-critical-software-mappings",
+      "mapping_kind": "critical_software",
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/641f02c11e6f71752bb8bc96d96c5f38/NISTCSSMMapping.xlsx",
+      "sha256": "sha256:7b3df8d47bbd335ae3e2e58db9dc93c5017848f4eee7c532754e42dd4d7389ef",
+      "byte_length": 310256,
+      "retrieved_at": "2026-08-12T12:15:07.438Z",
+      "worksheets": [
+        {
+          "name": "Google",
+          "rows": 14,
+          "mappings": 13
+        },
+        {
+          "name": "Microsoft",
+          "rows": 97,
+          "mappings": 96
+        },
+        {
+          "name": "AWS",
+          "rows": 12,
+          "mappings": 11
+        },
+        {
+          "name": "F5",
+          "rows": 10,
+          "mappings": 9
+        },
+        {
+          "name": "Mandiant",
+          "rows": 2,
+          "mappings": 1
+        },
+        {
+          "name": "Appgate",
+          "rows": 10,
+          "mappings": 9
+        },
+        {
+          "name": "Zscaler",
+          "rows": 18,
+          "mappings": 17
+        },
+        {
+          "name": "NISTCSSM-to-Reference Arch",
+          "rows": 83,
+          "mappings": 82
+        },
+        {
+          "name": "DigiCert",
+          "rows": 5,
+          "mappings": 4
+        },
+        {
+          "name": "Lookout",
+          "rows": 23,
+          "mappings": 21
+        },
+        {
+          "name": "Broadcom (w VMware) & Omnissa",
+          "rows": 33,
+          "mappings": 30
+        },
+        {
+          "name": "Tenable",
+          "rows": 7,
+          "mappings": 4
+        },
+        {
+          "name": "Ivanti",
+          "rows": 22,
+          "mappings": 20
+        },
+        {
+          "name": "Broadcom (w Symantec product)",
+          "rows": 28,
+          "mappings": 27
+        },
+        {
+          "name": "IBM",
+          "rows": 41,
+          "mappings": 40
+        },
+        {
+          "name": "Radiant Logic",
+          "rows": 3,
+          "mappings": 2
+        }
+      ],
+      "parsed_records": 386
+    },
+    {
+      "source_key": "nist-sp-1800-35-csf11-mappings",
+      "mapping_kind": "csf_1_1",
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/993f56b28d4d113836cb1f1a34146cb3/CSF1.1Mapping.xlsx",
+      "sha256": "sha256:3e1465a81c0cc2cf1aaf655a5d448a87a74b9c4438c70a3640cb83235abc0f28",
+      "byte_length": 203874,
+      "retrieved_at": "2026-08-12T12:15:07.872Z",
+      "worksheets": [
+        {
+          "name": "Mandiant",
+          "rows": 3,
+          "mappings": 2
+        },
+        {
+          "name": "Broadcom (w Symantec product)",
+          "rows": 43,
+          "mappings": 42
+        },
+        {
+          "name": "IBM",
+          "rows": 82,
+          "mappings": 80
+        },
+        {
+          "name": "Appgate",
+          "rows": 21,
+          "mappings": 20
+        },
+        {
+          "name": "CSF 1.1-to-Reference Arch",
+          "rows": 134,
+          "mappings": 131
+        },
+        {
+          "name": "F5",
+          "rows": 12,
+          "mappings": 11
+        },
+        {
+          "name": "Zscaler",
+          "rows": 25,
+          "mappings": 24
+        },
+        {
+          "name": "Digicert",
+          "rows": 3,
+          "mappings": 2
+        },
+        {
+          "name": "Tenable",
+          "rows": 5,
+          "mappings": 4
+        },
+        {
+          "name": "Broadcom (w VMware) & Omnissa",
+          "rows": 73,
+          "mappings": 70
+        },
+        {
+          "name": "Radiant Logic",
+          "rows": 2,
+          "mappings": 1
+        }
+      ],
+      "parsed_records": 387
+    },
+    {
+      "source_key": "nist-sp-1800-35-sp80053-mappings",
+      "mapping_kind": "sp_800_53",
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/eba81c1a0ca458474b0e9bbdfc888eb5/SP800-53Mapping.xlsx",
+      "sha256": "sha256:940153bf3a198658cae055f79e0cc842861984b73859a2db5db859696921dfb7",
+      "byte_length": 269794,
+      "retrieved_at": "2026-08-12T12:15:08.428Z",
+      "worksheets": [
+        {
+          "name": "Google",
+          "rows": 33,
+          "mappings": 32
+        },
+        {
+          "name": "Microsoft",
+          "rows": 305,
+          "mappings": 304
+        },
+        {
+          "name": "AWS",
+          "rows": 43,
+          "mappings": 42
+        },
+        {
+          "name": "F5",
+          "rows": 13,
+          "mappings": 12
+        },
+        {
+          "name": "Mandiant",
+          "rows": 4,
+          "mappings": 3
+        },
+        {
+          "name": "Appgate",
+          "rows": 35,
+          "mappings": 33
+        },
+        {
+          "name": "Zscaler",
+          "rows": 44,
+          "mappings": 41
+        },
+        {
+          "name": "SP 800-53-to-Reference Arch",
+          "rows": 208,
+          "mappings": 200
+        },
+        {
+          "name": "Digicert",
+          "rows": 3,
+          "mappings": 2
+        },
+        {
+          "name": "Lookout",
+          "rows": 66,
+          "mappings": 64
+        },
+        {
+          "name": "Broadcom (w VMware) & Omnissa",
+          "rows": 126,
+          "mappings": 122
+        },
+        {
+          "name": "Tenable",
+          "rows": 5,
+          "mappings": 4
+        },
+        {
+          "name": "Ivanti",
+          "rows": 29,
+          "mappings": 28
+        },
+        {
+          "name": "Broadcom (w Symantec product)",
+          "rows": 95,
+          "mappings": 90
+        },
+        {
+          "name": "IBM",
+          "rows": 137,
+          "mappings": 134
+        },
+        {
+          "name": "Radiant Logic",
+          "rows": 4,
+          "mappings": 3
+        }
+      ],
+      "parsed_records": 1114
+    },
+    {
+      "source_key": "microsoft-zero-trust-maturity-questionnaire-v1-1",
+      "url": "https://download.microsoft.com/download/c/d/3/cd3e0d84-6fdd-4949-b529-73c9c0127b0d/Zero%20Trust%20Maturity%20Questionnaire%20v1.1.xlsx",
+      "sha256": "sha256:697bb6f809cfa7f3572510520199d5a29ecf78b568112aa1dd0ddf37caaf7f68",
+      "byte_length": 168581,
+      "retrieved_at": "2026-08-12T12:15:09.089Z",
+      "worksheets": [
+        {
+          "name": "2-Devices",
+          "rows": 18,
+          "questions": 12
+        },
+        {
+          "name": "6-Network",
+          "rows": 15,
+          "questions": 9
+        },
+        {
+          "name": "1-Identity",
+          "rows": 17,
+          "questions": 11
+        },
+        {
+          "name": "5-Data",
+          "rows": 16,
+          "questions": 10
+        },
+        {
+          "name": "4-Infrastructure",
+          "rows": 14,
+          "questions": 8
+        },
+        {
+          "name": "3-Applications",
+          "rows": 18,
+          "questions": 12
+        }
+      ],
+      "parsed_records": 62
+    }
+  ],
+  "reconciliation": {
+    "workbooks_discovered": 5,
+    "workbooks_ingested": 5,
+    "workbooks_failed": 0,
+    "mapping_records": 2560,
+    "questionnaire_records": 62,
+    "synthetic_records": 0
+  }
+}

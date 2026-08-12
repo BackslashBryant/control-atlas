@@ -2,84 +2,295 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PDFParse } from 'pdf-parse';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const CURATED = join(ROOT, 'data', 'curated', 'dod-zt');
+const FRAGMENTS = join(CURATED, 'source-fragments');
 const MAPS = join(ROOT, 'maps');
-
-const DEFAULT_PATHS = {
-  referenceArchitecture: 'd:/Storage/Downloads/(U)ZT_RA_v2.0(U)_Sep22.pdf',
-  overlays: 'd:/Storage/Downloads/DoD Zero Trust Overlays-Feb 2024.pdf',
-  capabilities: '',
-};
-
-const CONTROL_RE = /\b([A-Z]{2,3})-(\d+(?:\(\d+\))?)\b/g;
+const CONTROL_RE = /\b([A-Z]{2,3})-(\d+(?:\(\d+\))?)(?![\w(])/g;
 const CAPABILITY_HEADER_RE = /Capability\s+(\d+\.\d+):\s+([^\n]+)/g;
-const ACTIVITY_RE = /\b(\d+\.\d+\.\d+)\s+([^\n*]+)/g;
-const INVALID_CONTROLS = new Set(['NSM-8']);
+const INVALID_CONTROL_REFERENCE_REASONS = new Map([
+  ['NSM-8', 'NSM-8 is a National Security Memorandum identifier, not an SP 800-53 control.'],
+  ['EC-1', 'Figure EC-1 is a figure label in the Application and Workload appendix, not an SP 800-53 control.'],
+  ['SAC-16(3)', 'The publisher prose writes SAC-16(3), but its same-sentence bracket citation identifies SC-16(3), which is captured separately.'],
+  ['SC-4(26)', 'The publisher prose writes SC-4(26), but its same-sentence bracket citation identifies AC-4(26), which is captured separately.'],
+  ['SC-4(10)', 'The publisher prose writes SC-4(10), but its same-sentence bracket citation identifies SI-4(10), which is captured separately.'],
+  ['SA-18(8)', 'The publisher prose writes SA-18(8), but its same-sentence bracket citation identifies SA-17(8), which is captured separately.'],
+  ['IA-4(14)', 'The publisher prose writes IA-4(14), but its same-sentence bracket citation identifies IR-4(14), which is captured separately.'],
+]);
 
-const TENETS = [
-  { id: 'TENET-1', title: 'Assume a Hostile Environment', description: 'Operate without implicit trust in network location or asset ownership.' },
-  { id: 'TENET-2', title: 'Presume Breach', description: 'Consciously operate and defend resources with the assumption that an adversary is present.' },
-  { id: 'TENET-3', title: 'Never Trust, Always Verify', description: 'Require explicit verification for every access decision.' },
-  { id: 'TENET-4', title: 'Scrutinize Explicitly', description: 'Apply explicit scrutiny to users, devices, applications, and data flows.' },
-  { id: 'TENET-5', title: 'Apply Unified Analytics', description: 'Use unified analytics to inform authentication, authorization, and monitoring decisions.' },
+const DOCUMENTS = [
+  {
+    id: 'DOC-RA', title: 'DoD Zero Trust Reference Architecture v2.0',
+    sourceKey: 'dod-zt-reference-architecture-v2', fragmentFile: 'ra.json', atlasRole: 'primary_publication',
+    summary: { page: 9, start: 'Zero Trust is the term', end: '1.2 Purpose' },
+    sections: [{ page: 9, title: 'Purpose and strategic goals' }, { page: 10, title: 'Scope and stakeholders' }],
+  },
+  {
+    id: 'DOC-STRATEGY', title: 'DoD Zero Trust Strategy',
+    sourceKey: 'dod-zt-strategy', fragmentFile: 'strategy.json', atlasRole: 'primary_publication',
+    summary: { page: 6, start: 'This strategy lays out', end: 'To accelerate Zero Trust' },
+    sections: [{ page: 5, title: 'Executive summary' }, { page: 6, title: 'Strategy and goals' }],
+  },
+  {
+    id: 'DOC-CAPABILITIES', title: 'DoD Zero Trust Capabilities and Activities',
+    sourceKey: 'dod-zt-capabilities', fragmentFile: 'capabilities.json', atlasRole: 'primary_publication',
+    summary: { page: 1, start: 'Roadmap Updates', end: 'Notes' },
+    sections: [{ page: 1, title: 'Roadmap updates' }, { page: 2, title: 'Capability model' }],
+  },
+  {
+    id: 'DOC-ROADMAP', title: 'DoD Zero Trust Capability Execution Roadmap v1.1',
+    sourceKey: 'dod-zt-execution-roadmap', fragmentFile: 'roadmap.json', atlasRole: 'primary_publication',
+    summary: { page: 3, start: 'This update', end: '3' },
+    sections: [{ page: 3, title: 'Roadmap update' }, { page: 4, title: 'Fiscal Year 2027 objective' }],
+  },
+  {
+    id: 'DOC-OVERLAYS', title: 'DoD Zero Trust Overlays',
+    sourceKey: 'dod-zt-overlays-2024', fragmentFile: 'overlays.json', atlasRole: 'primary_publication',
+    summary: { page: 2, start: 'The Zero Trust Overlays are based', end: '• User.' },
+    sections: [{ page: 2, title: 'Executive summary' }, { page: 3, title: 'Control mapping purpose' }],
+    relationships: [
+      { target_catalog: 'dod-zt', target_id: 'DOC-RA', relationship_type: 'references', source_locator: 'overlays.pdf#page=2' },
+      { target_catalog: 'dod-zt', target_id: 'DOC-ROADMAP', relationship_type: 'references', source_locator: 'overlays.pdf#page=2' },
+    ],
+  },
+  {
+    id: 'DOC-OT', title: 'Zero Trust for Operational Technology Activities and Outcomes',
+    sourceKey: 'dod-zt-operational-technology', fragmentFile: 'ot.json', atlasRole: 'primary_publication',
+    summary: { page: 1, start: 'The ZT for OT Activities and Outcomes build', end: 'As defined in NIST SP 800-82' },
+    sections: [{ page: 1, title: 'Scope and purpose' }, { page: 2, title: 'Operational technology considerations' }],
+  },
+  {
+    id: 'DOC-NEWSLETTER-2024-11', title: 'DoD Zero Trust PfMO Newsletter — November 2024',
+    sourceKey: 'dod-zt-newsletter-2024-11', fragmentFile: 'newsletter.json', atlasRole: 'supporting_resource',
+    summary: { page: 1, start: 'MESSAGE FROM', end: null },
+    sections: [{ page: 1, title: 'November 2024 newsletter' }],
+  },
+  {
+    id: 'DOC-PLACEMATS', title: 'DoD Zero Trust Strategy Placemats',
+    sourceKey: 'dod-zt-strategy-placemats', fragmentFile: 'placemats.json', atlasRole: 'supporting_resource',
+    summary: { page: 1, start: 'DoD Information Enterprise', end: null },
+    sections: [{ page: 1, title: 'Zero Trust framework placemat' }, { page: 2, title: 'Strategy placemat' }],
+  },
 ];
 
-const PILLARS = [
-  { id: 'PILLAR-1', number: 1, title: 'User', family: 'Zero Trust Pillars', description: 'Continuously authenticate, access, and monitor user activity patterns to govern users\' access and privileges.' },
-  { id: 'PILLAR-2', number: 2, title: 'Device', family: 'Zero Trust Pillars', description: 'Understand device health and status to inform risk decisions and real-time access.' },
-  { id: 'PILLAR-3', number: 3, title: 'Applications and Workload', family: 'Zero Trust Pillars', description: 'Secure applications, workloads, containers, virtual machines, and hypervisors.' },
-  { id: 'PILLAR-4', number: 4, title: 'Data', family: 'Zero Trust Pillars', description: 'Provide data transparency, visibility, encryption, and tagging across the enterprise.' },
-  { id: 'PILLAR-5', number: 5, title: 'Network and Environment', family: 'Zero Trust Pillars', description: 'Segment, isolate, and control the network environment with dynamic policy and access controls.' },
-  { id: 'PILLAR-6', number: 6, title: 'Automation and Orchestration', family: 'Zero Trust Pillars', description: 'Automate security response based on defined policies and orchestration.' },
-  { id: 'PILLAR-7', number: 7, title: 'Visibility and Analytics', family: 'Zero Trust Pillars', description: 'Maintain visibility and analytics across users, devices, networks, applications, and data.' },
-];
-
-const OVERLAY_SECTIONS = [
-  { id: 'OVERLAY-USER', pillar_id: 'PILLAR-1', title: 'User Pillar Overlay', appendix: 'C', locator: 'ZeroTrustOverlays-2024Feb.pdf#Appendix-C' },
-  { id: 'OVERLAY-DEVICE', pillar_id: 'PILLAR-2', title: 'Device Pillar Overlay', appendix: 'D', locator: 'ZeroTrustOverlays-2024Feb.pdf#Appendix-D' },
-  { id: 'OVERLAY-APP', pillar_id: 'PILLAR-3', title: 'Application and Workload Pillar Overlay', appendix: 'E', locator: 'ZeroTrustOverlays-2024Feb.pdf#Appendix-E' },
-  { id: 'OVERLAY-DATA', pillar_id: 'PILLAR-4', title: 'Data Pillar Overlay', appendix: 'F', locator: 'ZeroTrustOverlays-2024Feb.pdf#Appendix-F' },
-  { id: 'OVERLAY-NET', pillar_id: 'PILLAR-5', title: 'Network and Environment Pillar Overlay', appendix: 'G', locator: 'ZeroTrustOverlays-2024Feb.pdf#Appendix-G' },
-  { id: 'OVERLAY-AUTO', pillar_id: 'PILLAR-6', title: 'Automation and Orchestration Pillar Overlay', appendix: 'H', locator: 'ZeroTrustOverlays-2024Feb.pdf#Appendix-H' },
-  { id: 'OVERLAY-VIS', pillar_id: 'PILLAR-7', title: 'Visibility and Analytics Pillar Overlay', appendix: 'I', locator: 'ZeroTrustOverlays-2024Feb.pdf#Appendix-I' },
-  { id: 'OVERLAY-ENABLER', pillar_id: 'PILLAR-ENABLER', title: 'Execution Enabler Overlay', appendix: 'B', locator: 'ZeroTrustOverlays-2024Feb.pdf#Appendix-B' },
-];
-
-const PILLAR_ENABLER = {
-  id: 'PILLAR-ENABLER',
-  number: 8,
-  title: 'Execution Enablers',
-  family: 'Zero Trust Enablers',
-  description: 'Cross-cutting, non-technical capabilities and activities that address culture, governance, and DOTmLPF-P elements.',
-};
-
-function parseArgs(argv) {
-  const args = { ...DEFAULT_PATHS };
-  for (let i = 2; i < argv.length; i += 1) {
-    const key = argv[i];
-    const value = argv[i + 1];
-    if (key === '--ra' && value) args.referenceArchitecture = value;
-    if (key === '--overlays' && value) args.overlays = value;
-    if (key === '--capabilities' && value) args.capabilities = value;
-  }
-  return args;
+function readJson(path) {
+  return JSON.parse(readFileSync(path, 'utf8'));
 }
 
-function sha256File(path) {
-  return createHash('sha256').update(readFileSync(path)).digest('hex');
+function writeJson(path, value) {
+  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 }
 
-async function readPdfText(path) {
-  if (!existsSync(path)) throw new Error(`Missing PDF: ${path}`);
-  const parser = new PDFParse({ data: readFileSync(path) });
-  try {
-    return (await parser.getText()).text;
-  } finally {
-    await parser.destroy();
+function cleanText(value) {
+  return String(value || '').replace(/\r/g, '').replace(/[ \t]+\n/g, '\n').trim();
+}
+
+function titleText(value) {
+  return cleanText(value).replace(/\s+/g, ' ');
+}
+
+function tableRows(document, pattern) {
+  const output = [];
+  for (const page of document.pages || []) {
+    for (const table of page.tables || []) {
+      for (let rowIndex = 0; rowIndex < table.rows.length; rowIndex += 1) {
+        const row = table.rows[rowIndex];
+        const id = cleanText(row[0]?.text);
+        if (!pattern.test(id)) continue;
+        output.push({ page: page.page, table: table.id, rowIndex, cells: row });
+      }
+    }
   }
+  return output;
+}
+
+function sourceFragments(document, row) {
+  return row.cells
+    .map((cell) => ({
+      document_key: document.document_key,
+      page: row.page,
+      table: row.table,
+      row: cell.row,
+      column: cell.column,
+      bbox: cell.bbox,
+      text: cleanText(cell.text),
+      checksum: `sha256:${createHash('sha256').update(cleanText(cell.text)).digest('hex')}`,
+      extraction_method: `pdfplumber-${document.extractor.version}-table-cell`,
+    }))
+    .filter((fragment) => fragment.text);
+}
+
+function locator(document, row) {
+  return `${document.source.filename}#page=${row.page}&table=${row.table}&row=${row.rowIndex}`;
+}
+
+function splitList(value) {
+  return cleanText(value)
+    .split(/\n|\s*;\s*/)
+    .map((entry) => entry.replace(/^\s*(?:\*|\d+[.)])\s*/, '').trim())
+    .filter((entry) => entry && !/^none$/i.test(entry));
+}
+
+function assertUnique(records, label) {
+  const seen = new Set();
+  for (const record of records) {
+    if (seen.has(record.id)) throw new Error(`Duplicate ${label} id: ${record.id}`);
+    seen.add(record.id);
+  }
+}
+
+export function parseCapabilitiesFromFragments(document) {
+  const records = tableRows(document, /^\d+\.\d+$/).map((row) => {
+    const values = row.cells.map((cell) => cleanText(cell.text));
+    const id = values[0];
+    const pillarNumber = Number(values[2].match(/^([1-7])\b/)?.[1] || id.split('.')[0]);
+    return {
+      id,
+      pillar_id: `PILLAR-${pillarNumber}`,
+      pillar_name: titleText(values[2].replace(/^\d+\s*-\s*/, '')),
+      title: titleText(values[1]),
+      description: values[3],
+      outcome: values[4],
+      impact: values[5],
+      associated_activities: splitList(values[6]),
+      level: 'Target',
+      locator: locator(document, row),
+      source_key: document.document_key,
+      source_fragments: sourceFragments(document, row),
+    };
+  });
+  assertUnique(records, 'DoD ZT capability');
+  if (!records.length) throw new Error('DoD ZT capabilities source contained no capability table rows');
+  return records;
+}
+
+export function parseActivitiesFromFragments(document) {
+  const records = tableRows(document, /^\d+\.\d+\.\d+$/).map((row) => {
+    const values = row.cells.map((cell) => cleanText(cell.text));
+    const id = values[0];
+    return {
+      id,
+      capability_id: id.split('.').slice(0, 2).join('.'),
+      title: titleText(values[1]),
+      pillar: titleText(values[2]),
+      responsibility: values[3],
+      activity_type: titleText(values[4]),
+      duration: values[5],
+      description: values[6],
+      outcomes: values[7],
+      end_state: values[8],
+      predecessors: splitList(values[9]),
+      successors: splitList(values[10]),
+      level: /advanced/i.test(values[4]) ? 'Advanced' : 'Target',
+      locator: locator(document, row),
+      source_key: document.document_key,
+      source_fragments: sourceFragments(document, row),
+    };
+  });
+  assertUnique(records, 'DoD ZT activity');
+  if (!records.length) throw new Error('DoD ZT activities source contained no activity table rows');
+  return records;
+}
+
+export function parseOtActivitiesFromFragments(document) {
+  const records = tableRows(document, /^\d+\.\d+\.\d+\.OT$/i).map((row) => {
+    const values = row.cells.map((cell) => cleanText(cell.text));
+    const id = values[0].toUpperCase();
+    return {
+      id,
+      capability_id: id.split('.').slice(0, 2).join('.'),
+      title: titleText(values[1]),
+      pillar: titleText(values[2]),
+      activity_type: titleText(values[3]),
+      description: values[4],
+      outcomes: values[5],
+      predecessors: splitList(values[6]),
+      successors: splitList(values[7]),
+      level: /advanced/i.test(values[3]) ? 'Advanced' : 'Target',
+      operational_technology: true,
+      locator: locator(document, row),
+      source_key: document.document_key,
+      source_fragments: sourceFragments(document, row),
+    };
+  });
+  assertUnique(records, 'DoD ZT OT activity');
+  if (!records.length) throw new Error('DoD ZT OT source contained no activity table rows');
+  return records;
+}
+
+function lineFragment(document, pageNumber, text) {
+  const page = document.pages.find((entry) => entry.page === pageNumber);
+  const line = page?.lines.find((entry) => entry.text.includes(text));
+  return {
+    document_key: document.document_key,
+    page: pageNumber,
+    bbox: line?.bbox || [0, 0, page?.width || 0, page?.height || 0],
+    text,
+    checksum: `sha256:${createHash('sha256').update(text).digest('hex')}`,
+    extraction_method: `pdfplumber-${document.extractor.version}-line`,
+  };
+}
+
+function lineBlockFragments(document, pageNumber, startMarker, endMarker = null) {
+  const page = document.pages.find((entry) => entry.page === pageNumber);
+  const lines = page?.lines || [];
+  const start = lines.findIndex((entry) => entry.text.includes(startMarker));
+  if (start < 0) throw new Error(`Could not locate ${startMarker} on page ${pageNumber} of ${document.document_key}`);
+  const end = endMarker
+    ? lines.findIndex((entry, index) => index > start && entry.text.includes(endMarker))
+    : -1;
+  return lines.slice(start, end < 0 ? lines.length : end).map((line) => ({
+    document_key: document.document_key,
+    page: pageNumber,
+    bbox: line.bbox,
+    text: line.text,
+    checksum: `sha256:${createHash('sha256').update(line.text).digest('hex')}`,
+    extraction_method: `pdfplumber-${document.extractor.version}-line`,
+  }));
+}
+
+function extractNamedParagraphs(text, names) {
+  const escaped = names.map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const marker = new RegExp(`(?:^|\\n)(?:•\\s*)?(${escaped.join('|')}):?\\s*`, 'g');
+  const matches = [...text.matchAll(marker)];
+  return matches.map((match, index) => ({
+    title: match[1],
+    description: cleanText(text.slice(match.index + match[0].length, matches[index + 1]?.index ?? text.length)),
+  }));
+}
+
+export function parseRaTaxonomy(document) {
+  const page21 = document.pages.find((page) => page.page === 21)?.text || '';
+  const pillarText = [22, 23].map((number) => document.pages.find((page) => page.page === number)?.text || '').join('\n');
+  const tenetNames = ['Assume a Hostile Environment', 'Presume Breach', 'Never Trust, Always Verify', 'Scrutinize Explicitly', 'Apply Unified Analytics'];
+  const pillarNames = ['User', 'Device', 'Network/Environment', 'Applications and Workload', 'Data', 'Visibility and Analytics', 'Automation and Orchestration'];
+  const tenets = extractNamedParagraphs(page21, tenetNames).map((entry, index) => ({
+    id: `TENET-${index + 1}`,
+    title: entry.title,
+    description: entry.description.replace(/^[.:]\s*/, ''),
+    source_key: document.document_key,
+    locator: `${document.source.filename}#page=21`,
+    source_fragments: lineBlockFragments(document, 21, entry.title, tenetNames[index + 1]),
+  }));
+  const pillars = extractNamedParagraphs(pillarText, pillarNames).map((entry, index) => ({
+    id: `PILLAR-${index + 1}`,
+    number: index + 1,
+    title: entry.title.replace('Network/Environment', 'Network and Environment'),
+    family: 'Zero Trust Pillars',
+    description: entry.description.replace(/^[.:]\s*/, '').replace(/\n\d+$/, '').trim(),
+    source_key: document.document_key,
+    locator: `${document.source.filename}#page=${index < 3 ? 22 : 23}`,
+    source_fragments: lineBlockFragments(
+      document,
+      index < 3 ? 22 : 23,
+      entry.title,
+      (index === 2 || index === pillarNames.length - 1) ? null : pillarNames[index + 1],
+    ),
+  }));
+  if (tenets.length !== 5) throw new Error(`Expected 5 DoD ZT tenets from source; found ${tenets.length}`);
+  if (pillars.length !== 7) throw new Error(`Expected 7 DoD ZT pillars from source; found ${pillars.length}`);
+  return { tenets, pillars };
 }
 
 export function normalizeControlId(raw) {
@@ -96,332 +307,202 @@ export function activityNodeId(activityId) {
   return `ACT-${String(activityId).replace(/\./g, '-')}`;
 }
 
-export function extractOverlayRelationships(text, sourceKey = 'dod-zt-overlays-2024') {
+export function extractOverlayRelationships(text, sourceKey = 'dod-zt-overlays-2024', validControlIds = null) {
   const headers = [];
   let match;
-  while ((match = CAPABILITY_HEADER_RE.exec(text)) !== null) {
-    headers.push({ id: match[1], title: match[2].trim(), index: match.index });
-  }
-
+  while ((match = CAPABILITY_HEADER_RE.exec(text)) !== null) headers.push({ id: match[1], title: match[2].trim(), index: match.index });
   const relationships = [];
+  const rejectedReferences = [];
+  const rejectedSeen = new Set();
   const seen = new Set();
-  for (let i = 0; i < headers.length; i += 1) {
-    const start = headers[i].index;
-    const end = i + 1 < headers.length ? headers[i + 1].index : text.length;
-    const block = text.slice(start, end);
-    const controls = new Set();
-    let controlMatch;
-    while ((controlMatch = CONTROL_RE.exec(block)) !== null) {
+  for (let index = 0; index < headers.length; index += 1) {
+    const block = text.slice(headers[index].index, headers[index + 1]?.index ?? text.length);
+    for (const controlMatch of block.matchAll(CONTROL_RE)) {
       const controlId = normalizeControlId(controlMatch[0]);
-      if (!controlId || INVALID_CONTROLS.has(controlId)) continue;
-      controls.add(controlId);
-    }
-    for (const controlId of controls) {
-      const targetId = capabilityNodeId(headers[i].id);
-      const dedupe = `${controlId}:${targetId}`;
-      if (seen.has(dedupe)) continue;
-      seen.add(dedupe);
+      if (!controlId) continue;
+      if (INVALID_CONTROL_REFERENCE_REASONS.has(controlId) || (validControlIds && !validControlIds.has(controlId))) {
+        const rejectedKey = `${controlId}:${headers[index].id}`;
+        if (!rejectedSeen.has(rejectedKey)) {
+          rejectedSeen.add(rejectedKey);
+          rejectedReferences.push({
+            source_id: controlId,
+            target_id: capabilityNodeId(headers[index].id),
+            reason: INVALID_CONTROL_REFERENCE_REASONS.get(controlId)
+              || 'Token is not a valid control identity in the attested NIST SP 800-53 Rev. 5 catalog; excluded rather than publishing a dangling relationship.',
+          });
+        }
+        continue;
+      }
+      const targetId = capabilityNodeId(headers[index].id);
+      const key = `${controlId}:${targetId}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
       relationships.push({
         source_id: controlId,
         target_id: targetId,
         relationship_type: 'supports',
-        why: `DoD Zero Trust Overlays associates NIST SP 800-53 ${controlId} with capability ${headers[i].id} ${headers[i].title}.`,
-        source_locator: `ZeroTrustOverlays-2024Feb.pdf#Capability-${headers[i].id}`,
+        why: `DoD Zero Trust Overlays associates NIST SP 800-53 ${controlId} with capability ${headers[index].id} ${headers[index].title}.`,
+        source_locator: `ZeroTrustOverlays-2024Feb.pdf#Capability-${headers[index].id}`,
         evidence_source: sourceKey,
       });
     }
   }
-  return { relationships, capabilities: headers };
+  return { relationships, capabilities: headers, rejected_references: rejectedReferences };
 }
 
-export function extractActivitiesFromOverlays(text) {
-  const activities = [];
-  const seen = new Set();
-  for (const match of text.matchAll(/\b(\d+\.\d+\.\d+)\s+([^\n]+)/g)) {
-    const id = match[1];
-    const [pillar] = id.split('.');
-    if (Number(pillar) < 1 || Number(pillar) > 7) continue;
-    const title = match[2].replace(/\s+\.{3,}.*$/, '').trim();
-    if (!title || title.length < 4 || /page\s+[A-Z]-\d+/i.test(title)) continue;
-    if (seen.has(id)) continue;
-    seen.add(id);
-    activities.push({
-      id,
-      capability_id: id.split('.').slice(0, 2).join('.'),
-      title,
-      level: 'Target',
-      locator: `ZeroTrustOverlays-2024Feb.pdf#Activity-${id}`,
-      source_key: 'dod-zt-overlays-2024',
-    });
-  }
-  return activities;
-}
-
-export function extractCapabilitiesAndActivities(text) {
-  const lines = text.split('\n');
-  const capabilities = [];
-  const activities = [];
-  const capabilityById = new Map();
-
-  for (let i = 0; i < lines.length; i += 1) {
-    const line = lines[i].trim();
-    const capMatch = line.match(/^(\d+\.\d+)\s+(.+?)\s+(\d+)\s*-\s*(.+)$/);
-    if (capMatch) {
-      const id = capMatch[1];
-      const pillarNumber = Number(capMatch[3]);
-      const record = {
-        id,
-        pillar_id: `PILLAR-${pillarNumber}`,
-        title: capMatch[2].trim(),
-        pillar_name: capMatch[4].trim(),
-        description: '',
-        outcome: '',
-        impact: '',
-        level: 'Target',
-        locator: `ZTCapabilitiesActivities.pdf#${id}`,
-      };
-      capabilities.push(record);
-      capabilityById.set(id, record);
-      continue;
-    }
-
-    const activityMatch = line.match(/^(\d+\.\d+\.\d+)\s+(.+?)\s+(Target Level ZT|Advanced Level ZT|Target|Advanced)/);
-    if (activityMatch) {
-      const capabilityId = activityMatch[1].split('.').slice(0, 2).join('.');
-      activities.push({
-        id: activityMatch[1],
-        capability_id: capabilityId,
-        title: activityMatch[2].trim(),
-        level: activityMatch[3].includes('Advanced') ? 'Advanced' : 'Target',
-        locator: `ZTCapabilitiesActivities.pdf#${activityMatch[1]}`,
-      });
-    }
-  }
-
-  if (capabilities.length === 0) {
-    return { capabilities: buildFallbackCapabilities(), activities: buildFallbackActivities() };
-  }
-  return { capabilities, activities };
-}
-
-function buildFallbackCapabilities() {
-  return [
-    { id: '1.1', pillar_id: 'PILLAR-1', title: 'User Inventory', description: 'Regular and privileged users are identified and integrated into an inventory.', outcome: 'System owners have control of all authorized users.', impact: 'Users not on the authorized user list will be denied access by policy.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#1.1' },
-    { id: '1.2', pillar_id: 'PILLAR-1', title: 'Conditional User Access', description: 'Creates a dynamic level of access for users through phased maturity.', outcome: 'Dynamic user, device, and NPE access through risk profiles.', impact: 'Unknown or high-risk users are denied access with greater accuracy.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#1.2' },
-    { id: '1.3', pillar_id: 'PILLAR-1', title: 'Multi-Factor Authentication (MFA)', description: 'Centralize MFA and identity provider capabilities.', outcome: 'Users authenticate with at least two authentication factors.', impact: 'Users without multiple authentication forms are denied access.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#1.3' },
-    { id: '1.4', pillar_id: 'PILLAR-1', title: 'Privileged Access Management (PAM)', description: 'Remove permanent administrator privileges through PAM.', outcome: 'Privileged identities are controlled, monitored, secured, and audited.', impact: 'Critical assets are secured through limits on admin access.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#1.4' },
-    { id: '1.5', pillar_id: 'PILLAR-1', title: 'Identity Federation and User Credentialing', description: 'Standardize ILM and integrate with organizational IDP/IDM.', outcome: 'Credentials are issued, managed, and revoked across trust domains.', impact: 'Users lacking sufficient credentials are denied access.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#1.5' },
-    { id: '1.6', pillar_id: 'PILLAR-1', title: 'Behavioral, Contextual ID, and Biometrics', description: 'Enable UEBA with enterprise and organizational attributes.', outcome: 'Behavioral, contextual, and biometric telemetry enhance access controls.', impact: 'Anomalous activity informs risk-based authentication.', level: 'Advanced', locator: 'ZTCapabilitiesActivities.pdf#1.6' },
-    { id: '1.7', pillar_id: 'PILLAR-1', title: 'Least Privileged Access', description: 'Enforce least privilege across enterprise access.', outcome: 'Access is limited to minimum necessary privileges.', impact: 'Excessive privileges are removed or denied.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#1.7' },
-    { id: '1.8', pillar_id: 'PILLAR-1', title: 'Continuous Authentication', description: 'Continuously evaluate authentication context during sessions.', outcome: 'Sessions are continuously evaluated for risk.', impact: 'High-risk sessions are terminated or re-authenticated.', level: 'Advanced', locator: 'ZTCapabilitiesActivities.pdf#1.8' },
-    { id: '1.9', pillar_id: 'PILLAR-1', title: 'Integrated ICAM Platform', description: 'Integrate ICAM capabilities across the enterprise.', outcome: 'Enterprise ICAM provides unified identity services.', impact: 'Fragmented identity tooling is reduced.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#1.9' },
-    { id: '2.1', pillar_id: 'PILLAR-2', title: 'Device Inventory', description: 'Maintain an inventory of authorized devices.', outcome: 'Device inventory supports authorization decisions.', impact: 'Unknown devices are denied or quarantined.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#2.1' },
-    { id: '2.2', pillar_id: 'PILLAR-2', title: 'Device Detection and Compliance', description: 'Detect devices and assess compliance posture.', outcome: 'Non-compliant devices are identified.', impact: 'Non-compliant devices are blocked or remediated.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#2.2' },
-    { id: '2.3', pillar_id: 'PILLAR-2', title: 'Device Authorization with Real Time Inspection', description: 'Authorize devices using real-time inspection.', outcome: 'Device health informs every access request.', impact: 'Unhealthy devices are denied access.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#2.3' },
-    { id: '2.4', pillar_id: 'PILLAR-2', title: 'Remote Access', description: 'Secure remote access to enterprise resources.', outcome: 'Remote sessions meet zero trust requirements.', impact: 'Untrusted remote access is denied.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#2.4' },
-    { id: '2.5', pillar_id: 'PILLAR-2', title: 'Partially and Fully Automated Asset, Vulnerability, and Patch Management', description: 'Automate asset, vulnerability, and patch management.', outcome: 'Assets are patched and vulnerabilities managed at scale.', impact: 'Unpatched assets are restricted.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#2.5' },
-    { id: '2.6', pillar_id: 'PILLAR-2', title: 'Unified Endpoint Management and Mobile Device Management', description: 'Manage endpoints and mobile devices consistently.', outcome: 'Enterprise endpoint management is unified.', impact: 'Unmanaged endpoints are denied.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#2.6' },
-    { id: '2.7', pillar_id: 'PILLAR-2', title: 'Endpoint and Extended Detection and Response', description: 'Deploy EDR/XDR across endpoints.', outcome: 'Endpoint threats are detected and responded to centrally.', impact: 'Compromised endpoints are isolated.', level: 'Advanced', locator: 'ZTCapabilitiesActivities.pdf#2.7' },
-    { id: '3.1', pillar_id: 'PILLAR-3', title: 'Application Inventory', description: 'Inventory applications and workloads.', outcome: 'Applications are visible and authorized.', impact: 'Unknown applications are blocked or removed.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#3.1' },
-    { id: '3.2', pillar_id: 'PILLAR-3', title: 'Secure Software Development and Integration', description: 'Integrate secure development practices.', outcome: 'Applications are developed and integrated securely.', impact: 'Insecure software is remediated before deployment.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#3.2' },
-    { id: '3.3', pillar_id: 'PILLAR-3', title: 'Software Risk Management', description: 'Manage software supply chain and component risk.', outcome: 'Software risk is assessed and tracked.', impact: 'High-risk software is blocked or mitigated.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#3.3' },
-    { id: '3.4', pillar_id: 'PILLAR-3', title: 'Resource Authorization and Integration', description: 'Authorize application and workload resources.', outcome: 'Resources are authorized before access is granted.', impact: 'Unauthorized resources are denied.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#3.4' },
-    { id: '3.5', pillar_id: 'PILLAR-3', title: 'Continuous Monitoring and Ongoing Authorizations', description: 'Continuously monitor applications for authorization.', outcome: 'Ongoing authorization replaces point-in-time approvals.', impact: 'Drift from authorized state triggers response.', level: 'Advanced', locator: 'ZTCapabilitiesActivities.pdf#3.5' },
-    { id: '4.1', pillar_id: 'PILLAR-4', title: 'Data Catalog Risk Alignment', description: 'Align data catalogs with risk management.', outcome: 'Data assets are cataloged with risk context.', impact: 'Uncataloged sensitive data is discovered and protected.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#4.1' },
-    { id: '4.2', pillar_id: 'PILLAR-4', title: 'DoD Enterprise Data Governance', description: 'Govern data across the enterprise.', outcome: 'Enterprise data governance is established.', impact: 'Ungoverned data flows are restricted.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#4.2' },
-    { id: '4.3', pillar_id: 'PILLAR-4', title: 'Data Labeling and Tagging', description: 'Label and tag data for protection decisions.', outcome: 'Data is labeled consistently.', impact: 'Unlabeled sensitive data is remediated.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#4.3' },
-    { id: '4.4', pillar_id: 'PILLAR-4', title: 'Data Monitoring and Sensing', description: 'Monitor data access and movement.', outcome: 'Data usage is visible in near real time.', impact: 'Anomalous data access triggers response.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#4.4' },
-    { id: '4.5', pillar_id: 'PILLAR-4', title: 'Data Encryption and Rights Management', description: 'Encrypt data and enforce rights management.', outcome: 'Sensitive data is encrypted and rights-managed.', impact: 'Unprotected sensitive data is blocked or encrypted.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#4.5' },
-    { id: '4.6', pillar_id: 'PILLAR-4', title: 'Data Loss Prevention', description: 'Prevent unauthorized data exfiltration.', outcome: 'DLP controls are deployed enterprise-wide.', impact: 'Data exfiltration attempts are blocked.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#4.6' },
-    { id: '4.7', pillar_id: 'PILLAR-4', title: 'Data Access Control', description: 'Control access to data based on policy.', outcome: 'Data access follows least privilege.', impact: 'Unauthorized data access is denied.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#4.7' },
-    { id: '5.1', pillar_id: 'PILLAR-5', title: 'Data Flow Mapping', description: 'Map data flows across the environment.', outcome: 'Data flows are documented and monitored.', impact: 'Unknown flows are restricted.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#5.1' },
-    { id: '5.2', pillar_id: 'PILLAR-5', title: 'Software Defined Networking', description: 'Use SDN for dynamic network policy.', outcome: 'Network policy is software defined.', impact: 'Static overly permissive paths are removed.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#5.2' },
-    { id: '5.3', pillar_id: 'PILLAR-5', title: 'Macro Segmentation', description: 'Segment the network at macro boundaries.', outcome: 'Macro segments limit lateral movement.', impact: 'Cross-segment access requires authorization.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#5.3' },
-    { id: '5.4', pillar_id: 'PILLAR-5', title: 'Micro Segmentation', description: 'Apply fine-grained network segmentation.', outcome: 'Micro segments enforce least privilege network access.', impact: 'Unnecessary east-west traffic is denied.', level: 'Advanced', locator: 'ZTCapabilitiesActivities.pdf#5.4' },
-    { id: '6.1', pillar_id: 'PILLAR-6', title: 'API Standardization', description: 'Standardize APIs for security automation.', outcome: 'Security tooling integrates through standard APIs.', impact: 'Non-standard integrations are reduced.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#6.1' },
-    { id: '6.2', pillar_id: 'PILLAR-6', title: 'Critical Process Automation', description: 'Automate critical security processes.', outcome: 'Key security processes are automated.', impact: 'Manual gaps in security response are reduced.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#6.2' },
-    { id: '6.3', pillar_id: 'PILLAR-6', title: 'Machine Learning', description: 'Apply machine learning to security operations.', outcome: 'ML augments detection and response.', impact: 'Anomalies are detected faster.', level: 'Advanced', locator: 'ZTCapabilitiesActivities.pdf#6.3' },
-    { id: '6.4', pillar_id: 'PILLAR-6', title: 'Artificial Intelligence', description: 'Apply AI to security orchestration and response.', outcome: 'AI-assisted response is integrated.', impact: 'Response latency is reduced.', level: 'Advanced', locator: 'ZTCapabilitiesActivities.pdf#6.4' },
-    { id: '6.5', pillar_id: 'PILLAR-6', title: 'Automated Decision Making', description: 'Automate policy-based security decisions.', outcome: 'Decisions are automated within policy bounds.', impact: 'Manual policy enforcement gaps are reduced.', level: 'Advanced', locator: 'ZTCapabilitiesActivities.pdf#6.5' },
-    { id: '6.6', pillar_id: 'PILLAR-6', title: 'Security Orchestration, Automation, and Response (SOAR)', description: 'Orchestrate automated security response.', outcome: 'SOAR integrates security tooling.', impact: 'Incident response is coordinated automatically.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#6.6' },
-    { id: '6.7', pillar_id: 'PILLAR-6', title: 'Security Operations Center (SOC) Optimization', description: 'Optimize SOC workflows for zero trust.', outcome: 'SOC processes support zero trust operations.', impact: 'Operational blind spots are reduced.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#6.7' },
-    { id: '7.1', pillar_id: 'PILLAR-7', title: 'Log All Traffic (Network, Data, Apps, User)', description: 'Log traffic across all zero trust pillars.', outcome: 'Comprehensive logging is available for analysis.', impact: 'Unlogged critical traffic is remediated.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#7.1' },
-    { id: '7.2', pillar_id: 'PILLAR-7', title: 'Security Information and Event Management (SIEM)', description: 'Centralize security event management.', outcome: 'Events are correlated in a SIEM.', impact: 'Uncorrelated critical events are escalated.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#7.2' },
-    { id: '7.3', pillar_id: 'PILLAR-7', title: 'Common Security and Risk Analytics', description: 'Share analytics across the enterprise.', outcome: 'Risk analytics are common and reusable.', impact: 'Siloed analytics are integrated.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#7.3' },
-    { id: '7.4', pillar_id: 'PILLAR-7', title: 'User and Entity Behavior Analytics (UEBA)', description: 'Analyze user and entity behavior.', outcome: 'Behavioral analytics inform access decisions.', impact: 'Anomalous behavior triggers response.', level: 'Advanced', locator: 'ZTCapabilitiesActivities.pdf#7.4' },
-    { id: '7.5', pillar_id: 'PILLAR-7', title: 'Threat Intelligence Integration', description: 'Integrate threat intelligence into analytics.', outcome: 'Threat intelligence enriches detections.', impact: 'Known threats are blocked faster.', level: 'Target', locator: 'ZTCapabilitiesActivities.pdf#7.5' },
-    { id: '7.6', pillar_id: 'PILLAR-7', title: 'Automated Dynamic Policies', description: 'Dynamically update policies from analytics.', outcome: 'Policies adapt based on analytics.', impact: 'Stale policies are automatically updated.', level: 'Advanced', locator: 'ZTCapabilitiesActivities.pdf#7.6' },
-  ];
-}
-
-function buildFallbackActivities() {
-  const titles = {
-    '1.1.1': 'Inventory User',
-    '1.2.1': 'Implement Application Based Permissions per Enterprise',
-    '1.2.2': 'Rule Based Dynamic Access Part 1',
-    '1.3.1': 'Organizational MFA/IDP',
-    '2.1.1': 'Inventory Devices',
-    '3.1.1': 'Inventory Applications',
-    '4.1.1': 'Data Catalog Alignment',
-    '5.1.1': 'Map Data Flows',
-    '6.1.1': 'Standardize APIs',
-    '7.1.1': 'Log All Traffic',
-  };
-  return Object.entries(titles).map(([id, title]) => ({
-    id,
-    capability_id: id.split('.').slice(0, 2).join('.'),
-    title,
-    level: 'Target',
-    locator: `ZTCapabilitiesActivities.pdf#${id}`,
+function documentLineFragments(extracted, pageNumber) {
+  const page = extracted.pages.find((entry) => entry.page === pageNumber);
+  if (!page) throw new Error(`Missing page ${pageNumber} of ${extracted.document_key}`);
+  return (page.lines || []).map((line) => ({
+    document_key: extracted.document_key,
+    page: pageNumber,
+    bbox: line.bbox,
+    text: line.text,
+    checksum: `sha256:${createHash('sha256').update(line.text).digest('hex')}`,
+    extraction_method: `pdfplumber-${extracted.extractor.version}-line`,
   }));
 }
 
-function buildTaxonomy(overlayCapabilities) {
-  const overlayTitles = new Map(overlayCapabilities.map((entry) => [entry.id, entry.title]));
+function documentSummary(fragmentRoot, document) {
+  const extracted = readJson(join(fragmentRoot, document.fragmentFile));
+  const summaryFragments = lineBlockFragments(
+    extracted,
+    document.summary.page,
+    document.summary.start,
+    document.summary.end,
+  );
+  const documentSections = document.sections.map((section) => {
+    const page = extracted.pages.find((entry) => entry.page === section.page);
+    if (!page) throw new Error(`Missing page ${section.page} of ${extracted.document_key}`);
+    return {
+      id: `${document.id}-PAGE-${section.page}`,
+      title: section.title,
+      locator: `${extracted.source.filename}#page=${section.page}`,
+      structured_content: [{
+        type: 'paragraph',
+        text: page.text,
+        source_offset: { start: 0, end: page.text.length },
+      }],
+      source_fragments: documentLineFragments(extracted, section.page),
+    };
+  });
   return {
-    schema_version: '1.0',
-    generated_at: new Date().toISOString(),
-    tenets: TENETS.map((entry) => ({
-      ...entry,
-      source_key: 'dod-zt-reference-architecture-v2',
-      locator: `ZT_RA_v2.0#section-2.2-${entry.id}`,
-    })),
-    pillars: [...PILLARS, PILLAR_ENABLER].map((entry) => ({
-      ...entry,
-      source_key: 'dod-zt-reference-architecture-v2',
-      locator: `ZT_RA_v2.0#pillar-${entry.number}`,
-    })),
-    overlay_sections: OVERLAY_SECTIONS.map((entry) => ({
-      ...entry,
-      source_key: 'dod-zt-overlays-2024',
-    })),
-    documents: [
-      {
-        id: 'DOC-RA',
-        title: 'DoD Zero Trust Reference Architecture v2.0',
-        source_key: 'dod-zt-reference-architecture-v2',
-        locator: 'ZT_RA_v2.0',
-        relationships: [{ target_catalog: 'dod-zt', target_id: 'CATALOG', relationship_type: 'defines' }],
-      },
-      {
-        id: 'DOC-STRATEGY',
-        title: 'DoD Zero Trust Strategy',
-        source_key: 'dod-zt-strategy',
-        locator: 'DoD-ZTStrategy.pdf',
-        relationships: [{ target_catalog: 'dod-zt', target_id: 'DOC-RA', relationship_type: 'references' }],
-      },
-      {
-        id: 'DOC-ROADMAP',
-        title: 'DoD Zero Trust Capability Execution Roadmap v1.1',
-        source_key: 'dod-zt-execution-roadmap',
-        locator: 'ZT-ExecutionRoadmap-v1.1.pdf',
-        relationships: [{ target_catalog: 'dod-zt', target_id: 'DOC-STRATEGY', relationship_type: 'references' }],
-      },
-      {
-        id: 'DOC-OVERLAYS',
-        title: 'DoD Zero Trust Overlays',
-        source_key: 'dod-zt-overlays-2024',
-        locator: 'ZeroTrustOverlays-2024Feb.pdf',
-        disambiguation: 'DoD control overlays on ZT pillars (RMF overlay sense), not overlay networks or ZTNA.',
-        relationships: [
-          { target_catalog: 'dod-zt', target_id: 'DOC-RA', relationship_type: 'references' },
-          { target_catalog: 'dod-zt', target_id: 'DOC-ROADMAP', relationship_type: 'references' },
-        ],
-      },
-    ],
-    overlay_capability_titles: [...overlayTitles.entries()].map(([id, title]) => ({ id, title })),
+    id: document.id,
+    title: document.title,
+    source_key: document.sourceKey,
+    locator: `${extracted.source.filename}#page=1`,
+    description: summaryFragments.map((fragment) => fragment.text).join('\n'),
+    description_source_fragments: summaryFragments,
+    document_sections: documentSections,
+    atlas_role: document.atlasRole,
+    page_count: extracted.source.pages,
+    byte_length: extracted.source.byte_length,
+    retrieved_at: extracted.source.retrieved_at,
+    checksum: extracted.source.sha256,
+    source_url: extracted.source.url,
+    relationships: document.relationships || [],
   };
 }
 
-function writeJson(path, value) {
-  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
-}
-
-export async function extractDodZeroTrust(options = DEFAULT_PATHS) {
-  mkdirSync(CURATED, { recursive: true });
+export async function extractDodZeroTrust(options = {}) {
+  const curatedRoot = options.curatedRoot || CURATED;
+  const fragmentRoot = options.fragmentRoot || join(curatedRoot, 'source-fragments');
+  mkdirSync(curatedRoot, { recursive: true });
   mkdirSync(MAPS, { recursive: true });
-
-  const overlaysText = await readPdfText(options.overlays);
-  const { relationships, capabilities: overlayCapabilities } = extractOverlayRelationships(overlaysText);
-  const overlayActivities = extractActivitiesFromOverlays(overlaysText);
-
-  let capabilitiesText = '';
-  if (options.capabilities && existsSync(options.capabilities)) {
-    const header = readFileSync(options.capabilities).subarray(0, 4).toString();
-    if (header.startsWith('%PDF')) {
-      try {
-        capabilitiesText = await readPdfText(options.capabilities);
-      } catch {
-        capabilitiesText = '';
-      }
-    }
+  for (const filename of ['ra.json', 'capabilities.json', 'ot.json', 'strategy.json', 'roadmap.json', 'overlays.json', 'newsletter.json', 'placemats.json']) {
+    if (!existsSync(join(fragmentRoot, filename))) throw new Error(`Missing required DoD ZT source fragments: ${filename}`);
   }
 
-  const { capabilities, activities: parsedActivities } = capabilitiesText
-    ? extractCapabilitiesAndActivities(capabilitiesText)
-    : { capabilities: buildFallbackCapabilities(), activities: [] };
+  const ra = readJson(join(fragmentRoot, 'ra.json'));
+  const capabilitiesSource = readJson(join(fragmentRoot, 'capabilities.json'));
+  const otSource = readJson(join(fragmentRoot, 'ot.json'));
+  const { tenets, pillars } = parseRaTaxonomy(ra);
+  const capabilities = parseCapabilitiesFromFragments(capabilitiesSource);
+  const activities = parseActivitiesFromFragments(capabilitiesSource);
+  const otActivities = parseOtActivitiesFromFragments(otSource);
+  const capabilityIds = new Set(capabilities.map((record) => record.id));
+  const missingParents = [...activities, ...otActivities].filter((record) => !capabilityIds.has(record.capability_id));
+  if (missingParents.length) throw new Error(`DoD ZT activities reference ${missingParents.length} missing capabilities`);
 
-  const activities = overlayActivities.length ? overlayActivities : (parsedActivities.length ? parsedActivities : buildFallbackActivities());
-
-  for (const overlayCap of overlayCapabilities) {
-    const id = overlayCap.id;
-    if (!capabilities.some((entry) => entry.id === id)) {
-      const pillarNumber = Number(id.split('.')[0]);
-      capabilities.push({
-        id,
-        pillar_id: `PILLAR-${pillarNumber}`,
-        title: overlayCap.title,
-        description: `Capability ${id} from DoD Zero Trust Overlays.`,
-        outcome: '',
-        impact: '',
-        level: 'Target',
-        locator: `ZeroTrustOverlays-2024Feb.pdf#Capability-${id}`,
-      });
-    } else {
-      const existing = capabilities.find((entry) => entry.id === id);
-      if (existing && !existing.title) existing.title = overlayCap.title;
-    }
+  const nistControls = readJson(join(ROOT, 'data', 'controls-800-53.json')).records || [];
+  const validControlIds = new Set(nistControls.flatMap((record) => {
+    const id = String(record.id);
+    const parenthetical = id.replace(/^(\w+-\d+)\.(\d+)$/, '$1($2)');
+    return parenthetical === id ? [id] : [id, parenthetical];
+  }));
+  const overlaySource = readJson(join(fragmentRoot, 'overlays.json'));
+  const overlayText = (overlaySource.pages || []).map((page) => page.text).join('\n');
+  const overlay = extractOverlayRelationships(overlayText, 'dod-zt-overlays-2024', validControlIds);
+  const capabilityTitles = new Map(capabilities.map((record) => [capabilityNodeId(record.id), record.title]));
+  for (const relationship of overlay.relationships) {
+    const title = capabilityTitles.get(relationship.target_id);
+    if (title) relationship.why = `DoD Zero Trust Overlays associates NIST SP 800-53 ${relationship.source_id} with ${title}.`;
   }
+  const priorOverlayMap = readJson(join(MAPS, '800-53-to-dod-zt-overlays.json'));
+  writeJson(join(MAPS, '800-53-to-dod-zt-overlays.json'), {
+    ...priorOverlayMap,
+    checksum: overlaySource.source.sha256,
+    relationships: overlay.relationships,
+    rejected_references: overlay.rejected_references,
+  });
 
-  const taxonomy = buildTaxonomy(overlayCapabilities);
-  const overlaysChecksum = sha256File(options.overlays);
-
-  const mapDocument = {
+  const documents = DOCUMENTS.map((document) => documentSummary(fragmentRoot, document));
+  const atlasDocuments = documents.filter((document) => document.atlas_role === 'primary_publication');
+  const supportingDocuments = documents.filter((document) => document.atlas_role === 'supporting_resource');
+  const taxonomy = {
     schema_version: '2.0',
-    source_key: 'dod-zt-overlays-2024',
-    source_artifact: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf',
-    source_version: '2024-02',
-    snapshot_date: new Date().toISOString().slice(0, 10),
-    checksum: `sha256:${overlaysChecksum}`,
-    provenance: 'DoD Zero Trust Overlays (Feb 2024) control-to-capability allocations from pillar overlay appendices.',
-    owner_authority: true,
-    submitter: 'DoD CIO',
-    relationships,
+    tenets,
+    pillars,
+    overlay_sections: [],
+    documents,
   };
-
-  writeJson(join(CURATED, 'taxonomy.json'), taxonomy);
-  writeJson(join(CURATED, 'capabilities.json'), { schema_version: '1.0', source_key: 'dod-zt-capabilities', records: capabilities });
-  writeJson(join(CURATED, 'activities.json'), { schema_version: '1.0', source_key: 'dod-zt-capabilities', records: activities });
-  writeJson(join(MAPS, '800-53-to-dod-zt-overlays.json'), mapDocument);
-
-  return {
-    taxonomy,
-    capabilities: capabilities.length,
-    activities: activities.length,
-    relationships: relationships.length,
-    overlaysChecksum,
+  const sourceManifest = {
+    schema_version: '1.0',
+    documents: documents.map((document) => ({
+      source_key: document.source_key,
+      source_url: document.source_url,
+      retrieved_at: document.retrieved_at,
+      byte_length: document.byte_length,
+      checksum: document.checksum,
+      pages: document.page_count,
+      atlas_role: document.atlas_role,
+    })),
+    reconciliation: {
+      documents_extracted: documents.length,
+      atlas_documents: atlasDocuments.length,
+      supporting_documents: supportingDocuments.length,
+      pages_extracted: documents.reduce((total, document) => total + document.page_count, 0),
+      tenets: tenets.length,
+      pillars: pillars.length,
+      capabilities: capabilities.length,
+      enterprise_activities: activities.length,
+      operational_technology_activities: otActivities.length,
+      total_activities: activities.length + otActivities.length,
+      atlas_records_expected: atlasDocuments.length + tenets.length + pillars.length + capabilities.length + activities.length + otActivities.length,
+      synthetic_records: 0,
+      parser_failures: 0,
+      overlay_relationships_discovered: overlay.relationships.length + overlay.rejected_references.length,
+      overlay_relationships_published: overlay.relationships.length,
+      overlay_relationships_rejected: overlay.rejected_references.length,
+    },
   };
+  writeJson(join(curatedRoot, 'taxonomy.json'), taxonomy);
+  writeJson(join(curatedRoot, 'capabilities.json'), { schema_version: '2.0', source_key: 'dod-zt-capabilities', records: capabilities });
+  writeJson(join(curatedRoot, 'activities.json'), { schema_version: '2.0', source_key: 'dod-zt-capabilities', records: [...activities, ...otActivities] });
+  writeJson(join(curatedRoot, 'source-manifest.json'), sourceManifest);
+
+  return { taxonomy, ...sourceManifest.reconciliation };
 }
 
 async function main() {
-  const options = parseArgs(process.argv);
-  const result = await extractDodZeroTrust(options);
-  console.log(JSON.stringify(result, null, 2));
+  const result = await extractDodZeroTrust();
+  const { taxonomy: _taxonomy, ...summary } = result;
+  console.log(JSON.stringify(summary, null, 2));
 }
 
 if (process.argv[1] && process.argv[1].endsWith('dod-zt-extract.mjs')) {
-  main().catch((err) => {
-    console.error(err);
+  main().catch((error) => {
+    console.error(error);
     process.exit(1);
   });
 }

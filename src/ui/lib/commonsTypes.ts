@@ -42,6 +42,22 @@ export type CommonsPopularitySignals = {
   citations?: number;
 };
 
+export type CommonsEvidenceSection = {
+  status: "documented" | "not_documented" | "not_applicable";
+  text: string;
+  sourceUrl: string;
+  values?: string[];
+};
+
+export type CommonsReleaseEvidence = {
+  status: "published" | "not_published" | "not_documented";
+  version: string | null;
+  name: string | null;
+  url: string;
+  publishedAt: string | null;
+  prerelease: boolean;
+};
+
 export type CommonsResource = {
   id: string;
   name: string;
@@ -112,6 +128,69 @@ export type CommonsResource = {
   brandKey?: string;
   sourceEvidence?: string | null;
   verificationMethod?: "public_url" | "official_repository" | "manual_restricted";
+  overview?: {
+    text: string;
+    sourceUrl: string;
+    sourceType: "repository_readme" | "publisher_source";
+    exactPublisherText: boolean;
+  };
+  compatibility?: {
+    status: "documented" | "not_stated" | "not_applicable";
+    operatingSystems: string[];
+    environments: string[];
+    sourceUrl: string;
+    note: string;
+  };
+  media?: {
+    status: "available" | "not_available";
+    sourceUrl: string;
+    reason?: string;
+    items: Array<{
+      kind: "publisher_screenshot";
+      url: string;
+      alt: string;
+      sourceUrl: string;
+      sha256: string;
+      byteLength: number;
+      contentType: string;
+      width: number;
+      height: number;
+      license: string;
+      licenseBasis: "repository_license" | "publisher_media_license";
+      retrievedAt: string;
+      commitSha: string;
+    }>;
+  };
+  presentationProfile?: {
+    profileType: string;
+    template: "tool" | "reference" | "training" | "directory" | "community" | "data" | "ecosystem" | "destination" | "artifact";
+    whatItDoes: CommonsEvidenceSection;
+    whoItIsFor: CommonsEvidenceSection;
+    limitations: CommonsEvidenceSection;
+  };
+  toolProfile?: {
+    inputs: CommonsEvidenceSection;
+    outputs: CommonsEvidenceSection;
+    formats: CommonsEvidenceSection;
+    integrations: CommonsEvidenceSection;
+    installation: CommonsEvidenceSection;
+    usage: CommonsEvidenceSection;
+    license: CommonsEvidenceSection;
+    maintenance: { status: string; text: string; sourceUrl: string };
+    release: CommonsReleaseEvidence;
+  };
+  repositoryEvidence?: {
+    capturedAt: string;
+    repositoryScope: "repository" | "organization_profile";
+    repositoryApiUrl: string;
+    commitSha: string;
+    commitUrl: string;
+    readmePath: string;
+    readmeUrl: string;
+    readmeSha256: string;
+    readmeByteLength: number;
+    release: CommonsReleaseEvidence;
+  } | null;
   automatedFields?: string[];
   manualFields?: string[];
 };

@@ -142,7 +142,10 @@ test("WS2 keeps every published record form readable at compact width", async ({
     ["Zero Trust activity", "/#/record/dod-zt/ACT-1-1-1", "Activity"],
     ["Zero Trust capability", "/#/record/dod-zt/CAP-1-1", "Capability"],
     ["Zero Trust document", "/#/record/dod-zt/DOC-OVERLAYS", "Document Summary"],
-    ["Zero Trust overlay", "/#/record/dod-zt/OVERLAY-APP", "Overlay Section"],
+    ["NIST Zero Trust publication", "/#/record/nist-zt/SP800-207", "Publication Summary"],
+    ["NIST Zero Trust logical component", "/#/record/nist-zt/SP800207-COMPONENT-POLICY-ENGINE-PE", "Logical Component"],
+    ["NIST Zero Trust implementation", "/#/record/nist-zt/SP180035-E1B1", "Implementation Summary"],
+    ["Zero Trust assessment question", "/#/record/microsoft-zt-maturity/MSZT-2-1", "Assessment Guidance"],
     ["Zero Trust pillar", "/#/record/dod-zt/PILLAR-1", "Pillar Summary"],
     ["Zero Trust tenet", "/#/record/dod-zt/TENET-1", "Tenet"],
   ];

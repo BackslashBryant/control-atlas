@@ -336,11 +336,11 @@ test('every catalog with a declared parent tier has all of its records parented'
   }
 });
 
-test('all 23 publication-native structure profiles reconcile with one containment path per record', () => {
+test('all 27 publication-native structure profiles reconcile with valid containment paths', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
 
-  assert.equal(CATALOG_STRUCTURE_IDS.length, 23);
+  assert.equal(CATALOG_STRUCTURE_IDS.length, 27);
   assert.deepEqual(validatePublisherNativeContainment(nodes, edges), []);
   assert.deepEqual(
     catalogStructureProfile('disa-stig').paths,
@@ -354,6 +354,45 @@ test('all 23 publication-native structure profiles reconcile with one containmen
     catalogStructureProfile('nist-800-53').paths.some((path) =>
       path.join('>') === 'catalog>family>control>control_enhancement'),
   );
+});
+
+test('ATT&CK techniques preserve every publisher-declared tactic membership', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+  const parentIdsByChild = new Map();
+  for (const edge of edges) {
+    if (!isNativeStructuralEdge(edge, nodeById)) continue;
+    const parents = parentIdsByChild.get(edge.target_node_id) || [];
+    parents.push(edge.source_node_id);
+    parentIdsByChild.set(edge.target_node_id, parents);
+  }
+
+  let multiTacticTechniqueCount = 0;
+  for (const catalogId of ['mitre-attack', 'mitre-attack-ics']) {
+    const techniques = nodes.filter(
+      (node) => node.metadata?.catalog_id === catalogId && node.node_type === 'attack_technique',
+    );
+    assert.ok(techniques.length > 0, `${catalogId} produced no techniques`);
+    for (const technique of techniques) {
+      const actualParents = [...(parentIdsByChild.get(technique.id) || [])].sort();
+      if (technique.metadata?.is_subtechnique) {
+        assert.deepEqual(
+          actualParents,
+          [`${catalogId}:${technique.metadata.parent_technique_id}`],
+          `${technique.id} must be contained only by its publisher-declared parent technique`,
+        );
+        continue;
+      }
+      const expectedParents = (technique.metadata?.tactic_memberships || [])
+        .map((membership) => `${catalogId}:TACTIC-${membership.id}`)
+        .sort();
+      assert.ok(expectedParents.length > 0, `${technique.id} needs a publisher tactic membership`);
+      assert.deepEqual(actualParents, expectedParents, `${technique.id} tactic memberships drifted`);
+      if (expectedParents.length > 1) multiTacticTechniqueCount += 1;
+    }
+  }
+  assert.ok(multiTacticTechniqueCount > 0, 'expected ATT&CK techniques assigned to multiple tactics');
 });
 
 test('declared parent tiers materialize real tier nodes with plain-language titles', () => {
@@ -374,11 +413,15 @@ test('declared parent tiers materialize real tier nodes with plain-language titl
     for (const node of tierNodes) {
       assert.ok(node.label?.trim(), `${node.id} needs a label`);
       assert.ok(node.metadata?.title?.trim(), `${node.id} needs a title`);
-      assert.equal(
-        node.metadata?.description,
-        undefined,
-        `${node.id} must not invent a description for a grouping node`,
-      );
+      if (node.metadata?.description) {
+        assert.equal(
+          node.metadata.description_provenance,
+          'publisher',
+          `${node.id} grouping description must be publisher text`,
+        );
+      } else {
+        assert.equal(node.metadata?.description, undefined, `${node.id} must not invent a grouping description`);
+      }
       assert.ok(
         (childCount.get(node.id) ?? 0) > 0,
         `${node.id} is a tier node with no children, so it should not exist`,
@@ -625,7 +668,9 @@ test('the Rev 4 crosswalk maps only what NIST published', () => {
 test('DoD Zero Trust tenets are connected to the catalog, not fabricated as pillar children', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;
-  const tenets = nodes.filter((node) => node.node_type === 'zt_tenet');
+  const tenets = nodes.filter(
+    (node) => node.node_type === 'zt_tenet' && node.metadata?.catalog_id === 'dod-zt',
+  );
   assert.equal(tenets.length, 5, 'DoD Zero Trust has 5 tenets');
 
   const nativeStructure = structuralEdges(nodes, edges);
@@ -754,7 +799,7 @@ test('every catalog stays within its documented description-completeness budget'
   const EXCEPTIONS = {};
   const byCatalog = new Map();
   for (const node of nodes) {
-    if (SYNTHETIC_STRUCTURE_NODE_TYPES.has(node.node_type)) continue;
+    if (SYNTHETIC_STRUCTURE_NODE_TYPES.has(node.node_type) || node.metadata?.structural_group === true) continue;
     const catalogId = node.metadata?.catalog_id;
     if (!catalogId) continue;
     const bucket = byCatalog.get(catalogId) || [];

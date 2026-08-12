@@ -1,0 +1,975 @@
+{
+  "document_key": "dod-zt-newsletter-2024-11",
+  "extractor": {
+    "name": "pdfplumber",
+    "version": "0.11.10"
+  },
+  "pages": [
+    {
+      "height": 842.52,
+      "lines": [
+        {
+          "bbox": [
+            20.486,
+            21.089,
+            417.692,
+            71.609
+          ],
+          "id": "line-1",
+          "text": "ZERO TRUST PFMO"
+        },
+        {
+          "bbox": [
+            20.476,
+            73.935,
+            129.831,
+            91.935
+          ],
+          "id": "line-2",
+          "text": "NEWSLETTER"
+        },
+        {
+          "bbox": [
+            19.949,
+            103.207,
+            121.393,
+            114.187
+          ],
+          "id": "line-3",
+          "text": "NOVEMBER 2024"
+        },
+        {
+          "bbox": [
+            23.393,
+            140.238,
+            356.912,
+            159.738
+          ],
+          "id": "line-4",
+          "text": "MESSAGE FROM R A N D Y RESNICK"
+        },
+        {
+          "bbox": [
+            19.896,
+            164.418,
+            421.955,
+            172.398
+          ],
+          "id": "line-5",
+          "text": "As the DoD’s Chief ZT Officer of the Zero Trust Portfolio Management Office (ZT PfMO), I’m honored"
+        },
+        {
+          "bbox": [
+            19.864,
+            176.899,
+            422.032,
+            184.879
+          ],
+          "id": "line-6",
+          "text": "to highlight the remarkable progress we’ve made over the past three years. Since the 2021"
+        },
+        {
+          "bbox": [
+            19.864,
+            189.379,
+            422.108,
+            197.359
+          ],
+          "id": "line-7",
+          "text": "executive order (EO-14028), we’ve reviewed over 40 ZT Implementation Plans from DoD"
+        },
+        {
+          "bbox": [
+            19.896,
+            201.86,
+            422.096,
+            209.84
+          ],
+          "id": "line-8",
+          "text": "Components, laying the groundwork for a transformative cybersecurity defense shift across the"
+        },
+        {
+          "bbox": [
+            19.912,
+            214.341,
+            46.916,
+            222.321
+          ],
+          "id": "line-9",
+          "text": "DoDIN."
+        },
+        {
+          "bbox": [
+            20.454,
+            228.864,
+            422.152,
+            236.844
+          ],
+          "id": "line-10",
+          "text": "From the advancements in developing DoD's ZT Reference Architecture, ZT Strategy, ZT"
+        },
+        {
+          "bbox": [
+            20.446,
+            241.345,
+            421.909,
+            249.325
+          ],
+          "id": "line-11",
+          "text": "Roadmap, ZT Implementation Plan, ZT Overlays, and most recently, Navy Flank Speed - these"
+        },
+        {
+          "bbox": [
+            20.438,
+            253.826,
+            422.112,
+            261.806
+          ],
+          "id": "line-12",
+          "text": "have all been unprecedented achievements within the Department in such a short period of"
+        },
+        {
+          "bbox": [
+            20.414,
+            266.307,
+            421.901,
+            274.287
+          ],
+          "id": "line-13",
+          "text": "time. Along with strong vendor partnerships, we’re not just securing DoD systems to protect"
+        },
+        {
+          "bbox": [
+            452.872,
+            274.67,
+            546.442,
+            286.19
+          ],
+          "id": "line-14",
+          "text": "RANDY RESNICK"
+        },
+        {
+          "bbox": [
+            20.398,
+            278.787,
+            422.048,
+            286.767
+          ],
+          "id": "line-15",
+          "text": "America - we’re making history. Your hard work, commitment, and dedication to advance ZT"
+        },
+        {
+          "bbox": [
+            466.945,
+            284.511,
+            531.724,
+            290.031
+          ],
+          "id": "line-16",
+          "text": "DoD CIO Chief ZT Officer"
+        },
+        {
+          "bbox": [
+            20.406,
+            291.268,
+            340.682,
+            299.248
+          ],
+          "id": "line-17",
+          "text": "progress are crucial to this mission. Thank you for your passion and dedication!"
+        },
+        {
+          "bbox": [
+            23.394,
+            310.126,
+            404.736,
+            329.626
+          ],
+          "id": "line-18",
+          "text": "NAVY F L A N K S P E E D A C C E L E R A T E S ZT"
+        },
+        {
+          "bbox": [
+            20.256,
+            332.998,
+            422.16,
+            340.978
+          ],
+          "id": "line-19",
+          "text": "The Navy's Flank Speed cloud service has surpassed expectations by achieving 151 out of 152"
+        },
+        {
+          "bbox": [
+            20.28,
+            345.479,
+            421.41,
+            353.459
+          ],
+          "id": "line-20",
+          "text": "Zero Trust security activities, thus establishing a new benchmark for ZT. Flank Speed was"
+        },
+        {
+          "bbox": [
+            20.264,
+            357.959,
+            421.921,
+            365.939
+          ],
+          "id": "line-21",
+          "text": "developed by PEO Digital and U.S. Fleet Cyber Command and provides enhanced collaboration,"
+        },
+        {
+          "bbox": [
+            20.28,
+            370.44,
+            421.09,
+            378.42
+          ],
+          "id": "line-22",
+          "text": "productivity, and robust ZT security to more than 560,000 users worldwide. DON CIO Jane"
+        },
+        {
+          "bbox": [
+            20.288,
+            382.921,
+            421.235,
+            390.901
+          ],
+          "id": "line-23",
+          "text": "Rathbun stated, \"Aligning the Department of Navy with Zero Trust principles was born out of a"
+        },
+        {
+          "bbox": [
+            20.296,
+            395.401,
+            421.923,
+            403.381
+          ],
+          "id": "line-24",
+          "text": "sense of urgency to deliver a secure collaboration and communications platform.\" The service"
+        },
+        {
+          "bbox": [
+            20.288,
+            407.882,
+            421.978,
+            415.862
+          ],
+          "id": "line-25",
+          "text": "surpassed expectations during its second round of security assessments this year. After rigorous"
+        },
+        {
+          "bbox": [
+            20.296,
+            420.363,
+            422.136,
+            428.343
+          ],
+          "id": "line-26",
+          "text": "testing, Flank Speed not only successfully delivered all target level ZT activities, but also 60 of the"
+        },
+        {
+          "bbox": [
+            20.312,
+            432.844,
+            422.152,
+            440.824
+          ],
+          "id": "line-27",
+          "text": "61 Advanced ZT activities, positioning it as a leader in Zero Trust implementation within the DOD."
+        },
+        {
+          "bbox": [
+            20.336,
+            445.324,
+            421.996,
+            453.304
+          ],
+          "id": "line-28",
+          "text": "The path forward for Flank Speed involves expanding ZT outcomes to the Navy enterprise,"
+        },
+        {
+          "bbox": [
+            20.304,
+            457.798,
+            363.037,
+            465.785
+          ],
+          "id": "line-29",
+          "text": "ensuring the future of Navy IT remains secure and resilient. Read the full article here."
+        },
+        {
+          "bbox": [
+            28.03,
+            491.966,
+            175.898,
+            511.466
+          ],
+          "id": "line-30",
+          "text": "IPLAN UPDATE"
+        },
+        {
+          "bbox": [
+            20.475,
+            518.234,
+            575.622,
+            526.214
+          ],
+          "id": "line-31",
+          "text": "In the second iteration of the Zero Trust implementation, over 40 components of the DoD have submitted their plans to the Zero Trust"
+        },
+        {
+          "bbox": [
+            20.459,
+            529.27,
+            575.698,
+            537.25
+          ],
+          "id": "line-32",
+          "text": "PfMO. These Implementation Plans (IPlans) will be reviewed by a specialized team until the end of the year. This year, the PfMO will"
+        },
+        {
+          "bbox": [
+            20.491,
+            540.306,
+            575.03,
+            548.294
+          ],
+          "id": "line-33",
+          "text": "leverage the DON’s Data Application Tool and Advana dashboards to accurately gather, monitor, and evaluate the progress of each"
+        },
+        {
+          "bbox": [
+            20.479,
+            551.35,
+            575.725,
+            559.33
+          ],
+          "id": "line-34",
+          "text": "component. The PfMO expects all data to be evaluated and reported to Congress by early 2025. The review is part of a quarterly"
+        },
+        {
+          "bbox": [
+            20.471,
+            562.386,
+            575.733,
+            570.366
+          ],
+          "id": "line-35",
+          "text": "update and assessment of each component in order to ensure that every component remains on schedule to successfully"
+        },
+        {
+          "bbox": [
+            20.463,
+            573.423,
+            575.669,
+            581.403
+          ],
+          "id": "line-36",
+          "text": "implement Zero Trust in their systems by FY2027. This effort will enhance the security posture of the DoD and protect sensitive"
+        },
+        {
+          "bbox": [
+            20.487,
+            584.459,
+            183.2,
+            592.439
+          ],
+          "id": "line-37",
+          "text": "information from ongoing cyber threats."
+        },
+        {
+          "bbox": [
+            28.035,
+            607.628,
+            406.206,
+            627.128
+          ],
+          "id": "line-38",
+          "text": "ACT- IAC L E A D S IN INTEROPERABILITY"
+        },
+        {
+          "bbox": [
+            33.915,
+            628.994,
+            571.671,
+            636.974
+          ],
+          "id": "line-39",
+          "text": "On September 30th, government and industry participants convened for the Zero Trust Interoperability Working Group, co-"
+        },
+        {
+          "bbox": [
+            33.947,
+            640.158,
+            571.484,
+            648.138
+          ],
+          "id": "line-40",
+          "text": "hosted by the DoD ZT PfMO and ACT-IAC. The meeting focused on common challenges and solutions around Interoperability"
+        },
+        {
+          "bbox": [
+            33.915,
+            651.258,
+            570.923,
+            659.238
+          ],
+          "id": "line-41",
+          "text": "ZTNA Agents, Agentless, and Comply-to-Connect (C2C). Examples from vendors and sanitized use cases from agencies"
+        },
+        {
+          "bbox": [
+            33.931,
+            662.422,
+            571.351,
+            670.402
+          ],
+          "id": "line-42",
+          "text": "discussed short-term and long-term strategies that would be possible. The next meeting this year will address the subsequent"
+        },
+        {
+          "bbox": [
+            33.883,
+            673.522,
+            551.553,
+            681.502
+          ],
+          "id": "line-43",
+          "text": "steps on solutions and standardizations, ZTNA Agent Operations within various operating systems, and solving agent conflicts."
+        },
+        {
+          "bbox": [
+            28.032,
+            716.029,
+            543.099,
+            730.653
+          ],
+          "id": "line-44",
+          "text": "ZT PROOF OF CONCEPT UPDATE ZT OVERLAYS RELEASED"
+        },
+        {
+          "bbox": [
+            20.476,
+            744.489,
+            575.75,
+            752.481
+          ],
+          "id": "line-45",
+          "text": "The ZT PfMO has funded 20 ZT proof of concept efforts to support the On May 29, 2024, ZT overlays were launched to"
+        },
+        {
+          "bbox": [
+            20.46,
+            755.525,
+            575.466,
+            763.518
+          ],
+          "id": "line-46",
+          "text": "acceleration of Zero Trust at the DoD. The proofs of concepts have a wide accelerate Zero Trust adoption, providing a scalable"
+        },
+        {
+          "bbox": [
+            20.452,
+            766.561,
+            575.596,
+            774.554
+          ],
+          "id": "line-47",
+          "text": "diversity in terms of technologies and use cases. The scope of the PoCs is ZT solution for DoD components to implement Zero Trust"
+        },
+        {
+          "bbox": [
+            20.452,
+            777.598,
+            575.577,
+            785.601
+          ],
+          "id": "line-48",
+          "text": "COA solutions and functional PoCs in the areas of ICAM, DevSecOps, Data principles. To learn more, please visit the DOD CIO’s"
+        },
+        {
+          "bbox": [
+            20.436,
+            788.634,
+            406.277,
+            796.641
+          ],
+          "id": "line-49",
+          "text": "Tagging, DDIL, and Operational Technology. library website"
+        },
+        {
+          "bbox": [
+            17.72,
+            815.662,
+            573.722,
+            826.624
+          ],
+          "id": "line-50",
+          "text": "ZERO TRUST PFMO NEWSLETTER 01"
+        }
+      ],
+      "page": 1,
+      "tables": [],
+      "text": "ZERO TRUST PFMO\nNEWSLETTER\nNOVEMBER 2024\nMESSAGE FROM R A N D Y RESNICK\nAs the DoD’s Chief ZT Officer of the Zero Trust Portfolio Management Office (ZT PfMO), I’m honored\nto highlight the remarkable progress we’ve made over the past three years. Since the 2021\nexecutive order (EO-14028), we’ve reviewed over 40 ZT Implementation Plans from DoD\nComponents, laying the groundwork for a transformative cybersecurity defense shift across the\nDoDIN.\nFrom the advancements in developing DoD's ZT Reference Architecture, ZT Strategy, ZT\nRoadmap, ZT Implementation Plan, ZT Overlays, and most recently, Navy Flank Speed - these\nhave all been unprecedented achievements within the Department in such a short period of\ntime. Along with strong vendor partnerships, we’re not just securing DoD systems to protect\nRANDY RESNICK\nAmerica - we’re making history. Your hard work, commitment, and dedication to advance ZT\nDoD CIO Chief ZT Officer\nprogress are crucial to this mission. Thank you for your passion and dedication!\nNAVY F L A N K S P E E D A C C E L E R A T E S ZT\nThe Navy's Flank Speed cloud service has surpassed expectations by achieving 151 out of 152\nZero Trust security activities, thus establishing a new benchmark for ZT. Flank Speed was\ndeveloped by PEO Digital and U.S. Fleet Cyber Command and provides enhanced collaboration,\nproductivity, and robust ZT security to more than 560,000 users worldwide. DON CIO Jane\nRathbun stated, \"Aligning the Department of Navy with Zero Trust principles was born out of a\nsense of urgency to deliver a secure collaboration and communications platform.\" The service\nsurpassed expectations during its second round of security assessments this year. After rigorous\ntesting, Flank Speed not only successfully delivered all target level ZT activities, but also 60 of the\n61 Advanced ZT activities, positioning it as a leader in Zero Trust implementation within the DOD.\nThe path forward for Flank Speed involves expanding ZT outcomes to the Navy enterprise,\nensuring the future of Navy IT remains secure and resilient. Read the full article here.\nIPLAN UPDATE\nIn the second iteration of the Zero Trust implementation, over 40 components of the DoD have submitted their plans to the Zero Trust\nPfMO. These Implementation Plans (IPlans) will be reviewed by a specialized team until the end of the year. This year, the PfMO will\nleverage the DON’s Data Application Tool and Advana dashboards to accurately gather, monitor, and evaluate the progress of each\ncomponent. The PfMO expects all data to be evaluated and reported to Congress by early 2025. The review is part of a quarterly\nupdate and assessment of each component in order to ensure that every component remains on schedule to successfully\nimplement Zero Trust in their systems by FY2027. This effort will enhance the security posture of the DoD and protect sensitive\ninformation from ongoing cyber threats.\nACT- IAC L E A D S IN INTEROPERABILITY\nOn September 30th, government and industry participants convened for the Zero Trust Interoperability Working Group, co-\nhosted by the DoD ZT PfMO and ACT-IAC. The meeting focused on common challenges and solutions around Interoperability\nZTNA Agents, Agentless, and Comply-to-Connect (C2C). Examples from vendors and sanitized use cases from agencies\ndiscussed short-term and long-term strategies that would be possible. The next meeting this year will address the subsequent\nsteps on solutions and standardizations, ZTNA Agent Operations within various operating systems, and solving agent conflicts.\nZT PROOF OF CONCEPT UPDATE ZT OVERLAYS RELEASED\nThe ZT PfMO has funded 20 ZT proof of concept efforts to support the On May 29, 2024, ZT overlays were launched to\nacceleration of Zero Trust at the DoD. The proofs of concepts have a wide accelerate Zero Trust adoption, providing a scalable\ndiversity in terms of technologies and use cases. The scope of the PoCs is ZT solution for DoD components to implement Zero Trust\nCOA solutions and functional PoCs in the areas of ICAM, DevSecOps, Data principles. To learn more, please visit the DOD CIO’s\nTagging, DDIL, and Operational Technology. library website\nZERO TRUST PFMO NEWSLETTER 01",
+      "text_sha256": "sha256:bc9adc37b020a2160a3dd4ba58da8608a4a8a5d90ac32933222f28ab1a51a14a",
+      "width": 595.02
+    },
+    {
+      "height": 842.52,
+      "lines": [
+        {
+          "bbox": [
+            20.711,
+            15.419,
+            571.046,
+            28.31
+          ],
+          "id": "line-1",
+          "text": "NOVEMBER 2024 ZERO TRUST PFMO NEWSLETTER"
+        },
+        {
+          "bbox": [
+            192.359,
+            66.069,
+            421.394,
+            85.569
+          ],
+          "id": "line-2",
+          "text": "ZT SPOTLIGHT O F 2024"
+        },
+        {
+          "bbox": [
+            188.844,
+            94.252,
+            588.471,
+            102.772
+          ],
+          "id": "line-3",
+          "text": "David Voelker, the Department of Navy’s Zero Trust Implementation Lead, has been"
+        },
+        {
+          "bbox": [
+            188.87,
+            107.629,
+            588.475,
+            116.149
+          ],
+          "id": "line-4",
+          "text": "recognized as the \"ZT Spotlight of 2024\" for his contributions to the Zero Trust journey. He"
+        },
+        {
+          "bbox": [
+            188.87,
+            120.945,
+            588.367,
+            129.465
+          ],
+          "id": "line-5",
+          "text": "developed the DON ZT Major Design Concept, which provides repeatable design"
+        },
+        {
+          "bbox": [
+            188.878,
+            134.322,
+            588.833,
+            142.842
+          ],
+          "id": "line-6",
+          "text": "guidance to achieve ZT, the DON ZT Blueprint (a graphical framework outlining ZT"
+        },
+        {
+          "bbox": [
+            188.887,
+            147.698,
+            588.403,
+            156.218
+          ],
+          "id": "line-7",
+          "text": "architecture), and played a key role in the Zero Trust Tactical Afloat (ZTTA) experiment. His"
+        },
+        {
+          "bbox": [
+            188.904,
+            161.015,
+            588.391,
+            169.535
+          ],
+          "id": "line-8",
+          "text": "efforts have advanced ZT implementation in Tactical Afloat environments toward"
+        },
+        {
+          "bbox": [
+            188.895,
+            174.391,
+            588.548,
+            182.911
+          ],
+          "id": "line-9",
+          "text": "production and joint capabilities across multiple pillars. In recognition of his"
+        },
+        {
+          "bbox": [
+            188.921,
+            187.768,
+            588.348,
+            196.288
+          ],
+          "id": "line-10",
+          "text": "achievements, Mr. Voelker has received additional funding to support ZTTA and Cyber"
+        },
+        {
+          "bbox": [
+            188.93,
+            201.084,
+            588.489,
+            209.604
+          ],
+          "id": "line-11",
+          "text": "Ready goals for tactical ashore/afloat. His dedication is a tremendous asset to our"
+        },
+        {
+          "bbox": [
+            57.219,
+            207.22,
+            157.23,
+            219.7
+          ],
+          "id": "line-12",
+          "text": "DAVID VOELKER"
+        },
+        {
+          "bbox": [
+            188.947,
+            214.461,
+            323.764,
+            222.981
+          ],
+          "id": "line-13",
+          "text": "commitment to advancing ZT!"
+        },
+        {
+          "bbox": [
+            51.22,
+            219.118,
+            160.714,
+            225.118
+          ],
+          "id": "line-14",
+          "text": "DON Zero Trust Implementation Lead"
+        },
+        {
+          "bbox": [
+            208.512,
+            241.592,
+            370.506,
+            261.092
+          ],
+          "id": "line-15",
+          "text": "EVENTS 2024- 25"
+        },
+        {
+          "bbox": [
+            62.914,
+            285.887,
+            506.434,
+            294.452
+          ],
+          "id": "line-16",
+          "text": "Carnegie Melon Software Engineering Institute Red Hat Government Symposium"
+        },
+        {
+          "bbox": [
+            125.577,
+            304.923,
+            527.155,
+            312.903
+          ],
+          "id": "line-17",
+          "text": "Hosted by CMU Software Engineering Federal leaders will discuss key"
+        },
+        {
+          "bbox": [
+            40.021,
+            308.107,
+            378.462,
+            316.629
+          ],
+          "id": "line-18",
+          "text": "11/13/2024 11/19/2024"
+        },
+        {
+          "bbox": [
+            27.539,
+            317.523,
+            550.34,
+            327.969
+          ],
+          "id": "line-19",
+          "text": "Carnegie Mellon U, Institute Research Review to build Reagan Building technology and policy advancements"
+        },
+        {
+          "bbox": [
+            38.223,
+            330.123,
+            484.124,
+            339.31
+          ],
+          "id": "line-20",
+          "text": "Pittsburgh, PA partnerships Washington DC for future advantage"
+        },
+        {
+          "bbox": [
+            84.92,
+            369.625,
+            548.647,
+            379.91
+          ],
+          "id": "line-21",
+          "text": "Cloud Security Alliance ZT Summit Joint Mosaics @techconnect & Resilience Week"
+        },
+        {
+          "bbox": [
+            36.85,
+            387.836,
+            532.933,
+            397.126
+          ],
+          "id": "line-22",
+          "text": "11/20 - 11/21 2024 3rd annual Virtual ZT Summit: register Resilience Week unites leaders to"
+        },
+        {
+          "bbox": [
+            320.857,
+            394.0,
+            386.845,
+            402.52
+          ],
+          "id": "line-23",
+          "text": "12/3 - 12/5 2024"
+        },
+        {
+          "bbox": [
+            57.315,
+            399.827,
+            561.796,
+            408.417
+          ],
+          "id": "line-24",
+          "text": "Virtual at www.cloudsecurityalliance.org accelerate tech solutions for military and"
+        },
+        {
+          "bbox": [
+            333.637,
+            405.221,
+            374.07,
+            413.741
+          ],
+          "id": "line-25",
+          "text": "Austin, TX"
+        },
+        {
+          "bbox": [
+            405.875,
+            413.037,
+            469.076,
+            421.017
+          ],
+          "id": "line-26",
+          "text": "national security"
+        },
+        {
+          "bbox": [
+            220.86,
+            452.805,
+            376.143,
+            461.325
+          ],
+          "id": "line-27",
+          "text": "USCYBERCOM/ZT PfMO Engagement"
+        },
+        {
+          "bbox": [
+            267.194,
+            470.75,
+            396.217,
+            478.73
+          ],
+          "id": "line-28",
+          "text": "ZT PfMO and DAU will host a 3-day"
+        },
+        {
+          "bbox": [
+            180.203,
+            476.916,
+            243.489,
+            485.436
+          ],
+          "id": "line-29",
+          "text": "1/21 - 1/23 2025"
+        },
+        {
+          "bbox": [
+            267.194,
+            483.35,
+            393.893,
+            491.33
+          ],
+          "id": "line-30",
+          "text": "event to support USCYBERCOM in"
+        },
+        {
+          "bbox": [
+            179.308,
+            488.137,
+            243.89,
+            496.657
+          ],
+          "id": "line-31",
+          "text": "Fort Meade, MD"
+        },
+        {
+          "bbox": [
+            267.194,
+            495.951,
+            345.288,
+            503.931
+          ],
+          "id": "line-32",
+          "text": "achieving Zero Trust"
+        },
+        {
+          "bbox": [
+            31.905,
+            587.347,
+            154.053,
+            597.847
+          ],
+          "id": "line-33",
+          "text": "ZT TRAINING SCHEDULE"
+        },
+        {
+          "bbox": [
+            31.905,
+            599.383,
+            90.782,
+            610.903
+          ],
+          "id": "line-34",
+          "text": "2024-2025"
+        },
+        {
+          "bbox": [
+            24.046,
+            639.85,
+            532.284,
+            650.081
+          ],
+          "id": "line-35",
+          "text": "ZT Practitioners Workshop Times: 19-20 Nov 2024 – Virtual (PST) Click HERE to register for DAU courses."
+        },
+        {
+          "bbox": [
+            149.386,
+            676.057,
+            568.049,
+            695.857
+          ],
+          "id": "line-36",
+          "text": "MISSI ON VISION K E Y F O CU S A REAS"
+        },
+        {
+          "bbox": [
+            267.515,
+            710.017,
+            569.495,
+            717.997
+          ],
+          "id": "line-37",
+          "text": "To Deliver an Information Cloud. Communications. Cybersecurity. Enablin g"
+        },
+        {
+          "bbox": [
+            130.781,
+            716.471,
+            247.994,
+            725.471
+          ],
+          "id": "line-38",
+          "text": "Protect. Connect. Perform."
+        },
+        {
+          "bbox": [
+            261.755,
+            722.197,
+            533.585,
+            729.697
+          ],
+          "id": "line-39",
+          "text": "Dominant Domain to Defeat Artificial Intelligence and Data."
+        },
+        {
+          "bbox": [
+            268.655,
+            734.857,
+            359.225,
+            742.357
+          ],
+          "id": "line-40",
+          "text": "our Nation's Adversaries."
+        },
+        {
+          "bbox": [
+            32.063,
+            773.053,
+            553.882,
+            782.053
+          ],
+          "id": "line-41",
+          "text": "DISCLAIMER: The discussion of non-federal entities, methods, products, or services does not imply any endorsement"
+        },
+        {
+          "bbox": [
+            75.911,
+            787.273,
+            509.362,
+            796.273
+          ],
+          "id": "line-42",
+          "text": "by the United States Department of Defense or the DoD CIO ZT PfMO https://dodcio.defense.gov/"
+        },
+        {
+          "bbox": [
+            20.18,
+            823.155,
+            574.559,
+            834.117
+          ],
+          "id": "line-43",
+          "text": "ZERO TRUST PFMO NEWSLETTER 02"
+        }
+      ],
+      "page": 2,
+      "tables": [],
+      "text": "NOVEMBER 2024 ZERO TRUST PFMO NEWSLETTER\nZT SPOTLIGHT O F 2024\nDavid Voelker, the Department of Navy’s Zero Trust Implementation Lead, has been\nrecognized as the \"ZT Spotlight of 2024\" for his contributions to the Zero Trust journey. He\ndeveloped the DON ZT Major Design Concept, which provides repeatable design\nguidance to achieve ZT, the DON ZT Blueprint (a graphical framework outlining ZT\narchitecture), and played a key role in the Zero Trust Tactical Afloat (ZTTA) experiment. His\nefforts have advanced ZT implementation in Tactical Afloat environments toward\nproduction and joint capabilities across multiple pillars. In recognition of his\nachievements, Mr. Voelker has received additional funding to support ZTTA and Cyber\nReady goals for tactical ashore/afloat. His dedication is a tremendous asset to our\nDAVID VOELKER\ncommitment to advancing ZT!\nDON Zero Trust Implementation Lead\nEVENTS 2024- 25\nCarnegie Melon Software Engineering Institute Red Hat Government Symposium\nHosted by CMU Software Engineering Federal leaders will discuss key\n11/13/2024 11/19/2024\nCarnegie Mellon U, Institute Research Review to build Reagan Building technology and policy advancements\nPittsburgh, PA partnerships Washington DC for future advantage\nCloud Security Alliance ZT Summit Joint Mosaics @techconnect & Resilience Week\n11/20 - 11/21 2024 3rd annual Virtual ZT Summit: register Resilience Week unites leaders to\n12/3 - 12/5 2024\nVirtual at www.cloudsecurityalliance.org accelerate tech solutions for military and\nAustin, TX\nnational security\nUSCYBERCOM/ZT PfMO Engagement\nZT PfMO and DAU will host a 3-day\n1/21 - 1/23 2025\nevent to support USCYBERCOM in\nFort Meade, MD\nachieving Zero Trust\nZT TRAINING SCHEDULE\n2024-2025\nZT Practitioners Workshop Times: 19-20 Nov 2024 – Virtual (PST) Click HERE to register for DAU courses.\nMISSI ON VISION K E Y F O CU S A REAS\nTo Deliver an Information Cloud. Communications. Cybersecurity. Enablin g\nProtect. Connect. Perform.\nDominant Domain to Defeat Artificial Intelligence and Data.\nour Nation's Adversaries.\nDISCLAIMER: The discussion of non-federal entities, methods, products, or services does not imply any endorsement\nby the United States Department of Defense or the DoD CIO ZT PfMO https://dodcio.defense.gov/\nZERO TRUST PFMO NEWSLETTER 02",
+      "text_sha256": "sha256:68e35f7533c303380c1a49f00bde7e9a78019695606ed412c2f6f87b2de245c3",
+      "width": 595.02
+    }
+  ],
+  "reconciliation": {
+    "pages_discovered": 2,
+    "pages_extracted": 2,
+    "pages_with_tables": 0,
+    "pages_with_text": 2,
+    "tables_extracted": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "byte_length": 1902008,
+    "filename": "newsletter.pdf",
+    "pages": 2,
+    "retrieved_at": "2026-08-12",
+    "sha256": "sha256:2be18eaf9c5b2c2d0aaf56d68514d49c5ea726f3540afb5fe81bb8b59fd3bc8b",
+    "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-NewsletterNov.pdf"
+  }
+}

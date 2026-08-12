@@ -5,6 +5,7 @@ import test from 'node:test';
 
 const workflow = readFileSync('.github/workflows/nightly-refresh.yml', 'utf8');
 const refreshScript = readFileSync('scripts/refresh-data.mjs', 'utf8');
+const ingestionPipeline = readFileSync('scripts/lib/ingestion-pipeline.mjs', 'utf8');
 const lighthouseAb = readFileSync('.github/workflows/lighthouse-ab.yml', 'utf8');
 const trackedWorkflows = execFileSync('git', ['ls-files', '.github/workflows/*.yml'], {
   encoding: 'utf8',
@@ -40,10 +41,12 @@ test('obsolete Tenable refresh cannot run outside the current registry pipeline'
 });
 
 test('source refresh ingests the current structured FedRAMP rules before rebuilding', () => {
-  assert.match(refreshScript, /fetch-fedramp-2026-rules\.mjs/);
-  assert.match(refreshScript, /reconcile-artifact-counts\.mjs/);
-  assert.match(refreshScript, /verify-discovery\.mjs/);
-  assert.match(refreshScript, /verify-manifests\.mjs/);
+  assert.match(ingestionPipeline, /fetch-fedramp-2026-rules\.mjs/);
+  assert.match(ingestionPipeline, /reconcile-artifact-counts\.mjs/);
+  assert.match(ingestionPipeline, /verify-discovery\.mjs/);
+  assert.match(ingestionPipeline, /verify-manifests\.mjs/);
+  assert.match(ingestionPipeline, /presentation/);
+  assert.match(refreshScript, /INGESTION_TASKS/);
 });
 
 test('Lighthouse A/B gates a candidate against v1.0.0 on the same mobile runner', () => {

@@ -2,7 +2,7 @@
 
 - **Owner:** Forge
 - **Status:** Canonical
-- **Last reviewed:** 2026-08-11
+- **Last reviewed:** 2026-08-12
 - **Supersession:** Approved architecture changes replace the affected section here and update executable contracts in the same change.
 
 ## Product Identity
@@ -18,15 +18,21 @@ Control Atlas adopts a `src/`-based React + Vite static application and staged s
 
 ```text
 Public Sources
-  -> Build-Time Importers
-  -> Raw Source Cache or Lawful Committed Artifacts
-  -> Normalization Pipeline
-  -> Schema Validation
-  -> Relationship Builder
-  -> Static Data Bundles
+  -> Discover
+  -> Acquire
+  -> Attest
+  -> Parse
+  -> Normalize
+  -> Structure
+  -> Relationships
+  -> Presentation
+  -> Reconcile
+  -> Publish
   -> Static Web App
   -> Client-Side Search / Template Generation / Export
 ```
+
+All catalogs and Resources entries use this same ordered ingestion contract. Format-specific behavior is confined to source adapters inside a stage; an adapter cannot bypass a stage. Each stage records `complete`, `not_applicable` with a concrete reason, or `failed`. Presentation therefore runs as part of ingestion for every displayable source instead of being a page-specific cleanup pass.
 
 ## Runtime Boundary
 
@@ -88,6 +94,7 @@ Blocked relationships remain graph-health findings and never become displayable 
 - GitHub Pages remains the deployment target.
 - MiniSearch is the target search pattern.
 - Zod + JSON Schema is the target validation pattern.
+- AJV validates the application boundary and normalized output for OSCAL inputs; the official NIST OSCAL CLI remains an independent upstream-conformance gate.
 - JSON/JSONL runtime bundles and YAML curated registry files are the target data format pattern.
 
 ## Component Boundaries

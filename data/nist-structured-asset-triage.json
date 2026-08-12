@@ -1,0 +1,476 @@
+{
+  "schema_version": "1.0",
+  "source_inventory": "data/nist-structured-asset-discovery.json",
+  "source_inventory_sha256": "sha256:51dd268aa9d12ec578407aeef20c024efa3c08f2097e131d173bf9d882a40730",
+  "reconciliation": {
+    "assets_discovered": 28,
+    "assets_classified": 28,
+    "unclassified_assets": 0,
+    "ingested_catalog": 8,
+    "out_of_scope": 12,
+    "queued_resource": 7,
+    "redundant_representation": 1
+  },
+  "assets": [
+    {
+      "url": "http://software-carpentry.org/feed.xml",
+      "format": "xml",
+      "labels": [
+        "Blog"
+      ],
+      "projects": [
+        "2015-07-23-nist",
+        "2015-09-23-nist",
+        "2016-05-23-nist",
+        "2016-05-26-nist"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/2015-07-23-nist/",
+        "https://pages.nist.gov/2015-09-23-nist/",
+        "https://pages.nist.gov/2016-05-23-nist/",
+        "https://pages.nist.gov/2016-05-26-nist/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    },
+    {
+      "url": "https://github.com/usnistgov/HTGS/archive/master.zip",
+      "format": "zip",
+      "labels": [
+        "Download"
+      ],
+      "projects": [
+        "HTGS"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/HTGS/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    },
+    {
+      "url": "https://github.com/usnistgov/hyperspy_tutorial/releases/download/2022-07-31_MandM_short_course/hyperspy_tutorial.zip",
+      "format": "zip",
+      "labels": [
+        "this"
+      ],
+      "projects": [
+        "hyperspy_tutorial"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/hyperspy_tutorial/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    },
+    {
+      "url": "https://github.com/usnistgov/Lineage-Mapper/archive/master.zip",
+      "format": "zip",
+      "labels": [
+        "Download"
+      ],
+      "projects": [
+        "Lineage-Mapper"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/Lineage-Mapper/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    },
+    {
+      "url": "https://github.com/usnistgov/MIST/archive/master.zip",
+      "format": "zip",
+      "labels": [
+        "Download"
+      ],
+      "projects": [
+        "MIST"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/MIST/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    },
+    {
+      "url": "https://github.com/usnistgov/Public_Safety_Analytics_Resources/raw/main/Compendium%20of%20Open%20Resources%20for%20Multimodal%20Emergency%20Awareness%20AI%20Analytics.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "Access the compendium as an MS Excel workbook here."
+      ],
+      "projects": [
+        "Public_Safety_Analytics_Resources"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/Public_Safety_Analytics_Resources/"
+      ],
+      "status": "queued_resource",
+      "target": "resources:nist-public-safety-analytics",
+      "reason": "The workbook is a resource compendium for AI analytics and belongs in Resources rather than the compliance graph."
+    },
+    {
+      "url": "https://pages.nist.gov/AGA8/downloads/AGA8.XLS",
+      "format": "xls",
+      "labels": [
+        "Link to Excel spreadsheet"
+      ],
+      "projects": [
+        "AGA8"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/AGA8/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    },
+    {
+      "url": "https://pages.nist.gov/AGA8/downloads/AGA8CODE.ZIP",
+      "format": "zip",
+      "labels": [
+        "Link to AGA8 sample code"
+      ],
+      "projects": [
+        "AGA8"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/AGA8/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    },
+    {
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_800-53.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "NIST Device Cybersecurity Catalog to NIST SP 800-53 Rev 5"
+      ],
+      "projects": [
+        "IoT-Device-Cybersecurity-Requirement-Catalogs"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/informative_references/"
+      ],
+      "status": "ingested_catalog",
+      "target": "nist-iot-cybersecurity",
+      "reason": "Publisher-structured rows are parsed into the catalog with exact worksheet, row, and cell provenance."
+    },
+    {
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_Cybersecurity_Framework.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "NIST Device Cybersecurity Catalog to Cybersecurity Framework"
+      ],
+      "projects": [
+        "IoT-Device-Cybersecurity-Requirement-Catalogs"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/informative_references/"
+      ],
+      "status": "ingested_catalog",
+      "target": "nist-iot-cybersecurity",
+      "reason": "Publisher-structured rows are parsed into the catalog with exact worksheet, row, and cell provenance."
+    },
+    {
+      "url": "https://pages.nist.gov/minex/results/csvs/minexiii_timing.csv",
+      "format": "csv",
+      "labels": [
+        "MINEX III Timing"
+      ],
+      "projects": [
+        "minex"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/minex/"
+      ],
+      "status": "queued_resource",
+      "target": "resources:nist-minex",
+      "reason": "Biometric interoperability test results are useful identity-assurance supporting material, not publisher-native control records."
+    },
+    {
+      "url": "https://pages.nist.gov/minex/results/csvs/minexiii_two_finger_fnmr_fmr_0001.csv",
+      "format": "csv",
+      "labels": [
+        "MINEX III Compliant Two Finger FNMR@FMR = 0.0001"
+      ],
+      "projects": [
+        "minex"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/minex/"
+      ],
+      "status": "queued_resource",
+      "target": "resources:nist-minex",
+      "reason": "Biometric interoperability test results are useful identity-assurance supporting material, not publisher-native control records."
+    },
+    {
+      "url": "https://pages.nist.gov/minex/results/csvs/minexiii_two_finger_fnmr_fmr_01.csv",
+      "format": "csv",
+      "labels": [
+        "MINEX III Compliant Two Finger FNMR@FMR = 0.01"
+      ],
+      "projects": [
+        "minex"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/minex/"
+      ],
+      "status": "queued_resource",
+      "target": "resources:nist-minex",
+      "reason": "Biometric interoperability test results are useful identity-assurance supporting material, not publisher-native control records."
+    },
+    {
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-cve-list.csv",
+      "format": "csv",
+      "labels": [
+        "Click here to download as a CSV",
+        "CSV"
+      ],
+      "projects": [
+        "mobile-threat-catalogue"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/mobile-threat-catalogue/cve-list.html",
+        "https://pages.nist.gov/mobile-threat-catalogue/downloads.html"
+      ],
+      "status": "ingested_catalog",
+      "target": "nist-mobile-threats",
+      "reason": "Threat/category content is parsed from publisher JSON and every CSV CVE is reconciled."
+    },
+    {
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-data.json",
+      "format": "json",
+      "labels": [
+        "JSON"
+      ],
+      "projects": [
+        "mobile-threat-catalogue"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/mobile-threat-catalogue/downloads.html"
+      ],
+      "status": "ingested_catalog",
+      "target": "nist-mobile-threats",
+      "reason": "Threat/category content is parsed from publisher JSON and every CSV CVE is reconciled."
+    },
+    {
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-data.xml",
+      "format": "xml",
+      "labels": [
+        "XML"
+      ],
+      "projects": [
+        "mobile-threat-catalogue"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/mobile-threat-catalogue/downloads.html"
+      ],
+      "status": "redundant_representation",
+      "target": "nist-mobile-threats",
+      "reason": "The publisher JSON is the canonical threat payload and the CSV independently reconciles CVEs; this XML is a duplicate representation, not a missing catalog."
+    },
+    {
+      "url": "https://pages.nist.gov/REFPROP-docs/RefrigerantHMX_2024_10_22.zip",
+      "format": "zip",
+      "labels": [
+        "revision 2024-10-22"
+      ],
+      "projects": [
+        "REFPROP-docs"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/REFPROP-docs/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    },
+    {
+      "url": "https://pages.nist.gov/REFPROP-docs/RefrigerantHMX_2024_11_13.zip",
+      "format": "zip",
+      "labels": [
+        "revision 2024-11-13"
+      ],
+      "projects": [
+        "REFPROP-docs"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/REFPROP-docs/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    },
+    {
+      "url": "https://pages.nist.gov/sctools/bt-model/core.xml",
+      "format": "xml",
+      "labels": [
+        "core.xml"
+      ],
+      "projects": [
+        "sctools"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/sctools/"
+      ],
+      "status": "queued_resource",
+      "target": "resources:nist-security-content-tools",
+      "reason": "Historical experimental NIST security-content schemas support a Resource entry, not a second control catalog beside current NIST publications."
+    },
+    {
+      "url": "https://pages.nist.gov/sctools/bt.xml",
+      "format": "xml",
+      "labels": [
+        "Baseline Tailor"
+      ],
+      "projects": [
+        "sctools"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/sctools/"
+      ],
+      "status": "queued_resource",
+      "target": "resources:nist-security-content-tools",
+      "reason": "Historical experimental NIST security-content schemas support a Resource entry, not a second control catalog beside current NIST publications."
+    },
+    {
+      "url": "https://pages.nist.gov/sctools/schemas/tailored-schematron.xml",
+      "format": "xml",
+      "labels": [
+        "tailored-schematron.xml"
+      ],
+      "projects": [
+        "sctools"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/sctools/"
+      ],
+      "status": "queued_resource",
+      "target": "resources:nist-security-content-tools",
+      "reason": "Historical experimental NIST security-content schemas support a Resource entry, not a second control catalog beside current NIST publications."
+    },
+    {
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/01dfaff2b25f0a61f127f06906bc37cc/CSF2.0Mapping.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "Download Spreadsheet"
+      ],
+      "projects": [
+        "zero-trust-architecture"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html"
+      ],
+      "status": "ingested_catalog",
+      "target": "nist-zt",
+      "reason": "Publisher-structured rows are parsed into the catalog with exact worksheet, row, and cell provenance."
+    },
+    {
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/641f02c11e6f71752bb8bc96d96c5f38/NISTCSSMMapping.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "Download Spreadsheet"
+      ],
+      "projects": [
+        "zero-trust-architecture"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html"
+      ],
+      "status": "ingested_catalog",
+      "target": "nist-zt",
+      "reason": "Publisher-structured rows are parsed into the catalog with exact worksheet, row, and cell provenance."
+    },
+    {
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/993f56b28d4d113836cb1f1a34146cb3/CSF1.1Mapping.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "Download Spreadsheet"
+      ],
+      "projects": [
+        "zero-trust-architecture"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html"
+      ],
+      "status": "ingested_catalog",
+      "target": "nist-zt",
+      "reason": "Publisher-structured rows are parsed into the catalog with exact worksheet, row, and cell provenance."
+    },
+    {
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/eba81c1a0ca458474b0e9bbdfc888eb5/SP800-53Mapping.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "Download Spreadsheet"
+      ],
+      "projects": [
+        "zero-trust-architecture"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html"
+      ],
+      "status": "ingested_catalog",
+      "target": "nist-zt",
+      "reason": "Publisher-structured rows are parsed into the catalog with exact worksheet, row, and cell provenance."
+    },
+    {
+      "url": "https://trc.nist.gov/refprop/AGA/SUPPMATR.ZIP",
+      "format": "zip",
+      "labels": [
+        "Link to test data"
+      ],
+      "projects": [
+        "AGA8"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/AGA8/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    },
+    {
+      "url": "https://trc.nist.gov/refprop/FAQ/NEWMIX.ZIP",
+      "format": "zip",
+      "labels": [
+        "NEWMIX.ZIP"
+      ],
+      "projects": [
+        "REFPROP-docs"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/REFPROP-docs/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    },
+    {
+      "url": "https://www.sqlite.org/2019/sqlite-tools-win32-x86-3270200.zip",
+      "format": "zip",
+      "labels": [
+        "sqlite3"
+      ],
+      "projects": [
+        "2019-08-21-nist",
+        "2020-04-10-nist",
+        "2020-04-10-nist-sql"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/2019-08-21-nist/",
+        "https://pages.nist.gov/2020-04-10-nist-sql/",
+        "https://pages.nist.gov/2020-04-10-nist/"
+      ],
+      "status": "out_of_scope",
+      "target": null,
+      "reason": "The discovered file is scientific, tutorial, build-tool, or third-party feed material without a cybersecurity governance, control, threat, or implementation role."
+    }
+  ]
+}

@@ -42,7 +42,7 @@ export function buildSourceRegister(
     })
     .map((source) => ({
       id: source.id,
-      publication: source.display_name || source.name || source.id,
+      publication: source.name || source.display_name || source.id,
       publisher: source.owner || "Publisher not recorded",
       coverage:
         source.metadata?.frameworks?.join(", ") ||

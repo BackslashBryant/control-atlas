@@ -7,9 +7,40 @@ import {
   fetchArtifact,
   parseJsonResponseOffThread,
   runtimeArtifactPlan,
+  selectAtlasStructuralPath,
 } from "../../src/ui/lib/runtimeLoader";
 import { requiresFullGraph } from "../../src/ui/lib/navigationState";
 import { normalizeViewState } from "../../src/ui/lib/viewState";
+
+test("Atlas selects the publisher path identified by branch context", () => {
+  const tacticA = { id: "attack:tactic-a", node_type: "tactic", label: "Tactic A", metadata: {} };
+  const tacticB = { id: "attack:tactic-b", node_type: "tactic", label: "Tactic B", metadata: {} };
+  const catalog = { id: "attack:catalog", node_type: "catalog", label: "ATT&CK", metadata: {} };
+  const technique = { id: "attack:T1000", node_type: "attack_technique", label: "Technique", metadata: {} };
+  const record = {
+    center_node: { ...technique, display_path: [catalog, tacticA] },
+    nodes: [catalog, tacticA, tacticB, technique],
+    edges: [],
+    structural_path: [catalog, tacticA, technique],
+    structural_paths: [
+      [catalog, tacticA, technique],
+      [catalog, tacticB, technique],
+    ],
+    published_connection_count: 0,
+    candidate_connection_count: 0,
+  };
+
+  const selected = selectAtlasStructuralPath(record, "attack:tactic-b");
+  assert.deepEqual(selected.structural_path.map((node) => node.id), [
+    "attack:catalog",
+    "attack:tactic-b",
+    "attack:T1000",
+  ]);
+  assert.deepEqual(selected.center_node.display_path?.map((node) => node.id), [
+    "attack:catalog",
+    "attack:tactic-b",
+  ]);
+});
 
 test("compressed artifacts keep cache-busting parameters after the gzip extension", () => {
   assert.equal(

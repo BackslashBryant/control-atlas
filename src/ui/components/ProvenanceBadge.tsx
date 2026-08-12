@@ -10,6 +10,7 @@ const PROVENANCE_MAP: Record<string, { label: string; cssClass: string }> = {
   mitre_published: { label: "MITRE", cssClass: "ca-badge--mitre" },
   community_open_source: { label: "Community", cssClass: "ca-badge--community" },
   federal_referenced: { label: "Community", cssClass: "ca-badge--community" },
+  third_party_published: { label: "Publisher", cssClass: "ca-badge--community" },
   inferred: { label: "Inferred", cssClass: "ca-badge--inferred" },
   deprecated: { label: "Deprecated", cssClass: "ca-badge--deprecated" },
   active: { label: "Active", cssClass: "ca-badge--active" },

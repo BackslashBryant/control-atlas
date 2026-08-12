@@ -11,7 +11,10 @@ import {
 import { createHash } from "node:crypto";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildSourceTextPresentation } from "../src/shared/source-text-presentation.mjs";
+import {
+  buildSourceTextPresentation,
+  isValidSourceTextPresentation,
+} from "../src/shared/source-text-presentation.mjs";
 import { validateGraphArtifacts } from "../tools/validators/federal-graph.mjs";
 import { loadSourceRegistry } from "../tools/validators/source-registry.mjs";
 import {
@@ -53,6 +56,14 @@ import {
   catalogStructureProfile,
   structurePathIsAllowed,
 } from "../src/shared/catalog-structure.mjs";
+import { taxonomyTagsForRecord } from "../src/shared/record-taxonomy.mjs";
+import {
+  publisherStructureMembershipForEdge,
+  sourceRecordEnvelopeForNode,
+  validatePublisherStructureMembership,
+  validateSourceFragment,
+  validateSourceRecordEnvelope,
+} from "../src/shared/data-trust-contracts.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED = join(ROOT, "data", "generated");
@@ -72,6 +83,10 @@ const GOVERNANCE_FILES = [
   "graph-diff-summary.json",
   "library-search.json",
   "atlas-neighborhood-manifest.json",
+  "source-count-ledger.json",
+  "ingestion-stage-ledger.json",
+  "resource-ingestion-ledger.json",
+  "catalog-source-inventory.json",
 ];
 const ATLAS_NEIGHBORHOOD_DIR = join(GENERATED, "atlas-neighborhood");
 
@@ -89,6 +104,7 @@ const NON_RECORD_NODE_TYPES = new Set([
   "tactic",
   "trunk",
 ]);
+const SUPPORTED_RECORD_TYPE_SET = new Set(SUPPORTED_RECORD_TYPES);
 
 export function cciClassificationLabel(value = "") {
   const parts = [...new Set(String(value).split(",").map((part) => part.trim().toLocaleLowerCase()).filter(Boolean))];
@@ -104,7 +120,7 @@ export function validateRecordPresentation(nodes) {
   const supported = new Set(SUPPORTED_RECORD_TYPES);
   const failures = [];
   for (const node of nodes) {
-    if (NON_RECORD_NODE_TYPES.has(node.node_type)) continue;
+    if (NON_RECORD_NODE_TYPES.has(node.node_type) || node.metadata?.structural_group === true) continue;
     if (!supported.has(node.node_type)) {
       failures.push(`${node.id}: missing presentation profile for ${node.node_type}`);
       continue;
@@ -112,6 +128,14 @@ export function validateRecordPresentation(nodes) {
     const profile = recordPresentationProfile(node.metadata?.catalog_id || "", node.node_type);
     const missing = missingRequiredRecordFields(profile, node.metadata || {});
     if (!String(node.metadata?.family || "").trim()) missing.push("family");
+    for (const section of profile.sections.filter((entry) => entry.kind === "text")) {
+      const value = node.metadata?.[section.field];
+      if (!String(value || "").trim()) continue;
+      const fieldPresentation = node.metadata?.source_text_presentation?.[section.field];
+      if (!isValidSourceTextPresentation(value, fieldPresentation)) {
+        missing.push(`${section.field} presentation`);
+      }
+    }
     if (missing.length) failures.push(`${node.id}: missing ${missing.join(", ")}`);
   }
   if (failures.length) {
@@ -152,6 +176,10 @@ const CATALOGS = [
   ["ssdf.json", "nist-ssdf", "nist-ssdf-oscal", "requirement"],
   ["dod-rai.json", "dod-rai", "dod-rai-toolkit", "requirement"],
   ["dod-zt.json", "dod-zt", "dod-zt-reference-architecture-v2", "requirement"],
+  ["nist-zt.json", "nist-zt", "nist-sp-800-207", "requirement"],
+  ["microsoft-zt-maturity.json", "microsoft-zt-maturity", "microsoft-zero-trust-maturity-questionnaire-v1-1", "zt_assessment_question"],
+  ["nist-iot-cybersecurity.json", "nist-iot-cybersecurity", "nist-iot-device-cybersecurity-requirement-catalogs", "iot_capability_element"],
+  ["nist-mobile-threats.json", "nist-mobile-threats", "nist-mobile-threat-catalogue", "mobile_threat"],
   ["stig-rules.json", "disa-stig", "disa-stig-library", "stig_rule"],
   ["srg-requirements.json", "disa-srg", "disa-srg-library", "srg_requirement"],
   [
@@ -201,14 +229,20 @@ const CATALOGS = [
  * first; neither case is served by inventing a tier here.
  */
 export const CATALOG_TIERS = {
+  "microsoft-zt-maturity": {
+    nodeType: "zt_pillar",
+    idPrefix: "PILLAR",
+    key: (record) => slugKey(record.family),
+    title: (record) => record.family,
+    edgeDataset: "microsoft-zt-pillar-membership",
+    rationale: (record, title) => `${record.id} is published on the ${title} worksheet.`,
+  },
   "nist-800-53": {
     nodeType: "family",
     idPrefix: "FAMILY",
     key: (record) => familyCodeFromControlId(record.id),
     title: (record) => record.family,
     label: (key, title) => `${key} ${title} Family`,
-    description: (record, title) =>
-      `${title} controls and enhancements from NIST SP 800-53 Rev. 5.`,
     edgeDataset: "800-53-family-membership",
     rationale: (record, title) =>
       `${record.id} is part of the ${title} family in NIST SP 800-53 Rev. 5.`,
@@ -219,8 +253,6 @@ export const CATALOG_TIERS = {
     key: (record) => familyCodeFromControlId(record.id),
     title: (record) => record.family,
     label: (key, title) => `${key} ${title} Family`,
-    description: (record, title) =>
-      `${title} assessment procedures from NIST SP 800-53A Rev. 5.`,
     edgeDataset: "800-53a-family-membership",
     rationale: (record, title) =>
       `${record.id} is an assessment procedure in the ${title} family.`,
@@ -230,8 +262,6 @@ export const CATALOG_TIERS = {
     idPrefix: "FAMILY",
     key: (record) => slugKey(record.family),
     title: (record) => record.family,
-    description: (record, title) =>
-      `${title} security requirements from NIST SP 800-171 Rev. 3.`,
     edgeDataset: "800-171-family-membership",
     rationale: (record, title) =>
       `${record.id} is part of the ${title} family in NIST SP 800-171 Rev. 3.`,
@@ -241,8 +271,6 @@ export const CATALOG_TIERS = {
     idPrefix: "FAMILY",
     key: (record) => slugKey(record.family),
     title: (record) => record.family,
-    description: (record, title) =>
-      `${title} security requirements from NIST SP 800-171 Rev. 2.`,
     edgeDataset: "800-171-rev2-family-membership",
     rationale: (record, title) =>
       `${record.id} is part of the ${title} family in NIST SP 800-171 Rev. 2.`,
@@ -252,8 +280,6 @@ export const CATALOG_TIERS = {
     idPrefix: "FAMILY",
     key: (record) => slugKey(record.family),
     title: (record) => record.family,
-    description: (record, title) =>
-      `${title} enhanced security requirements from NIST SP 800-172.`,
     edgeDataset: "800-172-family-membership",
     rationale: (record, title) =>
       `${record.id} is part of the ${title} family in NIST SP 800-172.`,
@@ -265,9 +291,8 @@ export const CATALOG_TIERS = {
     idPrefix: "BENCHMARK",
     key: (record) => slugKey(record.metadata?.benchmark_id),
     title: (record) => record.metadata?.benchmark_title,
-    description: (record, title) =>
-      record.metadata?.benchmark_description ||
-      `${title} published in the DISA STIG library.`,
+    description: (record) => record.metadata?.benchmark_description,
+    descriptionProvenance: "publisher",
     edgeDataset: "disa-stig-benchmark-membership",
     rationale: (record, title) =>
       `${record.id} is a rule in the ${title} benchmark.`,
@@ -277,9 +302,8 @@ export const CATALOG_TIERS = {
     idPrefix: "BENCHMARK",
     key: (record) => slugKey(record.metadata?.benchmark_id),
     title: (record) => record.metadata?.benchmark_title,
-    description: (record, title) =>
-      record.metadata?.benchmark_description ||
-      `${title} published in the DISA SRG library.`,
+    description: (record) => record.metadata?.benchmark_description,
+    descriptionProvenance: "publisher",
     edgeDataset: "disa-srg-benchmark-membership",
     rationale: (record, title) =>
       `${record.id} is a requirement in the ${title} security requirements guide.`,
@@ -295,8 +319,6 @@ export const CATALOG_TIERS = {
     idPrefix: "CATEGORY",
     key: (record) => record.category_id,
     title: (record) => record.category,
-    description: (record, title) =>
-      `${title} category of the NIST Cybersecurity Framework 2.0.`,
     edgeDataset: "csf-category-membership",
     rationale: (record, title) =>
       `${record.id} is a subcategory in the ${title} category of CSF 2.0.`,
@@ -305,8 +327,6 @@ export const CATALOG_TIERS = {
       idPrefix: "FUNCTION",
       key: (record) => record.function_id,
       title: (record) => record.function,
-      description: (record, title) =>
-        `${title} function of the NIST Cybersecurity Framework 2.0.`,
       edgeDataset: "csf-function-membership",
       rationale: (record, title) =>
         `The ${title} function of CSF 2.0 organizes this category.`,
@@ -328,8 +348,6 @@ export const CATALOG_TIERS = {
     idPrefix: "TACTIC",
     key: (record) => record.metadata?.tactic_id,
     title: (record) => record.metadata?.tactic_title,
-    description: (record, title) =>
-      `${title} tactic of the MITRE ATT&CK Enterprise matrix.`,
     edgeDataset: "mitre-attack-tactic-membership",
     rationale: (record, title) =>
       `${record.id} is a technique under the ${title} tactic in MITRE ATT&CK.`,
@@ -339,8 +357,6 @@ export const CATALOG_TIERS = {
     idPrefix: "TACTIC",
     key: (record) => record.metadata?.tactic_id,
     title: (record) => record.metadata?.tactic_title,
-    description: (record, title) =>
-      `${title} tactic of the MITRE ATT&CK for ICS matrix.`,
     edgeDataset: "mitre-attack-ics-tactic-membership",
     rationale: (record, title) =>
       `${record.id} is a technique under the ${title} tactic in MITRE ATT&CK for ICS.`,
@@ -350,8 +366,6 @@ export const CATALOG_TIERS = {
     idPrefix: "TACTIC",
     key: (record) => record.metadata?.tactic_id,
     title: (record) => record.metadata?.tactic_title,
-    description: (record, title) =>
-      `${title} tactic of the MITRE D3FEND defensive technique ontology.`,
     edgeDataset: "mitre-d3fend-tactic-membership",
     rationale: (record, title) =>
       `${record.id} is a defensive technique under the ${title} tactic in MITRE D3FEND.`,
@@ -368,8 +382,6 @@ export const CATALOG_TIERS = {
     idPrefix: "GROUP",
     key: (record) => slugKey(record.family),
     title: (record) => record.family,
-    description: (record, title) =>
-      `${title} group of the NIST AI Risk Management Framework Playbook.`,
     edgeDataset: "nist-ai-rmf-group-membership",
     rationale: (record, title) =>
       `${record.id} is part of the ${title} group in the NIST AI RMF Playbook.`,
@@ -379,8 +391,6 @@ export const CATALOG_TIERS = {
     idPrefix: "GROUP",
     key: (record) => slugKey(record.family),
     title: (record) => record.family,
-    description: (record, title) =>
-      `${title} practice group of NIST SP 800-218 (SSDF).`,
     edgeDataset: "nist-ssdf-group-membership",
     rationale: (record, title) =>
       `${record.id} is part of the ${title} practice group in the SSDF.`,
@@ -390,8 +400,6 @@ export const CATALOG_TIERS = {
     idPrefix: "GROUP",
     key: (record) => slugKey(record.family),
     title: (record) => record.family,
-    description: (record, title) =>
-      `${title} section of the DoD Responsible AI Toolkit.`,
     edgeDataset: "dod-rai-group-membership",
     rationale: (record, title) =>
       `${record.id} is part of the ${title} section of the DoD Responsible AI Toolkit.`,
@@ -561,6 +569,34 @@ const CATALOG_SUMMARIES = new Map([
       title: "DoD Zero Trust Catalog",
     },
   ],
+  [
+    "nist-zt",
+    {
+      sourceId: "nist-sp-800-207",
+      title: "NIST Zero Trust Catalog",
+    },
+  ],
+  [
+    "microsoft-zt-maturity",
+    {
+      sourceId: "microsoft-zero-trust-maturity-questionnaire-v1-1",
+      title: "Microsoft Zero Trust Maturity Questionnaire",
+    },
+  ],
+  [
+    "nist-iot-cybersecurity",
+    {
+      sourceId: "nist-iot-device-cybersecurity-requirement-catalogs",
+      title: "NIST IoT Device Cybersecurity Requirement Catalog",
+    },
+  ],
+  [
+    "nist-mobile-threats",
+    {
+      sourceId: "nist-mobile-threat-catalogue",
+      title: "NIST Mobile Threat Catalogue",
+    },
+  ],
 ]);
 
 const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
@@ -629,6 +665,23 @@ function tierFor(catalogId, record) {
   };
 }
 
+function tierMembershipsFor(catalogId, record) {
+  const tier = CATALOG_TIERS[catalogId];
+  if (!tier) return [];
+  if ((catalogId === "mitre-attack" || catalogId === "mitre-attack-ics")
+    && Array.isArray(record.metadata?.tactic_memberships)) {
+    return record.metadata.tactic_memberships.map((membership) => ({
+      tier,
+      key: membership.id,
+      title: membership.title,
+      nodeId: nodeId(catalogId, `${tier.idPrefix}-${membership.id}`),
+      itemId: `${tier.idPrefix}-${membership.id}`,
+    }));
+  }
+  const resolved = tierFor(catalogId, record);
+  return resolved ? [resolved] : [];
+}
+
 /**
  * Resolve a tier's own parent tier (e.g. CSF Category's parent Function),
  * when the catalog's CATALOG_TIERS row declares one via `parentTier`. Most
@@ -650,12 +703,6 @@ function parentTierFor(catalogId, record, tier) {
 }
 
 /** The outermost tier a record's chain resolves to — what hangs off the catalog. */
-function topTierFor(catalogId, record) {
-  const resolved = tierFor(catalogId, record);
-  if (!resolved) return null;
-  return parentTierFor(catalogId, record, resolved.tier) || resolved;
-}
-
 function normalize53BBaselineId(value) {
   const label = String(value || "").toUpperCase();
   if (label.includes("PRIVACY")) return "PRIVACY";
@@ -689,17 +736,27 @@ function aliasArtifact(id) {
 // (applyOrganizingSpine) so neither path ships a node with no provenance.
 function attachNodeProvenance(node, sourceId, registry) {
   const source = registry.byId.get(sourceId);
+  const defaultArtifactId = aliasArtifact(`artifact-${sourceId}`);
+  const bundlePrimaryArtifactId = registry.catalogSourceBundles
+    .find((bundle) => bundle.catalog_id === node.metadata?.catalog_id)
+    ?.primary_artifact_ids?.[0];
+  const primaryArtifactId = aliasArtifact(
+    node.metadata?.primary_artifact_id ||
+      node.metadata?.contributing_artifact_ids?.[0] ||
+      (registry.byId.has(defaultArtifactId) ? defaultArtifactId : bundlePrimaryArtifactId) ||
+      defaultArtifactId,
+  );
   node.publication_source_id = sourceId;
-  node.artifact_ids = node.artifact_ids || [
-    aliasArtifact(node.metadata?.primary_artifact_id || `artifact-${sourceId}`),
+  node.artifact_ids = node.artifact_ids || [...new Set([
+    primaryArtifactId,
     ...(node.metadata?.contributing_artifact_ids || []).map(aliasArtifact),
     ...(node.metadata?.enrichment_artifact_ids || []).map(aliasArtifact),
-  ];
+  ])];
   node.provenance_assertions = node.provenance_assertions || [
     {
       authority_class: source?.authority_class || "publisher",
       publication_source_id: sourceId,
-      artifact_id: aliasArtifact(`artifact-${sourceId}`),
+      artifact_id: primaryArtifactId,
       source_locator: node.metadata?.source_locator || `${sourceId}#${node.id}`,
       version: source?.version || "1.0",
       snapshot_date: source?.retrieved_at || "2026-08-05",
@@ -723,9 +780,12 @@ function pushEligibleNode(state, registry, node, sourceId) {
   }
   if (node.metadata) {
     const presentation = {};
-    for (const field of ["description", "check_text", "fix_text", "discussion", "procedure_text"]) {
-      if (String(node.metadata[field] || "").trim()) {
-        presentation[field] = buildSourceTextPresentation(node.metadata[field]);
+    if (SUPPORTED_RECORD_TYPE_SET.has(node.node_type)) {
+      const profile = recordPresentationProfile(node.metadata.catalog_id || "", node.node_type);
+      for (const section of profile.sections.filter((entry) => entry.kind === "text")) {
+        if (String(node.metadata[section.field] || "").trim()) {
+          presentation[section.field] = buildSourceTextPresentation(node.metadata[section.field]);
+        }
       }
     }
     if (Object.keys(presentation).length) node.metadata.source_text_presentation = presentation;
@@ -749,6 +809,7 @@ function buildAssessmentNode(record, ingestionSourceId) {
     metadata: {
       catalog_id: "nist-800-53a",
       ingestion_source_id: ingestionSourceId,
+      source_locator: `${record.source?.locator || `controls-800-53.json#${record.id}`}#assessment`,
       item_id: record.id,
       title: `${record.title || record.id} Assessment Procedure`,
       description: assessment.procedure_text || "",
@@ -824,7 +885,10 @@ function registerTierNode(
       ingestion_source_id: ingestionSourceId,
       item_id: itemId,
       title,
+      ...(tier.description ? { description: tier.description(record, title) } : {}),
+      ...(tier.descriptionProvenance ? { description_provenance: tier.descriptionProvenance } : {}),
       family: title,
+      structural_group: true,
       baselines: null,
       nist_800_53b_baselines: null,
       nist_control: null,
@@ -881,12 +945,13 @@ function buildNodes(registry) {
         catalogId,
         family: primaryClassification,
       });
+      const taxonomyTags = taxonomyTagsForRecord(record);
       pushEligibleNode(
         state,
         registry,
         {
           id,
-          node_type: record.type?.startsWith("zt_")
+          node_type: SUPPORTED_RECORD_TYPE_SET.has(record.type) && /^(?:zt_|iot_|mobile_)/.test(record.type)
             ? record.type
             : nodeType(defaultType, record.id),
           // DISA CCI records carry their own identifier as the title, so the
@@ -901,6 +966,7 @@ function buildNodes(registry) {
           metadata: {
             catalog_id: catalogId,
             ingestion_source_id: ingestionSourceId,
+            source_locator: record.source?.locator || `${filename}#${record.id}`,
             item_id: record.id,
             title: record.title || record.id,
             description: record.description || "",
@@ -914,6 +980,9 @@ function buildNodes(registry) {
             // (800-53, 800-171, AI-RMF, SSDF, ...) see no change; STIG/SRG,
             // whose raw record.family is empty, keep resolving through the tier.
             family: primaryClassification,
+            ...(taxonomyTags.length
+              ? { taxonomy_tags: taxonomyTags }
+              : {}),
             ...(identityCategory !== primaryClassification
               ? { identity_category: identityCategory }
               : {}),
@@ -936,8 +1005,49 @@ function buildNodes(registry) {
             superseded_by: record.metadata?.superseded_by || null,
             discussion: record.metadata?.discussion || null,
             related_controls: record.metadata?.related_controls || null,
+            tactic_id: record.metadata?.tactic_id || null,
+            tactic_title: record.metadata?.tactic_title || null,
+            tactic_memberships: record.metadata?.tactic_memberships || null,
+            is_subtechnique: record.metadata?.is_subtechnique || false,
+            parent_technique_id: record.metadata?.parent_technique_id || null,
             implementation_examples: record.metadata?.implementation_examples || null,
             informative_references: record.metadata?.informative_references || null,
+            parent_id: record.metadata?.parent_id || null,
+            source_fragments: record.metadata?.source_fragments || null,
+            structured_content: record.metadata?.structured_content || null,
+            document_sections: record.metadata?.document_sections || null,
+            architecture_sections: record.metadata?.architecture_sections || null,
+            implementation_sections: record.metadata?.implementation_sections || null,
+            media: record.metadata?.media || null,
+            related_build_codes: record.metadata?.related_build_codes || null,
+            implementation_guide_url: record.metadata?.implementation_guide_url || null,
+            source_pages: record.metadata?.source_pages || null,
+            answer_options: record.metadata?.answer_options || null,
+            publisher_default_answer: record.metadata?.publisher_default_answer || null,
+            link_label: record.metadata?.link_label || null,
+            question_number: record.metadata?.question_number || null,
+            category: record.metadata?.category || null,
+            pillar: record.metadata?.pillar || null,
+            component_class: record.metadata?.component_class || null,
+            threat_origin: record.metadata?.threat_origin || null,
+            exploit_examples: record.metadata?.exploit_examples || null,
+            cve_examples: record.metadata?.cve_examples || null,
+            countermeasures: record.metadata?.countermeasures || null,
+            publisher_status: record.metadata?.publisher_status || null,
+            publisher_mappings: record.metadata?.publisher_mappings || null,
+            collaborator: record.metadata?.collaborator || null,
+            product: record.metadata?.product || null,
+            architecture_component: record.metadata?.architecture_component || null,
+            mapping_count: record.metadata?.mapping_count || null,
+            mapping_targets: record.metadata?.mapping_targets || null,
+            outcomes: record.metadata?.outcomes || null,
+            end_state: record.metadata?.end_state || null,
+            predecessors: record.metadata?.predecessors || null,
+            successors: record.metadata?.successors || null,
+            responsibility: record.metadata?.responsibility || null,
+            activity_type: record.metadata?.activity_type || null,
+            duration: record.metadata?.duration || null,
+            operational_technology: record.metadata?.operational_technology || null,
             primary_artifact_id: record.metadata?.primary_artifact_id || null,
             contributing_artifact_ids: record.metadata?.contributing_artifact_ids || null,
             enrichment_artifact_ids: record.metadata?.enrichment_artifact_ids || null,
@@ -977,19 +1087,19 @@ function buildNodes(registry) {
 
       }
 
-      registerTierNode(
-        tierNodes,
-        catalogId,
-        resolvedTier,
-        sourceId,
-        ingestionSourceId,
-        record,
-      );
-      if (resolvedTier) {
+      for (const membership of tierMembershipsFor(catalogId, record)) {
         registerTierNode(
           tierNodes,
           catalogId,
-          parentTierFor(catalogId, record, resolvedTier.tier),
+          membership,
+          sourceId,
+          ingestionSourceId,
+          record,
+        );
+        registerTierNode(
+          tierNodes,
+          catalogId,
+          parentTierFor(catalogId, record, membership.tier),
           sourceId,
           ingestionSourceId,
           record,
@@ -1048,7 +1158,13 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
   }
 
   const edgeId = `edge:${payload.subjectId}`;
-  const evidenceId = `evidence:${payload.subjectId}`;
+  const evidenceLocators = [...new Set(
+    (payload.evidenceLocators?.length ? payload.evidenceLocators : [payload.locator || `${payload.sourceId}#relationship`])
+      .filter(Boolean),
+  )];
+  const evidenceIds = evidenceLocators.map((_, index) =>
+    index === 0 ? `evidence:${payload.subjectId}` : `evidence:${payload.subjectId}:${index + 1}`,
+  );
   const publicationStatus = payload.publicationStatus || "published";
   const provenanceClass = payload.provenanceClass || source.provenance_class;
 
@@ -1065,23 +1181,23 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     }
   }
 
-  const sourceRefs = payload.sourceRefs || [
-    {
-      source_id: payload.sourceId,
-      ref_type: payload.evidenceQuality || "primary",
-      locator: payload.locator || `${payload.sourceId}#relationship`,
-    },
-  ];
-
-  state.evidence.push({
-    id: evidenceId,
+  const sourceRefs = payload.sourceRefs || evidenceLocators.map((locator) => ({
     source_id: payload.sourceId,
-    source_version: payload.sourceVersion || source.version,
-    locator: payload.locator,
-    retrieved_at: payload.retrievedAt || source.retrieved_at,
-    checksum: payload.checksum || source.checksum,
-    evidence_quality: payload.evidenceQuality || "primary",
-    ingestion_source_id: payload.ingestionSourceId || payload.sourceId,
+    ref_type: payload.evidenceQuality || "primary",
+    locator,
+  }));
+
+  evidenceLocators.forEach((locator, index) => {
+    state.evidence.push({
+      id: evidenceIds[index],
+      source_id: payload.sourceId,
+      source_version: payload.sourceVersion || source.version,
+      locator,
+      retrieved_at: payload.retrievedAt || source.retrieved_at,
+      checksum: payload.checksum || source.checksum,
+      evidence_quality: payload.evidenceQuality || "primary",
+      ingestion_source_id: payload.ingestionSourceId || payload.sourceId,
+    });
   });
 
   state.edges.push({
@@ -1106,7 +1222,7 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
       payload.confidence ||
       (publicationStatus === "candidate" ? "inferred_high" : "direct"),
     publication_status: publicationStatus,
-    evidence_ids: [evidenceId],
+    evidence_ids: evidenceIds,
     display_label:
       payload.displayLabel ||
       `${payload.sourceNodeId} ${payload.relationshipType} ${payload.targetNodeId}`,
@@ -1144,12 +1260,14 @@ function addDocumentRelationshipEdges(state, registry, nodeIds) {
         );
         addPublishedEdge(state, registry, nodeIds, {
           subjectId,
-          sourceId: identity.publicationSourceId,
+          sourceId: relationship.source_id || identity.publicationSourceId,
           ingestionSourceId,
           sourceNodeId,
           targetNodeId,
           relationshipType: relationship.relationship_type || "references",
-          locator: `${record.source?.locator || `${filename}#${record.id}`}->${relationship.target_catalog}:${relationship.target_id}`,
+          rawRelationshipType: relationship.raw_relationship_type,
+          locator: relationship.source_locator || `${record.source?.locator || `${filename}#${record.id}`}->${relationship.target_catalog}:${relationship.target_id}`,
+          evidenceLocators: relationship.source_locators,
           retrievedAt: record.source?.snapshot_date,
           rationale:
             relationship.rationale ||
@@ -1159,6 +1277,42 @@ function addDocumentRelationshipEdges(state, registry, nodeIds) {
         });
       }
     }
+  }
+}
+
+function addExplicitParentHierarchyEdges(
+  state,
+  registry,
+  nodeIds,
+  catalogId,
+  filename,
+  defaultSourceId,
+  defaultSourceArtifactId,
+) {
+  const path = join(ROOT, "data", filename);
+  if (!existsSync(path)) return;
+  const document = readJson(path);
+  for (const record of document.records || []) {
+    const parentId = record.metadata?.parent_id;
+    if (!parentId) continue;
+    const sourceNodeId = parentId === "CATALOG" ? `${catalogId}:CATALOG` : nodeId(catalogId, parentId);
+    const targetNodeId = nodeId(catalogId, record.id);
+    addPublishedEdge(state, registry, nodeIds, {
+      subjectId: relationshipId(`${catalogId}-explicit-parent`, sourceNodeId, targetNodeId, "contains"),
+      sourceId: record.source?.key || defaultSourceId,
+      sourceArtifactId:
+        record.source?.artifact_id ||
+        record.metadata?.contributing_artifact_ids?.[0] ||
+        defaultSourceArtifactId,
+      sourceNodeId,
+      targetNodeId,
+      relationshipType: "contains",
+      relationshipClass: RELATIONSHIP_CLASSES.structural,
+      confidence: "direct",
+      locator: record.source?.locator || `${filename}#${record.id}`,
+      retrievedAt: record.source?.snapshot_date,
+      rationale: `${record.id} is published beneath ${parentId} in the ${catalogId} source structure.`,
+    });
   }
 }
 
@@ -1181,8 +1335,8 @@ function addTierMembershipEdges(state, registry, nodeIds) {
         sourceById: registry.byId,
       });
       if (!identity) continue;
-      const resolved = tierFor(catalogId, record);
-      if (!resolved) continue;
+      const memberships = tierMembershipsFor(catalogId, record);
+      if (!memberships.length) continue;
       // Enhancement-style children have a more specific publisher-native
       // parent. Do not also attach them directly to the outer grouping tier.
       if (catalogId === "nist-800-53" && String(record.id).includes(".")) continue;
@@ -1190,27 +1344,23 @@ function addTierMembershipEdges(state, registry, nodeIds) {
         (catalogId === "mitre-attack" || catalogId === "mitre-attack-ics") &&
         record.metadata?.parent_technique_id
       ) continue;
-      const { tier, title, nodeId: sourceNodeId } = resolved;
-      const targetNodeId = nodeId(catalogId, record.id);
-      const subjectId = relationshipId(
-        tier.edgeDataset,
-        sourceNodeId,
-        targetNodeId,
-        "contains",
-      );
-      addPublishedEdge(state, registry, nodeIds, {
-        subjectId,
-        sourceId: identity.publicationSourceId,
-        ingestionSourceId,
-        sourceNodeId,
-        targetNodeId,
-        relationshipType: "contains",
-        relationshipClass: RELATIONSHIP_CLASSES.structural,
-        confidence: "derived",
-        locator: record.source?.locator || `${filename}#${record.id}`,
-        retrievedAt: record.source?.snapshot_date,
-        rationale: tier.rationale(record, title),
-      });
+      for (const { tier, title, nodeId: sourceNodeId } of memberships) {
+        const targetNodeId = nodeId(catalogId, record.id);
+        const subjectId = relationshipId(tier.edgeDataset, sourceNodeId, targetNodeId, "contains");
+        addPublishedEdge(state, registry, nodeIds, {
+          subjectId,
+          sourceId: identity.publicationSourceId,
+          ingestionSourceId,
+          sourceNodeId,
+          targetNodeId,
+          relationshipType: "contains",
+          relationshipClass: RELATIONSHIP_CLASSES.structural,
+          confidence: "derived",
+          locator: record.source?.locator || `${filename}#${record.id}`,
+          retrievedAt: record.source?.snapshot_date,
+          rationale: tier.rationale(record, title),
+        });
+      }
     }
   }
 }
@@ -1290,17 +1440,19 @@ function addTierToCatalogEdges(state, registry, nodeIds) {
         sourceById: registry.byId,
       });
       if (!identity) continue;
-      const top = topTierFor(catalogId, record);
-      if (!top) continue;
-      const subjectId = relationshipId(
+      const tops = tierMembershipsFor(catalogId, record).map((resolved) =>
+        parentTierFor(catalogId, record, resolved.tier) || resolved);
+      if (!tops.length) continue;
+      for (const top of tops) {
+        const subjectId = relationshipId(
         `${catalogId}-catalog-membership`,
         catalogNodeId,
         top.nodeId,
         "contains",
-      );
-      if (seen.has(subjectId)) continue;
-      seen.add(subjectId);
-      addPublishedEdge(state, registry, nodeIds, {
+        );
+        if (seen.has(subjectId)) continue;
+        seen.add(subjectId);
+        addPublishedEdge(state, registry, nodeIds, {
         subjectId,
         sourceId: identity.publicationSourceId,
         ingestionSourceId,
@@ -1312,7 +1464,8 @@ function addTierToCatalogEdges(state, registry, nodeIds) {
         locator: record.source?.locator || `${filename}#${record.id}`,
         retrievedAt: record.source?.snapshot_date,
         rationale: `${top.title} is organized under the ${catalogId} catalog.`,
-      });
+        });
+      }
     }
   }
 }
@@ -1886,8 +2039,60 @@ function buildEdges(registry, nodes) {
   addAssessmentHierarchyEdges(state, registry, nodeIds, nodes);
   addCmmcProgramEdges(state, registry, nodeIds, nodes);
   addDodZeroTrustHierarchyEdges(state, registry, nodeIds);
+  addExplicitParentHierarchyEdges(state, registry, nodeIds, "nist-zt", "nist-zt.json", "nist-sp-800-207");
+  addExplicitParentHierarchyEdges(
+    state,
+    registry,
+    nodeIds,
+    "nist-iot-cybersecurity",
+    "nist-iot-cybersecurity.json",
+    "nist-iot-device-cybersecurity-requirement-catalogs",
+    "artifact-nist-iot-requirements-80053-mapping-draft",
+  );
+  addExplicitParentHierarchyEdges(state, registry, nodeIds, "nist-mobile-threats", "nist-mobile-threats.json", "nist-mobile-threat-catalogue");
   addCuiPolicyEdges(state, registry, nodeIds);
   return state;
+}
+
+function attachPublisherStructuralOrder(nodes, edges) {
+  const nodesById = new Map(nodes.map((node) => [node.id, node]));
+  const nextByParent = new Map();
+  for (const edge of edges) {
+    if (edge.relationship_class !== RELATIONSHIP_CLASSES.structural) continue;
+    const child = nodesById.get(edge.target_node_id);
+    const parent = nodesById.get(edge.source_node_id);
+    const publicationId = child?.metadata?.catalog_id || parent?.metadata?.catalog_id || "";
+    const key = `${publicationId}\u0000${edge.source_node_id}`;
+    const order = nextByParent.get(key) || 0;
+    edge.publisher_order = order;
+    nextByParent.set(key, order + 1);
+  }
+}
+
+export function validateDataTrustContracts(nodes, edges) {
+  const failures = [];
+  const nodesById = new Map(nodes.map((node) => [node.id, node]));
+  for (const node of nodes) {
+    if (node.metadata?.item_id && !NON_RECORD_NODE_TYPES.has(node.node_type) && node.metadata?.structural_group !== true) {
+      const envelope = sourceRecordEnvelopeForNode(node);
+      for (const failure of validateSourceRecordEnvelope(envelope)) {
+        failures.push(`${node.id}: SourceRecordEnvelope ${failure}`);
+      }
+    }
+    for (const fragment of node.metadata?.source_fragments || []) {
+      for (const failure of validateSourceFragment(fragment)) {
+        failures.push(`${node.id}: SourceFragment ${failure}`);
+      }
+    }
+  }
+  for (const edge of edges) {
+    if (edge.relationship_class !== RELATIONSHIP_CLASSES.structural) continue;
+    const membership = publisherStructureMembershipForEdge(edge, nodesById);
+    for (const failure of validatePublisherStructureMembership(membership)) {
+      failures.push(`${edge.id}: PublisherStructureMembership ${failure}`);
+    }
+  }
+  return failures;
 }
 
 /**
@@ -2619,6 +2824,9 @@ function pushStructuralBackfillEdge(edgeState, sourceById, { subjectId, parentNo
     target_node_id: childNode.id,
     relationship_type: "contains",
     relationship_class: RELATIONSHIP_CLASSES.structural,
+    mapping_model: RELATIONSHIP_CLASSES.structural,
+    source_artifact_id: childNode.artifact_ids?.[0] || aliasArtifact(`artifact-${childNode.source_id}`),
+    source_locator: childNode.metadata?.source_locator || `${childNode.source_id}#${childNode.id}`,
     provenance_class: provenance,
     confidence: "direct",
     publication_status: "published",
@@ -2661,7 +2869,7 @@ function attachAncestorPaths(nodes, edges) {
 }
 
 export function validatePublisherNativeContainment(nodes, edges = []) {
-  const failures = [];
+  const failures = new Set();
   const nodesById = new Map(nodes.map((node) => [node.id, node]));
   const parentsByChild = new Map();
   for (const edge of edges) {
@@ -2675,62 +2883,67 @@ export function validatePublisherNativeContainment(nodes, edges = []) {
   );
   for (const catalogId of catalogIds) {
     if (!catalogStructureProfile(catalogId)) {
-      failures.push(`${catalogId}: missing CatalogStructureProfile`);
+      failures.add(`${catalogId}: missing CatalogStructureProfile`);
     }
   }
   for (const profileId of CATALOG_STRUCTURE_IDS) {
     if (!catalogIds.has(profileId)) {
-      failures.push(`${profileId}: profile has no emitted catalog`);
+      failures.add(`${profileId}: profile has no emitted catalog`);
     }
   }
 
   for (const node of nodes) {
     const catalogId = catalogIdOf(node);
     if (!catalogId || node.node_type === "catalog") continue;
-    const chain = [node];
-    const visited = new Set([node.id]);
-    let cursor = node;
-    while (cursor.node_type !== "catalog") {
+    const walk = (cursor, chain, visited) => {
+      if (cursor.node_type === "catalog") {
+        const rootId = `${catalogId}:CATALOG`;
+        if (cursor.id !== rootId) {
+          failures.add(`${node.id}: containment is not anchored at ${rootId}`);
+          return;
+        }
+        const nativeTypes = [...chain].reverse().map((entry) => entry.node_type);
+        if (!structurePathIsAllowed(catalogId, nativeTypes)) {
+          failures.add(`${node.id}: undeclared structure ${nativeTypes.join(" > ")}`);
+        }
+        return;
+      }
+
       const parentIds = [...(parentsByChild.get(cursor.id) || [])];
-      if (parentIds.length !== 1) {
-        failures.push(`${cursor.id}: expected exactly one containment parent, found ${parentIds.length}`);
-        break;
+      if (!parentIds.length) {
+        failures.add(`${cursor.id}: expected a containment parent, found 0`);
+        return;
       }
-      const parent = nodesById.get(parentIds[0]);
-      if (!parent) {
-        failures.push(`${cursor.id}: missing containment parent ${parentIds[0]}`);
-        break;
+      const permitsMultipleParents =
+        catalogStructureProfile(catalogId)?.multiParentNodeTypes.includes(cursor.node_type) &&
+        !cursor.metadata?.is_subtechnique &&
+        parentIds.every((parentId) => nodesById.get(parentId)?.node_type === "tactic");
+      if (parentIds.length > 1 && !permitsMultipleParents) {
+        failures.add(`${cursor.id}: expected one containment parent, found ${parentIds.length}`);
+        return;
       }
-      if (visited.has(parent.id)) {
-        failures.push(`${node.id}: containment cycle through ${parent.id}`);
-        break;
+
+      for (const parentId of parentIds) {
+        const parent = nodesById.get(parentId);
+        if (!parent) {
+          failures.add(`${cursor.id}: missing containment parent ${parentId}`);
+          continue;
+        }
+        const parentCatalogId = catalogIdOf(parent);
+        if (parentCatalogId && parentCatalogId !== catalogId) {
+          failures.add(`${node.id}: foreign catalog ancestor ${parent.id}`);
+          continue;
+        }
+        if (visited.has(parent.id)) {
+          failures.add(`${node.id}: containment cycle through ${parent.id}`);
+          continue;
+        }
+        walk(parent, [...chain, parent], new Set([...visited, parent.id]));
       }
-      visited.add(parent.id);
-      chain.unshift(parent);
-      cursor = parent;
-    }
-    const nativeChain = chain.filter((entry) => catalogIdOf(entry) === catalogId);
-    const rootId = `${catalogId}:CATALOG`;
-    if (nativeChain[0]?.id !== rootId) {
-      failures.push(`${node.id}: containment is not anchored at ${rootId}`);
-      continue;
-    }
-    const foreignAncestors = chain.slice(0, -1).filter((entry) => {
-      const ancestorCatalog = catalogIdOf(entry);
-      return ancestorCatalog && ancestorCatalog !== catalogId;
-    });
-    if (foreignAncestors.length) {
-      failures.push(
-        `${node.id}: foreign catalog ancestor ${foreignAncestors[0].id}`,
-      );
-      continue;
-    }
-    const nativeTypes = nativeChain.map((entry) => entry.node_type);
-    if (!structurePathIsAllowed(catalogId, nativeTypes)) {
-      failures.push(`${node.id}: undeclared structure ${nativeTypes.join(" > ")}`);
-    }
+    };
+    walk(node, [node], new Set([node.id]));
   }
-  return failures;
+  return [...failures].sort();
 }
 
 function applyOrganizingSpine(nodeState, edgeState, registry) {
@@ -2902,6 +3115,7 @@ export function buildFrameworkData() {
   const edgeState = buildEdges(registry, nodeState.nodes);
   const authoritySpine = applyAuthoritySpine(nodeState, edgeState, registry);
   applyOrganizingSpine(nodeState, edgeState, registry);
+  attachPublisherStructuralOrder(nodeState.nodes, edgeState.edges);
   attachAuthorityPublicationMetadata(nodeState.nodes, authoritySpine);
   attachAncestorPaths(nodeState.nodes, edgeState.edges);
   const findings = [...nodeState.findings, ...edgeState.findings];
@@ -2917,6 +3131,7 @@ export function buildFrameworkData() {
     ...validateGraphArtifacts(graph),
     ...validateCatalogPublicationIdentity(graph.nodes, graph.sources),
     ...validatePublisherNativeContainment(graph.nodes, graph.edges),
+    ...validateDataTrustContracts(graph.nodes, graph.edges),
   ];
   if (errors.length)
     throw new Error(`Invalid federal graph:\n- ${errors.join("\n- ")}`);
@@ -3080,6 +3295,9 @@ const catalogRecords = new Map();
   mkdirSync(GENERATED, { recursive: true });
   for (const entry of readdirSync(GENERATED)) {
     const entryPath = join(GENERATED, entry);
+    if (GOVERNANCE_FILES.includes(entry)) {
+      continue;
+    }
     // This sibling artifact is owned by build-commons-index.mjs. Framework
     // rebuilds must not erase another generator's committed output.
     if (entry === "commons-search-index.json") {

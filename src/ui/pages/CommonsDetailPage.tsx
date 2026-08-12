@@ -28,6 +28,16 @@ function display(value: string) {
   return value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
+function EvidenceCopy({ section }: { section?: { status: string; text: string; sourceUrl: string } }) {
+  if (!section) return null;
+  return (
+    <div className={`resource-evidence-copy resource-evidence-copy--${section.status}`}>
+      <p>{section.text}</p>
+      <p className="resource-detail-evidence"><a href={section.sourceUrl} rel="noopener noreferrer" target="_blank">Evidence <IconExternalLink aria-hidden="true" size={14} /></a></p>
+    </div>
+  );
+}
+
 export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
   const id = viewState.view === "commons-detail" ? viewState.id : "";
   const [copied, setCopied] = useState(false);
@@ -80,16 +90,50 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
 
         <div className="resource-detail-grid">
           <div className="resource-detail-main">
-            <DetailSection title="About This Resource"><p>{resource.summary}</p></DetailSection>
+            <DetailSection title="What This Is">
+              <p>{resource.overview?.text || resource.summary}</p>
+              {resource.overview?.sourceUrl ? <p className="resource-detail-evidence"><a href={resource.overview.sourceUrl} rel="noopener noreferrer" target="_blank">{resource.overview.sourceType === "repository_readme" ? "Repository README" : "Publisher source"} <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}
+            </DetailSection>
+            <DetailSection title="What It Does"><EvidenceCopy section={resource.presentationProfile?.whatItDoes} /></DetailSection>
+            <DetailSection title="Who It Is For"><EvidenceCopy section={resource.presentationProfile?.whoItIsFor} /></DetailSection>
+            {resource.media?.status === "available" ? (
+              <DetailSection title="Screenshots">
+                <div className="resource-detail-media">{resource.media.items.map((item) => <figure key={`${item.url}-${item.sha256}`}><img alt={item.alt} height={item.height} loading="lazy" src={item.url} width={item.width} /><figcaption>Publisher image from commit {item.commitSha.slice(0, 7)} / {item.width}x{item.height} / {item.license}. <a href={item.sourceUrl} rel="noopener noreferrer" target="_blank">Source</a></figcaption></figure>)}</div>
+              </DetailSection>
+            ) : resource.resourceType === "tool" ? <DetailSection title="Screenshots"><p>{resource.media?.reason || "No attributable publisher screenshot was available."}</p></DetailSection> : null}
             <DetailSection title="Useful For"><div className="resource-detail-tags">{usefulFor.map((item) => <span key={item}>{display(item)}</span>)}</div></DetailSection>
+            <DetailSection title="Compatibility">
+              {resource.compatibility?.status === "documented" ? <div className="resource-detail-tags">{[...resource.compatibility.operatingSystems, ...resource.compatibility.environments].map((item) => <span key={item}>{item}</span>)}</div> : null}
+              <p>{resource.compatibility?.note || "Compatibility was not stated in the reviewed publisher source."}</p>
+              {resource.compatibility?.sourceUrl ? <p className="resource-detail-evidence"><a href={resource.compatibility.sourceUrl} rel="noopener noreferrer" target="_blank">Compatibility evidence <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}
+            </DetailSection>
+            {resource.toolProfile ? (
+              <>
+                <DetailSection title="Inputs, Outputs, and Integrations">
+                  <div className="resource-tool-profile-grid">
+                    <section><h3>Inputs</h3><EvidenceCopy section={resource.toolProfile.inputs} /></section>
+                    <section><h3>Outputs</h3><EvidenceCopy section={resource.toolProfile.outputs} /></section>
+                    <section><h3>Formats</h3><EvidenceCopy section={resource.toolProfile.formats} /></section>
+                    <section><h3>Integrations</h3><EvidenceCopy section={resource.toolProfile.integrations} /></section>
+                  </div>
+                </DetailSection>
+                <DetailSection title="Install and Run">
+                  <div className="resource-tool-profile-grid">
+                    <section><h3>Installation</h3><EvidenceCopy section={resource.toolProfile.installation} /></section>
+                    <section><h3>Usage</h3><EvidenceCopy section={resource.toolProfile.usage} /></section>
+                  </div>
+                </DetailSection>
+              </>
+            ) : null}
             <DetailSection title="Access">
               <dl className="resource-detail-facts"><div><dt>Access</dt><dd>{resourceAccessLabel(resource)}</dd></div><div><dt>Cost</dt><dd>{display(resource.costType)}</dd></div><div><dt>Status</dt><dd>{display(resource.officialStatus || resource.resourceLane)}</dd></div></dl>
               <p>{resource.publicAccessNotes}</p>
             </DetailSection>
             <DetailSection title="Links">
-              <ul className="resource-link-list"><li><a href={resource.canonicalUrl} rel="noopener noreferrer" target="_blank">Canonical resource <IconExternalLink aria-hidden="true" size={14} /></a></li>{resource.alternateUrls?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Publisher alternate <IconExternalLink aria-hidden="true" size={14} /></a></li>)}</ul>
+              <ul className="resource-link-list"><li><a href={resource.canonicalUrl} rel="noopener noreferrer" target="_blank">Canonical resource <IconExternalLink aria-hidden="true" size={14} /></a></li>{resource.repositoryEvidence?.readmeUrl ? <li><a href={resource.repositoryEvidence.readmeUrl} rel="noopener noreferrer" target="_blank">Inspected README <IconExternalLink aria-hidden="true" size={14} /></a></li> : null}{resource.toolProfile?.release?.url ? <li><a href={resource.toolProfile.release.url} rel="noopener noreferrer" target="_blank">Releases <IconExternalLink aria-hidden="true" size={14} /></a></li> : null}{resource.downloadLinks?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Publisher download <IconExternalLink aria-hidden="true" size={14} /></a></li>)}{resource.alternateUrls?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Publisher alternate <IconExternalLink aria-hidden="true" size={14} /></a></li>)}</ul>
             </DetailSection>
             <DetailSection title="Why It Is Listed"><p>{resource.whyIncluded}</p></DetailSection>
+            <DetailSection title="Limitations"><EvidenceCopy section={resource.presentationProfile?.limitations} /></DetailSection>
           </div>
 
           <aside className="resource-detail-side">
@@ -105,7 +149,8 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
               <AppLink className="resource-library-search" onNavigate={onNavigate} patch={{ query: resource.frameworks[0] || resource.programs?.[0] || resource.shortName }} view="search"><IconBook2 aria-hidden="true" size={16} />Search the Library</AppLink>
             </DetailSection>
             <DetailSection title="Maintenance">
-              <dl className="resource-detail-facts stacked"><div><dt>Last checked</dt><dd>{resource.lastCheckedAt}</dd></div><div><dt>Next review</dt><dd>{resource.nextCheckAt || "Not scheduled"}</dd></div><div><dt>Method</dt><dd>{display(resource.verificationMethod || "manual review")}</dd></div></dl>
+              <dl className="resource-detail-facts stacked"><div><dt>Release</dt><dd>{resource.currentVersion || (resource.toolProfile?.release.status === "not_published" ? "No published GitHub release" : "Not documented")}</dd></div><div><dt>Maintenance</dt><dd>{display(resource.maintenanceStatus)}</dd></div><div><dt>License</dt><dd>{resource.license || "Not documented"}</dd></div><div><dt>Last repository activity</dt><dd>{resource.lastCommitAt || resource.publisherUpdatedAt || "Not documented"}</dd></div><div><dt>Last checked</dt><dd>{resource.lastCheckedAt}</dd></div><div><dt>Next review</dt><dd>{resource.nextCheckAt || "Not scheduled"}</dd></div><div><dt>Method</dt><dd>{display(resource.verificationMethod || "manual review")}</dd></div></dl>
+              {resource.repositoryEvidence ? <p className="resource-detail-evidence"><a href={resource.repositoryEvidence.commitUrl} rel="noopener noreferrer" target="_blank">Evidence commit {resource.repositoryEvidence.commitSha.slice(0, 7)} <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}
             </DetailSection>
           </aside>
         </div>

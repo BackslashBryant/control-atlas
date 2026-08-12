@@ -15,6 +15,21 @@
 
 export const COMPLETENESS_STATES = ['reconciled', 'partial', 'discovered', 'unknown', 'quarantined'];
 
+export function summarizeCompleteness(catalogs) {
+  const states = Object.fromEntries(
+    COMPLETENESS_STATES.map((state) => [
+      state,
+      catalogs.filter((catalog) => catalog.completeness_status === state).length,
+    ]),
+  );
+  return {
+    status: catalogs.length > 0 && catalogs.every((catalog) => catalog.completeness_status === 'reconciled')
+      ? 'COMPLETE'
+      : 'INCOMPLETE',
+    states,
+  };
+}
+
 // Resolve an authoritative expected count from an evidence locator of the form
 // "relative/path.json#dotted.path.to.integer". `readJson` reads a repo-relative
 // JSON file (or returns null). Returns an integer or null.
