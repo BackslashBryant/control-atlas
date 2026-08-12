@@ -410,13 +410,23 @@ export function ObjectDetailPage(props: {
 
       <div className="record-template-grid">
         <article className="record-template-main">
-          {missingSourceFields.length ? (
+          {source ? (
+            <p className="support-meta" data-record-source-identity>
+              Source excerpt from {source.display_name || source.name}
+            </p>
+          ) : null}
+          {!source ? (
+            <section className="notice" data-record-source-error role="alert">
+              <h2>Source identity unavailable</h2>
+              <p>Official source identity unavailable. This record is not shown as official content until its publication identity can be verified.</p>
+            </section>
+          ) : missingSourceFields.length ? (
             <section className="notice" data-record-source-error role="alert">
               <h2>Record data unavailable</h2>
               <p>The published text for this record did not load.</p>
             </section>
           ) : (
-            <div className="record-official-text" data-source-text="published">
+            <div className="record-official-text" data-record-section="official-text" data-source-text="published">
               {presentation.sections.map((section) => {
                 const value = sourceMetadata[section.field as keyof typeof sourceMetadata];
                 if (Array.isArray(value) ? value.length === 0 : !String(value || "").trim()) return null;
