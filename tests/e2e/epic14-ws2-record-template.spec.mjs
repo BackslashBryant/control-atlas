@@ -101,6 +101,22 @@ test("WS2 turns clear DISA commands and file procedures into copyable source for
   }
 
   await page.setViewportSize({ width: 375, height: 812 });
+  for (const copyButton of await page.getByRole("button", { name: "Copy", exact: true }).all()) {
+    expect(
+      await copyButton.evaluate((element) => ({
+        fits: element.scrollWidth <= element.clientWidth,
+        whiteSpace: globalThis.getComputedStyle(element).whiteSpace,
+      })),
+    ).toEqual({ fits: true, whiteSpace: "nowrap" });
+  }
+  for (const codeStep of await fix.locator(".source-procedure-list__code-step").all()) {
+    expect(
+      await codeStep.evaluate((element) => ({
+        display: globalThis.getComputedStyle(element).display,
+        marker: globalThis.getComputedStyle(element).listStyleType,
+      })),
+    ).toEqual({ display: "list-item", marker: "disc" });
+  }
   const overflow = await page.evaluate(() =>
     globalThis.document.documentElement.scrollWidth -
       globalThis.document.documentElement.clientWidth,

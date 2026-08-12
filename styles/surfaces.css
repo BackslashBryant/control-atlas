@@ -8260,8 +8260,12 @@ button.atlas-leverage-row:hover {
 }
 
 .source-procedure-list__code-step {
-  display: grid;
-  gap: var(--ca-space-2);
+  display: list-item;
+}
+
+.source-procedure-list__code-step > span {
+  display: block;
+  margin-bottom: var(--ca-space-2);
 }
 
 .source-procedure-list__code-step > .source-code-snippet {
@@ -8288,8 +8292,11 @@ button.atlas-leverage-row:hover {
   font-weight: 700;
 }
 
-.source-code-snippet__header .button {
+.source-code-snippet__header > button {
+  flex: 0 0 auto;
   min-height: 32px;
+  white-space: nowrap;
+  word-break: normal;
 }
 
 .source-code-snippet pre {
