@@ -36,8 +36,6 @@ import {
 import {
   assertTrunkReachability,
   canonicalTrunkReachable,
-  deriveAssessmentProcedureParents,
-  deriveCciHierarchyParents,
   deriveEditorialSpine,
   deriveSyntheticCatalogs,
 } from "./hierarchy-derivation.mjs";
@@ -50,6 +48,11 @@ import {
   recordPresentationProfile,
   SUPPORTED_RECORD_TYPES,
 } from "../src/shared/record-presentation.mjs";
+import {
+  CATALOG_STRUCTURE_IDS,
+  catalogStructureProfile,
+  structurePathIsAllowed,
+} from "../src/shared/catalog-structure.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED = join(ROOT, "data", "generated");
@@ -180,7 +183,7 @@ const CATALOGS = [
  * buildNodes. Before this table, tier construction was gated behind
  * `catalogId === "nist-800-53"`, which left 88% of graph nodes with no parent even
  * though most catalogs carry their grouping value in the source data — measured in
- * docs/audits/grc-hierarchy-audit-2026-07-25.md.
+ * docs/DATA_POLICY.md.
  *
  * Row contract:
  *   nodeType     node_type for the tier node
@@ -209,6 +212,18 @@ export const CATALOG_TIERS = {
     edgeDataset: "800-53-family-membership",
     rationale: (record, title) =>
       `${record.id} is part of the ${title} family in NIST SP 800-53 Rev. 5.`,
+  },
+  "nist-800-53a": {
+    nodeType: "family",
+    idPrefix: "FAMILY",
+    key: (record) => familyCodeFromControlId(record.id),
+    title: (record) => record.family,
+    label: (key, title) => `${key} ${title} Family`,
+    description: (record, title) =>
+      `${title} assessment procedures from NIST SP 800-53A Rev. 5.`,
+    edgeDataset: "800-53a-family-membership",
+    rationale: (record, title) =>
+      `${record.id} is an assessment procedure in the ${title} family.`,
   },
   "nist-800-171": {
     nodeType: "family",
@@ -950,6 +965,14 @@ function buildNodes(registry) {
             assessmentNode,
             assessmentNode.source_id,
           );
+          registerTierNode(
+            tierNodes,
+            "nist-800-53a",
+            tierFor("nist-800-53a", record),
+            assessmentNode.source_id,
+            ingestionSourceId,
+            record,
+          );
         }
 
       }
@@ -1160,6 +1183,13 @@ function addTierMembershipEdges(state, registry, nodeIds) {
       if (!identity) continue;
       const resolved = tierFor(catalogId, record);
       if (!resolved) continue;
+      // Enhancement-style children have a more specific publisher-native
+      // parent. Do not also attach them directly to the outer grouping tier.
+      if (catalogId === "nist-800-53" && String(record.id).includes(".")) continue;
+      if (
+        (catalogId === "mitre-attack" || catalogId === "mitre-attack-ics") &&
+        record.metadata?.parent_technique_id
+      ) continue;
       const { tier, title, nodeId: sourceNodeId } = resolved;
       const targetNodeId = nodeId(catalogId, record.id);
       const subjectId = relationshipId(
@@ -1239,7 +1269,7 @@ function addTierParentEdges(state, registry, nodeIds) {
  * Every catalog that declares a CATALOG_TIERS row gets its outermost tier
  * (the parent tier when one is declared, else the tier itself) linked to the
  * catalog's own summary node, so nothing hangs disconnected above the tree —
- * this is what closes docs/audits/grc-hierarchy-audit-2026-07-25.md's
+ * this enforces docs/DATA_POLICY.md's
  * "family (20) has no parent itself" finding for every tiered catalog, not
  * only SP 800-53.
  */
@@ -1462,6 +1492,35 @@ function addAssessmentEdges(state, registry, nodeIds) {
       locator: `sp800-53a#${record.id}`,
       rationale: `NIST SP 800-53A assessment procedures for ${record.id} assess the corresponding control.`,
       displayLabel: `${sourceNodeId} assesses ${targetNodeId}`,
+    });
+  }
+}
+
+function addAssessmentHierarchyEdges(state, registry, nodeIds, nodes) {
+  for (const procedure of nodes.filter(
+    (node) => node.node_type === "assessment_procedure" && catalogIdOf(node) === "nist-800-53a",
+  )) {
+    const familyCode = familyCodeFromControlId(procedure.metadata?.item_id);
+    if (!familyCode) continue;
+    const familyNodeId = `nist-800-53a:FAMILY-${familyCode}`;
+    const sourceId = procedure.source_id;
+    const ingestionSourceId = procedure.metadata?.ingestion_source_id || sourceId;
+    addPublishedEdge(state, registry, nodeIds, {
+      subjectId: relationshipId(
+        "800-53a-family-membership",
+        familyNodeId,
+        procedure.id,
+        "contains",
+      ),
+      sourceId,
+      ingestionSourceId,
+      sourceNodeId: familyNodeId,
+      targetNodeId: procedure.id,
+      relationshipType: "contains",
+      relationshipClass: RELATIONSHIP_CLASSES.structural,
+      confidence: "derived",
+      locator: `sp800-53a#${procedure.metadata?.item_id || procedure.id}`,
+      rationale: `${procedure.metadata?.item_id || procedure.id} is an assessment procedure in the ${familyCode} family.`,
     });
   }
 }
@@ -1758,9 +1817,9 @@ function addCuiPolicyEdges(state, registry, nodeIds) {
 /**
  * W1.2/W1.3d — the `nist-800-53:CATALOG` node's structural parent, derived
  * from the already-published CSF<->800-53 OLIR correlation edges (no new
- * fetch: see docs/STATE.md 2026-07-26 session 3 for why the sprint doc's
+ * source: see docs/DATA_POLICY.md for why a catalog's
  * "zero edges" premise was disproven). The individual control<->subcategory
- * correlation stays Class 3 (`maps_to`) per docs/tree-model.md §3 — one
+ * correlation stays `maps_to` per docs/DATA_POLICY.md — one
  * control maps to dozens of subcategories across every function, so no
  * single function can honestly "contain" a control. What CAN take a single
  * structural parent is the catalog as a whole: the CSF Function that the
@@ -1824,6 +1883,7 @@ function buildEdges(registry, nodes) {
   addBaselineMembershipEdges(state, registry, nodeIds);
   addFedrampMembershipEdges(state, registry, nodeIds);
   addAssessmentEdges(state, registry, nodeIds);
+  addAssessmentHierarchyEdges(state, registry, nodeIds, nodes);
   addCmmcProgramEdges(state, registry, nodeIds, nodes);
   addDodZeroTrustHierarchyEdges(state, registry, nodeIds);
   addCuiPolicyEdges(state, registry, nodeIds);
@@ -2459,7 +2519,7 @@ export function buildAtlasSpine(graph, authoritySpine, treeSpine) {
 // "editorial", never publisher-declared) plus structural backfill for orphans
 // whose catalog root exists, then a HARD connectivity gate that fails the build
 // if any node cannot reach the trunk over the full (undirected) edge set. CCIs
-// and assessment procedures stay pure correlation junctions (docs/tree-model.md
+// and assessment procedures stay pure correlation junctions (docs/DATA_POLICY.md
 // §4) — they reach the trunk through their existing correlation/assesses edges,
 // not through new structural parents.
 
@@ -2600,6 +2660,79 @@ function attachAncestorPaths(nodes, edges) {
   }
 }
 
+export function validatePublisherNativeContainment(nodes, edges = []) {
+  const failures = [];
+  const nodesById = new Map(nodes.map((node) => [node.id, node]));
+  const parentsByChild = new Map();
+  for (const edge of edges) {
+    if (edge.relationship_class !== RELATIONSHIP_CLASSES.structural) continue;
+    const parents = parentsByChild.get(edge.target_node_id) || new Set();
+    parents.add(edge.source_node_id);
+    parentsByChild.set(edge.target_node_id, parents);
+  }
+  const catalogIds = new Set(
+    nodes.map((node) => catalogIdOf(node)).filter(Boolean),
+  );
+  for (const catalogId of catalogIds) {
+    if (!catalogStructureProfile(catalogId)) {
+      failures.push(`${catalogId}: missing CatalogStructureProfile`);
+    }
+  }
+  for (const profileId of CATALOG_STRUCTURE_IDS) {
+    if (!catalogIds.has(profileId)) {
+      failures.push(`${profileId}: profile has no emitted catalog`);
+    }
+  }
+
+  for (const node of nodes) {
+    const catalogId = catalogIdOf(node);
+    if (!catalogId || node.node_type === "catalog") continue;
+    const chain = [node];
+    const visited = new Set([node.id]);
+    let cursor = node;
+    while (cursor.node_type !== "catalog") {
+      const parentIds = [...(parentsByChild.get(cursor.id) || [])];
+      if (parentIds.length !== 1) {
+        failures.push(`${cursor.id}: expected exactly one containment parent, found ${parentIds.length}`);
+        break;
+      }
+      const parent = nodesById.get(parentIds[0]);
+      if (!parent) {
+        failures.push(`${cursor.id}: missing containment parent ${parentIds[0]}`);
+        break;
+      }
+      if (visited.has(parent.id)) {
+        failures.push(`${node.id}: containment cycle through ${parent.id}`);
+        break;
+      }
+      visited.add(parent.id);
+      chain.unshift(parent);
+      cursor = parent;
+    }
+    const nativeChain = chain.filter((entry) => catalogIdOf(entry) === catalogId);
+    const rootId = `${catalogId}:CATALOG`;
+    if (nativeChain[0]?.id !== rootId) {
+      failures.push(`${node.id}: containment is not anchored at ${rootId}`);
+      continue;
+    }
+    const foreignAncestors = chain.slice(0, -1).filter((entry) => {
+      const ancestorCatalog = catalogIdOf(entry);
+      return ancestorCatalog && ancestorCatalog !== catalogId;
+    });
+    if (foreignAncestors.length) {
+      failures.push(
+        `${node.id}: foreign catalog ancestor ${foreignAncestors[0].id}`,
+      );
+      continue;
+    }
+    const nativeTypes = nativeChain.map((entry) => entry.node_type);
+    if (!structurePathIsAllowed(catalogId, nativeTypes)) {
+      failures.push(`${node.id}: undeclared structure ${nativeTypes.join(" > ")}`);
+    }
+  }
+  return failures;
+}
+
 function applyOrganizingSpine(nodeState, edgeState, registry) {
   const spine = readJson(join(ROOT, "data", "curated", "tree-spine.json"));
   const sourceById = registry.byId;
@@ -2685,63 +2818,14 @@ function applyOrganizingSpine(nodeState, edgeState, registry) {
 
   // 3.5 Junction canonical parents as organizing edges so the rail can walk them.
   // These stay OUT of structural ancestry — CCIs and procedures remain correlation
-  // junctions (docs/tree-model.md §4); the organizing edge is a badged editorial
+  // junctions (docs/DATA_POLICY.md); the organizing edge is a badged editorial
   // "where this sits" home, never a publisher containment claim.
-  const nodeIdSet = new Set(nodes.map((node) => node.id));
-  const assessesRelationships = edgeState.edges
-    .filter((edge) => edge.relationship_type === "assesses")
-    .map((edge) => ({ source_id: edge.source_node_id, target_id: edge.target_node_id }));
-  const { parents: procedureParents } = deriveAssessmentProcedureParents(assessesRelationships);
-  for (const [procedureNodeId, { controlId }] of procedureParents) {
-    if (!nodeIdSet.has(controlId)) continue;
-    // Parent -> child: the control is the parent, the procedure hangs beneath it.
-    pushOrganizingEdge(edgeState, {
-      subjectId: `organizing:procedure:${procedureNodeId}`,
-      sourceNodeId: controlId,
-      targetNodeId: procedureNodeId,
-      rationale: `${procedureNodeId} assesses ${controlId}; filed beneath it for the tree path.`,
-    });
-  }
-  const cciMapRelationships = (filename) => {
-    const path = join(ROOT, "maps", filename);
-    if (!existsSync(path)) return [];
-    return (readJson(path).relationships || []).map((relationship) => ({
-      source_id: relationship.source_id,
-      target_id: normalizeControlId(relationship.target_id),
-    }));
-  };
-  const { parents: cciParents } = deriveCciHierarchyParents({
-    cciItemIds: nodes
-      .filter((node) => catalogIdOf(node) === "disa-cci")
-      .map((node) => node.metadata.item_id),
-    directRelationships: cciMapRelationships("cci-to-800-53.json"),
-    crosswalkRelationships: cciMapRelationships("cci-to-800-53-rev4.json"),
-    assessmentProcedureItemIds: new Set(
-      nodes
-        .filter((node) => node.node_type === "assessment_procedure")
-        .map((node) => node.metadata.item_id),
-    ),
-    controlItemIds: new Set(
-      nodes
-        .filter((node) => catalogIdOf(node) === "nist-800-53")
-        .map((node) => node.metadata.item_id),
-    ),
-  });
-  for (const [cciItemId, { controlId, tier }] of cciParents) {
-    const parentNodeId =
-      tier === "assessment_procedure" ? `nist-800-53a:${controlId}` : `nist-800-53:${controlId}`;
-    if (!nodeIdSet.has(parentNodeId)) continue;
+  /* Cross-publication CCI and assessment links remain relationships. They are
+     deliberately excluded from publisher-native containment. */
+  // Cross-publication references stay in the relationship layer.
     // Parent -> child: the control/assessment objective is the parent, the CCI
-    // hangs beneath it (docs/tree-model.md §4: control -> objective -> CCI).
-    pushOrganizingEdge(edgeState, {
-      subjectId: `organizing:cci:disa-cci:${cciItemId}`,
-      sourceNodeId: parentNodeId,
-      targetNodeId: `disa-cci:${cciItemId}`,
-      rationale: `CCI ${cciItemId} cites ${controlId}; filed beneath its ${
-        tier === "assessment_procedure" ? "assessment objective" : "control"
-      } for the tree path.`,
-    });
-  }
+    // remains related to it (docs/DATA_POLICY.md).
+
 
   // 4. Residual connectivity backfill — anything still unreachable from the trunk.
   const syntheticNonOwningCatalogs = new Set(
@@ -2832,6 +2916,7 @@ export function buildFrameworkData() {
   const errors = [
     ...validateGraphArtifacts(graph),
     ...validateCatalogPublicationIdentity(graph.nodes, graph.sources),
+    ...validatePublisherNativeContainment(graph.nodes, graph.edges),
   ];
   if (errors.length)
     throw new Error(`Invalid federal graph:\n- ${errors.join("\n- ")}`);

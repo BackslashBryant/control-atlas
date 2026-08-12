@@ -1,5 +1,5 @@
 {
-  "_doc": "Class-4 (organizing) data. Hand-authored, NOT derived and NOT publisher-declared. Defines the Cybersecurity trunk, the nine limbs, and which limb every published catalog attaches to. See docs/tree-model.md \u00a73 Class 4 and docs/plans/cybersecurity-trunk-and-voice-2026-07-31.md Part A. Every catalog->limb and trunk->limb hop is emitted as an `organizes` edge (relationship_class `organizing`, publication_status `editorial`) and must be badged 'Control Atlas structure' in the UI, never as a source name.",
+  "_doc": "Hand-authored Control Atlas organization, not publisher containment. Defines the Cybersecurity root, nine areas, and each publication's navigation area under docs/DATA_POLICY.md. Every root-to-area and area-to-publication hop is an `organizes` edge with editorial publication status and must never be presented as publisher truth.",
   "trunk": {
     "id": "atlas:TRUNK",
     "label": "Cybersecurity"
@@ -69,7 +69,7 @@
     "mitre-attack-ics": "atlas:LIMB-THREAT",
     "mitre-d3fend": "atlas:LIMB-THREAT"
   },
-  "_syntheticCatalogsDoc": "These three catalog_ids carry real limb content but ship with no catalog root node of their own (their records land orphaned). The build (Part A.3) synthesizes a `<catalog_id>:CATALOG` node for each so they attach to their limb exactly like the 16 real roots; their same-catalog children then attach via the existing structural rule. Baseline catalogs (nist-800-53b, fedramp-rev5) are deliberately excluded \u2014 baselines are Class-2 applicability overlays, never tree spine (docs/tree-model.md \u00a73.2).",
+  "_syntheticCatalogsDoc": "Publications without an upstream catalog node receive a deterministic `<catalog_id>:CATALOG` root. Only the publisher-native outer level declared here attaches to it. Baselines remain applicability relationships unless their own publication profile defines a native baseline record.",
   "_residualLimbsDoc": "Total-trunk-connectivity backfill (owner 2026-07-31: 'everything must connect to the trunk, period'). Catalog_ids here have neither a real nor a synthetic catalog root \u2014 they are baseline / applicability sets. Their orphan nodes connect to the trunk via an editorial `organizes` edge to the named limb, satisfying connectivity while keeping baselines OFF the structural spine (they remain Class-2 applicability overlays). Any orphan whose catalog_id HAS a real catalog root is instead backfilled structurally to that root by the build (same-catalog rule); the build fails loudly if ANY node still cannot reach the trunk.",
   "residualLimbs": {},
   "syntheticCatalogs": [
@@ -99,8 +99,8 @@
       "limb": "atlas:LIMB-ASSESSMENT",
       "label": "NIST SP 800-53A Assessment Procedures",
       "source_id": "nist-800-53a-assessment-procedures",
-      "description": "The procedures an assessor follows to decide whether each control is working.",
-      "attachRecords": false
+      "attachNodeTypes": ["family"],
+      "description": "The procedures an assessor follows to decide whether each control is working."
     },
     {
       "catalog_id": "fedramp-rev5",
@@ -121,8 +121,7 @@
       "limb": "atlas:LIMB-IMPLEMENTATION",
       "label": "DISA Control Correlation Identifiers",
       "source_id": "disa-cci-list",
-      "description": "The identifiers that tie a control's individual statements to the settings that satisfy them.",
-      "attachRecords": false
+      "description": "The identifiers that tie a control's individual statements to the settings that satisfy them."
     }
   ],
   "_areaDestinationsDoc": "Areas whose content is not a published catalog. Explore renders these as real entries pointing at the surface that holds them, so no area is ever shown empty.",

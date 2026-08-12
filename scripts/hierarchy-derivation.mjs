@@ -114,7 +114,7 @@ export function assertTrunkReachability(nodes, edges, trunkId) {
  * CCIs (99.1%) to a real `nist-800-53` control id — this module only *picks
  * one canonical target per CCI* from data that already exists, per the
  * doctrine's Assessment Objective tier (`nist-800-53a` assessment_procedure
- * nodes ARE that tier, docs/tree-model.md + sprint-handoff §6a), falling back
+ * nodes ARE that tier (docs/DATA_POLICY.md), falling back
  * to the control/enhancement directly when no assessment_procedure exists for
  * that control. The 44 CCIs neither file can resolve are left unparented and
  * reported — the same 44 already documented as genuinely unmappable
@@ -257,7 +257,7 @@ export function deriveEditorialSpine(catalogRoots, spine, catalogIdOf) {
  * rule accepts them). A declared synthetic catalog that matches zero nodes is
  * reported in `empty` so the build fails loudly rather than emitting a childless
  * wrapper. Baseline catalogs are intentionally NOT declared here — baselines are
- * Class-2 applicability, never spine (docs/tree-model.md §3.2).
+ * applicability, never containment (docs/DATA_POLICY.md).
  *
  * @param {Array<{id: string, node_type?: string, metadata?: {catalog_id?: string}}>} nodes
  * @param {{syntheticCatalogs?: Array<{catalog_id: string, limb: string}>}} spine
@@ -291,7 +291,11 @@ export function deriveSyntheticCatalogs(nodes, spine, catalogIdOf) {
       // "area > wrapper > record", losing the control it belongs to. Those
       // catalogs get a browsable root with no children of its own; Explore
       // lists their records by catalog membership instead.
-      childIds: decl.attachRecords === false ? [] : childIds,
+      childIds: decl.attachRecords === false
+        ? []
+        : Array.isArray(decl.attachNodeTypes)
+          ? childIds.filter((id) => decl.attachNodeTypes.includes(nodes.find((node) => node.id === id)?.node_type))
+          : childIds,
     });
   }
   return { wrappers, empty };

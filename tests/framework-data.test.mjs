@@ -188,13 +188,12 @@ test("runtime Atlas spine carries full L0-L3 structure and L4 summaries", () => 
     (entry) => entry.id === "nist-800-53a:CATALOG",
   );
   assert.ok(assessmentCatalog.child_count > 0);
-  assert.ok(
-    entries.some(
-      (entry) =>
-        entry.parent_id === assessmentCatalog.id &&
-        entry.id.startsWith("membership:nist-800-53a:"),
-    ),
+  const assessmentFamilies = entries.filter(
+    (entry) =>
+      entry.parent_id === assessmentCatalog.id && entry.node_type === "family",
   );
+  assert.equal(assessmentFamilies.length, assessmentCatalog.child_count);
+  assert.ok(assessmentFamilies.every((entry) => entry.child_count > 0));
   assert.ok(
     entries.some(
       (entry) => entry.child_count !== entry.descendant_record_count,
