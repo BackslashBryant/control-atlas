@@ -10626,6 +10626,11 @@ input[type="checkbox"] {
     white-space: nowrap;
   }
 
+  .atlas-tree__mobile-bar button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
   .atlas-tree__drawer-close {
     display: inline-flex;
     align-items: center;

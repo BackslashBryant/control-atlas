@@ -137,7 +137,8 @@ test("mobile Atlas keeps keyboard overview navigation and uses a structural Brow
   await browse.getByLabel("Search this publication").fill("Oracle Linux 9");
   await browse.getByRole("button", { name: /BENCHMARK-ORACLE-LINUX-9-STIG/ }).click();
   await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG\?/);
-  const reopen = page.getByRole("button", { name: "Browse structure" });
+  await expect(page.locator("[data-atlas-structural-explorer]").getByRole("heading", { name: /Oracle Linux 9/ })).toBeVisible();
+  const reopen = page.locator(".atlas-tree__mobile-bar").getByRole("button", { name: "Browse structure" });
   await expect(reopen).toBeVisible();
   const target = await reopen.evaluate((node) => {
     const box = node.getBoundingClientRect();
