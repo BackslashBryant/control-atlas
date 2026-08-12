@@ -588,13 +588,16 @@ export function AtlasTree(props: AtlasTreeProps) {
     <section aria-labelledby="atlas-page-title" className="atlas-tree" data-layout-status={layoutStatus} data-tree-edge-count={flowEdges.length} data-tree-node-count={flowNodes.length}>
       <div className="atlas-tree__mobile-bar">
         <button aria-controls="atlas-structure-sidebar" aria-expanded={sidebarOpen} onClick={() => setSidebarOpen((open) => !open)} type="button">
-          {sidebarOpen ? "Close browse" : "Browse structure"}
+          Browse structure
         </button>
         <span>{breadcrumb.at(-1)?.label || "Atlas"}</span>
       </div>
       {sidebarOpen ? <button aria-label="Close structure browser" className="atlas-tree__scrim" onClick={() => setSidebarOpen(false)} type="button" /> : null}
       <div className={`atlas-tree__workbench${sidebarOpen ? " has-open-sidebar" : ""}${structuralExplorer ? " is-structural" : " is-overview"}`}>
         <aside aria-label="Atlas navigation" className="atlas-tree__dock atlas-tree__dock--left" id="atlas-structure-sidebar">
+          <button className="atlas-tree__drawer-close" onClick={() => setSidebarOpen(false)} type="button">
+            Close browse
+          </button>
           <nav aria-label="Atlas breadcrumb" className="atlas-tree__breadcrumb">
             <strong>Current path</strong>
             <ol>
