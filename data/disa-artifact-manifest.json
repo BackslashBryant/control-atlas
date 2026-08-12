@@ -2,16 +2,16 @@
   "discovery_source": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/",
   "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_SRG-STIG_Library_July_2026.zip",
   "byte_length": 368971055,
-  "retrieval_timestamp": "2026-08-09T01:23:31.064Z",
+  "retrieval_timestamp": "2026-08-12T11:42:14.255Z",
   "checksum": "sha256:df371dc0ebb163e1a0434b141bc2f16b56c97b2062622d6811191fbe4f093c01",
   "reconciliation": {
     "discovered_urls": 1015,
     "compilation_entries": 2616,
-    "ingested_files": 378,
+    "ingested_files": 379,
     "excluded_files": 84,
-    "failed_files": 1,
+    "failed_files": 0,
     "ignored_files": 2153,
-    "stig_records_parsed": 16877,
+    "stig_records_parsed": 17021,
     "srg_records_parsed": 2516,
     "cci_relationships": 28412,
     "inventory_details": [
@@ -44,6 +44,7 @@
         "entryPath": "U_AAA_Services_V2R2_SRG.zip/U_AAA_Services_V2R2_Manual_SRG/U_AAA_Services_SRG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "AAA_Services",
         "recordCount": 77
       },
@@ -81,6 +82,7 @@
         "entryPath": "U_Active_Directory_Domain_V3R7_STIG.zip/U_Active_Directory_Domain_V3R7_Manual_STIG/U_Active_Directory_Domain_STIG_V3R7_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Active_Directory_Domain",
         "recordCount": 36
       },
@@ -118,6 +120,7 @@
         "entryPath": "U_Active_Directory_Forest_V3R2_STIG.zip/U_Active_Directory_Forest_V3R2_Manual_STIG/U_Active_Directory_Forest_STIG_V3R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Active_Directory_Forest",
         "recordCount": 7
       },
@@ -150,6 +153,7 @@
         "entryPath": "U_Adobe_Acrobat_Pro_DC_Continuous_V2R1_STIG.zip/U_Adobe_Acrobat_Pro_DC_Continuous_V2R1_Manual_STIG/U_Adobe_Acrobat_Pro_DC_Continuous_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Adobe_Acrobat_Pro_DC_Continuous_STIG",
         "recordCount": 23
       },
@@ -187,6 +191,7 @@
         "entryPath": "U_Adobe_Acrobat_Reader_DC_Continuous_V2R1_STIG.zip/U_Adobe_Acrobat_Reader_DC_Continuous_V2R1_Manual_STIG/U_Adobe_Acrobat_Reader_DC_Continuous_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Adobe_Acrobat_Reader_DC_Continuous_Track_STIG",
         "recordCount": 26
       },
@@ -229,6 +234,7 @@
         "entryPath": "U_Adobe_ColdFusion_V1R2_STIG.zip/U_Adobe_ColdFusion_V1R2_Manual_STIG/U_Adobe_ColdFusion_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Adobe_ColdFusion_STIG",
         "recordCount": 84
       },
@@ -276,6 +282,7 @@
         "entryPath": "U_AFS_Ax-OS_V1R2_STIG.zip/U_AFS_Ax-OS_V1R2_Manual_STIG/U_AFS_Ax-OS_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "AFS_Ax-OS_STIG",
         "recordCount": 16
       },
@@ -318,6 +325,7 @@
         "entryPath": "U_Akamai_KSD_Service_IL2_ALG_V1R1_STIG.zip/U_Akamai_KSD_Service_IL2_ALG_V1R1_Manual_STIG/U_Akamai_KSD_Service_IL2_ALG_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Akamai_KSD_Service_IL2_ALG_STIG",
         "recordCount": 33
       },
@@ -345,6 +353,7 @@
         "entryPath": "U_Akamai_KSD_Service_IL2_NDM_V1R1_STIG.zip/U_Akamai_KSD_Service_IL2_NDM_V1R1_Manual_STIG/U_Akamai_KSD_Service_IL2_NDM_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Akamai_KSD_Service_IL2_NDM_STIG",
         "recordCount": 24
       },
@@ -367,6 +376,7 @@
         "entryPath": "U_Amazon_Linux_2023_V1R4_STIG.zip/U_Amazon_Linux_2023_V1R4_Manual_STIG/U_Amazon_Linux_2023_STIG_V1R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Amazon_Linux_2023_STIG",
         "recordCount": 187
       },
@@ -409,6 +419,7 @@
         "entryPath": "U_Anduril_NixOS_V1R2_STIG.zip/U_Anduril_NixOS_V1R2_Manual_STIG/U_Anduril_NixOS_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Anduril_NixOS_STIG",
         "recordCount": 103
       },
@@ -461,6 +472,7 @@
         "entryPath": "U_AP_Compliance_Guardian_V1R1_STIG.zip/U_AP_Compliance_Guardian_V1R1_Manual_STIG/U_AP_Compliance_Guardian_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "AvePoint_Compliance_Guardian_STIG",
         "recordCount": 10
       },
@@ -493,6 +505,7 @@
         "entryPath": "U_AP_Fly_Server_V1R1_STIG.zip/U_AP_Fly_Server_V1R1_Manual_STIG/U_AP_Fly_Server_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "AvePoint_Fly_Server_STIG",
         "recordCount": 22
       },
@@ -540,6 +553,7 @@
         "entryPath": "U_Apache_Server_2-4_Unix_Y26M07_STIG.zip/U_Apache_Server_2-4_Unix_Server_V3R3_Manual_STIG/U_Apache_Server_2-4_UNIX_Server_STIG_V3R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Apache_Server_2-4_UNIX_Server_STIG",
         "recordCount": 45
       },
@@ -562,6 +576,7 @@
         "entryPath": "U_Apache_Server_2-4_Unix_Y26M07_STIG.zip/U_Apache_Server_2-4_Unix_Site_V2R7_Manual_STIG/U_Apache_Server_2-4_UNIX_Site_STIG_V2R7_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Apache_Server_2-4_UNIX_Site_STIG",
         "recordCount": 16
       },
@@ -619,6 +634,7 @@
         "entryPath": "U_Apache_Server_2-4_Windows_Y26M04_STIG.zip/U_Apache_Server_2-4_Windows_Server_V3R4_Manual_STIG/U_Apache_Server_2-4_Windows_Server_STIG_V3R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Apache_Server_2-4_Windows_Server_STIG",
         "recordCount": 49
       },
@@ -641,6 +657,7 @@
         "entryPath": "U_Apache_Server_2-4_Windows_Y26M04_STIG.zip/U_Apache_Server_2-4_Windows_Site_V2R3_Manual_STIG/U_Apache_Server_2-4_Windows_Site_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Apache_Server_2-4_Windows_Site_STIG",
         "recordCount": 16
       },
@@ -668,6 +685,7 @@
         "entryPath": "U_Apache_Tomcat_Application_Server_9_V3R4_STIG.zip/U_Apache_Tomcat_Application_Server_9_V3R4_Manual_STIG/U_Apache_Tomcat_Application_Server_9_STIG_V3R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Tomcat_Application_Server_9_STIG",
         "recordCount": 79
       },
@@ -700,6 +718,7 @@
         "entryPath": "U_API_V1R1_SRG.zip/U_API_V1R1_Manual_SRG/U_API_SRG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "API_SRG",
         "recordCount": 65
       },
@@ -737,6 +756,7 @@
         "entryPath": "U_Apple_iOS-iPadOS_18_V2R3_STIG.zip/U_Apple_iOS-iPadOS_18_V2R3_Manual_STIG/U_Apple_iOS-iPadOS_18_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Apple_iOS-iPadOS_18_STIG",
         "recordCount": 88
       },
@@ -784,6 +804,7 @@
         "entryPath": "U_Apple_iOS-iPadOS_26_V1R3_STIG.zip/U_Apple_iOS-iPadOS_26_V1R3_Manual_STIG/U_Apple_iOS-iPadOS_26_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Apple_iOS-iPadOS_26_STIG",
         "recordCount": 88
       },
@@ -836,6 +857,7 @@
         "entryPath": "U_Apple_macOS_15_V1R7_STIG.zip/U_Apple_macOS_15_V1R7_Manual_STIG/U_Apple_macOS_15_V1R7_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Apple_macOS_15_STIG",
         "recordCount": 160
       },
@@ -983,6 +1005,7 @@
         "entryPath": "U_Apple_visionOS_2_Y26M05_STIG.zip/U_Apple_visionOS_2_V1R2_Manual_STIG/U_Apple_visionOS_2_V1R2_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Apple_visionOS_2_STIG",
         "recordCount": 48
       },
@@ -1025,6 +1048,7 @@
         "entryPath": "U_Application_Layer_Gateway_V2R4_SRG.zip/U_Application_Layer_Gateway_V2R4_Manual_SRG/U_Application_Layer_Gateway_SRG_V2R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Application_Layer_Gateway_SRG",
         "recordCount": 160
       },
@@ -1062,6 +1086,7 @@
         "entryPath": "U_Application_Server_V4R5_SRG.zip/U_Application_Server_V4R5_Manual_SRG/U_Application_Server_SRG_V4R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Application_Server_SRG",
         "recordCount": 137
       },
@@ -1104,6 +1129,7 @@
         "entryPath": "U_Arista_MLS_EOS_4-X_Y25M07_STIG.zip/U_Arista_MLS_EOS_4-X_L2S_V2R3_Manual_STIG/U_Arista_MLS_EOS_4-X_L2S_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Arista_MLS_EOS_4-2x_L2S_STIG",
         "recordCount": 18
       },
@@ -1126,6 +1152,7 @@
         "entryPath": "U_Arista_MLS_EOS_4-X_Y25M07_STIG.zip/U_Arista_MLS_EOS_4-X_NDM_V2R2_Manual_STIG/U_Arista_MLS_EOS_4-X_NDM_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Arista_MLS_EOS_4-2x_NDM_STIG",
         "recordCount": 21
       },
@@ -1148,6 +1175,7 @@
         "entryPath": "U_Arista_MLS_EOS_4-X_Y25M07_STIG.zip/U_Arista_MLS_EOS_4-X_Router_V2R2_Manual_STIG/U_Arista_MLS_EOS_4-X_Router_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Arista_MLS_EOS_4-2x_Router_STIG",
         "recordCount": 75
       },
@@ -1190,6 +1218,7 @@
         "entryPath": "U_ASD_V6R4_STIG.zip/U_ASD_V6R4_Manual_STIG/U_ASD_STIG_V6R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Application_Security_Development_STIG",
         "recordCount": 286
       },
@@ -1232,6 +1261,7 @@
         "entryPath": "U_AvePoint_DocAve_6_V1R2_STIG.zip/U_AvePoint_DocAve_6_V1R2_Manual_STIG/U_AvePoint_DocAve_6_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "AvePoint_DocAve_6_STIG",
         "recordCount": 9
       },
@@ -1269,6 +1299,7 @@
         "entryPath": "U_AW_CylanceON-PREM_V1R1_STIG.zip/U_AW_CylanceON-PREM_V1R1_Manual_STIG/U_AW_CylanceON-PREM_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "AW_CylanceON-PREM_STIG",
         "recordCount": 16
       },
@@ -1306,6 +1337,7 @@
         "entryPath": "U_BB_CylancePROTECT_Mobile_for_UEM_V1R2_STIG.zip/U_BB_CylancePROTECT_Mobile_for_UEM_V1R2_Manual_STIG/U_BB_CylancePROTECT_Mobile_for_UEM_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "BB_CylancePROTECT_Mobile_for_UEM_STIG",
         "recordCount": 14
       },
@@ -1343,6 +1375,7 @@
         "entryPath": "U_BB_UEM_MDM_V2R1_STIG.zip/U_BB_UEM_MDM_V2R1_Manual_STIG/U_BB_UEM_MDM_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "BB_UEM_MDM_STIG",
         "recordCount": 16
       },
@@ -1385,6 +1418,7 @@
         "entryPath": "U_BEMS_2-x_V1R3_STIG.zip/U_BEMS_2-x_V1R3_Manual_STIG/U_BEMS_2-x_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "BEMS_2-x_STIG",
         "recordCount": 23
       },
@@ -1427,6 +1461,7 @@
         "entryPath": "U_BEMS_3-x_V1R2_STIG.zip/U_BEMS_3-x_V1R2_Manual_STIG/U_BEMS_3-x_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "BEMS_3-x_STIG",
         "recordCount": 27
       },
@@ -1474,6 +1509,7 @@
         "entryPath": "U_BIND_9-x_V3R3_STIG.zip/U_BIND_9-x_V3R3_Manual_STIG/U_BIND_9-x_STIG_V3R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "BIND_9-x_STIG",
         "recordCount": 73
       },
@@ -1516,6 +1552,7 @@
         "entryPath": "U_CA_IDMS_V2R2_STIG.zip/U_CA_IDMS_V2R2_Manual_STIG/U_CA_IDMS_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "CA_IDMS_STIG",
         "recordCount": 74
       },
@@ -1558,6 +1595,7 @@
         "entryPath": "U_CAN_Ubuntu_22-04_LTS_V2R9_STIG.zip/U_CAN_Ubuntu_22-04_LTS_V2R9_Manual_STIG/U_CAN_Ubuntu_22-04_LTS_STIG_V2R9_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "CAN_Ubuntu_22-04_LTS_STIG",
         "recordCount": 188
       },
@@ -1600,6 +1638,7 @@
         "entryPath": "U_CAN_Ubuntu_24-04_LTS_V1R6_STIG.zip/U_CAN_Ubuntu_24-04_LTS_V1R6_Manual_STIG/U_CAN_Ubuntu_24-04_LTS_STIG_V1R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "CAN_Ubuntu_24-04_STIG",
         "recordCount": 194
       },
@@ -1642,6 +1681,7 @@
         "entryPath": "U_CD_Postgres_16_V1R3_STIG.zip/U_CD_Postgres_16_V1R3_Manual_STIG/U_CD_Postgres_16_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "CD_Postgres_16_STIG",
         "recordCount": 111
       },
@@ -1739,6 +1779,7 @@
         "entryPath": "U_Central_Log_Server_V3R4_SRG.zip/U_Central_Log_Server_V3R4_Manual_SRG/U_Central_Log_Server_SRG_V3R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Central_Log_Server_SRG",
         "recordCount": 127
       },
@@ -1776,6 +1817,7 @@
         "entryPath": "U_Cisco_ACI_Y26M01_STIG.zip/U_Cisco_ACI_L2S_V1R2_Manual_STIG/U_Cisco_ACI_L2S_V1R2_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_ACI_L2S_STIG",
         "recordCount": 7
       },
@@ -1798,6 +1840,7 @@
         "entryPath": "U_Cisco_ACI_Y26M01_STIG.zip/U_Cisco_ACI_NDM_V1R2_Manual_STIG/U_Cisco_ACI_NDM_V1R2_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_ACI_NDM_STIG",
         "recordCount": 26
       },
@@ -1820,6 +1863,7 @@
         "entryPath": "U_Cisco_ACI_Y26M01_STIG.zip/U_Cisco_ACI_RTR_V1R2_Manual_STIG/U_Cisco_ACI_RTR_Manual_V1R2_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_ACI_RTR_STIG",
         "recordCount": 26
       },
@@ -1862,6 +1906,7 @@
         "entryPath": "U_Cisco_ASA_Y26M07_STIG.zip/U_Cisco_ASA_FW_V2R1_Manual_STIG/U_Cisco_ASA_Firewall_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_ASA_FW_STIG",
         "recordCount": 21
       },
@@ -1884,6 +1929,7 @@
         "entryPath": "U_Cisco_ASA_Y26M07_STIG.zip/U_Cisco_ASA_IPS_V2R1_Manual_STIG/U_Cisco_ASA_IPS_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_ASA_IPS_STIG",
         "recordCount": 23
       },
@@ -1906,6 +1952,7 @@
         "entryPath": "U_Cisco_ASA_Y26M07_STIG.zip/U_Cisco_ASA_NDM_V2R5_Manual_STIG/U_Cisco_ASA_NDM_STIG_V2R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_ASA_NDM_STIG",
         "recordCount": 47
       },
@@ -1928,6 +1975,7 @@
         "entryPath": "U_Cisco_ASA_Y26M07_STIG.zip/U_Cisco_ASA_VPN_V2R2_Manual_STIG/U_Cisco_ASA_VPN_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_ASA_VPN_STIG",
         "recordCount": 41
       },
@@ -1965,6 +2013,7 @@
         "entryPath": "U_Cisco_IOS_Router_Y26M07_STIG.zip/U_Cisco_IOS_Router_NDM_V3R8_Manual_STIG/U_Cisco_IOS_Router_NDM_STIG_V3R8_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS_Router_NDM_STIG",
         "recordCount": 35
       },
@@ -1987,6 +2036,7 @@
         "entryPath": "U_Cisco_IOS_Router_Y26M07_STIG.zip/U_Cisco_IOS_Router_RTR_V3R4_Manual_STIG/U_Cisco_IOS_Router_RTR_STIG_V3R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS_Router_RTR_STIG",
         "recordCount": 92
       },
@@ -2029,6 +2079,7 @@
         "entryPath": "U_Cisco_IOS_Switch_Y26M07_STIG.zip/U_Cisco_IOS_Switch_L2S_V3R2_Manual_STIG/U_Cisco_IOS_Switch_L2S_STIG_V3R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS_Switch_L2S_STIG",
         "recordCount": 22
       },
@@ -2051,6 +2102,7 @@
         "entryPath": "U_Cisco_IOS_Switch_Y26M07_STIG.zip/U_Cisco_IOS_Switch_NDM_V3R8_Manual_STIG/U_Cisco_IOS_Switch_NDM_STIG_V3R8_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS_Switch_NDM_STIG",
         "recordCount": 35
       },
@@ -2073,6 +2125,7 @@
         "entryPath": "U_Cisco_IOS_Switch_Y26M07_STIG.zip/U_Cisco_IOS_Switch_RTR_V3R3_Manual_STIG/U_Cisco_IOS_Switch_RTR_STIG_V3R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS_Switch_RTR_STIG",
         "recordCount": 53
       },
@@ -2115,6 +2168,7 @@
         "entryPath": "U_Cisco_IOS-XE_Router_Y26M04_STIG.zip/U_Cisco_IOS-XE_Router_NDM_V3R7_Manual_STIG/U_Cisco_IOS-XE_Router_NDM_STIG_V3R7_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS-XE_Router_NDM_STIG",
         "recordCount": 42
       },
@@ -2142,6 +2196,7 @@
         "entryPath": "U_Cisco_IOS-XE_Router_Y26M04_STIG.zip/U_Cisco_IOS-XE_Router_RTR_V3R5_Manual_STIG/U_Cisco_IOS-XE_Router_RTR_STIG_V3R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS-XE_Router_RTR_STIG",
         "recordCount": 97
       },
@@ -2179,6 +2234,7 @@
         "entryPath": "U_Cisco_IOS-XE_Switch_Y26M04_STIG.zip/U_Cisco_IOS-XE_Switch_RTR_V3R4_Manual_STIG/U_Cisco_IOS-XE_Switch_RTR_STIG_V3R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS_XE_Switch_RTR_STIG",
         "recordCount": 88
       },
@@ -2201,6 +2257,7 @@
         "entryPath": "U_Cisco_IOS-XE_Switch_Y26M04_STIG.zip/U_Cisco_IOS-XE_Switch_L2S_V3R2_Manual_STIG/U_Cisco_IOS-XE_Switch_L2S_STIG_V3R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS_XE_Switch_L2S_STIG",
         "recordCount": 22
       },
@@ -2243,6 +2300,7 @@
         "entryPath": "U_Cisco_IOS-XE_Switch_Y26M04_STIG.zip/U_Cisco_IOS-XE_Switch_NDM_V3R6_Manual_STIG/U_Cisco_IOS-XE_Switch_NDM_STIG_V3R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS_XE_Switch_NDM_STIG",
         "recordCount": 42
       },
@@ -2265,6 +2323,7 @@
         "entryPath": "U_Cisco_IOS-XR_Router_Y26M04_STIG.zip/U_Cisco_IOS-XR_Router_NDM_V3R6_Manual_STIG/U_Cisco_IOS-XR_Router_NDM_STIG_V3R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS-XR_Router_NDM_STIG",
         "recordCount": 27
       },
@@ -2292,6 +2351,7 @@
         "entryPath": "U_Cisco_IOS-XR_Router_Y26M04_STIG.zip/U_Cisco_IOS-XR_Router_RTR_V3R3_Manual_STIG/U_Cisco_IOS-XR_Router_RTR_STIG_V3R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_IOS-XR_Router_RTR_STIG",
         "recordCount": 96
       },
@@ -2329,6 +2389,7 @@
         "entryPath": "U_Cisco_ISE_Y26M07_STIG.zip/U_Cisco_ISE_NAC_V2R4_Manual_STIG/U_Cisco_ISE_NAC_STIG_V2R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_ISE_NAC_STIG",
         "recordCount": 30
       },
@@ -2341,6 +2402,7 @@
         "entryPath": "U_Cisco_ISE_Y26M07_STIG.zip/U_Cisco_ISE_NDM_V2R4_Manual_STIG/U_Cisco_ISE_NDM_STIG_V2R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_ISE_NDM_STIG",
         "recordCount": 51
       },
@@ -2393,6 +2455,7 @@
         "entryPath": "U_Cisco_NX-OS_Switch_Y26M07_STIG.zip/U_Cisco_NX-OS_Switch_L2S_V3R4_Manual_STIG/U_Cisco_NX-OS_Switch_L2S_STIG_V3R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_NX-OS_Switch_L2S_STIG",
         "recordCount": 22
       },
@@ -2415,6 +2478,7 @@
         "entryPath": "U_Cisco_NX-OS_Switch_Y26M07_STIG.zip/U_Cisco_NX-OS_Switch_NDM_V3R6_Manual_STIG/U_Cisco_NX-OS_Switch_NDM_STIG_V3R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_NX-OS_Switch_NDM_STIG",
         "recordCount": 42
       },
@@ -2437,6 +2501,7 @@
         "entryPath": "U_Cisco_NX-OS_Switch_Y26M07_STIG.zip/U_Cisco_NX-OS_Switch_RTR_V3R4_Manual_STIG/U_Cisco_NX-OS_Switch_RTR_STIG_V3R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Cisco_NX-OS_Switch_RTR_STIG",
         "recordCount": 78
       },
@@ -2479,6 +2544,7 @@
         "entryPath": "U_CL_AlmaLinux_OS_9_V1R7_STIG.zip/U_CL_AlmaLinux_OS_9_V1R7_Manual_STIG/U_CL_AlmaLinux_OS_9_STIG_V1R7_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "CloudLinux_AlmaLinux_OS_9_STIG",
         "recordCount": 438
       },
@@ -2521,6 +2587,7 @@
         "entryPath": "U_Cloud_Computing_Y26M06_SRG.zip/U_Cloud_Computing_Mission_Owner_NET_V1R2_Manual_SRG/U_Cloud_Computing_Mission_Owner_NET_SRG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Cloud_Computing_Mission_Owner_SRG",
         "recordCount": 9
       },
@@ -2543,6 +2610,7 @@
         "entryPath": "U_Cloud_Computing_Y26M06_SRG.zip/U_Cloud_Computing_Mission_Owner_OS_V1R3_Manual_SRG/U_Cloud_Computing_Mission_Owner_OS_SRG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Cloud_Computing_Mission_Owner_OS_SRG",
         "recordCount": 17
       },
@@ -2595,6 +2663,7 @@
         "entryPath": "U_Container_Platform_V2R4_SRG.zip/U_Container_Platform_V2R4_Manual_SRG/U_Container_Platform_SRG_V2R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Container_Platform_SRG",
         "recordCount": 188
       },
@@ -2637,6 +2706,7 @@
         "entryPath": "U_Database_V4R5_SRG.zip/U_Database_V4R5_Manual_SRG/U_Database_SRG_V4R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Database_Generic",
         "recordCount": 142
       },
@@ -2674,6 +2744,7 @@
         "entryPath": "U_Dell_OS10_Switch_Y26M04_STIG.zip/U_Dell_OS10_Switch_L2S_V1R1_Manual_STIG/U_Dell_OS10_Switch_L2S_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Dell_OS10_Switch_L2S_STIG",
         "recordCount": 20
       },
@@ -2696,6 +2767,7 @@
         "entryPath": "U_Dell_OS10_Switch_Y26M04_STIG.zip/U_Dell_OS10_Switch_NDM_V1R1_Manual_STIG/U_Dell_OS10_Switch_NDM_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Dell_OS10_Switch_NDM_STIG",
         "recordCount": 39
       },
@@ -2728,6 +2800,7 @@
         "entryPath": "U_Dell_OS10_Switch_Y26M04_STIG.zip/U_Dell_OS10_Switch_RTR_V1R2_Manual_STIG/U_Dell_OS10_Switch_RTR_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Dell_OS10_Switch_Router_STIG",
         "recordCount": 42
       },
@@ -2755,6 +2828,7 @@
         "entryPath": "U_Domain_Name_System_V4R2_SRG.zip/U_Domain_Name_System_V4R2_Manual_SRG/U_Domain_Name_System_V4R2_Manual-xccdf.xml.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "DNS_SRG",
         "recordCount": 119
       },
@@ -2797,6 +2871,7 @@
         "entryPath": "U_Dragos_Platform_2-x_V1R6_STIG.zip/U_Dragos_Platform_2-x_V1R6_Manual_STIG/U_Dragos_Platform_2-x_STIG_V1R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Dragos_Platform_2-x_STIG",
         "recordCount": 19
       },
@@ -2839,6 +2914,7 @@
         "entryPath": "U_EPAS_V2R1_STIG.zip/U_EPAS_V2R1_Manual_STIG/EDB_Postgres_Advanced_Server_STIG.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "EPAS_STIG",
         "recordCount": 118
       },
@@ -2881,6 +2957,7 @@
         "entryPath": "U_EVVM_Y26M07_SRG.zip/U_EVVM_Session_Management_V1R3_Manual_SRG/U_EVVM_Session_Management_SRG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "EVVM_Session_Management_SRG",
         "recordCount": 60
       },
@@ -2923,6 +3000,7 @@
         "entryPath": "U_EVVM_Y26M07_SRG.zip/U_EVVM_Endpoint_V1R3_Manual_SRG/U_EVVM_Endpoint_SRG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "EVVM_Endpoint_SRG",
         "recordCount": 47
       },
@@ -2945,6 +3023,7 @@
         "entryPath": "U_EVVM_Y26M07_SRG.zip/U_EVVM_Policy_V1R4_Manual_SRG/U_EVVM_Policy_SRG_V1R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "EVVM_Policy_SRG",
         "recordCount": 51
       },
@@ -2967,6 +3046,7 @@
         "entryPath": "U_F5_BIG-IP_TMOS_Y26M07_STIG.zip/U_F5_BIG-IP_TMOS_ALG_V1R3_Manual_STIG/U_F5_BIG-IP_TMOS_ALG_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "F5_BIG-IP_TMOS_ALG_STIG",
         "recordCount": 37
       },
@@ -2989,6 +3069,7 @@
         "entryPath": "U_F5_BIG-IP_TMOS_Y26M07_STIG.zip/U_F5_BIG-IP_TMOS_DNS_V1R1_Manual_STIG/U_F5_BIG-IP_TMOS_DNS_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "F5_BIG-IP_TMOS_DNS_STIG",
         "recordCount": 12
       },
@@ -3011,6 +3092,7 @@
         "entryPath": "U_F5_BIG-IP_TMOS_Y26M07_STIG.zip/U_F5_BIG-IP_TMOS_FW_V1R1_Manual_STIG/U_F5_BIG-IP_TMOS_FW_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "F5_BIG-IP_TMOS_FW_STIG",
         "recordCount": 14
       },
@@ -3033,6 +3115,7 @@
         "entryPath": "U_F5_BIG-IP_TMOS_Y26M07_STIG.zip/U_F5_BIG-IP_TMOS_NDM_V1R2_Manual_STIG/U_F5_BIG-IP_TMOS_NDM_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "F5_BIG-IP_TMOS_NDM_STIG",
         "recordCount": 29
       },
@@ -3055,6 +3138,7 @@
         "entryPath": "U_F5_BIG-IP_TMOS_Y26M07_STIG.zip/U_F5_BIG-IP_TMOS_VPN_V1R1_Manual_STIG/U_F5_BIG-IP_TMOS_VPN_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "F5_BIG-IP_TMOS_VPN_STIG",
         "recordCount": 12
       },
@@ -3117,6 +3201,7 @@
         "entryPath": "U_F5_NGINX_V1R1_STIG.zip/U_F5_NGINX_V1R1_Manual_STIG/U_F5_NGINX_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "F5_NGINX_STIG",
         "recordCount": 32
       },
@@ -3139,6 +3224,7 @@
         "entryPath": "U_Firewall_V3R4_SRG.zip/U_Firewall_V3R4_Manual_SRG/U_Firewall_SRG_V3R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Firewall_SRG",
         "recordCount": 35
       },
@@ -3176,6 +3262,7 @@
         "entryPath": "U_FN_FortiGate_Firewall_Y26M01_STIG.zip/U_FN_FortiGate_Firewall_V1R4_Manual_STIG/U_FN_FortiGate_Firewall_STIG_V1R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "FN_FortiGate_Firewall_STIG",
         "recordCount": 29
       },
@@ -3218,6 +3305,7 @@
         "entryPath": "U_FN_FortiGate_Firewall_Y26M01_STIG.zip/U_FN_FortiGate_Firewall_NDM_V1R5_Manual_STIG/U_FN_FortiGate_Firewall_NDM_STIG_V1R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "FN_FortiGate_Firewall_NDM_STIG",
         "recordCount": 60
       },
@@ -3240,6 +3328,7 @@
         "entryPath": "U_FS_Y26M07_STIG.zip/U_FS_NAC_V2R5_Manual_STIG/U_FS_NAC_STIG_V2R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "FS_NAC_STIG",
         "recordCount": 25
       },
@@ -3262,6 +3351,7 @@
         "entryPath": "U_FS_Y26M07_STIG.zip/U_FS_NDM_V2R3_Manual_STIG/U_FS_NDM_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Forescout_NDM_STIG",
         "recordCount": 42
       },
@@ -3304,6 +3394,7 @@
         "entryPath": "U_Google_Android_14_BYOAD_Y25M10_STIG.zip/U_Google_Android_14_BYOAD_V1R1_Manual_STIG/U_Google_Android_14_BYOAD_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Google_Android_14_BYOAD_STIG",
         "recordCount": 14
       },
@@ -3326,6 +3417,7 @@
         "entryPath": "U_Google_Android_14_BYOAD_Y25M10_STIG.zip/U_Google_Android_14_MDF_PP_3-3_BYOAD_V1R2_Manual_STIG/U_Google_Android_14_MDF_PP_3-3_BYOAD_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Google_Android_14_MDF_PP_3-3_BYOAD_STIG",
         "recordCount": 23
       },
@@ -3373,6 +3465,7 @@
         "entryPath": "U_Google_Android_14_Y26M05_STIG.zip/U_Google_Android_14_COPE_V2R5_STIG/U_Google_Android_14_COPE_STIG_V2R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Google_Android_14_COPE_STIG",
         "recordCount": 41
       },
@@ -3395,6 +3488,7 @@
         "entryPath": "U_Google_Android_14_Y26M05_STIG.zip/U_Google_Android_14_COBO_V2R5_STIG/U_Google_Android_14_COBO_STIG_V2R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Google_Android_14_COBO_STIG",
         "recordCount": 36
       },
@@ -3442,6 +3536,7 @@
         "entryPath": "U_Google_Android_15_Y26M05_STIG.zip/U_Google_Android_15_COBO_V1R5_Manual_STIG/U_Google_Android_15_COBO_STIG_V1R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Google_Android_15_COBO_STIG",
         "recordCount": 42
       },
@@ -3464,6 +3559,7 @@
         "entryPath": "U_Google_Android_15_Y26M05_STIG.zip/U_Google_Android_15_COPE_V1R5_Manual_STIG/U_Google_Android_15_COPE_STIG_V1R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Google_Android_15_COPE_STIG",
         "recordCount": 45
       },
@@ -3511,6 +3607,7 @@
         "entryPath": "U_Google_Android_16_Y26M05_STIG.zip/U_Google_Android_16_COBO_V1R3_Manual_STIG/U_Google_Android_16_COBO_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Google_Android_16_COBO_STIG",
         "recordCount": 40
       },
@@ -3533,6 +3630,7 @@
         "entryPath": "U_Google_Android_16_Y26M05_STIG.zip/U_Google_Android_16_COPE_V1R3_Manual_STIG/U_Google_Android_16_COPE_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Google_Android_16_COPE_STIG",
         "recordCount": 43
       },
@@ -3580,6 +3678,7 @@
         "entryPath": "U_Google_Chrome_V2R11_STIG.zip/U_Google_Chrome_V2R11_Manual_STIG/U_Google_Chrome_STIG_V2R11_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Google_Chrome_Current_Windows",
         "recordCount": 46
       },
@@ -3622,6 +3721,7 @@
         "entryPath": "U_GPOS_V3R3_SRG.zip/U_GPOS_V3R3_Manual_SRG/U_GPOS_SRG_V3R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "General_Purpose_Operating_System",
         "recordCount": 203
       },
@@ -3659,6 +3759,7 @@
         "entryPath": "U_HP_FlexFabric_Switch_Y25M07_STIG.zip/U_HP_FlexFabric_Switch_L2S_V1R3_Manual_STIG/U_HP_FlexFabric_Switch_L2S_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HP_FlexFabric_Switch_L2S_STIG",
         "recordCount": 22
       },
@@ -3681,6 +3782,7 @@
         "entryPath": "U_HP_FlexFabric_Switch_Y25M07_STIG.zip/U_HP_FlexFabric_Switch_NDM_V1R4_Manual_STIG/U_HP_FlexFabric_Switch_NDM_STIG_V1R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HP_FlexFabric_Switch_NDM_STIG",
         "recordCount": 79
       },
@@ -3713,6 +3815,7 @@
         "entryPath": "U_HP_FlexFabric_Switch_Y25M07_STIG.zip/U_HP_FlexFabric_Switch_RTR_V1R2_Manual_STIG/U_HP_FlexFabric_Switch_RTR_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HP_FlexFabric_Switch_RTR_STIG",
         "recordCount": 21
       },
@@ -3745,6 +3848,7 @@
         "entryPath": "U_HPE_Alletra_Storage_ArcusOS_Y26M02_STIG.zip/U_HPE_Alletra_Storage_ArcusOS_NDM_V1R1_Manual_STIG/U_HPE_Alletra_Storage_ArcusOS_NDM_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HPE_Alletra_Storage_ArcusOS_NDM_STIG",
         "recordCount": 19
       },
@@ -3767,6 +3871,7 @@
         "entryPath": "U_HPE_Alletra_Storage_ArcusOS_Y26M02_STIG.zip/U_HPE_Alletra_Storage_ArcusOS_WS_V1R1_Manual_STIG/U_HPE_Alletra_Storage_ArcusOS_WS_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HPE_Alletra_Storage_ArcusOS_WS_STIG",
         "recordCount": 6
       },
@@ -3809,6 +3914,7 @@
         "entryPath": "U_HPE_Aruba_Networking_AOS_Y26M04_STIG.zip/U_HPE_Aruba_Networking_AOS_Wireless_V1R2_Manual_STIG/U_HPE_Aruba_Networking_AOS_Wireless_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HPE_Aruba_AOS_Wireless_STIG",
         "recordCount": 14
       },
@@ -3831,6 +3937,7 @@
         "entryPath": "U_HPE_Aruba_Networking_AOS_Y26M04_STIG.zip/U_HPE_Aruba_Networking_AOS_NDM_V1R1_Manual_STIG/U_HPE_Aruba_Networking_AOS_NDM_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HPE_Aruba_AOS_NDM_STIG",
         "recordCount": 37
       },
@@ -3853,6 +3960,7 @@
         "entryPath": "U_HPE_Aruba_Networking_AOS_Y26M04_STIG.zip/U_HPE_Aruba_Networking_AOS_VPN_V1R1_Manual_STIG/U_HPE_Aruba_Networking_AOS_VPN_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HPE_Aruba_AOS_VPN_STIG",
         "recordCount": 21
       },
@@ -3895,6 +4003,7 @@
         "entryPath": "U_HPE_Nimble_Storage_Array_V2R1_STIG.zip/U_HPE_Nimble_Storage_Array_V2R1_Manual_STIG/U_HPE_Nimble_Storage_Array_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HPE_Nimble_Storage_Array_NDM_STIG",
         "recordCount": 20
       },
@@ -3937,6 +4046,7 @@
         "entryPath": "U_HW_Android_13_Y25M04_STIG.zip/U_HW_Android_13_COBO_V1R1_Manual_STIG/U_HW_Android_13_COBO_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HW_Android_13_COBO_STIG",
         "recordCount": 32
       },
@@ -3959,6 +4069,7 @@
         "entryPath": "U_HW_Android_13_Y25M04_STIG.zip/U_HW_Android_13_COPE_V1R1_Manual_STIG/U_HW_Android_13_COPE_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HW_Android_13_COPE_STIG",
         "recordCount": 36
       },
@@ -3996,6 +4107,7 @@
         "entryPath": "U_HYCU_Protege_V1R3_STIG.zip/U_HYCU_Protege_V1R3_Manual_STIG/U_HYCU_Protege_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "HYCU_Protege_STIG",
         "recordCount": 55
       },
@@ -4038,6 +4150,7 @@
         "entryPath": "U_IB_8-x_DNS_V1R3_STIG.zip/U_IB_8-x_DNS_V1R3_Manual_STIG/U_IB_8-x_DNS_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Infoblox_8_DNS_STIG",
         "recordCount": 70
       },
@@ -4080,6 +4193,7 @@
         "entryPath": "U_IBM_AIX_7-x_V3R3_STIG.zip/U_IBM_AIX_7-x_V3R3_Manual_STIG/U_IBM_AIX_7-x_STIG_V3R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_AIX_7-x_STIG",
         "recordCount": 283
       },
@@ -4142,6 +4256,7 @@
         "entryPath": "U_IBM_DataPower_ALG_V1R1_STIG.zip/U_IBM_DataPower_ALG_V1R1_Manual_STIG/U_IBM_DataPower_ALG_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_DataPower_ALG_STIG",
         "recordCount": 65
       },
@@ -4169,6 +4284,7 @@
         "entryPath": "U_IBM_DataPower_NDM_V1R2_STIG.zip/U_IBM_DataPower_NDM_V1R2_Manual_STIG/U_IBM_DataPower_NDM_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_DataPower_NDM_STIG",
         "recordCount": 64
       },
@@ -4206,6 +4322,7 @@
         "entryPath": "U_IBM_DB2_V10-5_LUW_V2R2_STIG.zip/U_IBM_DB2_V10-5_LUW_V2R2_Manual_STIG/U_IBM_DB2_V10-5_LUW_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_DB2_V10-5_LUW_STIG",
         "recordCount": 93
       },
@@ -4248,6 +4365,7 @@
         "entryPath": "U_IBM_HMC_V2R1_STIG.zip/U_IBM_HMC_V2R1_Manual_STIG/U_IBM_HMC_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_HMC_STIG",
         "recordCount": 35
       },
@@ -4280,6 +4398,7 @@
         "entryPath": "U_IBM_MaaS360_with_Watson_v10-x_MDM_V1R2_STIG.zip/U_IBM_MaaS360_with_Watson_v10-x_MDM_V1R2_Manual_STIG/U_IBM_MaaS360_with_Watson_v10-x_MDM_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_MaaS360_with_Watson_v10.x_MDM_STIG",
         "recordCount": 12
       },
@@ -4327,6 +4446,7 @@
         "entryPath": "U_IBM_WebSphere_Liberty_Server_V2R4_STIG.zip/U_IBM_WebSphere_Liberty_Server_V2R4_Manual_STIG/U_IBM_WebSphere_Liberty_Server_STIG_V2R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_WebSphere_Liberty_Server_STIG",
         "recordCount": 30
       },
@@ -4369,6 +4489,7 @@
         "entryPath": "U_IBM_WebSphere_Traditional_V9-x_V2R1_STIG.zip/U_IBM_WebSphere_Traditional_V9-x_V2R1_Manual_STIG/U_IBM_WebSphere_Traditional_V9-x_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_WebSphere_Traditional_V9-x_STIG",
         "recordCount": 77
       },
@@ -4406,6 +4527,7 @@
         "entryPath": "U_IBM_zOS_Y26M07_STIG.zip/U_IBM_zOS_ACF2_V9R9_Manual_STIG/U_IBM_zOS_ACF2_STIG_V9R9_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_zOS_ACF2_STIG",
         "recordCount": 226
       },
@@ -4428,6 +4550,7 @@
         "entryPath": "U_IBM_zOS_Y26M07_STIG.zip/U_IBM_zOS_RACF_V9R9_Manual_STIG/U_IBM_zOS_RACF_STIG_V9R9_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_zOS_RACF_STIG",
         "recordCount": 223
       },
@@ -4450,6 +4573,7 @@
         "entryPath": "U_IBM_zOS_Y26M07_STIG.zip/U_IBM_zOS_TSS_V9R9_Manual_STIG/U_IBM_zOS_TSS_STIG_V9R9_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_zOS_TSS_STIG",
         "recordCount": 231
       },
@@ -4492,6 +4616,7 @@
         "entryPath": "U_IBM_zSecure_Suite_V1R3_STIG.zip/U_IBM_zSecure_Suite_V1R3_Manual_STIG/U_IBM_zSecure_Suite_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_zSecure_Suite_STIG",
         "recordCount": 11
       },
@@ -4534,6 +4659,7 @@
         "entryPath": "U_IBM_zVM_Using_CA_VMSecure_V2R2_STIG.zip/U_IBM_zVM_Using_CA_VMSecure_V2R2_Manual_STIG/U_IBM_zVM_Using_CA_VMSecure_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IBM_zVM_CA_VMSecure_STIG",
         "recordCount": 77
       },
@@ -4576,6 +4702,7 @@
         "entryPath": "U_IDPS_V3R4_SRG.zip/U_IDPS_V3R4_Manual_SRG/U_IDPS_SRG_V3R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "IDPS_SRG",
         "recordCount": 60
       },
@@ -4613,6 +4740,7 @@
         "entryPath": "U_ISEC7_Sphere_V3R1_STIG.zip/U_ISEC7_Sphere_V3R1_Manual_STIG/U_ISEC7_Sphere_STIG_V3R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "ISEC7_Sphere",
         "recordCount": 34
       },
@@ -4655,6 +4783,7 @@
         "entryPath": "U_Ivanti_Connect_Secure_Y25M10_STIG.zip/U_Ivanti_Connect_Secure_NDM_V2R3_Manual_STIG/U_Ivanti_Connect_Secure_NDM_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Ivanti_Connect_Secure_NDM_STIG",
         "recordCount": 29
       },
@@ -4677,6 +4806,7 @@
         "entryPath": "U_Ivanti_Connect_Secure_Y25M10_STIG.zip/U_Ivanti_Connect_Secure_VPN_V2R2_Manual_STIG/U_Ivanti_Connect_Secure_VPN_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Ivanti_Connect_Secure_VPN_STIG",
         "recordCount": 15
       },
@@ -4709,6 +4839,7 @@
         "entryPath": "U_Ivanti_EPMM_Server_V3R1_STIG.zip/U_Ivanti_EPMM_Server_V3R1_Manual_STIG/U_Ivanti_MI_Core_MDM_Server_STIG_V3R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Ivanti_MI_Core_MDM_Server_STIG",
         "recordCount": 26
       },
@@ -4756,6 +4887,7 @@
         "entryPath": "U_Ivanti_Sentry_9-x_Y24M10_STIG.zip/U_Ivanti_Sentry_9-x_ALG_V3R1_Manual_STIG/U_Ivanti_Sentry_9-x_ALG_STIG_V3R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Ivanti_Sentry_9-x_ALG_STIG",
         "recordCount": 32
       },
@@ -4778,6 +4910,7 @@
         "entryPath": "U_Ivanti_Sentry_9-x_Y24M10_STIG.zip/U_Ivanti_Sentry_9-x_NDM_V3R1_Manual_STIG/U_Ivanti_Sentry_9-x_NDM_STIG_V3R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Ivanti_MI_Sentry_9-x_NDM_STIG",
         "recordCount": 26
       },
@@ -4820,6 +4953,7 @@
         "entryPath": "U_Jamf_Pro_v10-x_EMM_V3R1_STIG.zip/U_Jamf_Pro_v10-x_EMM_V3R1_Manual_STIG/U_Jamf_Pro_v10-x_EMM_STIG_V3R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Jamf_Pro_v10-x_EMM_STIG",
         "recordCount": 29
       },
@@ -4867,6 +5001,7 @@
         "entryPath": "U_JBoss_EAP_6-3_V2R6_STIG.zip/U_JBoss_EAP_6-3_V2R6_Manual_STIG/U_JBoss_EAP_6-3_STIG_V2R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "JBoss_EAP_6-3_STIG",
         "recordCount": 67
       },
@@ -4904,6 +5039,7 @@
         "entryPath": "U_Juniper_EX_Switches_Y26M07_STIG.zip/U_Juniper_EX_Switches_NDM_V2R5_Manual_STIG/U_Juniper_EX_Switches_NDM_STIG_V2R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Juniper_EX_NDM_STIG",
         "recordCount": 55
       },
@@ -4926,6 +5062,7 @@
         "entryPath": "U_Juniper_EX_Switches_Y26M07_STIG.zip/U_Juniper_EX_Switches_L2S_V2R5_Manual_STIG/U_Juniper_EX_Switches_L2S_STIG_V2R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Juniper_EX_L2S_STIG",
         "recordCount": 24
       },
@@ -4948,6 +5085,7 @@
         "entryPath": "U_Juniper_EX_Switches_Y26M07_STIG.zip/U_Juniper_EX_Switches_RTR_V2R1_Manual_STIG/U_Juniper_EX_Switches_RTR_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Juniper_EX_RTR_STIG",
         "recordCount": 102
       },
@@ -4990,6 +5128,7 @@
         "entryPath": "U_Juniper_Router_Y25M01_STIG.zip/U_Juniper_Router_NDM_V3R2_Manual_STIG/U_Juniper_Router_NDM_STIG_V3R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Juniper_Router_NDM_STIG",
         "recordCount": 49
       },
@@ -5012,6 +5151,7 @@
         "entryPath": "U_Juniper_Router_Y25M01_STIG.zip/U_Juniper_Router_RTR_V3R2_Manual_STIG/U_Juniper_Router_RTR_STIG_V3R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Juniper_Router_RTR_STIG",
         "recordCount": 96
       },
@@ -5054,6 +5194,7 @@
         "entryPath": "U_Juniper_SRX_SG_Y25M01_STIG.zip/U_Juniper_SRX_SG_ALG_V3R3_Manual_STIG/U_Juniper_SRX_SG_ALG_STIG_V3R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Juniper_SRX_SG_ALG_STIG",
         "recordCount": 24
       },
@@ -5076,6 +5217,7 @@
         "entryPath": "U_Juniper_SRX_SG_Y25M01_STIG.zip/U_Juniper_SRX_SG_IDPS_V2R1_Manual_STIG/U_Juniper_SRX_SG_IDPS_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Juniper_SRX_SG_IDPS_STIG",
         "recordCount": 28
       },
@@ -5098,6 +5240,7 @@
         "entryPath": "U_Juniper_SRX_SG_Y25M01_STIG.zip/U_Juniper_SRX_SG_NDM_V3R3_Manual_STIG/U_Juniper_SRX_SG_NDM_STIG_V3R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Juniper_SRX_SG_NDM_STIG",
         "recordCount": 68
       },
@@ -5130,6 +5273,7 @@
         "entryPath": "U_Juniper_SRX_SG_Y25M01_STIG.zip/U_Juniper_SRX_SG_VPN_V3R2_Manual_STIG/U_Juniper_SRX_SG_VPN_STIG_V3R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Juniper_SRX_SG_VPN_STIG",
         "recordCount": 28
       },
@@ -5162,6 +5306,7 @@
         "entryPath": "U_Kubernetes_V2R6_STIG.zip/U_Kubernetes_V2R6_Manual_STIG/U_Kubernetes_STIG_V2R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Kubernetes_STIG",
         "recordCount": 92
       },
@@ -5209,6 +5354,7 @@
         "entryPath": "U_Layer_2_Switch_V3R4_SRG.zip/U_Layer_2_Switch_V3R4_Manual_SRG/U_Layer_2_Switch_SRG_V3R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Layer_2_Switch_SRG",
         "recordCount": 36
       },
@@ -5246,6 +5392,7 @@
         "entryPath": "U_Mainframe_Product_V3R5_SRG.zip/U_Mainframe_Product_V3R5_Manual_SRG/U_Mainframe_Product_SRG_V3R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Mainframe_Product_SRG",
         "recordCount": 194
       },
@@ -5293,6 +5440,7 @@
         "entryPath": "U_MariaDB_Enterprise_10-x_V2R5_STIG.zip/U_MariaDB_Enterprise_10-x_V2R5_Manual_STIG/U_MariaDB_Enterprise_10-x_STIG_V2R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MariaDB_Enterprise_10-x_STIG",
         "recordCount": 107
       },
@@ -5330,6 +5478,7 @@
         "entryPath": "U_MarkLogic_Server_v9_V3R2_STIG.zip/U_MarkLogic_Server_v9_V3R2_Manual_STIG/U_MarkLogic_Server_v9_STIG_V3R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MarkLogic_Server_v9_STIG",
         "recordCount": 80
       },
@@ -5372,6 +5521,7 @@
         "entryPath": "U_MDB_Enterprise_Advanced_8-x_V1R1_STIG.zip/U_MDB_Enterprise_Advanced_8-x_V1R1_Manual_STIG/U_MDB_Enterprise_Advanced_8-x_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MongoDB_Enterpise_Advanced_8-x_STIG",
         "recordCount": 55
       },
@@ -5414,6 +5564,7 @@
         "entryPath": "U_Mirantis_Kubernetes_Engine_V2R1_STIG.zip/U_Mirantis_Kubernetes_Engine_V2R1_Manual_STIG/U_Mirantis_Kubernetes_Engine_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Mirantis_Kubernetes_Engine_STIG",
         "recordCount": 44
       },
@@ -5446,6 +5597,7 @@
         "entryPath": "U_MobileIron_Core_v10-x_MDM_V1R1_STIG.zip/U_MobileIron_Core_v10-x_MDM_V1R1_Manual_STIG/U_MobileIron_Core_v10-x_MDM_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MobileIron_Core_v10-x_MDM_STIG",
         "recordCount": 11
       },
@@ -5493,6 +5645,7 @@
         "entryPath": "U_MongoDB_Enterprise_Advanced_7-x_V1R2_STIG.zip/U_MongoDB_Enterprise_Advanced_7-x_V1R2_Manual_STIG/U_MongoDB_Enterprise_Advanced_7-x_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MongoDB_Enterprise_Advanced_7-x_STIG",
         "recordCount": 51
       },
@@ -5535,6 +5688,7 @@
         "entryPath": "U_MOZ_Firefox_V6R8_STIG.zip/U_MOZ_Firefox_V6R8_Manual_STIG/U_MOZ_Firefox_STIG_V6R8_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MOZ_Firefox_STIG",
         "recordCount": 33
       },
@@ -5572,6 +5726,7 @@
         "entryPath": "U_MS_Azure_SQL_DB_V2R3_STIG.zip/U_MS_Azure_SQL_DB_V2R3_Manual_STIG/U_MS_Azure_SQL_DB_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Azure_SQL_DB_STIG",
         "recordCount": 76
       },
@@ -5634,6 +5789,7 @@
         "entryPath": "U_MS_Azure_SQL_MI_V1R1_STIG.zip/U_MS_Azure_SQL_MI_V1R1_Manual_STIG/U_MS_Azure_SQL_MI_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Azure_SQL_Managed_Instance_STIG",
         "recordCount": 84
       },
@@ -5691,6 +5847,7 @@
         "entryPath": "U_MS_Defender_Antivirus_V2R9_STIG.zip/U_MS_Defender_Antivirus_V2R9_Manual_STIG/U_MS_Defender_Antivirus_STIG_V2R9_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Defender_Antivirus",
         "recordCount": 67
       },
@@ -5728,6 +5885,7 @@
         "entryPath": "U_MS_Defender_Endpoint_V1R2_STIG.zip/U_MS_Defender_Endpoint_V1R2_Manual_STIG/U_MS_Defender_Endpoint_V1R2_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Defender_Endpoint_STIG",
         "recordCount": 25
       },
@@ -5770,6 +5928,7 @@
         "entryPath": "U_MS_Edge_V2R5_STIG.zip/U_MS_Edge_V2R5_Manual_STIG/U_MS_Edge_V2R5_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Edge_STIG",
         "recordCount": 61
       },
@@ -5817,6 +5976,7 @@
         "entryPath": "U_MS_Entra_ID_V1R1_STIG.zip/U_MS_Entra_ID_V1R1_Manual_STIG/U_MS_Entra_ID_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Entra_ID_STIG",
         "recordCount": 10
       },
@@ -5854,6 +6014,7 @@
         "entryPath": "U_MS_Exchange_2016_Y25M01_STIG.zip/U_MS_Exchange_2016_Edge_Transport_Server_V2R6_Manual_STIG/U_MS_Exchange_2016_Edge_Transport_Server_STIG_V2R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Exchange_2016_Edge_Transport_Server_STIG",
         "recordCount": 68
       },
@@ -5876,6 +6037,7 @@
         "entryPath": "U_MS_Exchange_2016_Y25M01_STIG.zip/U_MS_Exchange_2016_Mailbox_Server_V2R6_Manual_STIG/U_MS_Exchange_2016_Mailbox_Server_STIG_V2R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Exchange_2016_Mailbox_Server_STIG",
         "recordCount": 64
       },
@@ -5918,6 +6080,7 @@
         "entryPath": "U_MS_Exchange_2019_Y25M07_STIG.zip/U_MS_Exchange_2019_Mailbox_Server_V2R3_Manual_STIG/U_MS_Exchange_2019_Mailbox_Server_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Exchange_2019_Mailbox_Server_STIG",
         "recordCount": 66
       },
@@ -5940,6 +6103,7 @@
         "entryPath": "U_MS_Exchange_2019_Y25M07_STIG.zip/U_MS_Exchange_2019_Edge_Server_V2R2_Manual_STIG/U_MS_Exchange_2019_Edge_Server_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Exchange_2019_Edge_Server_STIG",
         "recordCount": 68
       },
@@ -5982,6 +6146,7 @@
         "entryPath": "U_MS_IIS_10-0_Y26M07_STIG.zip/U_MS_IIS_10-0_Server_V3R7_Manual_STIG/U_MS_IIS_10-0_Server_STIG_V3R7_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IIS_10-0_Server_STIG",
         "recordCount": 40
       },
@@ -6004,6 +6169,7 @@
         "entryPath": "U_MS_IIS_10-0_Y26M07_STIG.zip/U_MS_IIS_10-0_Site_V2R16_Manual_STIG/U_MS_IIS_10-0_Site_STIG_V2R16_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "IIS_10-0_Site_STIG",
         "recordCount": 44
       },
@@ -6046,6 +6212,7 @@
         "entryPath": "U_MS_Intune_Desktop_Mobile_Y26M07_STIG.zip/U_MS_Intune_MDM_Service_Desktop_Mobile_V1R2_Manual_STIG/U_MS_Intune_MDM_Service_Desktop_Mobile_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Intune_MDM_Service_Desktop_Mobile_STIG",
         "recordCount": 3
       },
@@ -6093,6 +6260,7 @@
         "entryPath": "U_MS_Office_365_ProPlus_V3R5_STIG.zip/U_MS_Office_365_ProPlus_V3R5_Manual_STIG/U_MS_Office_365_ProPlus_STIG_V3R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Office_365_ProPlus_STIG",
         "recordCount": 139
       },
@@ -6135,6 +6303,7 @@
         "entryPath": "U_MS_SQL_Server_2016_Y26M04_STIG.zip/U_MS_SQL_Server_2016_Database_V3R5_Manual_STIG/U_MS_SQL_Server_2016_Database_STIG_V3R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_SQL_Server_2016_Database_STIG",
         "recordCount": 23
       },
@@ -6157,6 +6326,7 @@
         "entryPath": "U_MS_SQL_Server_2016_Y26M04_STIG.zip/U_MS_SQL_Server_2016_Instance_V3R6_Manual_STIG/U_MS_SQL_Server_2016_Instance_STIG_V3R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_SQL_Server_2016_Instance_STIG",
         "recordCount": 84
       },
@@ -6224,6 +6394,7 @@
         "entryPath": "U_MS_SQL_Server_2022_Y26M04_STIG.zip/U_MS_SQL_Server_2022_Instance_V1R4_Manual_STIG/U_MS_SQL_Server_2022_Instance_STIG_V1R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_SQL_Server_2022_Instance_STIG",
         "recordCount": 79
       },
@@ -6246,6 +6417,7 @@
         "entryPath": "U_MS_SQL_Server_2022_Y26M04_STIG.zip/U_MS_SQL_Server_2022_Database_V1R3_Manual_STIG/U_MS_SQL_Server_2022_Database_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_SQL_Server_2022_Database_STIG",
         "recordCount": 23
       },
@@ -6313,6 +6485,7 @@
         "entryPath": "U_MS_Windows_11_V2R8_STIG.zip/U_MS_Windows_11_V2R8_Manual_STIG/U_MS_Windows_11_STIG_V2R8_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Microsoft_Windows_11_STIG",
         "recordCount": 256
       },
@@ -6350,6 +6523,7 @@
         "entryPath": "U_MS_Windows_Defender_Firewall_V2R2_STIG.zip/U_MS_Windows_Defender_Firewall_V2R2_Manual_STIG/U_MS_Windows_Defender_Firewall_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Windows_Firewall_with_Advanced_Security",
         "recordCount": 21
       },
@@ -6392,6 +6566,7 @@
         "entryPath": "U_MS_Windows_PAW_V3R3_STIG.zip/U_MS_Windows_PAW_V3R3_Manual_STIG/U_MS_Windows_PAW_STIG_V3R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Windows_PAW_STIG",
         "recordCount": 24
       },
@@ -6429,6 +6604,7 @@
         "entryPath": "U_MS_Windows_Server_2022_V2R9_STIG.zip/U_MS_Windows_Server_2022_V2R9_Manual_STIG/U_MS_Windows_Server_2022_STIG_V2R9_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Windows_Server_2022_STIG",
         "recordCount": 279
       },
@@ -6471,6 +6647,7 @@
         "entryPath": "U_MS_Windows_Server_2025_V1R2_STIG.zip/U_MS_Windows_Server_2025_V1R2_Manual_STIG/U_MS_Windows_Server_2025_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Windows_Server_2025_STIG",
         "recordCount": 292
       },
@@ -6513,6 +6690,7 @@
         "entryPath": "U_MS_Windows_Server_DNS_V2R5_STIG.zip/U_MS_Windows_Server_DNS_V2R5_Manual_STIG/U_MS_Windows_Server_DNS_STIG_V2R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "MS_Windows_Server_2022_DNS_STIG",
         "recordCount": 81
       },
@@ -6555,6 +6733,7 @@
         "entryPath": "U_NDM_V5R5_SRG.zip/U_NDM_V5R5_Manual_SRG/U_NDM_SRG_V5R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Network_Device_Management_SRG",
         "recordCount": 99
       },
@@ -6602,6 +6781,7 @@
         "entryPath": "U_NetApp_ONTAP_DSC_9-x_V2R4_STIG.zip/U_NetApp_ONTAP_DSC_9-x_V2R4_Manual_STIG/U_NetApp_ONTAP_DSC_9-x_STIG_V2R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "NetApp_ONTAP_DSC_9-x_STIG",
         "recordCount": 29
       },
@@ -6629,6 +6809,7 @@
         "entryPath": "U_Network_Infrastructure_Policy_V10R7_STIG.zip/U_Network_Infrastructure_Policy_V10R7_Manual_STIG/U_Network_Infrastructure_Policy_STIG_V10R7_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Network_Infrastructure_Policy_STIG",
         "recordCount": 67
       },
@@ -6666,6 +6847,7 @@
         "entryPath": "U_Network_WLAN_Y23M10_STIG.zip/U_Network_WLAN_AP-IG_Manual_STIG/U_Network_WLAN_AP-IG_Mgmt_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Network_WLAN_AP-IG_Mgmt_STIG",
         "recordCount": 19
       },
@@ -6673,6 +6855,7 @@
         "entryPath": "U_Network_WLAN_Y23M10_STIG.zip/U_Network_WLAN_AP-IG_Manual_STIG/U_Network_WLAN_AP-IG_Platform_STIG_V7R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Network_WLAN_AP-IG_Platform_STIG",
         "recordCount": 9
       },
@@ -6695,6 +6878,7 @@
         "entryPath": "U_Network_WLAN_Y23M10_STIG.zip/U_Network_WLAN_AP-NIPR_Manual_STIG/U_Network_WLAN_AP-NIPR_Mgmt_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Network_WLAN_AP-NIPR_Mgmt_STIG",
         "recordCount": 18
       },
@@ -6702,6 +6886,7 @@
         "entryPath": "U_Network_WLAN_Y23M10_STIG.zip/U_Network_WLAN_AP-NIPR_Manual_STIG/U_Network_WLAN_AP-NIPR_Platform_STIG_V7R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Network_WLAN_AP-NIPR_Platform_STIG",
         "recordCount": 11
       },
@@ -6724,6 +6909,7 @@
         "entryPath": "U_Network_WLAN_Y23M10_STIG.zip/U_Network_WLAN_Bridge_Manual_STIG/U_Network_WLAN_Bridge_Mgmt_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Network_WLAN_Bridge_Mgmt_STIG",
         "recordCount": 18
       },
@@ -6731,6 +6917,7 @@
         "entryPath": "U_Network_WLAN_Y23M10_STIG.zip/U_Network_WLAN_Bridge_Manual_STIG/U_Network_WLAN_Bridge_Platform_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Network_WLAN_Bridge_Platform_STIG",
         "recordCount": 6
       },
@@ -6753,6 +6940,7 @@
         "entryPath": "U_Network_WLAN_Y23M10_STIG.zip/U_Network_WLAN_Controller_Manual_STIG/U_Network_WLAN_Controller_Mgmt_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Network_WLAN_Controller_Mgmt_STIG",
         "recordCount": 18
       },
@@ -6760,6 +6948,7 @@
         "entryPath": "U_Network_WLAN_Y23M10_STIG.zip/U_Network_WLAN_Controller_Manual_STIG/U_Network_WLAN_Controller_Platform_STIG_V7R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Network_WLAN_Controller_Platform_STIG",
         "recordCount": 6
       },
@@ -6797,6 +6986,7 @@
         "entryPath": "U_Nokia_SR_OS_25-x_Y26M04_STIG.zip/U_Nokia_SR_OS_25-x_L2S_V1R1_Manual_STIG/U_Nokia_SR_OS_25.x_L2S_V1R1_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Nokia_SR_OS_25-x_L2S_STIG",
         "recordCount": 15
       },
@@ -6819,6 +7009,7 @@
         "entryPath": "U_Nokia_SR_OS_25-x_Y26M04_STIG.zip/U_Nokia_SR_OS_25-x_NDM_V1R1_Manual_STIG/U_Nokia_SR_OS_25-x_NDM_V1R1_STIG_Manual-xccdf.XML",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Nokia_SR_OS_25-x_NDM_STIG",
         "recordCount": 37
       },
@@ -6841,6 +7032,7 @@
         "entryPath": "U_Nokia_SR_OS_25-x_Y26M04_STIG.zip/U_Nokia_SR_OS_25-x_RTR_V1R1_Manual_STIG/U_Nokia_SR_OS_25-x_RTR_V1R1_STIG_Manual-xccdf.XML",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Nokia_SR_OS_25-x_RTR_STIG",
         "recordCount": 95
       },
@@ -6883,6 +7075,7 @@
         "entryPath": "U_NTX_Acropolis_Y26M01_STIG.zip/U_NTX_Acropolis_AS_V1R1_Manual_STIG/U_NTX_Acropolis_AS_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "NTNX_Acropolis_AS_STIG",
         "recordCount": 31
       },
@@ -6905,6 +7098,7 @@
         "entryPath": "U_NTX_Acropolis_Y26M01_STIG.zip/U_NTX_Acropolis_OS_V1R1_Manual_STIG/U_NTX_Acropolis_OS_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "NTNX_Acropolis_GPOS_STIG",
         "recordCount": 106
       },
@@ -6957,6 +7151,7 @@
         "entryPath": "U_Okta_IDaaS_V1R2_STIG.zip/U_Okta_IDaaS_V1R2_Manual_STIG/U_Okta_IDaaS_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Okta_IDaaS_STIG",
         "recordCount": 29
       },
@@ -6994,6 +7189,7 @@
         "entryPath": "U_Omnissa_WS1_UEM_Y26M05_STIG.zip/U_Omnissa_WS1_UEM_Agent_V1R1_Manual_STIG/U_Omnissa_WS1_UEM_Agent_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Omnissa_WS1_UEM_Agent_STIG",
         "recordCount": 2
       },
@@ -7016,6 +7212,7 @@
         "entryPath": "U_Omnissa_WS1_UEM_Y26M05_STIG.zip/U_Omnissa_WS1_UEM_API_V1R1_Manual_STIG/U_Omnissa_WS1_UEM_API_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Omnissa_WS1_UEM_API_STIG",
         "recordCount": 2
       },
@@ -7048,6 +7245,7 @@
         "entryPath": "U_Omnissa_WS1_UEM_Y26M05_STIG.zip/U_Omnissa_WS1_UEM_Server_V1R1_Manual_STIG/U_Omnissa_WS1_UEM_Server_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Omnissa_WS1_UEM_Server_STIG",
         "recordCount": 15
       },
@@ -7085,6 +7283,7 @@
         "entryPath": "U_Oracle_Database_19c_V1R5_STIG.zip/U_Oracle_Database_19c_V1R5_Manual_STIG/U_Oracle_Database_19c_STIG_V1R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Oracle_Database_19c_STIG",
         "recordCount": 96
       },
@@ -7127,6 +7326,7 @@
         "entryPath": "U_Oracle_Linux_8_V2R9_STIG.zip/U_Oracle_Linux_8_V2R9_Manual_STIG/U_Oracle_Linux_8_STIG_V2R9_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Oracle_Linux_8_STIG",
         "recordCount": 376
       },
@@ -7169,6 +7369,7 @@
         "entryPath": "U_Oracle_Linux_9_V1R6_STIG.zip/U_Oracle_Linux_9_V1R6_Manual_STIG/U_Oracle_Linux_9_STIG_V1R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Oracle_Linux_9_STIG",
         "recordCount": 448
       },
@@ -7216,6 +7417,7 @@
         "entryPath": "U_Oracle_MySQL_8-0_V2R2_STIG.zip/U_Oracle_MySQL_8-0_V2R2_Manual_STIG/U_Oracle_MySQL_8-0_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Oracle_MySQL_8.0_STIG",
         "recordCount": 100
       },
@@ -7258,6 +7460,7 @@
         "entryPath": "U_PAN_Prisma_Cloud_Compute_V2R3_STIG.zip/U_PAN_Prisma_Cloud_Compute_V2R3_Manual_STIG/U_PAN_Prisma_Cloud_Compute_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "PAN_Prisma_Cloud_Compute_STIG",
         "recordCount": 31
       },
@@ -7295,6 +7498,7 @@
         "entryPath": "U_RB_NetIM_Y25M09_STIG.zip/U_RB_NetIM_NDM_V1R1_Manual_STIG/U_RB_NetIM_NDM_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RB_NetIM_STIG",
         "recordCount": 15
       },
@@ -7317,6 +7521,7 @@
         "entryPath": "U_RB_NetIM_Y25M09_STIG.zip/U_RB_NetIM_OS_V1R1_Manual_STIG/U_RB_NetIM_OS_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RB_NetIM_OS_STIG",
         "recordCount": 154
       },
@@ -7354,6 +7559,7 @@
         "entryPath": "U_RB_NetProfiler_V2R1_STIG.zip/U_RB_NetProfiler_V2R1_Manual_STIG/U_RB_NetProfiler_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RB_NetProfiler_STIG",
         "recordCount": 25
       },
@@ -7396,6 +7602,7 @@
         "entryPath": "U_Redis_Enterprise_6-x_V2R2_STIG.zip/U_Redis_Enterprise_6-x_V2R2_Manual_STIG/U_Redis_Enterprise_6-x_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Redis_Enterprise_6-x_STIG",
         "recordCount": 71
       },
@@ -7428,6 +7635,7 @@
         "entryPath": "U_RGS_MCM_V2R2_STIG.zip/U_RGS_MCM_V2R2_Manual_STIG/U_RGS_MCM_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Rancher_MCM_STIG",
         "recordCount": 7
       },
@@ -7470,6 +7678,7 @@
         "entryPath": "U_RGS_RKE2_V2R7_STIG.zip/U_RGS_RKE2_V2R7_Manual_STIG/U_RGS_RKE2_STIG_V2R7_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RGS_RKE2_STIG",
         "recordCount": 21
       },
@@ -7512,6 +7721,7 @@
         "entryPath": "U_RH_Ansible_Automation_Controller_Y26M01_STIG.zip/U_RH_Ansible_Automation_Controller_WS_V2R3_Manual_STIG/U_RH_Ansible_Automation_Controller_WS_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RH_Ansible_Automation_Controller_Web_Server_STIG",
         "recordCount": 28
       },
@@ -7534,6 +7744,7 @@
         "entryPath": "U_RH_Ansible_Automation_Controller_Y26M01_STIG.zip/U_RH_Ansible_Automation_Controller_AS_V2R3_Manual_STIG/U_RH_Ansible_Automation_Controller_AS_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RH_Ansible_Automation_Controller_App_Server_STIG",
         "recordCount": 16
       },
@@ -7576,6 +7787,7 @@
         "entryPath": "U_RH_OpenShift_Container_Platform_4-x_V2R6_STIG.zip/U_RH_OpenShift_Container_Platform_4-x_V2R6_Manual_STIG/U_RH_OpenShift_Container_Platform_4-x_STIG_V2R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RH_OpenShift_Container_Platform_4-x_STIG",
         "recordCount": 83
       },
@@ -7618,6 +7830,7 @@
         "entryPath": "U_RHEL_8_V2R8_STIG.zip/U_RHEL_8_V2R8_Manual_STIG/U_RHEL_8_STIG_V2R8_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RHEL_8_STIG",
         "recordCount": 369
       },
@@ -7660,6 +7873,7 @@
         "entryPath": "U_RHEL_9_V2R9_STIG.zip/U_RHEL_9_V2R9_Manual_STIG/U_RHEL_9_STIG_V2R9_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RHEL_9_STIG",
         "recordCount": 445
       },
@@ -7702,6 +7916,7 @@
         "entryPath": "U_RHEL_10_V1R2_STIG.zip/U_RHEL_10_V1R2_Manual_STIG/U_RHEL_10_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RHEL_10_STIG",
         "recordCount": 434
       },
@@ -7749,6 +7964,7 @@
         "entryPath": "U_Router_V5R2_SRG.zip/U_Router_V5R2_Manual_SRG/U_Router_SRG_V5R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Router_SRG",
         "recordCount": 123
       },
@@ -7786,6 +8002,7 @@
         "entryPath": "U_RUCKUS_ICX_Y25M05_STIG.zip/U_RUCKUS_ICX_L2S_V1R1_Manual_STIG/U_RUCKUS_ICX_L2S_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RUCKUS_ICX_L2S_STIG",
         "recordCount": 24
       },
@@ -7808,6 +8025,7 @@
         "entryPath": "U_RUCKUS_ICX_Y25M05_STIG.zip/U_RUCKUS_ICX_NDM_V1R1_Manual_STIG/U_RUCKUS_ICX_NDM_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RUCKUS_ICX_NDM_STIG",
         "recordCount": 25
       },
@@ -7840,6 +8058,7 @@
         "entryPath": "U_RUCKUS_ICX_Y25M05_STIG.zip/U_RUCKUS_ICX_RTR_V1R1_Manual_STIG/U_RUCKUS_ICX_RTR_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "RUCKUS_ICX_RTR_STIG",
         "recordCount": 81
       },
@@ -7867,6 +8086,7 @@
         "entryPath": "U_SEL-2740S_V1R1_STIG.zip/U_SEL-2740S_L2S_V1R1_Manual_STIG/U_SEL-2740S_L2S_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "SEL-2740S_L2S_STIG",
         "recordCount": 13
       },
@@ -7884,6 +8104,7 @@
         "entryPath": "U_SEL-2740S_V1R1_STIG.zip/U_SEL-2740S_NDM_V1R1_Manual_STIG/U_SEL-2740S_NDM_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "SEL-2740S_NDM_STIG",
         "recordCount": 13
       },
@@ -7911,6 +8132,7 @@
         "entryPath": "U_SLEM_5_V1R4_STIG.zip/U_SLEM_5_V1R4_Manual_STIG/U_SLEM_5_STIG_V1R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "SLEM_5_STIG",
         "recordCount": 208
       },
@@ -7953,6 +8175,7 @@
         "entryPath": "U_SLES_15_V2R8_STIG.zip/U_SLES_15_V2R8_Manual_STIG/U_SLES_15_STIG_V2R8_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "SLES_15_STIG",
         "recordCount": 218
       },
@@ -7995,6 +8218,7 @@
         "entryPath": "U_SOL_11_SPARC_V3R6_STIG.zip/U_SOL_11_SPARC_V3R6_Manual_STIG/U_SOL_11_SPARC_STIG_V3R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Solaris_11_SPARC_STIG",
         "recordCount": 215
       },
@@ -8032,6 +8256,7 @@
         "entryPath": "U_SOL_11_x86_V3R6_STIG.zip/U_SOL_11_x86_V3R6_Manual_STIG/U_SOL_11_x86_STIG_V3R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Solaris_11_X86_STIG",
         "recordCount": 214
       },
@@ -8084,6 +8309,7 @@
         "entryPath": "U_SPEC_Innovations_Innoslate_4-x_V1R1_STIG.zip/U_SPEC_Innovations_Innoslate_4-x_V1R1_Manual_STIG/U_SPEC_Innovations_Innoslate_4-x_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "SPEC_Innovations_Innoslate_4.x_STIG",
         "recordCount": 11
       },
@@ -8106,6 +8332,7 @@
         "entryPath": "U_SS_Android_16_KPE_3-x_Y26M05_STIG.zip/U_SS_Android_16_KPE_3-x_COPE_V1R3_Manual_STIG/U_SS_Android_16_KPE_3-x_COPE_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "U_SS_Android_16_COPE_STIG",
         "recordCount": 46
       },
@@ -8128,6 +8355,7 @@
         "entryPath": "U_SS_Android_16_KPE_3-x_Y26M05_STIG.zip/U_SS_Android_16_KPE_3-x_COBO_V1R3_Manual_STIG/U_SS_Android_16_KPE_3-x_COBO_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "U_SS_Android_16_COBO_STIG",
         "recordCount": 43
       },
@@ -8180,6 +8408,7 @@
         "entryPath": "U_SS_SDS_EMM_V1R3_STIG.zip/U_SS_SDS_EMM_V1R3_Manual_STIG/U_SS_SDS_EMM_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Samsung_SDS_EMM_STIG",
         "recordCount": 23
       },
@@ -8217,6 +8446,7 @@
         "entryPath": "U_SSS_TCMax_9-x_V1R1_STIG.zip/U_SSS_TCMax_9-x_V1R1_Manual_STIG/U_SSS_TCMax_9-x_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "SSS_TCMax_9-x",
         "recordCount": 17
       },
@@ -8259,6 +8489,7 @@
         "entryPath": "U_SYM_Edge_SWG_Y26M04_STIG.zip/U_SYM_Edge_SWG_NDM_V1R2_Manual_STIG/U_SYM_Edge_SWG_NDM_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Symantec_Edge_SWG_NDM_STIG",
         "recordCount": 30
       },
@@ -8286,6 +8517,7 @@
         "entryPath": "U_SYM_Edge_SWG_Y26M04_STIG.zip/U_SYM_Edge_SWG_ALG_V1R1_Manual_STIG/U_SYM_Edge_SWG_ALG_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Symantec_Edge_SWG_ALG_STIG",
         "recordCount": 15
       },
@@ -8323,6 +8555,7 @@
         "entryPath": "U_SYM_ProxySG_Y20M04_STIG.zip/U_SYM_ProxySG_ALG_V1R3_Manual_STIG/U_SYM_ProxySG_ALG_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Symantec_ProxySG_ALG_STIG",
         "recordCount": 66
       },
@@ -8340,6 +8573,7 @@
         "entryPath": "U_SYM_ProxySG_Y20M04_STIG.zip/U_SYM_ProxySG_NDM_V1R2_Manual_STIG/U_SYM_ProxySG_NDM_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Symantec_ProxySG_NDM_STIG",
         "recordCount": 32
       },
@@ -8377,6 +8611,7 @@
         "entryPath": "U_Tanium_7-x_TanOS_Y25M04_STIG.zip/U_Tanium_7-x_App_TanOS_V2R2_Manual_STIG/U_Tanium_7-x_App_TanOS_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Tanium_7-x_Application_TanOS_STIG",
         "recordCount": 75
       },
@@ -8399,6 +8634,7 @@
         "entryPath": "U_Tanium_7-x_TanOS_Y25M04_STIG.zip/U_Tanium_7-x_OS_TanOS_V2R2_Manual_STIG/U_Tanium_7-x_OS_TanOS_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Tanium_7-x_OS_TanOS_STIG",
         "recordCount": 31
       },
@@ -8451,6 +8687,7 @@
         "entryPath": "U_Tanium_7-x_V2R3_STIG.zip/U_Tanium_7-x_V2R3_Manual_STIG/U_Tanium_7-x_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Tanium_7-x_STIG",
         "recordCount": 98
       },
@@ -8483,6 +8720,7 @@
         "entryPath": "U_TM_TippingPoint_Y25M04_STIG.zip/U_TM_TippingPoint_IDPS_V2R2_Manual_STIG/U_TM_TippingPoint_IDPS_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "TM_TippingPoint_IDPS_STIG",
         "recordCount": 30
       },
@@ -8505,6 +8743,7 @@
         "entryPath": "U_TM_TippingPoint_Y25M04_STIG.zip/U_TM_TippingPoint_NDM_V2R3_Manual_STIG/U_TM_TippingPoint_NDM_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "TM_TippingPoint_NDM_STIG",
         "recordCount": 30
       },
@@ -8547,6 +8786,7 @@
         "entryPath": "U_TOSS_4_V2R6_STIG.zip/U_TOSS_4_V2R6_Manual_STIG/U_TOSS_4_STIG_V2R6_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "TOSS_4_STIG",
         "recordCount": 225
       },
@@ -8594,6 +8834,7 @@
         "entryPath": "U_TOSS_5_V1R1_STIG.zip/U_TOSS_5_V1R1_Manual_STIG/U_TOSS_5 _STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "TOSS_5_STIG",
         "recordCount": 391
       },
@@ -8639,8 +8880,11 @@
       },
       {
         "entryPath": "U_Traditional_Security_Checklist_V2R9.zip/U_Traditional_Security_Manual_Checklist_V2R9/U_Traditional_Security_Checklist_V2R9_Manual-xccdf.xml",
-        "status": "failed",
-        "reason": "DISA XCCDF missing benchmark metadata"
+        "status": "ingested",
+        "catalogKind": "stig",
+        "classificationBasis": "public-compilation-default",
+        "benchmarkId": "Traditional_Security_Checklist",
+        "recordCount": 144
       },
       {
         "entryPath": "U_Trellix_Application_Control_8-x_V3R2_STIG.zip/U_Trellix_Application_Control_8-x_V3R2_Manual_STIG/",
@@ -8661,6 +8905,7 @@
         "entryPath": "U_Trellix_Application_Control_8-x_V3R2_STIG.zip/U_Trellix_Application_Control_8-x_V3R2_Manual_STIG/U_Trellix_Application_Control_8-x_STIG_V3R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "McAfee_Application_Control_8-x_STIG",
         "recordCount": 31
       },
@@ -8708,6 +8953,7 @@
         "entryPath": "U_UEM_Y26M06_SRG.zip/U_UEM_Agent_V2R2_Manual_SRG/U_UEM_Agent_SRG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "UEM_Agent_SRG",
         "recordCount": 14
       },
@@ -8730,6 +8976,7 @@
         "entryPath": "U_UEM_Y26M06_SRG.zip/U_UEM_Server_V2R5_Manual_SRG/U_UEM_Server_SRG_V2R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "UEM_Server_SRG",
         "recordCount": 137
       },
@@ -8767,6 +9014,7 @@
         "entryPath": "U_Virtual_Machine_Manager_V2R4_SRG.zip/U_Virtual_Machine_Manager_V2R4_Manual_SRG/U_Virtual_Machine_Manager_SRG_V2R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "VMM",
         "recordCount": 198
       },
@@ -8804,6 +9052,7 @@
         "entryPath": "U_VMW_NSX_4-x_Y25M01_STIG.zip/U_VMW_NSX_4-x_Manager_NDM_V1R2_Manual_STIG/U_VMW_NSX_4-x_Manager_NDM_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_NSX_4-x_Manager_NDM_STIG",
         "recordCount": 28
       },
@@ -8826,6 +9075,7 @@
         "entryPath": "U_VMW_NSX_4-x_Y25M01_STIG.zip/U_VMW_NSX_4-x_T-0_Gateway_FW_V1R2_Manual_STIG/U_VMW_NSX_4-x_T-0_Gateway_FW_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_NSX_4-x_Tier0_GW_FW_STIG",
         "recordCount": 4
       },
@@ -8848,6 +9098,7 @@
         "entryPath": "U_VMW_NSX_4-x_Y25M01_STIG.zip/U_VMW_NSX_4-x_T-0_Gateway_RTR_V1R2_Manual_STIG/U_VMW_NSX_4-x_T-0_Gateway_RTR_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_NSX_4-x_Tier0_GW_RTR_STIG",
         "recordCount": 16
       },
@@ -8870,6 +9121,7 @@
         "entryPath": "U_VMW_NSX_4-x_Y25M01_STIG.zip/U_VMW_NSX_4-x_T-1_Gateway_FW_V1R2_Manual_STIG/U_VMW_NSX_4-x_T-1_Gateway_FW_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_NSX_4-x_Tier1_GW_FW_STIG",
         "recordCount": 5
       },
@@ -8892,6 +9144,7 @@
         "entryPath": "U_VMW_NSX_4-x_Y25M01_STIG.zip/U_VMW_NSX_4-x_T-1_Gateway_RTR_V1R2_Manual_STIG/U_VMW_NSX_4-x_T-1_Gateway_RTR_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_NSX_4-x_Tier1_GW_RTR_STIG",
         "recordCount": 4
       },
@@ -8934,6 +9187,7 @@
         "entryPath": "U_VMW_NSX_4-x_Y25M01_STIG.zip/U_VMW_NSX_4-x_Distributed_FW_V1R2_Manual_STIG/U_VMW_NSX_4-x_Distributed_FW_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_NSX_4-x_Distributed_FW_STIG",
         "recordCount": 6
       },
@@ -8956,6 +9210,7 @@
         "entryPath": "U_VMW_NSX-T_Y23M07_STIG.zip/U_VMW_NSX-T_Distributed_FW_V1R3_Manual_STIG/U_VMW_NSX-T_Distributed_FW_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMware_NSX-T_Distributed_FW_STIG",
         "recordCount": 7
       },
@@ -8973,6 +9228,7 @@
         "entryPath": "U_VMW_NSX-T_Y23M07_STIG.zip/U_VMW_NSX-T_Manager_NDM_V1R3_Manual_STIG/U_VMW_NSX-T_Manager_NDM_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_NSX-T_Manager_NDM_STIG",
         "recordCount": 23
       },
@@ -9000,6 +9256,7 @@
         "entryPath": "U_VMW_NSX-T_Y23M07_STIG.zip/U_VMW_NSX-T_SDN_Controller_V1R1_Manual_STIG/U_VMW_NSX-T_SDN_Controller_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMware_NSX-T_SDN_Controller_STIG",
         "recordCount": 2
       },
@@ -9032,6 +9289,7 @@
         "entryPath": "U_VMW_NSX-T_Y23M07_STIG.zip/U_VMW_NSX-T_T-0_Gateway_FW_V1R3_Manual_STIG/U_VMW_NSX-T_T-0_Gateway_FW_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_NSX-T_T-0_Gateway_FW_STIG",
         "recordCount": 7
       },
@@ -9049,6 +9307,7 @@
         "entryPath": "U_VMW_NSX-T_Y23M07_STIG.zip/U_VMW_NSX-T_T-0_Gateway_RTR_V1R2_Manual_STIG/U_VMW_NSX-T_T-0_Gateway_RTR_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_NSX-T_T-0_RTR_STIG",
         "recordCount": 16
       },
@@ -9066,6 +9325,7 @@
         "entryPath": "U_VMW_NSX-T_Y23M07_STIG.zip/U_VMW_NSX-T_T-1_Gateway_FW_V1R3_Manual_STIG/U_VMW_NSX-T_T-1_Gateway_FW_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_NSX-T_T1_Gateway_FW_STIG",
         "recordCount": 9
       },
@@ -9083,6 +9343,7 @@
         "entryPath": "U_VMW_NSX-T_Y23M07_STIG.zip/U_VMW_NSX-T_T-1_Gateway_RTR_V1R1_Manual_STIG/U_VMW_NSX-T_T-1_Gateway_RTR_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_NSX-T_T1_Gateway_RTR_STIG",
         "recordCount": 4
       },
@@ -9110,6 +9371,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_ESXi_V1R4_Manual_STIG/U_VMW_vSphere_7-0_ESXi_STIG_V1R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_ESXi_STIG",
         "recordCount": 75
       },
@@ -9152,6 +9414,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_VAMI_V1R2_Manual_STIG/U_VMW_vSphere_7-0_VAMI_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_VAMI_STIG",
         "recordCount": 28
       },
@@ -9174,6 +9437,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_vCA_EAM_V1R2_Manual_STIG/U_VMW_vSphere_7-0_vCA_EAM_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_vCA_EAM_STIG",
         "recordCount": 33
       },
@@ -9196,6 +9460,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_vCA_Lookup_Svc_V1R2_Manual_STIG/U_VMW_vSphere_7-0_vCA_Lookup_Svc_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_vCA_Lookup_Svc_STIG",
         "recordCount": 31
       },
@@ -9218,6 +9483,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_vCA_Perfcharts_V1R1_Manual_STIG/U_VMW_vSphere_7-0_vCA_Perfcharts_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_vCA_Perfcharts_STIG",
         "recordCount": 34
       },
@@ -9240,6 +9506,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_vCA_Photon_OS_V1R4_Manual_STIG/U_VMW_vSphere_7-0_vCA_Photon_OS_STIG_V1R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_vCA_Photon_OS_STIG",
         "recordCount": 113
       },
@@ -9262,6 +9529,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_vCA_PostgreSQL_V1R2_Manual_STIG/U_VMW_vSphere_7-0_vCA_PostgreSQL_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_vCA_PostgreSQL_STIG",
         "recordCount": 20
       },
@@ -9284,6 +9552,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_vCA_RhttpProxy_V1R1_Manual_STIG/U_VMW_vSphere_7-0_vCA_RhttpProxy_STIG_V1R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_vCA_RhttpProxy_STIG",
         "recordCount": 8
       },
@@ -9306,6 +9575,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_vCA_STS_V1R2_Manual_STIG/U_VMW_vSphere_7-0_vCA_STS_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_vCA_STS_STIG",
         "recordCount": 31
       },
@@ -9328,6 +9598,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_vCA_UI_V1R2_Manual_STIG/U_VMW_vSphere_7-0_vCA_UI_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_vCA_UI_STIG",
         "recordCount": 33
       },
@@ -9350,6 +9621,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_vCenter_V1R3_Manual_STIG/U_VMW_vSphere_7-0_vCenter_STIG_V1R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_vCenter_STIG",
         "recordCount": 57
       },
@@ -9372,6 +9644,7 @@
         "entryPath": "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_Virtual_Machine_V1R4_Manual_STIG/U_VMW_vSphere_7-0_Virtual_Machine_STIG_V1R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_7-0_Virtual_Machine_STIG",
         "recordCount": 28
       },
@@ -9654,6 +9927,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_vCenter_V2R4_Manual_STIG/U_VMW_vSphere_8-0_vCenter_STIG_V2R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8-0_vCenter_STIG",
         "recordCount": 67
       },
@@ -9676,6 +9950,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_VCSA_EAM_V2R3_Manual_STIG/U_VMW_vSphere_8-0_VCSA_EAM_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8-0_VCSA_EAM_STIG",
         "recordCount": 34
       },
@@ -9698,6 +9973,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_VCSA_Envoy_V2R2_Manual_STIG/U_VMW_vSphere_8-0_VCSA_Envoy_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8-0_VCSA_Envoy_STIG",
         "recordCount": 5
       },
@@ -9720,6 +9996,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_VCSA_Lookup_Svc_V2R2_Manual_STIG/U_VMW_vSphere_8-0_VCSA_Lookup_Svc_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8-0_VCSA_Lookup_Svc_STIG",
         "recordCount": 34
       },
@@ -9742,6 +10019,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_VCSA_Perfcharts_V2R2_Manual_STIG/U_VMW_vSphere_8-0_VCSA_Perfcharts_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8-0_VCSA_Perfcharts_STIG",
         "recordCount": 33
       },
@@ -9764,6 +10042,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_VCSA_Photon_OS_4-0_V2R2_Manual_STIG/U_VMW_vSphere_8-0_VCSA_Photon_OS_4-0_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8-0_VCSA_Photon_OS_4-0_STIG",
         "recordCount": 107
       },
@@ -9786,6 +10065,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_VCSA_PostgreSQL_V2R3_Manual_STIG/U_VMW_vSphere_8-0_VCSA_PostgreSQL_STIG_V2R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8-0_VCSA_PostgreSQL_STIG",
         "recordCount": 18
       },
@@ -9808,6 +10088,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_VCSA_STS_V2R2_Manual_STIG/U_VMW_vSphere_8-0_VCSA_STS_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8-0_VCSA_STS_STIG",
         "recordCount": 33
       },
@@ -9830,6 +10111,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_VCSA_UI_V2R2_Manual_STIG/U_VMW_vSphere_8-0_VCSA_UI_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8-0_VCSA_UI_STIG",
         "recordCount": 33
       },
@@ -9852,6 +10134,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_VCSA_VAMI_V2R2_Manual_STIG/U_VMW_vSphere_8-0_VCSA_VAMI_STIG_V2R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8-0_VCSA_VAMI_STIG",
         "recordCount": 22
       },
@@ -9874,6 +10157,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_Virtual_Machine_V2R1_Manual_STIG/U_VMW_vSphere_8-0_Virtual_Machine_STIG_V2R1_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8.0_Virtual_Machine_STIG",
         "recordCount": 25
       },
@@ -9896,6 +10180,7 @@
         "entryPath": "U_VMW_vSphere_8-0_Y26M07_STIG.zip/U_VMW_vSphere_8-0_ESXi_V2R4_Manual_STIG/U_VMW_vSphere_8-0-ESXi_STIG_V2R4_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "VMW_vSphere_8-0_ESXi_STIG",
         "recordCount": 76
       },
@@ -9938,6 +10223,7 @@
         "entryPath": "U_VPN_V3R5_SRG.zip/U_VPN_V3R5_Manual_SRG/U_VPN_SRG_V3R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "VPN",
         "recordCount": 92
       },
@@ -9975,6 +10261,7 @@
         "entryPath": "U_Web_Server_V4R5_SRG.zip/U_Web_Server_V4R5_Manual_SRG/U_Web_Server_SRG_V4R5_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "srg",
+        "classificationBasis": "entry-path-srg",
         "benchmarkId": "Web_Server_SRG",
         "recordCount": 126
       },
@@ -10017,6 +10304,7 @@
         "entryPath": "U_Xylok_Security_Suite_20-x_V1R2_STIG.zip/U_Xylok_Security_Suite_20-x_V1R2_Manual_STIG/U_Xylok_Security_Suite_20-x_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Xylok_Security_Suite_20-x_STIG",
         "recordCount": 19
       },
@@ -10064,6 +10352,7 @@
         "entryPath": "U_Zebra_Android_14_Y26M05_STIG.zip/U_Zebra_Android_14_COBO_V1R2_Manual_STIG/U_Zebra_Android_14_COBO_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Zebra_Android_14_COBO_STIG",
         "recordCount": 37
       },
@@ -10086,6 +10375,7 @@
         "entryPath": "U_Zebra_Android_14_Y26M05_STIG.zip/U_Zebra_Android_14_COPE_V1R2_Manual_STIG/U_Zebra_Android_14_COPE_STIG_V1R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "Zebra_Android_14_COPE_STIG",
         "recordCount": 42
       },
@@ -10128,6 +10418,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_BMC_CONTROL-D_for_ACF2_V7R2_Manual_STIG/U_zOS_BMC_CONTROL-D_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-D_for_ACF2_STIG",
         "recordCount": 7
       },
@@ -10150,6 +10441,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_BMC_CONTROL-M_for_ACF2_V7R2_Manual_STIG/U_zOS_BMC_CONTROL-M_for_ACF2_STIG_V7R2_Manual_xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-M_for_ACF2_STIG",
         "recordCount": 8
       },
@@ -10172,6 +10464,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_BMC_CONTROL-M_Restart_for_ACF2_V7R2_Manual_STIG/U_zOS_BMC_CONTROL-M_Restart_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-M_Restart_for_ACF2_STIG",
         "recordCount": 2
       },
@@ -10194,6 +10487,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_BMC_CONTROL-O_for_ACF2_V7R2_Manual_STIG/U_zOS BMC_CONTROL-O _for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-O_for_ACF2_STIG",
         "recordCount": 7
       },
@@ -10216,6 +10510,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_BMC_IOA_for_ACF2_V7R2_Manual_STIG/U_zOS_BMC_IOA_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_IOA_for_ACF2_STIG",
         "recordCount": 7
       },
@@ -10238,6 +10533,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_BMC_MAINVIEW_for_zOS_for_ACF2_V7R2_Manual_STIG/U_zOS_BMC_MAINVIEW_for_zOS_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_MAINVIEW_for_zOS_for_ACF2_STIG",
         "recordCount": 6
       },
@@ -10260,6 +10556,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_CA_Auditor_for_ACF2_V7R2_Manual_STIG/U_zOS_CA_Auditor_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_Auditor_for_ACF2_STIG",
         "recordCount": 3
       },
@@ -10282,6 +10579,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_CA_Common_Services_for_ACF2_V7R2_Manual_STIG/U_zOS_CA_Common_Services_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_Common_Services_for_ACF2_STIG",
         "recordCount": 2
       },
@@ -10304,6 +10602,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_CA_MICS_for_ACF2_V7R2_Manual_STIG/U_zOS_CA_MICS_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_MICS_for_ACF2_STIG",
         "recordCount": 2
       },
@@ -10326,6 +10625,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_CA_MIM_for_ACF2_V7R2_Manual_STIG/U_zOS_CA_MIM_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_MIM_for_ACF2_STIG",
         "recordCount": 5
       },
@@ -10348,6 +10648,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_CA_VTAPE_for_ACF2_V7R2_Manual_STIG/U_zOS_CA_VTAPE_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_VTAPE_for_ACF2_STIG",
         "recordCount": 3
       },
@@ -10370,6 +10671,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_CA-1_Tape_Management_for_ACF2_V7R2_Manual_STIG/U_zOS_CA-1_Tape_Management_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_1_Tape_Management_for_ACF2_STIG",
         "recordCount": 9
       },
@@ -10392,6 +10694,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_Catalog_Solutions_for_ACF2_V7R2_Manual_STIG/U_zOS_Catalog_Solutions_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Catalog_Solutions_for_ACF2_STIG",
         "recordCount": 2
       },
@@ -10414,6 +10717,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_CLSuperSession_for_ACF2_V7R2_Manual_STIG/U_zOS_CLSuperSession_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CLSuperSession_for_ACF2_STIG",
         "recordCount": 7
       },
@@ -10436,6 +10740,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_Compuware_Abend-AID_for_ACF2_V7R2_Manual_STIG/U_zOS_Compuware_Abend-AID_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Compuware_Abend-AID_for_ACF2",
         "recordCount": 6
       },
@@ -10458,6 +10763,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_CSSMTP_for_ACF2_V7R1_Manual_STIG/U_zOS_CSSMTP_for_ACF2_V7R1_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CSSMTP_for_ACF2_STIG",
         "recordCount": 2
       },
@@ -10480,6 +10786,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_FDR_for_ACF2_V7R2_Manual_STIG/U_zOS_FDR_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_FDR_for_ACF2_STIG",
         "recordCount": 2
       },
@@ -10502,6 +10809,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_Front_End_Processor_for_ACF2_V7R2_Manual_STIG/U_zOS_Front_End_Processor_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_FEP_for_ACF2_STIG",
         "recordCount": 5
       },
@@ -10524,6 +10832,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_HCD_for_ACF2_V7R2_Manual_STIG/U_zOS_HCD_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_HCD_for_ACF2_STIG",
         "recordCount": 3
       },
@@ -10546,6 +10855,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_IBM_CICS_Transaction_Server_for_ACF2_V7R2_Manual_STIG/U_zOS_IBM_CICS_Transaction_Server_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_IBM_CICS_Transaction_Server_for_ACF2",
         "recordCount": 12
       },
@@ -10568,6 +10878,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_IBM_Health_Checker_for_ACF2_V7R1_Manual_STIG/U_zOS_IBM_Health_Checker_for_ACF2_V7R1_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_IBM_Health_Checker_for_ACF2",
         "recordCount": 2
       },
@@ -10590,6 +10901,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_IBM_SDSF_for_ACF2_V7R2_Manual_ STIG/U_zOS_IBM_SDSF_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_IBM_System_Display_and_Search_Facility_for_ACF2_STIG",
         "recordCount": 7
       },
@@ -10612,6 +10924,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_NetView_for_ACF2_V7R2_Manual_STIG/U_zOS_NetView_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_NetView_for_ACF2_STIG",
         "recordCount": 5
       },
@@ -10634,6 +10947,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_Quest_NC-Pass_for_ACF2_V7R2_Manual_STIG/U_zOS_Quest_NC-Pass_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Quest_NC-Pass_for_ACF2_STIG",
         "recordCount": 4
       },
@@ -10656,6 +10970,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_ROSCOE_for_ACF2_V7R2_Manual_STIG/U_zOS_ROSCOE_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_ROSCOE_for_ACF2_STIG",
         "recordCount": 6
       },
@@ -10678,6 +10993,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_SRRAUDIT_for_ACF2_V7R2_Manual_STIG/U_zOS_SRRAUDIT_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_SRRAUDIT_for_ACF2_STIG",
         "recordCount": 2
       },
@@ -10700,6 +11016,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_TADz for_ACF2_V7R2_Manual_STIG/U_zOS_TADz_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_TADz_for_ACF2_STIG",
         "recordCount": 3
       },
@@ -10722,6 +11039,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_TDMF_for_ACF2_V7R2_Manual_STIG/U_zOS_TDMF_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_TDMF_for_ACF2_STIG",
         "recordCount": 2
       },
@@ -10744,6 +11062,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_WebSphere_Application_Server_for_ACF2_V7R2_Manual_STIG/U_zOS_Websphere_Application_Server_for_ACF2_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Websphere_Application_Server_for_ACF2_STIG",
         "recordCount": 5
       },
@@ -10766,6 +11085,7 @@
         "entryPath": "U_zOS_ACF2_Y26M07_Products.zip/U_zOS_WebsphereMQ_for_ACF2_V7R3_Manual_STIG/U_zOS_WebSphere_MQ_for_ACF2_STIG_V7R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_WebsphereMQ_for_ACF2_STIG",
         "recordCount": 17
       },
@@ -10838,6 +11158,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_BMC_CONTROL-D_for_RACF_V7R2_Manual_STIG/U_zOS_BMC_CONTROL-D_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-D_for_RACF_STIG",
         "recordCount": 8
       },
@@ -10860,6 +11181,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_BMC_CONTROL-M_for_RACF_V7R2_Manual_STIG/U_zOS_BMC_CONTROL-M_for_RACF_STIG_V7R2_Manual_xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-M_for_RACF_STIG",
         "recordCount": 9
       },
@@ -10882,6 +11204,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_BMC_CONTROL-M_Restart_for_RACF_V7R2_Manual_STIG/U_zOS_BMC_CONTROL-M_Restart_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-M_Restart_for_RACF_STIG",
         "recordCount": 2
       },
@@ -10904,6 +11227,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_BMC_CONTROL-O_for_RACF_V7R2_Manual_STIG/U_zOS_BMC_CONTROL-O_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-O_for_RACF_STIG",
         "recordCount": 8
       },
@@ -10926,6 +11250,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_BMC_IOA_for_RACF_V7R2_Manual_STIG/U_zOS_BMC_IOA_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_IOA_for_RACF_STIG",
         "recordCount": 8
       },
@@ -10948,6 +11273,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_BMC_MAINVIEW_for_zOS_for_RACF_V7R2_Manual_STIG/U_zOS_BMC_MAINVIEW_for_zOS_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_MAINVIEW_for_zOS_for_RACF_STIG",
         "recordCount": 7
       },
@@ -10970,6 +11296,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_CA_Auditor_for_RACF_V7R2_Manual_STIG/U_zOS_CA_Auditor_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_Auditor_for_RACF_STIG",
         "recordCount": 3
       },
@@ -10992,6 +11319,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_CA_Common_Services_for_RACF_V7R2_Manual_STIG/U_zOS_CA_Common_Services_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_Common_Services_for_RACF_STIG",
         "recordCount": 3
       },
@@ -11014,6 +11342,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_CA_MICS_for_RACF_V7R2_Manual_STIG/U_zOS_CA_MICS_for_RACF_STIG_V7R2_Manual_xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_MICS_for_RACF_STIG",
         "recordCount": 2
       },
@@ -11036,6 +11365,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_CA_MIM_for_RACF_V7R2_Manual_STIG/U_zOS_CA_MIM_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_MIM_for_RACF_STIG",
         "recordCount": 6
       },
@@ -11058,6 +11388,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_CA_VTAPE_for_RACF_V7R2_Manual_STIG/U_zOS_CA_VTAPE_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_VTAPE_for_RACF_STIG",
         "recordCount": 4
       },
@@ -11080,6 +11411,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_CA-1_Tape_Management_for_RACF_V7R2_Manual_STIG/U_zOS_CA-1_Tape_Management_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_1_Tape_Management_for_RACF_STIG",
         "recordCount": 11
       },
@@ -11102,6 +11434,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_Catalog_Solutions_for_RACF_V7R2_Manual_STIG/U_zOS_Catalog_Solutions_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Catalog_Solutions_for_RACF_STIG",
         "recordCount": 2
       },
@@ -11124,6 +11457,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_CLSuperSession_for_RACF_V7R2_Manual_STIG/U_zOS_CLSuperSession_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CLSuperSession_for_RACF_STIG",
         "recordCount": 9
       },
@@ -11146,6 +11480,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_Compuware_Abend-AID_for_RACF_V7R2_Manual_STIG/U_zOS_Compuware_Abend-AID_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Compuware_Abend-AID_for_RACF",
         "recordCount": 7
       },
@@ -11168,6 +11503,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_CSSMTP_for_RACF_V7R1_Manual_STIG/U_zOS_CSSMTP_for_RACF_V7R1_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CSSMTP_for_RACF_STIG",
         "recordCount": 3
       },
@@ -11190,6 +11526,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_FDR_for_RACF_V7R2_Manual_STIG/U_zOS_FDR_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_FDR_for_RACF_STIG",
         "recordCount": 2
       },
@@ -11212,6 +11549,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_Front_End_Processor_for_RACF_V7R2_Manual_STIG/U_zOS_Front_End_Processor_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_FEP_for_RACF_STIG",
         "recordCount": 5
       },
@@ -11234,6 +11572,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_HCD_for_RACF_V7R2_Manual_STIG/U_zOS_HCD_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_HCD_for_RACF_STIG",
         "recordCount": 3
       },
@@ -11256,6 +11595,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_IBM_CICS_Transaction_Server_RACF_V7R2_Manual_STIG/U_zOS_IBM_CICS_Transaction_Server_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_IBM_CICS_Transaction_Server_for_RACF",
         "recordCount": 9
       },
@@ -11278,6 +11618,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_IBM_Health_Checker_for_RACF_V7R1_Manual_STIG/U_zOS_IBM_Health_Checker_for_RACF_V7R1_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_IBM_Health_Checker_for_RACF",
         "recordCount": 3
       },
@@ -11300,6 +11641,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_IBM_SDSF_for RACF_V7R2_Manual_STIG/U_zOS_IBM_SDSF_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_IBM_System_Display_and_Search_Facility_for_RACF_STIG",
         "recordCount": 8
       },
@@ -11322,6 +11664,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_NetView_for_RACF_V7R2_Manual_STIG/U_zOS_NetView_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_NetView_for_RACF_STIG",
         "recordCount": 6
       },
@@ -11344,6 +11687,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_Quest_NC-Pass_for_RACF_V7R2_Manual_STIG/U_zOS_Quest_NC-Pass_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Quest_NC-Pass_for_RACF_STIG",
         "recordCount": 5
       },
@@ -11366,6 +11710,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_ROSCOE_for_RACF_V7R2_Manual_STIG/U_zOS_ROSCOE_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_ROSCOE_for_RACF_STIG",
         "recordCount": 7
       },
@@ -11388,6 +11733,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_SRRAUDIT_for_RACF_V7R2_Manual_STIG/U_zOS_SRRAUDIT_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_SRRAUDIT_for_RACF_STIG",
         "recordCount": 2
       },
@@ -11410,6 +11756,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_TADz_for_RACF_V7R2_Manual_STIG/U_zOS_TADz_for_RACF_STG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_TADz_for_RACF_STIG",
         "recordCount": 4
       },
@@ -11432,6 +11779,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_TDMF_for_RACF_V7R2_Manual_STIG/U_zOS_TDMF_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_TDMF_for_RACF_STIG",
         "recordCount": 2
       },
@@ -11454,6 +11802,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_VSS_for_RACF_V7R2_Manual_STIG/U_zOS_VSS_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_VSS_for_RACF_STIG",
         "recordCount": 3
       },
@@ -11476,6 +11825,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_Websphere_Application_Server_for_RACF_V7R2_Manual_STIG/U_zOS_Websphere_Application_Server_for_RACF_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Websphere_Application_Server_for_RACF_STIG",
         "recordCount": 5
       },
@@ -11498,6 +11848,7 @@
         "entryPath": "U_zOS_RACF_Y26M07_Products.zip/U_zOS_WebsphereMQ_for_RACF_V7R3_Manual_STIG/U_zOS_WebsphereMQ_for_RACF_STIG_V7R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_WebsphereMQ_for_RACF_STIG",
         "recordCount": 17
       },
@@ -11570,6 +11921,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_SRRAUDIT_for_TSS_V7R2_Manual_STIG/U_zOS_SRRAUDIT_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_SRRAUDIT_for_TSS_STIG",
         "recordCount": 2
       },
@@ -11592,6 +11944,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_TADz_for_TSS_V7R2_Manual_STIG/U_zOS_TADz_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_TADz_for_TSS_STIG",
         "recordCount": 4
       },
@@ -11614,6 +11967,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_TDMF_for_TSS_V7R2_Manual_STIG/U_zOS_TDMF_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_TDMF_for_TSS_STIG",
         "recordCount": 2
       },
@@ -11636,6 +11990,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_Websphere_Application_Server_for_TSS_V7R2_Manual_STIG/U_zOS_Websphere_Application_Server_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Websphere_Application_Server_for_TSS_STIG",
         "recordCount": 5
       },
@@ -11658,6 +12013,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_WebsphereMQ_for_TSS_V7R3_Manual_STIG/U_zOS_WebsphereMQ_for_TSS_STIG_V7R3_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_WebsphereMQ_for_TSS_STIG",
         "recordCount": 17
       },
@@ -11730,6 +12086,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_BMC_CONTROL-D_for_TSS_V7R2_Manual_STIG/U_zOS_BMC_CONTROL-D_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-D_for_TSS_STIG",
         "recordCount": 9
       },
@@ -11752,6 +12109,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_BMC_CONTROL-M_for_TSS_V7R2_Manual_STIG/U_zOS_BMC_CONTROL-M_for_TSS_STIG_V7R2_Manual_xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-M_for_TSS_STIG",
         "recordCount": 10
       },
@@ -11774,6 +12132,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_BMC_CONTROL-M_Restart_for_TSS_V7R2_Manual_STIG/U_zOS_BMC_CONTROL-M_Restart_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-M_Restart_for_TSS_STIG",
         "recordCount": 2
       },
@@ -11796,6 +12155,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_BMC_CONTROL-O_for_TSS_V7R2_Manual_STIG/U_zOS_BMC_CONTROL-O_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_CONTROL-O_for_TSS_STIG",
         "recordCount": 9
       },
@@ -11818,6 +12178,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_BMC_IOA_for_TSS_V7R2_Manual_STIG/U_zOS_BMC_IOA_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_IOA_for_TSS_STIG",
         "recordCount": 9
       },
@@ -11840,6 +12201,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_BMC_MAINVIEW_for_zOS_for_TSS_V7R2_Manual_STIG/U_zOS_BMC_MAINVIEW_for_zOS_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_BMC_MAINVIEW_for_zOS_for_TSS_STIG",
         "recordCount": 8
       },
@@ -11862,6 +12224,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_CA_Auditor_for_TSS_V7R2_Manual_STIG/U_zOS_CA_Auditor_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_Auditor_for_TSS_STIG",
         "recordCount": 3
       },
@@ -11884,6 +12247,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_CA_Common_Services_for_TSS_V7R2_Manual_STIG/U_zOS_CA_Common_Services_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_Common_Services_for_TSS_STIG",
         "recordCount": 3
       },
@@ -11906,6 +12270,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_CA_MICS_for_TSS_V7R2_Manual_STIG/U_zOS_CA_MICS_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_MICS_for_TSS_STIG",
         "recordCount": 2
       },
@@ -11928,6 +12293,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_CA_MIM_for_TSS_V7R2_Manual_STIG/U_zOS_CA_MIM_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_MIM_for_TSS_STIG",
         "recordCount": 6
       },
@@ -11950,6 +12316,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_CA_VTAPE_for_TSS_V7R2_Manual_STIG/U_zOS_CA_VTAPE_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_VTAPE_for_TSS_STIG",
         "recordCount": 4
       },
@@ -11972,6 +12339,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_CA-1_Tape_Management_for_TSS_V7R2_Manual_STIG/U_zOS_CA-1_Tape_Management_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CA_1_Tape_Management_for_TSS_STIG",
         "recordCount": 11
       },
@@ -11994,6 +12362,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_Catalog_Solutions_for_TSS_V7R2_Manual_STIG/U_zOS_Catalog_Solutions_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Catalog_Solutions_for_TSS_STIG",
         "recordCount": 2
       },
@@ -12016,6 +12385,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_CLSuperSession_for_TSS_V7R2_Manual_STIG/U_zOS_CLSuperSession_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CLSuperSession_for_TSS_STIG",
         "recordCount": 10
       },
@@ -12038,6 +12408,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_Compuware_Abend-AID_for_TSS_V7R2_Manual_STIG/U_zOS_Compuware_Abend-AID_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Compuware_Abend-AID_for_TSS",
         "recordCount": 7
       },
@@ -12060,6 +12431,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_CSSMTP_for_TSS_V7R1_Manual_STIG/U_zOS_CSSMTP_for_TSS_V7R1_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_CSSMTP_for_TSS_STIG",
         "recordCount": 3
       },
@@ -12082,6 +12454,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_FDR_for_TSS_V7R2_Manual_STIG/U_zOS_FDR_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_FDR_for_TSS_STIG",
         "recordCount": 2
       },
@@ -12104,6 +12477,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_Front_End_Processor_for_TSS_V7R2_Manual_STIG/U_zOS_Front_End_Processor_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_FEP_for_TSS",
         "recordCount": 5
       },
@@ -12126,6 +12500,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_HCD_for_TSS_V7R2_Manual_STIG/U_zOS_HCD_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_HCD_for_TSS_STIG",
         "recordCount": 3
       },
@@ -12148,6 +12523,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_IBM_CICS_Transaction_Server_TSS_V7R2_Manual_STIG/U_zOS_IBM_CICS_Transaction_Server_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_IBM_CICS_Transaction_Server_for_TSS",
         "recordCount": 9
       },
@@ -12170,6 +12546,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_IBM_Health_Checker_for_TSS_V7R1_Manual_STIG/U_zOS_IBM_Health_Checker_for_TSS_V7R1_STIG_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_IBM_Health_Checker_for_TSS",
         "recordCount": 3
       },
@@ -12192,6 +12569,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_IBM_SDSF_for_TSS_V7R2_Manual_STIG/U_zOS_IBM_SDSF_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_IBM_System_Display_and_Search_Facility_for_TSS_STIG",
         "recordCount": 7
       },
@@ -12214,6 +12592,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_NetView_for_TSS_V7R2_Manual_STIG/U_zOS_NetView for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_NetView_for_TSS_STIG",
         "recordCount": 7
       },
@@ -12236,6 +12615,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_Quest_NC-Pass_for_TSS_V7R2_Manual_STIG/U_zOS_Quest_NC-Pass_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_Quest_NC-Pass_for_TSS_STIG",
         "recordCount": 6
       },
@@ -12258,6 +12638,7 @@
         "entryPath": "U_zOS_TSS_Y26M07_Products.zip/U_zOS_ROSCOE_for_TSS_V7R2_Manual_STIG/U_zOS_ROSCOE_for_TSS_STIG_V7R2_Manual-xccdf.xml",
         "status": "ingested",
         "catalogKind": "stig",
+        "classificationBasis": "entry-path-stig",
         "benchmarkId": "zOS_ROSCOE_for_TSS_STIG",
         "recordCount": 8
       },

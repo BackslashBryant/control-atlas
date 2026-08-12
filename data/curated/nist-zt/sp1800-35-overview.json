@@ -1,0 +1,2459 @@
+{
+  "schema_version": "1.0",
+  "title": "Implementing a Zero Trust Architecture: Full Document",
+  "sections": [
+    {
+      "id": "implementing-a-zero-trust-architecture-full-document",
+      "title": "Implementing a Zero Trust Architecture: Full Document",
+      "structured_content": [
+        {
+          "type": "paragraph",
+          "text": "Note"
+        },
+        {
+          "type": "paragraph",
+          "text": "This page is supplementary material for the NIST SP 1800-35 publication."
+        },
+        {
+          "type": "paragraph",
+          "text": "Oliver Borchert"
+        },
+        {
+          "type": "paragraph",
+          "text": "Gema Howell"
+        },
+        {
+          "type": "paragraph",
+          "text": "Alper Kerman"
+        },
+        {
+          "type": "paragraph",
+          "text": "Scott Rose"
+        },
+        {
+          "type": "paragraph",
+          "text": "Murugiah Souppaya"
+        },
+        {
+          "type": "paragraph",
+          "text": "National Institute of"
+        },
+        {
+          "type": "paragraph",
+          "text": "Standards and Technology"
+        },
+        {
+          "type": "paragraph",
+          "text": "Jason Ajmo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Yemi Fashina"
+        },
+        {
+          "type": "paragraph",
+          "text": "Parisa Grayeli"
+        },
+        {
+          "type": "paragraph",
+          "text": "Joseph Hunt"
+        },
+        {
+          "type": "paragraph",
+          "text": "Jason Hurlburt"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nedu Irrechukwu"
+        },
+        {
+          "type": "paragraph",
+          "text": "Joshua Klosterman"
+        },
+        {
+          "type": "paragraph",
+          "text": "Oksana Slivina"
+        },
+        {
+          "type": "paragraph",
+          "text": "Susan Symington"
+        },
+        {
+          "type": "paragraph",
+          "text": "Allen Tan"
+        },
+        {
+          "type": "paragraph",
+          "text": "The MITRE Corporation"
+        },
+        {
+          "type": "paragraph",
+          "text": "Karen Scarfone"
+        },
+        {
+          "type": "paragraph",
+          "text": "Scarfone Cybersecurity"
+        },
+        {
+          "type": "paragraph",
+          "text": "William Barker"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dakota Consulting"
+        },
+        {
+          "type": "paragraph",
+          "text": "Peter Gallagher"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aaron Palermo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Appgate"
+        },
+        {
+          "type": "paragraph",
+          "text": "Madhu Balaji"
+        },
+        {
+          "type": "paragraph",
+          "text": "Adam Cerini"
+        },
+        {
+          "type": "paragraph",
+          "text": "Rajarshi Das"
+        },
+        {
+          "type": "paragraph",
+          "text": "AWS (Amazon Web Services)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Jacob Barosin"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kyle Black"
+        },
+        {
+          "type": "paragraph",
+          "text": "Scott Gordon"
+        },
+        {
+          "type": "paragraph",
+          "text": "Jerry Haskins"
+        },
+        {
+          "type": "paragraph",
+          "text": "Keith Luck"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dale McKay"
+        },
+        {
+          "type": "paragraph",
+          "text": "Sunjeet Randhawa"
+        },
+        {
+          "type": "paragraph",
+          "text": "Broadcom"
+        },
+        {
+          "type": "paragraph",
+          "text": "Brian Butler"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mike Delaguardia"
+        },
+        {
+          "type": "paragraph",
+          "text": "Matthew Hyatt"
+        },
+        {
+          "type": "paragraph",
+          "text": "Randy Martin"
+        },
+        {
+          "type": "paragraph",
+          "text": "Peter Romness"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cisco"
+        },
+        {
+          "type": "paragraph",
+          "text": "Corey Bonnell"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dean Coclin"
+        },
+        {
+          "type": "paragraph",
+          "text": "DigiCert"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ryan Johnson"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dung Lam"
+        },
+        {
+          "type": "paragraph",
+          "text": "Darwin Tolbert"
+        },
+        {
+          "type": "paragraph",
+          "text": "F5"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tim Jones"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tom May"
+        },
+        {
+          "type": "paragraph",
+          "text": "Forescout"
+        },
+        {
+          "type": "paragraph",
+          "text": "Christopher Altman"
+        },
+        {
+          "type": "paragraph",
+          "text": "Alex Bauer"
+        },
+        {
+          "type": "paragraph",
+          "text": "Marco Genovese"
+        },
+        {
+          "type": "paragraph",
+          "text": "Google Cloud"
+        },
+        {
+          "type": "paragraph",
+          "text": "Andrew Campagna"
+        },
+        {
+          "type": "paragraph",
+          "text": "John Dombroski"
+        },
+        {
+          "type": "paragraph",
+          "text": "Adam Frank"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nalini Kannan"
+        },
+        {
+          "type": "paragraph",
+          "text": "Priti Patil"
+        },
+        {
+          "type": "paragraph",
+          "text": "Harmeet Singh"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mike Spisak"
+        },
+        {
+          "type": "paragraph",
+          "text": "Krishna Yellepeddy"
+        },
+        {
+          "type": "paragraph",
+          "text": "IBM"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nicholas Herrmann"
+        },
+        {
+          "type": "paragraph",
+          "text": "Corey Lund"
+        },
+        {
+          "type": "paragraph",
+          "text": "Farhan Saifudin"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ivanti"
+        },
+        {
+          "type": "paragraph",
+          "text": "Madhu Dodda"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tim LeMaster"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lookout"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ken Durbin"
+        },
+        {
+          "type": "paragraph",
+          "text": "James Elliott"
+        },
+        {
+          "type": "paragraph",
+          "text": "Earl Matthews"
+        },
+        {
+          "type": "paragraph",
+          "text": "David Pricer"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mandiant"
+        },
+        {
+          "type": "paragraph",
+          "text": "Joey Cruz"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tarek Dawoud"
+        },
+        {
+          "type": "paragraph",
+          "text": "Carmichael Patton"
+        },
+        {
+          "type": "paragraph",
+          "text": "Alex Pavlovsky"
+        },
+        {
+          "type": "paragraph",
+          "text": "Brandon Stephenson"
+        },
+        {
+          "type": "paragraph",
+          "text": "Clay Taylor"
+        },
+        {
+          "type": "paragraph",
+          "text": "Microsoft"
+        },
+        {
+          "type": "paragraph",
+          "text": "Bob Lyons"
+        },
+        {
+          "type": "paragraph",
+          "text": "Vinu Panicker"
+        },
+        {
+          "type": "paragraph",
+          "text": "Okta"
+        },
+        {
+          "type": "paragraph",
+          "text": "Peter Bjork"
+        },
+        {
+          "type": "paragraph",
+          "text": "Hans Drolshagen"
+        },
+        {
+          "type": "paragraph",
+          "text": "Omnissa"
+        },
+        {
+          "type": "paragraph",
+          "text": "Imran Bashir"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ali Haider"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nishit Kothari"
+        },
+        {
+          "type": "paragraph",
+          "text": "Sean Morgan"
+        },
+        {
+          "type": "paragraph",
+          "text": "Seetal Patel"
+        },
+        {
+          "type": "paragraph",
+          "text": "Norman Wong"
+        },
+        {
+          "type": "paragraph",
+          "text": "Palo Alto Networks"
+        },
+        {
+          "type": "paragraph",
+          "text": "Zack Austin"
+        },
+        {
+          "type": "paragraph",
+          "text": "Shawn Higgins"
+        },
+        {
+          "type": "paragraph",
+          "text": "Rob Woodworth"
+        },
+        {
+          "type": "paragraph",
+          "text": "PC Matic"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mitchell Lewars"
+        },
+        {
+          "type": "paragraph",
+          "text": "Bryan Rosensteel"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ping Identity"
+        },
+        {
+          "type": "paragraph",
+          "text": "Bill Baz"
+        },
+        {
+          "type": "paragraph",
+          "text": "Don Coltrain"
+        },
+        {
+          "type": "paragraph",
+          "text": "Wade Ellery"
+        },
+        {
+          "type": "paragraph",
+          "text": "Deborah McGinn"
+        },
+        {
+          "type": "paragraph",
+          "text": "Radiant Logic"
+        },
+        {
+          "type": "paragraph",
+          "text": "Frank Briguglio"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ryan Tighe"
+        },
+        {
+          "type": "paragraph",
+          "text": "SailPoint"
+        },
+        {
+          "type": "paragraph",
+          "text": "Chris Jensen"
+        },
+        {
+          "type": "paragraph",
+          "text": "Joshua Moll"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tenable"
+        },
+        {
+          "type": "paragraph",
+          "text": "Jason White"
+        },
+        {
+          "type": "paragraph",
+          "text": "Trellix, Public Sector"
+        },
+        {
+          "type": "paragraph",
+          "text": "Joe Brown"
+        },
+        {
+          "type": "paragraph",
+          "text": "Gary Bradt"
+        },
+        {
+          "type": "paragraph",
+          "text": "Zimperium"
+        },
+        {
+          "type": "paragraph",
+          "text": "Jeffrey Adorno"
+        },
+        {
+          "type": "paragraph",
+          "text": "Syed Ali"
+        },
+        {
+          "type": "paragraph",
+          "text": "Bob Smith"
+        },
+        {
+          "type": "paragraph",
+          "text": "Zscaler"
+        },
+        {
+          "type": "paragraph",
+          "text": "June 2025"
+        },
+        {
+          "type": "paragraph",
+          "text": "FINAL"
+        },
+        {
+          "type": "paragraph",
+          "text": "DISCLAIMER"
+        },
+        {
+          "type": "paragraph",
+          "text": "Certain commercial entities, equipment, products, or materials may be identified by name or company logo or other insignia in order to acknowledge their participation in this collaboration or to describe an experimental procedure or concept adequately. Such identification is not intended to imply special status or relationship with NIST or recommendation or endorsement by NIST or NCCoE; neither is it intended to imply that the entities, equipment, products, or materials are necessarily the best available for the purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "While NIST and the NCCoE address goals of improving management of cybersecurity and privacy risk through outreach and application of standards and best practices, it is the stakeholder’s responsibility to fully perform a risk assessment to include the current threat, vulnerabilities, likelihood of a compromise, and the impact should the threat be realized before adopting cybersecurity measures such as this recommendation."
+        },
+        {
+          "type": "paragraph",
+          "text": "National Institute of Standards and Technology Special Publication 1800-35, Natl. Inst. Stand. Technol. Spec. Publ. 1800-35, (June 2025), CODEN: NSPUE2"
+        },
+        {
+          "type": "paragraph",
+          "text": "NIST TECHNICAL SERIES POLICIES"
+        },
+        {
+          "type": "paragraph",
+          "text": "Copyright, Use, and Licensing Statements"
+        },
+        {
+          "type": "paragraph",
+          "text": "NIST Technical Series Publication Identifier Syntax"
+        },
+        {
+          "type": "paragraph",
+          "text": "AUTHOR ORCID IDS"
+        },
+        {
+          "type": "paragraph",
+          "text": "Oliver Borchert: 0009-0006-1880-0542"
+        },
+        {
+          "type": "paragraph",
+          "text": "Gema Howell: 0000-0002-0428-5045"
+        },
+        {
+          "type": "paragraph",
+          "text": "Alper Kerman: 0009-0000-5880-8369"
+        },
+        {
+          "type": "paragraph",
+          "text": "Scott Rose: 0000-0002-3105-7427"
+        },
+        {
+          "type": "paragraph",
+          "text": "Murugiah Souppaya: 0000-0002-8055-8527"
+        },
+        {
+          "type": "paragraph",
+          "text": "Karen Scarfone: 0000-0001-6334-9486"
+        },
+        {
+          "type": "paragraph",
+          "text": "William Barker: 0000-0002-4113-8861"
+        },
+        {
+          "type": "paragraph",
+          "text": "FEEDBACK"
+        },
+        {
+          "type": "paragraph",
+          "text": "You can view or download the final guide at the NCCoE ZTA project page."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comments on this publication may be submitted to: nccoe-zta-project@list.nist.gov."
+        },
+        {
+          "type": "paragraph",
+          "text": "All comments are subject to release under the Freedom of Information Act."
+        },
+        {
+          "type": "paragraph",
+          "text": "NATIONAL CYBERSECURITY CENTER OF EXCELLENCE"
+        },
+        {
+          "type": "paragraph",
+          "text": "The National Cybersecurity Center of Excellence (NCCoE), a part of the National Institute of Standards and Technology (NIST), is a collaborative hub where industry organizations, government agencies, and academic institutions work together to address businesses ‘ most pressing cybersecurity issues. This public-private partnership enables the creation of practical cybersecurity solutions for specific industries, as well as for broad, cross-sector technology challenges. Through consortia under Cooperative Research and Development Agreements (CRADAs), including technology partners—from Fortune 50 market leaders to smaller companies specializing in information technology security—the NCCoE applies standards and best practices to develop modular, adaptable example cybersecurity solutions using commercially available technology. The NCCoE documents these example solutions in the NIST Special Publication 1800 series, which maps capabilities to the NIST Cybersecurity Framework (CSF) and details the steps needed for another entity to re-create the example solution. The NCCoE was established in 2012 by NIST in partnership with the State of Maryland and Montgomery County, Maryland."
+        },
+        {
+          "type": "paragraph",
+          "text": "To learn more about the NCCoE, visit https://www.nccoe.nist.gov/. To learn more about NIST, visit https://www.nist.gov."
+        },
+        {
+          "type": "paragraph",
+          "text": "NIST CYBERSECURITY PRACTICE GUIDES"
+        },
+        {
+          "type": "paragraph",
+          "text": "NIST Cybersecurity Practice Guides (Special Publication 1800 series) target specific cybersecurity challenges in the public and private sectors. They are practical, user-friendly guides that facilitate the adoption of standards-based approaches to cybersecurity. They show members of the information security community how to implement example solutions that help them align with relevant standards and best practices, and provide users with the materials lists, configuration files, and other information they need to implement a similar approach."
+        },
+        {
+          "type": "paragraph",
+          "text": "The documents in this series describe example implementations of cybersecurity practices that businesses and other organizations may voluntarily adopt. These documents do not describe regulations or mandatory practices, nor do they carry statutory authority."
+        },
+        {
+          "type": "paragraph",
+          "text": "ABSTRACT"
+        },
+        {
+          "type": "paragraph",
+          "text": "A zero trust architecture (ZTA) enables secure authorized access to enterprise resources that are distributed across on-premises and multiple cloud environments, while enabling a hybrid workforce and partners to access resources from anywhere, at any time, from any device in support of the organization’s mission."
+        },
+        {
+          "type": "paragraph",
+          "text": "This NIST Cybersecurity Practice Guide explains how organizations can implement ZTA consistent with the concepts and principles outlined in NIST Special Publication (SP) 800-207, Zero Trust Architecture. The NCCoE worked with 24 collaborators under Cooperative Research and Development Agreements (CRADAs) to integrate commercially available technology to build 19 ZTA example implementations and demonstrate a number of common use cases. The guide includes detailed technical information on each example ZTA implementation, providing models that organizations can emulate. The Guide also summarizes best practices and lessons learned from the implementations and integrations to make it easier and more cost-effective to implement ZTA. This guide also includes mappings of ZTA principles and technologies to commonly used security standards and guidelines."
+        },
+        {
+          "type": "paragraph",
+          "text": "KEYWORDS"
+        },
+        {
+          "type": "paragraph",
+          "text": "enhanced identity governance (EIG); identity, credential, and access management (ICAM); microsegmentation; secure access service edge (SASE); software-defined perimeter (SDP); zero trust; zero trust architecture (ZTA)."
+        },
+        {
+          "type": "paragraph",
+          "text": "ACKNOWLEDGMENTS"
+        },
+        {
+          "type": "paragraph",
+          "text": "We are grateful to the following individuals for their generous contributions of expertise and time."
+        },
+        {
+          "type": "unordered_list",
+          "items": [
+            "Appgate: Jason Garbis, Adam Rose, Jonathan Roy",
+            "AWS (Amazon Web Services): Conrad Fernandes*, Harrison Holstein, Quint Van Deman",
+            "Broadcom: Andrew Babakian*, Genc Domi*, Paul Mancuso, Eric Michael, Dennis Moreau*, Wayne Pauley*, Jacob Rapp*, Lewis Shepherd",
+            "Cisco: Ken Andrews, Robert Bui, Leo Lebel, Tom Oast, Aaron Rodriguez, Kelly Sennett, Steve Vetter, Micah Wilson",
+            "F5: Daniel Cayer, David Clark, Jay Kelley, Darrell Pierson",
+            "Forescout: Yejin Jang*, Neal Lucier*",
+            "Google Cloud: Tim Knudson*",
+            "IBM: Nilesh Atal, Himanshu Gupta, Lakshmeesh Hegde, Sharath Math, Naveen Murthy, Nikhil Shah, Deepa Shetty, Harishkumar Somashekaraiah",
+            "IT Coalition: Aaron Cook, Vahid Esfahani*, Jeff Laclair, Ebadullah Siddiqui*, Musumani Woods*",
+            "Ivanti: Patty Arcano, Jeffery Burton, Jay Dineshkumar",
+            "Lookout: Tyler Croak, Jeff Gilhool, Hashim Khan*",
+            "Microsoft: Thomas Detzner, Ehud Itshaki, Janet Jones, Hemma Prafullchandra*, Enrique Saggese, Sarah Young",
+            "MITRE: Eileen Division*, Spike E. Dog*, Sallie Edwards*, Ayayidjin Gabiam, Jolene Loveless*, Karri Meldorf, Kenneth Sandlin, Lauren Swan, Jessica Walton*",
+            "NIST: Mike Bartock, Julia Chua, Douglas Montgomery, Cherilyn Pascoe, Michael Powell, Kevin Stine",
+            "Okta: Brian Dack, Sean Frazier, Naveed Mirza, Kelsey Nelson, Ron Wilson",
+            "Omnissa: Keith Luck*",
+            "PC Matic: Andy Tuch",
+            "Ping Identity: Ivan Anderson, Aubrey Turner",
+            "Radiant Logic: Rusty Deaton, John Petrutiu, Lauren Selby",
+            "SailPoint: Peter Amaral, Jim Russell, Esteban Soto",
+            "Tenable: Jeremiah Stallcup",
+            "Zimperium: Dan Butzer, Jim Kovach*, Kern Smith",
+            "Zscaler: Jeremy James, Lisa Lorenzin*, Matt Moulton, Patrick Perry"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Appgate: Jason Garbis, Adam Rose, Jonathan Roy"
+        },
+        {
+          "type": "paragraph",
+          "text": "AWS (Amazon Web Services): Conrad Fernandes*, Harrison Holstein, Quint Van Deman"
+        },
+        {
+          "type": "paragraph",
+          "text": "Broadcom: Andrew Babakian*, Genc Domi*, Paul Mancuso, Eric Michael, Dennis Moreau*, Wayne Pauley*, Jacob Rapp*, Lewis Shepherd"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cisco: Ken Andrews, Robert Bui, Leo Lebel, Tom Oast, Aaron Rodriguez, Kelly Sennett, Steve Vetter, Micah Wilson"
+        },
+        {
+          "type": "paragraph",
+          "text": "F5: Daniel Cayer, David Clark, Jay Kelley, Darrell Pierson"
+        },
+        {
+          "type": "paragraph",
+          "text": "Forescout: Yejin Jang*, Neal Lucier*"
+        },
+        {
+          "type": "paragraph",
+          "text": "Google Cloud: Tim Knudson*"
+        },
+        {
+          "type": "paragraph",
+          "text": "IBM: Nilesh Atal, Himanshu Gupta, Lakshmeesh Hegde, Sharath Math, Naveen Murthy, Nikhil Shah, Deepa Shetty, Harishkumar Somashekaraiah"
+        },
+        {
+          "type": "paragraph",
+          "text": "IT Coalition: Aaron Cook, Vahid Esfahani*, Jeff Laclair, Ebadullah Siddiqui*, Musumani Woods*"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ivanti: Patty Arcano, Jeffery Burton, Jay Dineshkumar"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lookout: Tyler Croak, Jeff Gilhool, Hashim Khan*"
+        },
+        {
+          "type": "paragraph",
+          "text": "Microsoft: Thomas Detzner, Ehud Itshaki, Janet Jones, Hemma Prafullchandra*, Enrique Saggese, Sarah Young"
+        },
+        {
+          "type": "paragraph",
+          "text": "MITRE: Eileen Division*, Spike E. Dog*, Sallie Edwards*, Ayayidjin Gabiam, Jolene Loveless*, Karri Meldorf, Kenneth Sandlin, Lauren Swan, Jessica Walton*"
+        },
+        {
+          "type": "paragraph",
+          "text": "NIST: Mike Bartock, Julia Chua, Douglas Montgomery, Cherilyn Pascoe, Michael Powell, Kevin Stine"
+        },
+        {
+          "type": "paragraph",
+          "text": "Okta: Brian Dack, Sean Frazier, Naveed Mirza, Kelsey Nelson, Ron Wilson"
+        },
+        {
+          "type": "paragraph",
+          "text": "Omnissa: Keith Luck*"
+        },
+        {
+          "type": "paragraph",
+          "text": "PC Matic: Andy Tuch"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ping Identity: Ivan Anderson, Aubrey Turner"
+        },
+        {
+          "type": "paragraph",
+          "text": "Radiant Logic: Rusty Deaton, John Petrutiu, Lauren Selby"
+        },
+        {
+          "type": "paragraph",
+          "text": "SailPoint: Peter Amaral, Jim Russell, Esteban Soto"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tenable: Jeremiah Stallcup"
+        },
+        {
+          "type": "paragraph",
+          "text": "Zimperium: Dan Butzer, Jim Kovach*, Kern Smith"
+        },
+        {
+          "type": "paragraph",
+          "text": "Zscaler: Jeremy James, Lisa Lorenzin*, Matt Moulton, Patrick Perry"
+        },
+        {
+          "type": "paragraph",
+          "text": "* Former employee; all work for this publication was done while at that organization"
+        },
+        {
+          "type": "paragraph",
+          "text": "Special thanks to all who reviewed and provided feedback on this document."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Technology Collaborators who participated in this project submitted their capabilities in response to a notice in the Federal Register. Respondents with relevant capabilities or product components were invited to sign a Cooperative Research and Development Agreement (CRADA) with NIST, allowing them to participate in a consortium to build this example solution. We worked with:"
+        },
+        {
+          "type": "paragraph",
+          "text": "Appgate"
+        },
+        {
+          "type": "paragraph",
+          "text": "IBM"
+        },
+        {
+          "type": "paragraph",
+          "text": "PC Matic"
+        },
+        {
+          "type": "paragraph",
+          "text": "AWS"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ivanti"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ping Identity"
+        },
+        {
+          "type": "paragraph",
+          "text": "Broadcom"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lookout"
+        },
+        {
+          "type": "paragraph",
+          "text": "Radiant Logic"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cisco"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mandiant"
+        },
+        {
+          "type": "paragraph",
+          "text": "SailPoint"
+        },
+        {
+          "type": "paragraph",
+          "text": "DigiCert"
+        },
+        {
+          "type": "paragraph",
+          "text": "Microsoft"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tenable"
+        },
+        {
+          "type": "paragraph",
+          "text": "F5"
+        },
+        {
+          "type": "paragraph",
+          "text": "Okta"
+        },
+        {
+          "type": "paragraph",
+          "text": "Trellix"
+        },
+        {
+          "type": "paragraph",
+          "text": "Forescout"
+        },
+        {
+          "type": "paragraph",
+          "text": "Omnissa"
+        },
+        {
+          "type": "paragraph",
+          "text": "Zimperium"
+        },
+        {
+          "type": "paragraph",
+          "text": "Google Cloud"
+        },
+        {
+          "type": "paragraph",
+          "text": "Palo Alto Networks"
+        },
+        {
+          "type": "paragraph",
+          "text": "Zscaler"
+        },
+        {
+          "type": "paragraph",
+          "text": "Note that after the VMware End User Computing division products were implemented at the NCCoE, VMware was acquired by Broadcom, then the VMware End User Computing Division was divested and reformed under a new entity, Omnissa LLC. Symantec was also previously acquired by Broadcom."
+        },
+        {
+          "type": "paragraph",
+          "text": "DOCUMENT CONVENTIONS"
+        },
+        {
+          "type": "paragraph",
+          "text": "The terms “shall” and “shall not” indicate requirements to be followed strictly to conform to the publication and from which no deviation is permitted. The terms “should” and “should not” indicate that among several possibilities, one is recommended as particularly suitable without mentioning or excluding others, or that a certain course of action is preferred but not necessarily required, or that (in the negative form) a certain possibility or course of action is discouraged but not prohibited. The terms “may” and “need not” indicate a course of action permissible within the limits of the publication. The terms “can” and “cannot” indicate a possibility and capability, whether material, physical, or causal."
+        },
+        {
+          "type": "paragraph",
+          "text": "PATENT DISCLOSURE NOTICE"
+        },
+        {
+          "type": "paragraph",
+          "text": "NOTICE: The Information Technology Laboratory (ITL) has requested that holders of patent claims whose use may be required for compliance with the guidance or requirements of this publication disclose such patent claims to ITL. However, holders of patents are not obligated to respond to ITL calls for patents and ITL has not undertaken a patent search in order to identify which, if any, patents may apply to this publication."
+        },
+        {
+          "type": "paragraph",
+          "text": "As of the date of publication and following call(s) for the identification of patent claims whose use may be required for compliance with the guidance or requirements of this publication, no such patent claims have been identified to ITL."
+        },
+        {
+          "type": "paragraph",
+          "text": "No representation is made or implied by ITL that licenses are not required to avoid patent infringement in the use of this publication."
+        }
+      ],
+      "media": [
+        {
+          "url": "https://pages.nist.gov/zero-trust-architecture/_images/Figure1.png",
+          "alt": "This graphic contains the logos for NIST and the NCCoE.",
+          "source_locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document"
+        }
+      ],
+      "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document",
+      "source_fragments": [
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-1",
+          "text": "Note",
+          "checksum": "sha256:d8da2c49df39d91df7ecd199b92da7bf264f026242ccc69b08daeadfe587c45b",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-2",
+          "text": "This page is supplementary material for the NIST SP 1800-35 publication.",
+          "checksum": "sha256:0ddfd55c537fa84368ca5bd0f436c8761d0258cda6535c6990fa2c3928adac42",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-3",
+          "text": "Oliver Borchert",
+          "checksum": "sha256:97027d9e1d52bee7c970258899704181799cecf0bff9b66843cb5d58c43ea49a",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-4",
+          "text": "Gema Howell",
+          "checksum": "sha256:0d01712ad77a8f55be9d7711888b2c033e2c833b7a39249939bad9a30cfa76ff",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-5",
+          "text": "Alper Kerman",
+          "checksum": "sha256:d1cb54f0cc9329c5545c9c5bc8855340e60ac78bef4b2dbb6f5acbd18455d306",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-6",
+          "text": "Scott Rose",
+          "checksum": "sha256:b160fa714690e97d34a420f215e5ee2c80a6e4762a9966314ecffdeb96f2de69",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-7",
+          "text": "Murugiah Souppaya",
+          "checksum": "sha256:3f958c6e99df58076f38187275473cadcccdc7507093abf9ec3f924bb944afd0",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-8",
+          "text": "National Institute of",
+          "checksum": "sha256:9b7ede94065ae60abe8ac40e9ce0dc2bcb18830b17e3488f15a5384a74720deb",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-9",
+          "text": "Standards and Technology",
+          "checksum": "sha256:45e00654d7d077f144aa548218e9854c6d919c8966e8d040b1fb6b6a1fb89264",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-10",
+          "text": "Jason Ajmo",
+          "checksum": "sha256:5f4d885ff64de967310952d2b23eafa031c79070b922915c932c62c58d8c7c8a",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-11",
+          "text": "Yemi Fashina",
+          "checksum": "sha256:c99563c6df8ff313e4685162936ea049a389b11dd005d8402b9598828957d768",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-12",
+          "text": "Parisa Grayeli",
+          "checksum": "sha256:1f9e0f9afe7dddbf125db3813f446c04725cb4993e46526266790f7aadb499ed",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-13",
+          "text": "Joseph Hunt",
+          "checksum": "sha256:653f1fae052666cb25a9c5ce18b1420943cd2d4baddf472bc74594a84b72768d",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-14",
+          "text": "Jason Hurlburt",
+          "checksum": "sha256:01211c4966fb5cf2e30a97c3b7bcec3a790231ad96002672a5c88e6c086b5785",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-15",
+          "text": "Nedu Irrechukwu",
+          "checksum": "sha256:53580559c946745fdc1b44b093596b5f0eb5a0cded82c2b9a14b9e9b2a003943",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-16",
+          "text": "Joshua Klosterman",
+          "checksum": "sha256:3a79064dbf491fb0b50ebf5af6e1225c08ca109539725c437c9091bb7504905b",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-17",
+          "text": "Oksana Slivina",
+          "checksum": "sha256:2d5547f1585cc0e1d2bbc89251890c73b4a55b55b17e129b169cf9eb71ac5be3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-18",
+          "text": "Susan Symington",
+          "checksum": "sha256:42bece4c4e6810c62f2b0469cfb702ee79f81ed205b0ed08678b33fe16a8095b",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-19",
+          "text": "Allen Tan",
+          "checksum": "sha256:dd82c3fcbcf1deee4d92868a9964ca95c94efdf2cf1c1a269dfb20e8ebf44748",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-20",
+          "text": "The MITRE Corporation",
+          "checksum": "sha256:96d98b0557615a6c8c31715a657e9a9b24b216b32ae3e2a8eb548177813b0d48",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-21",
+          "text": "Karen Scarfone",
+          "checksum": "sha256:09f5d65a716676d9c5e605d67259f99f36268e4e03735d686bd60b5405aac692",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-22",
+          "text": "Scarfone Cybersecurity",
+          "checksum": "sha256:f1061c1b6bac9b587c3e24fcc1910db96b8e99744895d54e3ef1f1f510fdf3e1",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-23",
+          "text": "William Barker",
+          "checksum": "sha256:f6ab23c0ab77c9e2a1af8b88157b849093a64ce0d4c28e701afc24e01f7d2277",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-24",
+          "text": "Dakota Consulting",
+          "checksum": "sha256:cbf6d1f4c4b780c4515c094244081515fb148fe1dd7c944c2d6cae7e9b3326b0",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-25",
+          "text": "Peter Gallagher",
+          "checksum": "sha256:53e6c9b3598f9ee66cef83b34b38fe115b48d2297760f4174d749278a6233f89",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-26",
+          "text": "Aaron Palermo",
+          "checksum": "sha256:821f5d90265a1f7bae676dd25253405fd61a289ae42b63bf4e8070252b4c415e",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-27",
+          "text": "Appgate",
+          "checksum": "sha256:835ec7f121e022cc993f70cdfe1ebb7905061129bffa392af111f9f780c4b6ba",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-28",
+          "text": "Madhu Balaji",
+          "checksum": "sha256:3f4585779161ddd59d638f55e9bd084274623ad86c7456dca2a22610f8a4cee8",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-29",
+          "text": "Adam Cerini",
+          "checksum": "sha256:028ad5eff51e3f7d8ee17a21d74ebe5151eebf46202a5a4568c20893f6b39794",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-30",
+          "text": "Rajarshi Das",
+          "checksum": "sha256:1023de9b00a01bf25aa9c50d0a4e75b9c7b86feb3829dd1b4eb59b48789deeed",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-31",
+          "text": "AWS (Amazon Web Services)",
+          "checksum": "sha256:a9ec123f83126af7d17834f2b7555a98f7226d4caa58225c1d63198e9d8d6dbb",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-32",
+          "text": "Jacob Barosin",
+          "checksum": "sha256:9a9c1c968c7fd432b9f113dd41481c81ad3c1c57364228ec83b9bfe107cf25e2",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-33",
+          "text": "Kyle Black",
+          "checksum": "sha256:6ca27c271bbf0db34b9b33368f8638bebe11113ee1e2f22c8b7986276a81ddd4",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-34",
+          "text": "Scott Gordon",
+          "checksum": "sha256:beaf8385bf1ae97a21462ba582cb507e589ea026af5b27ef0409bea38eeb67c7",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-35",
+          "text": "Jerry Haskins",
+          "checksum": "sha256:1098a7f1208c45fd99726f2245e97a9b16995566db6ae8d6942381888f76aa5f",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-36",
+          "text": "Keith Luck",
+          "checksum": "sha256:e49244373645e894eb0a1d0d83809d699b59ea9df7f80d8dc4ab42a6b330904b",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-37",
+          "text": "Dale McKay",
+          "checksum": "sha256:28fc6278b606ee9f694c3e5f9e5637907edec8c51dce1c9f91abf71533a3c777",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-38",
+          "text": "Sunjeet Randhawa",
+          "checksum": "sha256:d9c15419583e4186d894d75642356e4155135dee86ac94c6a07ee3c45b6ba6d0",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-39",
+          "text": "Broadcom",
+          "checksum": "sha256:caf79e01972c0c7690d2dd26b5c320f9e20b90bbb220bd7c259d5ae9d928fd30",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-40",
+          "text": "Brian Butler",
+          "checksum": "sha256:949defe75753ad09990bfb26d350244b203576b032485a3c4a19d04fb3c010cd",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-41",
+          "text": "Mike Delaguardia",
+          "checksum": "sha256:d6e8b888911ddd1d17bb3012472b8c8c21b14c93cd6385916ce6bc048da7d131",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-42",
+          "text": "Matthew Hyatt",
+          "checksum": "sha256:92c5714d1c1c71396b9a5be7f53b1d918d9a8882ee5006ce9959db75021fbeed",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-43",
+          "text": "Randy Martin",
+          "checksum": "sha256:b5298ce083da57753fb4535cc15a3cceb55fc00b31523a5419b669565928e1cd",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-44",
+          "text": "Peter Romness",
+          "checksum": "sha256:fcd72b96a26f298b80553ab5b967f61c818fb468784d6919de00e387cd18bc14",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-45",
+          "text": "Cisco",
+          "checksum": "sha256:aa669b285cc133bf8440ce04e6c2559ed5ce8c77cab452d0152f0da9f3e21f89",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-46",
+          "text": "Corey Bonnell",
+          "checksum": "sha256:ddd7461c0ba5331b85f6690fbb90da8ad2b61477c6c5383a59e359a889b39f57",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-47",
+          "text": "Dean Coclin",
+          "checksum": "sha256:7e0db0a25def4ba0bf4febb75024778f33a05fa520999093ad8c125b6a8ee790",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-48",
+          "text": "DigiCert",
+          "checksum": "sha256:ee316a677ecd3999672494760d9ff011363f85c51c078263892222412e1c9ef3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-49",
+          "text": "Ryan Johnson",
+          "checksum": "sha256:07a09cb1dea70ca0aff0934e8453e6501aad1289575949bddfdc892fe6d3e87a",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-50",
+          "text": "Dung Lam",
+          "checksum": "sha256:b88db39e74c1269b59aaa3182ef5e1997732e6d11fde366853be1089391e27f7",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-51",
+          "text": "Darwin Tolbert",
+          "checksum": "sha256:220e972812cec922d9e5a8cb6509306f1532c98c4ec236457487f707bd5af241",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-52",
+          "text": "F5",
+          "checksum": "sha256:6cd28ed32abf73d0d64218a8ce983fd5e460ac662b660a556b8939d9d6ae37a3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-53",
+          "text": "Tim Jones",
+          "checksum": "sha256:3dde64ef5cad758fcb840489e9c8e33e4e6ac8220821d092c49546093f4e876a",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-54",
+          "text": "Tom May",
+          "checksum": "sha256:5c7f1425a80f38c850c6b780f26db980dc9ecf4582b3fb46b0807b638eb4ca85",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-55",
+          "text": "Forescout",
+          "checksum": "sha256:9f771e7382ea8a4ecfb369b6daa6c1289c1f1bd530c5c64d62aa332359ba287c",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-56",
+          "text": "Christopher Altman",
+          "checksum": "sha256:059c0f1bc8da42f7968c91ad9eaa58f54bc98d7a8ee4714b4e4fd5a8adecf3c8",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-57",
+          "text": "Alex Bauer",
+          "checksum": "sha256:3f53386bf26e2edebb6a39ac8836c9a71a0f23b4ad97c2981efaf7f7c8132fb5",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-58",
+          "text": "Marco Genovese",
+          "checksum": "sha256:4e7a094ba942f50085d39616925b70ba371f9905f57794d02be3122f3b801247",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-59",
+          "text": "Google Cloud",
+          "checksum": "sha256:69bd2211a05e151338291eb88add1fcdd30966b4d92a1de7f3fb651f3e5078db",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-60",
+          "text": "Andrew Campagna",
+          "checksum": "sha256:8ec151b6f98d39bcef1c331b91f0f19508b18e94552eb92715d00814986a2089",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-61",
+          "text": "John Dombroski",
+          "checksum": "sha256:b8ce96abbf6b7559e9ade5cec3619877f4656170b89dd500e53795ff959c4693",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-62",
+          "text": "Adam Frank",
+          "checksum": "sha256:25b054a8c5e0f81d3659cc6bfc596f7fce2aead56d145077a2bad4c66d6b41e8",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-63",
+          "text": "Nalini Kannan",
+          "checksum": "sha256:7d00e81f851e67d7efc25a498e8238d28ac8271914a75edb2ce327b0d73ae0bd",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-64",
+          "text": "Priti Patil",
+          "checksum": "sha256:a8507f3faf42c46997ac66b3b50a4d409087295c64b99c1f96f39a8b8ece1d3d",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-65",
+          "text": "Harmeet Singh",
+          "checksum": "sha256:bb697dece5f5682262a3bef282e01e6ad938eb353d9176a4ee8d345965840039",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-66",
+          "text": "Mike Spisak",
+          "checksum": "sha256:e194c855987cf3100a76dbc6f604b507c2171223834de4900a6fc6ab0a5b1c09",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-67",
+          "text": "Krishna Yellepeddy",
+          "checksum": "sha256:aab94ddaef7d03ceab170591a6d8039617e0ffd67ad658e899af7ab265a9d3ef",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-68",
+          "text": "IBM",
+          "checksum": "sha256:973a4a818d799636d44525dfac347ef440bc67f5e33c404d7824a784465abead",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-69",
+          "text": "Nicholas Herrmann",
+          "checksum": "sha256:22e57a93f1f1d419df0a63f15a3a2d19f604c11c8f9dd130a4400d54a8ecc3c1",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-70",
+          "text": "Corey Lund",
+          "checksum": "sha256:0bd1b90e8e06b1cab411990cb15175ad268b4f0759c56b95bb9bc81fa493939a",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-71",
+          "text": "Farhan Saifudin",
+          "checksum": "sha256:b50dd4935250580bb30ef2f1d931fb84ab5668fa71a77e431245e355c90c7c3a",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-72",
+          "text": "Ivanti",
+          "checksum": "sha256:068a59bc654dfb47666203caa8790b163bbee1b82f19e83055a24a0496ebbd41",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-73",
+          "text": "Madhu Dodda",
+          "checksum": "sha256:1b71978a1d374e5878863ae95a1371933d5ae729dafb4deb603dcbe0362125d1",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-74",
+          "text": "Tim LeMaster",
+          "checksum": "sha256:b26a1cdf6fb3380abd5c0945203f3e2031ad8dafc66f376e1560abd076ad8293",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-75",
+          "text": "Lookout",
+          "checksum": "sha256:2338ca8b87d2dea8847002787fe391b3e32c2593ca652934b82b536be58601e3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-76",
+          "text": "Ken Durbin",
+          "checksum": "sha256:248772accc7637a39da258cddb1fe579076d5860d882a24892868af065f224fc",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-77",
+          "text": "James Elliott",
+          "checksum": "sha256:b51a78582b22b243d095fae304828c0cd3a9fa79115098aac4c9a2fd19faf2de",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-78",
+          "text": "Earl Matthews",
+          "checksum": "sha256:f2d4b7302ff375e194ddf27471b1f39e9ae29327237375ef04af79f3a1013bc7",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-79",
+          "text": "David Pricer",
+          "checksum": "sha256:62abe61a6c07bd5b163e2abc7eb2b0656eea98ec6c915c5625ffd801c3e307d1",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-80",
+          "text": "Mandiant",
+          "checksum": "sha256:3d1c30acb6dd6890d45787e406d8f71c71d9354bd63edba7bb1decd1293f1a57",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-81",
+          "text": "Joey Cruz",
+          "checksum": "sha256:9ab763443af55330611e9bf05c34a28c0697783027a5712eb320f7695877f3ed",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-82",
+          "text": "Tarek Dawoud",
+          "checksum": "sha256:84daf80b825b07a1678de5738ae1012b7dc35b70763b78d14a2f814c47c683ac",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-83",
+          "text": "Carmichael Patton",
+          "checksum": "sha256:0a94588023c8d584b43aa21044950f7fa48ada4894b6aa259cea07de1e5c812f",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-84",
+          "text": "Alex Pavlovsky",
+          "checksum": "sha256:4566cb304a6615d85c4dccc7b52f670c94753bfc09b56414ae114c525a1fcceb",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-85",
+          "text": "Brandon Stephenson",
+          "checksum": "sha256:350920b47b6ba4a1f45a786b977d755659b0a3157cbe01c26ef78a555a9ba465",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-86",
+          "text": "Clay Taylor",
+          "checksum": "sha256:df6d55f63e743a95661b172507de7f109fca003624e34ac30067091f79c963ed",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-87",
+          "text": "Microsoft",
+          "checksum": "sha256:c7bac46904be785cd0c965bf5659610044f0cdb4cbb02d2ec398dc56648988fd",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-88",
+          "text": "Bob Lyons",
+          "checksum": "sha256:5db4a37cfe11bf3e078d89873e9b054aa528cd48bd92dd753356ddd2096a6c14",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-89",
+          "text": "Vinu Panicker",
+          "checksum": "sha256:e0bafb027bb118219cead7c381674aec04f5530e4542a39d19f00ae06ab8bca9",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-90",
+          "text": "Okta",
+          "checksum": "sha256:7006a191ba3a4a863abbe7db05c1a21e476a71bf7cd234df0abe43f06f348d62",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-91",
+          "text": "Peter Bjork",
+          "checksum": "sha256:062e01d4126d72a10fdaeb183169a7451168e84860b5ed80dce118d592ca0150",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-92",
+          "text": "Hans Drolshagen",
+          "checksum": "sha256:406e84a29dc79fe7384b912207cdbd64ce7fefaf208f649342618f4d34f94ab3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-93",
+          "text": "Omnissa",
+          "checksum": "sha256:c346020b106aecb311d1945dc7e316a43586c95a68b79189025eb8e193f438e3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-94",
+          "text": "Imran Bashir",
+          "checksum": "sha256:6e6a927b1f708d9f75ab3201ba073b4afb4075c074cd02acb95444a056aeb88b",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-95",
+          "text": "Ali Haider",
+          "checksum": "sha256:37a8a8086c69519181f986eb4d81356a6bfe262b9f211fdb0c5885c870b7e093",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-96",
+          "text": "Nishit Kothari",
+          "checksum": "sha256:8211e7b8696f5a2212c720b38bbac3a9375b116f00982ebbc799ff6ef7c7c729",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-97",
+          "text": "Sean Morgan",
+          "checksum": "sha256:67e8a7a832a47d4207d8dfc733d5bb92b4a5f430de3cd3a73866b97952715e3a",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-98",
+          "text": "Seetal Patel",
+          "checksum": "sha256:a977f24a52cc8a17aae22304117e8a4630f9c02709065b0c51c5a0322a0ebdad",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-99",
+          "text": "Norman Wong",
+          "checksum": "sha256:f4efd13fcc710c03e97d44686cc8b799561fec85508df184a3a79189e0db9a80",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-100",
+          "text": "Palo Alto Networks",
+          "checksum": "sha256:02fbd33c10a82394d279739b3f57bffd18f8e5a13b0bdc6dabb724d3cffaf88b",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-101",
+          "text": "Zack Austin",
+          "checksum": "sha256:20e8df8e8b0322f7a14f5896005840ba4fb7fa8f0d07b89875143d87b9634ca0",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-102",
+          "text": "Shawn Higgins",
+          "checksum": "sha256:cfc3b4e97fc77d82cdeca3716864e50095358e78f24623323433f192efa9dac8",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-103",
+          "text": "Rob Woodworth",
+          "checksum": "sha256:a5e0dd110bd18aeb74bc7f887e91d473401cb04a533c5b1087bbcb90caf7996c",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-104",
+          "text": "PC Matic",
+          "checksum": "sha256:5bd12b74ae55f9b294d52a34c3d14baf3efe49f97e8773c624da31ceba17fb00",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-105",
+          "text": "Mitchell Lewars",
+          "checksum": "sha256:c275b74af2fe343ff0d2cd7c8f630ffe3fb5b527e11e5c182d3b058616148d71",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-106",
+          "text": "Bryan Rosensteel",
+          "checksum": "sha256:10317127715f46f6a63b1f0372659c1031fe75451de350ef6eff0e4a6139c0ad",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-107",
+          "text": "Ping Identity",
+          "checksum": "sha256:7223f950e0e91ffd8c5d06e6021c7e868ecba887a1f4a88ba5a37144ccd1b8db",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-108",
+          "text": "Bill Baz",
+          "checksum": "sha256:37527ce0f12b7d3b81826cc693145aaf6488cb10e6cba2a1df5465c7e3f05915",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-109",
+          "text": "Don Coltrain",
+          "checksum": "sha256:84b55f79e308a5d4b6052d7070e4f2dd53fb7c1913642e00d13d5f4b8438089f",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-110",
+          "text": "Wade Ellery",
+          "checksum": "sha256:16503562852869cd52bd30eff0994b31e7b7db3b72d4fcd97b8b8c167115ad8c",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-111",
+          "text": "Deborah McGinn",
+          "checksum": "sha256:853d26fcd9ac9183692f102609d8eaeccc56d8518ada86a5fd7e362998d46605",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-112",
+          "text": "Radiant Logic",
+          "checksum": "sha256:782bf21b5728e092070efccffcac2e3c7e647b232aaf1a14dc09380607bf9d8b",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-113",
+          "text": "Frank Briguglio",
+          "checksum": "sha256:bf07b408c341d6afaca049076ef04c2c13907fefe7c4e891a2afbfeed2c99ccf",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-114",
+          "text": "Ryan Tighe",
+          "checksum": "sha256:52501f68e78c0def45f73f885ac58c731691e0f6b6fb66d8bcd0174c97527f2c",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-115",
+          "text": "SailPoint",
+          "checksum": "sha256:594ae4e99a84b96dcfc9d46736354dda12b1bcedab0708de6a8087ae5919e7d8",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-116",
+          "text": "Chris Jensen",
+          "checksum": "sha256:ebd12646012d08592a8b5a61e0d064220a6706f7cd0d08504548b78ec1870099",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-117",
+          "text": "Joshua Moll",
+          "checksum": "sha256:c237d419030a5d8a0001a2b255e8a1efcf0c1ac6e4efe7336e511972458272ac",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-118",
+          "text": "Tenable",
+          "checksum": "sha256:671d55f698e2730686db83b7bb7f678447494ee562207ed166df8370fd92a268",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-119",
+          "text": "Jason White",
+          "checksum": "sha256:2f466166b2eb5e930212686c3fe962860209ea9e61b75737d769fcdf4b7f9e50",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-120",
+          "text": "Trellix, Public Sector",
+          "checksum": "sha256:316a877441ce1754725e4f79a0d4746934371047391432f269843b99577aa983",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-121",
+          "text": "Joe Brown",
+          "checksum": "sha256:277b8632ae31d2d504b7ff40768e3bb44b2bfd0cd13f33b21b6f445aa57962e7",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-122",
+          "text": "Gary Bradt",
+          "checksum": "sha256:08ab8f930b72e35ab144aaec3f4d4b9fa37a0b9be65f0f3e9f21086b3d6251ef",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-123",
+          "text": "Zimperium",
+          "checksum": "sha256:277c86ea5ee736bc6ebb7da07b2ed82a68ec9660968d26626f0bc3e17144cc46",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-124",
+          "text": "Jeffrey Adorno",
+          "checksum": "sha256:82ac0bed2a12e95bc09b7b3ae7bf7088a8f30455f3aa77601615c9e52a83b7fb",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-125",
+          "text": "Syed Ali",
+          "checksum": "sha256:cdfc4d16d4d6b87c1a2bdbb01aa47ebb5faac6f01ab8240c4a55b190020164c5",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-126",
+          "text": "Bob Smith",
+          "checksum": "sha256:7e3d89811312ed290e4d1e50b7edbeea816a31d0b586c5e85c16c9c4c6d22ebe",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-127",
+          "text": "Zscaler",
+          "checksum": "sha256:3a93a1286e8fe07453984c13a825e2a7f7c00c3a0b3bba7ffc61f1cf06fa84c2",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-128",
+          "text": "June 2025",
+          "checksum": "sha256:964da9b5c7ac7cf08f2d6d519e1ecd23f8f1949beedee6585f30ae7b743da771",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-129",
+          "text": "FINAL",
+          "checksum": "sha256:e37811fce6143132da65f180c6ed004b85a766374681bded89cff588a3f49f5f",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-130",
+          "text": "DISCLAIMER",
+          "checksum": "sha256:c790927b32835f27e33a1caf911be99f1d181b25df94d6353771d371bccef0f1",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-131",
+          "text": "Certain commercial entities, equipment, products, or materials may be identified by name or company logo or other insignia in order to acknowledge their participation in this collaboration or to describe an experimental procedure or concept adequately. Such identification is not intended to imply special status or relationship with NIST or recommendation or endorsement by NIST or NCCoE; neither is it intended to imply that the entities, equipment, products, or materials are necessarily the best available for the purpose.",
+          "checksum": "sha256:508a0f81e66135c28efe4d23993246cdef5cbd3c8fb1ab4a07cc27442aa983d2",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-132",
+          "text": "While NIST and the NCCoE address goals of improving management of cybersecurity and privacy risk through outreach and application of standards and best practices, it is the stakeholder’s responsibility to fully perform a risk assessment to include the current threat, vulnerabilities, likelihood of a compromise, and the impact should the threat be realized before adopting cybersecurity measures such as this recommendation.",
+          "checksum": "sha256:2b212d6909faab9ec6d8e36a9d5a3451050ac005b49fc1512525747f94798fe0",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-133",
+          "text": "National Institute of Standards and Technology Special Publication 1800-35, Natl. Inst. Stand. Technol. Spec. Publ. 1800-35, (June 2025), CODEN: NSPUE2",
+          "checksum": "sha256:ddbb540991c18e7e997e702fd67bf6d2b4f01527e59c389310cb5ebaf247049d",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-134",
+          "text": "NIST TECHNICAL SERIES POLICIES",
+          "checksum": "sha256:2daef4539e758e160150a6174eee9af403806e22d2d9cce74349156fe7404167",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-135",
+          "text": "Copyright, Use, and Licensing Statements",
+          "checksum": "sha256:cea96c81e5609aad31c36d3567da57773c5f0a4940bbcd4aa19f2d5ff5cf836d",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-136",
+          "text": "NIST Technical Series Publication Identifier Syntax",
+          "checksum": "sha256:d63e49125af6009ff86be0e53be48559d76884f58cbf58e24486378ef3388819",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-137",
+          "text": "AUTHOR ORCID IDS",
+          "checksum": "sha256:7ba0ba4a22a1025a82da082c36f71741b663cec4d9b1c147a30589f30c032848",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-138",
+          "text": "Oliver Borchert: 0009-0006-1880-0542",
+          "checksum": "sha256:97dea10bf4e0df529fcbe0a5a58f63dfd2963e6db00f2ec28d774e1c04dfebeb",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-139",
+          "text": "Gema Howell: 0000-0002-0428-5045",
+          "checksum": "sha256:d26d2d28629bbddc7639ba1725dcdcc4391a9f1a5efc624e5ac328ad2512c88d",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-140",
+          "text": "Alper Kerman: 0009-0000-5880-8369",
+          "checksum": "sha256:ec3d2fb812c5d0488ae1abbf0a74d707123da7e4f9ad2e74631157a0c06eb072",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-141",
+          "text": "Scott Rose: 0000-0002-3105-7427",
+          "checksum": "sha256:940e906efe0fb3d30f5a867a35061564a207d6f097d998227e1f60d10490e1ab",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-142",
+          "text": "Murugiah Souppaya: 0000-0002-8055-8527",
+          "checksum": "sha256:f3ec10dfffbce9dd70ca9846cc96223820f4346140615f38b2a1eabc20e2a857",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-143",
+          "text": "Karen Scarfone: 0000-0001-6334-9486",
+          "checksum": "sha256:eaaaa9216f4cf2def40c6cc9720ce5b19b84e97c8f8d50256be8f4799e819e70",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-144",
+          "text": "William Barker: 0000-0002-4113-8861",
+          "checksum": "sha256:504b3370c5698298c181f582d29f0996fbef417c91276d84fcd70535ff291f98",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-145",
+          "text": "FEEDBACK",
+          "checksum": "sha256:1f3c95d5c7de55a30e20a9aa542b23d9fa3243c6ec8172b766d3d4079c0fcf4d",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-146",
+          "text": "You can view or download the final guide at the NCCoE ZTA project page.",
+          "checksum": "sha256:0059ca1344c59063b45e04dd8ea3115964fc65916d912495f5daf0a24d62e16f",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-147",
+          "text": "Comments on this publication may be submitted to: nccoe-zta-project@list.nist.gov.",
+          "checksum": "sha256:c5c903153c974163d2783aa2098d5980f85e989650253cac939c29a0bdf03d2c",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-148",
+          "text": "All comments are subject to release under the Freedom of Information Act.",
+          "checksum": "sha256:d8343f83125529faec9b13eddf03ceac6cfb6658af71765444f38a85a8acb78a",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-149",
+          "text": "NATIONAL CYBERSECURITY CENTER OF EXCELLENCE",
+          "checksum": "sha256:7915c7386eaef1efe3aca1f7fccd53ed6bf39e85109ca47256ae9a8949d9041b",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-150",
+          "text": "The National Cybersecurity Center of Excellence (NCCoE), a part of the National Institute of Standards and Technology (NIST), is a collaborative hub where industry organizations, government agencies, and academic institutions work together to address businesses ‘ most pressing cybersecurity issues. This public-private partnership enables the creation of practical cybersecurity solutions for specific industries, as well as for broad, cross-sector technology challenges. Through consortia under Cooperative Research and Development Agreements (CRADAs), including technology partners—from Fortune 50 market leaders to smaller companies specializing in information technology security—the NCCoE applies standards and best practices to develop modular, adaptable example cybersecurity solutions using commercially available technology. The NCCoE documents these example solutions in the NIST Special Publication 1800 series, which maps capabilities to the NIST Cybersecurity Framework (CSF) and details the steps needed for another entity to re-create the example solution. The NCCoE was established in 2012 by NIST in partnership with the State of Maryland and Montgomery County, Maryland.",
+          "checksum": "sha256:26c9551087e8d9dacf6fdea1b026cc3b6b9f2a1d867378f03c2297ae506c18a3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-151",
+          "text": "To learn more about the NCCoE, visit https://www.nccoe.nist.gov/. To learn more about NIST, visit https://www.nist.gov.",
+          "checksum": "sha256:39a6f38b87570ba3cc064d3e1e78c75e827cc61af68b0aad5d0fbf09828e2f85",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-152",
+          "text": "NIST CYBERSECURITY PRACTICE GUIDES",
+          "checksum": "sha256:6a3abb65d3368dac1bf308ca4edc2273374265947e90bfe325300db9e70e1425",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-153",
+          "text": "NIST Cybersecurity Practice Guides (Special Publication 1800 series) target specific cybersecurity challenges in the public and private sectors. They are practical, user-friendly guides that facilitate the adoption of standards-based approaches to cybersecurity. They show members of the information security community how to implement example solutions that help them align with relevant standards and best practices, and provide users with the materials lists, configuration files, and other information they need to implement a similar approach.",
+          "checksum": "sha256:2b4ea2340043593ca334cba96a732e649ba6d8c2268b9d1fc8573f80a0e06c23",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-154",
+          "text": "The documents in this series describe example implementations of cybersecurity practices that businesses and other organizations may voluntarily adopt. These documents do not describe regulations or mandatory practices, nor do they carry statutory authority.",
+          "checksum": "sha256:921a7e2dd11ca7b952a58eae9012a46f1b5031ecc35921a7a0ef4cede35bb447",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-155",
+          "text": "ABSTRACT",
+          "checksum": "sha256:3d1626989d3e923485561f1e5bdeaa583842a399edaf8cb6df59dbc6f17848f8",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-156",
+          "text": "A zero trust architecture (ZTA) enables secure authorized access to enterprise resources that are distributed across on-premises and multiple cloud environments, while enabling a hybrid workforce and partners to access resources from anywhere, at any time, from any device in support of the organization’s mission.",
+          "checksum": "sha256:86a1fbe6205834c4c9464baa86b80734d059c6c39bccde41099b5b4b38148e33",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-157",
+          "text": "This NIST Cybersecurity Practice Guide explains how organizations can implement ZTA consistent with the concepts and principles outlined in NIST Special Publication (SP) 800-207, Zero Trust Architecture. The NCCoE worked with 24 collaborators under Cooperative Research and Development Agreements (CRADAs) to integrate commercially available technology to build 19 ZTA example implementations and demonstrate a number of common use cases. The guide includes detailed technical information on each example ZTA implementation, providing models that organizations can emulate. The Guide also summarizes best practices and lessons learned from the implementations and integrations to make it easier and more cost-effective to implement ZTA. This guide also includes mappings of ZTA principles and technologies to commonly used security standards and guidelines.",
+          "checksum": "sha256:5734b3a0754d24bb62f6e5a6f780f7e9e4a12a73b0cd7366d0a5ef3ed369f116",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-158",
+          "text": "KEYWORDS",
+          "checksum": "sha256:1ecb607ef82c28f11d0f93b22f06e09cfe33b1cdfa12b4c010dfe22e6c1db3d6",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-159",
+          "text": "enhanced identity governance (EIG); identity, credential, and access management (ICAM); microsegmentation; secure access service edge (SASE); software-defined perimeter (SDP); zero trust; zero trust architecture (ZTA).",
+          "checksum": "sha256:c95c22bd86eaca074d6135657371ce29899706a8e14f7a9e21ae61a53b598b77",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-160",
+          "text": "ACKNOWLEDGMENTS",
+          "checksum": "sha256:e3c34cdc4e6035e05099c7378fbd93f5ee12c027acc313ac882cca5a0d3e79a7",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-161",
+          "text": "We are grateful to the following individuals for their generous contributions of expertise and time.",
+          "checksum": "sha256:992f7f9d1533c910e3baf495e1f8b4ad01bb80c165d3e99d9f8c189b7c4c4d92",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-162",
+          "text": "Appgate: Jason Garbis, Adam Rose, Jonathan Roy\nAWS (Amazon Web Services): Conrad Fernandes*, Harrison Holstein, Quint Van Deman\nBroadcom: Andrew Babakian*, Genc Domi*, Paul Mancuso, Eric Michael, Dennis Moreau*, Wayne Pauley*, Jacob Rapp*, Lewis Shepherd\nCisco: Ken Andrews, Robert Bui, Leo Lebel, Tom Oast, Aaron Rodriguez, Kelly Sennett, Steve Vetter, Micah Wilson\nF5: Daniel Cayer, David Clark, Jay Kelley, Darrell Pierson\nForescout: Yejin Jang*, Neal Lucier*\nGoogle Cloud: Tim Knudson*\nIBM: Nilesh Atal, Himanshu Gupta, Lakshmeesh Hegde, Sharath Math, Naveen Murthy, Nikhil Shah, Deepa Shetty, Harishkumar Somashekaraiah\nIT Coalition: Aaron Cook, Vahid Esfahani*, Jeff Laclair, Ebadullah Siddiqui*, Musumani Woods*\nIvanti: Patty Arcano, Jeffery Burton, Jay Dineshkumar\nLookout: Tyler Croak, Jeff Gilhool, Hashim Khan*\nMicrosoft: Thomas Detzner, Ehud Itshaki, Janet Jones, Hemma Prafullchandra*, Enrique Saggese, Sarah Young\nMITRE: Eileen Division*, Spike E. Dog*, Sallie Edwards*, Ayayidjin Gabiam, Jolene Loveless*, Karri Meldorf, Kenneth Sandlin, Lauren Swan, Jessica Walton*\nNIST: Mike Bartock, Julia Chua, Douglas Montgomery, Cherilyn Pascoe, Michael Powell, Kevin Stine\nOkta: Brian Dack, Sean Frazier, Naveed Mirza, Kelsey Nelson, Ron Wilson\nOmnissa: Keith Luck*\nPC Matic: Andy Tuch\nPing Identity: Ivan Anderson, Aubrey Turner\nRadiant Logic: Rusty Deaton, John Petrutiu, Lauren Selby\nSailPoint: Peter Amaral, Jim Russell, Esteban Soto\nTenable: Jeremiah Stallcup\nZimperium: Dan Butzer, Jim Kovach*, Kern Smith\nZscaler: Jeremy James, Lisa Lorenzin*, Matt Moulton, Patrick Perry",
+          "checksum": "sha256:c834a3417fc0884b23089aa5b24bcb590c022c44d19bffce472f635cc8523ef1",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-163",
+          "text": "Appgate: Jason Garbis, Adam Rose, Jonathan Roy",
+          "checksum": "sha256:e71c6dfc38c5ad5c692090eabc1a9e98af5fdd28b3548c6ee72fe0eee77c8cf3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-164",
+          "text": "AWS (Amazon Web Services): Conrad Fernandes*, Harrison Holstein, Quint Van Deman",
+          "checksum": "sha256:9aa614bada0f4456cd5ca35d81e2347e24bf4df9a07bbc757bb8b280d80956c3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-165",
+          "text": "Broadcom: Andrew Babakian*, Genc Domi*, Paul Mancuso, Eric Michael, Dennis Moreau*, Wayne Pauley*, Jacob Rapp*, Lewis Shepherd",
+          "checksum": "sha256:0a059ff21553f8cdbdcd93a3e143510c366a39fa433b52f7d3a01cd1bcd5e54c",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-166",
+          "text": "Cisco: Ken Andrews, Robert Bui, Leo Lebel, Tom Oast, Aaron Rodriguez, Kelly Sennett, Steve Vetter, Micah Wilson",
+          "checksum": "sha256:86b216c12b5f8dfaea2c17f8c683286dd3e5f41669136e048ca1ae146584c9d2",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-167",
+          "text": "F5: Daniel Cayer, David Clark, Jay Kelley, Darrell Pierson",
+          "checksum": "sha256:490b1f402cf0a2c24603cd3b49130d07034d398fcda9f4d70d4b61158bd926be",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-168",
+          "text": "Forescout: Yejin Jang*, Neal Lucier*",
+          "checksum": "sha256:e70ff5adf725dd4bc0a8a3a17bda93999f3c4c5baaeba3580d6ef0e3d38a5630",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-169",
+          "text": "Google Cloud: Tim Knudson*",
+          "checksum": "sha256:db809a38e24a09899422709688ccbd81b37aaabdd1de6fab494737ef46c7a230",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-170",
+          "text": "IBM: Nilesh Atal, Himanshu Gupta, Lakshmeesh Hegde, Sharath Math, Naveen Murthy, Nikhil Shah, Deepa Shetty, Harishkumar Somashekaraiah",
+          "checksum": "sha256:ad5ce2c99da8954a8989de3e3620f3c776f989320a21ea3492f009c89333642c",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-171",
+          "text": "IT Coalition: Aaron Cook, Vahid Esfahani*, Jeff Laclair, Ebadullah Siddiqui*, Musumani Woods*",
+          "checksum": "sha256:47421cd34456430e10a58d008a1c685da2e19702718e85599ffc421c905c78dc",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-172",
+          "text": "Ivanti: Patty Arcano, Jeffery Burton, Jay Dineshkumar",
+          "checksum": "sha256:9025967e3bd0958c697b07bf8d218aafeb854bc61cf3c9016bff8bdf88625961",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-173",
+          "text": "Lookout: Tyler Croak, Jeff Gilhool, Hashim Khan*",
+          "checksum": "sha256:4f0675f6d73a7c3f8e1e6d5c63b8f821dce5d6f83a167074ec99ad55d350e1a9",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-174",
+          "text": "Microsoft: Thomas Detzner, Ehud Itshaki, Janet Jones, Hemma Prafullchandra*, Enrique Saggese, Sarah Young",
+          "checksum": "sha256:258912628a9b9a41e3e5cb32523a6508265f30e8696078d9c465311fc2a72ed7",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-175",
+          "text": "MITRE: Eileen Division*, Spike E. Dog*, Sallie Edwards*, Ayayidjin Gabiam, Jolene Loveless*, Karri Meldorf, Kenneth Sandlin, Lauren Swan, Jessica Walton*",
+          "checksum": "sha256:b30d39c871a42a3ea2bfc404459c6d43d8cfeab65788395f6afa90de5246fa80",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-176",
+          "text": "NIST: Mike Bartock, Julia Chua, Douglas Montgomery, Cherilyn Pascoe, Michael Powell, Kevin Stine",
+          "checksum": "sha256:3fff8063f56167d0d9dd7abdbc1eaa09159547aae257a9af906b85bcbf21409c",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-177",
+          "text": "Okta: Brian Dack, Sean Frazier, Naveed Mirza, Kelsey Nelson, Ron Wilson",
+          "checksum": "sha256:cc155e8e0dc4d7beb95e2a4be276838d813c89f06381e20ebbb36c023558b9d9",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-178",
+          "text": "Omnissa: Keith Luck*",
+          "checksum": "sha256:41e573c19e4f6c95d422f96862f50034fea20f71f918a71120957043462536ad",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-179",
+          "text": "PC Matic: Andy Tuch",
+          "checksum": "sha256:e638d1ac77bf644a9ce6a434cddb7945285f7ef6d37dc1a12d90ed8b04bd44de",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-180",
+          "text": "Ping Identity: Ivan Anderson, Aubrey Turner",
+          "checksum": "sha256:ecd5419d3c382bebaf07f28daa9b133d4b8ec3ac10fd6f2a5f8e4bef5565d06b",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-181",
+          "text": "Radiant Logic: Rusty Deaton, John Petrutiu, Lauren Selby",
+          "checksum": "sha256:efae538413ae4f186d0daca5e38bc91926786cdd17b12fcc4bf01a25c35fc552",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-182",
+          "text": "SailPoint: Peter Amaral, Jim Russell, Esteban Soto",
+          "checksum": "sha256:2c9bb356201dfb7c4cc03857347b9ab698e2febbcc7bb5db92ddab30fc88bc10",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-183",
+          "text": "Tenable: Jeremiah Stallcup",
+          "checksum": "sha256:a0bf784ea6e02f6446b97db4c801f359ff02799c9af3b37a4ae81f8ef752795c",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-184",
+          "text": "Zimperium: Dan Butzer, Jim Kovach*, Kern Smith",
+          "checksum": "sha256:6f6b40af8614684c554e4e0bd4c32ced827693b7be79afa25afc1e4ca4590400",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-185",
+          "text": "Zscaler: Jeremy James, Lisa Lorenzin*, Matt Moulton, Patrick Perry",
+          "checksum": "sha256:353432ed6fe576ecb494f216442d54644a5c0dddf5df3505a9f3dabc9fe22f52",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-186",
+          "text": "* Former employee; all work for this publication was done while at that organization",
+          "checksum": "sha256:33fa032674d09eb7354c322580e1e8bcd579c873bb401b9b47e20f4c8897207a",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-187",
+          "text": "Special thanks to all who reviewed and provided feedback on this document.",
+          "checksum": "sha256:e36f4fa19f8c55084e7aed2252e08bd66d75d1eaf05e30b7a3f004ec1a3fd3df",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-188",
+          "text": "The Technology Collaborators who participated in this project submitted their capabilities in response to a notice in the Federal Register. Respondents with relevant capabilities or product components were invited to sign a Cooperative Research and Development Agreement (CRADA) with NIST, allowing them to participate in a consortium to build this example solution. We worked with:",
+          "checksum": "sha256:e0ac4f0c1e990406a634619d80e5dd821316383c6963ddc7127a3d528c40d105",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-189",
+          "text": "Appgate",
+          "checksum": "sha256:835ec7f121e022cc993f70cdfe1ebb7905061129bffa392af111f9f780c4b6ba",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-190",
+          "text": "IBM",
+          "checksum": "sha256:973a4a818d799636d44525dfac347ef440bc67f5e33c404d7824a784465abead",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-191",
+          "text": "PC Matic",
+          "checksum": "sha256:5bd12b74ae55f9b294d52a34c3d14baf3efe49f97e8773c624da31ceba17fb00",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-192",
+          "text": "AWS",
+          "checksum": "sha256:32fd72a0e0746043a1cce59f2e840490df6b9ea49e9bbcade136da5e8173d6c0",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-193",
+          "text": "Ivanti",
+          "checksum": "sha256:068a59bc654dfb47666203caa8790b163bbee1b82f19e83055a24a0496ebbd41",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-194",
+          "text": "Ping Identity",
+          "checksum": "sha256:7223f950e0e91ffd8c5d06e6021c7e868ecba887a1f4a88ba5a37144ccd1b8db",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-195",
+          "text": "Broadcom",
+          "checksum": "sha256:caf79e01972c0c7690d2dd26b5c320f9e20b90bbb220bd7c259d5ae9d928fd30",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-196",
+          "text": "Lookout",
+          "checksum": "sha256:2338ca8b87d2dea8847002787fe391b3e32c2593ca652934b82b536be58601e3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-197",
+          "text": "Radiant Logic",
+          "checksum": "sha256:782bf21b5728e092070efccffcac2e3c7e647b232aaf1a14dc09380607bf9d8b",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-198",
+          "text": "Cisco",
+          "checksum": "sha256:aa669b285cc133bf8440ce04e6c2559ed5ce8c77cab452d0152f0da9f3e21f89",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-199",
+          "text": "Mandiant",
+          "checksum": "sha256:3d1c30acb6dd6890d45787e406d8f71c71d9354bd63edba7bb1decd1293f1a57",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-200",
+          "text": "SailPoint",
+          "checksum": "sha256:594ae4e99a84b96dcfc9d46736354dda12b1bcedab0708de6a8087ae5919e7d8",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-201",
+          "text": "DigiCert",
+          "checksum": "sha256:ee316a677ecd3999672494760d9ff011363f85c51c078263892222412e1c9ef3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-202",
+          "text": "Microsoft",
+          "checksum": "sha256:c7bac46904be785cd0c965bf5659610044f0cdb4cbb02d2ec398dc56648988fd",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-203",
+          "text": "Tenable",
+          "checksum": "sha256:671d55f698e2730686db83b7bb7f678447494ee562207ed166df8370fd92a268",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-204",
+          "text": "F5",
+          "checksum": "sha256:6cd28ed32abf73d0d64218a8ce983fd5e460ac662b660a556b8939d9d6ae37a3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-205",
+          "text": "Okta",
+          "checksum": "sha256:7006a191ba3a4a863abbe7db05c1a21e476a71bf7cd234df0abe43f06f348d62",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-206",
+          "text": "Trellix",
+          "checksum": "sha256:8a84f13689b09008fa1065889e90275415b06de96115394b53f3e6337ea10a0a",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-207",
+          "text": "Forescout",
+          "checksum": "sha256:9f771e7382ea8a4ecfb369b6daa6c1289c1f1bd530c5c64d62aa332359ba287c",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-208",
+          "text": "Omnissa",
+          "checksum": "sha256:c346020b106aecb311d1945dc7e316a43586c95a68b79189025eb8e193f438e3",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-209",
+          "text": "Zimperium",
+          "checksum": "sha256:277c86ea5ee736bc6ebb7da07b2ed82a68ec9660968d26626f0bc3e17144cc46",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-210",
+          "text": "Google Cloud",
+          "checksum": "sha256:69bd2211a05e151338291eb88add1fcdd30966b4d92a1de7f3fb651f3e5078db",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-211",
+          "text": "Palo Alto Networks",
+          "checksum": "sha256:02fbd33c10a82394d279739b3f57bffd18f8e5a13b0bdc6dabb724d3cffaf88b",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-212",
+          "text": "Zscaler",
+          "checksum": "sha256:3a93a1286e8fe07453984c13a825e2a7f7c00c3a0b3bba7ffc61f1cf06fa84c2",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-213",
+          "text": "Note that after the VMware End User Computing division products were implemented at the NCCoE, VMware was acquired by Broadcom, then the VMware End User Computing Division was divested and reformed under a new entity, Omnissa LLC. Symantec was also previously acquired by Broadcom.",
+          "checksum": "sha256:f57cc621624ac0cf526c847bab8fdf4512cb7dd5361fa17aa30b4bd645253a3f",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-214",
+          "text": "DOCUMENT CONVENTIONS",
+          "checksum": "sha256:d70acc6a73cdfb7d3fe412c1b24fa218aea8b242271bbc060a30901724085a38",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-215",
+          "text": "The terms “shall” and “shall not” indicate requirements to be followed strictly to conform to the publication and from which no deviation is permitted. The terms “should” and “should not” indicate that among several possibilities, one is recommended as particularly suitable without mentioning or excluding others, or that a certain course of action is preferred but not necessarily required, or that (in the negative form) a certain possibility or course of action is discouraged but not prohibited. The terms “may” and “need not” indicate a course of action permissible within the limits of the publication. The terms “can” and “cannot” indicate a possibility and capability, whether material, physical, or causal.",
+          "checksum": "sha256:4367df95c5a46a9189c58a4705a8d55269507d16c0be5f42d8f207cebc536115",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-216",
+          "text": "PATENT DISCLOSURE NOTICE",
+          "checksum": "sha256:a84e6424f7b46128a54e5f3b97f71298441e3dd4574bd554d71c596210fb499e",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-217",
+          "text": "NOTICE: The Information Technology Laboratory (ITL) has requested that holders of patent claims whose use may be required for compliance with the guidance or requirements of this publication disclose such patent claims to ITL. However, holders of patents are not obligated to respond to ITL calls for patents and ITL has not undertaken a patent search in order to identify which, if any, patents may apply to this publication.",
+          "checksum": "sha256:62228fa206cd180eb922993612a5a1d2238a30b90cea7d0367b24397a51c77d6",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-218",
+          "text": "As of the date of publication and following call(s) for the identification of patent claims whose use may be required for compliance with the guidance or requirements of this publication, no such patent claims have been identified to ITL.",
+          "checksum": "sha256:cadd189ec499f54d3fac157b947252fb7807ea4cc4d88095d691bd2965b04bd4",
+          "extraction_method": "explicit-html-markup"
+        },
+        {
+          "source_key": "nist-sp-1800-35",
+          "locator": "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-219",
+          "text": "No representation is made or implied by ITL that licenses are not required to avoid patent infringement in the use of this publication.",
+          "checksum": "sha256:0589e31526a6f3671a763f6bbef46f3bcff994c82670a740580ef7dbbd91c269",
+          "extraction_method": "explicit-html-markup"
+        }
+      ]
+    }
+  ],
+  "sha256": "sha256:4be04dd5f21e434f08edf9f62c06161acc955a5f9131e9f98787db7424cb4b60",
+  "byte_length": 49243,
+  "related_build_codes": [],
+  "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/index.html"
+}

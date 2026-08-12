@@ -1,22 +1,5 @@
 {
   "schema_version": "1.0",
   "policy": "Blocked relationships remain unpublished. Do not infer or normalize an ineligible endpoint into a displayable edge.",
-  "findings": [
-    {
-      "finding_id": "finding:blocked-relationship:800-53-to-dod-zt-overlays:424",
-      "source_id": "dod-zt-overlays-2024",
-      "upstream_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
-      "rejected_reference": "EC-1 -> CAP-2-7",
-      "reason": "EC-1 is not an SP 800-53 control identifier in the catalog.",
-      "disposition": "blocked_not_published"
-    },
-    {
-      "finding_id": "finding:blocked-relationship:800-53-to-dod-zt-overlays:694",
-      "source_id": "dod-zt-overlays-2024",
-      "upstream_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
-      "rejected_reference": "SAC-16 -> CAP-6-1",
-      "reason": "SAC-16 is not an SP 800-53 control identifier in the catalog.",
-      "disposition": "blocked_not_published"
-    }
-  ]
+  "findings": []
 }

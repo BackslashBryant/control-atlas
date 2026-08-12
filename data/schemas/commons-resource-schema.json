@@ -2,6 +2,30 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "ControlCommonsDataset",
   "type": "object",
+  "definitions": {
+    "evidenceSection": {
+      "type": "object",
+      "required": ["status", "text", "sourceUrl"],
+      "properties": {
+        "status": { "type": "string", "enum": ["documented", "not_documented", "not_applicable"] },
+        "text": { "type": "string", "minLength": 1 },
+        "sourceUrl": { "type": "string", "format": "uri" },
+        "values": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "releaseEvidence": {
+      "type": "object",
+      "required": ["status", "version", "name", "url", "publishedAt", "prerelease"],
+      "properties": {
+        "status": { "type": "string", "enum": ["published", "not_published", "not_documented"] },
+        "version": { "type": ["string", "null"] },
+        "name": { "type": ["string", "null"] },
+        "url": { "type": "string", "format": "uri" },
+        "publishedAt": { "type": ["string", "null"] },
+        "prerelease": { "type": "boolean" }
+      }
+    }
+  },
   "required": ["schemaVersion", "lastUpdated", "resources", "collections"],
   "properties": {
     "schemaVersion": { "type": "string" },
@@ -66,7 +90,11 @@
           "featuredCollections",
           "brandKey",
           "sourceEvidence",
-          "verificationMethod"
+          "verificationMethod",
+          "overview",
+          "compatibility",
+          "media",
+          "presentationProfile"
         ],
         "properties": {
           "id": { "type": "string" },
@@ -172,9 +200,121 @@
             "type": "string",
             "enum": ["public_url", "official_repository", "manual_restricted"]
           },
+          "overview": {
+            "type": "object",
+            "required": ["text", "sourceUrl", "sourceType", "exactPublisherText"],
+            "properties": {
+              "text": { "type": "string", "minLength": 20 },
+              "sourceUrl": { "type": "string" },
+              "sourceType": { "type": "string", "enum": ["repository_readme", "publisher_source"] },
+              "exactPublisherText": { "type": "boolean" }
+            }
+          },
+          "compatibility": {
+            "type": "object",
+            "required": ["status", "operatingSystems", "environments", "sourceUrl", "note"],
+            "properties": {
+              "status": { "type": "string", "enum": ["documented", "not_stated", "not_applicable"] },
+              "operatingSystems": { "type": "array", "items": { "type": "string" } },
+              "environments": { "type": "array", "items": { "type": "string" } },
+              "sourceUrl": { "type": "string" },
+              "note": { "type": "string" }
+            }
+          },
+          "media": {
+            "type": "object",
+            "required": ["status", "items", "sourceUrl"],
+            "properties": {
+              "status": { "type": "string", "enum": ["available", "not_available"] },
+              "sourceUrl": { "type": "string" },
+              "reason": { "type": "string" },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["kind", "url", "alt", "sourceUrl", "sha256", "byteLength", "contentType", "width", "height", "license", "licenseBasis", "retrievedAt", "commitSha"],
+                  "properties": {
+                    "kind": { "type": "string", "enum": ["publisher_screenshot"] },
+                    "url": { "type": "string" },
+                    "alt": { "type": "string" },
+                    "sourceUrl": { "type": "string" },
+                    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+                    "byteLength": { "type": "integer", "minimum": 1 },
+                    "contentType": { "type": "string", "pattern": "^image/" },
+                    "width": { "type": "number", "exclusiveMinimum": 0 },
+                    "height": { "type": "number", "exclusiveMinimum": 0 },
+                    "license": { "type": "string", "minLength": 1 },
+                    "licenseBasis": { "type": "string", "enum": ["repository_license", "publisher_media_license"] },
+                    "retrievedAt": { "type": "string" },
+                    "commitSha": { "type": "string", "pattern": "^[a-f0-9]{40}$" }
+                  }
+                }
+              }
+            }
+          },
+          "presentationProfile": {
+            "type": "object",
+            "required": ["profileType", "template", "whatItDoes", "whoItIsFor", "limitations"],
+            "properties": {
+              "profileType": { "type": "string" },
+              "template": { "type": "string", "enum": ["tool", "reference", "training", "directory", "community", "data", "ecosystem", "destination", "artifact"] },
+              "whatItDoes": { "$ref": "#/definitions/evidenceSection" },
+              "whoItIsFor": { "$ref": "#/definitions/evidenceSection" },
+              "limitations": { "$ref": "#/definitions/evidenceSection" }
+            }
+          },
+          "toolProfile": {
+            "type": "object",
+            "required": ["inputs", "outputs", "formats", "integrations", "installation", "usage", "license", "maintenance", "release"],
+            "properties": {
+              "inputs": { "$ref": "#/definitions/evidenceSection" },
+              "outputs": { "$ref": "#/definitions/evidenceSection" },
+              "formats": { "$ref": "#/definitions/evidenceSection" },
+              "integrations": { "$ref": "#/definitions/evidenceSection" },
+              "installation": { "$ref": "#/definitions/evidenceSection" },
+              "usage": { "$ref": "#/definitions/evidenceSection" },
+              "license": { "$ref": "#/definitions/evidenceSection" },
+              "maintenance": {
+                "type": "object",
+                "required": ["status", "text", "sourceUrl"],
+                "properties": {
+                  "status": { "type": "string" },
+                  "text": { "type": "string" },
+                  "sourceUrl": { "type": "string", "format": "uri" }
+                }
+              },
+              "release": { "$ref": "#/definitions/releaseEvidence" }
+            }
+          },
+          "repositoryEvidence": {
+            "type": ["object", "null"],
+            "required": ["capturedAt", "repositoryScope", "repositoryApiUrl", "commitSha", "commitUrl", "readmePath", "readmeUrl", "readmeSha256", "readmeByteLength", "sections", "media", "release", "facts"],
+            "properties": {
+              "capturedAt": { "type": "string" },
+              "repositoryScope": { "type": "string", "enum": ["repository", "organization_profile"] },
+              "repositoryApiUrl": { "type": "string", "format": "uri" },
+              "commitSha": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+              "commitUrl": { "type": "string", "format": "uri" },
+              "readmePath": { "type": "string" },
+              "readmeUrl": { "type": "string", "format": "uri" },
+              "readmeSha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+              "readmeByteLength": { "type": "integer", "minimum": 1 },
+              "overviewExcerpt": { "type": ["string", "null"] },
+              "sections": { "type": "object" },
+              "media": { "type": "array" },
+              "release": { "$ref": "#/definitions/releaseEvidence" },
+              "facts": { "type": "object" }
+            }
+          },
           "automatedFields": { "type": "array", "items": { "type": "string" } },
           "manualFields": { "type": "array", "items": { "type": "string" } }
-        }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "resourceType": { "const": "tool" } } },
+            "then": { "required": ["toolProfile"] }
+          }
+        ]
       }
     }
   }

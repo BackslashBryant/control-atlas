@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-08-11T00:00:00.000Z",
+  "builtAt": "2026-08-12T00:00:00.000Z",
   "totalCount": 114,
   "collections": [
     {
@@ -5684,7 +5684,7 @@
       ],
       "accessType": "public",
       "costType": "free",
-      "maintenanceStatus": "active",
+      "maintenanceStatus": "archived",
       "openSource": true,
       "popularitySignals": {},
       "companionResources": [],

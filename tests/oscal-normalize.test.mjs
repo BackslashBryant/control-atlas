@@ -8,9 +8,26 @@ import {
   parse800172Catalog,
   parse80053Catalog,
   parseCsfCatalog,
+  validateOscalDocumentBoundary,
 } from '../tools/normalizers/oscal-normalize.mjs';
 
 const sample80053Assessment = JSON.parse(readFileSync('tests/fixtures/oscal/sample-800-53-assessment.json', 'utf8'));
+
+function validOscalCatalog(document) {
+  return {
+    ...document,
+    catalog: {
+      uuid: '3d77bcf2-7a51-4a2f-90df-d8968f470e2f',
+      metadata: {
+        title: 'Normalizer test catalog',
+        'last-modified': '2026-08-12T00:00:00Z',
+        version: '1.0.0',
+        'oscal-version': '1.1.2',
+      },
+      ...document.catalog,
+    },
+  };
+}
 
 test('OSCAL seam classifies supported Release 1 document models', () => {
   assert.equal(classifyOscalDocument(sample80053Assessment), 'catalog');
@@ -21,6 +38,20 @@ test('OSCAL seam classifies supported Release 1 document models', () => {
 
 test('OSCAL seam rejects unsupported document models', () => {
   assert.throws(() => classifyOscalDocument({ 'system-security-plan': { uuid: '1' } }), /Unsupported OSCAL document model/);
+});
+
+test('OSCAL application boundary rejects malformed supported models before normalization', () => {
+  assert.equal(validateOscalDocumentBoundary(sample80053Assessment), 'catalog');
+  const missingMetadata = structuredClone(sample80053Assessment);
+  delete missingMetadata.catalog.metadata;
+  assert.throws(
+    () => validateOscalDocumentBoundary(missingMetadata, 'catalog'),
+    /Invalid OSCAL catalog at application boundary/,
+  );
+  assert.throws(
+    () => validateOscalDocumentBoundary({ profile: { uuid: '3d77bcf2-7a51-4a2f-90df-d8968f470e2f' } }, 'profile'),
+    /Invalid OSCAL profile at application boundary/,
+  );
 });
 
 test('800-53 catalog normalization captures issue 11 assessment context', () => {
@@ -83,7 +114,7 @@ test('800-53 catalog normalization substitutes assignment and selection ODP mous
       }],
     },
   };
-  const result = parse80053Catalog(catalog, 'nist-oscal');
+  const result = parse80053Catalog(validOscalCatalog(catalog), 'nist-oscal');
   const record = result.records.find((item) => item.id === 'AC-2');
   assert.match(record.description, /\[Assignment: personnel or roles\]/);
   assert.match(record.description, /\[Selection \(one or more\): monthly; quarterly; annually\]/);
@@ -123,7 +154,7 @@ test('800-53 catalog normalization resolves nested selection choices and falls b
       }],
     },
   };
-  const result = parse80053Catalog(catalog, 'nist-oscal');
+  const result = parse80053Catalog(validOscalCatalog(catalog), 'nist-oscal');
   const record = result.records.find((item) => item.id === 'SC-30.3');
   assert.match(record.description, /\[Selection: \[Assignment: time frequency\]; random time intervals\]/);
 
@@ -143,7 +174,7 @@ test('800-53 catalog normalization resolves nested selection choices and falls b
       }],
     },
   };
-  const missingResult = parse80053Catalog(missingParamCatalog, 'nist-oscal');
+  const missingResult = parse80053Catalog(validOscalCatalog(missingParamCatalog), 'nist-oscal');
   const missingRecord = missingResult.records.find((item) => item.id === 'XX-1');
   assert.match(missingRecord.description, /\[Assignment: organization-defined value\]/);
 });
@@ -178,7 +209,7 @@ test('800-53 catalog normalization marks withdrawn controls and captures superse
       }],
     },
   };
-  const result = parse80053Catalog(catalog, 'nist-oscal');
+  const result = parse80053Catalog(validOscalCatalog(catalog), 'nist-oscal');
   const record = result.records.find((item) => item.id === 'AC-13');
   assert.equal(record.status, 'withdrawn');
   assert.deepEqual(record.metadata.superseded_by, ['AC-2', 'AU-6']);
@@ -200,7 +231,7 @@ test('800-172 catalog normalization preserves enhanced requirement identifiers',
       }],
     },
   };
-  const result = parse800172Catalog(catalog, 'nist-800-172-rev3');
+  const result = parse800172Catalog(validOscalCatalog(catalog), 'nist-800-172-rev3');
   assert.equal(result.source_key, 'nist-800-172-rev3');
   assert.deepEqual(result.records[0], {
     id: '3.1.1E',
@@ -240,7 +271,7 @@ test('800-53 catalog normalization separates Discussion from the control stateme
       }],
     },
   };
-  const result = parse80053Catalog(catalog, 'nist-oscal');
+  const result = parse80053Catalog(validOscalCatalog(catalog), 'nist-oscal');
   const record = result.records.find((item) => item.id === 'AC-2');
   assert.ok(record.description.length > 1200, 'statement text must not be capped');
   assert.ok(!record.description.endsWith('...'), 'statement must not be artificially truncated');
@@ -270,7 +301,7 @@ test('CSF 2.0 catalog normalization threads Function and Category grouping onto 
       }],
     },
   };
-  const result = parseCsfCatalog(catalog, 'nist-oscal');
+  const result = parseCsfCatalog(validOscalCatalog(catalog), 'nist-oscal');
   assert.equal(result.source_key, 'nist-oscal');
   assert.deepEqual(result.records[0], {
     id: 'GV.OC-01',

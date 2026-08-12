@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "documents": [
+    {
+      "source_key": "dod-zt-reference-architecture-v2",
+      "source_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
+      "retrieved_at": "2026-08-12",
+      "byte_length": 6733190,
+      "checksum": "sha256:b51eabcd5a41033164b701724ce40ac127f8eabda0826bb042761b508c8db799",
+      "pages": 104,
+      "atlas_role": "primary_publication"
+    },
+    {
+      "source_key": "dod-zt-strategy",
+      "source_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
+      "retrieved_at": "2026-08-12",
+      "byte_length": 6141341,
+      "checksum": "sha256:cba8e6093fbfa2a33f75f5fd286dd604b3d3ba4212350d1b528fe63462dea635",
+      "pages": 37,
+      "atlas_role": "primary_publication"
+    },
+    {
+      "source_key": "dod-zt-capabilities",
+      "source_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-CapabilitiesActivities.pdf",
+      "retrieved_at": "2026-08-12",
+      "byte_length": 651809,
+      "checksum": "sha256:756abc470d22dfddf399bcf3264b23c23fecedd8ac32b98b4f3461c96ed43be1",
+      "pages": 26,
+      "atlas_role": "primary_publication"
+    },
+    {
+      "source_key": "dod-zt-execution-roadmap",
+      "source_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
+      "retrieved_at": "2026-08-12",
+      "byte_length": 3540044,
+      "checksum": "sha256:cd25245394b6bf128425519f489468858ac8a4569226c046d0e4055283ca3774",
+      "pages": 54,
+      "atlas_role": "primary_publication"
+    },
+    {
+      "source_key": "dod-zt-overlays-2024",
+      "source_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
+      "retrieved_at": "2026-06-15",
+      "byte_length": 6398712,
+      "checksum": "sha256:196d381b7e74a2dc7b88e7d7705cf64e4389f35019282332b97d5a575f05f3fc",
+      "pages": 383,
+      "atlas_role": "primary_publication"
+    },
+    {
+      "source_key": "dod-zt-operational-technology",
+      "source_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-OperationalTechnologyActivitiesOutcomes_v2.pdf",
+      "retrieved_at": "2026-08-12",
+      "byte_length": 1602017,
+      "checksum": "sha256:34ddda61b7078e45255d9df2e7ccfab8e8741f3e7713467feef2b8964434a152",
+      "pages": 28,
+      "atlas_role": "primary_publication"
+    },
+    {
+      "source_key": "dod-zt-newsletter-2024-11",
+      "source_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-NewsletterNov.pdf",
+      "retrieved_at": "2026-08-12",
+      "byte_length": 1902008,
+      "checksum": "sha256:2be18eaf9c5b2c2d0aaf56d68514d49c5ea726f3540afb5fe81bb8b59fd3bc8b",
+      "pages": 2,
+      "atlas_role": "supporting_resource"
+    },
+    {
+      "source_key": "dod-zt-strategy-placemats",
+      "source_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-StrategyPlacemats.pdf",
+      "retrieved_at": "2026-08-12",
+      "byte_length": 740009,
+      "checksum": "sha256:453ba7af10d64034af963ef28da60b85c7a920d638388a4b153c8212113c85d3",
+      "pages": 2,
+      "atlas_role": "supporting_resource"
+    }
+  ],
+  "reconciliation": {
+    "documents_extracted": 8,
+    "atlas_documents": 6,
+    "supporting_documents": 2,
+    "pages_extracted": 636,
+    "tenets": 5,
+    "pillars": 7,
+    "capabilities": 45,
+    "enterprise_activities": 152,
+    "operational_technology_activities": 105,
+    "total_activities": 257,
+    "atlas_records_expected": 320,
+    "synthetic_records": 0,
+    "parser_failures": 0,
+    "overlay_relationships_discovered": 1910,
+    "overlay_relationships_published": 1903,
+    "overlay_relationships_rejected": 7
+  }
+}

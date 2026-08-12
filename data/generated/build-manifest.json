@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-12T01:43:31.195Z",
+  "generated_at": "2026-08-12T15:36:53.329Z",
   "build_manifest": {
     "kind": "build_manifest",
     "runtime_artifacts": [
@@ -21,16 +21,20 @@
       "source-manifests.json",
       "graph-diff-summary.json",
       "library-search.json",
-      "atlas-neighborhood-manifest.json"
+      "atlas-neighborhood-manifest.json",
+      "source-count-ledger.json",
+      "ingestion-stage-ledger.json",
+      "resource-ingestion-ledger.json",
+      "catalog-source-inventory.json"
     ],
     "source_registry_path": "data/source-registry.json",
     "source_registry_schema": "4.0",
     "counts": {
-      "sources": 122,
-      "nodes": 29387,
-      "edges": 72091,
-      "evidence": 72091,
-      "findings": 2
+      "sources": 192,
+      "nodes": 30775,
+      "edges": 76814,
+      "evidence": 76855,
+      "findings": 0
     }
   }
 }

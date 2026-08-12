@@ -66,6 +66,7 @@ function inlineFileProcedurePresentation(text) {
   const blocks = [];
   let cursor = 0;
   let match;
+  INLINE_FILE_PROCEDURE.lastIndex = 0;
   while ((match = INLINE_FILE_PROCEDURE.exec(text)) !== null) {
     const matchStart = match.index;
     const actionStart = matchStart;
@@ -91,6 +92,7 @@ function inlineFileProcedurePresentation(text) {
     if (nextProcedure < 0) break;
     INLINE_FILE_PROCEDURE.lastIndex = nextProcedure;
   }
+  INLINE_FILE_PROCEDURE.lastIndex = 0;
   const tail = makeParagraph(cursor, text.length);
   if (tail) blocks.push(tail);
   return blocks.some((block) => block.kind === "code")
@@ -107,8 +109,15 @@ export function buildSourceTextPresentation(value) {
   const text = String(value || "");
   if (!text.trim()) return { version: STRUCTURED_CONTENT_VERSION, blocks: [] };
 
+  // Publisher importers may preserve paragraph breaks around paths and
+  // configuration bodies. Detect the semantic file procedure before the
+  // line-oriented fallback so equivalent one-line and multiline source text
+  // receive the same list + exact-code presentation.
+  const fileProcedure = inlineFileProcedurePresentation(text);
+  if (fileProcedure) return fileProcedure;
+
   const lines = lineRanges(text);
-  if (lines.length === 1) return inlineFileProcedurePresentation(text) || inlineCommandPresentation(text) || {
+  if (lines.length === 1) return inlineCommandPresentation(text) || {
     version: STRUCTURED_CONTENT_VERSION,
     blocks: [{ kind: "paragraph", start: 0, end: text.length }],
   };

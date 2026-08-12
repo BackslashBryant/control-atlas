@@ -304,6 +304,27 @@ test('DISA XCCDF parser falls back to an explicit hintKind when no SRG/STIG sign
   assert.equal(result.records[0].type, 'stig_rule');
 });
 
+test('DISA compilation classifies an otherwise ambiguous public checklist as STIG with an explicit basis', () => {
+  const checklistXml = numericVersionSrgXml
+    .replace('Database_Generic', 'Traditional_Security_Checklist')
+    .replace('Database Security Requirements Guide', 'Traditional Security Checklist');
+  const archive = zipSync({
+    'U_Traditional_Security_Checklist_V2R9.zip': zipSync({
+      'U_Traditional_Security_Manual_Checklist_V2R9/U_Traditional_Security_Checklist_V2R9_Manual-xccdf.xml': strToU8(checklistXml),
+    }),
+  });
+
+  const result = parseDisaCompilationArchive(archive, {
+    artifactUrl: 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_STIG_Library.zip',
+    sourceKeys: { stig: 'disa-stig-library', srg: 'disa-srg-library' },
+  });
+
+  assert.equal(result.failed.length, 0);
+  assert.equal(result.stig.records.length, 1);
+  assert.equal(result.srg.records.length, 0);
+  assert.equal(result.stig.records[0].metadata.benchmark_id, 'Traditional_Security_Checklist');
+});
+
 test('DISA XCCDF parser preserves full-length prose fields without truncation', () => {
   const longDiscussion = 'A'.repeat(600);
   const longFix = 'B'.repeat(600);

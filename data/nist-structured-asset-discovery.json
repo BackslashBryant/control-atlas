@@ -1,0 +1,3135 @@
+{
+  "schema_version": "1.0",
+  "source_inventory": "data/nist-pages-discovery.json",
+  "source_inventory_sha256": "sha256:c326e8abdc8d31e9bd46e07af58c2d19a1bd5e8080accaac2795bacb52664066",
+  "reconciliation": {
+    "projects_discovered": 262,
+    "project_landing_pages_attempted": 262,
+    "pages_attempted": 342,
+    "pages_fetched": 338,
+    "pages_failed": 4,
+    "structured_assets_discovered": 28,
+    "spreadsheets_discovered": 8,
+    "csv_files_discovered": 4
+  },
+  "pages": [
+    {
+      "requested_url": "https://pages.nist.gov/2015-07-23-nist/",
+      "url": "https://pages.nist.gov/2015-07-23-nist/",
+      "project": "2015-07-23-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2015-09-23-nist/",
+      "url": "https://pages.nist.gov/2015-09-23-nist/",
+      "project": "2015-09-23-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2016-05-23-nist/",
+      "url": "https://pages.nist.gov/2016-05-23-nist/",
+      "project": "2016-05-23-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2016-05-26-nist/",
+      "url": "https://pages.nist.gov/2016-05-26-nist/",
+      "project": "2016-05-26-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2017-04-04-commerce-library/",
+      "url": "https://pages.nist.gov/2017-04-04-commerce-library/",
+      "project": "2017-04-04-commerce-library",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2017-04-11-nist/",
+      "url": "https://pages.nist.gov/2017-04-11-nist/",
+      "project": "2017-04-11-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2017-05-24-nist/",
+      "url": "https://pages.nist.gov/2017-05-24-nist/",
+      "project": "2017-05-24-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2017-06-26-nist/",
+      "url": "https://pages.nist.gov/2017-06-26-nist/",
+      "project": "2017-06-26-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2017-11-02-nist/",
+      "url": "https://pages.nist.gov/2017-11-02-nist/",
+      "project": "2017-11-02-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2018-03-13-census/",
+      "url": "https://pages.nist.gov/2018-03-13-census/",
+      "project": "2018-03-13-census",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2018-05-31-nist/",
+      "url": "https://pages.nist.gov/2018-05-31-nist/",
+      "project": "2018-05-31-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2018-09-10-nist/",
+      "url": "https://pages.nist.gov/2018-09-10-nist/",
+      "project": "2018-09-10-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2018-09-11-nist/",
+      "url": "https://pages.nist.gov/2018-09-11-nist/",
+      "project": "2018-09-11-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2018-09-20-nist/",
+      "url": "https://pages.nist.gov/2018-09-20-nist/",
+      "project": "2018-09-20-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2018-12-04-nist/",
+      "url": "https://pages.nist.gov/2018-12-04-nist/",
+      "project": "2018-12-04-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2019-05-22-nist/",
+      "url": "https://pages.nist.gov/2019-05-22-nist/",
+      "project": "2019-05-22-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2019-06_CCEM_presentation/",
+      "url": "https://pages.nist.gov/2019-06_CCEM_presentation/",
+      "project": "2019-06_CCEM_presentation",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2019-06-05-nist/",
+      "url": "https://pages.nist.gov/2019-06-05-nist/",
+      "project": "2019-06-05-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2019-08-21-nist/",
+      "url": "https://pages.nist.gov/2019-08-21-nist/",
+      "project": "2019-08-21-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2020-02-05-nist/",
+      "url": "https://pages.nist.gov/2020-02-05-nist/",
+      "project": "2020-02-05-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2020-04-10-nist/",
+      "url": "https://pages.nist.gov/2020-04-10-nist/",
+      "project": "2020-04-10-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2020-04-10-nist-git/",
+      "url": "https://pages.nist.gov/2020-04-10-nist-git/",
+      "project": "2020-04-10-nist-git",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2020-04-10-nist-python/",
+      "url": "https://pages.nist.gov/2020-04-10-nist-python/",
+      "project": "2020-04-10-nist-python",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2020-04-10-nist-r/",
+      "url": "https://pages.nist.gov/2020-04-10-nist-r/",
+      "project": "2020-04-10-nist-r",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2020-04-10-nist-shell/",
+      "url": "https://pages.nist.gov/2020-04-10-nist-shell/",
+      "project": "2020-04-10-nist-shell",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2020-04-10-nist-sql/",
+      "url": "https://pages.nist.gov/2020-04-10-nist-sql/",
+      "project": "2020-04-10-nist-sql",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2020-05-29-nist/",
+      "url": "https://pages.nist.gov/2020-05-29-nist/",
+      "project": "2020-05-29-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2020-12-15-nist-chimad/",
+      "url": "https://pages.nist.gov/2020-12-15-nist-chimad/",
+      "project": "2020-12-15-nist-chimad",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2021-05-26-nist/",
+      "url": "https://pages.nist.gov/2021-05-26-nist/",
+      "project": "2021-05-26-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2021-06-10-nist/",
+      "url": "https://pages.nist.gov/2021-06-10-nist/",
+      "project": "2021-06-10-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2021-10-22-ctcms-online/",
+      "url": "https://pages.nist.gov/2021-10-22-ctcms-online/",
+      "project": "2021-10-22-ctcms-online",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2021-11-09-nist/",
+      "url": "https://pages.nist.gov/2021-11-09-nist/",
+      "project": "2021-11-09-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2022-01-27-nist-branching-online/",
+      "url": "https://pages.nist.gov/2022-01-27-nist-branching-online/",
+      "project": "2022-01-27-nist-branching-online",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2022-02-04-ctcms-online/",
+      "url": "https://pages.nist.gov/2022-02-04-ctcms-online/",
+      "project": "2022-02-04-ctcms-online",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2022-04-05-nist-online/",
+      "url": "https://pages.nist.gov/2022-04-05-nist-online/",
+      "project": "2022-04-05-nist-online",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2022-05-26-nist/",
+      "url": "https://pages.nist.gov/2022-05-26-nist/",
+      "project": "2022-05-26-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2022-06-24-nist/",
+      "url": "https://pages.nist.gov/2022-06-24-nist/",
+      "project": "2022-06-24-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2023-05-24-nist/",
+      "url": "https://pages.nist.gov/2023-05-24-nist/",
+      "project": "2023-05-24-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2024-06-10-nist/",
+      "url": "https://pages.nist.gov/2024-06-10-nist/",
+      "project": "2024-06-10-nist",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2024-07-12-SURF/",
+      "url": "https://pages.nist.gov/2024-07-12-SURF/",
+      "project": "2024-07-12-SURF",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2025-01-15-blackbird/",
+      "url": "https://pages.nist.gov/2025-01-15-blackbird/",
+      "project": "2025-01-15-blackbird",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/2025-04-16-blackbird/",
+      "url": "https://pages.nist.gov/2025-04-16-blackbird/",
+      "project": "2025-04-16-blackbird",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/800-157r1/",
+      "url": "https://pages.nist.gov/800-157r1/",
+      "project": "800-157r1",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/800-217/",
+      "url": "https://pages.nist.gov/800-217/",
+      "project": "800-217",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/800-63-3/",
+      "url": "https://pages.nist.gov/800-63-3/",
+      "project": "800-63-3",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/800-63-3-Implementation-Resources/",
+      "url": "https://pages.nist.gov/800-63-3-Implementation-Resources/",
+      "project": "800-63-3-Implementation-Resources",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/800-63-3-Implementation-Resources/63A/",
+      "url": "https://pages.nist.gov/800-63-3-Implementation-Resources/63A/",
+      "project": "800-63-3-Implementation-Resources",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/800-63-3-Implementation-Resources/63B/",
+      "url": "https://pages.nist.gov/800-63-3-Implementation-Resources/63B/",
+      "project": "800-63-3-Implementation-Resources",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/800-63-3-Implementation-Resources/63C/",
+      "url": "https://pages.nist.gov/800-63-3-Implementation-Resources/63C/",
+      "project": "800-63-3-Implementation-Resources",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/800-63-4/",
+      "url": "https://pages.nist.gov/800-63-4/",
+      "project": "800-63-4",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/800-63-FAQ/",
+      "url": "https://pages.nist.gov/800-63-FAQ/",
+      "project": "800-63-FAQ",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/800-63-FAQ/",
+      "url": "https://pages.nist.gov/800-63-FAQ/",
+      "project": "800-63-FAQ",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/800-63-Public-Comments/",
+      "url": "https://pages.nist.gov/800-63-Public-Comments/",
+      "project": "800-63-Public-Comments",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ACMVPDocs/",
+      "url": "https://pages.nist.gov/ACMVPDocs/",
+      "project": "ACMVPDocs",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ACMVPDocs/appendix-e/MappingtoNIST800Series.html",
+      "url": "https://pages.nist.gov/ACMVPDocs/appendix-e/MappingtoNIST800Series.html",
+      "project": "ACMVPDocs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ACVP/",
+      "url": "https://pages.nist.gov/ACVP/",
+      "project": "ACVP",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/affinis/",
+      "url": "https://pages.nist.gov/affinis/",
+      "project": "affinis",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/AFL-agent/",
+      "url": "https://pages.nist.gov/AFL-agent/",
+      "project": "AFL-agent",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/AFL-automation/",
+      "url": "https://pages.nist.gov/AFL-automation/",
+      "project": "AFL-automation",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/AGA8/",
+      "url": "https://pages.nist.gov/AGA8/",
+      "project": "AGA8",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 3
+    },
+    {
+      "requested_url": "https://pages.nist.gov/Agentic-AI-in-AM/",
+      "url": "https://pages.nist.gov/Agentic-AI-in-AM/",
+      "project": "Agentic-AI-in-AM",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ai-bugfinder-testbed/",
+      "url": "https://pages.nist.gov/ai-bugfinder-testbed/",
+      "project": "ai-bugfinder-testbed",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ai-technology-evaluation/",
+      "url": "https://pages.nist.gov/ai-technology-evaluation/",
+      "project": "ai-technology-evaluation",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/AMRS/",
+      "url": "https://pages.nist.gov/AMRS/",
+      "project": "AMRS",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/analphipy/",
+      "url": "https://pages.nist.gov/analphipy/",
+      "project": "analphipy",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ARIAC_docs/",
+      "url": "https://pages.nist.gov/ARIAC_docs/",
+      "project": "ARIAC_docs",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/artiq_scan_framework/",
+      "url": "https://pages.nist.gov/artiq_scan_framework/",
+      "project": "artiq_scan_framework",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/asmg_workflow/",
+      "url": "https://pages.nist.gov/asmg_workflow/",
+      "project": "asmg_workflow",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/atom-probe-peak-fitting/",
+      "url": "https://pages.nist.gov/atom-probe-peak-fitting/",
+      "project": "atom-probe-peak-fitting",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/BF/",
+      "url": "https://pages.nist.gov/BF/",
+      "project": "BF",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/biometrics-edu/",
+      "url": "https://pages.nist.gov/biometrics-edu/",
+      "project": "biometrics-edu",
+      "depth": 0,
+      "status": "failed",
+      "reason": "The operation was aborted due to timeout",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/blossom/",
+      "url": "https://pages.nist.gov/blossom/",
+      "project": "blossom",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/BoteSalvatICX.jl/",
+      "url": "https://pages.nist.gov/BoteSalvatICX.jl/",
+      "project": "BoteSalvatICX.jl",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/CAD-PMI-Testing/",
+      "url": "https://pages.nist.gov/CAD-PMI-Testing/",
+      "project": "CAD-PMI-Testing",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/CastVoteRecords/",
+      "url": "https://pages.nist.gov/CastVoteRecords/",
+      "project": "CastVoteRecords",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/cdf-test-method/",
+      "url": "https://pages.nist.gov/cdf-test-method/",
+      "project": "cdf-test-method",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/cfast/",
+      "url": "https://pages.nist.gov/cfast/",
+      "project": "cfast",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/chimad-phase-field/",
+      "url": "https://pages.nist.gov/chimad-phase-field/",
+      "project": "chimad-phase-field",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/CHIPS-AWACKSM-data/",
+      "url": "https://pages.nist.gov/CHIPS-AWACKSM-data/",
+      "project": "CHIPS-AWACKSM-data",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/christmas_tree_fire_safety/",
+      "url": "https://pages.nist.gov/christmas_tree_fire_safety/",
+      "project": "christmas_tree_fire_safety",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/circular-economy-manufacturing-models/",
+      "url": "https://pages.nist.gov/circular-economy-manufacturing-models/",
+      "project": "circular-economy-manufacturing-models",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/cmomy/",
+      "url": "https://pages.nist.gov/cmomy/",
+      "project": "cmomy",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/CONTAM-apps/",
+      "url": "https://pages.nist.gov/CONTAM-apps/",
+      "project": "CONTAM-apps",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/Contingency/",
+      "url": "https://pages.nist.gov/Contingency/",
+      "project": "Contingency",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/cookiecutter-nist-python/",
+      "url": "https://pages.nist.gov/cookiecutter-nist-python/",
+      "project": "cookiecutter-nist-python",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/cpe-reference-implementation/",
+      "url": "https://pages.nist.gov/cpe-reference-implementation/",
+      "project": "cpe-reference-implementation",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/cpspwg/",
+      "url": "https://pages.nist.gov/cpspwg/",
+      "project": "cpspwg",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/cpspwg/library",
+      "url": "https://pages.nist.gov/cpspwg/library/",
+      "project": "cpspwg",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/cyrsoxs/",
+      "url": "https://pages.nist.gov/cyrsoxs/",
+      "project": "cyrsoxs",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/decima/",
+      "url": "https://pages.nist.gov/decima/",
+      "project": "decima",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/detection_limits/",
+      "url": "https://pages.nist.gov/detection_limits/",
+      "project": "detection_limits",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/digital-traceability-home/",
+      "url": "https://pages.nist.gov/digital-traceability-home/",
+      "project": "digital-traceability-home",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/dimspec/",
+      "url": "https://pages.nist.gov/dimspec/",
+      "project": "dimspec",
+      "depth": 0,
+      "status": "failed",
+      "reason": "HTTP 403",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/dioptra/",
+      "url": "https://pages.nist.gov/dioptra/",
+      "project": "dioptra",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/disaster-failure-studies-portal/",
+      "url": "https://pages.nist.gov/disaster-failure-studies-portal/",
+      "project": "disaster-failure-studies-portal",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/Docs4NIST/",
+      "url": "https://pages.nist.gov/Docs4NIST/",
+      "project": "Docs4NIST",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/eerc/",
+      "url": "https://pages.nist.gov/eerc/",
+      "project": "eerc",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/eerc2022/",
+      "url": "https://pages.nist.gov/eerc2022/",
+      "project": "eerc2022",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/eerc2023/",
+      "url": "https://pages.nist.gov/eerc2023/",
+      "project": "eerc2023",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/eerc2025/",
+      "url": "https://pages.nist.gov/eerc2025/",
+      "project": "eerc2025",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/elabftw-python-api/",
+      "url": "https://pages.nist.gov/elabftw-python-api/",
+      "project": "elabftw-python-api",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ElectionEventLogging/",
+      "url": "https://pages.nist.gov/ElectionEventLogging/",
+      "project": "ElectionEventLogging",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ElectionGlossary/",
+      "url": "https://pages.nist.gov/ElectionGlossary/",
+      "project": "ElectionGlossary",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ElectionModeling/",
+      "url": "https://pages.nist.gov/ElectionModeling/",
+      "project": "ElectionModeling",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ElectionResultsReporting/",
+      "url": "https://pages.nist.gov/ElectionResultsReporting/",
+      "project": "ElectionResultsReporting",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/elft/",
+      "url": "https://pages.nist.gov/elft/",
+      "project": "elft",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/err-schema-docs/",
+      "url": "https://pages.nist.gov/err-schema-docs/",
+      "project": "err-schema-docs",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/etspy/",
+      "url": "https://pages.nist.gov/etspy/",
+      "project": "etspy",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/experimental_design/",
+      "url": "https://pages.nist.gov/experimental_design/",
+      "project": "experimental_design",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/fds/",
+      "url": "https://pages.nist.gov/fds/",
+      "project": "fds",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/fds-smv/",
+      "url": "https://pages.nist.gov/fds-smv/",
+      "project": "fds-smv",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/feasst/",
+      "url": "https://pages.nist.gov/feasst/",
+      "project": "feasst",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/FederalProfile-8259A/",
+      "url": "https://pages.nist.gov/FederalProfile-8259A/",
+      "project": "FederalProfile-8259A",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/FFAST.jl/",
+      "url": "https://pages.nist.gov/FFAST.jl/",
+      "project": "FFAST.jl",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/FIPS201/",
+      "url": "https://pages.nist.gov/FIPS201/",
+      "project": "FIPS201",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/fipy/",
+      "url": "https://pages.nist.gov/fipy/",
+      "project": "fipy",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/fireflow/",
+      "url": "https://pages.nist.gov/fireflow/",
+      "project": "fireflow",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/frif/",
+      "url": "https://pages.nist.gov/frif/",
+      "project": "frif",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/frifte/",
+      "url": "https://pages.nist.gov/frifte/",
+      "project": "frifte",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/frvt/",
+      "url": "https://pages.nist.gov/frvt/",
+      "project": "frvt",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/GCTC/",
+      "url": "https://pages.nist.gov/GCTC/",
+      "project": "GCTC",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/generate_alchemical_lammps_inputs/",
+      "url": "https://pages.nist.gov/generate_alchemical_lammps_inputs/",
+      "project": "generate_alchemical_lammps_inputs",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/genomics_ppfl/",
+      "url": "https://pages.nist.gov/genomics_ppfl/",
+      "project": "genomics_ppfl",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/git-novice-MSE/",
+      "url": "https://pages.nist.gov/git-novice-MSE/",
+      "project": "git-novice-MSE",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/Golden-Datasets-for-AI-in-AM/",
+      "url": "https://pages.nist.gov/Golden-Datasets-for-AI-in-AM/",
+      "project": "Golden-Datasets-for-AI-in-AM",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/hedgehog/",
+      "url": "https://pages.nist.gov/hedgehog/",
+      "project": "hedgehog",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/hedgehog-Tutorials/",
+      "url": "https://pages.nist.gov/hedgehog-Tutorials/",
+      "project": "hedgehog-Tutorials",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/hiperc/",
+      "url": "https://pages.nist.gov/hiperc/",
+      "project": "hiperc",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/HLG-MOS_Synthetic_Data_Test_Drive/",
+      "url": "https://pages.nist.gov/HLG-MOS_Synthetic_Data_Test_Drive/",
+      "project": "HLG-MOS_Synthetic_Data_Test_Drive",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/HTGS/",
+      "url": "https://pages.nist.gov/HTGS/",
+      "project": "HTGS",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/hugo-uswds-docs/",
+      "url": "https://pages.nist.gov/hugo-uswds-docs/",
+      "project": "hugo-uswds-docs",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/hyperspy_tutorial/",
+      "url": "https://pages.nist.gov/hyperspy_tutorial/",
+      "project": "hyperspy_tutorial",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IARPA-N2N/",
+      "url": "https://pages.nist.gov/IARPA-N2N/",
+      "project": "IARPA-N2N",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/iEdison-API-Documentation/",
+      "url": "https://pages.nist.gov/iEdison-API-Documentation/",
+      "project": "iEdison-API-Documentation",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ifpc/",
+      "url": "https://pages.nist.gov/ifpc/",
+      "project": "ifpc",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/interlab_py/",
+      "url": "https://pages.nist.gov/interlab_py/",
+      "project": "interlab_py",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/background/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/background/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/catalog.md",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/catalog.md",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "failed",
+      "reason": "HTTP 404",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/FAQs/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/FAQs/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/feedback/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/feedback/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/informative_references/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/informative_references/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 2
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/nontechnical/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/nontechnical/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/nontechnical/manufacturer/documentation/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/nontechnical/manufacturer/documentation/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/nontechnical/manufacturer/education/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/nontechnical/manufacturer/education/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/nontechnical/manufacturer/information/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/nontechnical/manufacturer/information/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/nontechnical/manufacturer/query/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/nontechnical/manufacturer/query/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/configuration/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/configuration/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/identity/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/identity/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/logical/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/logical/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/protection/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/protection/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/security/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/security/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/state/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/state/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/update/",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/technical/update/",
+      "project": "IoT-Device-Cybersecurity-Requirement-Catalogs",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/IREX10/",
+      "url": "https://pages.nist.gov/IREX10/",
+      "project": "IREX10",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/jarvis/",
+      "url": "https://pages.nist.gov/jarvis/",
+      "project": "jarvis",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/jarvis_leaderboard/",
+      "url": "https://pages.nist.gov/jarvis_leaderboard/",
+      "project": "jarvis_leaderboard",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/labbench/",
+      "url": "https://pages.nist.gov/labbench/",
+      "project": "labbench",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/leaveNotice/",
+      "url": "https://pages.nist.gov/leaveNotice/",
+      "project": "leaveNotice",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/libbiomeval/",
+      "url": "https://pages.nist.gov/libbiomeval/",
+      "project": "libbiomeval",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/liboscal-java/",
+      "url": "https://pages.nist.gov/liboscal-java/",
+      "project": "liboscal-java",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/Lineage-Mapper/",
+      "url": "https://pages.nist.gov/Lineage-Mapper/",
+      "project": "Lineage-Mapper",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/los_simulation/",
+      "url": "https://pages.nist.gov/los_simulation/",
+      "project": "los_simulation",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/macos_security/",
+      "url": "https://pages.nist.gov/macos_security/",
+      "project": "macos_security",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/macos_security/more-information/resources/",
+      "url": "https://pages.nist.gov/macos_security/more-information/resources/",
+      "project": "macos_security",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/MAS_example/",
+      "url": "https://pages.nist.gov/MAS_example/",
+      "project": "MAS_example",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/masskit/",
+      "url": "https://pages.nist.gov/masskit/",
+      "project": "masskit",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/masskit_ai/",
+      "url": "https://pages.nist.gov/masskit_ai/",
+      "project": "masskit_ai",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/material-schema/",
+      "url": "https://pages.nist.gov/material-schema/",
+      "project": "material-schema",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/MATS/",
+      "url": "https://pages.nist.gov/MATS/",
+      "project": "MATS",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mbuild_polybuild/",
+      "url": "https://pages.nist.gov/mbuild_polybuild/",
+      "project": "mbuild_polybuild",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mCDF/",
+      "url": "https://pages.nist.gov/mCDF/",
+      "project": "mCDF",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/Metal_Sample/",
+      "url": "https://pages.nist.gov/Metal_Sample/",
+      "project": "Metal_Sample",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/metaschema/",
+      "url": "https://pages.nist.gov/metaschema/",
+      "project": "metaschema",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/metaschema-java/",
+      "url": "https://pages.nist.gov/metaschema-java/",
+      "project": "metaschema-java",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/microbial-lims/",
+      "url": "https://pages.nist.gov/microbial-lims/",
+      "project": "microbial-lims",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/microcalorimetry-ipages/",
+      "url": "https://pages.nist.gov/microcalorimetry-ipages/",
+      "project": "microcalorimetry-ipages",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/minex/",
+      "url": "https://pages.nist.gov/minex/",
+      "project": "minex",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 3
+    },
+    {
+      "requested_url": "https://pages.nist.gov/MIST/",
+      "url": "https://pages.nist.gov/MIST/",
+      "project": "MIST",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ml_uncertainty_py/",
+      "url": "https://pages.nist.gov/ml_uncertainty_py/",
+      "project": "ml_uncertainty_py",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/MLXN25/",
+      "url": "https://pages.nist.gov/MLXN25/",
+      "project": "MLXN25",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/MLXN26/",
+      "url": "https://pages.nist.gov/MLXN26/",
+      "project": "MLXN26",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/",
+      "project": "mobile-threat-catalogue",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/acronyms.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/acronyms.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/application.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/application.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/authentication.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/authentication.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/background",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/background/",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/background/",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/background/",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/background/mobile-attack-surface/",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/background/mobile-attack-surface/",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/background/mobile-attack-surface/communication-mechanisms.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/background/mobile-attack-surface/communication-mechanisms.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/background/mobile-attack-surface/mobile-ecosystem.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/background/mobile-attack-surface/mobile-ecosystem.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/background/mobile-attack-surface/supply-chain.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/background/mobile-attack-surface/supply-chain.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/background/mobile-attack-surface/tech-stack.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/background/mobile-attack-surface/tech-stack.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/background/mtc-overview/",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/background/mtc-overview/",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/categories.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/categories.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/cellular.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/cellular.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/contributing.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/contributing.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/cve-list.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/cve-list.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/downloads.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/downloads.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 3
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/ecosystem.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/ecosystem.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/emm.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/emm.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/gps.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/gps.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/lan-pan.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/lan-pan.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/payment.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/payment.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/physical.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/physical.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/privacy.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/privacy.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mobile-threat-catalogue/stack.html",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/stack.html",
+      "project": "mobile-threat-catalogue",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/module-utilities/",
+      "url": "https://pages.nist.gov/module-utilities/",
+      "project": "module-utilities",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mosaic/",
+      "url": "https://pages.nist.gov/mosaic/",
+      "project": "mosaic",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/mumpce_py/",
+      "url": "https://pages.nist.gov/mumpce_py/",
+      "project": "mumpce_py",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nccoe-devsecops/",
+      "url": "https://pages.nist.gov/nccoe-devsecops/",
+      "project": "nccoe-devsecops",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nccoe-devsecops/appendix-c.html",
+      "url": "https://pages.nist.gov/nccoe-devsecops/appendix-c.html",
+      "project": "nccoe-devsecops",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nccoe-genomic-data-threat-modeling/",
+      "url": "https://pages.nist.gov/nccoe-genomic-data-threat-modeling/",
+      "project": "nccoe-genomic-data-threat-modeling",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nccoe-genomic-data-threat-modeling/",
+      "url": "https://pages.nist.gov/nccoe-genomic-data-threat-modeling/",
+      "project": "nccoe-genomic-data-threat-modeling",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nccoe-genomic-data-threat-modeling/Vol_C/index.html",
+      "url": "https://pages.nist.gov/nccoe-genomic-data-threat-modeling/Vol_C/index.html",
+      "project": "nccoe-genomic-data-threat-modeling",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nccoe-genomic-data-threat-modeling/Vol_C/PTM/index.html",
+      "url": "https://pages.nist.gov/nccoe-genomic-data-threat-modeling/Vol_C/PTM/index.html",
+      "project": "nccoe-genomic-data-threat-modeling",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nccoe-mdl-project-static-website/",
+      "url": "https://pages.nist.gov/nccoe-mdl-project-static-website/",
+      "project": "nccoe-mdl-project-static-website",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nccoe-migration-post-quantum-cryptography/",
+      "url": "https://pages.nist.gov/nccoe-migration-post-quantum-cryptography/",
+      "project": "nccoe-migration-post-quantum-cryptography",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nccoe-tls-visibility/",
+      "url": "https://pages.nist.gov/nccoe-tls-visibility/",
+      "project": "nccoe-tls-visibility",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nccoe-tls-visibility/AppCScenarios/ds-10.html",
+      "url": "https://pages.nist.gov/nccoe-tls-visibility/AppCScenarios/ds-10.html",
+      "project": "nccoe-tls-visibility",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nccoe-tls-visibility/P_AppendixG.html",
+      "url": "https://pages.nist.gov/nccoe-tls-visibility/P_AppendixG.html",
+      "project": "nccoe-tls-visibility",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nestor/",
+      "url": "https://pages.nist.gov/nestor/",
+      "project": "nestor",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/netzero/",
+      "url": "https://pages.nist.gov/netzero/",
+      "project": "netzero",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NeXLCore.jl/",
+      "url": "https://pages.nist.gov/NeXLCore.jl/",
+      "project": "NeXLCore.jl",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NeXLMatrixCorrection.jl/",
+      "url": "https://pages.nist.gov/NeXLMatrixCorrection.jl/",
+      "project": "NeXLMatrixCorrection.jl",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NeXLSpectrum.jl/",
+      "url": "https://pages.nist.gov/NeXLSpectrum.jl/",
+      "project": "NeXLSpectrum.jl",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NeXLUncertainties.jl/",
+      "url": "https://pages.nist.gov/NeXLUncertainties.jl/",
+      "project": "NeXLUncertainties.jl",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NexusLIMS/",
+      "url": "https://pages.nist.gov/NexusLIMS/",
+      "project": "NexusLIMS",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nfflr/",
+      "url": "https://pages.nist.gov/nfflr/",
+      "project": "nfflr",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NFIQ2/",
+      "url": "https://pages.nist.gov/NFIQ2/",
+      "project": "NFIQ2",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nist-header-footer/",
+      "url": "https://pages.nist.gov/nist-header-footer/",
+      "project": "nist-header-footer",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NIST-Tech-Pubs/",
+      "url": "https://pages.nist.gov/NIST-Tech-Pubs/",
+      "project": "NIST-Tech-Pubs",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NISTIR-8112/",
+      "url": "https://pages.nist.gov/NISTIR-8112/",
+      "project": "NISTIR-8112",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NISTIR-8149/",
+      "url": "https://pages.nist.gov/NISTIR-8149/",
+      "project": "NISTIR-8149",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NistPluggableModules/",
+      "url": "https://pages.nist.gov/NistPluggableModules/",
+      "project": "NistPluggableModules",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NLPER/",
+      "url": "https://pages.nist.gov/NLPER/",
+      "project": "NLPER",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/nn-calculator/",
+      "url": "https://pages.nist.gov/nn-calculator/",
+      "project": "nn-calculator",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/NRSS/",
+      "url": "https://pages.nist.gov/NRSS/",
+      "project": "NRSS",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/open-notebook/",
+      "url": "https://pages.nist.gov/open-notebook/",
+      "project": "open-notebook",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/OpenSeadragonFiltering/",
+      "url": "https://pages.nist.gov/OpenSeadragonFiltering/",
+      "project": "OpenSeadragonFiltering",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/OpenSeadragonPixelColor/",
+      "url": "https://pages.nist.gov/OpenSeadragonPixelColor/",
+      "project": "OpenSeadragonPixelColor",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/OpenSeadragonScalebar/",
+      "url": "https://pages.nist.gov/OpenSeadragonScalebar/",
+      "project": "OpenSeadragonScalebar",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/opensource/",
+      "url": "https://pages.nist.gov/opensource/",
+      "project": "opensource",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/optbayesexpt/",
+      "url": "https://pages.nist.gov/optbayesexpt/",
+      "project": "optbayesexpt",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/OSCAL/",
+      "url": "https://pages.nist.gov/OSCAL/",
+      "project": "OSCAL",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/OSCAL/",
+      "url": "https://pages.nist.gov/OSCAL/",
+      "project": "OSCAL",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/OSCAL/resources",
+      "url": "https://pages.nist.gov/OSCAL/resources/",
+      "project": "OSCAL",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/oscal-cli/",
+      "url": "https://pages.nist.gov/oscal-cli/",
+      "project": "oscal-cli",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/OSCAL-Pages/",
+      "url": "https://pages.nist.gov/OSCAL-Pages/",
+      "project": "OSCAL-Pages",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/OSCAL-Reference/",
+      "url": "https://pages.nist.gov/OSCAL-Reference/",
+      "project": "OSCAL-Reference",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/oscal-tools/",
+      "url": "https://pages.nist.gov/oscal-tools/",
+      "project": "oscal-tools",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/oscal-tools/",
+      "url": "https://pages.nist.gov/oscal-tools/",
+      "project": "oscal-tools",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/OSCALER/",
+      "url": "https://pages.nist.gov/OSCALER/",
+      "project": "OSCALER",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/oss-maven/",
+      "url": "https://pages.nist.gov/oss-maven/",
+      "project": "oss-maven",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/Pages-Template/",
+      "url": "https://pages.nist.gov/Pages-Template/",
+      "project": "Pages-Template",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/PARTF/",
+      "url": "https://pages.nist.gov/PARTF/",
+      "project": "PARTF",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/PEDEditor/",
+      "url": "https://pages.nist.gov/PEDEditor/",
+      "project": "PEDEditor",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/pf-recommended-practices/",
+      "url": "https://pages.nist.gov/pf-recommended-practices/",
+      "project": "pf-recommended-practices",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/pfhub/",
+      "url": "https://pages.nist.gov/pfhub/",
+      "project": "pfhub",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/pfhub-cli/",
+      "url": "https://pages.nist.gov/pfhub-cli/",
+      "project": "pfhub-cli",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/pft/",
+      "url": "https://pages.nist.gov/pft/",
+      "project": "pft",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/PIV-Public-Comments/",
+      "url": "https://pages.nist.gov/PIV-Public-Comments/",
+      "project": "PIV-Public-Comments",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/piv-standards/",
+      "url": "https://pages.nist.gov/piv-standards/",
+      "project": "piv-standards",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/piv-standards/sp800-73pt1",
+      "url": "https://pages.nist.gov/piv-standards/sp800-73pt1/",
+      "project": "piv-standards",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ppdiffuse/",
+      "url": "https://pages.nist.gov/ppdiffuse/",
+      "project": "ppdiffuse",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/privacy_collaborative_research_cycle/",
+      "url": "https://pages.nist.gov/privacy_collaborative_research_cycle/",
+      "project": "privacy_collaborative_research_cycle",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/Public_Safety_Analytics_Resources/",
+      "url": "https://pages.nist.gov/Public_Safety_Analytics_Resources/",
+      "project": "Public_Safety_Analytics_Resources",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 1
+    },
+    {
+      "requested_url": "https://pages.nist.gov/PublicSafetyUseCases/",
+      "url": "https://pages.nist.gov/PublicSafetyUseCases/",
+      "project": "PublicSafetyUseCases",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/PyHyperScattering/",
+      "url": "https://pages.nist.gov/PyHyperScattering/",
+      "project": "PyHyperScattering",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/pyMCR/",
+      "url": "https://pages.nist.gov/pyMCR/",
+      "project": "pyMCR",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/pyproject2conda/",
+      "url": "https://pages.nist.gov/pyproject2conda/",
+      "project": "pyproject2conda",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/pySCATMECH/",
+      "url": "https://pages.nist.gov/pySCATMECH/",
+      "project": "pySCATMECH",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/rad_calculator/",
+      "url": "https://pages.nist.gov/rad_calculator/",
+      "project": "rad_calculator",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/RDaF-site/",
+      "url": "https://pages.nist.gov/RDaF-site/",
+      "project": "RDaF-site",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/reflectometry-calculators/",
+      "url": "https://pages.nist.gov/reflectometry-calculators/",
+      "project": "reflectometry-calculators",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/REFPROP-docs/",
+      "url": "https://pages.nist.gov/REFPROP-docs/",
+      "project": "REFPROP-docs",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 3
+    },
+    {
+      "requested_url": "https://pages.nist.gov/remi/",
+      "url": "https://pages.nist.gov/remi/",
+      "project": "remi",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/REPO/",
+      "url": "https://pages.nist.gov/REPO/",
+      "project": "REPO",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/rmellipse/",
+      "url": "https://pages.nist.gov/rmellipse/",
+      "project": "rmellipse",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/rmellipse-ipages/",
+      "url": "https://pages.nist.gov/rmellipse-ipages/",
+      "project": "rmellipse-ipages",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/rminstr-ipages/",
+      "url": "https://pages.nist.gov/rminstr-ipages/",
+      "project": "rminstr-ipages",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/rminstr-specs-ipages/",
+      "url": "https://pages.nist.gov/rminstr-specs-ipages/",
+      "project": "rminstr-specs-ipages",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/rsoxs/",
+      "url": "https://pages.nist.gov/rsoxs/",
+      "project": "rsoxs",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/SCATMECH/",
+      "url": "https://pages.nist.gov/SCATMECH/",
+      "project": "SCATMECH",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ScatterMIST/",
+      "url": "https://pages.nist.gov/ScatterMIST/",
+      "project": "ScatterMIST",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/sctools/",
+      "url": "https://pages.nist.gov/sctools/",
+      "project": "sctools",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 3
+    },
+    {
+      "requested_url": "https://pages.nist.gov/sctools/schemas/core.rnc",
+      "url": "https://pages.nist.gov/sctools/schemas/core.rnc",
+      "project": "sctools",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/sctools/schemas/core.xsd",
+      "url": "https://pages.nist.gov/sctools/schemas/core.xsd",
+      "project": "sctools",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/sctools/schemas/profile.rnc",
+      "url": "https://pages.nist.gov/sctools/schemas/profile.rnc",
+      "project": "sctools",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/sctools/schemas/profile.xsd",
+      "url": "https://pages.nist.gov/sctools/schemas/profile.xsd",
+      "project": "sctools",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/sctools/schemas/tailored.rnc",
+      "url": "https://pages.nist.gov/sctools/schemas/tailored.rnc",
+      "project": "sctools",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/sctools/schemas/tailored.xsd",
+      "url": "https://pages.nist.gov/sctools/schemas/tailored.xsd",
+      "project": "sctools",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/SEA-DATA/",
+      "url": "https://pages.nist.gov/SEA-DATA/",
+      "project": "SEA-DATA",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/seized-material-sampling-app/",
+      "url": "https://pages.nist.gov/seized-material-sampling-app/",
+      "project": "seized-material-sampling-app",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/sesame/",
+      "url": "https://pages.nist.gov/sesame/",
+      "project": "sesame",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/slapseg/",
+      "url": "https://pages.nist.gov/slapseg/",
+      "project": "slapseg",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/smartcitiesarchitecture/",
+      "url": "https://pages.nist.gov/smartcitiesarchitecture/",
+      "project": "smartcitiesarchitecture",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/SOEN-PDK/",
+      "url": "https://pages.nist.gov/SOEN-PDK/",
+      "project": "SOEN-PDK",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/SOFA/",
+      "url": "https://pages.nist.gov/SOFA/",
+      "project": "SOFA",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/srse/",
+      "url": "https://pages.nist.gov/srse/",
+      "project": "srse",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ssmdevices/",
+      "url": "https://pages.nist.gov/ssmdevices/",
+      "project": "ssmdevices",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/steppyngstounes/",
+      "url": "https://pages.nist.gov/steppyngstounes/",
+      "project": "steppyngstounes",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/striqt/",
+      "url": "https://pages.nist.gov/striqt/",
+      "project": "striqt",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/swid-tools/",
+      "url": "https://pages.nist.gov/swid-tools/",
+      "project": "swid-tools",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/TEChallenge/",
+      "url": "https://pages.nist.gov/TEChallenge/",
+      "project": "TEChallenge",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/teqp-docs/",
+      "url": "https://pages.nist.gov/teqp-docs/",
+      "project": "teqp-docs",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/thermoextrap/",
+      "url": "https://pages.nist.gov/thermoextrap/",
+      "project": "thermoextrap",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ThreeBodyTB.jl/",
+      "url": "https://pages.nist.gov/ThreeBodyTB.jl/",
+      "project": "ThreeBodyTB.jl",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/TIG-Stage/",
+      "url": "https://pages.nist.gov/TIG-Stage/",
+      "project": "TIG-Stage",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/tls-web-portal/",
+      "url": "https://pages.nist.gov/tls-web-portal/",
+      "project": "tls-web-portal",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/tmmc-lnpy/",
+      "url": "https://pages.nist.gov/tmmc-lnpy/",
+      "project": "tmmc-lnpy",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/traction-lithium-battery-recovery/",
+      "url": "https://pages.nist.gov/traction-lithium-battery-recovery/",
+      "project": "traction-lithium-battery-recovery",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/trec-browser/",
+      "url": "https://pages.nist.gov/trec-browser/",
+      "project": "trec-browser",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/trojai/",
+      "url": "https://pages.nist.gov/trojai/",
+      "project": "trojai",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/ucef/",
+      "url": "https://pages.nist.gov/ucef/",
+      "project": "ucef",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/univariate_tools/",
+      "url": "https://pages.nist.gov/univariate_tools/",
+      "project": "univariate_tools",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/uv-workon/",
+      "url": "https://pages.nist.gov/uv-workon/",
+      "project": "uv-workon",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/v2plusDemo/",
+      "url": "https://pages.nist.gov/v2plusDemo/",
+      "project": "v2plusDemo",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/vlincs/",
+      "url": "https://pages.nist.gov/vlincs/",
+      "project": "vlincs",
+      "depth": 0,
+      "status": "failed",
+      "reason": "HTTP 403",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/VoterRecordsInterchange/",
+      "url": "https://pages.nist.gov/VoterRecordsInterchange/",
+      "project": "VoterRecordsInterchange",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/VotingMethods/",
+      "url": "https://pages.nist.gov/VotingMethods/",
+      "project": "VotingMethods",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/vulntology/",
+      "url": "https://pages.nist.gov/vulntology/",
+      "project": "vulntology",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/vulntology/",
+      "url": "https://pages.nist.gov/vulntology/",
+      "project": "vulntology",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/webalglib/",
+      "url": "https://pages.nist.gov/webalglib/",
+      "project": "webalglib",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/xslt-blender/",
+      "url": "https://pages.nist.gov/xslt-blender/",
+      "project": "xslt-blender",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zenowrapper/",
+      "url": "https://pages.nist.gov/zenowrapper/",
+      "project": "zenowrapper",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/",
+      "url": "https://pages.nist.gov/zero-trust-architecture/",
+      "project": "zero-trust-architecture",
+      "depth": 0,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E1B4.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E1B4.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E3B2.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E3B2.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E3B3.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E3B3.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E3B4.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E3B4.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E1B4.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E1B4.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E3B2.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E3B2.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E3B3.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E3B3.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E3B4.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E3B4.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeD/UseCaseA.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeD/UseCaseA.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeD/UseCaseH.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeD/UseCaseH.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeE/ArchitectureSecurityMappings.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeE/ArchitectureSecurityMappings.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 0
+    },
+    {
+      "requested_url": "https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html",
+      "project": "zero-trust-architecture",
+      "depth": 1,
+      "status": "fetched",
+      "structured_assets": 4
+    }
+  ],
+  "assets": [
+    {
+      "url": "http://software-carpentry.org/feed.xml",
+      "format": "xml",
+      "labels": [
+        "Blog"
+      ],
+      "projects": [
+        "2015-07-23-nist",
+        "2015-09-23-nist",
+        "2016-05-23-nist",
+        "2016-05-26-nist"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/2015-07-23-nist/",
+        "https://pages.nist.gov/2015-09-23-nist/",
+        "https://pages.nist.gov/2016-05-23-nist/",
+        "https://pages.nist.gov/2016-05-26-nist/"
+      ]
+    },
+    {
+      "url": "https://github.com/usnistgov/HTGS/archive/master.zip",
+      "format": "zip",
+      "labels": [
+        "Download"
+      ],
+      "projects": [
+        "HTGS"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/HTGS/"
+      ]
+    },
+    {
+      "url": "https://github.com/usnistgov/hyperspy_tutorial/releases/download/2022-07-31_MandM_short_course/hyperspy_tutorial.zip",
+      "format": "zip",
+      "labels": [
+        "this"
+      ],
+      "projects": [
+        "hyperspy_tutorial"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/hyperspy_tutorial/"
+      ]
+    },
+    {
+      "url": "https://github.com/usnistgov/Lineage-Mapper/archive/master.zip",
+      "format": "zip",
+      "labels": [
+        "Download"
+      ],
+      "projects": [
+        "Lineage-Mapper"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/Lineage-Mapper/"
+      ]
+    },
+    {
+      "url": "https://github.com/usnistgov/MIST/archive/master.zip",
+      "format": "zip",
+      "labels": [
+        "Download"
+      ],
+      "projects": [
+        "MIST"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/MIST/"
+      ]
+    },
+    {
+      "url": "https://github.com/usnistgov/Public_Safety_Analytics_Resources/raw/main/Compendium%20of%20Open%20Resources%20for%20Multimodal%20Emergency%20Awareness%20AI%20Analytics.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "Access the compendium as an MS Excel workbook here."
+      ],
+      "projects": [
+        "Public_Safety_Analytics_Resources"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/Public_Safety_Analytics_Resources/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/AGA8/downloads/AGA8.XLS",
+      "format": "xls",
+      "labels": [
+        "Link to Excel spreadsheet"
+      ],
+      "projects": [
+        "AGA8"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/AGA8/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/AGA8/downloads/AGA8CODE.ZIP",
+      "format": "zip",
+      "labels": [
+        "Link to AGA8 sample code"
+      ],
+      "projects": [
+        "AGA8"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/AGA8/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_800-53.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "NIST Device Cybersecurity Catalog to NIST SP 800-53 Rev 5"
+      ],
+      "projects": [
+        "IoT-Device-Cybersecurity-Requirement-Catalogs"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/informative_references/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_Cybersecurity_Framework.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "NIST Device Cybersecurity Catalog to Cybersecurity Framework"
+      ],
+      "projects": [
+        "IoT-Device-Cybersecurity-Requirement-Catalogs"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/informative_references/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/minex/results/csvs/minexiii_timing.csv",
+      "format": "csv",
+      "labels": [
+        "MINEX III Timing"
+      ],
+      "projects": [
+        "minex"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/minex/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/minex/results/csvs/minexiii_two_finger_fnmr_fmr_0001.csv",
+      "format": "csv",
+      "labels": [
+        "MINEX III Compliant Two Finger FNMR@FMR = 0.0001"
+      ],
+      "projects": [
+        "minex"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/minex/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/minex/results/csvs/minexiii_two_finger_fnmr_fmr_01.csv",
+      "format": "csv",
+      "labels": [
+        "MINEX III Compliant Two Finger FNMR@FMR = 0.01"
+      ],
+      "projects": [
+        "minex"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/minex/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-cve-list.csv",
+      "format": "csv",
+      "labels": [
+        "Click here to download as a CSV",
+        "CSV"
+      ],
+      "projects": [
+        "mobile-threat-catalogue"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/mobile-threat-catalogue/cve-list.html",
+        "https://pages.nist.gov/mobile-threat-catalogue/downloads.html"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-data.json",
+      "format": "json",
+      "labels": [
+        "JSON"
+      ],
+      "projects": [
+        "mobile-threat-catalogue"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/mobile-threat-catalogue/downloads.html"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-data.xml",
+      "format": "xml",
+      "labels": [
+        "XML"
+      ],
+      "projects": [
+        "mobile-threat-catalogue"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/mobile-threat-catalogue/downloads.html"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/REFPROP-docs/RefrigerantHMX_2024_10_22.zip",
+      "format": "zip",
+      "labels": [
+        "revision 2024-10-22"
+      ],
+      "projects": [
+        "REFPROP-docs"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/REFPROP-docs/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/REFPROP-docs/RefrigerantHMX_2024_11_13.zip",
+      "format": "zip",
+      "labels": [
+        "revision 2024-11-13"
+      ],
+      "projects": [
+        "REFPROP-docs"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/REFPROP-docs/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/sctools/bt-model/core.xml",
+      "format": "xml",
+      "labels": [
+        "core.xml"
+      ],
+      "projects": [
+        "sctools"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/sctools/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/sctools/bt.xml",
+      "format": "xml",
+      "labels": [
+        "Baseline Tailor"
+      ],
+      "projects": [
+        "sctools"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/sctools/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/sctools/schemas/tailored-schematron.xml",
+      "format": "xml",
+      "labels": [
+        "tailored-schematron.xml"
+      ],
+      "projects": [
+        "sctools"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/sctools/"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/01dfaff2b25f0a61f127f06906bc37cc/CSF2.0Mapping.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "Download Spreadsheet"
+      ],
+      "projects": [
+        "zero-trust-architecture"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/641f02c11e6f71752bb8bc96d96c5f38/NISTCSSMMapping.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "Download Spreadsheet"
+      ],
+      "projects": [
+        "zero-trust-architecture"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/993f56b28d4d113836cb1f1a34146cb3/CSF1.1Mapping.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "Download Spreadsheet"
+      ],
+      "projects": [
+        "zero-trust-architecture"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html"
+      ]
+    },
+    {
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/eba81c1a0ca458474b0e9bbdfc888eb5/SP800-53Mapping.xlsx",
+      "format": "xlsx",
+      "labels": [
+        "Download Spreadsheet"
+      ],
+      "projects": [
+        "zero-trust-architecture"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html"
+      ]
+    },
+    {
+      "url": "https://trc.nist.gov/refprop/AGA/SUPPMATR.ZIP",
+      "format": "zip",
+      "labels": [
+        "Link to test data"
+      ],
+      "projects": [
+        "AGA8"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/AGA8/"
+      ]
+    },
+    {
+      "url": "https://trc.nist.gov/refprop/FAQ/NEWMIX.ZIP",
+      "format": "zip",
+      "labels": [
+        "NEWMIX.ZIP"
+      ],
+      "projects": [
+        "REFPROP-docs"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/REFPROP-docs/"
+      ]
+    },
+    {
+      "url": "https://www.sqlite.org/2019/sqlite-tools-win32-x86-3270200.zip",
+      "format": "zip",
+      "labels": [
+        "sqlite3"
+      ],
+      "projects": [
+        "2019-08-21-nist",
+        "2020-04-10-nist",
+        "2020-04-10-nist-sql"
+      ],
+      "source_pages": [
+        "https://pages.nist.gov/2019-08-21-nist/",
+        "https://pages.nist.gov/2020-04-10-nist-sql/",
+        "https://pages.nist.gov/2020-04-10-nist/"
+      ]
+    }
+  ]
+}

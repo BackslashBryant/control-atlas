@@ -55,7 +55,11 @@ function normalizeAttackRecord(object, options) {
   const description = textValue(object.description);
   const tactics = tacticNames(object);
   const platforms = platformNames(object);
-  const primaryTactic = tactics[0] ? options.tacticLookup?.get(tactics[0]) : null;
+  const tacticMemberships = tactics.map((shortname) => {
+    const tactic = options.tacticLookup?.get(shortname);
+    return tactic ? { id: tactic.id, title: tactic.title, shortname } : null;
+  }).filter(Boolean);
+  const primaryTactic = tacticMemberships[0] || null;
   const parentTechniqueId = object.x_mitre_is_subtechnique
     ? techniqueId.split('.')[0]
     : null;
@@ -72,6 +76,7 @@ function normalizeAttackRecord(object, options) {
       tactics,
       tactic_id: primaryTactic?.id || null,
       tactic_title: primaryTactic?.title || null,
+      tactic_memberships: tacticMemberships,
       platforms,
       is_subtechnique: Boolean(object.x_mitre_is_subtechnique),
       parent_technique_id: parentTechniqueId,

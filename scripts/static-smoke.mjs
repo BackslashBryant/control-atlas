@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { loadSourceRegistry } from '../tools/validators/source-registry.mjs';
+import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
 import { readGeneratedCollection } from './lib/generated-graph-artifacts.mjs';
 
 const required = [
@@ -33,8 +34,13 @@ const assets = readdirSync('dist/site/assets');
 assert.equal(registry.registry.schema_version, '5.0');
 assert.ok(nodes.length > 6000, 'normalized federal graph nodes required');
 assert.ok(edges.length > 3000, 'source-backed federal graph edges required');
-assert.equal(edges.length, evidence.length, 'each current edge must have evidence');
-assert.ok(findings.length > 0, 'blocked and unsupported relationships must be reported');
+assert.ok(evidence.length >= edges.length, 'every current edge must have one or more evidence records');
+assert.deepEqual(
+  validateGraphArtifacts({ sources: registry.sources, nodes, edges, evidence }),
+  [],
+  'the built graph must retain complete evidence coverage and valid references',
+);
+assert.equal(findings.length, 0, 'the shipped graph must contain no unresolved integrity findings');
 assert.ok(nodes.some((node) => node.id === 'nist-800-53a:AC-2'), 'assessment procedures must be present');
 assert.ok(edges.some((edge) => edge.relationship_type === 'assesses'), 'assessment edges must be present');
 assert.ok(buildManifest.governance_artifacts.includes('build-manifest.json'));

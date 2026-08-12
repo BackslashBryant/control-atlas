@@ -84,6 +84,33 @@ for (const r of dataset.resources) {
   assert.ok(r.whyIncluded && r.whyIncluded.trim().length > 10, `Resource ${r.id} missing valid whyIncluded statement`);
   assert.ok(r.resourceLane, `Resource ${r.id} missing resourceLane`);
   assert.ok(r.publisher, `Resource ${r.id} missing publisher`);
+  assert.ok(r.overview?.text?.trim().length >= 20, `Resource ${r.id} missing source-backed overview`);
+  assert.ok(r.overview?.sourceUrl?.startsWith("https://"), `Resource ${r.id} overview needs evidence URL`);
+  assert.ok(r.compatibility, `Resource ${r.id} missing compatibility disposition`);
+  assert.ok(
+    ["documented", "not_stated", "not_applicable"].includes(r.compatibility.status),
+    `Resource ${r.id} has invalid compatibility status`,
+  );
+  assert.ok(r.compatibility.sourceUrl?.startsWith("https://"), `Resource ${r.id} compatibility needs evidence URL`);
+  assert.ok(r.compatibility.note?.trim(), `Resource ${r.id} compatibility needs an honest note`);
+  assert.ok(r.media, `Resource ${r.id} missing media disposition`);
+  assert.equal(
+    r.media.status === "available",
+    r.media.items.length > 0,
+    `Resource ${r.id} media status must match its attributable media`,
+  );
+  if (r.media.status === "not_available") {
+    assert.ok(r.media.reason?.trim(), `Resource ${r.id} needs an explicit unavailable-media reason`);
+  }
+  for (const media of r.media.items) {
+    assert.ok(media.url.startsWith("https://"), `Resource ${r.id} media URL must be HTTPS`);
+    assert.ok(media.sourceUrl.startsWith("https://"), `Resource ${r.id} media needs publisher evidence`);
+    assert.ok(media.alt.trim(), `Resource ${r.id} media needs alt text`);
+  }
+  if (/^https:\/\/github\.com\/[^/]+\/[^/]+\/?$/.test(r.repositoryUrl || "")) {
+    assert.ok(r.repositoryEvidence?.readmeUrl, `Resource ${r.id} repository needs README evidence`);
+    assert.ok(r.repositoryEvidence?.facts?.defaultBranch, `Resource ${r.id} repository needs source-backed facts`);
+  }
   assert.equal(
     Object.hasOwn(r, "editorialRecommendation"),
     false,
@@ -99,6 +126,53 @@ for (const r of dataset.resources) {
   }
 }
 console.log("  ✓ Uniqueness and whyIncluded Statement Audits Passed");
+
+for (const resource of dataset.resources) {
+  assert.equal(resource.presentationProfile?.profileType, resource.resourceType, `${resource.id} profile type`);
+  assert.ok(resource.presentationProfile?.template, `${resource.id} presentation template`);
+  for (const field of ["whatItDoes", "whoItIsFor", "limitations"]) {
+    const section = resource.presentationProfile?.[field];
+    assert.ok(section, `${resource.id} ${field}`);
+    assert.ok(["documented", "not_documented", "not_applicable"].includes(section.status), `${resource.id} ${field} status`);
+    assert.ok(section.text && section.sourceUrl, `${resource.id} ${field} evidence`);
+  }
+}
+
+const exactTools = dataset.resources.filter((resource) => resource.resourceType === "tool");
+assert.equal(exactTools.length, 40, "All 40 tool records receive the tool contract");
+for (const resource of exactTools) {
+  assert.notEqual(resource.currentVersion, "Current", `${resource.id} must not use a Current placeholder`);
+  assert.ok(resource.toolProfile, `${resource.id} tool profile`);
+  for (const field of ["inputs", "outputs", "formats", "integrations", "installation", "usage"]) {
+    const section = resource.toolProfile[field];
+    assert.ok(section, `${resource.id} ${field}`);
+    assert.ok(["documented", "not_documented", "not_applicable"].includes(section.status), `${resource.id} ${field} status`);
+    assert.ok(section.text && section.sourceUrl, `${resource.id} ${field} evidence`);
+  }
+  assert.ok(resource.toolProfile.maintenance?.status, `${resource.id} maintenance status`);
+  assert.ok(resource.toolProfile.release?.status, `${resource.id} release status`);
+}
+
+const repositoryBackedTools = exactTools.filter((resource) => resource.repositoryEvidence);
+assert.equal(repositoryBackedTools.length, 36, "All 36 repository-backed tools have repository evidence");
+for (const resource of repositoryBackedTools) {
+  const evidence = resource.repositoryEvidence;
+  assert.match(evidence.commitSha, /^[a-f0-9]{40}$/i, `${resource.id} commit SHA`);
+  assert.match(evidence.readmeSha256, /^sha256:[a-f0-9]{64}$/, `${resource.id} README checksum`);
+  assert.ok(evidence.readmeByteLength > 0, `${resource.id} README byte length`);
+  assert.ok(evidence.readmeUrl.includes(evidence.commitSha), `${resource.id} commit-pinned README URL`);
+  assert.ok(["published", "not_published"].includes(evidence.release.status), `${resource.id} release disposition`);
+}
+
+for (const resource of dataset.resources) {
+  for (const media of resource.media?.items || []) {
+    assert.match(media.sha256, /^sha256:[a-f0-9]{64}$/, `${resource.id} media checksum`);
+    assert.ok(media.byteLength > 0, `${resource.id} media byte length`);
+    assert.ok(media.width > 0 && media.height > 0, `${resource.id} media dimensions`);
+    assert.ok(media.license && media.licenseBasis, `${resource.id} media license basis`);
+    assert.ok(media.retrievedAt && media.commitSha, `${resource.id} media retrieval provenance`);
+  }
+}
 
 const paidProductEntries = dataset.resources.filter(
   (resource) =>

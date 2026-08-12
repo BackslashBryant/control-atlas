@@ -1,0 +1,431 @@
+{
+  "schema_version": "1.0",
+  "repository": {
+    "url": "https://github.com/usnistgov/zero-trust-architecture",
+    "branch": "nist-pages",
+    "commit": "f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff"
+  },
+  "sources": [
+    {
+      "source_key": "nist-sp-800-207",
+      "url": "https://nvlpubs.nist.gov/nistpubs/specialpublications/NIST.SP.800-207.pdf",
+      "sha256": "sha256:0290d6ece24874287316f4bf430fef770aa4ec08a2227c8f2c1e5b2ff975e03d",
+      "byte_length": 966908,
+      "pages": 59,
+      "parsed_tenets": 7,
+      "parsed_components": 11,
+      "retrieved_at": "2026-08-12T12:55:03.867Z"
+    },
+    {
+      "source_key": "nist-sp-800-207a",
+      "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-207A.pdf",
+      "sha256": "sha256:bb1af3bab70d8589e71e9fce4a99d3e714a82dd7b2bc7a931c7458a6ab60bb52",
+      "byte_length": 1380107,
+      "pages": 31,
+      "parsed_requirements": 11,
+      "retrieved_at": "2026-08-12T13:11:42.904Z"
+    },
+    {
+      "source_key": "nist-sp-1800-35",
+      "url": "https://pages.nist.gov/zero-trust-architecture/",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/index.html",
+      "sha256": "sha256:4be04dd5f21e434f08edf9f62c06161acc955a5f9131e9f98787db7424cb4b60",
+      "byte_length": 49243,
+      "sections": 1,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B1-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E1B1.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E1B1.html",
+      "sha256": "sha256:de7dcee23a62ac98cd287df117fb22c532ed003ab186ef658f50032f4ac619f5",
+      "byte_length": 78427,
+      "sections": 11,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B1-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E1B1.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E1B1.html",
+      "sha256": "sha256:dd02bff757abb3e558f31e5caaeb1a5e7f8f7a1985e86b73222ef6941956b8e0",
+      "byte_length": 131518,
+      "sections": 63,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E2B1-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E2B1.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E2B1.html",
+      "sha256": "sha256:945109aacd0bde0c3a3f20f85fb19688bf26319532d3d088382028748ec0d835",
+      "byte_length": 74648,
+      "sections": 11,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E2B1-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E2B1.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E2B1.html",
+      "sha256": "sha256:351ed01f15036c44e4f74ce5b9aad8f2e7c7098ab435cb02bf29e8a06d4ef594",
+      "byte_length": 54660,
+      "sections": 21,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E3B1-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E3B1.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E3B1.html",
+      "sha256": "sha256:7327de7b8e2038d8d54fce1e71bd519687aa874bdeb3bd47105b870f8db82a2a",
+      "byte_length": 58815,
+      "sections": 8,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E3B1-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E3B1.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E3B1.html",
+      "sha256": "sha256:5d0777e0273958592e298f4588d3fb566579b54c15a2bee999c557ce1bab3e2d",
+      "byte_length": 79945,
+      "sections": 36,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B2-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E1B2.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E1B2.html",
+      "sha256": "sha256:459f9a3f5274af59283e15662528abc961abb211f3b0c8f13ce95a4286d664b5",
+      "byte_length": 71113,
+      "sections": 9,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B2-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E1B2.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E1B2.html",
+      "sha256": "sha256:754c2532dfce47f9f492c2649f4ada666bbea3e28e23decc55b1605372429376",
+      "byte_length": 50474,
+      "sections": 18,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E3B2-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E3B2.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E3B2.html",
+      "sha256": "sha256:385c7c45afa07bef568c09e83e9061a017da193b1bcbf6078b76e5eaefc576d2",
+      "byte_length": 72766,
+      "sections": 9,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E3B2-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E3B2.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E3B2.html",
+      "sha256": "sha256:90ab9351e09b53478999e24908bec9cd5ac7a622ec0472644494f37752294293",
+      "byte_length": 53574,
+      "sections": 14,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B3-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E1B3.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E1B3.html",
+      "sha256": "sha256:4ab0fa0652c0ee59d9f42802663050ff35221783425ca2aa47e5847a0c715339",
+      "byte_length": 31647,
+      "sections": 1,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B3-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E1B3.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E1B3.html",
+      "sha256": "sha256:84b2e76449dfbc04b587c8a5815b34eae5677545c191c8a14bb997c5e1c904ff",
+      "byte_length": 30623,
+      "sections": 1,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E2B3-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E2B3.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E2B3.html",
+      "sha256": "sha256:1d5a3b8aeaa0a7450229e2246ffe26207e1e0861e51fe79630f75b820ba02fc2",
+      "byte_length": 80846,
+      "sections": 13,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E2B3-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E2B3.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E2B3.html",
+      "sha256": "sha256:415f61adc22f983183cfcdc75c89c3b6f0a25addf1a109b6733c5b4d71bc4f34",
+      "byte_length": 80302,
+      "sections": 40,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E3B3-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E3B3.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E3B3.html",
+      "sha256": "sha256:61241b994f98e3c5e5ab250fd8c4be46b9b14c43f3e5caa3e040a93fbfc0974a",
+      "byte_length": 70692,
+      "sections": 10,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E3B3-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E3B3.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E3B3.html",
+      "sha256": "sha256:40cd7269f063f2d1fcb308dac0436fdca6c2a6880b7ab07dd77a67a4193dac92",
+      "byte_length": 50859,
+      "sections": 14,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E4B3-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E4B3.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E4B3.html",
+      "sha256": "sha256:4fb41383fa42c51762971fb497a421439075a8427de0b0c0b7bc8131e7d56c69",
+      "byte_length": 57115,
+      "sections": 8,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E4B3-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E4B3.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E4B3.html",
+      "sha256": "sha256:b62b2852034fa83001b145b38ae0707414e0dd1d4c063a8b3cb90a534e7c8be8",
+      "byte_length": 65382,
+      "sections": 33,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B4-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E1B4.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E1B4.html",
+      "sha256": "sha256:c5c5977b53922f8bae63c66c4a5501a83105233be2447707af41d93ae4d0bc1f",
+      "byte_length": 65550,
+      "sections": 10,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B4-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E1B4.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E1B4.html",
+      "sha256": "sha256:ba0354240d4e4f60d9220725a85e69295b581c624ce2e989611e80fe3f87fc5a",
+      "byte_length": 52365,
+      "sections": 18,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E2B4-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E2B4.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E2B4.html",
+      "sha256": "sha256:5e5d6553ee4bc7db45de2a87e16862acd9771e7719c9da10a5aeb3f9df431d5e",
+      "byte_length": 66008,
+      "sections": 11,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E2B4-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E2B4.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E2B4.html",
+      "sha256": "sha256:295cbd9f5e6b854e783c2a57ec5b356533c9a98bda6e4014921ff5ce0b75f69a",
+      "byte_length": 60763,
+      "sections": 34,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E3B4-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E3B4.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E3B4.html",
+      "sha256": "sha256:74d430eb464e7872cd7890cf4043d79e6e5cf9dd960adde977353e9fc9c140c5",
+      "byte_length": 61503,
+      "sections": 9,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E3B4-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E3B4.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E3B4.html",
+      "sha256": "sha256:42d3d35385cb046979392a4139a6a50fe2755dacc84d01df74c2af93d0d89de3",
+      "byte_length": 47968,
+      "sections": 23,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E4B4-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E4B4.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E4B4.html",
+      "sha256": "sha256:56970b3e3b87448ff6a4a8d8198061c9ea9d11828eeeb01a86c35eaaac040452",
+      "byte_length": 58568,
+      "sections": 8,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E4B4-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E4B4.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E4B4.html",
+      "sha256": "sha256:7cc883c62c7b4556fcb7c5455341c9b18a032a813f8a6f0064ccbc5a5401191e",
+      "byte_length": 70903,
+      "sections": 38,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B5-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E1B5.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E1B5.html",
+      "sha256": "sha256:b3a6bdb3f35ffa80cebc9024148d1e3d2d44739fa966c03c927938b3ed1e96ed",
+      "byte_length": 83318,
+      "sections": 12,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B5-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E1B5.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E1B5.html",
+      "sha256": "sha256:54d5aca6d81b03940ea2bb3d8a02548fd2a3b196fbb6b083ca350d9906b12c17",
+      "byte_length": 59466,
+      "sections": 20,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E2B5-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E2B5.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E2B5.html",
+      "sha256": "sha256:a3feda89e41bbb662b759d203a8b927889369ae0b0ec8dddb3800e755a330000",
+      "byte_length": 68696,
+      "sections": 13,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E2B5-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E2B5.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E2B5.html",
+      "sha256": "sha256:cad896d9928f25eb62c69ac1edb235878a42a22d2ad31180c8b30d6d95ef0c3c",
+      "byte_length": 53260,
+      "sections": 27,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E3B5-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E3B5.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E3B5.html",
+      "sha256": "sha256:36439f9868f0ee1624033be76fc0bc106f273aac9a722bf9a6eec6c0c0e4a86c",
+      "byte_length": 62668,
+      "sections": 9,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E3B5-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E3B5.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E3B5.html",
+      "sha256": "sha256:c62863037f48202d013ff0fbc3e2071ca4997420aa0c00b8612e963c3fe525db",
+      "byte_length": 46254,
+      "sections": 20,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E4B5-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E4B5.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E4B5.html",
+      "sha256": "sha256:44c9b896d15139c4871a218bf61a074a92fcc7f4ebee22b529fba858d075ef02",
+      "byte_length": 49353,
+      "sections": 6,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E4B5-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E4B5.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E4B5.html",
+      "sha256": "sha256:65d257f7658aaa41041be21c4038306094bec697aebc9408c8e71507ebcdf2cc",
+      "byte_length": 40142,
+      "sections": 10,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B6-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E1B6.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E1B6.html",
+      "sha256": "sha256:30c4e90647a17b3fbb99438567b86c1a8847783183529456f299003b222a9369",
+      "byte_length": 56468,
+      "sections": 8,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E1B6-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E1B6.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E1B6.html",
+      "sha256": "sha256:19ebbda612929efd1c5e889a4588fadfbda76a35a51d54684f6c729636058ab3",
+      "byte_length": 46077,
+      "sections": 14,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E2B6-architecture",
+      "role": "architecture",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeB/appendices/Appendix-E2B6.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeB/appendices/Appendix-E2B6.html",
+      "sha256": "sha256:3e84589d5425206b3dc8b35cf7d9b83e50c3376f28e6a49b47414efa053d6c04",
+      "byte_length": 57923,
+      "sections": 9,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    },
+    {
+      "source_key": "SP180035-E2B6-implementation_guide",
+      "role": "implementation_guide",
+      "url": "https://pages.nist.gov/zero-trust-architecture/VolumeC/HowTo-E2B6.html",
+      "artifact_url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/VolumeC/HowTo-E2B6.html",
+      "sha256": "sha256:5ee47f229d398cfcf840b5230954a5a1772aa37412193b686d42bdb370bc3fe8",
+      "byte_length": 47594,
+      "sections": 20,
+      "retrieved_at": "2026-08-12T13:01:58.383Z"
+    }
+  ],
+  "reconciliation": {
+    "sp800_207_tenets": 7,
+    "sp800_207_logical_components": 11,
+    "sp800_207a_requirements": 11,
+    "sp1800_35_builds_discovered": 19,
+    "sp1800_35_builds_ingested": 19,
+    "sp1800_35_architecture_pages": 19,
+    "sp1800_35_implementation_guides": 19,
+    "parsed_sections": 639,
+    "media_references": 117,
+    "failed_pages": 0,
+    "synthetic_records": 0
+  }
+}

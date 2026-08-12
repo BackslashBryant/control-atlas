@@ -77,6 +77,7 @@ export const PROVENANCE_CLASSES = new Set([
   'federal_utilized',
   'federal_referenced',
   'mitre_published',
+  'third_party_published',
   'control_atlas_derived',
 ]);
 
@@ -329,4 +330,3 @@ export function loadSourceRegistry(registry) {
 export function getSource(registryState, sourceId) {
   return registryState.byId.get(sourceId) || null;
 }
-

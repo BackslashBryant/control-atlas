@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "sources": [
+    {
+      "source_key": "nist-iot-requirements-80053-mapping-draft",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_800-53.xlsx",
+      "format": "xlsx",
+      "mapping_kind": "sp_800_53",
+      "sha256": "sha256:6fd2261f49917b9657ac1fe26a2f3008f24cdca65cdebb77cf8a72e8b725b9ce",
+      "byte_length": 89472,
+      "retrieved_at": "2026-08-12T12:42:20.474Z"
+    },
+    {
+      "source_key": "nist-iot-requirements-csf11-mapping-draft",
+      "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_Cybersecurity_Framework.xlsx",
+      "format": "xlsx",
+      "mapping_kind": "csf_1_1",
+      "sha256": "sha256:e485be296ed9a12948a11d6d59aaa3d23eed193e2fc50eae83b22a995efc952e",
+      "byte_length": 80838,
+      "retrieved_at": "2026-08-12T12:42:20.820Z"
+    },
+    {
+      "source_key": "nist-mobile-threat-catalogue",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-data.json",
+      "format": "json",
+      "sha256": "sha256:a3128ca6f905e18caae71149771eadc4c46a5db48ed4363aa69f7d23e2e36272",
+      "byte_length": 238330,
+      "retrieved_at": "2026-08-12T12:42:21.389Z"
+    },
+    {
+      "source_key": "nist-mobile-threat-catalogue-cve-list",
+      "url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-cve-list.csv",
+      "format": "csv",
+      "sha256": "sha256:fab13eba27d35f8cb8b520a6a50709422e2737d06ee763463075612c23f843eb",
+      "byte_length": 3513,
+      "retrieved_at": "2026-08-12T12:42:21.495Z"
+    }
+  ],
+  "reconciliation": {
+    "iot": {
+      "workbooks_discovered": 2,
+      "workbooks_ingested": 2,
+      "workbooks_failed": 0,
+      "primary_worksheets": [
+        {
+          "worksheet": "Non Technical Manufacturers",
+          "source_rows": 213,
+          "parsed_rows": 213
+        },
+        {
+          "worksheet": "Technical Capabilities 800-53 ",
+          "source_rows": 161,
+          "parsed_rows": 161
+        }
+      ],
+      "supplemental_worksheets": [
+        {
+          "worksheet": "Technical Capabilities",
+          "source_rows": 161,
+          "parsed_rows": 161
+        },
+        {
+          "worksheet": "Non Technical Manufacturers",
+          "source_rows": 213,
+          "parsed_rows": 213
+        }
+      ],
+      "primary_only_records": 0,
+      "supplemental_only_records": 0,
+      "records": 489,
+      "mapped_records": 341,
+      "published_mapping_assertions": 986,
+      "graph_eligible_80053_relationships": 450,
+      "synthetic_records": 0
+    },
+    "mobile_threats": {
+      "json_rows_discovered": 243,
+      "blank_rows_excluded": 7,
+      "threats_ingested": 236,
+      "categories_ingested": 32,
+      "total_records": 268,
+      "expected_records": 275,
+      "csv_rows_discovered": 249,
+      "unique_cves_reconciled": 249,
+      "synthetic_records": 0
+    }
+  }
+}

@@ -3,7 +3,7 @@
   "source_key": "mitre-attack-ics",
   "source_artifact": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
   "source_version": "2026-08-05",
-  "snapshot_date": "2026-08-09",
+  "snapshot_date": "2026-08-12",
   "checksum": "sha256:348a4e9a54dd9011329f92e0fd20ba72cae2fec76f0e2790b1e98f0de8f139bf",
   "provenance": "MITRE ATT&CK for ICS STIX bundle",
   "records": [
@@ -21,6 +21,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -30,7 +37,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0800"
       }
@@ -49,6 +56,13 @@
         ],
         "tactic_id": "TA0100",
         "tactic_title": "Collection",
+        "tactic_memberships": [
+          {
+            "id": "TA0100",
+            "title": "Collection",
+            "shortname": "collection"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -58,7 +72,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0801"
       }
@@ -77,6 +91,13 @@
         ],
         "tactic_id": "TA0100",
         "tactic_title": "Collection",
+        "tactic_memberships": [
+          {
+            "id": "TA0100",
+            "title": "Collection",
+            "shortname": "collection"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -86,7 +107,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0802"
       }
@@ -105,6 +126,13 @@
         ],
         "tactic_id": "TA0106",
         "tactic_title": "Impair Process Control",
+        "tactic_memberships": [
+          {
+            "id": "TA0106",
+            "title": "Impair Process Control",
+            "shortname": "impair-process-control"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -114,7 +142,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0806"
       }
@@ -133,6 +161,13 @@
         ],
         "tactic_id": "TA0104",
         "tactic_title": "Execution",
+        "tactic_memberships": [
+          {
+            "id": "TA0104",
+            "title": "Execution",
+            "shortname": "execution"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -142,7 +177,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0807"
       }
@@ -161,6 +196,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -170,7 +212,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0809"
       }
@@ -189,6 +231,13 @@
         ],
         "tactic_id": "TA0100",
         "tactic_title": "Collection",
+        "tactic_memberships": [
+          {
+            "id": "TA0100",
+            "title": "Collection",
+            "shortname": "collection"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -198,7 +247,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0811"
       }
@@ -217,6 +266,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -226,7 +282,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0813"
       }
@@ -245,6 +301,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -254,7 +317,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0814"
       }
@@ -273,6 +336,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -282,7 +352,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0815"
       }
@@ -301,6 +371,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -310,7 +387,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0816"
       }
@@ -329,6 +406,13 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -338,7 +422,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0817"
       }
@@ -357,6 +441,13 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -366,7 +457,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0819"
       }
@@ -385,6 +476,13 @@
         ],
         "tactic_id": "TA0103",
         "tactic_title": "Evasion",
+        "tactic_memberships": [
+          {
+            "id": "TA0103",
+            "title": "Evasion",
+            "shortname": "evasion"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -394,7 +492,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0820"
       }
@@ -413,6 +511,13 @@
         ],
         "tactic_id": "TA0104",
         "tactic_title": "Execution",
+        "tactic_memberships": [
+          {
+            "id": "TA0104",
+            "title": "Execution",
+            "shortname": "execution"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -422,7 +527,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0821"
       }
@@ -441,6 +546,13 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -450,7 +562,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0822"
       }
@@ -469,6 +581,13 @@
         ],
         "tactic_id": "TA0104",
         "tactic_title": "Execution",
+        "tactic_memberships": [
+          {
+            "id": "TA0104",
+            "title": "Execution",
+            "shortname": "execution"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -478,7 +597,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0823"
       }
@@ -497,6 +616,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -506,7 +632,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0826"
       }
@@ -525,6 +651,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -534,7 +667,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0827"
       }
@@ -553,6 +686,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -562,7 +702,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0828"
       }
@@ -581,6 +721,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -590,7 +737,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0829"
       }
@@ -609,6 +756,13 @@
         ],
         "tactic_id": "TA0100",
         "tactic_title": "Collection",
+        "tactic_memberships": [
+          {
+            "id": "TA0100",
+            "title": "Collection",
+            "shortname": "collection"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -618,7 +772,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0830"
       }
@@ -637,6 +791,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -646,7 +807,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0831"
       }
@@ -665,6 +826,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -674,7 +842,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0832"
       }
@@ -693,6 +861,13 @@
         ],
         "tactic_id": "TA0104",
         "tactic_title": "Execution",
+        "tactic_memberships": [
+          {
+            "id": "TA0104",
+            "title": "Execution",
+            "shortname": "execution"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -702,7 +877,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0834"
       }
@@ -721,6 +896,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -730,7 +912,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0835"
       }
@@ -749,6 +931,13 @@
         ],
         "tactic_id": "TA0106",
         "tactic_title": "Impair Process Control",
+        "tactic_memberships": [
+          {
+            "id": "TA0106",
+            "title": "Impair Process Control",
+            "shortname": "impair-process-control"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -758,7 +947,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0836"
       }
@@ -777,6 +966,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -786,7 +982,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0837"
       }
@@ -805,6 +1001,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -814,7 +1017,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0838"
       }
@@ -833,6 +1036,13 @@
         ],
         "tactic_id": "TA0102",
         "tactic_title": "Discovery",
+        "tactic_memberships": [
+          {
+            "id": "TA0102",
+            "title": "Discovery",
+            "shortname": "discovery"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -842,7 +1052,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0840"
       }
@@ -861,6 +1071,13 @@
         ],
         "tactic_id": "TA0102",
         "tactic_title": "Discovery",
+        "tactic_memberships": [
+          {
+            "id": "TA0102",
+            "title": "Discovery",
+            "shortname": "discovery"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -870,7 +1087,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0842"
       }
@@ -889,6 +1106,13 @@
         ],
         "tactic_id": "TA0109",
         "tactic_title": "Lateral Movement",
+        "tactic_memberships": [
+          {
+            "id": "TA0109",
+            "title": "Lateral Movement",
+            "shortname": "lateral-movement"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -898,7 +1122,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0843"
       }
@@ -917,6 +1141,13 @@
         ],
         "tactic_id": "TA0109",
         "tactic_title": "Lateral Movement",
+        "tactic_memberships": [
+          {
+            "id": "TA0109",
+            "title": "Lateral Movement",
+            "shortname": "lateral-movement"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0843",
@@ -924,7 +1155,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0843.001"
       }
@@ -943,6 +1174,13 @@
         ],
         "tactic_id": "TA0109",
         "tactic_title": "Lateral Movement",
+        "tactic_memberships": [
+          {
+            "id": "TA0109",
+            "title": "Lateral Movement",
+            "shortname": "lateral-movement"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0843",
@@ -950,7 +1188,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0843.002"
       }
@@ -969,6 +1207,13 @@
         ],
         "tactic_id": "TA0109",
         "tactic_title": "Lateral Movement",
+        "tactic_memberships": [
+          {
+            "id": "TA0109",
+            "title": "Lateral Movement",
+            "shortname": "lateral-movement"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0843",
@@ -976,7 +1221,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0843.003"
       }
@@ -995,6 +1240,13 @@
         ],
         "tactic_id": "TA0100",
         "tactic_title": "Collection",
+        "tactic_memberships": [
+          {
+            "id": "TA0100",
+            "title": "Collection",
+            "shortname": "collection"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1004,7 +1256,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0845"
       }
@@ -1023,6 +1275,13 @@
         ],
         "tactic_id": "TA0102",
         "tactic_title": "Discovery",
+        "tactic_memberships": [
+          {
+            "id": "TA0102",
+            "title": "Discovery",
+            "shortname": "discovery"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1032,7 +1291,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0846"
       }
@@ -1051,6 +1310,13 @@
         ],
         "tactic_id": "TA0102",
         "tactic_title": "Discovery",
+        "tactic_memberships": [
+          {
+            "id": "TA0102",
+            "title": "Discovery",
+            "shortname": "discovery"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0846",
@@ -1058,7 +1324,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0846.001"
       }
@@ -1077,6 +1343,13 @@
         ],
         "tactic_id": "TA0102",
         "tactic_title": "Discovery",
+        "tactic_memberships": [
+          {
+            "id": "TA0102",
+            "title": "Discovery",
+            "shortname": "discovery"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0846",
@@ -1084,7 +1357,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0846.002"
       }
@@ -1103,6 +1376,13 @@
         ],
         "tactic_id": "TA0102",
         "tactic_title": "Discovery",
+        "tactic_memberships": [
+          {
+            "id": "TA0102",
+            "title": "Discovery",
+            "shortname": "discovery"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0846",
@@ -1110,7 +1390,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0846.003"
       }
@@ -1129,6 +1409,13 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1138,7 +1425,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0847"
       }
@@ -1157,6 +1444,13 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1166,7 +1460,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0848"
       }
@@ -1185,6 +1479,13 @@
         ],
         "tactic_id": "TA0103",
         "tactic_title": "Evasion",
+        "tactic_memberships": [
+          {
+            "id": "TA0103",
+            "title": "Evasion",
+            "shortname": "evasion"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1194,7 +1495,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0849"
       }
@@ -1214,6 +1515,18 @@
         ],
         "tactic_id": "TA0103",
         "tactic_title": "Evasion",
+        "tactic_memberships": [
+          {
+            "id": "TA0103",
+            "title": "Evasion",
+            "shortname": "evasion"
+          },
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1223,7 +1536,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0851"
       }
@@ -1242,6 +1555,13 @@
         ],
         "tactic_id": "TA0100",
         "tactic_title": "Collection",
+        "tactic_memberships": [
+          {
+            "id": "TA0100",
+            "title": "Collection",
+            "shortname": "collection"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1251,7 +1571,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0852"
       }
@@ -1270,6 +1590,13 @@
         ],
         "tactic_id": "TA0104",
         "tactic_title": "Execution",
+        "tactic_memberships": [
+          {
+            "id": "TA0104",
+            "title": "Execution",
+            "shortname": "execution"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1279,7 +1606,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0853"
       }
@@ -1299,6 +1626,18 @@
         ],
         "tactic_id": "TA0104",
         "tactic_title": "Execution",
+        "tactic_memberships": [
+          {
+            "id": "TA0104",
+            "title": "Execution",
+            "shortname": "execution"
+          },
+          {
+            "id": "TA0103",
+            "title": "Evasion",
+            "shortname": "evasion"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1308,7 +1647,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0858"
       }
@@ -1328,6 +1667,18 @@
         ],
         "tactic_id": "TA0110",
         "tactic_title": "Persistence",
+        "tactic_memberships": [
+          {
+            "id": "TA0110",
+            "title": "Persistence",
+            "shortname": "persistence"
+          },
+          {
+            "id": "TA0109",
+            "title": "Lateral Movement",
+            "shortname": "lateral-movement"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1337,7 +1688,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0859"
       }
@@ -1356,6 +1707,13 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1365,7 +1723,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0860"
       }
@@ -1384,6 +1742,13 @@
         ],
         "tactic_id": "TA0100",
         "tactic_title": "Collection",
+        "tactic_memberships": [
+          {
+            "id": "TA0100",
+            "title": "Collection",
+            "shortname": "collection"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1393,7 +1758,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0861"
       }
@@ -1412,6 +1777,13 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1421,7 +1793,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0862"
       }
@@ -1440,6 +1812,13 @@
         ],
         "tactic_id": "TA0104",
         "tactic_title": "Execution",
+        "tactic_memberships": [
+          {
+            "id": "TA0104",
+            "title": "Execution",
+            "shortname": "execution"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1449,7 +1828,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0863"
       }
@@ -1468,6 +1847,13 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1477,7 +1863,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0864"
       }
@@ -1496,6 +1882,13 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1505,7 +1898,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0865"
       }
@@ -1525,6 +1918,18 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          },
+          {
+            "id": "TA0109",
+            "title": "Lateral Movement",
+            "shortname": "lateral-movement"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1534,7 +1939,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0866"
       }
@@ -1553,6 +1958,13 @@
         ],
         "tactic_id": "TA0109",
         "tactic_title": "Lateral Movement",
+        "tactic_memberships": [
+          {
+            "id": "TA0109",
+            "title": "Lateral Movement",
+            "shortname": "lateral-movement"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1562,7 +1974,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0867"
       }
@@ -1581,6 +1993,13 @@
         ],
         "tactic_id": "TA0100",
         "tactic_title": "Collection",
+        "tactic_memberships": [
+          {
+            "id": "TA0100",
+            "title": "Collection",
+            "shortname": "collection"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1590,7 +2009,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0868"
       }
@@ -1609,6 +2028,13 @@
         ],
         "tactic_id": "TA0101",
         "tactic_title": "Command and Control",
+        "tactic_memberships": [
+          {
+            "id": "TA0101",
+            "title": "Command and Control",
+            "shortname": "command-and-control"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1618,7 +2044,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0869"
       }
@@ -1637,6 +2063,13 @@
         ],
         "tactic_id": "TA0104",
         "tactic_title": "Execution",
+        "tactic_memberships": [
+          {
+            "id": "TA0104",
+            "title": "Execution",
+            "shortname": "execution"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1646,7 +2079,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0871"
       }
@@ -1665,6 +2098,13 @@
         ],
         "tactic_id": "TA0103",
         "tactic_title": "Evasion",
+        "tactic_memberships": [
+          {
+            "id": "TA0103",
+            "title": "Evasion",
+            "shortname": "evasion"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1674,7 +2114,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0872"
       }
@@ -1693,6 +2133,13 @@
         ],
         "tactic_id": "TA0110",
         "tactic_title": "Persistence",
+        "tactic_memberships": [
+          {
+            "id": "TA0110",
+            "title": "Persistence",
+            "shortname": "persistence"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1702,7 +2149,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0873"
       }
@@ -1721,6 +2168,13 @@
         ],
         "tactic_id": "TA0110",
         "tactic_title": "Persistence",
+        "tactic_memberships": [
+          {
+            "id": "TA0110",
+            "title": "Persistence",
+            "shortname": "persistence"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0873",
@@ -1728,7 +2182,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0873.001"
       }
@@ -1748,6 +2202,18 @@
         ],
         "tactic_id": "TA0104",
         "tactic_title": "Execution",
+        "tactic_memberships": [
+          {
+            "id": "TA0104",
+            "title": "Execution",
+            "shortname": "execution"
+          },
+          {
+            "id": "TA0111",
+            "title": "Privilege Escalation",
+            "shortname": "privilege-escalation"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1757,7 +2223,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0874"
       }
@@ -1776,6 +2242,13 @@
         ],
         "tactic_id": "TA0100",
         "tactic_title": "Collection",
+        "tactic_memberships": [
+          {
+            "id": "TA0100",
+            "title": "Collection",
+            "shortname": "collection"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1785,7 +2258,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0877"
       }
@@ -1804,6 +2277,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1813,7 +2293,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0878"
       }
@@ -1832,6 +2312,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1841,7 +2328,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0879"
       }
@@ -1860,6 +2347,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1869,7 +2363,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0880"
       }
@@ -1888,6 +2382,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1897,7 +2398,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0881"
       }
@@ -1916,6 +2417,13 @@
         ],
         "tactic_id": "TA0105",
         "tactic_title": "Impact",
+        "tactic_memberships": [
+          {
+            "id": "TA0105",
+            "title": "Impact",
+            "shortname": "impact"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1925,7 +2433,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0882"
       }
@@ -1944,6 +2452,13 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1953,7 +2468,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0883"
       }
@@ -1972,6 +2487,13 @@
         ],
         "tactic_id": "TA0101",
         "tactic_title": "Command and Control",
+        "tactic_memberships": [
+          {
+            "id": "TA0101",
+            "title": "Command and Control",
+            "shortname": "command-and-control"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -1981,7 +2503,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0884"
       }
@@ -2000,6 +2522,13 @@
         ],
         "tactic_id": "TA0101",
         "tactic_title": "Command and Control",
+        "tactic_memberships": [
+          {
+            "id": "TA0101",
+            "title": "Command and Control",
+            "shortname": "command-and-control"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -2009,7 +2538,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0885"
       }
@@ -2029,6 +2558,18 @@
         ],
         "tactic_id": "TA0108",
         "tactic_title": "Initial Access",
+        "tactic_memberships": [
+          {
+            "id": "TA0108",
+            "title": "Initial Access",
+            "shortname": "initial-access"
+          },
+          {
+            "id": "TA0109",
+            "title": "Lateral Movement",
+            "shortname": "lateral-movement"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -2038,7 +2579,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0886"
       }
@@ -2058,6 +2599,18 @@
         ],
         "tactic_id": "TA0102",
         "tactic_title": "Discovery",
+        "tactic_memberships": [
+          {
+            "id": "TA0102",
+            "title": "Discovery",
+            "shortname": "discovery"
+          },
+          {
+            "id": "TA0100",
+            "title": "Collection",
+            "shortname": "collection"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -2067,7 +2620,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0887"
       }
@@ -2086,6 +2639,13 @@
         ],
         "tactic_id": "TA0102",
         "tactic_title": "Discovery",
+        "tactic_memberships": [
+          {
+            "id": "TA0102",
+            "title": "Discovery",
+            "shortname": "discovery"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -2095,7 +2655,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0888"
       }
@@ -2114,6 +2674,13 @@
         ],
         "tactic_id": "TA0110",
         "tactic_title": "Persistence",
+        "tactic_memberships": [
+          {
+            "id": "TA0110",
+            "title": "Persistence",
+            "shortname": "persistence"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -2123,7 +2690,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0889"
       }
@@ -2142,6 +2709,13 @@
         ],
         "tactic_id": "TA0111",
         "tactic_title": "Privilege Escalation",
+        "tactic_memberships": [
+          {
+            "id": "TA0111",
+            "title": "Privilege Escalation",
+            "shortname": "privilege-escalation"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -2151,7 +2725,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0890"
       }
@@ -2170,6 +2744,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -2179,7 +2760,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0892"
       }
@@ -2198,6 +2779,13 @@
         ],
         "tactic_id": "TA0100",
         "tactic_title": "Collection",
+        "tactic_memberships": [
+          {
+            "id": "TA0100",
+            "title": "Collection",
+            "shortname": "collection"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -2207,7 +2795,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0893"
       }
@@ -2226,6 +2814,13 @@
         ],
         "tactic_id": "TA0103",
         "tactic_title": "Evasion",
+        "tactic_memberships": [
+          {
+            "id": "TA0103",
+            "title": "Evasion",
+            "shortname": "evasion"
+          }
+        ],
         "platforms": [
           "None"
         ],
@@ -2235,7 +2830,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0894"
       }
@@ -2254,6 +2849,13 @@
         ],
         "tactic_id": "TA0104",
         "tactic_title": "Execution",
+        "tactic_memberships": [
+          {
+            "id": "TA0104",
+            "title": "Execution",
+            "shortname": "execution"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
@@ -2261,7 +2863,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T0895"
       }
@@ -2280,6 +2882,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
@@ -2287,7 +2896,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1691"
       }
@@ -2306,6 +2915,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1691",
@@ -2313,7 +2929,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1691.001"
       }
@@ -2332,6 +2948,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1691",
@@ -2339,7 +2962,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1691.002"
       }
@@ -2359,6 +2982,18 @@
         ],
         "tactic_id": "TA0103",
         "tactic_title": "Evasion",
+        "tactic_memberships": [
+          {
+            "id": "TA0103",
+            "title": "Evasion",
+            "shortname": "evasion"
+          },
+          {
+            "id": "TA0106",
+            "title": "Impair Process Control",
+            "shortname": "impair-process-control"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
@@ -2366,7 +3001,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1692"
       }
@@ -2386,6 +3021,18 @@
         ],
         "tactic_id": "TA0103",
         "tactic_title": "Evasion",
+        "tactic_memberships": [
+          {
+            "id": "TA0103",
+            "title": "Evasion",
+            "shortname": "evasion"
+          },
+          {
+            "id": "TA0106",
+            "title": "Impair Process Control",
+            "shortname": "impair-process-control"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1692",
@@ -2393,7 +3040,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1692.001"
       }
@@ -2413,6 +3060,18 @@
         ],
         "tactic_id": "TA0103",
         "tactic_title": "Evasion",
+        "tactic_memberships": [
+          {
+            "id": "TA0103",
+            "title": "Evasion",
+            "shortname": "evasion"
+          },
+          {
+            "id": "TA0106",
+            "title": "Impair Process Control",
+            "shortname": "impair-process-control"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1692",
@@ -2420,7 +3079,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1692.002"
       }
@@ -2441,6 +3100,23 @@
         ],
         "tactic_id": "TA0110",
         "tactic_title": "Persistence",
+        "tactic_memberships": [
+          {
+            "id": "TA0110",
+            "title": "Persistence",
+            "shortname": "persistence"
+          },
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          },
+          {
+            "id": "TA0106",
+            "title": "Impair Process Control",
+            "shortname": "impair-process-control"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
@@ -2448,7 +3124,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1693"
       }
@@ -2469,6 +3145,23 @@
         ],
         "tactic_id": "TA0110",
         "tactic_title": "Persistence",
+        "tactic_memberships": [
+          {
+            "id": "TA0110",
+            "title": "Persistence",
+            "shortname": "persistence"
+          },
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          },
+          {
+            "id": "TA0106",
+            "title": "Impair Process Control",
+            "shortname": "impair-process-control"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1693",
@@ -2476,7 +3169,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1693.001"
       }
@@ -2497,6 +3190,23 @@
         ],
         "tactic_id": "TA0110",
         "tactic_title": "Persistence",
+        "tactic_memberships": [
+          {
+            "id": "TA0110",
+            "title": "Persistence",
+            "shortname": "persistence"
+          },
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          },
+          {
+            "id": "TA0106",
+            "title": "Impair Process Control",
+            "shortname": "impair-process-control"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1693",
@@ -2504,7 +3214,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1693.002"
       }
@@ -2524,6 +3234,18 @@
         ],
         "tactic_id": "TA0110",
         "tactic_title": "Persistence",
+        "tactic_memberships": [
+          {
+            "id": "TA0110",
+            "title": "Persistence",
+            "shortname": "persistence"
+          },
+          {
+            "id": "TA0109",
+            "title": "Lateral Movement",
+            "shortname": "lateral-movement"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
@@ -2531,7 +3253,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1694"
       }
@@ -2551,6 +3273,18 @@
         ],
         "tactic_id": "TA0110",
         "tactic_title": "Persistence",
+        "tactic_memberships": [
+          {
+            "id": "TA0110",
+            "title": "Persistence",
+            "shortname": "persistence"
+          },
+          {
+            "id": "TA0109",
+            "title": "Lateral Movement",
+            "shortname": "lateral-movement"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1694",
@@ -2558,7 +3292,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1694.001"
       }
@@ -2578,6 +3312,18 @@
         ],
         "tactic_id": "TA0110",
         "tactic_title": "Persistence",
+        "tactic_memberships": [
+          {
+            "id": "TA0110",
+            "title": "Persistence",
+            "shortname": "persistence"
+          },
+          {
+            "id": "TA0109",
+            "title": "Lateral Movement",
+            "shortname": "lateral-movement"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1694",
@@ -2585,7 +3331,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1694.002"
       }
@@ -2604,6 +3350,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
@@ -2611,7 +3364,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1695"
       }
@@ -2630,6 +3383,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1695",
@@ -2637,7 +3397,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1695.001"
       }
@@ -2656,6 +3416,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1695",
@@ -2663,7 +3430,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1695.002"
       }
@@ -2682,6 +3449,13 @@
         ],
         "tactic_id": "TA0107",
         "tactic_title": "Inhibit Response Function",
+        "tactic_memberships": [
+          {
+            "id": "TA0107",
+            "title": "Inhibit Response Function",
+            "shortname": "inhibit-response-function"
+          }
+        ],
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1695",
@@ -2689,7 +3463,7 @@
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-09",
+        "snapshot_date": "2026-08-12",
         "version": "2026-08-05",
         "locator": "ics-attack.json#T1695.003"
       }

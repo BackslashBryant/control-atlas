@@ -3,12 +3,91 @@
  * Normalize NIST OSCAL documents into Control Atlas source record arrays.
  */
 
+import Ajv from 'ajv';
+
 const ASSESSMENT_SOURCE_KEY = 'nist-800-53a-assessment-procedures';
 const SUPPORTED_OSCAL_MODELS = ['catalog', 'profile', 'component-definition', 'assessment-plan'];
 
 const ASSESSMENT_PART_NAMES = new Set(['assessment-objective', 'assessment-method', 'assessment-objects', 'objective']);
 const INSERT_PATTERN = /\{\{\s*insert:\s*param,\s*([\w.-]+)\s*\}\}/g;
 const UNRESOLVED_ASSIGNMENT = '[Assignment: organization-defined value]';
+
+const OSCAL_METADATA_SCHEMA = {
+  type: 'object',
+  required: ['title', 'last-modified', 'version', 'oscal-version'],
+  properties: {
+    title: { type: 'string', minLength: 1 },
+    'last-modified': { type: 'string', minLength: 1 },
+    version: { type: 'string', minLength: 1 },
+    'oscal-version': { type: 'string', minLength: 1 },
+  },
+  additionalProperties: true,
+};
+
+const OSCAL_MODEL_SCHEMAS = Object.fromEntries(SUPPORTED_OSCAL_MODELS.map((model) => {
+  const modelSchema = {
+    type: 'object',
+    required: ['uuid', 'metadata'],
+    properties: {
+      uuid: {
+        type: 'string',
+        pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$',
+      },
+      metadata: OSCAL_METADATA_SCHEMA,
+    },
+    additionalProperties: true,
+  };
+  if (model === 'catalog') {
+    modelSchema.anyOf = [{ required: ['groups'] }, { required: ['controls'] }];
+  }
+  if (model === 'profile') {
+    modelSchema.required.push('imports');
+    modelSchema.properties.imports = { type: 'array', minItems: 1 };
+  }
+  return [model, {
+    type: 'object',
+    required: [model],
+    properties: { [model]: modelSchema },
+    additionalProperties: true,
+  }];
+}));
+
+const NORMALIZED_OSCAL_SCHEMA = {
+  type: 'object',
+  required: ['schema_version', 'source_key', 'records'],
+  properties: {
+    schema_version: { const: '1.0' },
+    source_key: { type: 'string', minLength: 1 },
+    records: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['id', 'type', 'framework', 'title', 'description'],
+        properties: {
+          id: { type: 'string', minLength: 1 },
+          type: { type: 'string', minLength: 1 },
+          framework: { type: 'string', minLength: 1 },
+          title: { type: 'string', minLength: 1 },
+          description: { type: 'string' },
+        },
+        additionalProperties: true,
+      },
+    },
+  },
+  additionalProperties: true,
+};
+
+const ajv = new Ajv({ allErrors: true, strict: false });
+const validateOscalModel = Object.fromEntries(
+  Object.entries(OSCAL_MODEL_SCHEMAS).map(([model, schema]) => [model, ajv.compile(schema)]),
+);
+const validateNormalizedOscal = ajv.compile(NORMALIZED_OSCAL_SCHEMA);
+
+function validationMessage(errors) {
+  return (errors || [])
+    .map((error) => `${error.instancePath || '/'} ${error.message}`)
+    .join('; ');
+}
 
 /**
  * Build a resolver function that substitutes `{{ insert: param, <id> }}` moustaches
@@ -184,6 +263,35 @@ export function classifyOscalDocument(document) {
   return model;
 }
 
+/**
+ * Fail closed before publisher OSCAL enters any Control Atlas normalizer.
+ * This seam is intentionally separate from the independent NIST CLI check:
+ * AJV protects the application boundary while the official tool validates
+ * full upstream OSCAL conformance.
+ */
+export function validateOscalDocumentBoundary(document, expectedModel = null) {
+  const recognizedModels = SUPPORTED_OSCAL_MODELS.filter((model) => document?.[model]);
+  if (recognizedModels.length !== 1) {
+    throw new Error(`OSCAL application boundary requires exactly one supported document model; found ${recognizedModels.length}`);
+  }
+  const model = recognizedModels[0];
+  if (expectedModel && model !== expectedModel) {
+    throw new Error(`Expected OSCAL ${expectedModel} document; received ${model}`);
+  }
+  const validate = validateOscalModel[model];
+  if (!validate(document)) {
+    throw new Error(`Invalid OSCAL ${model} at application boundary: ${validationMessage(validate.errors)}`);
+  }
+  return model;
+}
+
+function validatedNormalizedOutput(output) {
+  if (!validateNormalizedOscal(output)) {
+    throw new Error(`Invalid normalized OSCAL output: ${validationMessage(validateNormalizedOscal.errors)}`);
+  }
+  return output;
+}
+
 export function normalize80053Id(oscalId) {
   return String(oscalId || '').toUpperCase();
 }
@@ -264,16 +372,14 @@ function walk80053(nodes, familyTitle, records, sourceKey, parentParams) {
 }
 
 export function parse80053Catalog(catalogJson, sourceKey) {
-  if (classifyOscalDocument(catalogJson) !== 'catalog') {
-    throw new Error('Expected OSCAL catalog document');
-  }
+  validateOscalDocumentBoundary(catalogJson, 'catalog');
   const records = [];
   walk80053(catalogJson.catalog?.groups, null, records, sourceKey);
-  return {
+  return validatedNormalizedOutput({
     schema_version: '1.0',
     source_key: sourceKey,
     records,
-  };
+  });
 }
 
 function walkCsf(nodes, functionCtx, categoryCtx, records) {
@@ -308,9 +414,7 @@ function walkCsf(nodes, functionCtx, categoryCtx, records) {
 }
 
 export function parseCsfCatalog(catalogJson, sourceKey) {
-  if (classifyOscalDocument(catalogJson) !== 'catalog') {
-    throw new Error('Expected OSCAL catalog document');
-  }
+  validateOscalDocumentBoundary(catalogJson, 'catalog');
   const records = [];
   walkCsf(catalogJson.catalog?.groups, null, null, records);
 
@@ -324,11 +428,11 @@ export function parseCsfCatalog(catalogJson, sourceKey) {
     }
   }
 
-  return {
+  return validatedNormalizedOutput({
     schema_version: '1.0',
     source_key: sourceKey,
     records,
-  };
+  });
 }
 
 function walk800171(nodes, familyTitle, records) {
@@ -360,16 +464,14 @@ function walk800171(nodes, familyTitle, records) {
 }
 
 export function parse800171Catalog(catalogJson, sourceKey) {
-  if (classifyOscalDocument(catalogJson) !== 'catalog') {
-    throw new Error('Expected OSCAL catalog document');
-  }
+  validateOscalDocumentBoundary(catalogJson, 'catalog');
   const records = [];
   walk800171(catalogJson.catalog?.groups, null, records);
-  return {
+  return validatedNormalizedOutput({
     schema_version: '1.0',
     source_key: sourceKey,
     records,
-  };
+  });
 }
 
 function parseCsvRows(text) {
@@ -468,16 +570,14 @@ function walk800172(nodes, familyTitle, records) {
 }
 
 export function parse800172Catalog(catalogJson, sourceKey) {
-  if (classifyOscalDocument(catalogJson) !== 'catalog') {
-    throw new Error('Expected OSCAL catalog document');
-  }
+  validateOscalDocumentBoundary(catalogJson, 'catalog');
   const records = [];
   walk800172(catalogJson.catalog?.groups, null, records);
-  return {
+  return validatedNormalizedOutput({
     schema_version: '1.0',
     source_key: sourceKey,
     records,
-  };
+  });
 }
 
 export function buildSearchTokens(record) {

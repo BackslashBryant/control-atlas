@@ -11,6 +11,7 @@ const PROVENANCE_CLASSES = new Set([
   'federal_utilized',
   'federal_referenced',
   'mitre_published',
+  'third_party_published',
   'inferred',
   // Control Atlas's own organizing spine (trunk/limb/catalog attachment). Not a
   // publisher claim — always paired with publication_status 'editorial'.

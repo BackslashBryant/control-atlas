@@ -7,6 +7,7 @@ import { spawn } from 'node:child_process';
 import {
   classifyOscalDocument,
   parse80053Catalog,
+  validateOscalDocumentBoundary,
 } from './normalizers/oscal-normalize.mjs';
 
 const catalogPath = 'tests/fixtures/oscal/sample-800-53-assessment.json';
@@ -51,16 +52,30 @@ await mkdir(dirname(outputPath), { recursive: true });
 await writeFile(invalidCatalogPath, `${JSON.stringify(invalidCatalog, null, 2)}\n`);
 await writeFile(invalidProfilePath, `${JSON.stringify(invalidProfile, null, 2)}\n`);
 
+function rejectsAtApplicationBoundary(document, model) {
+  try {
+    validateOscalDocumentBoundary(document, model);
+    return false;
+  } catch {
+    return true;
+  }
+}
+
 const currentValidation = {
   catalogModel: classifyOscalDocument(catalog),
   catalogRecords: parse80053Catalog(catalog, 'nist-oscal').records.length,
-  invalidCatalogAcceptedByNormalizer:
-    parse80053Catalog(invalidCatalog, 'nist-oscal').records.length > 0,
+  invalidCatalogRejectedByApplicationBoundary:
+    rejectsAtApplicationBoundary(invalidCatalog, 'catalog'),
   profileModel: classifyOscalDocument(profile),
-  invalidProfileAcceptedByClassifier:
-    classifyOscalDocument(invalidProfile) === 'profile',
-  ajvOscalValidationPresent: false,
+  invalidProfileRejectedByApplicationBoundary:
+    rejectsAtApplicationBoundary(invalidProfile, 'profile'),
+  ajvOscalValidationPresent: true,
 };
+
+if (!currentValidation.invalidCatalogRejectedByApplicationBoundary
+  || !currentValidation.invalidProfileRejectedByApplicationBoundary) {
+  throw new Error(`Application OSCAL boundary accepted an invalid fixture: ${JSON.stringify(currentValidation)}`);
+}
 
 const cli = {
   validCatalog: await runCli(['catalog', 'validate', catalogPath]),
@@ -83,7 +98,7 @@ const result = {
   currentValidation,
   cli,
   conclusion:
-    'The NIST CLI catches missing required OSCAL metadata that the current classifier and normalizer accept.',
+    'AJV rejects malformed OSCAL at the application boundary, and the independent NIST CLI confirms upstream conformance.',
 };
 await writeFile(outputPath, `${JSON.stringify(result, null, 2)}\n`);
 console.log(JSON.stringify(result, null, 2));

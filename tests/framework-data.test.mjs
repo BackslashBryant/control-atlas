@@ -104,8 +104,8 @@ test("federal graph build emits graph contract counts", () => {
   assert.ok(buildResult.sources >= 51);
   assert.ok(buildResult.nodes > 9000);
   assert.ok(buildResult.edges > 12000);
-  assert.equal(buildResult.edges, buildResult.evidence);
-  assert.ok(buildResult.findings > 0);
+  assert.ok(buildResult.evidence >= buildResult.edges);
+  assert.equal(buildResult.findings, 0);
 });
 
 test("authority nodes and issued-under relationships emit outside canonical organizes", () => {
@@ -166,7 +166,7 @@ test("runtime Atlas spine carries full L0-L3 structure and L4 summaries", () => 
     }
   }
   const catalogEntries = entries.filter((entry) => entry.node_type === "catalog");
-  assert.equal(catalogEntries.length, 23);
+  assert.equal(catalogEntries.length, 27);
   const publicationsByArea = new Map();
   for (const entry of catalogEntries) {
     publicationsByArea.set(
@@ -816,7 +816,8 @@ test("dod-zt graph build emits pillars, capabilities, and overlay crosswalk edge
       edge.relationship_type === "contains" &&
       edge.relationship_class === "structural",
   );
-  assert.equal(residualOverlayEdges.length, 8);
+  assert.equal(residualOverlayEdges.length, 0);
+  assert.ok(overlayIds.every((id) => !nodeIds.has(id)), "overlay appendices must not survive as empty structural records");
 
   const reachability = evaluateTrunkReachability(nodes, edges, "atlas:TRUNK");
   assert.deepEqual(reachability.undirectedOrphans, []);

@@ -1,0 +1,745 @@
+{
+  "document_key": "dod-zt-strategy-placemats",
+  "extractor": {
+    "name": "pdfplumber",
+    "version": "0.11.10"
+  },
+  "pages": [
+    {
+      "height": 540.0,
+      "lines": [
+        {
+          "bbox": [
+            170.44,
+            33.068,
+            844.884,
+            57.068
+          ],
+          "id": "line-1",
+          "text": "DoD Information Enterprise - Zero Trust Framework"
+        },
+        {
+          "bbox": [
+            56.88,
+            116.496,
+            911.303,
+            130.516
+          ],
+          "id": "line-2",
+          "text": "Secure information at all operational levels Continually update & advance ZT enabled IT"
+        },
+        {
+          "bbox": [
+            30.96,
+            139.036,
+            860.966,
+            154.836
+          ],
+          "id": "line-3",
+          "text": "Create dynamic access control capabilities Virtualize and breakdown silos"
+        },
+        {
+          "bbox": [
+            74.06,
+            160.496,
+            240.855,
+            174.476
+          ],
+          "id": "line-4",
+          "text": "Interoperate with secured data"
+        },
+        {
+          "bbox": [
+            716.52,
+            164.996,
+            836.566,
+            178.976
+          ],
+          "id": "line-5",
+          "text": "Simplify architectures"
+        },
+        {
+          "bbox": [
+            51.6,
+            182.276,
+            219.835,
+            196.256
+          ],
+          "id": "line-6",
+          "text": "Automate cyber and ZT with AI"
+        },
+        {
+          "bbox": [
+            740.1,
+            188.3,
+            893.932,
+            202.3
+          ],
+          "id": "line-7",
+          "text": "Automate data management"
+        },
+        {
+          "bbox": [
+            337.4,
+            196.2,
+            609.324,
+            208.2
+          ],
+          "id": "line-8",
+          "text": "Full interoperation of DoD Deploy Zero Trust"
+        },
+        {
+          "bbox": [
+            343.88,
+            209.24,
+            624.384,
+            221.24
+          ],
+          "id": "line-9",
+          "text": "cybersecurity and Zero technologies equal to or"
+        },
+        {
+          "bbox": [
+            343.7,
+            222.26,
+            612.408,
+            234.26
+          ],
+          "id": "line-10",
+          "text": "Trust practices achieve exceeding industry"
+        },
+        {
+          "bbox": [
+            339.98,
+            235.22,
+            635.34,
+            247.22
+          ],
+          "id": "line-11",
+          "text": "enterprise resilience and advancements outpacing the"
+        },
+        {
+          "bbox": [
+            374.06,
+            248.24,
+            635.328,
+            260.24
+          ],
+          "id": "line-12",
+          "text": "protection changing threat environment"
+        },
+        {
+          "bbox": [
+            775.92,
+            281.816,
+            896.064,
+            295.796
+          ],
+          "id": "line-13",
+          "text": "Native operations and"
+        },
+        {
+          "bbox": [
+            109.9,
+            291.136,
+            200.127,
+            305.116
+          ],
+          "id": "line-14",
+          "text": "A workforce that"
+        },
+        {
+          "bbox": [
+            775.92,
+            298.616,
+            845.359,
+            312.596
+          ],
+          "id": "line-15",
+          "text": "performance"
+        },
+        {
+          "bbox": [
+            129.28,
+            307.936,
+            200.159,
+            321.916
+          ],
+          "id": "line-16",
+          "text": "embraces ZT"
+        },
+        {
+          "bbox": [
+            312.82,
+            311.74,
+            343.54,
+            323.74
+          ],
+          "id": "line-17",
+          "text": "A Zero"
+        },
+        {
+          "bbox": [
+            269.62,
+            324.76,
+            675.544,
+            338.26
+          ],
+          "id": "line-18",
+          "text": "Trust security framework DoD Zero Trust"
+        },
+        {
+          "bbox": [
+            58.78,
+            334.78,
+            926.014,
+            353.096
+          ],
+          "id": "line-19",
+          "text": "Increased collaboration and mindset that guides permeates Department- Consistent, aligned, and"
+        },
+        {
+          "bbox": [
+            269.08,
+            350.74,
+            925.349,
+            365.596
+          ],
+          "id": "line-20",
+          "text": "the design, development, level and Component- effectively resourced ZT"
+        },
+        {
+          "bbox": [
+            98.38,
+            355.916,
+            187.642,
+            369.896
+          ],
+          "id": "line-21",
+          "text": "and productivity"
+        },
+        {
+          "bbox": [
+            262.3,
+            363.76,
+            907.846,
+            382.396
+          ],
+          "id": "line-22",
+          "text": "integration, and deployment ZERO level processes supporting functions"
+        },
+        {
+          "bbox": [
+            266.02,
+            376.78,
+            690.148,
+            394.644
+          ],
+          "id": "line-23",
+          "text": "of access control and data TRUST resulting in seamless"
+        },
+        {
+          "bbox": [
+            82.68,
+            389.74,
+            678.364,
+            404.276
+          ],
+          "id": "line-24",
+          "text": "Increased commitment protection across the and coordinated"
+        },
+        {
+          "bbox": [
+            98.7,
+            402.78,
+            917.621,
+            421.076
+          ],
+          "id": "line-25",
+          "text": "to ZT cybersecurity DoD Enterprise security posture Streamline and accelerate"
+        },
+        {
+          "bbox": [
+            302.26,
+            415.8,
+            354.136,
+            427.8
+          ],
+          "id": "line-26",
+          "text": "Ecosystem"
+        },
+        {
+          "bbox": [
+            775.92,
+            419.736,
+            910.729,
+            433.716
+          ],
+          "id": "line-27",
+          "text": "acquisition processes to"
+        },
+        {
+          "bbox": [
+            443.22,
+            430.284,
+            517.809,
+            440.304
+          ],
+          "id": "line-28",
+          "text": "APPLICATIONS"
+        },
+        {
+          "bbox": [
+            775.92,
+            436.536,
+            895.868,
+            450.516
+          ],
+          "id": "line-29",
+          "text": "deploy ZT capabilities"
+        },
+        {
+          "bbox": [
+            442.02,
+            440.244,
+            518.914,
+            450.264
+          ],
+          "id": "line-30",
+          "text": "& WORKLOADS"
+        },
+        {
+          "bbox": [
+            370.46,
+            459.566,
+            585.971,
+            472.106
+          ],
+          "id": "line-31",
+          "text": "USER DATA"
+        },
+        {
+          "bbox": [
+            298.62,
+            493.644,
+            652.59,
+            508.226
+          ],
+          "id": "line-32",
+          "text": "DEVICES NETWORK & AUTOMATION & VISIBILITY &"
+        },
+        {
+          "bbox": [
+            380.74,
+            503.604,
+            651.135,
+            513.97
+          ],
+          "id": "line-33",
+          "text": "ENVIRONMENT ORCHESTRATION ANALYTICS"
+        },
+        {
+          "bbox": [
+            946.66,
+            521.526,
+            952.765,
+            532.506
+          ],
+          "id": "line-34",
+          "text": "1"
+        }
+      ],
+      "page": 1,
+      "tables": [],
+      "text": "DoD Information Enterprise - Zero Trust Framework\nSecure information at all operational levels Continually update & advance ZT enabled IT\nCreate dynamic access control capabilities Virtualize and breakdown silos\nInteroperate with secured data\nSimplify architectures\nAutomate cyber and ZT with AI\nAutomate data management\nFull interoperation of DoD Deploy Zero Trust\ncybersecurity and Zero technologies equal to or\nTrust practices achieve exceeding industry\nenterprise resilience and advancements outpacing the\nprotection changing threat environment\nNative operations and\nA workforce that\nperformance\nembraces ZT\nA Zero\nTrust security framework DoD Zero Trust\nIncreased collaboration and mindset that guides permeates Department- Consistent, aligned, and\nthe design, development, level and Component- effectively resourced ZT\nand productivity\nintegration, and deployment ZERO level processes supporting functions\nof access control and data TRUST resulting in seamless\nIncreased commitment protection across the and coordinated\nto ZT cybersecurity DoD Enterprise security posture Streamline and accelerate\nEcosystem\nacquisition processes to\nAPPLICATIONS\ndeploy ZT capabilities\n& WORKLOADS\nUSER DATA\nDEVICES NETWORK & AUTOMATION & VISIBILITY &\nENVIRONMENT ORCHESTRATION ANALYTICS\n1",
+      "text_sha256": "sha256:04773c9bf3d6b572d18ca657a606e527622e2600ff40e31cf4888b8cb4715370",
+      "width": 960.0
+    },
+    {
+      "height": 540.0,
+      "lines": [
+        {
+          "bbox": [
+            164.22,
+            35.188,
+            814.672,
+            59.188
+          ],
+          "id": "line-1",
+          "text": "DoD Information Enterprise - Zero Trust Guidance"
+        },
+        {
+          "bbox": [
+            733.1,
+            111.284,
+            879.596,
+            125.264
+          ],
+          "id": "line-2",
+          "text": "DOD ZT STRATEGY"
+        },
+        {
+          "bbox": [
+            33.36,
+            119.304,
+            209.746,
+            133.284
+          ],
+          "id": "line-3",
+          "text": "STRATEGIC GUIDANCE"
+        },
+        {
+          "bbox": [
+            733.4,
+            139.686,
+            895.201,
+            150.666
+          ],
+          "id": "line-4",
+          "text": "Establishes desired outcomes for"
+        },
+        {
+          "bbox": [
+            29.6,
+            151.924,
+            912.901,
+            163.866
+          ],
+          "id": "line-5",
+          "text": "• EO 14028, “Improving the Nation’s Cybersecurity” Components to achieve minimum ZT"
+        },
+        {
+          "bbox": [
+            38.48,
+            163.924,
+            905.676,
+            177.066
+          ],
+          "id": "line-6",
+          "text": "(21 May 2021) Target Level capabilities across the"
+        },
+        {
+          "bbox": [
+            29.6,
+            175.924,
+            247.477,
+            185.944
+          ],
+          "id": "line-7",
+          "text": "• National Defense Authorization Act for FY 2022"
+        },
+        {
+          "bbox": [
+            733.4,
+            179.286,
+            902.92,
+            190.266
+          ],
+          "id": "line-8",
+          "text": "DoD Information Enterprise (IE) for"
+        },
+        {
+          "bbox": [
+            38.48,
+            187.924,
+            101.606,
+            197.944
+          ],
+          "id": "line-9",
+          "text": "(27 Dec 2021)"
+        },
+        {
+          "bbox": [
+            733.4,
+            192.486,
+            902.975,
+            203.466
+          ],
+          "id": "line-10",
+          "text": "data, assets, applications, services"
+        },
+        {
+          "bbox": [
+            29.6,
+            199.924,
+            274.428,
+            209.944
+          ],
+          "id": "line-11",
+          "text": "• OMB M-22-09, “Moving the U.S. Government Toward"
+        },
+        {
+          "bbox": [
+            733.4,
+            205.686,
+            896.585,
+            216.666
+          ],
+          "id": "line-12",
+          "text": "(DAAS) at all classification levels."
+        },
+        {
+          "bbox": [
+            38.48,
+            211.924,
+            261.706,
+            221.944
+          ],
+          "id": "line-13",
+          "text": "Zero Trust Cybersecurity Principles” (26 Jan 2022)"
+        },
+        {
+          "bbox": [
+            29.6,
+            223.924,
+            261.69,
+            233.944
+          ],
+          "id": "line-14",
+          "text": "• NMM-2022-01, “National Security Memorandum 8,"
+        },
+        {
+          "bbox": [
+            38.48,
+            235.944,
+            253.86,
+            245.964
+          ],
+          "id": "line-15",
+          "text": "Zero Trust Security and Cloud Migration Security"
+        },
+        {
+          "bbox": [
+            38.48,
+            247.944,
+            144.111,
+            257.964
+          ],
+          "id": "line-16",
+          "text": "Guidance” (2 Feb 2022)"
+        },
+        {
+          "bbox": [
+            29.6,
+            259.944,
+            219.921,
+            269.964
+          ],
+          "id": "line-17",
+          "text": "• National Defense Strategy (28Mar 2022)"
+        },
+        {
+          "bbox": [
+            126.56,
+            291.404,
+            273.548,
+            303.404
+          ],
+          "id": "line-18",
+          "text": "DOD ZT CAPABILITIES"
+        },
+        {
+          "bbox": [
+            35.82,
+            310.83,
+            165.744,
+            319.83
+          ],
+          "id": "line-19",
+          "text": "Capabilities define the outcomes"
+        },
+        {
+          "bbox": [
+            40.26,
+            321.356,
+            553.39,
+            341.336
+          ],
+          "id": "line-20",
+          "text": "that Components must reach to A secure DoD"
+        },
+        {
+          "bbox": [
+            45.3,
+            332.43,
+            165.783,
+            341.43
+          ],
+          "id": "line-21",
+          "text": "achieve minimum ZT Target&"
+        },
+        {
+          "bbox": [
+            52.44,
+            343.23,
+            595.326,
+            365.336
+          ],
+          "id": "line-22",
+          "text": "AdvancedLevel capabilities. Information Enterprise"
+        },
+        {
+          "bbox": [
+            94.7,
+            374.044,
+            273.584,
+            386.044
+          ],
+          "id": "line-23",
+          "text": "ZT CAPABILITY TIMELINES"
+        },
+        {
+          "bbox": [
+            80.48,
+            393.57,
+            162.371,
+            402.57
+          ],
+          "id": "line-24",
+          "text": "Roadmap depictions"
+        },
+        {
+          "bbox": [
+            78.32,
+            404.37,
+            162.362,
+            413.37
+          ],
+          "id": "line-25",
+          "text": "show how Zero Trust"
+        },
+        {
+          "bbox": [
+            66.5,
+            415.17,
+            162.395,
+            424.17
+          ],
+          "id": "line-26",
+          "text": "capabilities will advance"
+        },
+        {
+          "bbox": [
+            84.98,
+            425.99,
+            162.38,
+            434.99
+          ],
+          "id": "line-27",
+          "text": "across the 7 pillars."
+        },
+        {
+          "bbox": [
+            631.34,
+            438.364,
+            916.113,
+            452.344
+          ],
+          "id": "line-28",
+          "text": "DOD ZT REFERENCE ARCHITECTURE"
+        },
+        {
+          "bbox": [
+            40.58,
+            461.164,
+            273.536,
+            473.164
+          ],
+          "id": "line-29",
+          "text": "ZT IMPLEMENTATION MILESTONES"
+        },
+        {
+          "bbox": [
+            631.08,
+            464.806,
+            881.358,
+            475.786
+          ],
+          "id": "line-30",
+          "text": "Establishes a framework that provides guidance via"
+        },
+        {
+          "bbox": [
+            47.98,
+            478.006,
+            907.326,
+            488.986
+          ],
+          "id": "line-31",
+          "text": "Specified milestones provide architectural Pillars and Principles and identifies which of"
+        },
+        {
+          "bbox": [
+            99.52,
+            489.79,
+            906.261,
+            502.186
+          ],
+          "id": "line-32",
+          "text": "a basis to guide the overall strategic needs (goals and objectives) are the"
+        },
+        {
+          "bbox": [
+            65.08,
+            500.59,
+            162.442,
+            509.59
+          ],
+          "id": "line-33",
+          "text": "implementation planning"
+        },
+        {
+          "bbox": [
+            631.08,
+            504.406,
+            806.272,
+            515.386
+          ],
+          "id": "line-34",
+          "text": "focus of the Reference Architecture."
+        },
+        {
+          "bbox": [
+            125.44,
+            511.39,
+            162.403,
+            520.39
+          ],
+          "id": "line-35",
+          "text": "activities."
+        },
+        {
+          "bbox": [
+            946.66,
+            521.526,
+            952.765,
+            532.506
+          ],
+          "id": "line-36",
+          "text": "2"
+        }
+      ],
+      "page": 2,
+      "tables": [],
+      "text": "DoD Information Enterprise - Zero Trust Guidance\nDOD ZT STRATEGY\nSTRATEGIC GUIDANCE\nEstablishes desired outcomes for\n• EO 14028, “Improving the Nation’s Cybersecurity” Components to achieve minimum ZT\n(21 May 2021) Target Level capabilities across the\n• National Defense Authorization Act for FY 2022\nDoD Information Enterprise (IE) for\n(27 Dec 2021)\ndata, assets, applications, services\n• OMB M-22-09, “Moving the U.S. Government Toward\n(DAAS) at all classification levels.\nZero Trust Cybersecurity Principles” (26 Jan 2022)\n• NMM-2022-01, “National Security Memorandum 8,\nZero Trust Security and Cloud Migration Security\nGuidance” (2 Feb 2022)\n• National Defense Strategy (28Mar 2022)\nDOD ZT CAPABILITIES\nCapabilities define the outcomes\nthat Components must reach to A secure DoD\nachieve minimum ZT Target&\nAdvancedLevel capabilities. Information Enterprise\nZT CAPABILITY TIMELINES\nRoadmap depictions\nshow how Zero Trust\ncapabilities will advance\nacross the 7 pillars.\nDOD ZT REFERENCE ARCHITECTURE\nZT IMPLEMENTATION MILESTONES\nEstablishes a framework that provides guidance via\nSpecified milestones provide architectural Pillars and Principles and identifies which of\na basis to guide the overall strategic needs (goals and objectives) are the\nimplementation planning\nfocus of the Reference Architecture.\nactivities.\n2",
+      "text_sha256": "sha256:6b9d13c81d880ff12d595d7fe907cb211c52f4851c88343333b5edf2b208407d",
+      "width": 960.0
+    }
+  ],
+  "reconciliation": {
+    "pages_discovered": 2,
+    "pages_extracted": 2,
+    "pages_with_tables": 0,
+    "pages_with_text": 2,
+    "tables_extracted": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "byte_length": 740009,
+    "filename": "placemats.pdf",
+    "pages": 2,
+    "retrieved_at": "2026-08-12",
+    "sha256": "sha256:453ba7af10d64034af963ef28da60b85c7a920d638388a4b153c8212113c85d3",
+    "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-StrategyPlacemats.pdf"
+  }
+}

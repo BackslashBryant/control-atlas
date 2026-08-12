@@ -14,7 +14,7 @@ import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readGeneratedCollection } from './lib/generated-graph-artifacts.mjs';
-import { COMPLETENESS_STATES, resolveExpectedLocator, classifyCatalog } from './lib/completeness.mjs';
+import { resolveExpectedLocator, classifyCatalog, summarizeCompleteness } from './lib/completeness.mjs';
 import { NON_CATALOG_TECHNICAL_SHARDS } from './sync-catalog-source-bundles.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -102,7 +102,11 @@ if (!registry) {
 
     // Required fields present.
     for (const field of REQUIRED_ARTIFACT_FIELDS) {
-      if (art[field] === undefined || art[field] === null || art[field] === '') {
+      const documentedUnknownVersion = field === 'version'
+        && art.version === null
+        && typeof art.metadata?.version_unknown_reason === 'string'
+        && art.metadata.version_unknown_reason.trim();
+      if (!documentedUnknownVersion && (art[field] === undefined || art[field] === null || art[field] === '')) {
         err(`artifact ${art.id} missing required field: ${field}`);
       }
     }
@@ -194,10 +198,9 @@ if (!registry) {
   }
 }
 
-// Manifest/runtime agreement: every artifact's record_count and
-// relationship_count must equal the number of generated nodes/edges that cite
-// it (spec §9). Also confirms every generated node/edge resolves to a real
-// artifact (spec §11 provenance resolution).
+// SourceCountLedger agreement: publisher-side parsed counts remain immutable
+// source facts, while graph node/edge citation counts are verified separately.
+// Also confirms every generated node/edge resolves to a real artifact.
 const nodesRaw = readGeneratedCollection(ROOT, 'nodes');
 const edgesRaw = readGeneratedCollection(ROOT, 'edges');
 if (registry && nodesRaw && edgesRaw) {
@@ -225,11 +228,29 @@ if (registry && nodesRaw && edgesRaw) {
   if (quarantinedNodeCitations || quarantinedEdgeCitations) {
     console.log(`NOTE: ${quarantinedNodeCitations} node + ${quarantinedEdgeCitations} edge citations reference quarantined sources (see registry.quarantine for reasons).`);
   }
+  const countLedger = readJson('data/generated/source-count-ledger.json');
+  const ledgerArtifacts = new Map((countLedger?.artifacts || []).map((entry) => [entry.artifact_id, entry]));
+  if (countLedger?.schema_version !== '1.0') err('missing or invalid data/generated/source-count-ledger.json');
   for (const art of registry.artifacts || []) {
-    const rc = nodeCounts.get(art.id) || 0;
-    const relc = edgeCounts.get(art.id) || 0;
-    if (art.record_count !== rc) err(`artifact ${art.id} record_count ${art.record_count} != runtime node count ${rc} (manifest/runtime disagreement)`);
-    if (art.relationship_count !== relc) err(`artifact ${art.id} relationship_count ${art.relationship_count} != runtime edge count ${relc}`);
+    const entry = ledgerArtifacts.get(art.id);
+    if (!entry) {
+      err(`source count ledger missing artifact ${art.id}`);
+      continue;
+    }
+    const runtimeNodes = nodeCounts.get(art.id) || 0;
+    const runtimeEdges = edgeCounts.get(art.id) || 0;
+    if (entry.counts?.parsed_source_records !== art.record_count) {
+      err(`source count ledger ${art.id} parsed_source_records disagrees with source registry`);
+    }
+    if (entry.counts?.published_source_relationships !== art.relationship_count) {
+      err(`source count ledger ${art.id} published_source_relationships disagrees with source registry`);
+    }
+    if (entry.counts?.runtime_node_citations !== runtimeNodes) {
+      err(`source count ledger ${art.id} runtime_node_citations ${entry.counts?.runtime_node_citations} != ${runtimeNodes}`);
+    }
+    if (entry.counts?.runtime_edge_citations !== runtimeEdges) {
+      err(`source count ledger ${art.id} runtime_edge_citations ${entry.counts?.runtime_edge_citations} != ${runtimeEdges}`);
+    }
   }
 }
 
@@ -237,6 +258,9 @@ if (registry && nodesRaw && edgesRaw) {
 const disa = readJson('data/disa-artifact-manifest.json');
 if (disa) {
   if (!isRealSha256(disa.checksum)) err('DISA manifest checksum is not a real sha256');
+  if ((disa.reconciliation?.failed_files || 0) > 0) {
+    err(`DISA discovery contains ${disa.reconciliation.failed_files} failed file(s); source completeness cannot pass`);
+  }
   const hits = []; scanForbidden(disa, 'disa', hits);
   for (const h of hits) err(`DISA manifest forbidden marker: ${h}`);
 }
@@ -349,22 +373,21 @@ function buildCoverageManifest() {
       has_shard: hasShard,
     });
   }
-  const catalogStates = Object.fromEntries(
-    COMPLETENESS_STATES.map((s) => [s, catalogs.filter((c) => c.completeness_status === s).length]),
-  );
+  const completenessSummary = summarizeCompleteness(catalogs);
   return {
-    schema_version: '3.0',
+    schema_version: '4.0',
     generated_at: new Date().toISOString(),
     completeness: {
       total_publications: (registry?.publications || []).length,
       total_artifacts: (registry?.artifacts || []).length,
       total_catalog_bundles: (registry?.catalog_source_bundles || []).length,
       manual_seed_artifacts: (registry?.artifacts || []).filter((a) => a.parser === 'manual-seed').length,
-      catalog_states: catalogStates,
+      catalog_states: completenessSummary.states,
       provenance_verified: errors.length === 0,
     },
     catalogs,
-    verification_status: errors.length === 0 ? 'PASSED' : 'FAILED',
+    integrity_status: errors.length === 0 ? 'PASSED' : 'FAILED',
+    completeness_status: completenessSummary.status,
   };
 }
 
@@ -395,7 +418,7 @@ writeFileSync(
 if (errors.length > 0) {
   console.error(`FAIL: verify:manifests found ${errors.length} integrity error(s):`);
   for (const e of errors) console.error(`  - ${e}`);
-  console.error('Coverage manifest written with verification_status=FAILED.');
+  console.error('Coverage manifest written with integrity_status=FAILED.');
   process.exit(1);
 }
 console.log('PASS: manifests verified; source-coverage-manifest.json regenerated from counted values.');
