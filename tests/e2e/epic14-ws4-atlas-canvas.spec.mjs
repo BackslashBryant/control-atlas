@@ -155,7 +155,14 @@ test("Adaptive Explorer is bounded, responsive, and incrementally rendered at ev
       await expect(browse).toBeVisible();
       await browse.click();
       await expect(page.getByRole("navigation", { name: "Current publication structure" })).toBeVisible();
-      await page.getByRole("button", { name: "Close browse" }).click();
+      const closeBrowse = page.getByRole("button", { name: "Close browse" });
+      await expect(closeBrowse).toBeVisible();
+      if (width < 768) {
+        const closeBox = await closeBrowse.boundingBox();
+        const parentBox = await page.locator(".atlas-tree__local-parent").boundingBox();
+        expect(parentBox?.y, `${width}px parent control below close button`).toBeGreaterThanOrEqual(closeBox?.y + closeBox?.height);
+      }
+      await closeBrowse.click();
     } else {
       await expect(page.getByRole("navigation", { name: "Current publication structure" })).toBeVisible();
     }
