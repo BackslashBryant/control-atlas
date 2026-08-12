@@ -2,7 +2,7 @@
 
 - **Owner:** Product owner
 - **Status:** Canonical manifest
-- **Last reviewed:** 2026-08-11
+- **Last reviewed:** 2026-08-12
 - **Supersession:** A newer approved decision must update the affected canonical document in the same change. Git history, pull requests, and releases retain history.
 
 Only durable direction belongs in `docs/`:

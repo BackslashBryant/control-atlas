@@ -24,8 +24,15 @@ function docFiles(path = "docs") {
 }
 
 test("documentation has one canonical foundation and no completed plan archive", () => {
-  assert.deepEqual(docFiles().sort(), [...canonicalDocs].sort());
-  assert.equal(existsSync("docs/Plan.md"), false);
+  const expectedDocs = existsSync("docs/Plan.md")
+    ? [...canonicalDocs, "docs/Plan.md"]
+    : canonicalDocs;
+  assert.deepEqual(docFiles().sort(), [...expectedDocs].sort());
+  if (existsSync("docs/Plan.md")) {
+    const activePlan = readFileSync("docs/Plan.md", "utf8");
+    assert.match(activePlan, /Status:\*\* Active/i, "the only retained plan must be active");
+    assert.match(activePlan, /delete it in the shipping change/i);
+  }
   assert.equal(docFiles().filter((path) => /backlog/i.test(path)).length, 1);
   for (const path of canonicalDocs) {
     const content = readFileSync(path, "utf8");
@@ -38,7 +45,7 @@ test("canonical direction defines the current product, page, data, and release c
   assert.match(readFileSync("docs/PRD.md", "utf8"), /Build for translation, not complexity/i);
   assert.match(readFileSync("docs/PAGE_CONTRACTS.md", "utf8"), /Adaptive Explorer/);
   assert.match(readFileSync("docs/PAGE_CONTRACTS.md", "utf8"), /Related records/);
-  assert.match(readFileSync("docs/DATA_POLICY.md", "utf8"), /exactly one acyclic containment path/);
+  assert.match(readFileSync("docs/DATA_POLICY.md", "utf8"), /one or more acyclic containment paths/);
   assert.match(readFileSync("docs/DATA_POLICY.md", "utf8"), /StructuredContentBlock/);
   assert.match(readFileSync("docs/OPERATIONS.md", "utf8"), /deployed `release\.json` commit equals merged `main`/);
 });
