@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { markdownToPlainText } from "./lib/markdown-to-text.mjs";
 import { writeJsonAtomically } from "./lib/write-json-atomically.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -57,14 +58,7 @@ function repositoryIdentity(resource) {
 }
 
 function cleanMarkdown(value) {
-  return String(value || "")
-    .replace(/<!--[^]*?-->/g, "")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/[`*_>#|]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  return markdownToPlainText(value);
 }
 
 function excerpt(value, maximum = 1800) {

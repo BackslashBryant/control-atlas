@@ -7,6 +7,7 @@ import { INGESTION_STAGES, validateIngestionPipelineDefinition } from './lib/ing
 import { validateDataTrustContracts, validateRecordPresentation } from './build-framework-data.mjs';
 import { DATA_TRUST_CONTRACT_VERSION } from '../src/shared/data-trust-contracts.mjs';
 import { catalogStructureProfile } from '../src/shared/catalog-structure.mjs';
+import { preserveGeneratedAt } from './lib/stable-generated-at.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'data/generated/ingestion-stage-ledger.json');
@@ -162,7 +163,7 @@ const catalogEntries = (registry.catalog_source_bundles || []).map((bundle) => {
   return { catalog_id: bundle.catalog_id, stages };
 });
 
-const ledger = {
+const ledger = preserveGeneratedAt(OUT, {
   schema_version: '1.0',
   generated_at: new Date().toISOString(),
   status: errors.length ? 'FAILED' : 'COMPLETE',
@@ -175,7 +176,7 @@ const ledger = {
   artifacts: artifactEntries,
   catalogs: catalogEntries,
   findings: errors,
-};
+});
 writeFileSync(OUT, `${JSON.stringify(ledger, null, 2)}\n`, 'utf8');
 
 if (errors.length) {

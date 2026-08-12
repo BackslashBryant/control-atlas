@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { INGESTION_STAGES } from './lib/ingestion-pipeline.mjs';
+import { preserveGeneratedAt } from './lib/stable-generated-at.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const readJson = (relativePath) => JSON.parse(readFileSync(join(ROOT, relativePath), 'utf8'));
@@ -112,14 +113,14 @@ const resources = (dataset.resources || []).map((resource) => {
   return { resource_id: resource.id, source_url: resource.canonicalUrl, stages };
 });
 
-const ledger = {
+const ledger = preserveGeneratedAt(outputPath, {
   schema_version: '1.0',
   generated_at: new Date().toISOString(),
   status: errors.length ? 'FAILED' : 'COMPLETE',
   stage_contract: INGESTION_STAGES,
   resources,
   findings: errors,
-};
+});
 writeFileSync(outputPath, `${JSON.stringify(ledger, null, 2)}\n`, 'utf8');
 
 if (errors.length) {

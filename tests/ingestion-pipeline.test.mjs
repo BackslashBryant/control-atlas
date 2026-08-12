@@ -6,6 +6,16 @@ import {
   INGESTION_TASKS,
   validateIngestionPipelineDefinition,
 } from '../scripts/lib/ingestion-pipeline.mjs';
+import { preserveGeneratedAt } from '../scripts/lib/stable-generated-at.mjs';
+
+test('generated ingestion ledgers preserve their timestamp when content is unchanged', () => {
+  const path = 'data/generated/ingestion-stage-ledger.json';
+  const previous = JSON.parse(readFileSync(path, 'utf8'));
+  const next = { ...previous, generated_at: '2099-01-01T00:00:00.000Z' };
+  assert.equal(preserveGeneratedAt(path, next).generated_at, previous.generated_at);
+  next.status = 'FAILED';
+  assert.equal(preserveGeneratedAt(path, next).generated_at, '2099-01-01T00:00:00.000Z');
+});
 
 test('every source uses one complete ingestion lifecycle with explicit presentation', () => {
   assert.deepEqual(validateIngestionPipelineDefinition(), []);
