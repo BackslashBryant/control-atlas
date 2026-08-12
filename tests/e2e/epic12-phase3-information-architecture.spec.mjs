@@ -190,6 +190,33 @@ test("Template B keeps three destination cards and retires the Start card", asyn
   await expect(page.getByText("Start with your work", { exact: true })).toHaveCount(0);
 });
 
+test("DISA STIG publication entry points preserve the benchmark layer above V-IDs", async ({ page }) => {
+  await gotoApp(page, "/#/library");
+  await waitForAppReady(page, { allowPartial: true });
+  await page.getByRole("button", { name: /DISA STIG/ }).click();
+  await expect(page).toHaveURL(/#\/library\/publication\/disa-stig$/);
+  await expect(page.getByRole("heading", { name: "DISA STIG", level: 1 })).toBeVisible();
+  await expect(page.getByText("353 benchmarks", { exact: true })).toBeVisible();
+  await expect(page.locator('[data-published-tier="benchmark"]')).toHaveCount(353);
+  await expect(page.locator(".catalog-record-title")).toHaveCount(0);
+
+  await gotoApp(page, "/#/library/publication/disa-stig?browseAll=true");
+  await waitForAppReady(page, { allowPartial: true });
+  await expect(page.locator('[data-published-tier="benchmark"]')).toHaveCount(353);
+  await expect(page.locator(".catalog-record-title")).toHaveCount(0);
+
+  const benchmark = page.locator('[data-published-tier="benchmark"]', {
+    hasText: "VMware vSphere 7.0 vCenter Appliance PostgreSQL",
+  });
+  await benchmark.click();
+  await expect(page).toHaveURL(/family=VMware(?:%20|\+)vSphere(?:%20|\+)7\.0/);
+  await expect(page.getByText("Published group", { exact: true })).toBeVisible();
+  const rules = page.locator(".catalog-record-title");
+  await expect(rules.first()).toBeVisible({ timeout: 60_000 });
+  expect(await rules.count()).toBeGreaterThan(0);
+  await expect(rules.first()).toContainText(/^V-\d+/);
+});
+
 test("Phase 3 record actions and global footer expose the required hierarchy", async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(navigator, "clipboard", {
