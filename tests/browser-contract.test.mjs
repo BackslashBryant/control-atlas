@@ -213,7 +213,7 @@ test('graph implementation references are documented', () => {
     'https://www.nist.gov/cyberframework',
     'https://csrc.nist.gov/projects/olir',
   ]) {
-    assert.match(references, new RegExp(link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.ok(references.includes(link), `missing graph reference: ${link}`);
   }
 });
 
