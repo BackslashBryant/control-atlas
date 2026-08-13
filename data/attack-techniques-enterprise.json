@@ -3,7 +3,7 @@
   "source_key": "mitre-attack-enterprise",
   "source_artifact": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
   "source_version": "2026-08-05",
-  "snapshot_date": "2026-08-12",
+  "snapshot_date": "2026-08-13",
   "checksum": "sha256:fbe2a38a817899d4f3cf5f6ee5f29b332448ad6ebac0d3eee519e774778f49bc",
   "provenance": "MITRE ATT&CK Enterprise STIX bundle",
   "records": [
@@ -40,7 +40,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1001"
       }
@@ -78,7 +78,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1001.001"
       }
@@ -116,7 +116,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1001.002"
       }
@@ -154,7 +154,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1001.003"
       }
@@ -191,7 +191,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1003"
       }
@@ -226,7 +226,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1003.001"
       }
@@ -261,7 +261,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1003.002"
       }
@@ -296,7 +296,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1003.003"
       }
@@ -331,7 +331,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1003.004"
       }
@@ -367,7 +367,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1003.005"
       }
@@ -402,7 +402,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1003.006"
       }
@@ -437,7 +437,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1003.007"
       }
@@ -472,7 +472,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1003.008"
       }
@@ -511,7 +511,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1005"
       }
@@ -547,7 +547,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1006"
       }
@@ -584,7 +584,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1007"
       }
@@ -622,7 +622,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1008"
       }
@@ -659,7 +659,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1010"
       }
@@ -696,7 +696,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1011"
       }
@@ -733,7 +733,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1011.001"
       }
@@ -768,7 +768,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1012"
       }
@@ -805,7 +805,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1014"
       }
@@ -844,7 +844,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1016"
       }
@@ -882,7 +882,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1016.001"
       }
@@ -919,7 +919,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1016.002"
       }
@@ -958,7 +958,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1018"
       }
@@ -996,7 +996,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1020"
       }
@@ -1032,7 +1032,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1020.001"
       }
@@ -1071,7 +1071,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1021"
       }
@@ -1106,7 +1106,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1021.001"
       }
@@ -1141,7 +1141,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1021.002"
       }
@@ -1176,7 +1176,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1021.003"
       }
@@ -1213,7 +1213,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1021.004"
       }
@@ -1250,7 +1250,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1021.005"
       }
@@ -1285,7 +1285,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1021.006"
       }
@@ -1323,7 +1323,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1021.007"
       }
@@ -1358,7 +1358,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1021.008"
       }
@@ -1395,7 +1395,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1025"
       }
@@ -1434,7 +1434,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027"
       }
@@ -1471,7 +1471,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.001"
       }
@@ -1508,7 +1508,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.002"
       }
@@ -1545,7 +1545,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.003"
       }
@@ -1582,7 +1582,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.004"
       }
@@ -1619,7 +1619,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.005"
       }
@@ -1656,7 +1656,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.006"
       }
@@ -1691,7 +1691,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.007"
       }
@@ -1729,7 +1729,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.008"
       }
@@ -1766,7 +1766,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.009"
       }
@@ -1803,7 +1803,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.010"
       }
@@ -1839,7 +1839,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.011"
       }
@@ -1874,7 +1874,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.012"
       }
@@ -1911,7 +1911,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.013"
       }
@@ -1948,7 +1948,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.014"
       }
@@ -1985,7 +1985,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.015"
       }
@@ -2022,7 +2022,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.016"
       }
@@ -2059,7 +2059,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.017"
       }
@@ -2096,7 +2096,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1027.018"
       }
@@ -2133,7 +2133,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1029"
       }
@@ -2171,7 +2171,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1030"
       }
@@ -2209,7 +2209,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1033"
       }
@@ -2248,7 +2248,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036"
       }
@@ -2284,7 +2284,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.001"
       }
@@ -2321,7 +2321,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.002"
       }
@@ -2358,7 +2358,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.003"
       }
@@ -2395,7 +2395,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.004"
       }
@@ -2434,7 +2434,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.005"
       }
@@ -2470,7 +2470,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.006"
       }
@@ -2505,7 +2505,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.007"
       }
@@ -2542,7 +2542,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.008"
       }
@@ -2578,7 +2578,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.009"
       }
@@ -2620,7 +2620,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.010"
       }
@@ -2655,7 +2655,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.011"
       }
@@ -2692,7 +2692,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1036.012"
       }
@@ -2737,7 +2737,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1037"
       }
@@ -2778,7 +2778,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1037.001"
       }
@@ -2819,7 +2819,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1037.002"
       }
@@ -2860,7 +2860,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1037.003"
       }
@@ -2904,7 +2904,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1037.004"
       }
@@ -2945,7 +2945,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1037.005"
       }
@@ -2982,7 +2982,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1039"
       }
@@ -3027,7 +3027,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1040"
       }
@@ -3065,7 +3065,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1041"
       }
@@ -3105,7 +3105,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1046"
       }
@@ -3140,7 +3140,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1047"
       }
@@ -3182,7 +3182,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1048"
       }
@@ -3220,7 +3220,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1048.001"
       }
@@ -3258,7 +3258,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1048.002"
       }
@@ -3297,7 +3297,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1048.003"
       }
@@ -3337,7 +3337,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1049"
       }
@@ -3374,7 +3374,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1052"
       }
@@ -3411,7 +3411,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1052.001"
       }
@@ -3463,7 +3463,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1053"
       }
@@ -3512,7 +3512,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1053.002"
       }
@@ -3561,7 +3561,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1053.003"
       }
@@ -3608,7 +3608,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1053.005"
       }
@@ -3655,7 +3655,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1053.006"
       }
@@ -3702,7 +3702,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1053.007"
       }
@@ -3745,7 +3745,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055"
       }
@@ -3786,7 +3786,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.001"
       }
@@ -3827,7 +3827,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.002"
       }
@@ -3868,7 +3868,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.003"
       }
@@ -3909,7 +3909,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.004"
       }
@@ -3950,7 +3950,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.005"
       }
@@ -3991,7 +3991,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.008"
       }
@@ -4032,7 +4032,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.009"
       }
@@ -4073,7 +4073,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.011"
       }
@@ -4114,7 +4114,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.012"
       }
@@ -4155,7 +4155,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.013"
       }
@@ -4196,7 +4196,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.014"
       }
@@ -4237,7 +4237,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1055.015"
       }
@@ -4281,7 +4281,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1056"
       }
@@ -4325,7 +4325,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1056.001"
       }
@@ -4368,7 +4368,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1056.002"
       }
@@ -4411,7 +4411,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1056.003"
       }
@@ -4454,7 +4454,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1056.004"
       }
@@ -4493,7 +4493,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1057"
       }
@@ -4537,7 +4537,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059"
       }
@@ -4572,7 +4572,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.001"
       }
@@ -4607,7 +4607,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.002"
       }
@@ -4642,7 +4642,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.003"
       }
@@ -4680,7 +4680,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.004"
       }
@@ -4717,7 +4717,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.005"
       }
@@ -4755,7 +4755,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.006"
       }
@@ -4792,7 +4792,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.007"
       }
@@ -4827,7 +4827,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.008"
       }
@@ -4865,7 +4865,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.009"
       }
@@ -4900,7 +4900,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.010"
       }
@@ -4938,7 +4938,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.011"
       }
@@ -4973,7 +4973,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.012"
       }
@@ -5008,7 +5008,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1059.013"
       }
@@ -5046,7 +5046,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1068"
       }
@@ -5088,7 +5088,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1069"
       }
@@ -5125,7 +5125,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1069.001"
       }
@@ -5162,7 +5162,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1069.002"
       }
@@ -5200,7 +5200,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1069.003"
       }
@@ -5241,7 +5241,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1070"
       }
@@ -5280,7 +5280,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1070.003"
       }
@@ -5318,7 +5318,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1070.004"
       }
@@ -5353,7 +5353,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1070.005"
       }
@@ -5391,7 +5391,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1070.006"
       }
@@ -5429,7 +5429,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1070.007"
       }
@@ -5467,7 +5467,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1070.008"
       }
@@ -5505,7 +5505,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1070.009"
       }
@@ -5543,7 +5543,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1070.010"
       }
@@ -5582,7 +5582,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1071"
       }
@@ -5621,7 +5621,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1071.001"
       }
@@ -5660,7 +5660,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1071.002"
       }
@@ -5698,7 +5698,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1071.003"
       }
@@ -5737,7 +5737,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1071.004"
       }
@@ -5775,7 +5775,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1071.005"
       }
@@ -5820,7 +5820,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1072"
       }
@@ -5859,7 +5859,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1074"
       }
@@ -5897,7 +5897,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1074.001"
       }
@@ -5936,7 +5936,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1074.002"
       }
@@ -5998,7 +5998,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1078"
       }
@@ -6060,7 +6060,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1078.001"
       }
@@ -6116,7 +6116,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1078.002"
       }
@@ -6174,7 +6174,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1078.003"
       }
@@ -6230,7 +6230,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1078.004"
       }
@@ -6269,7 +6269,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1080"
       }
@@ -6309,7 +6309,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1082"
       }
@@ -6348,7 +6348,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1083"
       }
@@ -6390,7 +6390,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1087"
       }
@@ -6428,7 +6428,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1087.001"
       }
@@ -6465,7 +6465,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1087.002"
       }
@@ -6501,7 +6501,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1087.003"
       }
@@ -6539,7 +6539,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1087.004"
       }
@@ -6578,7 +6578,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1090"
       }
@@ -6617,7 +6617,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1090.001"
       }
@@ -6656,7 +6656,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1090.002"
       }
@@ -6695,7 +6695,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1090.003"
       }
@@ -6733,7 +6733,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1090.004"
       }
@@ -6774,7 +6774,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1091"
       }
@@ -6811,7 +6811,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1092"
       }
@@ -6850,7 +6850,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1095"
       }
@@ -6900,7 +6900,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1098"
       }
@@ -6943,7 +6943,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1098.001"
       }
@@ -6985,7 +6985,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1098.002"
       }
@@ -7029,7 +7029,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1098.003"
       }
@@ -7074,7 +7074,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1098.004"
       }
@@ -7116,7 +7116,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1098.005"
       }
@@ -7157,7 +7157,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1098.006"
       }
@@ -7200,7 +7200,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1098.007"
       }
@@ -7238,7 +7238,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1102"
       }
@@ -7276,7 +7276,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1102.001"
       }
@@ -7314,7 +7314,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1102.002"
       }
@@ -7352,7 +7352,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1102.003"
       }
@@ -7390,7 +7390,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1104"
       }
@@ -7429,7 +7429,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1105"
       }
@@ -7466,7 +7466,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1106"
       }
@@ -7510,7 +7510,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1110"
       }
@@ -7554,7 +7554,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1110.001"
       }
@@ -7594,7 +7594,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1110.002"
       }
@@ -7638,7 +7638,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1110.003"
       }
@@ -7682,7 +7682,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1110.004"
       }
@@ -7719,7 +7719,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1111"
       }
@@ -7760,7 +7760,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1112"
       }
@@ -7797,7 +7797,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1113"
       }
@@ -7835,7 +7835,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1114"
       }
@@ -7870,7 +7870,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1114.001"
       }
@@ -7906,7 +7906,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1114.002"
       }
@@ -7944,7 +7944,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1114.003"
       }
@@ -7981,7 +7981,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1115"
       }
@@ -8021,7 +8021,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1119"
       }
@@ -8058,7 +8058,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1120"
       }
@@ -8095,7 +8095,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1123"
       }
@@ -8134,7 +8134,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1124"
       }
@@ -8171,7 +8171,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1125"
       }
@@ -8212,7 +8212,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1127"
       }
@@ -8253,7 +8253,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1127.001"
       }
@@ -8294,7 +8294,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1127.002"
       }
@@ -8335,7 +8335,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1127.003"
       }
@@ -8372,7 +8372,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1129"
       }
@@ -8410,7 +8410,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1132"
       }
@@ -8448,7 +8448,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1132.001"
       }
@@ -8486,7 +8486,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1132.002"
       }
@@ -8530,7 +8530,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1133"
       }
@@ -8571,7 +8571,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1134"
       }
@@ -8612,7 +8612,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1134.001"
       }
@@ -8653,7 +8653,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1134.002"
       }
@@ -8694,7 +8694,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1134.003"
       }
@@ -8735,7 +8735,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1134.004"
       }
@@ -8776,7 +8776,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1134.005"
       }
@@ -8813,7 +8813,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1135"
       }
@@ -8857,7 +8857,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1136"
       }
@@ -8897,7 +8897,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1136.001"
       }
@@ -8934,7 +8934,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1136.002"
       }
@@ -8972,7 +8972,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1136.003"
       }
@@ -9008,7 +9008,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1137"
       }
@@ -9044,7 +9044,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1137.001"
       }
@@ -9080,7 +9080,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1137.002"
       }
@@ -9116,7 +9116,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1137.003"
       }
@@ -9152,7 +9152,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1137.004"
       }
@@ -9188,7 +9188,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1137.005"
       }
@@ -9224,7 +9224,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1137.006"
       }
@@ -9262,7 +9262,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1140"
       }
@@ -9299,7 +9299,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1176"
       }
@@ -9336,7 +9336,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1176.001"
       }
@@ -9373,7 +9373,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1176.002"
       }
@@ -9408,7 +9408,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1185"
       }
@@ -9443,7 +9443,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1187"
       }
@@ -9481,7 +9481,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1189"
       }
@@ -9522,7 +9522,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1190"
       }
@@ -9560,7 +9560,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1195"
       }
@@ -9597,7 +9597,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1195.001"
       }
@@ -9634,7 +9634,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1195.002"
       }
@@ -9671,7 +9671,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1195.003"
       }
@@ -9718,7 +9718,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1197"
       }
@@ -9759,7 +9759,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1199"
       }
@@ -9796,7 +9796,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1200"
       }
@@ -9838,7 +9838,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1201"
       }
@@ -9873,7 +9873,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1202"
       }
@@ -9910,7 +9910,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1203"
       }
@@ -9949,7 +9949,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1204"
       }
@@ -9986,7 +9986,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1204.001"
       }
@@ -10023,7 +10023,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1204.002"
       }
@@ -10059,7 +10059,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1204.003"
       }
@@ -10096,7 +10096,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1204.004"
       }
@@ -10133,7 +10133,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1204.005"
       }
@@ -10183,7 +10183,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1205"
       }
@@ -10233,7 +10233,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1205.001"
       }
@@ -10282,7 +10282,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1205.002"
       }
@@ -10317,7 +10317,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1207"
       }
@@ -10355,7 +10355,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1210"
       }
@@ -10394,7 +10394,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1211"
       }
@@ -10432,7 +10432,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1212"
       }
@@ -10472,7 +10472,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1213"
       }
@@ -10507,7 +10507,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1213.001"
       }
@@ -10543,7 +10543,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1213.002"
       }
@@ -10578,7 +10578,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1213.003"
       }
@@ -10613,7 +10613,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1213.004"
       }
@@ -10649,7 +10649,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1213.005"
       }
@@ -10688,7 +10688,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1213.006"
       }
@@ -10723,7 +10723,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1216"
       }
@@ -10758,7 +10758,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1216.001"
       }
@@ -10793,7 +10793,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1216.002"
       }
@@ -10830,7 +10830,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1217"
       }
@@ -10867,7 +10867,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218"
       }
@@ -10902,7 +10902,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.001"
       }
@@ -10937,7 +10937,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.002"
       }
@@ -10972,7 +10972,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.003"
       }
@@ -11007,7 +11007,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.004"
       }
@@ -11042,7 +11042,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.005"
       }
@@ -11077,7 +11077,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.007"
       }
@@ -11112,7 +11112,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.008"
       }
@@ -11147,7 +11147,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.009"
       }
@@ -11182,7 +11182,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.010"
       }
@@ -11217,7 +11217,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.011"
       }
@@ -11252,7 +11252,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.012"
       }
@@ -11287,7 +11287,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.013"
       }
@@ -11322,7 +11322,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.014"
       }
@@ -11359,7 +11359,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1218.015"
       }
@@ -11396,7 +11396,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1219"
       }
@@ -11433,7 +11433,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1219.001"
       }
@@ -11470,7 +11470,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1219.002"
       }
@@ -11507,7 +11507,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1219.003"
       }
@@ -11542,7 +11542,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1220"
       }
@@ -11577,7 +11577,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1221"
       }
@@ -11615,7 +11615,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1222"
       }
@@ -11650,7 +11650,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1222.001"
       }
@@ -11686,7 +11686,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1222.002"
       }
@@ -11724,7 +11724,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1480"
       }
@@ -11761,7 +11761,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1480.001"
       }
@@ -11798,7 +11798,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1480.002"
       }
@@ -11833,7 +11833,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1482"
       }
@@ -11875,7 +11875,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1484"
       }
@@ -11916,7 +11916,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1484.001"
       }
@@ -11958,7 +11958,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1484.002"
       }
@@ -11998,7 +11998,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1485"
       }
@@ -12033,7 +12033,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1485.001"
       }
@@ -12072,7 +12072,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1486"
       }
@@ -12111,7 +12111,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1489"
       }
@@ -12152,7 +12152,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1490"
       }
@@ -12191,7 +12191,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1491"
       }
@@ -12229,7 +12229,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1491.001"
       }
@@ -12267,7 +12267,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1491.002"
       }
@@ -12305,7 +12305,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1495"
       }
@@ -12345,7 +12345,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1496"
       }
@@ -12384,7 +12384,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1496.001"
       }
@@ -12423,7 +12423,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1496.002"
       }
@@ -12458,7 +12458,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1496.003"
       }
@@ -12493,7 +12493,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1496.004"
       }
@@ -12536,7 +12536,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1497"
       }
@@ -12579,7 +12579,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1497.001"
       }
@@ -12622,7 +12622,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1497.002"
       }
@@ -12665,7 +12665,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1497.003"
       }
@@ -12704,7 +12704,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1498"
       }
@@ -12742,7 +12742,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1498.001"
       }
@@ -12780,7 +12780,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1498.002"
       }
@@ -12819,7 +12819,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1499"
       }
@@ -12856,7 +12856,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1499.001"
       }
@@ -12894,7 +12894,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1499.002"
       }
@@ -12932,7 +12932,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1499.003"
       }
@@ -12970,7 +12970,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1499.004"
       }
@@ -13009,7 +13009,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1505"
       }
@@ -13045,7 +13045,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1505.001"
       }
@@ -13081,7 +13081,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1505.002"
       }
@@ -13119,7 +13119,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1505.003"
       }
@@ -13154,7 +13154,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1505.004"
       }
@@ -13189,7 +13189,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1505.005"
       }
@@ -13224,7 +13224,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1505.006"
       }
@@ -13263,7 +13263,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1518"
       }
@@ -13301,7 +13301,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1518.001"
       }
@@ -13338,7 +13338,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1518.002"
       }
@@ -13374,7 +13374,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1525"
       }
@@ -13412,7 +13412,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1526"
       }
@@ -13451,7 +13451,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1528"
       }
@@ -13490,7 +13490,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1529"
       }
@@ -13527,7 +13527,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1530"
       }
@@ -13568,7 +13568,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1531"
       }
@@ -13607,7 +13607,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1534"
       }
@@ -13642,7 +13642,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1535"
       }
@@ -13679,7 +13679,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1537"
       }
@@ -13717,7 +13717,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1538"
       }
@@ -13756,7 +13756,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1539"
       }
@@ -13800,7 +13800,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1542"
       }
@@ -13842,7 +13842,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1542.001"
       }
@@ -13885,7 +13885,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1542.002"
       }
@@ -13927,7 +13927,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1542.003"
       }
@@ -13968,7 +13968,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1542.004"
       }
@@ -14009,7 +14009,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1542.005"
       }
@@ -14053,7 +14053,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1543"
       }
@@ -14094,7 +14094,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1543.001"
       }
@@ -14135,7 +14135,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1543.002"
       }
@@ -14176,7 +14176,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1543.003"
       }
@@ -14217,7 +14217,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1543.004"
       }
@@ -14258,7 +14258,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1543.005"
       }
@@ -14304,7 +14304,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546"
       }
@@ -14345,7 +14345,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.001"
       }
@@ -14386,7 +14386,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.002"
       }
@@ -14427,7 +14427,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.003"
       }
@@ -14469,7 +14469,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.004"
       }
@@ -14511,7 +14511,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.005"
       }
@@ -14552,7 +14552,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.006"
       }
@@ -14593,7 +14593,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.007"
       }
@@ -14634,7 +14634,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.008"
       }
@@ -14675,7 +14675,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.009"
       }
@@ -14716,7 +14716,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.010"
       }
@@ -14757,7 +14757,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.011"
       }
@@ -14798,7 +14798,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.012"
       }
@@ -14839,7 +14839,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.013"
       }
@@ -14880,7 +14880,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.014"
       }
@@ -14921,7 +14921,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.015"
       }
@@ -14964,7 +14964,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.016"
       }
@@ -15005,7 +15005,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.017"
       }
@@ -15048,7 +15048,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1546.018"
       }
@@ -15092,7 +15092,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547"
       }
@@ -15133,7 +15133,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.001"
       }
@@ -15174,7 +15174,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.002"
       }
@@ -15215,7 +15215,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.003"
       }
@@ -15256,7 +15256,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.004"
       }
@@ -15297,7 +15297,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.005"
       }
@@ -15339,7 +15339,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.006"
       }
@@ -15380,7 +15380,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.007"
       }
@@ -15421,7 +15421,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.008"
       }
@@ -15462,7 +15462,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.009"
       }
@@ -15503,7 +15503,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.010"
       }
@@ -15544,7 +15544,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.012"
       }
@@ -15585,7 +15585,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.013"
       }
@@ -15626,7 +15626,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.014"
       }
@@ -15667,7 +15667,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1547.015"
       }
@@ -15707,7 +15707,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1548"
       }
@@ -15743,7 +15743,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1548.001"
       }
@@ -15778,7 +15778,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1548.002"
       }
@@ -15814,7 +15814,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1548.003"
       }
@@ -15849,7 +15849,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1548.004"
       }
@@ -15886,7 +15886,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1548.005"
       }
@@ -15921,7 +15921,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1548.006"
       }
@@ -15962,7 +15962,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1550"
       }
@@ -16001,7 +16001,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1550.001"
       }
@@ -16036,7 +16036,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1550.002"
       }
@@ -16071,7 +16071,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1550.003"
       }
@@ -16108,7 +16108,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1550.004"
       }
@@ -16151,7 +16151,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1552"
       }
@@ -16190,7 +16190,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1552.001"
       }
@@ -16225,7 +16225,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1552.002"
       }
@@ -16262,7 +16262,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1552.003"
       }
@@ -16300,7 +16300,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1552.004"
       }
@@ -16335,7 +16335,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1552.005"
       }
@@ -16370,7 +16370,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1552.006"
       }
@@ -16405,7 +16405,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1552.007"
       }
@@ -16441,7 +16441,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1552.008"
       }
@@ -16478,7 +16478,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1553"
       }
@@ -16513,7 +16513,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1553.001"
       }
@@ -16549,7 +16549,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1553.002"
       }
@@ -16584,7 +16584,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1553.003"
       }
@@ -16621,7 +16621,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1553.004"
       }
@@ -16656,7 +16656,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1553.005"
       }
@@ -16692,7 +16692,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1553.006"
       }
@@ -16730,7 +16730,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1554"
       }
@@ -16768,7 +16768,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1555"
       }
@@ -16803,7 +16803,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1555.001"
       }
@@ -16839,7 +16839,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1555.002"
       }
@@ -16876,7 +16876,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1555.003"
       }
@@ -16911,7 +16911,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1555.004"
       }
@@ -16948,7 +16948,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1555.005"
       }
@@ -16983,7 +16983,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1555.006"
       }
@@ -17037,7 +17037,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1556"
       }
@@ -17084,7 +17084,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1556.001"
       }
@@ -17131,7 +17131,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1556.002"
       }
@@ -17179,7 +17179,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1556.003"
       }
@@ -17226,7 +17226,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1556.004"
       }
@@ -17273,7 +17273,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1556.005"
       }
@@ -17326,7 +17326,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1556.006"
       }
@@ -17377,7 +17377,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1556.007"
       }
@@ -17424,7 +17424,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1556.008"
       }
@@ -17472,7 +17472,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1556.009"
       }
@@ -17516,7 +17516,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1557"
       }
@@ -17557,7 +17557,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1557.001"
       }
@@ -17600,7 +17600,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1557.002"
       }
@@ -17643,7 +17643,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1557.003"
       }
@@ -17684,7 +17684,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1557.004"
       }
@@ -17721,7 +17721,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1558"
       }
@@ -17756,7 +17756,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1558.001"
       }
@@ -17791,7 +17791,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1558.002"
       }
@@ -17826,7 +17826,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1558.003"
       }
@@ -17861,7 +17861,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1558.004"
       }
@@ -17897,7 +17897,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1558.005"
       }
@@ -17934,7 +17934,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1559"
       }
@@ -17969,7 +17969,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1559.001"
       }
@@ -18004,7 +18004,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1559.002"
       }
@@ -18039,7 +18039,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1559.003"
       }
@@ -18076,7 +18076,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1560"
       }
@@ -18113,7 +18113,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1560.001"
       }
@@ -18150,7 +18150,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1560.002"
       }
@@ -18187,7 +18187,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1560.003"
       }
@@ -18225,7 +18225,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1561"
       }
@@ -18263,7 +18263,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1561.001"
       }
@@ -18301,7 +18301,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1561.002"
       }
@@ -18338,7 +18338,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1563"
       }
@@ -18374,7 +18374,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1563.001"
       }
@@ -18409,7 +18409,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1563.002"
       }
@@ -18448,7 +18448,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564"
       }
@@ -18485,7 +18485,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.001"
       }
@@ -18522,7 +18522,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.002"
       }
@@ -18559,7 +18559,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.003"
       }
@@ -18594,7 +18594,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.004"
       }
@@ -18631,7 +18631,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.005"
       }
@@ -18669,7 +18669,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.006"
       }
@@ -18706,7 +18706,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.007"
       }
@@ -18744,7 +18744,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.008"
       }
@@ -18779,7 +18779,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.009"
       }
@@ -18814,7 +18814,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.010"
       }
@@ -18851,7 +18851,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.011"
       }
@@ -18888,7 +18888,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.012"
       }
@@ -18923,7 +18923,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.013"
       }
@@ -18959,7 +18959,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1564.014"
       }
@@ -18996,7 +18996,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1565"
       }
@@ -19033,7 +19033,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1565.001"
       }
@@ -19070,7 +19070,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1565.002"
       }
@@ -19107,7 +19107,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1565.003"
       }
@@ -19147,7 +19147,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1566"
       }
@@ -19184,7 +19184,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1566.001"
       }
@@ -19224,7 +19224,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1566.002"
       }
@@ -19261,7 +19261,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1566.003"
       }
@@ -19299,7 +19299,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1566.004"
       }
@@ -19339,7 +19339,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1567"
       }
@@ -19377,7 +19377,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1567.001"
       }
@@ -19415,7 +19415,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1567.002"
       }
@@ -19453,7 +19453,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1567.003"
       }
@@ -19493,7 +19493,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1567.004"
       }
@@ -19531,7 +19531,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1568"
       }
@@ -19569,7 +19569,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1568.001"
       }
@@ -19607,7 +19607,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1568.002"
       }
@@ -19645,7 +19645,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1568.003"
       }
@@ -19682,7 +19682,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1569"
       }
@@ -19717,7 +19717,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1569.001"
       }
@@ -19752,7 +19752,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1569.002"
       }
@@ -19787,7 +19787,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1569.003"
       }
@@ -19825,7 +19825,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1570"
       }
@@ -19863,7 +19863,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1571"
       }
@@ -19901,7 +19901,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1572"
       }
@@ -19940,7 +19940,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1573"
       }
@@ -19979,7 +19979,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1573.001"
       }
@@ -20018,7 +20018,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1573.002"
       }
@@ -20061,7 +20061,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574"
       }
@@ -20102,7 +20102,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.001"
       }
@@ -20143,7 +20143,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.004"
       }
@@ -20184,7 +20184,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.005"
       }
@@ -20226,7 +20226,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.006"
       }
@@ -20269,7 +20269,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.007"
       }
@@ -20310,7 +20310,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.008"
       }
@@ -20351,7 +20351,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.009"
       }
@@ -20392,7 +20392,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.010"
       }
@@ -20433,7 +20433,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.011"
       }
@@ -20474,7 +20474,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.012"
       }
@@ -20515,7 +20515,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.013"
       }
@@ -20556,7 +20556,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1574.014"
       }
@@ -20591,7 +20591,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1578"
       }
@@ -20626,7 +20626,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1578.001"
       }
@@ -20661,7 +20661,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1578.002"
       }
@@ -20696,7 +20696,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1578.003"
       }
@@ -20731,7 +20731,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1578.004"
       }
@@ -20766,7 +20766,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1578.005"
       }
@@ -20801,7 +20801,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1580"
       }
@@ -20836,7 +20836,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1583"
       }
@@ -20871,7 +20871,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1583.001"
       }
@@ -20906,7 +20906,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1583.002"
       }
@@ -20941,7 +20941,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1583.003"
       }
@@ -20976,7 +20976,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1583.004"
       }
@@ -21011,7 +21011,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1583.005"
       }
@@ -21046,7 +21046,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1583.006"
       }
@@ -21081,7 +21081,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1583.007"
       }
@@ -21116,7 +21116,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1583.008"
       }
@@ -21151,7 +21151,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1584"
       }
@@ -21186,7 +21186,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1584.001"
       }
@@ -21221,7 +21221,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1584.002"
       }
@@ -21256,7 +21256,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1584.003"
       }
@@ -21291,7 +21291,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1584.004"
       }
@@ -21326,7 +21326,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1584.005"
       }
@@ -21361,7 +21361,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1584.006"
       }
@@ -21396,7 +21396,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1584.007"
       }
@@ -21431,7 +21431,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1584.008"
       }
@@ -21466,7 +21466,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1585"
       }
@@ -21501,7 +21501,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1585.001"
       }
@@ -21536,7 +21536,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1585.002"
       }
@@ -21571,7 +21571,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1585.003"
       }
@@ -21606,7 +21606,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1586"
       }
@@ -21641,7 +21641,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1586.001"
       }
@@ -21676,7 +21676,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1586.002"
       }
@@ -21711,7 +21711,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1586.003"
       }
@@ -21746,7 +21746,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1587"
       }
@@ -21781,7 +21781,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1587.001"
       }
@@ -21816,7 +21816,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1587.002"
       }
@@ -21851,7 +21851,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1587.003"
       }
@@ -21886,7 +21886,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1587.004"
       }
@@ -21921,7 +21921,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1588"
       }
@@ -21956,7 +21956,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1588.001"
       }
@@ -21991,7 +21991,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1588.002"
       }
@@ -22026,7 +22026,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1588.003"
       }
@@ -22061,7 +22061,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1588.004"
       }
@@ -22096,7 +22096,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1588.005"
       }
@@ -22131,7 +22131,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1588.006"
       }
@@ -22166,7 +22166,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1588.007"
       }
@@ -22201,7 +22201,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1589"
       }
@@ -22236,7 +22236,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1589.001"
       }
@@ -22271,7 +22271,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1589.002"
       }
@@ -22306,7 +22306,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1589.003"
       }
@@ -22341,7 +22341,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1590"
       }
@@ -22376,7 +22376,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1590.001"
       }
@@ -22411,7 +22411,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1590.002"
       }
@@ -22446,7 +22446,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1590.003"
       }
@@ -22481,7 +22481,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1590.004"
       }
@@ -22516,7 +22516,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1590.005"
       }
@@ -22551,7 +22551,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1590.006"
       }
@@ -22586,7 +22586,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1591"
       }
@@ -22621,7 +22621,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1591.001"
       }
@@ -22656,7 +22656,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1591.002"
       }
@@ -22691,7 +22691,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1591.003"
       }
@@ -22726,7 +22726,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1591.004"
       }
@@ -22761,7 +22761,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1592"
       }
@@ -22796,7 +22796,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1592.001"
       }
@@ -22831,7 +22831,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1592.002"
       }
@@ -22866,7 +22866,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1592.003"
       }
@@ -22901,7 +22901,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1592.004"
       }
@@ -22936,7 +22936,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1593"
       }
@@ -22971,7 +22971,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1593.001"
       }
@@ -23006,7 +23006,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1593.002"
       }
@@ -23041,7 +23041,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1593.003"
       }
@@ -23076,7 +23076,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1594"
       }
@@ -23111,7 +23111,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1595"
       }
@@ -23146,7 +23146,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1595.001"
       }
@@ -23181,7 +23181,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1595.002"
       }
@@ -23216,7 +23216,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1595.003"
       }
@@ -23251,7 +23251,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1596"
       }
@@ -23286,7 +23286,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1596.001"
       }
@@ -23321,7 +23321,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1596.002"
       }
@@ -23356,7 +23356,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1596.003"
       }
@@ -23391,7 +23391,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1596.004"
       }
@@ -23426,7 +23426,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1596.005"
       }
@@ -23461,7 +23461,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1597"
       }
@@ -23496,7 +23496,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1597.001"
       }
@@ -23531,7 +23531,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1597.002"
       }
@@ -23566,7 +23566,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1598"
       }
@@ -23601,7 +23601,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1598.001"
       }
@@ -23636,7 +23636,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1598.002"
       }
@@ -23671,7 +23671,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1598.003"
       }
@@ -23706,7 +23706,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1598.004"
       }
@@ -23741,7 +23741,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1599"
       }
@@ -23776,7 +23776,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1599.001"
       }
@@ -23811,7 +23811,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1600"
       }
@@ -23846,7 +23846,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1600.001"
       }
@@ -23881,7 +23881,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1600.002"
       }
@@ -23916,7 +23916,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1601"
       }
@@ -23951,7 +23951,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1601.001"
       }
@@ -23986,7 +23986,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1601.002"
       }
@@ -24021,7 +24021,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1602"
       }
@@ -24056,7 +24056,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1602.001"
       }
@@ -24091,7 +24091,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1602.002"
       }
@@ -24132,7 +24132,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1606"
       }
@@ -24171,7 +24171,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1606.001"
       }
@@ -24210,7 +24210,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1606.002"
       }
@@ -24245,7 +24245,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1608"
       }
@@ -24280,7 +24280,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1608.001"
       }
@@ -24315,7 +24315,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1608.002"
       }
@@ -24350,7 +24350,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1608.003"
       }
@@ -24385,7 +24385,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1608.004"
       }
@@ -24420,7 +24420,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1608.005"
       }
@@ -24455,7 +24455,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1608.006"
       }
@@ -24490,7 +24490,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1609"
       }
@@ -24525,7 +24525,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1610"
       }
@@ -24563,7 +24563,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1611"
       }
@@ -24598,7 +24598,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1612"
       }
@@ -24633,7 +24633,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1613"
       }
@@ -24671,7 +24671,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1614"
       }
@@ -24708,7 +24708,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1614.001"
       }
@@ -24743,7 +24743,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1615"
       }
@@ -24778,7 +24778,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1619"
       }
@@ -24815,7 +24815,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1620"
       }
@@ -24856,7 +24856,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1621"
       }
@@ -24899,7 +24899,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1622"
       }
@@ -24934,7 +24934,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1647"
       }
@@ -24971,7 +24971,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1648"
       }
@@ -25009,7 +25009,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1649"
       }
@@ -25044,7 +25044,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1650"
       }
@@ -25079,7 +25079,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1651"
       }
@@ -25116,7 +25116,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1652"
       }
@@ -25154,7 +25154,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1653"
       }
@@ -25193,7 +25193,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1654"
       }
@@ -25232,7 +25232,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1657"
       }
@@ -25275,7 +25275,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1659"
       }
@@ -25314,7 +25314,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1665"
       }
@@ -25349,7 +25349,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1666"
       }
@@ -25387,7 +25387,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1667"
       }
@@ -25424,7 +25424,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1668"
       }
@@ -25462,7 +25462,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1669"
       }
@@ -25498,7 +25498,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1671"
       }
@@ -25536,7 +25536,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1673"
       }
@@ -25573,7 +25573,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1674"
       }
@@ -25608,7 +25608,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1675"
       }
@@ -25643,7 +25643,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1677"
       }
@@ -25680,7 +25680,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1678"
       }
@@ -25715,7 +25715,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1679"
       }
@@ -25754,7 +25754,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1680"
       }
@@ -25789,7 +25789,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1681"
       }
@@ -25824,7 +25824,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1682"
       }
@@ -25859,7 +25859,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1683"
       }
@@ -25894,7 +25894,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1683.001"
       }
@@ -25929,7 +25929,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1683.002"
       }
@@ -25968,7 +25968,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1684"
       }
@@ -26007,7 +26007,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1684.001"
       }
@@ -26045,7 +26045,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1684.002"
       }
@@ -26086,7 +26086,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1685"
       }
@@ -26121,7 +26121,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1685.001"
       }
@@ -26159,7 +26159,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1685.002"
       }
@@ -26196,7 +26196,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1685.003"
       }
@@ -26231,7 +26231,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1685.004"
       }
@@ -26266,7 +26266,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1685.005"
       }
@@ -26302,7 +26302,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1685.006"
       }
@@ -26341,7 +26341,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1686"
       }
@@ -26376,7 +26376,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1686.001"
       }
@@ -26411,7 +26411,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1686.002"
       }
@@ -26446,7 +26446,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1686.003"
       }
@@ -26485,7 +26485,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1687"
       }
@@ -26520,7 +26520,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1688"
       }
@@ -26557,7 +26557,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1689"
       }
@@ -26596,7 +26596,7 @@
       },
       "source": {
         "key": "mitre-attack-enterprise",
-        "snapshot_date": "2026-08-12",
+        "snapshot_date": "2026-08-13",
         "version": "2026-08-05",
         "locator": "enterprise-attack.json#T1690"
       }

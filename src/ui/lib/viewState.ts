@@ -68,6 +68,7 @@ export type ViewState =
       viewMode: "list" | "map";
       collection: string;
       area: string;
+      tags: string[];
     }
   | {
       view: "catalog-detail";
@@ -188,6 +189,7 @@ function searchState(): ViewState {
     viewMode: "list",
     collection: "",
     area: "",
+    tags: [],
   };
 }
 
@@ -469,6 +471,7 @@ export function parseViewState(search: string): ViewState {
     viewMode: params.get("view") === "map" ? "map" : "list",
     collection: "",
     area: params.get("area") || "",
+    tags: [...new Set(params.getAll("tag").filter(Boolean))].sort(),
   };
 }
 
@@ -652,6 +655,7 @@ export function normalizeViewState(
     controlFamily: "",
     severity: "",
     collection: "",
+    tags: Array.isArray(incoming.tags) ? [...new Set(incoming.tags.filter(Boolean))].sort() : [],
   };
 }
 
@@ -716,6 +720,7 @@ export function serializeViewState(state: ViewState): string {
     if (state.sort !== "relevance") setIfValue(params, "sort", state.sort);
     if (state.viewMode === "map") setIfValue(params, "view", "map");
     setIfValue(params, "area", state.area);
+    for (const tag of [...new Set(state.tags)].sort()) params.append("tag", tag);
   } else if (state.view === "catalog-detail") {
     params.set("view", state.view);
     setIfValue(params, "catalog", state.catalog);

@@ -19,22 +19,6 @@ export function attachPageDiagnostics(page) {
       `${request.method()} ${request.url()} :: ${request.failure()?.errorText || 'unknown failure'}`,
     );
   });
-  page.on('response', async (response) => {
-    const url = response.url();
-    const isRuntimeDependency = url.includes('/data/generated/') || url.endsWith('.mjs');
-    if (!isRuntimeDependency) return;
-    if (response.ok()) {
-      emitDiagnostic('response', `${response.status()} ${url}`);
-      return;
-    }
-    let bodyPreview = '';
-    try {
-      bodyPreview = (await response.text()).slice(0, 400);
-    } catch {
-      bodyPreview = '<response body unavailable>';
-    }
-    emitDiagnostic('response.error', `${response.status()} ${url} :: ${bodyPreview}`);
-  });
 }
 
 export function appUrl(path = '/') {
@@ -48,7 +32,15 @@ export function appUrl(path = '/') {
 }
 
 export async function gotoApp(page, path = '/', options = undefined) {
-  return page.goto(appUrl(path), options);
+  // The shared config intentionally keeps interaction navigation unconstrained
+  // for large local artifacts, but initial route navigation must not wait
+  // forever. A failed static server or a stalled first load used to make every
+  // rendered suite appear to hang without a test result.
+  return page.goto(appUrl(path), {
+    waitUntil: 'domcontentloaded',
+    timeout: 60_000,
+    ...options,
+  });
 }
 
 export async function dismissOnboarding(page) {

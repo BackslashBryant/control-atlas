@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-12T15:53:26.718Z",
+  "generated_at": "2026-08-13T06:10:25.670Z",
   "status": "COMPLETE",
   "stage_contract": [
     "discover",
@@ -979,7 +979,7 @@
         },
         "normalize": {
           "status": "not_applicable",
-          "reason": "primary_data artifact produces no standalone catalog records"
+          "reason": "enrichment artifact produces no standalone catalog records"
         },
         "structure": {
           "status": "not_applicable",
@@ -999,7 +999,7 @@
         },
         "publish": {
           "status": "not_applicable",
-          "reason": "primary_data evidence is retained without a standalone catalog object"
+          "reason": "enrichment evidence is retained without a standalone catalog object"
         }
       }
     },
@@ -1975,7 +1975,7 @@
         },
         "normalize": {
           "status": "not_applicable",
-          "reason": "primary_data artifact produces no standalone catalog records"
+          "reason": "mapping artifact produces no standalone catalog records"
         },
         "structure": {
           "status": "not_applicable",
@@ -1995,7 +1995,7 @@
         },
         "publish": {
           "status": "not_applicable",
-          "reason": "primary_data evidence is retained without a standalone catalog object"
+          "reason": "mapping evidence is retained without a standalone catalog object"
         }
       }
     },

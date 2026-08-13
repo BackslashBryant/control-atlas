@@ -1,5 +1,6 @@
 import {
   IconCompass,
+  IconGitCompare,
   IconInfoCircle,
   IconLibrary,
   IconTopologyStar3,
@@ -48,6 +49,13 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
     section: "discovery",
   },
   {
+    label: routeIdentityFor("matrix").label,
+    view: "matrix",
+    path: routeIdentityFor("matrix").path,
+    icon: IconGitCompare,
+    section: "discovery",
+  },
+  {
     label: routeIdentityFor("commons").label,
     view: "commons",
     path: routeIdentityFor("commons").path,
@@ -83,7 +91,6 @@ export const UTILITY_NAV_ITEMS: NavItem[] = [
 
 export const OVERFLOW_NAV_ITEMS: NavItem[] = [
   GUIDES_NAV_ITEM,
-  ...UTILITY_NAV_ITEMS,
 ];
 
 export const MOBILE_NAV_SECTIONS: NavSection[] = [
@@ -91,10 +98,11 @@ export const MOBILE_NAV_SECTIONS: NavSection[] = [
     label: PRIMARY_SECTION_LABEL,
     items: PRIMARY_NAV_ITEMS,
   },
-  { label: UTILITY_SECTION_LABEL, items: OVERFLOW_NAV_ITEMS },
+  { label: UTILITY_SECTION_LABEL, items: [...UTILITY_NAV_ITEMS, ...OVERFLOW_NAV_ITEMS] },
 ];
 
 export const ALL_NAV_ITEMS = [
   ...PRIMARY_NAV_ITEMS,
+  ...UTILITY_NAV_ITEMS,
   ...OVERFLOW_NAV_ITEMS,
 ];

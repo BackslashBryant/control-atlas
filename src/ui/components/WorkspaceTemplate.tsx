@@ -104,6 +104,55 @@ export function CheckboxFacet(props: {
   );
 }
 
+export function TagFacet(props: {
+  label: string;
+  options: Array<{ aliases: string[]; count: number; label: string; value: string }>;
+  selected: string[];
+  onChange: (values: string[]) => void;
+}) {
+  const [query, setQuery] = useState("");
+  const visible = props.options.filter((option) => {
+    const needle = query.trim().toLocaleLowerCase();
+    return !needle || [option.label, option.value, ...option.aliases]
+      .some((value) => value.toLocaleLowerCase().includes(needle));
+  });
+
+  return (
+    <fieldset className="workspace-checkbox-facet workspace-tag-facet">
+      <legend>{props.label}</legend>
+      <label className="workspace-tag-facet__search">
+        <span className="visually-hidden">Search {props.label.toLocaleLowerCase()} tags</span>
+        <input
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={`Find ${props.label.toLocaleLowerCase()}`}
+          type="search"
+          value={query}
+        />
+      </label>
+      {visible.map((option) => {
+        const checked = props.selected.includes(option.value);
+        return (
+          <label key={option.value}>
+            <input
+              checked={checked}
+              onChange={(event) => {
+                const next = event.target.checked
+                  ? [...props.selected, option.value]
+                  : props.selected.filter((value) => value !== option.value);
+                props.onChange([...new Set(next)].sort());
+              }}
+              type="checkbox"
+            />
+            <span>{option.label}</span>
+            <small aria-hidden="true">{option.count.toLocaleString()}</small>
+          </label>
+        );
+      })}
+      {!visible.length ? <p className="muted">No governed tags are available in this context.</p> : null}
+    </fieldset>
+  );
+}
+
 export function WorkspaceTemplate(props: {
   activeFilters?: ReactNode;
   children: ReactNode;
@@ -240,7 +289,7 @@ export function WorkspaceTemplate(props: {
           <div className="workspace-facet-heading"><strong>{props.facetLabel}</strong></div>
           {props.renderFacets("desktop")}
         </aside>
-        <div className="workspace-results" id={props.resultsId}>{props.children}</div>
+        <div className="workspace-results" id={props.resultsId} tabIndex={-1}>{props.children}</div>
       </div>
     </section>
   );

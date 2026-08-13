@@ -34,3 +34,17 @@ test('reconciliation separates checked dates, imported dates, and link observati
   assert.equal(registry.freshness.sources[2].last_checked, '2026-07-16');
   assert.equal(registry.freshness.sources[2].last_imported, null);
 });
+
+test('reconciliation keeps publication, source, and primary-artifact versions aligned', () => {
+  const registry = {
+    publications: [{ id: 'attack', version: '1', retrieved_at: '2026-07-01' }],
+    sources: [{ id: 'attack', version: '1', retrieved_at: '2026-07-01' }],
+    artifacts: [{ id: 'artifact-attack', publication_source_id: 'attack', version: '1', retrieved_at: '2026-07-01' }],
+    freshness: { sources: [{ source_id: 'attack', sync_model: 'auto_synced', last_checked: '2026-07-01', last_imported: '2026-07-01', hash: null }] },
+  };
+  reconcileFreshness(registry, new Map([['attack', [{ source_version: '2', records: [{ id: 'A' }] }]]]), '2026-07-16');
+  assert.equal(registry.publications[0].version, '2');
+  assert.equal(registry.sources[0].version, '2');
+  assert.equal(registry.artifacts[0].version, '2');
+  assert.equal(registry.publications[0].retrieved_at, '2026-07-16');
+});

@@ -14,6 +14,7 @@ export const LIBRARY_DOCUMENT_FIELDS = [
   "identity_category",
   "classification_provenance",
   "related_categories",
+  "taxonomy_tags",
   "severity",
   "published_connection_count",
   "published_cross_catalog_connection_count",

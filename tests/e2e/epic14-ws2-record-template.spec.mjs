@@ -39,7 +39,7 @@ test("WS2 related records exclude structural parents and public pages expose no 
   const connections = page.locator('[data-record-section="related-records"]');
   await expect(connections).toBeVisible();
   await expect(connections.getByRole("heading", { name: "Related records", exact: true })).toBeVisible();
-  await expect(connections).toContainText("Formal published links to other publications.");
+  await expect(connections).toContainText("Evidence-backed published links to other publications.");
   await expect(connections).not.toContainText("Contains");
   await expect(connections).not.toContainText("FAMILY-ACCESS-CONTROL");
   const connectionRows = connections.locator("[data-record-connection-id]");
@@ -57,6 +57,20 @@ test("WS2 related records exclude structural parents and public pages expose no 
   expect(visibleText).not.toContain("nist-800-53:AC-2");
   expect(visibleText).not.toMatch(/\.json#|\/data\/|Node ID/);
   await expect(page.getByText("Developer details", { exact: true })).toHaveCount(0);
+});
+
+test("WS2 CCI records expose publisher references and a bounded first set of connected records", async ({ page }) => {
+  await openRecord(page, "/#/record/disa-cci/CCI-000366");
+
+  const source = page.locator('[data-record-section="official-text"]');
+  await expect(source.getByRole("heading", { name: "Requirement", exact: true })).toBeVisible();
+  await expect(source.getByRole("heading", { name: "Publisher References", exact: true })).toBeVisible();
+  await expect(source.locator('[data-source-field="references"] li')).toHaveCount(4);
+
+  const connected = page.locator('[data-record-section="related-records"]');
+  await expect(connected.getByRole("heading", { name: "Evidence-backed connected records", exact: true })).toBeVisible();
+  await expect(connected.locator('[data-record-connection-id]')).toHaveCount(12);
+  await expect(connected.getByRole("link", { name: "Explore all connections in Atlas", exact: true })).toBeVisible();
 });
 
 test("WS2 preserves source-specific STIG fields and responsive flow", async ({ page }) => {

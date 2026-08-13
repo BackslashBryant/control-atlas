@@ -2,8 +2,8 @@
   "schema_version": "2.0",
   "source_key": "mitre-d3fend-mappings",
   "source_artifact": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
-  "source_version": "2026-08-12",
-  "snapshot_date": "2026-08-12",
+  "source_version": "2026-08-13",
+  "snapshot_date": "2026-08-13",
   "checksum": "sha256:3f103c5703fdfc8c2e658d8b81fb22b1cf7ef281d83ee324f4a3a176076f5d37",
   "provenance": "MITRE D3FEND inferred ATT&CK technique to defensive technique mappings",
   "relationships": [

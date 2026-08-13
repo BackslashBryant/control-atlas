@@ -7,6 +7,7 @@ import { gzipSync } from 'node:zlib';
 
 const ROOT = join(process.cwd(), 'dist', 'site');
 const PORT = Number(process.env.PORT || 4317);
+const testServer = process.env.CONTROL_ATLAS_PLAYWRIGHT_SERVER === '1';
 
 const contentTypes = new Map([
   ['.css', 'text/css; charset=utf-8'],
@@ -30,7 +31,15 @@ function compressedFile(filePath) {
   return compressed;
 }
 
-createServer((request, response) => {
+const server = createServer((request, response) => {
+  if (testServer && request.url?.split('?')[0] === '/__control-atlas-test-shutdown') {
+    response.writeHead(204, { 'cache-control': 'no-store' });
+    response.end();
+    server.closeAllConnections?.();
+    server.close(() => process.exit(0));
+    setTimeout(() => process.exit(0), 1_000).unref();
+    return;
+  }
   const rawPath = request.url.split('?')[0];
   const requestPath = rawPath === '/' ? '/index.html' : rawPath;
   const filePath = normalize(join(ROOT, requestPath));
@@ -64,6 +73,8 @@ createServer((request, response) => {
   } else {
     createReadStream(filePath).pipe(response);
   }
-}).listen(PORT, 'localhost', () => {
+});
+
+server.listen(PORT, 'localhost', () => {
   console.log(`Control Atlas static site available at http://localhost:${PORT}`);
 });

@@ -56,7 +56,7 @@ test("WS0 direct routes own exactly one main landmark without Home stacked above
   }
 });
 
-test("WS0 desktop header has three primary destinations, Search, and one overflow", async ({
+test("desktop header exposes task destinations, Search, and Guides overflow", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -67,7 +67,10 @@ test("WS0 desktop header has three primary destinations, Search, and one overflo
   await expect(primary.getByRole("link")).toHaveText([
     "Atlas",
     "Library",
+    "Compare",
     "Resources",
+    "Sources",
+    "About",
   ]);
   await expect(page.getByRole("button", { name: "Open search" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Open navigation menu" })).toHaveCount(0);
@@ -79,8 +82,6 @@ test("WS0 desktop header has three primary destinations, Search, and one overflo
   await expect(overflow).toBeVisible();
   await expect(overflow.getByRole("link")).toHaveText([
     "Guides",
-    "Sources",
-    "About",
   ]);
 });
 
@@ -143,14 +144,15 @@ test("WS0 tablet and mobile use one navigation control with every destination", 
 
     const sheet = page.getByRole("navigation", { name: "Primary navigation (mobile)" });
     await expect(sheet).toBeVisible();
-    await expect(sheet.getByRole("link")).toHaveText([
-      "Atlas",
-      "Library",
-      "Resources",
-      "Guides",
-      "Sources",
-      "About",
-    ]);
+      await expect(sheet.getByRole("link")).toHaveText([
+        "Atlas",
+        "Library",
+        "Compare",
+        "Resources",
+        "Sources",
+        "About",
+        "Guides",
+      ]);
     await page.keyboard.press("Escape");
     await expect(sheet).toHaveCount(0);
   }

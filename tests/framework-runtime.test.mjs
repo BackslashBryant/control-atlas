@@ -1299,6 +1299,19 @@ test("runtime builds relationship rows and hides inferred candidates by default"
   assert.equal(withCandidates.rows[1].publication_status, "candidate");
 });
 
+test("runtime offers only published cross-catalog comparison pairs", () => {
+  const runtime = createFederalGraphRuntime(fixture);
+  const connections = runtime.getConnectedCatalogs("nist-800-53");
+
+  assert.ok(connections.length > 0);
+  assert.ok(connections.every((entry) => entry.connection_count > 0));
+  assert.deepEqual(
+    connections.find((entry) => entry.id === "csf-2"),
+    { id: "csf-2", name: "NIST CSF 2.0", connection_count: 1 },
+  );
+  assert.deepEqual(runtime.getConnectedCatalogs("unknown-catalog"), []);
+});
+
 test("runtime builds STIG to CCI to NIST chains for package and item scopes", () => {
   const runtime = createFederalGraphRuntime(fixture);
 
@@ -1409,13 +1422,14 @@ test("relationship exports mirror the current visible rows", () => {
 
   assert.match(
     csv,
-    /"From ID","To ID","Relationship type","Source basis","Confidence","Rationale","Navigation note","Source references"/,
+    /"From ID","To ID","From tags","To tags","Relationship type","Source basis","Confidence","Rationale","Navigation note","Source references"/,
   );
   assert.match(csv, /V-100001/);
-  assert.match(markdown, /\| From ID \| To ID \| Relationship type \|/);
+  assert.match(markdown, /\| From ID \| To ID \| From tags \| To tags \| Relationship type \|/);
   const parsed = JSON.parse(json);
   assert.equal(parsed.length, 2);
   assert.equal(parsed[0].from_item_id, "V-100001");
+  assert.ok(Array.isArray(parsed[0].from_taxonomy_tags));
 });
 
 test("runtime composes issue 10 federal context for a control from adjacent nodes", () => {

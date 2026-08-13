@@ -1,6 +1,6 @@
 {
   "schema_version": "4.0",
-  "generated_at": "2026-08-12T15:25:30.315Z",
+  "generated_at": "2026-08-13T05:48:29.837Z",
   "completeness": {
     "total_publications": 100,
     "total_artifacts": 92,
@@ -54,7 +54,7 @@
         "direct_file_import",
         "extracted_from_official_publication"
       ],
-      "last_refresh": "2026-08-12",
+      "last_refresh": "2026-08-13",
       "has_shard": true
     },
     {
@@ -114,7 +114,7 @@
       "methods": [
         "direct_file_import"
       ],
-      "last_refresh": "2026-08-12",
+      "last_refresh": "2026-08-13",
       "has_shard": true
     },
     {
@@ -134,7 +134,7 @@
       "methods": [
         "direct_file_import"
       ],
-      "last_refresh": "2026-08-12",
+      "last_refresh": "2026-08-13",
       "has_shard": true
     },
     {
@@ -275,7 +275,7 @@
         "direct_file_import",
         "api_import"
       ],
-      "last_refresh": "2026-08-07",
+      "last_refresh": "2026-08-13",
       "has_shard": true
     },
     {
@@ -295,7 +295,7 @@
       "methods": [
         "direct_file_import"
       ],
-      "last_refresh": "2026-08-07",
+      "last_refresh": "2026-08-13",
       "has_shard": true
     },
     {
@@ -315,7 +315,7 @@
       "methods": [
         "api_import"
       ],
-      "last_refresh": "2026-08-07",
+      "last_refresh": "2026-08-13",
       "has_shard": true
     },
     {
@@ -416,7 +416,7 @@
         "extracted_from_official_publication",
         "direct_file_import"
       ],
-      "last_refresh": "2026-08-09",
+      "last_refresh": "2026-08-13",
       "has_shard": true
     },
     {
@@ -456,7 +456,7 @@
       "methods": [
         "direct_file_import"
       ],
-      "last_refresh": "2026-08-09",
+      "last_refresh": "2026-08-13",
       "has_shard": true
     },
     {

@@ -6,11 +6,12 @@
 // intentionally separate because one source record can create zero, one, or
 // multiple runtime objects. Conflating those meanings made earlier manifests
 // look reconciled by overwriting the source-side count after every build.
-import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readGeneratedCollection } from './lib/generated-graph-artifacts.mjs';
 import { resolveExpectedLocator } from './lib/completeness.mjs';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY = join(ROOT, 'data/source-registry.json');
@@ -127,5 +128,5 @@ const ledger = {
   artifacts,
   catalogs,
 };
-writeFileSync(OUT, `${JSON.stringify(ledger, null, 2)}\n`, 'utf8');
+writeJsonAtomically(OUT, ledger);
 console.log(`source-count-ledger: ${artifacts.length} artifacts and ${catalogs.length} catalogs; source registry counts preserved.`);

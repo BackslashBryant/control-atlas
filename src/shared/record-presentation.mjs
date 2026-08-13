@@ -36,8 +36,8 @@ const BASE_PROFILES = Object.freeze({
   iot_capability_domain: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability Domain", kind: "text" })]), required: Object.freeze(["description"]) }),
   iot_capability: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability", kind: "text" })]), required: Object.freeze(["description"]) }),
   iot_subcapability: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Sub-Capability", kind: "text" })]), required: Object.freeze(["description"]) }),
-  iot_capability_element: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability Element", kind: "text" })]), required: Object.freeze(["description"]) }),
-  iot_capability_subelement: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability Sub-Element", kind: "text" })]), required: Object.freeze(["description"]) }),
+  iot_capability_element: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability Element", kind: "text" }), Object.freeze({ field: "publisher_mappings", heading: "Publisher Mappings", kind: "publisher_mappings" })]), required: Object.freeze(["description"]) }),
+  iot_capability_subelement: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability Sub-Element", kind: "text" }), Object.freeze({ field: "publisher_mappings", heading: "Publisher Mappings", kind: "publisher_mappings" })]), required: Object.freeze(["description"]) }),
   mobile_threat_category: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Threat Category", kind: "text" })]), required: Object.freeze(["description"]) }),
   mobile_threat: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Threat", kind: "text" }), Object.freeze({ field: "threat_origin", heading: "Published Origin", kind: "text" }), Object.freeze({ field: "exploit_examples", heading: "Exploit Examples", kind: "list" }), Object.freeze({ field: "cve_examples", heading: "CVE Examples", kind: "list" }), Object.freeze({ field: "countermeasures", heading: "Possible Countermeasures", kind: "countermeasures" })]), required: Object.freeze(["description"]) }),
   policy: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Policy Statement", kind: "text" })]), required: Object.freeze(["description"]) }),
@@ -79,15 +79,17 @@ const BASE_PROFILES = Object.freeze({
   zt_logical_component: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Logical Component", kind: "text" })]), required: Object.freeze(["description"]) }),
   zt_mapping_document: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Mapping Workbook", kind: "text" })]), required: Object.freeze(["description"]) }),
   zt_pillar: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Pillar Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
-  zt_product_component: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Implemented Function", kind: "text" })]), required: Object.freeze(["description"]) }),
+  zt_product_component: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Implemented Function", kind: "text" }), Object.freeze({ field: "mapping_targets", heading: "Publisher Mapping Targets", kind: "mapping_targets" })]), required: Object.freeze(["description"]) }),
   zt_publication: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Publication Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
   zt_reference_component: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Reference Architecture Function", kind: "text" })]), required: Object.freeze(["description"]) }),
   zt_tenet: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Tenet", kind: "text" })]), required: Object.freeze(["description"]) }),
 });
 
 const CATALOG_OVERRIDES = Object.freeze({
+  "disa-cci:requirement": Object.freeze({ sections: Object.freeze([DESCRIPTION, Object.freeze({ field: "references", heading: "Publisher References", kind: "references" })]), required: Object.freeze(["description"]) }),
   "csf-2:requirement": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Outcome", kind: "text" })]), required: Object.freeze(["description"]) }),
   "dod-rai:requirement": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Guidance", kind: "text" })]), required: Object.freeze(["description"]) }),
+  "dod-zt:zt_activity": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Activity", kind: "text" }), Object.freeze({ field: "outcomes", heading: "Published Outcomes", kind: "text" }), Object.freeze({ field: "end_state", heading: "Published End State", kind: "text" }), Object.freeze({ field: "predecessors", heading: "Predecessor Activities", kind: "list" }), Object.freeze({ field: "successors", heading: "Successor Activities", kind: "list" })]), required: Object.freeze(["description"]) }),
   "nist-ai-rmf:requirement": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Action", kind: "text" })]), required: Object.freeze(["description"]) }),
   "nist-ssdf:requirement": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Practice", kind: "text" })]), required: Object.freeze(["description"]) }),
 });

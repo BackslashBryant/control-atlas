@@ -13,6 +13,7 @@ import { AppLink } from "../components/AppLink";
 import { BucketTag } from "../components/TaxonomyTag";
 import {
   CheckboxFacet,
+  TagFacet,
   TypeaheadFacet,
   WorkspaceTemplate,
 } from "../components/WorkspaceTemplate";
@@ -23,6 +24,10 @@ import {
 } from "../lib/areaVisualLanguage";
 import { buildCatalogCoverageList, catalogCoverageForId, isLowCatalogCoverage } from "../lib/catalogCoverage";
 import { LIBRARY_KINDS, libraryKindForRawType, libraryKindLabel } from "../lib/informationArchitecture";
+import {
+  TAXONOMY_CONTRACT,
+  TAXONOMY_TAG_BY_ID,
+} from "../../shared/taxonomy-contract.mjs";
 import {
   recordIdentityFor,
   officialRecordName,
@@ -37,6 +42,27 @@ import {
 import type { ViewState } from "../lib/viewState";
 
 type SearchState = Extract<ViewState, { view: "search" }>;
+
+function documentTaxonomyTags(document: any) {
+  return (document.metadata?.taxonomy_tags || document.taxonomy_tags || [])
+    .filter((tag: any) => tag?.id && tag?.kind);
+}
+
+function matchesTagSelection(document: any, selected: string[]) {
+  const required = new Map<string, Set<string>>();
+  for (const id of selected) {
+    const definition = TAXONOMY_TAG_BY_ID.get(id);
+    if (!definition) continue;
+    const values = required.get(definition.dimension) || new Set<string>();
+    values.add(id);
+    required.set(definition.dimension, values);
+  }
+  if (!required.size) return true;
+  const documentTags = new Set(documentTaxonomyTags(document).map((tag: any) => tag.id));
+  return [...required.values()].every((alternatives) =>
+    [...alternatives].some((id) => documentTags.has(id)),
+  );
+}
 
 function matchReasonFor(document: any, query: string): string {
   const needle = query.trim().toLocaleLowerCase();
@@ -76,13 +102,14 @@ export function ExplorePage(props: {
   const [compareMode, setCompareMode] = useState(false);
   const [selectedRecords, setSelectedRecords] = useState<string[]>([]);
   const connectedOnly = state.connectedOnly === "true";
-  const hasFilters = Boolean(state.filter || state.publisher || state.kind || state.area || connectedOnly);
+  const hasFilters = Boolean(state.filter || state.publisher || state.kind || state.area || state.tags.length || connectedOnly);
   const searchStarted = Boolean(state.query.trim() || hasFilters);
-  const allDocuments = useMemo(
-    () => bundle.runtime.searchLibrary("").filter((document: any) => Boolean(areaPresentationForCatalog(document.catalog_id))),
+  const runtimeCatalogs = useMemo(() => bundle.runtime.getCatalogs(), [bundle.runtime]);
+  const libraryFacets = useMemo(() => bundle.runtime.getLibraryFacets(), [bundle.runtime]);
+  const libraryBrowseCounts = useMemo(
+    () => (bundle.runtime as any).getLibraryBrowseCounts?.() || { object_types: {}, tags: {} },
     [bundle.runtime],
   );
-  const runtimeCatalogs = useMemo(() => bundle.runtime.getCatalogs(), [bundle.runtime]);
   const catalogNames = useMemo(
     () => new Map<string, string>(runtimeCatalogs.map((catalog: any) => [String(catalog.id), String(catalog.name)])),
     [runtimeCatalogs],
@@ -102,7 +129,7 @@ export function ExplorePage(props: {
     return () => window.cancelAnimationFrame(frame);
   }, [searchStarted, state.area, state.connectedOnly, state.filter, state.kind, state.publisher, state.query, state.sort]);
 
-  const documents = useMemo(() => {
+  const documentsBeforeTags = useMemo(() => {
     if (!searchStarted) return [];
     return bundle.runtime.searchLibrary(state.query, {
       catalog_id: state.filter || undefined,
@@ -112,9 +139,15 @@ export function ExplorePage(props: {
       if (!area) return false;
       if (state.kind && libraryKindForRawType(document.object_type) !== state.kind) return false;
       if (state.area && area?.id !== state.area) return false;
+      if (connectedOnly && Number(document.published_connection_count || 0) === 0) return false;
       return true;
     });
-  }, [bundle.runtime, searchStarted, state.area, state.filter, state.kind, state.publisher, state.query]);
+  }, [bundle.runtime, connectedOnly, searchStarted, state.area, state.filter, state.kind, state.publisher, state.query]);
+
+  const documents = useMemo(
+    () => documentsBeforeTags.filter((document: any) => matchesTagSelection(document, state.tags)),
+    [documentsBeforeTags, state.tags],
+  );
 
   const rows = useMemo(() => {
     const prepared = documents.map((document: any) => {
@@ -149,7 +182,7 @@ export function ExplorePage(props: {
         relationshipCount,
         title: officialRecordName(itemId, String(document.title || "")),
       };
-    }).filter((row: any) => !connectedOnly || row.relationshipCount > 0);
+    });
     const by = (key: "identifier" | "title" | "publication") => (left: any, right: any) =>
       String(left[key]).localeCompare(String(right[key]), undefined, { numeric: true, sensitivity: "base" });
     if (state.sort === "identifier") return prepared.sort(by("identifier"));
@@ -157,31 +190,54 @@ export function ExplorePage(props: {
     if (state.sort === "publication") return prepared.sort(by("publication"));
     return prepared.sort((left: any, right: any) =>
       (RELEVANCE_ORDER[left.matchReason] ?? 9) - (RELEVANCE_ORDER[right.matchReason] ?? 9) || by("title")(left, right));
-  }, [bundle.runtime, catalogCoverage, catalogNames, connectedOnly, documents, state.query, state.sort]);
+  }, [bundle.runtime, catalogCoverage, catalogNames, documents, state.query, state.sort]);
 
-  const publishers = useMemo<string[]>(() => [...new Set<string>(allDocuments
-    .map((document: any) => String(document.publisher_name || ""))
-    .filter(Boolean))].sort(), [allDocuments]);
+  const publishers = libraryFacets.publishers || [];
   const topCatalogs = useMemo(() => runtimeCatalogs
     .map((catalog: any) => ({
       ...catalog,
       publisher: recordPublisherName(
-        allDocuments.find((document: any) => document.catalog_id === catalog.id)?.publisher_name,
+        catalog.display_group,
         catalog.source_id ? bundle.runtime.getSource(catalog.source_id)?.owner : "",
         catalog.display_group,
       ),
     }))
     .filter((catalog: any) => catalog.leaf_record_count > 0)
     .sort((left: any, right: any) => right.leaf_record_count - left.leaf_record_count || left.name.localeCompare(right.name))
-    .slice(0, 6), [allDocuments, bundle.runtime, runtimeCatalogs]);
+    .slice(0, 6), [bundle.runtime, runtimeCatalogs]);
   const areaCounts = useMemo(() => AREA_PRESENTATIONS.map((area) => ({
     ...area,
-    count: allDocuments.filter((document: any) => areaPresentationForCatalog(document.catalog_id)?.id === area.id).length,
-  })), [allDocuments]);
+    count: runtimeCatalogs
+      .filter((catalog: any) => areaPresentationForCatalog(catalog.id)?.id === area.id)
+      .reduce((total: number, catalog: any) => total + Number(catalog.leaf_record_count || 0), 0),
+  })).filter((area) => area.count > 0), [runtimeCatalogs]);
   const kindCounts = useMemo(() => LIBRARY_KINDS.map((kind) => ({
     ...kind,
-    count: allDocuments.filter((document: any) => libraryKindForRawType(document.object_type) === kind.id).length,
-  })).filter((kind) => kind.count > 0), [allDocuments]);
+    count: Object.entries(libraryBrowseCounts.object_types || {})
+      .filter(([rawType]) => libraryKindForRawType(rawType) === kind.id)
+      .reduce((total, [, count]) => total + Number(count), 0),
+  })).filter((kind) => kind.count > 0), [libraryBrowseCounts]);
+  const tagFacetOptions = useMemo(() => TAXONOMY_CONTRACT.dimensions.map((dimension) => {
+    const selectedOutsideDimension = state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension !== dimension.id);
+    const contextualDocuments = documentsBeforeTags.filter((document: any) =>
+      matchesTagSelection(document, selectedOutsideDimension),
+    );
+    const options = TAXONOMY_CONTRACT.tags
+      .filter((tag) => tag.dimension === dimension.id)
+      .map((tag) => ({
+        aliases: tag.aliases,
+        count: searchStarted
+          ? contextualDocuments.filter((document: any) =>
+              documentTaxonomyTags(document).some((recordTag: any) => recordTag.id === tag.id),
+            ).length
+          : Number(libraryBrowseCounts.tags?.[tag.id] || 0),
+        label: tag.label,
+        value: tag.id,
+      }))
+      .filter((tag) => tag.count > 0)
+      .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label));
+    return { ...dimension, options };
+  }), [documentsBeforeTags, libraryBrowseCounts, searchStarted, state.tags]);
 
   const mapItems: LibraryMapItem[] = useMemo(() => state.viewMode !== "map" ? [] : rows.map((row: any) => ({
     id: row.document.id,
@@ -196,8 +252,12 @@ export function ExplorePage(props: {
     state.publisher && { key: "publisher", label: state.publisher },
     state.kind && { key: "kind", label: libraryKindLabel(state.kind) },
     state.area && { key: "area", label: AREA_PRESENTATIONS.find((area) => area.id === state.area)?.label || state.area },
+    ...state.tags.flatMap((id) => {
+      const tag = TAXONOMY_TAG_BY_ID.get(id);
+      return tag ? [{ key: "tags" as const, label: tag.label, tagId: id }] : [];
+    }),
     connectedOnly && { key: "connectedOnly", label: "Has connections" },
-  ].filter(Boolean) as Array<{ key: keyof SearchState; label: string }>;
+  ].filter(Boolean) as Array<{ key: keyof SearchState; label: string; tagId?: string }>;
 
   const clearFilters = () => onNavigate("search", {
     area: "",
@@ -205,6 +265,7 @@ export function ExplorePage(props: {
     filter: "",
     kind: "",
     publisher: "",
+    tags: [],
   });
   const switchView = (viewMode: string) => {
     const scrollY = window.scrollY;
@@ -212,7 +273,7 @@ export function ExplorePage(props: {
     window.requestAnimationFrame(() => window.requestAnimationFrame(() => window.scrollTo({ top: scrollY, behavior: "auto" })));
   };
   const renderFacets = (scope: "desktop" | "mobile") => (
-    <div className="workspace-facet-controls" data-facet-set="publisher,kind,publication,area,connections">
+    <div className="workspace-facet-controls" data-facet-set="publisher,kind,publication,area,tags,connections">
       <TypeaheadFacet
         id={`library-${scope}-publisher`}
         label="Publisher"
@@ -226,6 +287,20 @@ export function ExplorePage(props: {
         options={kindCounts.map((kind) => ({ count: kind.count, label: kind.label, textLabel: kind.label, value: kind.id }))}
         value={state.kind}
       />
+      {tagFacetOptions.map((dimension) => (
+        <TagFacet
+          key={dimension.id}
+          label={dimension.label}
+          onChange={(tags) => onNavigate("search", {
+            tags: [
+              ...state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension !== dimension.id),
+              ...tags,
+            ].sort(),
+          })}
+          options={dimension.options}
+          selected={state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension === dimension.id)}
+        />
+      ))}
       <TypeaheadFacet
         id={`library-${scope}-publication`}
         label="Publication"
@@ -264,7 +339,14 @@ export function ExplorePage(props: {
       activeFilters={activeFilters.length ? (
         <div aria-label="Active filters" className="active-filter-row">
           {activeFilters.map((filter) => (
-            <button className="active-filter-chip" key={filter.key} onClick={() => onNavigate("search", { [filter.key]: "" })} type="button">
+            <button
+              className="active-filter-chip"
+              key={filter.tagId || filter.key}
+              onClick={() => filter.tagId
+                ? onNavigate("search", { tags: state.tags.filter((id) => id !== filter.tagId) })
+                : onNavigate("search", { [filter.key]: "" })}
+              type="button"
+            >
               {filter.label}<IconX aria-hidden="true" size={13} />
             </button>
           ))}
@@ -300,7 +382,11 @@ export function ExplorePage(props: {
       onQueryDraftChange={setQueryDraft}
       onSearch={() => {
         onNavigate("search", { query: queryDraft.trim() });
-        window.requestAnimationFrame(() => resultsRef.current?.focus());
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            document.getElementById("library-results")?.focus();
+          });
+        });
       }}
       onSortChange={(sort) => onNavigate("search", { sort })}
       onViewChange={switchView}

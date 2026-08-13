@@ -55,7 +55,14 @@ function artifactVersion(document) {
 }
 
 export function reconcileFreshness(registry, artifactDocuments, runDate, observedSourceIds = []) {
-  const registrySources = new Map(registry.sources.map((source) => [source.id, source]));
+  const sourceRecordsById = new Map();
+  for (const collection of [registry.publications || [], registry.sources || []]) {
+    for (const source of collection) {
+      const records = sourceRecordsById.get(source.id) || [];
+      records.push(source);
+      sourceRecordsById.set(source.id, records);
+    }
+  }
   const observations = new Set(observedSourceIds);
   for (const freshness of registry.freshness.sources) {
     if (freshness.sync_model === 'link_out' && observations.has(freshness.source_id)) {
@@ -67,10 +74,22 @@ export function reconcileFreshness(registry, artifactDocuments, runDate, observe
     if (!document) throw new Error(`Missing refreshed artifact for ${freshness.source_id}`);
     const nextHash = artifactHash(document);
     freshness.last_checked = runDate;
-    if (freshness.hash !== nextHash) freshness.last_imported = runDate;
+    const contentChanged = freshness.hash !== nextHash;
+    if (contentChanged) freshness.last_imported = runDate;
     freshness.hash = nextHash;
     const nextVersion = artifactVersion(document);
-    if (nextVersion) registrySources.get(freshness.source_id).version = String(nextVersion);
+    if (nextVersion) {
+      for (const source of sourceRecordsById.get(freshness.source_id) || []) {
+        source.version = String(nextVersion);
+        if (contentChanged) source.retrieved_at = runDate;
+      }
+      for (const artifact of registry.artifacts || []) {
+        if (artifact.publication_source_id === freshness.source_id) {
+          artifact.version = String(nextVersion);
+          if (contentChanged) artifact.retrieved_at = runDate;
+        }
+      }
+    }
   }
   return registry;
 }

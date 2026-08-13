@@ -219,6 +219,21 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     else edgesBySource.set(edge.source_node_id, [edge]);
   }
   const suppliedLibraryDocuments = dataset.librarySearch?.documents || [];
+  const indexedLibraryTransport = dataset.librarySearch?.indexed_transport;
+  const indexedLibraryFields = indexedLibraryTransport?.format === "columns-v1"
+    && Array.isArray(indexedLibraryTransport.fields)
+    && Array.isArray(indexedLibraryTransport.columns)
+    && indexedLibraryTransport.fields.length === indexedLibraryTransport.columns.length
+    ? indexedLibraryTransport.fields
+    : [];
+  const indexedLibraryColumns = indexedLibraryFields.length
+    ? indexedLibraryTransport.columns
+    : [];
+  const indexedLibraryFieldIndex = new Map(
+    indexedLibraryFields.map((field, index) => [field, index]),
+  );
+  const indexedLibraryDocumentCount = indexedLibraryColumns[0]?.length || 0;
+  const indexedLibraryDocumentCache = new Map();
   const libraryDocuments =
     dataset.nodes.length === 0 ? suppliedLibraryDocuments : [];
   let libraryDocumentById =
@@ -247,6 +262,45 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       );
     }
     return libraryDocumentById.get(id) || null;
+  }
+
+  function indexedLibraryValue(index, field) {
+    const fieldIndex = indexedLibraryFieldIndex.get(field);
+    return fieldIndex === undefined ? undefined : indexedLibraryColumns[fieldIndex]?.[index];
+  }
+
+  function indexedLibraryDocument(index) {
+    const cached = indexedLibraryDocumentCache.get(index);
+    if (cached) return cached;
+    const document = Object.fromEntries(indexedLibraryFields.map((field) => [
+      field,
+      indexedLibraryValue(index, field),
+    ]));
+    indexedLibraryDocumentCache.set(index, document);
+    return document;
+  }
+
+  function indexedLibraryFacetMatches(index, filters = {}) {
+    return (
+      (!filters.object_type || indexedLibraryValue(index, "object_type") === filters.object_type) &&
+      (!filters.source_class || indexedLibraryValue(index, "source_class") === filters.source_class) &&
+      (!filters.control_family || indexedLibraryValue(index, "control_family") === filters.control_family) &&
+      (!filters.severity || indexedLibraryValue(index, "severity") === filters.severity) &&
+      (!filters.catalog_id || indexedLibraryValue(index, "catalog_id") === filters.catalog_id) &&
+      (!filters.publisher_name || indexedLibraryValue(index, "publisher_name") === filters.publisher_name)
+    );
+  }
+
+  function indexedLibraryRankBoost(index, query) {
+    const title = normalize(indexedLibraryValue(index, "title"));
+    const itemId = normalize(indexedLibraryValue(index, "item_id"));
+    let boost = 0;
+    if (title === query) boost += 10_000;
+    else if (title.includes(query)) boost += 1_000;
+    if (itemId === query) boost += 20_000;
+    if (indexedLibraryValue(index, "object_type") === "control") boost += 200;
+    if (indexedLibraryValue(index, "catalog_id") === "nist-800-53") boost += 50;
+    return boost;
   }
 
   ingestLibrarySearch(dataset.librarySearch);
@@ -394,6 +448,27 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
   const catalogs = Array.isArray(dataset.catalogs)
     ? dataset.catalogs
     : derivedCatalogs;
+  // Comparison is an evidence-navigation task, not a free-form catalog
+  // picker. Compute the published cross-catalog pairs once when the complete
+  // graph is loaded so the UI can offer only pairs that have a real, cited
+  // connection in this dataset. Direction is deliberately symmetric for
+  // choosing a pair; individual rows retain their published direction.
+  const publishedCatalogConnectionCounts = new Map();
+  const catalogConnectionKey = (fromCatalog, toCatalog) =>
+    `${fromCatalog}\u0000${toCatalog}`;
+  for (const edge of dataset.edges) {
+    if (edge.publication_status !== "published") continue;
+    const fromCatalog = nodeById.get(edge.source_node_id)?.metadata?.catalog_id;
+    const toCatalog = nodeById.get(edge.target_node_id)?.metadata?.catalog_id;
+    if (!fromCatalog || !toCatalog || fromCatalog === toCatalog) continue;
+    for (const [left, right] of [[fromCatalog, toCatalog], [toCatalog, fromCatalog]]) {
+      const key = catalogConnectionKey(left, right);
+      publishedCatalogConnectionCounts.set(
+        key,
+        (publishedCatalogConnectionCounts.get(key) || 0) + 1,
+      );
+    }
+  }
   const sortNodesByItemId = (left, right) =>
     itemIdFor(left).localeCompare(itemIdFor(right)) ||
     left.id.localeCompare(right.id);
@@ -449,10 +524,12 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     from_item_id: itemIdFor(fromNode),
     from_title: itemTitleFor(fromNode),
     from_catalog_id: fromNode.metadata?.catalog_id || "",
+    from_taxonomy_tags: fromNode.metadata?.taxonomy_tags || [],
     to_id: toNode.id,
     to_item_id: itemIdFor(toNode),
     to_title: itemTitleFor(toNode),
     to_catalog_id: toNode.metadata?.catalog_id || "",
+    to_taxonomy_tags: toNode.metadata?.taxonomy_tags || [],
     relationship_type: edge.relationship_type,
     provenance_class: edge.provenance_class,
     confidence: edge.confidence,
@@ -999,6 +1076,68 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     searchLibrary(query, filters = {}) {
       const needle = normalize(query);
       const aliasNeedle = normalizeControlNotation(needle);
+      if (indexedLibraryDocumentCount) {
+        const hasFilters = Object.values(filters).some(Boolean);
+        const exactMatches = [];
+        const matches = [];
+        const compareIndexedMatches = (left, right) =>
+          left.score - right.score ||
+          right.rankBoost - left.rankBoost ||
+          (String(indexedLibraryValue(left.index, "id")) < String(indexedLibraryValue(right.index, "id"))
+            ? -1
+            : String(indexedLibraryValue(left.index, "id")) > String(indexedLibraryValue(right.index, "id"))
+              ? 1
+              : 0);
+        const searchNeedle = normalizeLibrarySearchQuery(
+          aliasNeedle !== needle ? aliasNeedle : query,
+        ).toLowerCase();
+        const searchTerms = searchNeedle.split(/\s+/).filter(Boolean);
+        for (let index = 0; index < indexedLibraryDocumentCount; index += 1) {
+          if (hasFilters && !indexedLibraryFacetMatches(index, filters)) continue;
+          const normalizedItemId = normalize(indexedLibraryValue(index, "item_id"));
+          const normalizedId = normalize(indexedLibraryValue(index, "id"));
+          if (
+            needle && (
+              normalizedItemId === needle ||
+              normalizedId === needle ||
+              normalizedItemId === aliasNeedle ||
+              normalizedId === aliasNeedle
+            )
+          ) {
+            exactMatches.push(index);
+            continue;
+          }
+          if (!needle) {
+            matches.push({ index, rankBoost: 0, score: 0 });
+            continue;
+          }
+          if (!searchTerms.length) continue;
+          const title = normalize(indexedLibraryValue(index, "title"));
+          const searchableText = [
+            normalizedItemId,
+            title,
+            normalize(indexedLibraryValue(index, "control_family")),
+            normalize(indexedLibraryValue(index, "source_name")),
+            normalize(indexedLibraryValue(index, "publisher_name")),
+            normalize(indexedLibraryValue(index, "official_text_preview")),
+          ].join(" ");
+          if (!searchTerms.every((term) => searchableText.includes(term))) continue;
+          matches.push({
+            index,
+            rankBoost: indexedLibraryRankBoost(index, searchNeedle),
+            score: normalizedItemId.startsWith(needle) || normalizedItemId.startsWith(aliasNeedle)
+              ? 1
+              : title.includes(searchNeedle)
+                ? 2
+                : 3,
+          });
+        }
+        if (exactMatches.length) return exactMatches.map(indexedLibraryDocument);
+        return matches
+          .sort(compareIndexedMatches)
+          .slice(0, 100)
+          .map((entry) => indexedLibraryDocument(entry.index));
+      }
       const candidates = Object.values(filters).some(Boolean)
         ? libraryDocuments.filter((document) =>
             matchesLibraryFacet(document, filters),
@@ -1131,6 +1270,30 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     getCatalogs() {
       return catalogs;
     },
+    getConnectedCatalogs(catalogId) {
+      if (!catalogId) return [];
+      return catalogs
+        .map((catalog) => ({
+          catalog,
+          connection_count:
+            publishedCatalogConnectionCounts.get(
+              catalogConnectionKey(catalogId, catalog.id),
+            ) || 0,
+        }))
+        .filter(({ catalog, connection_count }) =>
+          catalog.id !== catalogId && connection_count > 0,
+        )
+        .sort(
+          (left, right) =>
+            right.connection_count - left.connection_count ||
+            left.catalog.name.localeCompare(right.catalog.name),
+        )
+        .map(({ catalog, connection_count }) => ({
+          id: catalog.id,
+          name: catalog.name,
+          connection_count,
+        }));
+    },
     getLibraryFacets() {
       if (dataset.librarySearch?.facets) {
         return dataset.librarySearch.facets;
@@ -1160,6 +1323,12 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
         ].sort(),
       };
     },
+    getLibraryBrowseCounts() {
+      return dataset.librarySearch?.browse_counts || {
+        object_types: {},
+        tags: {},
+      };
+    },
     buildRelationshipRows(request = {}) {
       return visibleRelationshipRows(request);
     },
@@ -1170,6 +1339,8 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
           [
             "From ID",
             "To ID",
+            "From tags",
+            "To tags",
             "Relationship type",
             "Source basis",
             "Confidence",
@@ -1180,6 +1351,8 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
           rows.map((row) => [
             row.from_item_id,
             row.to_item_id,
+            row.from_taxonomy_tags.map((tag) => tag.id).join("; "),
+            row.to_taxonomy_tags.map((tag) => tag.id).join("; "),
             row.relationship_type,
             row.provenance_class,
             row.confidence,
@@ -1193,6 +1366,8 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
         [
           "From ID",
           "To ID",
+          "From tags",
+          "To tags",
           "Relationship type",
           "Source basis",
           "Confidence",
@@ -1205,6 +1380,8 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
         csvRows.push([
           row.from_item_id,
           row.to_item_id,
+          row.from_taxonomy_tags.map((tag) => tag.id).join(" | "),
+          row.to_taxonomy_tags.map((tag) => tag.id).join(" | "),
           row.relationship_type,
           row.provenance_class,
           row.confidence,

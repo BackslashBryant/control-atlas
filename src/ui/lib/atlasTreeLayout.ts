@@ -1,4 +1,3 @@
-import ELK from "elkjs/lib/elk.bundled.js";
 
 import type { AtlasRenderableNode } from "./atlasTreeAggregation";
 import type { AtlasTreeModel } from "./atlasTreeModel";
@@ -35,7 +34,19 @@ type ElkGraph = ElkNode & {
   edges: ElkEdge[];
 };
 
-const elk = new ELK();
+type ElkLayoutEngine = {
+  layout(graph: ElkGraph): Promise<ElkGraph>;
+};
+
+let elkPromise: Promise<ElkLayoutEngine> | null = null;
+
+async function getElk() {
+  if (!elkPromise) {
+    elkPromise = import("elkjs/lib/elk.bundled.js")
+      .then(({ default: Elk }) => new Elk() as unknown as ElkLayoutEngine);
+  }
+  return elkPromise;
+}
 
 function lexical(left: AtlasRenderableNode, right: AtlasRenderableNode) {
   return left.itemId.localeCompare(right.itemId, undefined, {
@@ -107,6 +118,7 @@ export async function layoutAtlasTree(options: {
     ...options,
     focusId: options.focusId || "",
   });
+  const elk = await getElk();
   const laidOut = await elk.layout(graph) as ElkGraph;
   const positions = (laidOut.children || []).map((node) => ({
     id: node.id,

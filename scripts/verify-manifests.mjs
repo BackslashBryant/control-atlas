@@ -10,12 +10,13 @@
 //   missing evidence locator, unexplained exclusion, duplicate artifacts,
 //   duplicate releases, canonical-ID collisions, and any tracked value
 //   containing placeholder / placeholder_checksum / fabricated / estimated.
-import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readGeneratedCollection } from './lib/generated-graph-artifacts.mjs';
 import { resolveExpectedLocator, classifyCatalog, summarizeCompleteness } from './lib/completeness.mjs';
 import { NON_CATALOG_TECHNICAL_SHARDS } from './sync-catalog-source-bundles.mjs';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SHA256_PREFIXED = /^sha256:[a-f0-9]{64}$/i;
@@ -409,11 +410,7 @@ if (existsSync(coveragePath)) {
     // Corrupt/unreadable prior manifest: fall through and write fresh.
   }
 }
-writeFileSync(
-  coveragePath,
-  JSON.stringify(coverage, null, 2) + '\n',
-  'utf8',
-);
+writeJsonAtomically(coveragePath, coverage);
 
 if (errors.length > 0) {
   console.error(`FAIL: verify:manifests found ${errors.length} integrity error(s):`);

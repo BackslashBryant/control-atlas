@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-12T15:37:05.257Z",
+  "generated_at": "2026-08-13T05:48:26.183Z",
   "count_semantics": {
     "discovered_expected_records": "Independent publisher inventory expected by the completeness contract.",
     "parsed_source_records": "Publisher records emitted by the source adapter before graph construction.",
@@ -39,7 +39,7 @@
       "publication_source_id": "disa-cci-list",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 5138,
+        "parsed_source_records": 5137,
         "published_source_relationships": 3838,
         "runtime_node_citations": 5138,
         "runtime_edge_citations": 8975
@@ -204,7 +204,7 @@
       "publication_source_id": "fedramp-2026-rules",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 0,
+        "parsed_source_records": 5,
         "published_source_relationships": 0,
         "runtime_node_citations": 0,
         "runtime_edge_citations": 0
@@ -215,7 +215,7 @@
       "publication_source_id": "fedramp-rev5",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 5,
+        "parsed_source_records": 6,
         "published_source_relationships": 1045,
         "runtime_node_citations": 5,
         "runtime_edge_citations": 1049
@@ -248,7 +248,7 @@
       "publication_source_id": "mitre-attack-enterprise",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 713,
+        "parsed_source_records": 697,
         "published_source_relationships": 712,
         "runtime_node_citations": 713,
         "runtime_edge_citations": 744
@@ -259,7 +259,7 @@
       "publication_source_id": "mitre-attack-ics",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 110,
+        "parsed_source_records": 97,
         "published_source_relationships": 109,
         "runtime_node_citations": 110,
         "runtime_edge_citations": 120
@@ -270,7 +270,7 @@
       "publication_source_id": "mitre-d3fend-mappings",
       "source_role": "mapping",
       "counts": {
-        "parsed_source_records": 0,
+        "parsed_source_records": 16164,
         "published_source_relationships": 3796,
         "runtime_node_citations": 0,
         "runtime_edge_citations": 3796
@@ -281,7 +281,7 @@
       "publication_source_id": "mitre-d3fend-ontology",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 279,
+        "parsed_source_records": 271,
         "published_source_relationships": 278,
         "runtime_node_citations": 279,
         "runtime_edge_citations": 278
@@ -303,7 +303,7 @@
       "publication_source_id": "nist-800-171-oscal-mappings",
       "source_role": "mapping",
       "counts": {
-        "parsed_source_records": 148,
+        "parsed_source_records": 130,
         "published_source_relationships": 305,
         "runtime_node_citations": 148,
         "runtime_edge_citations": 305
@@ -314,7 +314,7 @@
       "publication_source_id": "nist-800-171-rev2",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 125,
+        "parsed_source_records": 117,
         "published_source_relationships": 125,
         "runtime_node_citations": 125,
         "runtime_edge_citations": 125
@@ -325,7 +325,7 @@
       "publication_source_id": "nist-800-172-rev3",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 133,
+        "parsed_source_records": 115,
         "published_source_relationships": 133,
         "runtime_node_citations": 133,
         "runtime_edge_citations": 133
@@ -347,7 +347,7 @@
       "publication_source_id": "nist-800-53",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 2252,
+        "parsed_source_records": 1196,
         "published_source_relationships": 3244,
         "runtime_node_citations": 2252,
         "runtime_edge_citations": 3264
@@ -358,7 +358,7 @@
       "publication_source_id": "nist-800-53-rev4-rev5-crosswalk",
       "source_role": "mapping",
       "counts": {
-        "parsed_source_records": 0,
+        "parsed_source_records": 2,
         "published_source_relationships": 1506,
         "runtime_node_citations": 0,
         "runtime_edge_citations": 1506
@@ -380,7 +380,7 @@
       "publication_source_id": "nist-ai-rmf-playbook",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 92,
+        "parsed_source_records": 72,
         "published_source_relationships": 91,
         "runtime_node_citations": 92,
         "runtime_edge_citations": 91
@@ -391,7 +391,7 @@
       "publication_source_id": "nist-csf-2",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 135,
+        "parsed_source_records": 219,
         "published_source_relationships": 134,
         "runtime_node_citations": 135,
         "runtime_edge_citations": 134
@@ -402,7 +402,7 @@
       "publication_source_id": "nist-csf-53-supplemental",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 0,
+        "parsed_source_records": 2,
         "published_source_relationships": 0,
         "runtime_node_citations": 0,
         "runtime_edge_citations": 0
@@ -1018,7 +1018,7 @@
       "publication_source_id": "nist-ssdf",
       "source_role": "primary_data",
       "counts": {
-        "parsed_source_records": 47,
+        "parsed_source_records": 61,
         "published_source_relationships": 46,
         "runtime_node_citations": 47,
         "runtime_edge_citations": 46
@@ -1073,7 +1073,7 @@
       "counts": {
         "discovered_expected_records": 5137,
         "normalized_records": 5137,
-        "parsed_primary_artifact_records": 5138,
+        "parsed_primary_artifact_records": 5137,
         "published_source_relationships": 33756,
         "graph_nodes": 5138,
         "graph_edges_incident": 38895,
@@ -1143,7 +1143,7 @@
       "counts": {
         "discovered_expected_records": 4,
         "normalized_records": 4,
-        "parsed_primary_artifact_records": 5,
+        "parsed_primary_artifact_records": 6,
         "published_source_relationships": 1045,
         "graph_nodes": 5,
         "graph_edges_incident": 1053,
@@ -1199,7 +1199,7 @@
       "counts": {
         "discovered_expected_records": 697,
         "normalized_records": 697,
-        "parsed_primary_artifact_records": 713,
+        "parsed_primary_artifact_records": 697,
         "published_source_relationships": 4508,
         "graph_nodes": 713,
         "graph_edges_incident": 3875,
@@ -1213,7 +1213,7 @@
       "counts": {
         "discovered_expected_records": 97,
         "normalized_records": 97,
-        "parsed_primary_artifact_records": 110,
+        "parsed_primary_artifact_records": 97,
         "published_source_relationships": 109,
         "graph_nodes": 110,
         "graph_edges_incident": 751,
@@ -1227,7 +1227,7 @@
       "counts": {
         "discovered_expected_records": 271,
         "normalized_records": 271,
-        "parsed_primary_artifact_records": 279,
+        "parsed_primary_artifact_records": 271,
         "published_source_relationships": 4074,
         "graph_nodes": 279,
         "graph_edges_incident": 4075,
@@ -1241,7 +1241,7 @@
       "counts": {
         "discovered_expected_records": 130,
         "normalized_records": 130,
-        "parsed_primary_artifact_records": 148,
+        "parsed_primary_artifact_records": 130,
         "published_source_relationships": 923,
         "graph_nodes": 148,
         "graph_edges_incident": 620,
@@ -1255,7 +1255,7 @@
       "counts": {
         "discovered_expected_records": 110,
         "normalized_records": 110,
-        "parsed_primary_artifact_records": 125,
+        "parsed_primary_artifact_records": 117,
         "published_source_relationships": 125,
         "graph_nodes": 125,
         "graph_edges_incident": 239,
@@ -1269,7 +1269,7 @@
       "counts": {
         "discovered_expected_records": 115,
         "normalized_records": 115,
-        "parsed_primary_artifact_records": 133,
+        "parsed_primary_artifact_records": 115,
         "published_source_relationships": 133,
         "graph_nodes": 133,
         "graph_edges_incident": 135,
@@ -1297,7 +1297,7 @@
       "counts": {
         "discovered_expected_records": 1196,
         "normalized_records": 1196,
-        "parsed_primary_artifact_records": 2252,
+        "parsed_primary_artifact_records": 1196,
         "published_source_relationships": 12734,
         "graph_nodes": 1217,
         "graph_edges_incident": 13950,
@@ -1311,7 +1311,7 @@
       "counts": {
         "discovered_expected_records": 1014,
         "normalized_records": 1014,
-        "parsed_primary_artifact_records": 2252,
+        "parsed_primary_artifact_records": 1196,
         "published_source_relationships": 3244,
         "graph_nodes": 1035,
         "graph_edges_incident": 2051,
@@ -1339,7 +1339,7 @@
       "counts": {
         "discovered_expected_records": 72,
         "normalized_records": 72,
-        "parsed_primary_artifact_records": 92,
+        "parsed_primary_artifact_records": 72,
         "published_source_relationships": 91,
         "graph_nodes": 92,
         "graph_edges_incident": 92,
@@ -1381,7 +1381,7 @@
       "counts": {
         "discovered_expected_records": 42,
         "normalized_records": 42,
-        "parsed_primary_artifact_records": 47,
+        "parsed_primary_artifact_records": 61,
         "published_source_relationships": 46,
         "graph_nodes": 47,
         "graph_edges_incident": 47,

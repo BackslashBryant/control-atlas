@@ -40,6 +40,10 @@ test("catalog-specific profiles preserve source-native nouns", () => {
   assert.equal(recordPresentationProfile("nist-ssdf", "requirement").sections[0].heading, "Practice");
   assert.equal(recordPresentationProfile("nist-ai-rmf", "requirement").sections[0].heading, "Action");
   assert.equal(recordPresentationProfile("dod-rai", "requirement").sections[0].heading, "Guidance");
+  assert.equal(recordPresentationProfile("disa-cci", "requirement").sections[1].field, "references");
+  assert.equal(recordPresentationProfile("dod-zt", "zt_activity").sections[1].field, "outcomes");
+  assert.equal(recordPresentationProfile("nist-zt", "zt_product_component").sections[1].field, "mapping_targets");
+  assert.equal(recordPresentationProfile("nist-iot-cybersecurity", "iot_capability_element").sections[1].field, "publisher_mappings");
 });
 
 test("every supported record form has a presentation contract", () => {

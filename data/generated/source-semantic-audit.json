@@ -1,0 +1,2072 @@
+{
+  "schema_version": "1.0",
+  "generated_from": {
+    "source_coverage_manifest": "2026-08-13T05:48:29.837Z",
+    "catalog_source_inventory": "2026-08-12T15:27:07.669Z",
+    "source_count_ledger": "2026-08-13T05:48:26.183Z"
+  },
+  "purpose": "Per-catalog audit boundary for publisher structure, parser reconciliation, artifact provenance, and intentionally unverified semantic review.",
+  "catalog_count": 27,
+  "catalogs": [
+    {
+      "catalog_id": "cmmc-2",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 3,
+        "imported_records": 3,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/cmmc-practices.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 3,
+          "normalized_records": 3,
+          "unique_record_ids": 3,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "program"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "dod-cmmc-rule",
+          "display_name": "CMMC 2.0",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-06-09",
+          "artifact_url": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170/section-170.14",
+          "checksum": "sha256:d8a57867903f8d16ba6a795e765367bd03feaebe098014ee4e2d76b68da99a28",
+          "parser": "ecfr-xml"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "csf-2",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 106,
+        "imported_records": 106,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/csf-subcategories.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 106,
+          "normalized_records": 106,
+          "unique_record_ids": 106,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "function",
+            "category",
+            "requirement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-csf-2",
+          "display_name": "Cybersecurity Framework 2.0",
+          "version": "2.0",
+          "retrieved_at": "2026-07-28",
+          "last_checked": "2026-07-28",
+          "artifact_url": "https://www.nist.gov/publications/nist-cybersecurity-framework-csf-20",
+          "checksum": "sha256:5c7485b42bdc8c5c89f841bb31c956552f67c0ad0516b495b9945257183917eb",
+          "parser": null
+        },
+        {
+          "source_id": "nist-csf-53-supplemental",
+          "display_name": "SP 800-53 Rev. 5",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-06-09",
+          "artifact_url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/csf-pf-to-sp800-53r5-mappings.xlsx",
+          "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
+          "parser": "olir-xlsx"
+        },
+        {
+          "source_id": "nist-csf11-csf20-crosswalk",
+          "display_name": "NIST CSF 2.0",
+          "version": "2024-02-20",
+          "retrieved_at": "2024-02-20",
+          "last_checked": "2024-02-20",
+          "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv1.1_to_CSFv2.0_CROSSWALK_20240220.xlsx",
+          "checksum": "sha256:07349f327dceffd659cd24ccbefd1b9aec6ac98dface7f46525dc9b47a69f512",
+          "parser": "olir-xlsx"
+        },
+        {
+          "source_id": "nist-olir-csf2-to-sp800-171",
+          "display_name": "NIST CSF 2.0",
+          "version": "2024-02-20",
+          "retrieved_at": "2024-02-20",
+          "last_checked": "2024-02-20",
+          "artifact_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-171_3_draft.xlsx",
+          "checksum": "sha256:07349f327dceffd659cd24ccbefd1b9aec6ac98dface7f46525dc9b47a69f512",
+          "parser": "olir-xlsx"
+        },
+        {
+          "source_id": "nist-olir-csf2-to-sp800-53",
+          "display_name": "NIST CSF 2.0",
+          "version": "2.0-final",
+          "retrieved_at": "2024-02-20",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
+          "checksum": "sha256:31eeb5114751a86f0e216e88a73e10f858165f7aa08fee3cfc8b7730263ca0a1",
+          "parser": "olir-xlsx"
+        },
+        {
+          "source_id": "nist-oscal",
+          "display_name": "NIST OSCAL Content",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://github.com/usnistgov/oscal-content",
+          "checksum": "sha256:59cd4f90a51561452b620d5b47f7702b549b502844d91363efd346495e9986bf",
+          "parser": "oscal-json"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "cui-policy",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 128,
+        "imported_records": 128,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/cui-policy.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 128,
+          "normalized_records": 128,
+          "unique_record_ids": 128,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "policy"
+          ],
+          [
+            "catalog",
+            "policy",
+            "policy"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "isoo-cui-regulation",
+          "display_name": "CUI Program",
+          "version": "current",
+          "retrieved_at": "2026-06-13",
+          "last_checked": "2026-06-13",
+          "artifact_url": "https://www.ecfr.gov/current/title-32/subtitle-B/chapter-XX/part-2002",
+          "checksum": "sha256:618487691ee9fbb1083f52dba7911be52ccf0573718d97038527b43cdeb3014b",
+          "parser": "ecfr-xml"
+        },
+        {
+          "source_id": "nara-cui-registry",
+          "display_name": "CUI Program",
+          "version": "2026-08-07",
+          "retrieved_at": "2026-08-07",
+          "last_checked": "2026-06-13",
+          "artifact_url": "https://www.archives.gov/cui/registry/category-list",
+          "checksum": "sha256:618487691ee9fbb1083f52dba7911be52ccf0573718d97038527b43cdeb3014b",
+          "parser": "nara-cui-registry-html"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "disa-cci",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 5137,
+        "imported_records": 5137,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/ccis.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 5137,
+          "normalized_records": 5137,
+          "unique_record_ids": 5137,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "requirement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "community-cci-research",
+          "display_name": "DISA CCI",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-06-09",
+          "artifact_url": "https://www.reddit.com/r/NISTControls/comments/wg8bit/comprehensive_list_of_ccis/",
+          "checksum": "sha256:84c9906ca3c8c135a2d60f650e3dd839942d1434bdfecb188f640bb1d2e9851b",
+          "parser": "community-research-register"
+        },
+        {
+          "source_id": "disa-cci-list",
+          "display_name": "DISA CCI",
+          "version": "2025-01-23",
+          "retrieved_at": "2025-01-23",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
+          "checksum": "sha256:b37b11384fa8e13b8a4df0d024c697ba6809ecd100ef56bd76136b0c23d340d4",
+          "parser": "cci-xml"
+        },
+        {
+          "source_id": "disa-cci-nist-references",
+          "display_name": "DISA CCI",
+          "version": "2025-01-23",
+          "retrieved_at": "2025-01-23",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
+          "checksum": "sha256:cbe530bfa300eb783cdae2083e791f719439ef7c15ace8740328f79f10ef985e",
+          "parser": "cci-xml"
+        },
+        {
+          "source_id": "disa-stig-srg-cci-references",
+          "display_name": "DISA STIG",
+          "version": "V3R7",
+          "retrieved_at": "2026-07-04",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://public.cyber.mil/stigs/downloads/",
+          "checksum": "sha256:b166976a9baba6846fedb2b65e76c435f60b2bcc174b84f9a4de34d08b1fe89a",
+          "parser": "xccdf"
+        },
+        {
+          "source_id": "mitre-cis-cci-mappings",
+          "display_name": "DISA CCI",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-06-09",
+          "artifact_url": "https://github.com/mitre/cis-cci-mappings",
+          "checksum": "sha256:84c9906ca3c8c135a2d60f650e3dd839942d1434bdfecb188f640bb1d2e9851b",
+          "parser": "github-json"
+        },
+        {
+          "source_id": "nist-800-53-rev4-rev5-crosswalk",
+          "display_name": "SP 800-53 Rev. 5",
+          "version": "2026-07-26",
+          "retrieved_at": "2026-07-26",
+          "last_checked": "2026-07-26",
+          "artifact_url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53r4-to-r5-comparison-workbook.xlsx",
+          "checksum": "sha256:33294be316ff481b5950adf626be5ae152922942aa6a1b42921b6bcaa265a625",
+          "parser": "rev4-rev5-crosswalk-xlsx"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "disa-srg",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 2516,
+        "imported_records": 2516,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/srg-requirements.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 2516,
+          "normalized_records": 2516,
+          "unique_record_ids": 2516,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "benchmark",
+            "srg_requirement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "cyber-mil-stig-compilations",
+          "display_name": "DISA STIG",
+          "version": "2026-06-15",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://www.cyber.mil/stigs/compilations/",
+          "checksum": "sha256:3295bbe915290fab2807f677b74a0ae7431a144c6d078a82a04f44e7edad6669",
+          "parser": "html-observer"
+        },
+        {
+          "source_id": "cyber-mil-stig-downloads",
+          "display_name": "DISA STIG",
+          "version": "2026-06-15",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://www.cyber.mil/stigs/downloads",
+          "checksum": "sha256:3295bbe915290fab2807f677b74a0ae7431a144c6d078a82a04f44e7edad6669",
+          "parser": "html-observer"
+        },
+        {
+          "source_id": "disa-srg-library",
+          "display_name": "DISA SRG",
+          "version": "V2R2",
+          "retrieved_at": "2026-08-13",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://public.cyber.mil/stigs/downloads/",
+          "checksum": "sha256:3676993277a443cec1c40abfa681afdca1a53a868c88716e8b6a6f17c81c0e66",
+          "parser": "xccdf"
+        },
+        {
+          "source_id": "disa-stig-srg-cci-references",
+          "display_name": "DISA STIG",
+          "version": "V3R7",
+          "retrieved_at": "2026-07-04",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://public.cyber.mil/stigs/downloads/",
+          "checksum": "sha256:b166976a9baba6846fedb2b65e76c435f60b2bcc174b84f9a4de34d08b1fe89a",
+          "parser": "xccdf"
+        },
+        {
+          "source_id": "nuwcdivnpt-github-org",
+          "display_name": "DISA STIG",
+          "version": "2026-06-15",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://github.com/NUWCDIVNPT",
+          "checksum": "sha256:e68232aa3708c3439dd69a890c152cf0c377183724dfc21d95b4c0891444b226",
+          "parser": "html-observer"
+        },
+        {
+          "source_id": "nuwcdivnpt-stig-manager",
+          "display_name": "DISA STIG",
+          "version": "2026-06-15",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://github.com/nuwcdivnpt/stig-manager",
+          "checksum": "sha256:e68232aa3708c3439dd69a890c152cf0c377183724dfc21d95b4c0891444b226",
+          "parser": "html-observer"
+        },
+        {
+          "source_id": "stigviewer-catalog",
+          "display_name": "DISA STIG",
+          "version": "2026-06-15",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://www.stigviewer.com/stigs",
+          "checksum": "sha256:e68232aa3708c3439dd69a890c152cf0c377183724dfc21d95b4c0891444b226",
+          "parser": "html-observer"
+        },
+        {
+          "source_id": "stigviewer-clkb-api",
+          "display_name": "DISA STIG",
+          "version": "2026-03-16",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://www.stigviewer.com/press-releases/2026-03-16",
+          "checksum": "sha256:e68232aa3708c3439dd69a890c152cf0c377183724dfc21d95b4c0891444b226",
+          "parser": "html-observer"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "disa-stig",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 17021,
+        "imported_records": 17021,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/stig-rules.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 17021,
+          "normalized_records": 17021,
+          "unique_record_ids": 17021,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "benchmark",
+            "stig_rule"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "cyber-mil-stig-compilations",
+          "display_name": "DISA STIG",
+          "version": "2026-06-15",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://www.cyber.mil/stigs/compilations/",
+          "checksum": "sha256:3295bbe915290fab2807f677b74a0ae7431a144c6d078a82a04f44e7edad6669",
+          "parser": "html-observer"
+        },
+        {
+          "source_id": "cyber-mil-stig-downloads",
+          "display_name": "DISA STIG",
+          "version": "2026-06-15",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://www.cyber.mil/stigs/downloads",
+          "checksum": "sha256:3295bbe915290fab2807f677b74a0ae7431a144c6d078a82a04f44e7edad6669",
+          "parser": "html-observer"
+        },
+        {
+          "source_id": "cyber-mil-stig-gpo",
+          "display_name": "DISA STIG",
+          "version": "2026-06-15",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://www.cyber.mil/stigs/gpo/",
+          "checksum": "sha256:3295bbe915290fab2807f677b74a0ae7431a144c6d078a82a04f44e7edad6669",
+          "parser": "html-observer"
+        },
+        {
+          "source_id": "disa-stig-library",
+          "display_name": "DISA STIG",
+          "version": "V3R7",
+          "retrieved_at": "2026-08-13",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://public.cyber.mil/stigs/downloads/",
+          "checksum": "sha256:3578716d26ece8c6861cc074adb32f54c99e53a0b143fbee557216b07d3ff2d1",
+          "parser": "xccdf"
+        },
+        {
+          "source_id": "disa-stig-srg-cci-references",
+          "display_name": "DISA STIG",
+          "version": "V3R7",
+          "retrieved_at": "2026-07-04",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://public.cyber.mil/stigs/downloads/",
+          "checksum": "sha256:b166976a9baba6846fedb2b65e76c435f60b2bcc174b84f9a4de34d08b1fe89a",
+          "parser": "xccdf"
+        },
+        {
+          "source_id": "nuwcdivnpt-github-org",
+          "display_name": "DISA STIG",
+          "version": "2026-06-15",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://github.com/NUWCDIVNPT",
+          "checksum": "sha256:e68232aa3708c3439dd69a890c152cf0c377183724dfc21d95b4c0891444b226",
+          "parser": "html-observer"
+        },
+        {
+          "source_id": "nuwcdivnpt-stig-manager",
+          "display_name": "DISA STIG",
+          "version": "2026-06-15",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://github.com/nuwcdivnpt/stig-manager",
+          "checksum": "sha256:e68232aa3708c3439dd69a890c152cf0c377183724dfc21d95b4c0891444b226",
+          "parser": "html-observer"
+        },
+        {
+          "source_id": "stigviewer-catalog",
+          "display_name": "DISA STIG",
+          "version": "2026-06-15",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://www.stigviewer.com/stigs",
+          "checksum": "sha256:e68232aa3708c3439dd69a890c152cf0c377183724dfc21d95b4c0891444b226",
+          "parser": "html-observer"
+        },
+        {
+          "source_id": "stigviewer-clkb-api",
+          "display_name": "DISA STIG",
+          "version": "2026-03-16",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://www.stigviewer.com/press-releases/2026-03-16",
+          "checksum": "sha256:e68232aa3708c3439dd69a890c152cf0c377183724dfc21d95b4c0891444b226",
+          "parser": "html-observer"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "dod-rai",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 11,
+        "imported_records": 11,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/dod-rai.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 11,
+          "normalized_records": 11,
+          "unique_record_ids": 11,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "group",
+            "requirement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "dod-rai-toolkit",
+          "display_name": "DoD RAI",
+          "version": "2026-08-07",
+          "retrieved_at": "2026-08-07",
+          "last_checked": "2026-06-09",
+          "artifact_url": "https://rai.acqbot.com/executive-summary",
+          "checksum": "sha256:26bed4c4a32b11224c7e42da17655710088685e69933d656a10d476506c1dbeb",
+          "parser": "dod-rai-toolkit-html"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "dod-zt",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 320,
+        "imported_records": 320,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/dod-zt.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 320,
+          "normalized_records": 320,
+          "unique_record_ids": 320,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "zt_pillar",
+            "zt_capability",
+            "zt_activity"
+          ],
+          [
+            "catalog",
+            "zt_tenet"
+          ],
+          [
+            "catalog",
+            "zt_document"
+          ],
+          [
+            "catalog",
+            "zt_overlay_section"
+          ],
+          [
+            "catalog",
+            "requirement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "dod-zt-capabilities",
+          "display_name": "DoD Zero Trust Capabilities and Activities",
+          "version": null,
+          "retrieved_at": "2026-08-12",
+          "last_checked": "2026-06-15",
+          "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-CapabilitiesActivities.pdf",
+          "checksum": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
+          "parser": "pdfplumber-located-lines"
+        },
+        {
+          "source_id": "dod-zt-execution-roadmap",
+          "display_name": "DoD Zero Trust Execution Roadmap",
+          "version": "1.1 (November 22, 2024)",
+          "retrieved_at": "2026-08-12",
+          "last_checked": "2026-06-15",
+          "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
+          "checksum": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
+          "parser": "pdfplumber-located-lines"
+        },
+        {
+          "source_id": "dod-zt-newsletter-2024-11",
+          "display_name": "DoD Zero Trust Newsletter",
+          "version": "November 2024",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-NewsletterNov.pdf",
+          "checksum": null,
+          "parser": "pdfplumber-located-lines"
+        },
+        {
+          "source_id": "dod-zt-operational-technology",
+          "display_name": "DoD Zero Trust for Operational Technology",
+          "version": "Version 2",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-OperationalTechnologyActivitiesOutcomes_v2.pdf",
+          "checksum": null,
+          "parser": "pdfplumber-located-lines"
+        },
+        {
+          "source_id": "dod-zt-overlays-2024",
+          "display_name": "DoD Zero Trust Overlays",
+          "version": "1.0 (February 2024)",
+          "retrieved_at": "2026-06-15",
+          "last_checked": "2026-06-15",
+          "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
+          "checksum": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
+          "parser": "pdfplumber-located-lines"
+        },
+        {
+          "source_id": "dod-zt-reference-architecture-v2",
+          "display_name": "DoD Zero Trust Reference Architecture",
+          "version": "2.0 (July 2022)",
+          "retrieved_at": "2026-08-12",
+          "last_checked": "2026-06-15",
+          "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
+          "checksum": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
+          "parser": "pdfplumber-located-lines"
+        },
+        {
+          "source_id": "dod-zt-strategy",
+          "display_name": "DoD Zero Trust Strategy",
+          "version": "October 21, 2022",
+          "retrieved_at": "2026-08-12",
+          "last_checked": "2026-06-15",
+          "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
+          "checksum": "sha256:c3a29e637b9a03170e0622e5b1e3dc84e36405e8bd67e3c8a806d9ebaca2e5c6",
+          "parser": "pdfplumber-located-lines"
+        },
+        {
+          "source_id": "dod-zt-strategy-placemats",
+          "display_name": "DoD Zero Trust Strategy Placemats",
+          "version": null,
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-StrategyPlacemats.pdf",
+          "checksum": null,
+          "parser": "pdfplumber-located-lines"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "fedramp-rev5",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 4,
+        "imported_records": 4,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/fedramp-baselines.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 4,
+          "normalized_records": 4,
+          "unique_record_ids": 4,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "baseline"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "fedramp-2026-rules",
+          "display_name": "FedRAMP Consolidated Rules for 2026",
+          "version": "2026.07.14.01",
+          "retrieved_at": "2026-07-16",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://raw.githubusercontent.com/FedRAMP/rules/main/fedramp-consolidated-rules.json",
+          "checksum": "sha256:b28eedc3dcb274f9276f045faa1508f4f53bf7f703eb28180585ecaa46d41776",
+          "parser": "fedramp-consolidated-rules-json"
+        },
+        {
+          "source_id": "fedramp-rev5",
+          "display_name": "FedRAMP Rev. 5 (legacy transition)",
+          "version": "Legacy Rev5 security controls baseline workbook",
+          "retrieved_at": "2026-07-16",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx",
+          "checksum": "sha256:a2bb86150a66f34a3c70e68c6361cd3d85fd46b92c3c474be6bc007dc355d860",
+          "parser": "fedramp-legacy-baseline-workbook"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "fips-199",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 3,
+        "imported_records": 3,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/fips-199.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 3,
+          "normalized_records": 3,
+          "unique_record_ids": 3,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "impact_category"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-fips-199",
+          "display_name": "FIPS 199",
+          "version": "2004-02",
+          "retrieved_at": "2026-06-13",
+          "last_checked": "2026-06-13",
+          "artifact_url": "https://csrc.nist.gov/pubs/fips/199/final",
+          "checksum": "sha256:a2ec9e3d7070b229773a49d37cc2ee787dc58a19516fd3898969ea71367adcda",
+          "parser": "pdf-extract"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "fips-200",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 17,
+        "imported_records": 17,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/fips-200.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 17,
+          "normalized_records": 17,
+          "unique_record_ids": 17,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "requirement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-fips-200",
+          "display_name": "FIPS 200",
+          "version": "2006-03",
+          "retrieved_at": "2026-06-13",
+          "last_checked": "2026-06-13",
+          "artifact_url": "https://csrc.nist.gov/pubs/fips/200/final",
+          "checksum": "sha256:7f6a4ad7fe6c140717bd7bd472b7730aad24665d06174a364d3d2dc397eb7085",
+          "parser": "pdf-extract"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "microsoft-zt-maturity",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 62,
+        "imported_records": 62,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/microsoft-zt-maturity.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 62,
+          "normalized_records": 62,
+          "unique_record_ids": 62,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "zt_pillar",
+            "zt_assessment_question"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "microsoft-zero-trust-maturity-questionnaire-v1-1",
+          "display_name": "Microsoft Zero Trust Maturity Questionnaire",
+          "version": "1.1",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://download.microsoft.com/download/c/d/3/cd3e0d84-6fdd-4949-b529-73c9c0127b0d/Zero%20Trust%20Maturity%20Questionnaire%20v1.1.xlsx",
+          "checksum": null,
+          "parser": "zero-trust-questionnaire-xlsx"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "mitre-attack",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 697,
+        "imported_records": 697,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/attack-techniques-enterprise.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 697,
+          "normalized_records": 697,
+          "unique_record_ids": 697,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "tactic",
+            "attack_technique"
+          ],
+          [
+            "catalog",
+            "tactic",
+            "attack_technique",
+            "attack_technique"
+          ]
+        ],
+        "multi_parent_node_types": [
+          "attack_technique"
+        ],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "mitre-attack-enterprise",
+          "display_name": "ATT&CK Enterprise",
+          "version": "2026-08-05",
+          "retrieved_at": "2026-08-13",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
+          "checksum": "sha256:d4af20476f1e70ab9085ed8314a50f49b8a9106eae36fa7e5750fc0193bf8e4e",
+          "parser": "stix-json"
+        },
+        {
+          "source_id": "mitre-d3fend-mappings",
+          "display_name": "D3FEND mappings",
+          "version": "2026-08-13",
+          "retrieved_at": "2026-08-13",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
+          "checksum": "sha256:3d7226f7a1fdd976da4df3d09d77d902738b036ac8c3960569434307d68832d3",
+          "parser": "json-ld"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "mitre-attack-ics",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 97,
+        "imported_records": 97,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/attack-techniques-ics.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 97,
+          "normalized_records": 97,
+          "unique_record_ids": 97,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "tactic",
+            "attack_technique"
+          ],
+          [
+            "catalog",
+            "tactic",
+            "attack_technique",
+            "attack_technique"
+          ]
+        ],
+        "multi_parent_node_types": [
+          "attack_technique"
+        ],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "mitre-attack-ics",
+          "display_name": "ATT&CK for ICS",
+          "version": "2026-08-05",
+          "retrieved_at": "2026-08-13",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
+          "checksum": "sha256:33c2ecb581e38c247cc2bcfb984118d3133e5f96e376634da76739abd261ddb3",
+          "parser": "stix-json"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "mitre-d3fend",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 271,
+        "imported_records": 271,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/d3fend-countermeasures.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 271,
+          "normalized_records": 271,
+          "unique_record_ids": 271,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "tactic",
+            "defend_countermeasure"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "mitre-d3fend-mappings",
+          "display_name": "D3FEND mappings",
+          "version": "2026-08-13",
+          "retrieved_at": "2026-08-13",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
+          "checksum": "sha256:3d7226f7a1fdd976da4df3d09d77d902738b036ac8c3960569434307d68832d3",
+          "parser": "json-ld"
+        },
+        {
+          "source_id": "mitre-d3fend-ontology",
+          "display_name": "D3FEND",
+          "version": "4",
+          "retrieved_at": "2026-06-19",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://d3fend.mitre.org/api/technique/all.json",
+          "checksum": "sha256:78b218e94e19e5854056b7190efd0be9de1120b55fc671574d4531641b153aaa",
+          "parser": "json-ld"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-800-171",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 130,
+        "imported_records": 130,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/requirements-800-171.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 130,
+          "normalized_records": 130,
+          "unique_record_ids": 130,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "family",
+            "requirement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-800-171",
+          "display_name": "SP 800-171 Rev. 3",
+          "version": "Revision 3",
+          "retrieved_at": "2026-07-28",
+          "last_checked": "2026-07-28",
+          "artifact_url": "https://csrc.nist.gov/pubs/sp/800/171/r3/final",
+          "checksum": "sha256:ab869046d7d6e0dc24c4fa4ed81b42eeba696c904344bb18ce649735330999e5",
+          "parser": null
+        },
+        {
+          "source_id": "nist-800-171-oscal-mappings",
+          "display_name": "SP 800-53 Rev. 5",
+          "version": "1.1.0",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
+          "checksum": "sha256:6edfe9c55fb66ff884220cc5863c6ee1431af993a8004c5a9b9149ae1d0d2c55",
+          "parser": "oscal-json"
+        },
+        {
+          "source_id": "nist-olir-csf2-to-sp800-171",
+          "display_name": "NIST CSF 2.0",
+          "version": "2024-02-20",
+          "retrieved_at": "2024-02-20",
+          "last_checked": "2024-02-20",
+          "artifact_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-171_3_draft.xlsx",
+          "checksum": "sha256:07349f327dceffd659cd24ccbefd1b9aec6ac98dface7f46525dc9b47a69f512",
+          "parser": "olir-xlsx"
+        },
+        {
+          "source_id": "nist-oscal",
+          "display_name": "NIST OSCAL Content",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://github.com/usnistgov/oscal-content",
+          "checksum": "sha256:59cd4f90a51561452b620d5b47f7702b549b502844d91363efd346495e9986bf",
+          "parser": "oscal-json"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-800-171-rev2",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 110,
+        "imported_records": 110,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/requirements-800-171-rev2.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 110,
+          "normalized_records": 110,
+          "unique_record_ids": 110,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "family",
+            "requirement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-800-171-rev2",
+          "display_name": "SP 800-171 Rev. 2",
+          "version": "2021-01",
+          "retrieved_at": "2026-06-13",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://csrc.nist.gov/files/pubs/sp/800/171/r2/upd1/final/docs/sp800-171r2-security-reqs.csv",
+          "checksum": "sha256:da79c181fd0f4c2298c0474608b4ea559469a09955b4fb9c5e7a70b498109540",
+          "parser": "csv"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-800-172",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 115,
+        "imported_records": 115,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/requirements-800-172.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 115,
+          "normalized_records": 115,
+          "unique_record_ids": 115,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "family",
+            "requirement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-800-172-rev3",
+          "display_name": "SP 800-172 Rev. 3",
+          "version": "2026-05",
+          "retrieved_at": "2026-06-13",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-172/rev3/json/NIST_SP800-172_rev3_catalog.json",
+          "checksum": "sha256:8402917cf67e528d53193c2ad056e7e02e35e7d330d0095f6cc5863e0b406e6b",
+          "parser": "oscal-json"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-800-37",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 7,
+        "imported_records": 7,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/tasks-800-37.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 7,
+          "normalized_records": 7,
+          "unique_record_ids": 7,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "rmf_step"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-800-37-rev2",
+          "display_name": "SP 800-37 Rev. 2",
+          "version": "2018-12",
+          "retrieved_at": "2026-06-13",
+          "last_checked": "2026-06-13",
+          "artifact_url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
+          "checksum": "sha256:f8f6c47630441a094ea0e7529d6de1202b3438ab60acb5fddf4c024e6ea87815",
+          "parser": "pdf-extract"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-800-53",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 1196,
+        "imported_records": 1196,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/controls-800-53.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 1196,
+          "normalized_records": 1196,
+          "unique_record_ids": 1196,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "family",
+            "control"
+          ],
+          [
+            "catalog",
+            "family",
+            "control",
+            "control_enhancement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "disa-cci-nist-references",
+          "display_name": "DISA CCI",
+          "version": "2025-01-23",
+          "retrieved_at": "2025-01-23",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
+          "checksum": "sha256:cbe530bfa300eb783cdae2083e791f719439ef7c15ace8740328f79f10ef985e",
+          "parser": "cci-xml"
+        },
+        {
+          "source_id": "fedramp-rev5",
+          "display_name": "FedRAMP Rev. 5 (legacy transition)",
+          "version": "Legacy Rev5 security controls baseline workbook",
+          "retrieved_at": "2026-07-16",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx",
+          "checksum": "sha256:a2bb86150a66f34a3c70e68c6361cd3d85fd46b92c3c474be6bc007dc355d860",
+          "parser": "fedramp-legacy-baseline-workbook"
+        },
+        {
+          "source_id": "mitre-d3fend-mappings",
+          "display_name": "D3FEND mappings",
+          "version": "2026-08-13",
+          "retrieved_at": "2026-08-13",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
+          "checksum": "sha256:3d7226f7a1fdd976da4df3d09d77d902738b036ac8c3960569434307d68832d3",
+          "parser": "json-ld"
+        },
+        {
+          "source_id": "nist-800-171-oscal-mappings",
+          "display_name": "SP 800-53 Rev. 5",
+          "version": "1.1.0",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
+          "checksum": "sha256:6edfe9c55fb66ff884220cc5863c6ee1431af993a8004c5a9b9149ae1d0d2c55",
+          "parser": "oscal-json"
+        },
+        {
+          "source_id": "nist-800-53",
+          "display_name": "SP 800-53 Rev. 5",
+          "version": "Revision 5, Release 5.2.0",
+          "retrieved_at": "2026-07-28",
+          "last_checked": "2026-07-28",
+          "artifact_url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+          "checksum": "sha256:604a2211ee8a552336549b1c737f446933c409c4f0f770a540538b3cf070458c",
+          "parser": null
+        },
+        {
+          "source_id": "nist-800-53-rev4-rev5-crosswalk",
+          "display_name": "SP 800-53 Rev. 5",
+          "version": "2026-07-26",
+          "retrieved_at": "2026-07-26",
+          "last_checked": "2026-07-26",
+          "artifact_url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53r4-to-r5-comparison-workbook.xlsx",
+          "checksum": "sha256:33294be316ff481b5950adf626be5ae152922942aa6a1b42921b6bcaa265a625",
+          "parser": "rev4-rev5-crosswalk-xlsx"
+        },
+        {
+          "source_id": "nist-800-53a-assessment-procedures",
+          "display_name": "SP 800-53A Rev. 5",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-13",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+          "checksum": "sha256:46f808428e0d517f1e0c13a36296e746060b61a4dc36e391252c9fbc7887e13d",
+          "parser": "oscal-assessment-procedures"
+        },
+        {
+          "source_id": "nist-800-53b-baselines",
+          "display_name": "SP 800-53B",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53B-r5",
+          "checksum": "sha256:0438254e54f22022d7b1f3b5ccb7d80ee81d20335db306784eb4001ce6e13398",
+          "parser": "oscal-profile"
+        },
+        {
+          "source_id": "nist-csf-53-supplemental",
+          "display_name": "SP 800-53 Rev. 5",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-06-09",
+          "artifact_url": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/csf-pf-to-sp800-53r5-mappings.xlsx",
+          "checksum": "sha256:5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f",
+          "parser": "olir-xlsx"
+        },
+        {
+          "source_id": "nist-olir-csf2-to-sp800-53",
+          "display_name": "NIST CSF 2.0",
+          "version": "2.0-final",
+          "retrieved_at": "2024-02-20",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
+          "checksum": "sha256:31eeb5114751a86f0e216e88a73e10f858165f7aa08fee3cfc8b7730263ca0a1",
+          "parser": "olir-xlsx"
+        },
+        {
+          "source_id": "nist-oscal",
+          "display_name": "NIST OSCAL Content",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://github.com/usnistgov/oscal-content",
+          "checksum": "sha256:59cd4f90a51561452b620d5b47f7702b549b502844d91363efd346495e9986bf",
+          "parser": "oscal-json"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-800-53a",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 1014,
+        "imported_records": 1014,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/controls-800-53.json",
+          "source_selection": "records carrying publisher assessment procedure metadata",
+          "discovered_records": 1014,
+          "normalized_records": 1014,
+          "unique_record_ids": 1014,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "family",
+            "assessment_procedure"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-800-53a-assessment-procedures",
+          "display_name": "SP 800-53A Rev. 5",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-13",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+          "checksum": "sha256:46f808428e0d517f1e0c13a36296e746060b61a4dc36e391252c9fbc7887e13d",
+          "parser": "oscal-assessment-procedures"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-800-53b",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 4,
+        "imported_records": 4,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/800-53b-baselines.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 4,
+          "normalized_records": 4,
+          "unique_record_ids": 4,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "baseline"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-800-53b-baselines",
+          "display_name": "SP 800-53B",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53B-r5",
+          "checksum": "sha256:0438254e54f22022d7b1f3b5ccb7d80ee81d20335db306784eb4001ce6e13398",
+          "parser": "oscal-profile"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-ai-rmf",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 72,
+        "imported_records": 72,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/ai-rmf.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 72,
+          "normalized_records": 72,
+          "unique_record_ids": 72,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "group",
+            "requirement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-ai-rmf-playbook",
+          "display_name": "AI RMF",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://airc.nist.gov/docs/playbook.json",
+          "checksum": "sha256:7f5b942ef16b1efacc76d6eb1f58d393dd1d43c51fd9e9e7cd655f0b6ec50616",
+          "parser": "json"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-iot-cybersecurity",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 489,
+        "imported_records": 489,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/nist-iot-cybersecurity.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 489,
+          "normalized_records": 489,
+          "unique_record_ids": 489,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "iot_capability_domain",
+            "iot_capability",
+            "iot_subcapability",
+            "iot_capability_element"
+          ],
+          [
+            "catalog",
+            "iot_capability_domain",
+            "iot_capability",
+            "iot_subcapability",
+            "iot_capability_element",
+            "iot_capability_subelement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-iot-device-cybersecurity-requirement-catalogs",
+          "display_name": "NIST IoT Device Cybersecurity",
+          "version": "Draft catalog",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/",
+          "checksum": null,
+          "parser": "nist-iot-requirement-xlsx"
+        },
+        {
+          "source_id": "nist-iot-requirements-80053-mapping-draft",
+          "display_name": "NIST IoT to SP 800-53 Workbook",
+          "version": "Draft",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_800-53.xlsx",
+          "checksum": null,
+          "parser": "nist-iot-requirement-xlsx"
+        },
+        {
+          "source_id": "nist-iot-requirements-csf11-mapping-draft",
+          "display_name": "NIST IoT to CSF 1.1 Workbook",
+          "version": "Draft",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_Cybersecurity_Framework.xlsx",
+          "checksum": null,
+          "parser": "nist-iot-requirement-xlsx"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-mobile-threats",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 275,
+        "imported_records": 268,
+        "excluded_records": 7,
+        "exclusions": [
+          {
+            "count": 7,
+            "reason": "Seven publisher JSON entries contain no threat ID, category, title, or content."
+          }
+        ],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/nist-mobile-threats.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 268,
+          "normalized_records": 268,
+          "unique_record_ids": 268,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "mobile_threat_category",
+            "mobile_threat"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-mobile-threat-catalogue",
+          "display_name": "NIST Mobile Threat Catalogue",
+          "version": "Current published data",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-data.json",
+          "checksum": null,
+          "parser": "nist-mobile-threat-json"
+        },
+        {
+          "source_id": "nist-mobile-threat-catalogue-cve-list",
+          "display_name": "NIST Mobile Threat CVE List",
+          "version": "Current published data",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-cve-list.csv",
+          "checksum": null,
+          "parser": "nist-mobile-threat-cve-csv"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-ssdf",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 42,
+        "imported_records": 42,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/ssdf.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 42,
+          "normalized_records": 42,
+          "unique_record_ids": 42,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "group",
+            "requirement"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-oscal",
+          "display_name": "NIST OSCAL Content",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://github.com/usnistgov/oscal-content",
+          "checksum": "sha256:59cd4f90a51561452b620d5b47f7702b549b502844d91363efd346495e9986bf",
+          "parser": "oscal-json"
+        },
+        {
+          "source_id": "nist-ssdf",
+          "display_name": "SP 800-218 SSDF Version 1.1",
+          "version": "1.1",
+          "retrieved_at": "2026-07-28",
+          "last_checked": "2026-07-28",
+          "artifact_url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+          "checksum": "sha256:3dfc33408f60a9674edd05f41c75086b0d61f073b8b9908482f08a05ae9827e5",
+          "parser": null
+        },
+        {
+          "source_id": "nist-ssdf-oscal",
+          "display_name": "NIST SSDF OSCAL Content",
+          "version": "2026-06-09",
+          "retrieved_at": "2026-06-09",
+          "last_checked": "2026-08-13",
+          "artifact_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1",
+          "checksum": "sha256:d711a85a4f88f7053544eead9e29d4d22846b60c85d01f01140af292a2d8e6f6",
+          "parser": "oscal-json"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    },
+    {
+      "catalog_id": "nist-zt",
+      "automated_evidence": {
+        "status": "reconciled",
+        "expected_records": 320,
+        "imported_records": 320,
+        "excluded_records": 0,
+        "exclusions": [],
+        "missing_records": 0,
+        "source_inventory": {
+          "source_file": "data/nist-zt.json",
+          "source_selection": "all normalized publisher records",
+          "discovered_records": 320,
+          "normalized_records": 320,
+          "unique_record_ids": 320,
+          "evidence_class": "pre_graph_adapter_inventory"
+        },
+        "published_source_relationships": 0,
+        "graph_nodes": 0,
+        "graph_edges_incident": 0
+      },
+      "declared_publisher_structure": {
+        "containment_paths": [
+          [
+            "catalog",
+            "zt_publication",
+            "zt_tenet"
+          ],
+          [
+            "catalog",
+            "zt_publication",
+            "zt_logical_component"
+          ],
+          [
+            "catalog",
+            "zt_publication",
+            "zt_cloud_native_requirement"
+          ],
+          [
+            "catalog",
+            "zt_publication",
+            "zt_build"
+          ],
+          [
+            "catalog",
+            "zt_publication",
+            "zt_reference_component"
+          ],
+          [
+            "catalog",
+            "zt_publication",
+            "zt_mapping_document"
+          ],
+          [
+            "catalog",
+            "zt_publication",
+            "zt_collaborator",
+            "zt_product_component"
+          ]
+        ],
+        "multi_parent_node_types": [],
+        "classification": "publisher_native_containment_only"
+      },
+      "publisher_artifacts": [
+        {
+          "source_id": "nist-sp-1800-35",
+          "display_name": "NIST Zero Trust Implementations",
+          "version": "June 2025",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://pages.nist.gov/zero-trust-architecture/",
+          "checksum": null,
+          "parser": "explicit-html-markup"
+        },
+        {
+          "source_id": "nist-sp-1800-35-critical-software-mappings",
+          "display_name": "NIST SP 1800-35 Mapping Workbook",
+          "version": "June 2025",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://pages.nist.gov/zero-trust-architecture/_downloads/641f02c11e6f71752bb8bc96d96c5f38/NISTCSSMMapping.xlsx",
+          "checksum": null,
+          "parser": "nist-zero-trust-mapping-xlsx"
+        },
+        {
+          "source_id": "nist-sp-1800-35-csf11-mappings",
+          "display_name": "NIST SP 1800-35 Mapping Workbook",
+          "version": "June 2025",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://pages.nist.gov/zero-trust-architecture/_downloads/993f56b28d4d113836cb1f1a34146cb3/CSF1.1Mapping.xlsx",
+          "checksum": null,
+          "parser": "nist-zero-trust-mapping-xlsx"
+        },
+        {
+          "source_id": "nist-sp-1800-35-csf2-mappings",
+          "display_name": "NIST SP 1800-35 Mapping Workbook",
+          "version": "June 2025",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://pages.nist.gov/zero-trust-architecture/_downloads/01dfaff2b25f0a61f127f06906bc37cc/CSF2.0Mapping.xlsx",
+          "checksum": null,
+          "parser": "nist-zero-trust-mapping-xlsx"
+        },
+        {
+          "source_id": "nist-sp-1800-35-sp80053-mappings",
+          "display_name": "NIST SP 1800-35 Mapping Workbook",
+          "version": "June 2025",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://pages.nist.gov/zero-trust-architecture/_downloads/eba81c1a0ca458474b0e9bbdfc888eb5/SP800-53Mapping.xlsx",
+          "checksum": null,
+          "parser": "nist-zero-trust-mapping-xlsx"
+        },
+        {
+          "source_id": "nist-sp-800-207",
+          "display_name": "NIST Zero Trust Architecture",
+          "version": "August 2020",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://nvlpubs.nist.gov/nistpubs/specialpublications/NIST.SP.800-207.pdf",
+          "checksum": null,
+          "parser": "pdfplumber-located-lines"
+        },
+        {
+          "source_id": "nist-sp-800-207a",
+          "display_name": "NIST Zero Trust Cloud-Native Access Control",
+          "version": "September 2023",
+          "retrieved_at": "2026-08-12",
+          "last_checked": null,
+          "artifact_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-207A.pdf",
+          "checksum": null,
+          "parser": "pdfplumber-located-lines"
+        }
+      ],
+      "evidence_boundary": {
+        "semantic_content_review": "unverified",
+        "locator_only_review": "unverified",
+        "upstream_currentness_review": "unverified",
+        "statement": "Automated reconciliation verifies declared source counts, identifiers, parser output, and containment contract only. It does not certify semantic completeness, whether a source is too terse for a task, or current upstream content beyond the recorded retrieval."
+      }
+    }
+  ]
+}

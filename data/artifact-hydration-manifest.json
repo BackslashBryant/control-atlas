@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-12T13:30:15.194Z",
-  "hydrated": 8,
+  "generated_at": "2026-08-13T05:44:24.631Z",
+  "hydrated": 90,
   "removed_orphans": [],
   "results": [
     {
@@ -184,6 +184,76 @@
       "retrieved_at": "2026-08-07"
     },
     {
+      "id": "artifact-nist-sp-800-207",
+      "status": "OK",
+      "http": 200,
+      "url": "https://nvlpubs.nist.gov/nistpubs/specialpublications/NIST.SP.800-207.pdf",
+      "sha256": "sha256:0290d6ece24874287316f4bf430fef770aa4ec08a2227c8f2c1e5b2ff975e03d",
+      "byte_length": 966908,
+      "record_count": null,
+      "retrieved_at": "2026-08-12"
+    },
+    {
+      "id": "artifact-nist-sp-800-207a",
+      "status": "OK",
+      "http": 200,
+      "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-207A.pdf",
+      "sha256": "sha256:bb1af3bab70d8589e71e9fce4a99d3e714a82dd7b2bc7a931c7458a6ab60bb52",
+      "byte_length": 1380107,
+      "record_count": null,
+      "retrieved_at": "2026-08-12"
+    },
+    {
+      "id": "artifact-nist-sp-1800-35",
+      "status": "OK",
+      "http": 200,
+      "url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/index.html",
+      "sha256": "sha256:4be04dd5f21e434f08edf9f62c06161acc955a5f9131e9f98787db7424cb4b60",
+      "byte_length": 49243,
+      "record_count": null,
+      "retrieved_at": "2026-08-12"
+    },
+    {
+      "id": "artifact-nist-sp-1800-35-csf2-mappings",
+      "status": "OK",
+      "http": 200,
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/01dfaff2b25f0a61f127f06906bc37cc/CSF2.0Mapping.xlsx",
+      "sha256": "sha256:699359d4f16116e6f13e42d1c0ac61a569ed02ac27788012308fa88740fc9702",
+      "byte_length": 294001,
+      "record_count": null,
+      "retrieved_at": "2026-08-12"
+    },
+    {
+      "id": "artifact-nist-sp-1800-35-critical-software-mappings",
+      "status": "OK",
+      "http": 200,
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/641f02c11e6f71752bb8bc96d96c5f38/NISTCSSMMapping.xlsx",
+      "sha256": "sha256:7b3df8d47bbd335ae3e2e58db9dc93c5017848f4eee7c532754e42dd4d7389ef",
+      "byte_length": 310256,
+      "record_count": null,
+      "retrieved_at": "2026-08-12"
+    },
+    {
+      "id": "artifact-nist-sp-1800-35-csf11-mappings",
+      "status": "OK",
+      "http": 200,
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/993f56b28d4d113836cb1f1a34146cb3/CSF1.1Mapping.xlsx",
+      "sha256": "sha256:3e1465a81c0cc2cf1aaf655a5d448a87a74b9c4438c70a3640cb83235abc0f28",
+      "byte_length": 203874,
+      "record_count": null,
+      "retrieved_at": "2026-08-12"
+    },
+    {
+      "id": "artifact-nist-sp-1800-35-sp80053-mappings",
+      "status": "OK",
+      "http": 200,
+      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/eba81c1a0ca458474b0e9bbdfc888eb5/SP800-53Mapping.xlsx",
+      "sha256": "sha256:940153bf3a198658cae055f79e0cc842861984b73859a2db5db859696921dfb7",
+      "byte_length": 269794,
+      "record_count": null,
+      "retrieved_at": "2026-08-12"
+    },
+    {
       "id": "artifact-microsoft-zero-trust-maturity-questionnaire-v1-1",
       "status": "OK",
       "http": 200,
@@ -234,6 +304,110 @@
       "retrieved_at": "2026-08-12"
     },
     {
+      "id": "artifact-dod-zt-reference-architecture-v2",
+      "status": "OK",
+      "http": "committed-extraction",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
+      "sha256": "sha256:b51eabcd5a41033164b701724ce40ac127f8eabda0826bb042761b508c8db799",
+      "byte_length": 6733190,
+      "record_count": 13,
+      "retrieved_at": "2026-08-12",
+      "pages_discovered": 104,
+      "pages_extracted": 104,
+      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
+    },
+    {
+      "id": "artifact-dod-zt-strategy",
+      "status": "OK",
+      "http": "committed-extraction",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
+      "sha256": "sha256:cba8e6093fbfa2a33f75f5fd286dd604b3d3ba4212350d1b528fe63462dea635",
+      "byte_length": 6141341,
+      "record_count": 1,
+      "retrieved_at": "2026-08-12",
+      "pages_discovered": 37,
+      "pages_extracted": 37,
+      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
+    },
+    {
+      "id": "artifact-dod-zt-capabilities",
+      "status": "OK",
+      "http": "committed-extraction",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-CapabilitiesActivities.pdf",
+      "sha256": "sha256:756abc470d22dfddf399bcf3264b23c23fecedd8ac32b98b4f3461c96ed43be1",
+      "byte_length": 651809,
+      "record_count": 198,
+      "retrieved_at": "2026-08-12",
+      "pages_discovered": 26,
+      "pages_extracted": 26,
+      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
+    },
+    {
+      "id": "artifact-dod-zt-execution-roadmap",
+      "status": "OK",
+      "http": "committed-extraction",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
+      "sha256": "sha256:cd25245394b6bf128425519f489468858ac8a4569226c046d0e4055283ca3774",
+      "byte_length": 3540044,
+      "record_count": 1,
+      "retrieved_at": "2026-08-12",
+      "pages_discovered": 54,
+      "pages_extracted": 54,
+      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
+    },
+    {
+      "id": "artifact-dod-zt-overlays-2024",
+      "status": "OK",
+      "http": "committed-extraction",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
+      "sha256": "sha256:196d381b7e74a2dc7b88e7d7705cf64e4389f35019282332b97d5a575f05f3fc",
+      "byte_length": 6398712,
+      "record_count": 1,
+      "retrieved_at": "2026-06-15",
+      "pages_discovered": 383,
+      "pages_extracted": 383,
+      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
+    },
+    {
+      "id": "artifact-dod-zt-operational-technology",
+      "status": "OK",
+      "http": "committed-extraction",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-OperationalTechnologyActivitiesOutcomes_v2.pdf",
+      "sha256": "sha256:34ddda61b7078e45255d9df2e7ccfab8e8741f3e7713467feef2b8964434a152",
+      "byte_length": 1602017,
+      "record_count": 106,
+      "retrieved_at": "2026-08-12",
+      "pages_discovered": 28,
+      "pages_extracted": 28,
+      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
+    },
+    {
+      "id": "artifact-dod-zt-newsletter-2024-11",
+      "status": "OK",
+      "http": "committed-extraction",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-NewsletterNov.pdf",
+      "sha256": "sha256:2be18eaf9c5b2c2d0aaf56d68514d49c5ea726f3540afb5fe81bb8b59fd3bc8b",
+      "byte_length": 1902008,
+      "record_count": 0,
+      "retrieved_at": "2026-08-12",
+      "pages_discovered": 2,
+      "pages_extracted": 2,
+      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
+    },
+    {
+      "id": "artifact-dod-zt-strategy-placemats",
+      "status": "OK",
+      "http": "committed-extraction",
+      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-StrategyPlacemats.pdf",
+      "sha256": "sha256:453ba7af10d64034af963ef28da60b85c7a920d638388a4b153c8212113c85d3",
+      "byte_length": 740009,
+      "record_count": 0,
+      "retrieved_at": "2026-08-12",
+      "pages_discovered": 2,
+      "pages_extracted": 2,
+      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
+    },
+    {
       "id": "artifact-dod-rai-toolkit",
       "status": "OK",
       "http": 200,
@@ -252,7 +426,7 @@
       "byte_length": 154957,
       "record_count": null,
       "retrieved_at": "2026-08-09",
-      "carried_forward_from": "2026-08-09T01:23:55.681Z",
+      "carried_forward_from": "2026-08-12T13:30:15.194Z",
       "carried_forward_reason": "HTTP 403"
     },
     {
@@ -290,10 +464,10 @@
       "status": "OK",
       "http": 200,
       "url": "https://csrc.nist.gov/extensions/nudp/services/json/csf/download?olirids=all",
-      "sha256": "sha256:45b3ca5186bb303c5484e0be3d90a8e96156d605de02fe6194a2e583cb869f0a",
-      "byte_length": 144518,
+      "sha256": "sha256:33db9e0c23644dcd909d2681448ff7870cc3ed4590939b65eada773eae8bbe3c",
+      "byte_length": 144519,
       "record_count": null,
-      "retrieved_at": "2026-08-12"
+      "retrieved_at": "2026-08-13"
     },
     {
       "id": "artifact-nist-fips-199",
@@ -371,10 +545,10 @@
       "status": "OK",
       "http": "local",
       "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json",
-      "sha256": "sha256:4c3f9ecee2fe2eb4dac56a205e64e5d8eb9738c25f4d38edf01a5da13247f074",
+      "sha256": "sha256:d13eb0fa6b0d386cdb424fbcdd7f8d7d213a07e73f985ad22e22c5911413c08c",
       "byte_length": 1865,
       "record_count": null,
-      "retrieved_at": "2026-08-09"
+      "retrieved_at": "2026-08-13"
     },
     {
       "id": "artifact-control-atlas-structure",
@@ -384,56 +558,6 @@
       "sha256": "sha256:7bf238858f8fa128d88e9313b55df9b57549f7bc2d46f31ba10fa58d52c4e7b1",
       "byte_length": 6259,
       "record_count": 10,
-      "retrieved_at": "2026-08-12"
-    },
-    {
-      "id": "artifact-nist-sp-1800-35",
-      "status": "OK",
-      "http": 200,
-      "url": "https://raw.githubusercontent.com/usnistgov/zero-trust-architecture/f8f1e6f8c7f0d88171eee0fc6ab2be60e9f681ff/index.html",
-      "sha256": "sha256:4be04dd5f21e434f08edf9f62c06161acc955a5f9131e9f98787db7424cb4b60",
-      "byte_length": 49243,
-      "record_count": null,
-      "retrieved_at": "2026-08-12"
-    },
-    {
-      "id": "artifact-nist-sp-1800-35-csf2-mappings",
-      "status": "OK",
-      "http": 200,
-      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/01dfaff2b25f0a61f127f06906bc37cc/CSF2.0Mapping.xlsx",
-      "sha256": "sha256:699359d4f16116e6f13e42d1c0ac61a569ed02ac27788012308fa88740fc9702",
-      "byte_length": 294001,
-      "record_count": null,
-      "retrieved_at": "2026-08-12"
-    },
-    {
-      "id": "artifact-nist-sp-1800-35-critical-software-mappings",
-      "status": "OK",
-      "http": 200,
-      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/641f02c11e6f71752bb8bc96d96c5f38/NISTCSSMMapping.xlsx",
-      "sha256": "sha256:7b3df8d47bbd335ae3e2e58db9dc93c5017848f4eee7c532754e42dd4d7389ef",
-      "byte_length": 310256,
-      "record_count": null,
-      "retrieved_at": "2026-08-12"
-    },
-    {
-      "id": "artifact-nist-sp-1800-35-csf11-mappings",
-      "status": "OK",
-      "http": 200,
-      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/993f56b28d4d113836cb1f1a34146cb3/CSF1.1Mapping.xlsx",
-      "sha256": "sha256:3e1465a81c0cc2cf1aaf655a5d448a87a74b9c4438c70a3640cb83235abc0f28",
-      "byte_length": 203874,
-      "record_count": null,
-      "retrieved_at": "2026-08-12"
-    },
-    {
-      "id": "artifact-nist-sp-1800-35-sp80053-mappings",
-      "status": "OK",
-      "http": 200,
-      "url": "https://pages.nist.gov/zero-trust-architecture/_downloads/eba81c1a0ca458474b0e9bbdfc888eb5/SP800-53Mapping.xlsx",
-      "sha256": "sha256:940153bf3a198658cae055f79e0cc842861984b73859a2db5db859696921dfb7",
-      "byte_length": 269794,
-      "record_count": null,
       "retrieved_at": "2026-08-12"
     },
     {
@@ -815,130 +939,6 @@
       "byte_length": 47594,
       "record_count": null,
       "retrieved_at": "2026-08-12"
-    },
-    {
-      "id": "artifact-nist-sp-800-207",
-      "status": "OK",
-      "http": 200,
-      "url": "https://nvlpubs.nist.gov/nistpubs/specialpublications/NIST.SP.800-207.pdf",
-      "sha256": "sha256:0290d6ece24874287316f4bf430fef770aa4ec08a2227c8f2c1e5b2ff975e03d",
-      "byte_length": 966908,
-      "record_count": null,
-      "retrieved_at": "2026-08-12"
-    },
-    {
-      "id": "artifact-nist-sp-800-207a",
-      "status": "OK",
-      "http": 200,
-      "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-207A.pdf",
-      "sha256": "sha256:bb1af3bab70d8589e71e9fce4a99d3e714a82dd7b2bc7a931c7458a6ab60bb52",
-      "byte_length": 1380107,
-      "record_count": null,
-      "retrieved_at": "2026-08-12"
-    },
-    {
-      "id": "artifact-dod-zt-reference-architecture-v2",
-      "status": "OK",
-      "http": "committed-extraction",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf",
-      "sha256": "sha256:b51eabcd5a41033164b701724ce40ac127f8eabda0826bb042761b508c8db799",
-      "byte_length": 6733190,
-      "record_count": 13,
-      "retrieved_at": "2026-08-12",
-      "pages_discovered": 104,
-      "pages_extracted": 104,
-      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
-    },
-    {
-      "id": "artifact-dod-zt-strategy",
-      "status": "OK",
-      "http": "committed-extraction",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf",
-      "sha256": "sha256:cba8e6093fbfa2a33f75f5fd286dd604b3d3ba4212350d1b528fe63462dea635",
-      "byte_length": 6141341,
-      "record_count": 1,
-      "retrieved_at": "2026-08-12",
-      "pages_discovered": 37,
-      "pages_extracted": 37,
-      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
-    },
-    {
-      "id": "artifact-dod-zt-capabilities",
-      "status": "OK",
-      "http": "committed-extraction",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-CapabilitiesActivities.pdf",
-      "sha256": "sha256:756abc470d22dfddf399bcf3264b23c23fecedd8ac32b98b4f3461c96ed43be1",
-      "byte_length": 651809,
-      "record_count": 198,
-      "retrieved_at": "2026-08-12",
-      "pages_discovered": 26,
-      "pages_extracted": 26,
-      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
-    },
-    {
-      "id": "artifact-dod-zt-execution-roadmap",
-      "status": "OK",
-      "http": "committed-extraction",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf",
-      "sha256": "sha256:cd25245394b6bf128425519f489468858ac8a4569226c046d0e4055283ca3774",
-      "byte_length": 3540044,
-      "record_count": 1,
-      "retrieved_at": "2026-08-12",
-      "pages_discovered": 54,
-      "pages_extracted": 54,
-      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
-    },
-    {
-      "id": "artifact-dod-zt-overlays-2024",
-      "status": "OK",
-      "http": "committed-extraction",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZeroTrustOverlays-2024Feb.pdf",
-      "sha256": "sha256:196d381b7e74a2dc7b88e7d7705cf64e4389f35019282332b97d5a575f05f3fc",
-      "byte_length": 6398712,
-      "record_count": 1,
-      "retrieved_at": "2026-06-15",
-      "pages_discovered": 383,
-      "pages_extracted": 383,
-      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
-    },
-    {
-      "id": "artifact-dod-zt-operational-technology",
-      "status": "OK",
-      "http": "committed-extraction",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-OperationalTechnologyActivitiesOutcomes_v2.pdf",
-      "sha256": "sha256:34ddda61b7078e45255d9df2e7ccfab8e8741f3e7713467feef2b8964434a152",
-      "byte_length": 1602017,
-      "record_count": 106,
-      "retrieved_at": "2026-08-12",
-      "pages_discovered": 28,
-      "pages_extracted": 28,
-      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
-    },
-    {
-      "id": "artifact-dod-zt-newsletter-2024-11",
-      "status": "OK",
-      "http": "committed-extraction",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-NewsletterNov.pdf",
-      "sha256": "sha256:2be18eaf9c5b2c2d0aaf56d68514d49c5ea726f3540afb5fe81bb8b59fd3bc8b",
-      "byte_length": 1902008,
-      "record_count": 0,
-      "retrieved_at": "2026-08-12",
-      "pages_discovered": 2,
-      "pages_extracted": 2,
-      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
-    },
-    {
-      "id": "artifact-dod-zt-strategy-placemats",
-      "status": "OK",
-      "http": "committed-extraction",
-      "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-StrategyPlacemats.pdf",
-      "sha256": "sha256:453ba7af10d64034af963ef28da60b85c7a920d638388a4b153c8212113c85d3",
-      "byte_length": 740009,
-      "record_count": 0,
-      "retrieved_at": "2026-08-12",
-      "pages_discovered": 2,
-      "pages_extracted": 2,
-      "attestation": "committed page-complete pdfplumber extraction from previously downloaded publisher PDF"
     }
   ]
 }

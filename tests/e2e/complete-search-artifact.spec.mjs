@@ -74,3 +74,20 @@ test("shared search URLs keep position; submitted searches move focus to results
   await page.getByRole("button", { name: "Search", exact: true }).click();
   await expect(page.locator("#library-results")).toBeFocused();
 });
+
+test("a complete Library search uses a bounded number of runtime shards", async ({
+  page,
+}) => {
+  let shardRequests = 0;
+  page.on("request", (request) => {
+    if (/\/data\/generated\/library-search-index\/[^/]+\.json(?:\.gz)?(?:\?|$)/.test(request.url())) {
+      shardRequests += 1;
+    }
+  });
+
+  await gotoApp(page, "/#/search?q=access%20control");
+  await expect(page.locator("#library-results .workspace-result-row").first()).toBeVisible({
+    timeout: 15000,
+  });
+  expect(shardRequests).toBeLessThanOrEqual(10);
+});
