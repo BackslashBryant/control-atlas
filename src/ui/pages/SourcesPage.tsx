@@ -136,8 +136,9 @@ export function SourcesPage(props: {
         </SummaryCard>
         <dl className="source-detail-grid">
           <div><dt>Publisher</dt><dd>{selectedSource.owner || "Not recorded"}</dd></div>
-          <div><dt>Version</dt><dd>{selectedSource.version || "Not recorded"}</dd></div>
-          <div><dt>Current through</dt><dd>{selectedSource.last_checked || selectedSource.retrieved_at || "Not recorded"}</dd></div>
+          <div><dt>Publisher version</dt><dd>{selectedSource.version || "Not recorded"}</dd></div>
+          <div><dt>Retrieved</dt><dd>{selectedSource.retrieved_at || "Not recorded"}</dd></div>
+          <div><dt>Last verified</dt><dd>{selectedSource.last_checked || "Not recorded"}</dd></div>
           <div><dt>Lifecycle</dt><dd>{displayNameFor("lifecycle_status", selectedSource.lifecycle_status)}</dd></div>
           {selectedSource.source_role && selectedSource.source_role !== "publication" ? (
             <div><dt>Update method</dt><dd>{selectedSource.retrieval_method ? displayNameFor("retrieval_method", selectedSource.retrieval_method) : "Not recorded"}</dd></div>
@@ -148,9 +149,21 @@ export function SourcesPage(props: {
           {typeof selectedSource.relationship_count === "number" ? (
             <div><dt>Relationships</dt><dd>{selectedSource.relationship_count.toLocaleString()}</dd></div>
           ) : null}
-          {selectedSource.artifact_url ? (
+          {selectedSource.catalog_browse_url || selectedSource.artifact_url ? (
             <div>
-              <dt>Official link</dt>
+              <dt>Official publication</dt>
+              <dd>
+                <a href={selectedSource.catalog_browse_url || selectedSource.artifact_url} rel="noopener noreferrer" target="_blank">
+                  {selectedSource.catalog_browse_url || selectedSource.artifact_url}
+                </a>
+              </dd>
+            </div>
+          ) : null}
+          {selectedSource.artifact_url &&
+          selectedSource.catalog_browse_url &&
+          selectedSource.artifact_url !== selectedSource.catalog_browse_url ? (
+            <div>
+              <dt>Retrieved artifact</dt>
               <dd>
                 <a href={selectedSource.artifact_url} rel="noopener noreferrer" target="_blank">
                   {selectedSource.artifact_url}

@@ -6,6 +6,7 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import {
   sourceCurrentAsOf,
   sourceFreshness,
+  sourceFreshnessWarning,
 } from "../../shared/source-freshness.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
@@ -132,7 +133,8 @@ export function sourceWarnings(source: any) {
     );
   }
   if (sourceFreshness(source).is_stale) {
-    warnings.push(sourceCurrentAsOf(source));
+    const freshnessWarning = sourceFreshnessWarning(source);
+    if (freshnessWarning) warnings.push(freshnessWarning);
   }
   return warnings;
 }
@@ -401,9 +403,7 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
       </div>
       <p className="result-summary">Maintained by {source.owner}.</p>
       <p className="support-meta">
-        {sourceFreshness(source).is_stale
-          ? `Last checked ${source.last_checked}`
-          : sourceCurrentAsOf(source)}
+        {sourceCurrentAsOf(source)}
       </p>
       <div className="source-summary-grid">
         <ProvenanceTerm
@@ -431,7 +431,7 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
       <div className="card-actions">
         <ButtonLink
           variant="secondary"
-          href={source.artifact_url}
+          href={source.catalog_browse_url || source.artifact_url}
           rel="noopener noreferrer"
           target="_blank"
         >

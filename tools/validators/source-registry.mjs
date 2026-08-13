@@ -310,7 +310,7 @@ export function loadSourceRegistry(registry) {
       if (f) {
         source.sync_model = f.sync_model;
         source.stale_after_days = staleDays;
-        source.last_checked = f.last_checked || source.last_checked || '2026-08-05';
+        source.last_checked = f.last_checked ?? source.last_checked ?? null;
         source.last_imported = f.last_imported ?? null;
         source.hash = f.hash ?? null;
       }

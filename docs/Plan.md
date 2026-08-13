@@ -13,7 +13,8 @@ Ship a source-truthful, task-first Control Atlas without treating parser counts,
 
 - Reproducible dependency/security baseline and the weighted Home area pool are shipped.
 - The 27-profile review register records source-linked semantic samples and separate locator/currentness dispositions. DoD RAI, D3FEND, SP 800-53A, and NIST IoT registry/presentation defects are corrected in the active milestone; NIST SP 800-171 Revision 2 remains explicitly superseded.
-- Next source milestone: re-run source-field presentation and copy-output regressions, then address the Sources metadata/date/layout backlog before taxonomy work.
+- Source detail now separates publisher version, retrieval date, verification date, publication landing pages, and parser artifacts; fabricated date fallbacks and inaccurate third-party federal-source language are removed; compact headers are opaque.
+- Next source milestone: replace the flat sentinel-filled register model with parent-publication joins and layer-specific fields, then make layer state, counts, filters, and bounded rendering contextual and URL-stable.
 
 ## Remaining work
 

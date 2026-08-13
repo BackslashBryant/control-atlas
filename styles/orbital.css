@@ -1724,6 +1724,7 @@ details > summary {
    navigation sheet owns both primary destinations and overflow pages. */
 @media (max-width: 1023px) {
   .site-header {
+    background: var(--ca-surface-deep);
     backdrop-filter: none;
   }
 

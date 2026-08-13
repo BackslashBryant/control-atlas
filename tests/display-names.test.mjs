@@ -72,6 +72,13 @@ test('displayNameFor returns a stable sentinel for empty input', () => {
   assert.equal(displayNameFor('node_type', undefined), 'Unknown');
 });
 
+test('federal use does not imply federal publication', () => {
+  assert.equal(
+    displayNameFor('provenance_class', 'federal_utilized'),
+    'Third-party source used in federal work',
+  );
+});
+
 test('template types use registry-aligned display names', () => {
   assert.equal(
     displayNameFor('template_type', 'inheritance_worksheet'),

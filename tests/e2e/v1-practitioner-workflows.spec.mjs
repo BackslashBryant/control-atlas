@@ -129,6 +129,26 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
   await expect(page.getByRole("table", { name: "Control Atlas source register" })).toBeVisible();
   await expect(page.getByLabel("Search sources")).toHaveValue("NIST");
   await expect(page.locator(".source-register-row").first()).toBeVisible();
+
+  await open(
+    page,
+    "/#/sources?source=nist-iot-device-cybersecurity-requirement-catalogs",
+  );
+  const iotDetail = page.locator(".sources-page");
+  await expect(iotDetail).toContainText("Publisher version");
+  await expect(iotDetail).toContainText("Spring 2021");
+  await expect(iotDetail).toContainText("Retrieved");
+  await expect(iotDetail).toContainText("Last verified");
+  await expect(iotDetail).toContainText("Not recorded");
+  await expect(iotDetail).not.toContainText("undefined");
+
+  await open(page, "/#/sources?source=nist-800-53a-assessment-procedures");
+  const assessmentDetail = page.locator(".source-detail-grid");
+  await expect(
+    assessmentDetail.getByRole("link", { name: "https://csrc.nist.gov/pubs/sp/800/53/a/r5/final" }),
+  ).toBeVisible();
+  await expect(assessmentDetail).toContainText("Retrieved artifact");
+  await expect(assessmentDetail).toContainText("NIST_SP-800-53_rev5_catalog.json");
 });
 
 test("V1 workflow 09 — find an external tool or starter resource", async ({ page }) => {
