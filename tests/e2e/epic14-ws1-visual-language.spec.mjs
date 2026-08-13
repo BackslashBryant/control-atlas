@@ -66,24 +66,33 @@ test("WS1 Atlas spends the full area palette on its nine branch nodes", async ({
   const tree = page.locator('.atlas-tree[data-layout-status="ready"]');
   await expect(tree).toBeVisible({ timeout: 60_000 });
   const areaNodes = tree.locator(".atlas-tree-node--area");
-  await expect.poll(
-    () => areaNodes.evaluateAll((nodes) => new Set(nodes.map((node) => node.getAttribute("data-area-id")).filter(Boolean)).size),
-  ).toBe(9);
-  const styles = await areaNodes.evaluateAll((nodes) => nodes.map((node) => ({
-    area: node.getAttribute("data-area-id"),
-    background: globalThis.getComputedStyle(node).backgroundColor,
-    border: globalThis.getComputedStyle(node).borderColor,
-    borderStyle: globalThis.getComputedStyle(node).borderStyle,
-    empty: node.classList.contains("is-empty"),
-    hue: globalThis.getComputedStyle(node).getPropertyValue("--ca-area-color").trim(),
-  })));
-
-  expect(new Set(styles.map((entry) => entry.area)).size).toBe(9);
-  expect(new Set(styles.map((entry) => entry.background)).size).toBe(9);
-  expect(new Set(styles.map((entry) => entry.hue)).size).toBe(9);
-  const populatedStyles = styles.filter((entry) => !entry.empty);
-  const emptyStyles = styles.filter((entry) => entry.empty);
-  expect(new Set(populatedStyles.map((entry) => entry.border)).size).toBe(populatedStyles.length);
-  expect(emptyStyles).toHaveLength(2);
-  expect(emptyStyles.every((entry) => entry.borderStyle === "dashed")).toBe(true);
+  await expect.poll(async () => {
+    const styles = await areaNodes.evaluateAll((nodes) => nodes.map((node) => ({
+      area: node.getAttribute("data-area-id"),
+      background: globalThis.getComputedStyle(node).backgroundColor,
+      border: globalThis.getComputedStyle(node).borderColor,
+      borderStyle: globalThis.getComputedStyle(node).borderStyle,
+      empty: node.classList.contains("is-empty"),
+      hue: globalThis.getComputedStyle(node).getPropertyValue("--ca-area-color").trim(),
+    })));
+    const populatedStyles = styles.filter((entry) => !entry.empty);
+    const emptyStyles = styles.filter((entry) => entry.empty);
+    return {
+      areas: new Set(styles.map((entry) => entry.area).filter(Boolean)).size,
+      backgrounds: new Set(styles.map((entry) => entry.background)).size,
+      hues: new Set(styles.map((entry) => entry.hue)).size,
+      distinctPopulatedBorders: new Set(populatedStyles.map((entry) => entry.border)).size,
+      populatedCount: populatedStyles.length,
+      emptyCount: emptyStyles.length,
+      emptyBordersDashed: emptyStyles.every((entry) => entry.borderStyle === "dashed"),
+    };
+  }).toEqual({
+    areas: 9,
+    backgrounds: 9,
+    hues: 9,
+    distinctPopulatedBorders: 7,
+    populatedCount: 7,
+    emptyCount: 2,
+    emptyBordersDashed: true,
+  });
 });

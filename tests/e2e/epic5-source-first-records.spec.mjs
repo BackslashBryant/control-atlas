@@ -1,13 +1,13 @@
 import { expect, test } from "@playwright/test";
 import { attachPageDiagnostics, dismissOnboarding, waitForAppReady } from "./support.mjs";
 
-/** @type {Array<[string, string, string, string]>} */
+/** @type {Array<[string, string, string, string, string?]>} */
 const records = [
   ["control", "/#/record/nist-800-53/AC-1", "AC-1", "Control Statement"],
   ["STIG rule", "/#/record/disa-stig/V-222387", "V-222387", "Discussion"],
   ["SRG rule", "/#/record/disa-srg/V-202013", "V-202013", "Discussion"],
   ["ATT&CK technique", "/#/record/mitre-attack-ics/T0800", "T0800", "Technique Description"],
-  ["assessment procedure", "/#/record/nist-800-53a/AC-1", "AC-1", "Assessment Procedure"],
+  ["assessment procedure", "/#/record/nist-800-53a/AC-1", "AC-1", "Assessment Procedure", "procedure_text"],
   // D3-AA was the last record type with an empty description (MITRE D3FEND
   // technique/all.json omits d3f:definition; the full ontology graph carries
   // it — docs/PAGE_CONTRACTS.md). No graph node currently has
@@ -26,7 +26,7 @@ for (const [label, width, height] of viewports) {
   test.describe(`source-first record detail at ${label}`, () => {
     test.use({ viewport: { width, height } });
 
-    for (const [recordType, route, itemId, sourceHeading] of records) {
+    for (const [recordType, route, itemId, sourceHeading, sourceField = "description"] of records) {
       test(`${recordType} shows only source-backed record content`, async ({ page }) => {
         attachPageDiagnostics(page);
         await page.goto(route);
@@ -34,7 +34,7 @@ for (const [label, width, height] of viewports) {
         await dismissOnboarding(page);
 
         await expect(page.locator("h1")).toContainText(itemId);
-        const sourceSection = page.locator('[data-source-field="description"]');
+        const sourceSection = page.locator(`[data-source-field="${sourceField}"]`);
         await expect(sourceSection.getByRole("heading", { name: sourceHeading, exact: true })).toBeVisible();
         await expect(sourceSection.locator("p")).not.toBeEmpty();
         await expect(page.getByRole("link", { name: "View official source", exact: true })).toHaveCount(1);
@@ -44,3 +44,22 @@ for (const [label, width, height] of viewports) {
     }
   });
 }
+
+test('NIST SP 1800-35 keeps official technology collaborators distinct from mapping workbook labels', async ({ page }) => {
+  attachPageDiagnostics(page);
+  await page.goto('/#/record/nist-zt/COLLABORATOR-APPGATE-835EC7F121');
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(page.locator('.record-official-name')).toHaveText('Appgate');
+  await expect(page.locator('[data-source-field="publisher_context"]'))
+    .toContainText('The Technology Collaborators who participated in this project');
+  await expect(page.getByText('Mapping Workbook Contributors', { exact: true })).toHaveCount(0);
+
+  await page.goto('/#/record/nist-zt/MAPPING-CONTRIBUTOR-APPGATE-835EC7F121');
+  await waitForAppReady(page);
+  await expect(page.locator('.record-official-name')).toHaveText('Appgate');
+  await expect(page.locator('[data-source-field="publisher_field"]')).toContainText('Collaborator');
+  await expect(page.locator('[data-source-field="publisher_context"]')).toHaveCount(0);
+  await expect(page.locator('[data-record-source-error]')).toHaveCount(0);
+});

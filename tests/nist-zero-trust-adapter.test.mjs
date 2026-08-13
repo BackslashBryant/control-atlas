@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { parseSp800207A, parseSp800207Core } from '../tools/importers/nist-zero-trust-adapter.mjs';
+import { buildNistZeroTrustCatalog } from '../tools/importers/framework-adapters.mjs';
 
 test('SP 800-207 parser extracts the seven tenets and eleven logical components from located lines', () => {
   const fragments = JSON.parse(readFileSync('data/curated/nist-zt/source-fragments/sp800-207.json', 'utf8'));
@@ -42,4 +43,20 @@ test('NIST SP 1800-35 corpus reconciles all 19 builds and both page types', () =
   assert.ok(builds.every((build) => build.architecture_sections.length > 0 && build.implementation_sections.length > 0));
   assert.deepEqual(builds.find((build) => build.code === 'E1B3').related_build_codes, ['E1B2']);
   assert.ok(builds.every((build) => build.source_pages.every((page) => /^sha256:[a-f0-9]{64}$/.test(page.sha256) && page.artifact_url.includes(`/${manifest.repository.commit}/`))));
+});
+
+test('NIST SP 1800-35 keeps the official collaborator roster distinct from mapping-workbook labels', () => {
+  const catalog = buildNistZeroTrustCatalog('2026-08-13', 'data/curated/nist-zt');
+  const roster = catalog.records.filter((record) => record.type === 'zt_collaborator');
+  const mappingContributors = catalog.records.filter((record) => record.type === 'zt_mapping_contributor');
+  assert.equal(roster.length, 24);
+  assert.deepEqual(roster.map((record) => record.title), [
+    'Appgate', 'IBM', 'PC Matic', 'AWS', 'Ivanti', 'Ping Identity', 'Broadcom', 'Lookout',
+    'Radiant Logic', 'Cisco', 'Mandiant', 'SailPoint', 'DigiCert', 'Microsoft', 'Tenable', 'F5',
+    'Okta', 'Trellix', 'Forescout', 'Omnissa', 'Zimperium', 'Google Cloud', 'Palo Alto Networks', 'Zscaler',
+  ]);
+  assert.equal(mappingContributors.length, 16);
+  assert.ok(mappingContributors.every((record) => record.metadata.publisher_field === 'Collaborator'));
+  assert.ok(catalog.records.filter((record) => record.type === 'zt_product_component')
+    .every((record) => mappingContributors.some((contributor) => contributor.id === record.metadata.parent_id)));
 });

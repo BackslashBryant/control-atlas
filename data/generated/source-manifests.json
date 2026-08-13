@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-13T09:37:26.895Z",
+  "generated_at": "2026-08-13T10:44:44.865Z",
   "source_manifests": [
     {
       "source_id": "artifact-ai-mil-responsible-ai",
@@ -3567,9 +3567,9 @@
       "access_status": "public",
       "lifecycle_status": "active",
       "graph_eligible": true,
-      "node_count": 285,
-      "relationship_count": 285,
-      "evidence_count": 285,
+      "node_count": 309,
+      "relationship_count": 309,
+      "evidence_count": 309,
       "finding_count": 0
     },
     {
