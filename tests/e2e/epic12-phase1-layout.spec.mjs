@@ -156,6 +156,36 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
+test("compact Sources header stays opaque while content scrolls beneath it", async ({ page }) => {
+  for (const viewport of [
+    { width: 320, height: 700 },
+    { width: 375, height: 812 },
+    { width: 390, height: 844 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await gotoApp(page, "/#/sources");
+    await waitForAppReady(page, { allowPartial: true });
+    await page.evaluate(() => globalThis.scrollTo(0, 700));
+
+    const compactHeader = await page.locator("header.site-header").evaluate((header) => {
+      const style = globalThis.getComputedStyle(header);
+      const background = style.backgroundColor;
+      const alphaMatch = /rgba\([^,]+,[^,]+,[^,]+,\s*([\d.]+)\)/.exec(background);
+      return {
+        alpha: alphaMatch ? Number(alphaMatch[1]) : 1,
+        backdropFilter: style.backdropFilter,
+        background,
+        top: header.getBoundingClientRect().top,
+      };
+    });
+
+    expect(compactHeader.top).toBe(0);
+    expect(compactHeader.alpha, compactHeader.background).toBe(1);
+    expect(compactHeader.background).not.toBe("rgba(0, 0, 0, 0)");
+    expect(compactHeader.backdropFilter).toBe("none");
+  }
+});
+
 test("record template leads with publisher text and omits generated guidance", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await gotoApp(page, "/#/record/nist-800-53/AC-2");

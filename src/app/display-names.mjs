@@ -4,7 +4,7 @@ const DISPLAY_NAMES = {
     mandated: 'Mandated source',
     federal_published: 'Published federal source',
     federal_program: 'Federal program',
-    federal_utilized: 'Federal source',
+    federal_utilized: 'Third-party source used in federal work',
     federal_referenced: 'Federal reference',
     third_party_published: 'Publisher source',
     inferred: 'Inferred',

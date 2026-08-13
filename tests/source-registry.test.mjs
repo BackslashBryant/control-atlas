@@ -26,6 +26,14 @@ test('loaded sources expose additive freshness fields', () => {
   assert.equal(byId.get('community-cci-research').hash, null);
 });
 
+test('missing verification dates stay missing instead of receiving a generated fallback', () => {
+  const withoutDate = structuredClone(registry);
+  const freshness = withoutDate.freshness.sources[0];
+  delete freshness.last_checked;
+  const loaded = loadSourceRegistry(withoutDate);
+  assert.equal(loaded.byId.get(freshness.source_id).last_checked, null);
+});
+
 test('reviewed publication identity stays distinct from parser artifacts', () => {
   const { byId } = loadSourceRegistry(registry);
 

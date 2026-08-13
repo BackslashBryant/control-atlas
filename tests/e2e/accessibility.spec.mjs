@@ -87,6 +87,10 @@ const ROUTES = [
     path: "/#/record/mitre-attack/T1033",
   },
   { label: "sources registry", path: "/#/sources" },
+  {
+    label: "source detail",
+    path: "/#/sources?source=nist-iot-device-cybersecurity-requirement-catalogs",
+  },
   { label: "build hub", path: "/#/build" },
   {
     label: "starter document detail",

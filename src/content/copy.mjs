@@ -36,6 +36,8 @@ export const provenanceDescriptionMap = {
     "Published federal mapping or catalog entry from the named source.",
   federal_program:
     "Program-specific published baseline or overlay from an official source.",
+  federal_utilized:
+    "Used in federal work; not federally published.",
   federal_referenced:
     "Referenced federal guidance used as supporting public context.",
   third_party_published:

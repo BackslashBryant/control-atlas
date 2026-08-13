@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { SITE_COPY } from "../src/shared/site-copy.mjs";
+import { provenanceDescriptionMap } from "../src/content/copy.mjs";
 
 const read = (path) => readFileSync(path, "utf8");
 const PUBLIC_COPY_FILES = [
@@ -54,6 +55,13 @@ test("site copy keeps every approved anchor exact", () => {
       ["Search the Library", "Find a specific record."],
       ["Browse Resources", "Find tools, training, and guidance."],
     ],
+  );
+});
+
+test("third-party federal-use provenance is described without changing its publisher", () => {
+  assert.equal(
+    provenanceDescriptionMap.federal_utilized,
+    "Used in federal work; not federally published.",
   );
 });
 
