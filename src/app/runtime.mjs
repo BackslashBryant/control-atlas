@@ -143,6 +143,9 @@ function uniqueBy(items, keyFn) {
 }
 
 function matchesLibraryFacet(document, filters = {}) {
+  const catalogIds = Array.isArray(filters.catalog_ids)
+    ? new Set(filters.catalog_ids)
+    : null;
   return (
     (!filters.object_type || document.object_type === filters.object_type) &&
     (!filters.source_class || document.source_class === filters.source_class) &&
@@ -150,6 +153,7 @@ function matchesLibraryFacet(document, filters = {}) {
       document.control_family === filters.control_family) &&
     (!filters.severity || document.severity === filters.severity) &&
     (!filters.catalog_id || document.catalog_id === filters.catalog_id) &&
+    (!catalogIds?.size || catalogIds.has(document.catalog_id)) &&
     (!filters.publisher_name || document.publisher_name === filters.publisher_name)
   );
 }
@@ -281,12 +285,16 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
   }
 
   function indexedLibraryFacetMatches(index, filters = {}) {
+    const catalogIds = Array.isArray(filters.catalog_ids)
+      ? filters.catalog_ids
+      : [];
     return (
       (!filters.object_type || indexedLibraryValue(index, "object_type") === filters.object_type) &&
       (!filters.source_class || indexedLibraryValue(index, "source_class") === filters.source_class) &&
       (!filters.control_family || indexedLibraryValue(index, "control_family") === filters.control_family) &&
       (!filters.severity || indexedLibraryValue(index, "severity") === filters.severity) &&
       (!filters.catalog_id || indexedLibraryValue(index, "catalog_id") === filters.catalog_id) &&
+      (!catalogIds.length || catalogIds.includes(indexedLibraryValue(index, "catalog_id"))) &&
       (!filters.publisher_name || indexedLibraryValue(index, "publisher_name") === filters.publisher_name)
     );
   }

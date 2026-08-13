@@ -41,3 +41,12 @@ test("columnar Library index retains governed tags for the tag filter contract",
   const tagged = runtime.searchLibrary("", { catalog_id: "disa-stig" });
   assert.ok(tagged.some((record) => Array.isArray(record.taxonomy_tags)));
 });
+
+test("columnar Library index applies multi-publication area constraints before its result cap", () => {
+  const runtime = indexedRuntime();
+  const implementationCatalogs = ["disa-stig", "disa-srg"];
+  const results = runtime.searchLibrary("", { catalog_ids: implementationCatalogs });
+
+  assert.ok(results.length > 0);
+  assert.ok(results.every((record) => implementationCatalogs.includes(record.catalog_id)));
+});

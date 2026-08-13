@@ -48,6 +48,29 @@ test("WS5 Home implements Template B with one search, three cards, and a weighte
   expect(new Set(accentColors).size).toBe(1);
 });
 
+test("WS5 weighted areas each open a populated Library filter", async ({ page }) => {
+  const areas = [
+    ["Implementation", "24,674"],
+    ["Compliance", "1,910"],
+    ["Threats & Defense", "1,333"],
+    ["Architecture", "1,153"],
+    ["Assessment", "1,082"],
+    ["Governance", "35"],
+    ["Risk", "3"],
+  ];
+
+  for (const [label, count] of areas) {
+    await gotoApp(page, "/");
+    await waitForAppReady(page, { allowPartial: true });
+    await page.getByRole("link", { name: `${label}, ${count} records` }).click();
+
+    await expect(page).toHaveURL(/#\/library\?area=atlas(?::|%3A)LIMB-/);
+    await expect(page.getByLabel("Active filters").getByRole("button", { name: label })).toBeVisible();
+    await expect(page.getByRole("status")).not.toHaveText("0 results");
+    await expect(page.getByRole("list", { name: "Search results" }).getByRole("listitem").first()).toBeVisible();
+  }
+});
+
 test("WS6 About states the research boundary exactly", async ({ page }) => {
   await gotoApp(page, "/#/about");
   await waitForAppReady(page);
