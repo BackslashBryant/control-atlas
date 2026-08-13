@@ -1,38 +1,5 @@
 {
   "version": 1,
   "threshold": "high",
-  "exceptions": [
-    {
-      "package": "postcss",
-      "id": 1124288,
-      "advisory": "GHSA-r28c-9q8g-f849",
-      "reason": "Path traversal in source-map auto-loading is a build-time devDependency risk (Tailwind's toolchain); postcss never runs against untrusted input in production and no .map files are served from user-controlled paths.",
-      "recordedAt": "2026-07-24",
-      "reviewBy": "2026-10-24"
-    },
-    {
-      "package": "brace-expansion",
-      "id": 1124334,
-      "advisory": "GHSA-mh99-v99m-4gvg",
-      "reason": "Transitive devDependency of @lhci/cli (Lighthouse CI), only invoked in local/CI performance-audit tooling against fixed, developer-controlled glob patterns — never against user input. Only available fix is a semver-major downgrade of @lhci/cli to 0.3.3.",
-      "recordedAt": "2026-07-24",
-      "reviewBy": "2026-10-24"
-    },
-    {
-      "package": "js-yaml",
-      "id": 1138114,
-      "advisory": "GHSA-5p4m-2wfm-xmqj",
-      "reason": "Risk acceptance for devDependency @lhci/utils using js-yaml@3.15.1. Quadratic CPU consumption in !!omap resolution. Lighthouse CI runs in controlled environments, not parsing untrusted input. No safe upgrade path available.",
-      "recordedAt": "2026-08-06",
-      "reviewBy": "2026-11-06"
-    },
-    {
-      "package": "js-yaml",
-      "id": 1138115,
-      "advisory": "GHSA-5p4m-2wfm-xmqj",
-      "reason": "Risk acceptance for devDependency @cyclonedx/cyclonedx-npm -> xmlbuilder2 using js-yaml@4.3.1. Quadratic CPU consumption in !!omap resolution. CycloneDX tooling runs only on trusted repo files during CI/builds, never parsing untrusted user input.",
-      "recordedAt": "2026-08-06",
-      "reviewBy": "2026-11-06"
-    }
-  ]
+  "exceptions": []
 }
