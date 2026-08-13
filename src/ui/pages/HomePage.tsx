@@ -5,12 +5,19 @@ import {
   IconTopologyStar3,
   IconUsersGroup,
 } from "@tabler/icons-react";
+import type { CSSProperties } from "react";
 
 import { HOME_CONTENT, HOME_DESTINATIONS } from "../../shared/home-content.mjs";
 import { AppLink } from "../components/AppLink";
-import { BucketTag } from "../components/TaxonomyTag";
-import { AREA_PRESENTATIONS } from "../lib/areaVisualLanguage";
+import { AREA_BROWSE_PRESENTATIONS, areaCssVariables } from "../lib/areaVisualLanguage";
 import type { ViewState } from "../lib/viewState";
+
+type HomeAreaStyle = CSSProperties & {
+  "--area-scale": number;
+  "--ca-area-color": string;
+  "--ca-area-color-on-light": string;
+  "--ca-area-color-on-dark": string;
+};
 
 type HomePageProps = {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
@@ -74,20 +81,28 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
       </nav>
 
       <nav aria-labelledby="home-area-heading" className="home-area-browse">
-        <h2 id="home-area-heading">Browse by area</h2>
-        <div className="home-ecosystem-areas">
-          {AREA_PRESENTATIONS.map((area) => (
-            <AppLink
-              className="home-area-link"
-              key={area.id}
-              onNavigate={onNavigate}
-              patch={{ area: area.id }}
-              view="search"
-            >
-              <BucketTag area={area.id}>{area.label}</BucketTag>
-            </AppLink>
-          ))}
+        <div className="home-area-browse__heading">
+          <h2 id="home-area-heading">Browse by area</h2>
+          <p>Size reflects record count.</p>
         </div>
+        <ul className="home-ecosystem-areas" data-area-count-scale="logarithmic">
+          {AREA_BROWSE_PRESENTATIONS.map((area) => (
+            <li key={area.id}>
+              <AppLink
+                aria-label={`${area.label}, ${area.recordCount.toLocaleString()} records`}
+                className="home-area-link"
+                data-record-count={area.recordCount}
+                onNavigate={onNavigate}
+                patch={{ area: area.id }}
+                style={{ ...areaCssVariables(area), "--area-scale": area.scale } as HomeAreaStyle}
+                view="search"
+              >
+                <span className="home-area-link__label">{area.label}</span>
+                <span aria-hidden="true" className="home-area-link__count">{area.recordCount.toLocaleString()}</span>
+              </AppLink>
+            </li>
+          ))}
+        </ul>
       </nav>
 
     </section>

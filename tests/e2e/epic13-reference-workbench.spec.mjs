@@ -14,7 +14,7 @@ test("homepage reads as a connected federal cybersecurity reference system", asy
   await expect(page.getByText("Understand what applies, what it means, and what to do next.", { exact: true })).toBeVisible();
   await expect(page.locator(".home-ecosystem")).toHaveCount(0);
   await expect(page.getByRole("navigation", { name: "Choose a Control Atlas destination" }).getByRole("link")).toHaveCount(3);
-  await expect(page.getByRole("navigation", { name: "Browse by area" }).getByRole("link")).toHaveCount(9);
+  await expect(page.getByRole("navigation", { name: "Browse by area" }).getByRole("link")).toHaveCount(7);
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Resources", exact: true })).toBeVisible();
   await expect(page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.document.documentElement.clientWidth)).resolves.toBe(true);
 
@@ -55,7 +55,7 @@ test("mobile homepage preserves the product story without horizontal overflow", 
   await gotoApp(page, "/");
 
   await expect(page.getByRole("heading", { name: "Make federal cybersecurity compliance make sense." })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Browse by area" }).getByRole("link")).toHaveCount(9);
+  await expect(page.getByRole("navigation", { name: "Browse by area" }).getByRole("link")).toHaveCount(7);
   await expect(page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.document.documentElement.clientWidth)).resolves.toBe(true);
   await page.screenshot({ path: testInfo.outputPath("epic13-home-mobile.png"), fullPage: true });
 });
