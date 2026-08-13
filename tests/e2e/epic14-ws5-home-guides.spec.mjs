@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
-test("WS5 Home implements Template B with one search, three cards, and nine area links", async ({ page }) => {
+test("WS5 Home implements Template B with one search, three cards, and a weighted area pool", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await gotoApp(page, "/");
   await waitForAppReady(page, { allowPartial: true });
@@ -33,8 +33,12 @@ test("WS5 Home implements Template B with one search, three cards, and nine area
   await expect(template.getByText("Start with your work", { exact: true })).toHaveCount(0);
 
   const areaLinks = template.getByRole("navigation", { name: "Browse by area" }).getByRole("link");
-  await expect(areaLinks).toHaveCount(9);
-  await expect(template.locator(".home-ecosystem-areas .bucket-tag__dot")).toHaveCount(9);
+  await expect(areaLinks).toHaveCount(7);
+  await expect(template.getByText("Size reflects record count.", { exact: true })).toBeVisible();
+  await expect(areaLinks.first()).toHaveAttribute("data-record-count", "24674");
+  await expect(areaLinks.first()).toHaveAccessibleName("Implementation, 24,674 records");
+  await expect(template.getByRole("link", { name: /^Operations,/ })).toHaveCount(0);
+  await expect(template.getByRole("link", { name: /^Knowledge,/ })).toHaveCount(0);
   const hrefs = await areaLinks.evaluateAll((links) => links.map((link) => link.getAttribute("href")));
   expect(hrefs.every((href) => href?.startsWith("#/library?area="))).toBe(true);
 

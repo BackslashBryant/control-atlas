@@ -20,7 +20,7 @@ test("Home is a calm, task-focused front door", async ({ page }) => {
   for (const entrance of ["Browse the Atlas", "Search the Library", "Browse Resources"]) {
     await expect(page.getByRole("link", { name: new RegExp(entrance) })).toBeVisible();
   }
-  await expect(page.locator(".home-ecosystem-areas .bucket-tag")).toHaveCount(9);
+  await expect(page.locator(".home-ecosystem-areas .home-area-link")).toHaveCount(7);
 });
 
 test("record leads with publisher text and contains no generated guidance", async ({ page }) => {

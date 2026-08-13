@@ -6,7 +6,7 @@ import { resolve } from 'node:path';
 import { RUNTIME_CACHE_VERSION } from './src/shared/runtime-cache-version.mjs';
 import { HOME_CONTENT, HOME_DESTINATIONS } from './src/shared/home-content.mjs';
 import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from './src/shared/site-copy.mjs';
-import { AREA_PRESENTATIONS } from './src/ui/lib/areaVisualLanguage';
+import { AREA_BROWSE_PRESENTATIONS, areaCssVariables } from './src/ui/lib/areaVisualLanguage';
 
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
 
@@ -17,9 +17,11 @@ function escapeHtml(value: string) {
 }
 
 function renderStaticHome() {
-  const areas = AREA_PRESENTATIONS.map((area) => {
+  const areas = AREA_BROWSE_PRESENTATIONS.map((area) => {
     const href = `#/library?area=${encodeURIComponent(area.id)}`;
-    return `<a class="home-area-link" data-route="${href}" href="${href}"><span class="bucket-tag" data-area-id="${area.id}" style="--ca-area-color:var(${area.token})"><span aria-hidden="true" class="bucket-tag__dot"></span><span>${escapeHtml(area.label)}</span></span></a>`;
+    const variables = areaCssVariables(area);
+    const style = `${Object.entries(variables).map(([name, value]) => `${name}:${value}`).join(';')};--area-scale:${area.scale}`;
+    return `<li><a aria-label="${escapeHtml(`${area.label}, ${area.recordCount.toLocaleString()} records`)}" class="home-area-link" data-record-count="${area.recordCount}" data-route="${href}" href="${href}" style="${style}"><span class="home-area-link__label">${escapeHtml(area.label)}</span><span aria-hidden="true" class="home-area-link__count">${area.recordCount.toLocaleString()}</span></a></li>`;
   }).join('');
   const destinations = HOME_DESTINATIONS.map((destination) => `
     <a class="home-secondary-action" data-route="${destination.href}" href="${destination.href}">
@@ -42,8 +44,8 @@ function renderStaticHome() {
     </div>
     <nav aria-label="Choose a Control Atlas destination" class="home-secondary-grid">${destinations}</nav>
     <nav aria-labelledby="home-area-heading" class="home-area-browse">
-      <h2 id="home-area-heading">Browse by area</h2>
-      <div class="home-ecosystem-areas">${areas}</div>
+      <div class="home-area-browse__heading"><h2 id="home-area-heading">Browse by area</h2><p>Size reflects record count.</p></div>
+      <ul class="home-ecosystem-areas" data-area-count-scale="logarithmic">${areas}</ul>
     </nav>
   </section>`;
 }

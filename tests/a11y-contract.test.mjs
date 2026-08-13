@@ -241,8 +241,9 @@ test("Template B Home exposes one search, three destinations, and labelled area 
   assert.match(homePage, /HOME_DESTINATIONS\.map/);
   assert.match(homePage, /aria-label="Choose a Control Atlas destination"/);
   assert.match(homePage, /aria-labelledby="home-area-heading"/);
-  assert.match(homePage, /AREA_PRESENTATIONS\.map/);
+  assert.match(homePage, /AREA_BROWSE_PRESENTATIONS\.map/);
   assert.match(homePage, /home-ecosystem-areas/);
+  assert.match(homePage, /aria-label=\{`\$\{area\.label\}, \$\{area\.recordCount\.toLocaleString\(\)\} records`\}/);
   assert.equal((homePage.match(/onOpenSearch/g) || []).length >= 2, true);
   assert.doesNotMatch(homePage, /home-ecosystem-authorities|home-start-here/);
   assert.doesNotMatch(homePage, /RMF|Risk Management Framework/);
@@ -278,6 +279,10 @@ test("compact icon and chip controls retain 44 pixel touch targets", () => {
   assert.ok(block, "Missing shared icon and chip control rule");
   assert.match(block[1], /min-height:\s*44px;/);
   assert.match(block[1], /min-width:\s*44px;/);
+
+  const homeAreaLink = surfacesCss.match(/\.home-area-link\s*\{([^}]*)\}/);
+  assert.ok(homeAreaLink, "Missing Home area link rule");
+  assert.match(homeAreaLink[1], /min-height:\s*var\(--ca-touch-target\);/);
 });
 
 test("sticky surfaces and in-page jumps share one header-safe offset", () => {

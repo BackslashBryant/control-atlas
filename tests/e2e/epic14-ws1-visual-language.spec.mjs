@@ -8,29 +8,26 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
 });
 
-test("WS1 Home uses neutral bucket tags with nine labelled area dots", async ({ page }) => {
+test("WS1 Home uses a source-colored area pool weighted by record count", async ({ page }) => {
   await gotoApp(page, "/#/");
   await waitForAppReady(page, { allowPartial: true });
 
-  const bucketTags = page.locator(".home-ecosystem-areas .bucket-tag");
-  await expect(bucketTags).toHaveCount(9);
+  const areaLinks = page.locator(".home-ecosystem-areas .home-area-link");
+  await expect(areaLinks).toHaveCount(7);
   await expect(page.locator(".home-ecosystem-authorities, .home-ecosystem")).toHaveCount(0);
 
-  const styles = await bucketTags.evaluateAll((tags) => tags.map((tag) => {
-    const dot = tag.querySelector(".bucket-tag__dot");
+  const styles = await areaLinks.evaluateAll((tags) => tags.map((tag) => {
     return {
-      area: tag.getAttribute("data-area-id"),
-      background: globalThis.getComputedStyle(tag).backgroundColor,
-      dot: dot ? globalThis.getComputedStyle(dot).backgroundColor : "",
+      count: Number(tag.getAttribute("data-record-count")),
+      fontSize: Number.parseFloat(globalThis.getComputedStyle(tag).fontSize),
       label: tag.textContent?.trim() || "",
     };
   }));
 
-  expect(new Set(styles.map((entry) => entry.area)).size).toBe(9);
-  expect(new Set(styles.map((entry) => entry.background)).size).toBe(1);
-  expect(new Set(styles.map((entry) => entry.dot)).size).toBe(9);
+  expect(styles[0].count).toBe(24674);
+  expect(styles.at(-1).count).toBe(3);
+  expect(styles[0].fontSize).toBeGreaterThan(styles.at(-1).fontSize);
   expect(styles.every((entry) => entry.label.length > 0)).toBe(true);
-  expect(styles.every((entry) => entry.background !== entry.dot)).toBe(true);
 });
 
 test("WS1 decorative surfaces resolve to one teal accent", async ({ page }) => {

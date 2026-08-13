@@ -1,4 +1,5 @@
 import treeSpine from "../../../data/curated/tree-spine.json";
+import catalogBootstrap from "../../../data/generated/catalog-bootstrap.json";
 
 const AREA_TOKEN_BY_ID = {
   "atlas:LIMB-GOVERNANCE": "--ca-area-governance",
@@ -19,6 +20,11 @@ export type AreaPresentation = {
   label: string;
   slug: string;
   token: (typeof AREA_TOKEN_BY_ID)[AreaId];
+};
+
+export type AreaBrowsePresentation = AreaPresentation & {
+  recordCount: number;
+  scale: number;
 };
 
 function slugFor(id: AreaId) {
@@ -83,6 +89,30 @@ export function areaPresentationFor(value?: string | null) {
 export function areaPresentationForCatalog(catalogId: string) {
   return areaPresentationFor(CATALOG_AREA_IDS[catalogId]);
 }
+
+const areaRecordCounts = new Map<AreaId, number>(AREA_IDS.map((areaId) => [areaId, 0]));
+for (const catalog of catalogBootstrap.catalog_bootstrap.catalogs) {
+  const area = areaPresentationForCatalog(catalog.id);
+  if (!area) continue;
+  areaRecordCounts.set(area.id, (areaRecordCounts.get(area.id) || 0) + Number(catalog.leaf_record_count || 0));
+}
+
+const populatedAreas = AREA_PRESENTATIONS
+  .map((area) => ({ ...area, recordCount: areaRecordCounts.get(area.id) || 0 }))
+  .filter((area) => area.recordCount > 0);
+const areaLogCounts = populatedAreas.map((area) => Math.log10(area.recordCount + 1));
+const minimumAreaLogCount = Math.min(...areaLogCounts);
+const maximumAreaLogCount = Math.max(...areaLogCounts);
+const areaLogRange = maximumAreaLogCount - minimumAreaLogCount || 1;
+
+export const AREA_BROWSE_PRESENTATIONS = Object.freeze(
+  populatedAreas
+    .map((area) => Object.freeze({
+      ...area,
+      scale: Number(((Math.log10(area.recordCount + 1) - minimumAreaLogCount) / areaLogRange).toFixed(4)),
+    }))
+    .sort((left, right) => right.recordCount - left.recordCount || left.label.localeCompare(right.label)),
+) as readonly AreaBrowsePresentation[];
 
 export function areaCssVariables(area: AreaPresentation | typeof AUTHORITY_PRESENTATION) {
   return {
