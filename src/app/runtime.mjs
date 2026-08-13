@@ -146,16 +146,32 @@ function matchesLibraryFacet(document, filters = {}) {
   const catalogIds = Array.isArray(filters.catalog_ids)
     ? new Set(filters.catalog_ids)
     : null;
+  const objectTypes = Array.isArray(filters.object_types)
+    ? new Set(filters.object_types)
+    : null;
   return (
     (!filters.object_type || document.object_type === filters.object_type) &&
+    (!objectTypes?.size || objectTypes.has(document.object_type)) &&
     (!filters.source_class || document.source_class === filters.source_class) &&
     (!filters.control_family ||
       document.control_family === filters.control_family) &&
     (!filters.severity || document.severity === filters.severity) &&
     (!filters.catalog_id || document.catalog_id === filters.catalog_id) &&
     (!catalogIds?.size || catalogIds.has(document.catalog_id)) &&
-    (!filters.publisher_name || document.publisher_name === filters.publisher_name)
+    (!filters.publisher_name || document.publisher_name === filters.publisher_name) &&
+    (!filters.connected_only || Number(document.published_connection_count || 0) > 0) &&
+    matchesTaxonomyTagGroups(document.taxonomy_tags, filters.taxonomy_tag_groups)
   );
+}
+
+function taxonomyTagIds(tags) {
+  return new Set((tags || []).map((tag) => typeof tag === "string" ? tag : tag?.id).filter(Boolean));
+}
+
+function matchesTaxonomyTagGroups(tags, groups = []) {
+  if (!groups?.length) return true;
+  const ids = taxonomyTagIds(tags);
+  return groups.every((alternatives) => alternatives.some((id) => ids.has(id)));
 }
 
 function itemIdFor(node) {
@@ -288,14 +304,20 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     const catalogIds = Array.isArray(filters.catalog_ids)
       ? filters.catalog_ids
       : [];
+    const objectTypes = Array.isArray(filters.object_types)
+      ? filters.object_types
+      : [];
     return (
       (!filters.object_type || indexedLibraryValue(index, "object_type") === filters.object_type) &&
+      (!objectTypes.length || objectTypes.includes(indexedLibraryValue(index, "object_type"))) &&
       (!filters.source_class || indexedLibraryValue(index, "source_class") === filters.source_class) &&
       (!filters.control_family || indexedLibraryValue(index, "control_family") === filters.control_family) &&
       (!filters.severity || indexedLibraryValue(index, "severity") === filters.severity) &&
       (!filters.catalog_id || indexedLibraryValue(index, "catalog_id") === filters.catalog_id) &&
       (!catalogIds.length || catalogIds.includes(indexedLibraryValue(index, "catalog_id"))) &&
-      (!filters.publisher_name || indexedLibraryValue(index, "publisher_name") === filters.publisher_name)
+      (!filters.publisher_name || indexedLibraryValue(index, "publisher_name") === filters.publisher_name) &&
+      (!filters.connected_only || Number(indexedLibraryValue(index, "published_connection_count") || 0) > 0) &&
+      matchesTaxonomyTagGroups(indexedLibraryValue(index, "taxonomy_tags"), filters.taxonomy_tag_groups)
     );
   }
 
@@ -1032,6 +1054,126 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     };
   };
 
+  function compareLibraryMatches(left, right) {
+    const leftId = left.index === undefined
+      ? String(left.document.id)
+      : String(indexedLibraryValue(left.index, "id"));
+    const rightId = right.index === undefined
+      ? String(right.document.id)
+      : String(indexedLibraryValue(right.index, "id"));
+    return left.score - right.score || right.rankBoost - left.rankBoost || leftId.localeCompare(rightId);
+  }
+
+  function indexedLibraryMatches(query, filters = {}) {
+    const needle = normalize(query);
+    const aliasNeedle = normalizeControlNotation(needle);
+    const searchNeedle = normalizeLibrarySearchQuery(
+      aliasNeedle !== needle ? aliasNeedle : query,
+    ).toLowerCase();
+    const searchTerms = searchNeedle.split(/\s+/).filter(Boolean);
+    const exactMatches = [];
+    const matches = [];
+    for (let index = 0; index < indexedLibraryDocumentCount; index += 1) {
+      if (!indexedLibraryFacetMatches(index, filters)) continue;
+      const normalizedItemId = normalize(indexedLibraryValue(index, "item_id"));
+      const normalizedId = normalize(indexedLibraryValue(index, "id"));
+      if (
+        needle && (
+          normalizedItemId === needle ||
+          normalizedId === needle ||
+          normalizedItemId === aliasNeedle ||
+          normalizedId === aliasNeedle
+        )
+      ) {
+        exactMatches.push({ index, rankBoost: 0, score: 0 });
+        continue;
+      }
+      if (!needle) {
+        matches.push({ index, rankBoost: 0, score: 0 });
+        continue;
+      }
+      if (!searchTerms.length) continue;
+      const title = normalize(indexedLibraryValue(index, "title"));
+      const searchableText = [
+        normalizedItemId,
+        title,
+        normalize(indexedLibraryValue(index, "control_family")),
+        normalize(indexedLibraryValue(index, "source_name")),
+        normalize(indexedLibraryValue(index, "publisher_name")),
+        normalize(indexedLibraryValue(index, "official_text_preview")),
+      ].join(" ");
+      if (!searchTerms.every((term) => searchableText.includes(term))) continue;
+      matches.push({
+        index,
+        rankBoost: indexedLibraryRankBoost(index, searchNeedle),
+        score: normalizedItemId.startsWith(needle) || normalizedItemId.startsWith(aliasNeedle)
+          ? 1
+          : title.includes(searchNeedle)
+            ? 2
+            : 3,
+      });
+    }
+    return exactMatches.length ? exactMatches : matches.sort(compareLibraryMatches);
+  }
+
+  function documentLibraryMatches(query, filters = {}) {
+    const needle = normalize(query);
+    const aliasNeedle = normalizeControlNotation(needle);
+    const candidates = libraryDocuments.filter((document) => matchesLibraryFacet(document, filters));
+    if (!needle) {
+      return candidates.map((document) => ({ document, rankBoost: 0, score: 0 }));
+    }
+    const exactMatches = candidates.filter((document) => {
+      const itemId = document.search_item_id || normalize(document.item_id);
+      const id = document.search_id || normalize(document.id);
+      return itemId === needle || id === needle || itemId === aliasNeedle || id === aliasNeedle;
+    });
+    if (exactMatches.length) {
+      return exactMatches.map((document) => ({ document, rankBoost: 0, score: 0 }));
+    }
+    const searchNeedle = normalizeLibrarySearchQuery(
+      aliasNeedle !== needle ? aliasNeedle : query,
+    ).toLowerCase();
+    const searchTerms = searchNeedle.split(/\s+/).filter(Boolean);
+    if (!searchTerms.length) return [];
+    const matches = [];
+    for (const document of candidates) {
+      const itemId = document.search_item_id || normalize(document.item_id);
+      const title = document.search_title || normalize(document.title);
+      const searchableText = document.search_text || [
+        itemId,
+        title,
+        normalize(document.control_family),
+        normalize(document.source_name),
+        normalize(document.publisher_name),
+        normalize(document.official_text_preview),
+      ].join(" ");
+      if (!searchTerms.every((term) => searchableText.includes(term))) continue;
+      matches.push({
+        document,
+        rankBoost: librarySearchRankBoost(document, searchNeedle),
+        score: itemId.startsWith(needle) || itemId.startsWith(aliasNeedle)
+          ? 1
+          : title.includes(searchNeedle)
+            ? 2
+            : 3,
+      });
+    }
+    return matches.sort(compareLibraryMatches);
+  }
+
+  function libraryMatches(query, filters = {}) {
+    return indexedLibraryDocumentCount
+      ? indexedLibraryMatches(query, filters)
+      : documentLibraryMatches(query, filters);
+  }
+
+  function matchTaxonomyTags(match) {
+    return match.index === undefined
+      ? match.document.taxonomy_tags
+      : indexedLibraryValue(match.index, "taxonomy_tags");
+  }
+
   return {
     dataset,
     searchNodes(query, filters = {}) {
@@ -1082,138 +1224,22 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
         .map((entry) => entry.node);
     },
     searchLibrary(query, filters = {}) {
-      const needle = normalize(query);
-      const aliasNeedle = normalizeControlNotation(needle);
-      if (indexedLibraryDocumentCount) {
-        const hasFilters = Object.values(filters).some(Boolean);
-        const exactMatches = [];
-        const matches = [];
-        const compareIndexedMatches = (left, right) =>
-          left.score - right.score ||
-          right.rankBoost - left.rankBoost ||
-          (String(indexedLibraryValue(left.index, "id")) < String(indexedLibraryValue(right.index, "id"))
-            ? -1
-            : String(indexedLibraryValue(left.index, "id")) > String(indexedLibraryValue(right.index, "id"))
-              ? 1
-              : 0);
-        const searchNeedle = normalizeLibrarySearchQuery(
-          aliasNeedle !== needle ? aliasNeedle : query,
-        ).toLowerCase();
-        const searchTerms = searchNeedle.split(/\s+/).filter(Boolean);
-        for (let index = 0; index < indexedLibraryDocumentCount; index += 1) {
-          if (hasFilters && !indexedLibraryFacetMatches(index, filters)) continue;
-          const normalizedItemId = normalize(indexedLibraryValue(index, "item_id"));
-          const normalizedId = normalize(indexedLibraryValue(index, "id"));
-          if (
-            needle && (
-              normalizedItemId === needle ||
-              normalizedId === needle ||
-              normalizedItemId === aliasNeedle ||
-              normalizedId === aliasNeedle
-            )
-          ) {
-            exactMatches.push(index);
-            continue;
-          }
-          if (!needle) {
-            matches.push({ index, rankBoost: 0, score: 0 });
-            continue;
-          }
-          if (!searchTerms.length) continue;
-          const title = normalize(indexedLibraryValue(index, "title"));
-          const searchableText = [
-            normalizedItemId,
-            title,
-            normalize(indexedLibraryValue(index, "control_family")),
-            normalize(indexedLibraryValue(index, "source_name")),
-            normalize(indexedLibraryValue(index, "publisher_name")),
-            normalize(indexedLibraryValue(index, "official_text_preview")),
-          ].join(" ");
-          if (!searchTerms.every((term) => searchableText.includes(term))) continue;
-          matches.push({
-            index,
-            rankBoost: indexedLibraryRankBoost(index, searchNeedle),
-            score: normalizedItemId.startsWith(needle) || normalizedItemId.startsWith(aliasNeedle)
-              ? 1
-              : title.includes(searchNeedle)
-                ? 2
-                : 3,
-          });
-        }
-        if (exactMatches.length) return exactMatches.map(indexedLibraryDocument);
-        return matches
-          .sort(compareIndexedMatches)
-          .slice(0, 100)
-          .map((entry) => indexedLibraryDocument(entry.index));
-      }
-      const candidates = Object.values(filters).some(Boolean)
-        ? libraryDocuments.filter((document) =>
-            matchesLibraryFacet(document, filters),
-          )
-        : libraryDocuments;
-      if (!needle) return candidates;
-
-      const exactMatches = candidates.filter((document) => {
-        const itemId =
-          document.search_item_id || normalize(document.item_id);
-        const id = document.search_id || normalize(document.id);
-        return (
-          itemId === needle ||
-          id === needle ||
-          itemId === aliasNeedle ||
-          id === aliasNeedle
-        );
-      });
-      if (exactMatches.length > 0) return exactMatches;
-
-      const searchNeedle = normalizeLibrarySearchQuery(
-        aliasNeedle !== needle ? aliasNeedle : query,
-      )
-        .toLowerCase();
-      const searchTerms = searchNeedle.split(/\s+/).filter(Boolean);
-      if (searchTerms.length === 0) return [];
-
-      const matches = [];
-      for (const document of candidates) {
-        const itemId =
-          document.search_item_id || normalize(document.item_id);
-        const title = document.search_title || normalize(document.title);
-        const searchableText =
-          document.search_text ||
-          [
-            itemId,
-            title,
-            normalize(document.control_family),
-            normalize(document.source_name),
-            normalize(document.publisher_name),
-            normalize(document.official_text_preview),
-          ].join(" ");
-        if (!searchTerms.every((term) => searchableText.includes(term))) {
-          continue;
-        }
-        const score =
-          itemId === needle || itemId === aliasNeedle
-            ? 0
-            : itemId.startsWith(needle) || itemId.startsWith(aliasNeedle)
-              ? 1
-              : title.includes(searchNeedle)
-                ? 2
-                : 3;
-        matches.push({
-          document,
-          rankBoost: librarySearchRankBoost(document, searchNeedle),
-          score,
-        });
-      }
-      return matches
-        .sort(
-          (a, b) =>
-            a.score - b.score ||
-            b.rankBoost - a.rankBoost ||
-            a.document.id.localeCompare(b.document.id),
-        )
+      return libraryMatches(query, filters)
         .slice(0, 100)
-        .map((entry) => entry.document);
+        .map((match) => match.index === undefined
+          ? match.document
+          : indexedLibraryDocument(match.index));
+    },
+    getLibraryTagContext(query, filters = {}) {
+      const matches = libraryMatches(query, filters);
+      const tags = {};
+      for (const match of matches) {
+        for (const tag of matchTaxonomyTags(match) || []) {
+          const id = typeof tag === "string" ? tag : tag?.id;
+          if (id) tags[id] = (tags[id] || 0) + 1;
+        }
+      }
+      return { result_count: matches.length, tags };
     },
     getNode(id) {
       return nodeById.get(id) || null;

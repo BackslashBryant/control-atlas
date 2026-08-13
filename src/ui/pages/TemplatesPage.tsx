@@ -25,6 +25,7 @@ import {
 
 import { STARTER_DOCUMENT_REVIEW_NOTICE } from "../../shared/disclaimer.mjs";
 import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
+import { ContextualTaxonomyLinks } from "../components/ContextualTaxonomyLinks";
 import { BuildLocalNav } from "../components/BuildLocalNav";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
 import { groupResourcesByKind } from "../lib/commonsPresentation.mjs";
@@ -1626,6 +1627,15 @@ export function TemplatesPage(props: {
               </p>
             ) : null}
           </SummaryCard>
+          {activeFramework ? (
+            <ContextualTaxonomyLinks
+              catalogIds={[activeFramework]}
+              contextLabel={selectedTemplate.display_name}
+              onNavigate={onNavigate}
+              runtime={bundle.runtime}
+              subjectLabel="starter document"
+            />
+          ) : null}
           <SummaryCard title="What it includes">
             <p>
               Download formats:{" "}

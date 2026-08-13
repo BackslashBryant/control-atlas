@@ -14,7 +14,7 @@ import { ResourceIdentityMark } from "../components/CommonsResourceCard";
 import { AppLink } from "../components/AppLink";
 import type { CommonsResource } from "../lib/commonsTypes";
 import { serializeHashLocation } from "../lib/hashRoutes";
-import { resourceAccessLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
+import { resourceAccessLabel, resourceFieldLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
 import { taxonomyTagsForResource } from "../../shared/record-taxonomy.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
@@ -24,10 +24,6 @@ type Props = {
   viewState: ViewState;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 };
-
-function display(value: string) {
-  return value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
-}
 
 function EvidenceCopy({ section }: { section?: { status: string; text: string; sourceUrl: string } }) {
   if (!section) return null;
@@ -103,7 +99,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
                 <div className="resource-detail-media">{resource.media.items.map((item) => <figure key={`${item.url}-${item.sha256}`}><img alt={item.alt} height={item.height} loading="lazy" src={item.url} width={item.width} /><figcaption>Publisher image from commit {item.commitSha.slice(0, 7)} / {item.width}x{item.height} / {item.license}. <a href={item.sourceUrl} rel="noopener noreferrer" target="_blank">Source</a></figcaption></figure>)}</div>
               </DetailSection>
             ) : resource.resourceType === "tool" ? <DetailSection title="Screenshots"><p>{resource.media?.reason || "No attributable publisher screenshot was available."}</p></DetailSection> : null}
-            <DetailSection title="Useful For"><div className="resource-detail-tags">{usefulFor.map((item) => <span key={item}>{display(item)}</span>)}</div></DetailSection>
+            <DetailSection title="Useful For"><div className="resource-detail-tags">{usefulFor.map((item) => <span key={item}>{resourceFieldLabel(item)}</span>)}</div></DetailSection>
             {taxonomyTags.length ? (
               <DetailSection title="Governed discovery tags">
                 <p>These tags come only from reviewed structured resource fields. They open the matching Library context; they do not claim that a framework applies to this resource.</p>
@@ -138,7 +134,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
               </>
             ) : null}
             <DetailSection title="Access">
-              <dl className="resource-detail-facts"><div><dt>Access</dt><dd>{resourceAccessLabel(resource)}</dd></div><div><dt>Cost</dt><dd>{display(resource.costType)}</dd></div><div><dt>Status</dt><dd>{display(resource.officialStatus || resource.resourceLane)}</dd></div></dl>
+              <dl className="resource-detail-facts"><div><dt>Access type</dt><dd>{resourceAccessLabel(resource)}</dd></div><div><dt>Cost</dt><dd>{resourceFieldLabel(resource.costType)}</dd></div><div><dt>Status</dt><dd>{resourceFieldLabel(resource.officialStatus || resource.resourceLane)}</dd></div></dl>
               <p>{resource.publicAccessNotes}</p>
             </DetailSection>
             <DetailSection title="Links">
@@ -161,7 +157,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
               <AppLink className="resource-library-search" onNavigate={onNavigate} patch={{ query: resource.frameworks[0] || resource.programs?.[0] || resource.shortName }} view="search"><IconBook2 aria-hidden="true" size={16} />Search the Library</AppLink>
             </DetailSection>
             <DetailSection title="Maintenance">
-              <dl className="resource-detail-facts stacked"><div><dt>Release</dt><dd>{resource.currentVersion || (resource.toolProfile?.release.status === "not_published" ? "No published GitHub release" : "Not documented")}</dd></div><div><dt>Maintenance</dt><dd>{display(resource.maintenanceStatus)}</dd></div><div><dt>License</dt><dd>{resource.license || "Not documented"}</dd></div><div><dt>Last repository activity</dt><dd>{resource.lastCommitAt || resource.publisherUpdatedAt || "Not documented"}</dd></div><div><dt>Last checked</dt><dd>{resource.lastCheckedAt}</dd></div><div><dt>Next review</dt><dd>{resource.nextCheckAt || "Not scheduled"}</dd></div><div><dt>Method</dt><dd>{display(resource.verificationMethod || "manual review")}</dd></div></dl>
+              <dl className="resource-detail-facts stacked"><div><dt>Release</dt><dd>{resource.currentVersion || (resource.toolProfile?.release.status === "not_published" ? "No published GitHub release" : "Not documented")}</dd></div><div><dt>Maintenance</dt><dd>{resourceFieldLabel(resource.maintenanceStatus)}</dd></div><div><dt>License</dt><dd>{resource.license || "Not documented"}</dd></div><div><dt>Last repository activity</dt><dd>{resource.lastCommitAt || resource.publisherUpdatedAt || "Not documented"}</dd></div><div><dt>Last checked</dt><dd>{resource.lastCheckedAt}</dd></div><div><dt>Next review</dt><dd>{resource.nextCheckAt || "Not scheduled"}</dd></div><div><dt>Method</dt><dd>{resourceFieldLabel(resource.verificationMethod || "manual_review")}</dd></div></dl>
               {resource.repositoryEvidence ? <p className="resource-detail-evidence"><a href={resource.repositoryEvidence.commitUrl} rel="noopener noreferrer" target="_blank">Evidence commit {resource.repositoryEvidence.commitSha.slice(0, 7)} <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}
             </DetailSection>
           </aside>

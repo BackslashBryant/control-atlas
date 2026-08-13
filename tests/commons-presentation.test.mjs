@@ -13,6 +13,7 @@ import {
   RESOURCE_BRAND_REGISTRY,
   RESOURCE_TYPE_FALLBACKS,
   resourceAccessLabel,
+  resourceFieldLabel,
   resourceBrandIdentity,
   resourceTypeLabel,
 } from "../src/ui/lib/resourceBrands.mjs";
@@ -348,6 +349,25 @@ test("resource type and access labels never expose raw schema enums", () => {
   assert.equal(resourceTypeLabel("community_forum"), "Community or forum");
   assert.equal(resourceTypeLabel("historical_reference"), "Historical reference");
   assert.equal(resourceAccessLabel({ accessType: "public" }), "Public");
+  assert.equal(resourceFieldLabel("active"), "Active");
+  assert.equal(resourceFieldLabel("general_it"), "General IT");
+  assert.equal(resourceFieldLabel("public_url"), "Public URL");
+  assert.equal(resourceFieldLabel("Agency ISSO"), "Agency ISSO");
+  assert.equal(resourceFieldLabel("FedRAMP PMO"), "FedRAMP PMO");
+  assert.equal(resourceFieldLabel("DevSecOps services"), "DevSecOps Services");
+  assert.equal(resourceFieldLabel("CUI"), "CUI");
+  assert.equal(resourceFieldLabel("OSCAL"), "OSCAL");
+  assert.equal(resourceFieldLabel("SCAP"), "SCAP");
+  assert.equal(resourceFieldLabel("SIEM"), "SIEM");
+  for (const resource of resources) {
+    for (const field of ["maintenanceStatus", "verificationMethod", "resourceLane", "officialStatus", "costType"]) {
+      const raw = resource[field];
+      if (!raw) continue;
+      const label = resourceFieldLabel(raw);
+      assert.ok(label.length > 0, `${resource.id}/${field}`);
+      assert.equal(label.includes("_"), false, `${resource.id}/${field}: ${label}`);
+    }
+  }
   assert.equal(
     resourceAccessLabel({ accessType: "free_account" }),
     "Free account required",

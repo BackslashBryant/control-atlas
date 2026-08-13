@@ -41,6 +41,7 @@ import type { CompareCrosswalk, ViewState } from "../lib/viewState";
 import { Button, Panel } from "../components/lsm";
 import { AppLink } from "../components/AppLink";
 import { RecordLink } from "../components/RecordLink";
+import { ContextualTaxonomyLinks, TaxonomyTagLinks } from "../components/ContextualTaxonomyLinks";
 
 function downloadTextFile(filename: string, content: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
@@ -52,6 +53,13 @@ function downloadTextFile(filename: string, content: string, mimeType: string) {
   anchor.click();
   anchor.remove();
   URL.revokeObjectURL(url);
+}
+
+function relationshipTagIds(row: any) {
+  return [
+    ...(row.from_taxonomy_tags || []).map((tag: any) => tag.id),
+    ...(row.to_taxonomy_tags || []).map((tag: any) => tag.id),
+  ].filter(Boolean);
 }
 
 
@@ -853,6 +861,15 @@ export function ComparePage(props: {
                                     <div><dt>Official rationale</dt><dd>{row.rationale || "No public rationale recorded."}</dd></div>
                                     <div><dt>{row.navigation_note ? "Navigation note" : "Relationship explanation"}</dt><dd>{row.navigation_note || "No product-authored navigation note."}</dd></div>
                                     <div><dt>Source references</dt><dd><SourceRefList refs={row.source_refs} /></dd></div>
+                                    {relationshipTagIds(row).length ? <div>
+                                      <dt>Governed record tags</dt>
+                                      <dd>
+                                        <TaxonomyTagLinks
+                                          onNavigate={onNavigate}
+                                          tagIds={relationshipTagIds(row)}
+                                        />
+                                      </dd>
+                                    </div> : null}
                                   </dl>
                                 </details>
                               </td>
@@ -1014,6 +1031,13 @@ export function ComparePage(props: {
                 : ""}
             </p>
           </WorkbenchControlSurface>
+          <ContextualTaxonomyLinks
+            catalogIds={[chainCatalogId]}
+            contextLabel="the current STIG or SRG comparison"
+            onNavigate={onNavigate}
+            runtime={bundle.runtime}
+            subjectLabel="comparison"
+          />
           {chainPayload?.rows?.length ? (
             <div className="stack">
               <CompareExportDisclosure

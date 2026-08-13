@@ -2,9 +2,15 @@
   "schema_version": "1.0",
   "generated_at": "2026-08-13T10:44:44.865Z",
   "taxonomy_coverage": {
-    "contract_version": "1.0.0",
+    "contract_version": "1.1.0",
     "record_count": 30365,
     "tagged_record_count": 15244,
+    "record_dimension_decision_count": 182190,
+    "decision_counts": {
+      "applicable": 28845,
+      "not_applicable": 0,
+      "unreviewed": 153345
+    },
     "catalogs": [
       {
         "catalog_id": "cmmc-2",
@@ -12,7 +18,44 @@
         "record_count": 3,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "csf-2",
@@ -20,7 +63,44 @@
         "record_count": 134,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "cui-policy",
@@ -28,7 +108,44 @@
         "record_count": 128,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "disa-cci",
@@ -36,7 +153,44 @@
         "record_count": 5137,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "disa-srg",
@@ -45,8 +199,42 @@
         "tagged_record_count": 1613,
         "tag_assignments": 1876,
         "dimensions": {
-          "asset_class": 1850,
-          "environment": 26
+          "asset_class": {
+            "applicable_record_count": 1587,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 929,
+            "tag_assignments": 1850
+          },
+          "environment": {
+            "applicable_record_count": 26,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2490,
+            "tag_assignments": 26
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          }
         }
       },
       {
@@ -56,11 +244,42 @@
         "tagged_record_count": 12788,
         "tag_assignments": 28919,
         "dimensions": {
-          "asset_class": 8786,
-          "vendor_brand": 9241,
-          "technology": 7084,
-          "product": 3179,
-          "environment": 629
+          "asset_class": {
+            "applicable_record_count": 7544,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 9477,
+            "tag_assignments": 8786
+          },
+          "environment": {
+            "applicable_record_count": 629,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16392,
+            "tag_assignments": 629
+          },
+          "technology": {
+            "applicable_record_count": 5737,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11284,
+            "tag_assignments": 7084
+          },
+          "vendor_brand": {
+            "applicable_record_count": 9241,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7780,
+            "tag_assignments": 9241
+          },
+          "product": {
+            "applicable_record_count": 3179,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13842,
+            "tag_assignments": 3179
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          }
         }
       },
       {
@@ -69,7 +288,44 @@
         "record_count": 13,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "dod-zt",
@@ -77,7 +333,44 @@
         "record_count": 320,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "fedramp-rev5",
@@ -85,7 +378,44 @@
         "record_count": 4,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "fips-199",
@@ -93,7 +423,44 @@
         "record_count": 3,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "fips-200",
@@ -101,7 +468,44 @@
         "record_count": 17,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "microsoft-zt-maturity",
@@ -110,7 +514,42 @@
         "tagged_record_count": 11,
         "tag_assignments": 11,
         "dimensions": {
-          "asset_class": 11
+          "asset_class": {
+            "applicable_record_count": 11,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 57,
+            "tag_assignments": 11
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 68,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 68,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 68,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 68,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 68,
+            "tag_assignments": 0
+          }
         }
       },
       {
@@ -119,7 +558,44 @@
         "record_count": 712,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "mitre-attack-ics",
@@ -127,7 +603,44 @@
         "record_count": 109,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "mitre-d3fend",
@@ -135,7 +648,44 @@
         "record_count": 278,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "nist-800-171",
@@ -143,7 +693,44 @@
         "record_count": 147,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "nist-800-171-rev2",
@@ -151,7 +738,44 @@
         "record_count": 124,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "nist-800-172",
@@ -159,7 +783,44 @@
         "record_count": 132,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "nist-800-37",
@@ -167,7 +828,44 @@
         "record_count": 7,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "nist-800-53",
@@ -176,8 +874,42 @@
         "tagged_record_count": 59,
         "tag_assignments": 118,
         "dimensions": {
-          "asset_class": 59,
-          "domain": 59
+          "asset_class": {
+            "applicable_record_count": 59,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1157,
+            "tag_assignments": 59
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1216,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1216,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1216,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1216,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 59,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1157,
+            "tag_assignments": 59
+          }
         }
       },
       {
@@ -186,7 +918,44 @@
         "record_count": 1034,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "nist-800-53b",
@@ -194,7 +963,44 @@
         "record_count": 4,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "nist-ai-rmf",
@@ -202,7 +1008,44 @@
         "record_count": 91,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "nist-iot-cybersecurity",
@@ -211,7 +1054,42 @@
         "tagged_record_count": 489,
         "tag_assignments": 489,
         "dimensions": {
-          "asset_class": 489
+          "asset_class": {
+            "applicable_record_count": 489,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 0,
+            "tag_assignments": 489
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 489,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 489,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 489,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 489,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 489,
+            "tag_assignments": 0
+          }
         }
       },
       {
@@ -221,7 +1099,42 @@
         "tagged_record_count": 268,
         "tag_assignments": 314,
         "dimensions": {
-          "asset_class": 314
+          "asset_class": {
+            "applicable_record_count": 268,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 0,
+            "tag_assignments": 314
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 268,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 268,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 268,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 268,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 268,
+            "tag_assignments": 0
+          }
         }
       },
       {
@@ -230,7 +1143,44 @@
         "record_count": 46,
         "tagged_record_count": 0,
         "tag_assignments": 0,
-        "dimensions": {}
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "catalog_id": "nist-zt",
@@ -239,8 +1189,42 @@
         "tagged_record_count": 16,
         "tag_assignments": 16,
         "dimensions": {
-          "environment": 11,
-          "asset_class": 5
+          "asset_class": {
+            "applicable_record_count": 5,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 339,
+            "tag_assignments": 5
+          },
+          "environment": {
+            "applicable_record_count": 11,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 333,
+            "tag_assignments": 11
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 344,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 344,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 344,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 344,
+            "tag_assignments": 0
+          }
         }
       }
     ],
@@ -249,298 +1233,1987 @@
         "record_type": "assessment_procedure",
         "record_count": 1014,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "attack_technique",
         "record_count": 794,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "baseline",
         "record_count": 8,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "category",
         "record_count": 22,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "control",
         "record_count": 324,
         "tagged_record_count": 23,
-        "tag_assignments": 46
+        "tag_assignments": 46,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 23,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 301,
+            "tag_assignments": 23
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 324,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 324,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 324,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 324,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 23,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 301,
+            "tag_assignments": 23
+          }
+        }
       },
       {
         "record_type": "control_enhancement",
         "record_count": 872,
         "tagged_record_count": 36,
-        "tag_assignments": 72
+        "tag_assignments": 72,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 36,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 836,
+            "tag_assignments": 36
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 872,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 872,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 872,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 872,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 36,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 836,
+            "tag_assignments": 36
+          }
+        }
       },
       {
         "record_type": "defend_countermeasure",
         "record_count": 271,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "family",
         "record_count": 88,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "function",
         "record_count": 6,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "group",
         "record_count": 25,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "impact_category",
         "record_count": 3,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "iot_capability",
         "record_count": 11,
         "tagged_record_count": 11,
-        "tag_assignments": 11
+        "tag_assignments": 11,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 11,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 0,
+            "tag_assignments": 11
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "iot_capability_domain",
         "record_count": 2,
         "tagged_record_count": 2,
-        "tag_assignments": 2
+        "tag_assignments": 2,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 2,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 0,
+            "tag_assignments": 2
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "iot_capability_element",
         "record_count": 243,
         "tagged_record_count": 243,
-        "tag_assignments": 243
+        "tag_assignments": 243,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 243,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 0,
+            "tag_assignments": 243
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 243,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 243,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 243,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 243,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 243,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "iot_capability_subelement",
         "record_count": 181,
         "tagged_record_count": 181,
-        "tag_assignments": 181
+        "tag_assignments": 181,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 181,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 0,
+            "tag_assignments": 181
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 181,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 181,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 181,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 181,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 181,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "iot_subcapability",
         "record_count": 52,
         "tagged_record_count": 52,
-        "tag_assignments": 52
+        "tag_assignments": 52,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 52,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 0,
+            "tag_assignments": 52
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "mobile_threat",
         "record_count": 236,
         "tagged_record_count": 236,
-        "tag_assignments": 282
+        "tag_assignments": 282,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 236,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 0,
+            "tag_assignments": 282
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 236,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 236,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 236,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 236,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 236,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "mobile_threat_category",
         "record_count": 32,
         "tagged_record_count": 32,
-        "tag_assignments": 32
+        "tag_assignments": 32,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 32,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 0,
+            "tag_assignments": 32
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 32,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 32,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 32,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 32,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 32,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "policy",
         "record_count": 128,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "program",
         "record_count": 3,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "requirement",
         "record_count": 5740,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "rmf_step",
         "record_count": 7,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "srg_requirement",
         "record_count": 2516,
         "tagged_record_count": 1613,
-        "tag_assignments": 1876
+        "tag_assignments": 1876,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 1587,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 929,
+            "tag_assignments": 1850
+          },
+          "environment": {
+            "applicable_record_count": 26,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2490,
+            "tag_assignments": 26
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "stig_rule",
         "record_count": 17021,
         "tagged_record_count": 12788,
-        "tag_assignments": 28919
+        "tag_assignments": 28919,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 7544,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 9477,
+            "tag_assignments": 8786
+          },
+          "environment": {
+            "applicable_record_count": 629,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16392,
+            "tag_assignments": 629
+          },
+          "technology": {
+            "applicable_record_count": 5737,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11284,
+            "tag_assignments": 7084
+          },
+          "vendor_brand": {
+            "applicable_record_count": 9241,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7780,
+            "tag_assignments": 9241
+          },
+          "product": {
+            "applicable_record_count": 3179,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13842,
+            "tag_assignments": 3179
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "tactic",
         "record_count": 34,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_activity",
         "record_count": 257,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_assessment_question",
         "record_count": 62,
         "tagged_record_count": 11,
-        "tag_assignments": 11
+        "tag_assignments": 11,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 11,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 51,
+            "tag_assignments": 11
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 62,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 62,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 62,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 62,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 62,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_build",
         "record_count": 19,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_capability",
         "record_count": 45,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_cloud_native_requirement",
         "record_count": 11,
         "tagged_record_count": 9,
-        "tag_assignments": 9
+        "tag_assignments": 9,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 5,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 5
+          },
+          "environment": {
+            "applicable_record_count": 4,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 4
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_collaborator",
         "record_count": 24,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_document",
         "record_count": 6,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_logical_component",
         "record_count": 11,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_mapping_contributor",
         "record_count": 16,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_mapping_document",
         "record_count": 4,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_pillar",
         "record_count": 13,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_product_component",
         "record_count": 197,
         "tagged_record_count": 7,
-        "tag_assignments": 7
+        "tag_assignments": 7,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 197,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 7,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 190,
+            "tag_assignments": 7
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 197,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 197,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 197,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 197,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_publication",
         "record_count": 3,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_reference_component",
         "record_count": 52,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          }
+        }
       },
       {
         "record_type": "zt_tenet",
         "record_count": 12,
         "tagged_record_count": 0,
-        "tag_assignments": 0
+        "tag_assignments": 0,
+        "dimensions": {
+          "asset_class": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          },
+          "environment": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          },
+          "technology": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          },
+          "vendor_brand": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          },
+          "product": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          },
+          "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          }
+        }
       }
     ],
     "dimensions": [
       {
         "dimension": "asset_class",
         "label": "Asset and system",
-        "record_count": 9963,
+        "record_count": 30365,
+        "applicable_record_count": 9963,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 20402,
         "tag_assignments": 11514
       },
       {
         "dimension": "environment",
         "label": "Environment",
-        "record_count": 666,
+        "record_count": 30365,
+        "applicable_record_count": 666,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 29699,
         "tag_assignments": 666
       },
       {
         "dimension": "technology",
         "label": "Technology",
-        "record_count": 5737,
+        "record_count": 30365,
+        "applicable_record_count": 5737,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 24628,
         "tag_assignments": 7084
       },
       {
         "dimension": "vendor_brand",
         "label": "Vendor",
-        "record_count": 9241,
+        "record_count": 30365,
+        "applicable_record_count": 9241,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 21124,
         "tag_assignments": 9241
       },
       {
         "dimension": "product",
         "label": "Product",
-        "record_count": 3179,
+        "record_count": 30365,
+        "applicable_record_count": 3179,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 27186,
         "tag_assignments": 3179
       },
       {
         "dimension": "domain",
         "label": "Security domain",
-        "record_count": 59,
+        "record_count": 30365,
+        "applicable_record_count": 59,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 30306,
         "tag_assignments": 59
       }
     ],
     "source_fields": [
       {
         "source_field": "metadata.benchmark_title",
+        "record_count": 11684,
         "tag_assignments": 23170
       },
       {
         "source_field": "metadata.identity_category",
+        "record_count": 7028,
         "tag_assignments": 7766
       },
       {
         "source_field": "catalog_id",
+        "record_count": 689,
         "tag_assignments": 689
       },
       {
         "source_field": "family",
+        "record_count": 59,
         "tag_assignments": 118
       }
-    ]
+    ],
+    "source_basis": [
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.benchmark_title",
+        "rule": "explicit-publisher-title-prefix",
+        "record_count": 9241,
+        "tag_assignments": 9241
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.benchmark_title",
+        "rule": "explicit-operating-system-term",
+        "record_count": 5694,
+        "tag_assignments": 5694
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.benchmark_title",
+        "rule": "explicit-product-title",
+        "record_count": 3179,
+        "tag_assignments": 3179
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.benchmark_title",
+        "rule": "explicit-server-term",
+        "record_count": 2584,
+        "tag_assignments": 2584
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.identity_category",
+        "rule": "explicit-network-device-term",
+        "record_count": 2390,
+        "tag_assignments": 2390
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.identity_category",
+        "rule": "explicit-mobile-term",
+        "record_count": 1490,
+        "tag_assignments": 1490
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.identity_category",
+        "rule": "explicit-application-term",
+        "record_count": 1218,
+        "tag_assignments": 1218
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.identity_category",
+        "rule": "explicit-virtualization-term",
+        "record_count": 1176,
+        "tag_assignments": 1176
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.identity_category",
+        "rule": "explicit-database-term",
+        "record_count": 997,
+        "tag_assignments": 997
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.benchmark_title",
+        "rule": "explicit-ios-term",
+        "record_count": 827,
+        "tag_assignments": 827
+      },
+      {
+        "taxonomy_layer": "publisher",
+        "assignment_provenance": "publisher",
+        "source_field": "catalog_id",
+        "rule": "publisher-catalog-scope",
+        "record_count": 689,
+        "tag_assignments": 689
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.benchmark_title",
+        "rule": "explicit-cloud-term",
+        "record_count": 666,
+        "tag_assignments": 666
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.benchmark_title",
+        "rule": "explicit-android-term",
+        "record_count": 520,
+        "tag_assignments": 520
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.benchmark_title",
+        "rule": "explicit-workstation-platform-term",
+        "record_count": 416,
+        "tag_assignments": 416
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.identity_category",
+        "rule": "explicit-container-term",
+        "record_count": 407,
+        "tag_assignments": 407
+      },
+      {
+        "taxonomy_layer": "publisher",
+        "assignment_provenance": "publisher",
+        "source_field": "family",
+        "rule": "exact-publisher-family",
+        "record_count": 59,
+        "tag_assignments": 118
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.identity_category",
+        "rule": "explicit-identity-term",
+        "record_count": 88,
+        "tag_assignments": 88
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "metadata.benchmark_title",
+        "rule": "explicit-active-directory-term",
+        "record_count": 43,
+        "tag_assignments": 43
+      }
+    ],
+    "not_applicable_source_basis": []
   }
 }

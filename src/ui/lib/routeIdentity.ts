@@ -5,6 +5,7 @@ import {
   isValidBuildFormat,
   isValidBuildSourceContext,
 } from "./buildRouteState";
+import { TAXONOMY_TAG_BY_ID } from "../../shared/taxonomy-contract.mjs";
 
 export type RouteIdentity = {
   path: string;
@@ -124,7 +125,7 @@ const ATLAS_PARAMS = new Set([
   "atlasStage", "relationshipGroup", "sourceView", "showSupportingReferences",
   "showDraftOrLegacy", "showRegistryOnly",
 ]);
-const SEARCH_PARAMS = new Set(["q", "filter", "publisher", "kind", "connectedOnly", "sort", "view", "area"]);
+const SEARCH_PARAMS = new Set(["q", "filter", "publisher", "kind", "connectedOnly", "sort", "view", "area", "tag"]);
 const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "area", "publisher", "lifecycle", "page"]);
 const DETAIL_PARAMS = new Set<string>();
 const START_PARAMS = new Set(["goal", "context"]);
@@ -145,6 +146,7 @@ function normalizedPath(input: string): { path: string; params: URLSearchParams 
 
 function permittedParams(params: URLSearchParams, permitted: Set<string>): { params: URLSearchParams; discarded: boolean } {
   const next = new URLSearchParams();
+  const tags = new Set<string>();
   let discarded = false;
   for (const [key, value] of params) {
     if (!permitted.has(key) || value.length > 240) {
@@ -189,8 +191,17 @@ function permittedParams(params: URLSearchParams, permitted: Set<string>): { par
       discarded = true;
       continue;
     }
+    if (key === "tag") {
+      if (!TAXONOMY_TAG_BY_ID.has(value)) {
+        discarded = true;
+        continue;
+      }
+      tags.add(value);
+      continue;
+    }
     next.set(key, value);
   }
+  for (const tag of [...tags].sort()) next.append("tag", tag);
   return { params: next, discarded };
 }
 

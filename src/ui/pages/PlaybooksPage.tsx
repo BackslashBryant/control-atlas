@@ -23,13 +23,14 @@ import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { Panel } from "../components/lsm";
 import { AppLink } from "../components/AppLink";
 import { BucketTag } from "../components/TaxonomyTag";
+import { TaxonomyTagLinks } from "../components/ContextualTaxonomyLinks";
 import { PageHeader, SummaryCard } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
 const GUIDE_PRESENTATION: Record<
   string,
-  { area: string; Icon: typeof IconFlag }
+  { area: string; Icon: typeof IconFlag; tagIds?: string[] }
 > = Object.freeze({
   "starting-an-authorization": { area: "Governance", Icon: IconFlag },
   "understanding-rmf": { area: "Governance", Icon: IconRoute },
@@ -41,7 +42,7 @@ const GUIDE_PRESENTATION: Record<
   "continuous-monitoring": { area: "Operations", Icon: IconActivityHeartbeat },
   "inheritance-and-common-controls": { area: "Architecture", Icon: IconHierarchy3 },
   reciprocity: { area: "Governance", Icon: IconArrowsExchange },
-  "cloud-and-shared-responsibility": { area: "Architecture", Icon: IconCloud },
+  "cloud-and-shared-responsibility": { area: "Architecture", Icon: IconCloud, tagIds: ["environment.cloud"] },
   "stig-lifecycle": { area: "Implementation", Icon: IconShieldCheck },
 });
 
@@ -54,6 +55,7 @@ export function PlaybooksPage(props: {
 }) {
   const { state, onNavigate } = props;
   const selected = learnArticleById(state.pattern);
+  const selectedPresentation = selected ? GUIDE_PRESENTATION[selected.id] : null;
 
   if (!selected) {
     return (
@@ -157,6 +159,15 @@ export function PlaybooksPage(props: {
             ))}
           </ul>
         </section>
+        {selectedPresentation?.tagIds?.length ? (
+          <section className="ca-contextual-taxonomy" aria-label={`Related Library tags for ${selected.title}`}>
+            <h3>Explore related Library records</h3>
+            <p>
+              This is an editorial entry point based on the guide topic. It does not classify the guide or claim that every tagged record applies to your system.
+            </p>
+            <TaxonomyTagLinks onNavigate={onNavigate} tagIds={selectedPresentation.tagIds} />
+          </section>
+        ) : null}
         <AppLink
           onNavigate={onNavigate}
           patch={selected.nextAction.patch as Partial<ViewState> | undefined}

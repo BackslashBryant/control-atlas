@@ -233,6 +233,24 @@ test("Sources layer state survives canonicalization and rejects unknown layers",
   assert.match(invalid.recoveryMessage, /removed/i);
 });
 
+test("Library taxonomy parameters remain repeatable, stable, and fail closed", () => {
+  const valid = canonicalizeHashLocation(
+    "/library?tag=vendor.microsoft&tag=asset.server&tag=vendor.microsoft",
+  );
+  assert.equal(
+    valid.canonicalPath,
+    "/library?tag=asset.server&tag=vendor.microsoft",
+  );
+  assert.equal(valid.requiresReplace, true);
+  assert.equal(valid.recoveryMessage, "");
+
+  const invalid = canonicalizeHashLocation(
+    "/library?tag=asset.server&tag=editorial.unreviewed",
+  );
+  assert.equal(invalid.canonicalPath, "/library?tag=asset.server");
+  assert.match(invalid.recoveryMessage, /unsupported link settings/i);
+});
+
 test("unrecognized retired aliases remain honest not-found routes", () => {
   for (const path of [
     "/menu", "/home", "/start-here", "/atlas-map", "/map", "/browse",

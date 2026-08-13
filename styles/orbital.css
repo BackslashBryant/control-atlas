@@ -1720,9 +1720,9 @@ details > summary {
   font: 400 var(--ca-text-sm) / 1.5 var(--ca-font-body);
 }
 
-/* The three primary destinations fit from 1024px upward. Below that, one
-   navigation sheet owns both primary destinations and overflow pages. */
-@media (max-width: 1023px) {
+/* Six primary destinations plus Search fit from 1200px upward. Below that,
+   one navigation sheet owns both primary destinations and overflow pages. */
+@media (max-width: 1199px) {
   .site-header {
     background: var(--ca-surface-deep);
     backdrop-filter: none;

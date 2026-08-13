@@ -1266,6 +1266,79 @@ test("runtime filters library documents by keyword and facets", () => {
   );
 });
 
+test("runtime applies governed taxonomy facets before the result cap and returns full contextual counts", () => {
+  const fields = [
+    "id",
+    "item_id",
+    "title",
+    "object_type",
+    "source_class",
+    "catalog_id",
+    "publisher_name",
+    "published_connection_count",
+    "taxonomy_tags",
+  ];
+  const documents = Array.from({ length: 120 }, (_, index) => ({
+    id: `test:FILLER-${index}`,
+    item_id: `FILLER-${index}`,
+    title: `Filler ${index}`,
+    object_type: "control",
+    source_class: "federal_published",
+    catalog_id: "test",
+    publisher_name: "Test",
+    published_connection_count: 0,
+    taxonomy_tags: [],
+  }));
+  documents.push(
+    {
+      ...documents[0],
+      id: "test:SERVER-MS",
+      item_id: "SERVER-MS",
+      taxonomy_tags: [{ id: "asset.server" }, { id: "vendor.microsoft" }],
+    },
+    {
+      ...documents[0],
+      id: "test:WORKSTATION-MS",
+      item_id: "WORKSTATION-MS",
+      taxonomy_tags: [{ id: "asset.workstation" }, { id: "vendor.microsoft" }],
+    },
+    {
+      ...documents[0],
+      id: "test:SERVER-LINUX",
+      item_id: "SERVER-LINUX",
+      taxonomy_tags: [{ id: "asset.server" }, { id: "vendor.linux" }],
+    },
+  );
+  const runtime = createFederalGraphRuntime({
+    sources: [],
+    nodes: [],
+    edges: [],
+    evidence: [],
+    findings: [],
+    librarySearch: {
+      indexed_transport: {
+        format: "columns-v1",
+        fields,
+        columns: fields.map((field) => documents.map((document) => document[field])),
+      },
+    },
+  });
+
+  assert.equal(runtime.searchLibrary("").length, 100);
+  assert.deepEqual(
+    runtime.searchLibrary("", { taxonomy_tag_groups: [["asset.server"]] }).map((entry) => entry.id),
+    ["test:SERVER-LINUX", "test:SERVER-MS"],
+  );
+  assert.equal(
+    runtime.getLibraryTagContext("", {
+      taxonomy_tag_groups: [["asset.server", "asset.workstation"], ["vendor.microsoft"]],
+    }).result_count,
+    2,
+  );
+  assert.equal(runtime.getLibraryTagContext("", {}).result_count, 123);
+  assert.equal(runtime.getLibraryTagContext("", {}).tags["asset.server"], 2);
+});
+
 test("runtime builds relationship rows and hides inferred candidates by default", () => {
   const runtime = createFederalGraphRuntime(fixture);
 

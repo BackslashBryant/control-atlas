@@ -23,7 +23,7 @@ import {
   areaPresentationForCatalog,
 } from "../lib/areaVisualLanguage";
 import { buildCatalogCoverageList, catalogCoverageForId, isLowCatalogCoverage } from "../lib/catalogCoverage";
-import { LIBRARY_KINDS, libraryKindForRawType, libraryKindLabel } from "../lib/informationArchitecture";
+import { LIBRARY_KINDS, libraryKindForRawType, libraryKindLabel, rawTypesForKind } from "../lib/informationArchitecture";
 import {
   TAXONOMY_CONTRACT,
   TAXONOMY_TAG_BY_ID,
@@ -43,25 +43,16 @@ import type { ViewState } from "../lib/viewState";
 
 type SearchState = Extract<ViewState, { view: "search" }>;
 
-function documentTaxonomyTags(document: any) {
-  return (document.metadata?.taxonomy_tags || document.taxonomy_tags || [])
-    .filter((tag: any) => tag?.id && tag?.kind);
-}
-
-function matchesTagSelection(document: any, selected: string[]) {
-  const required = new Map<string, Set<string>>();
+function taxonomyTagGroups(selected: string[]) {
+  const groups = new Map<string, string[]>();
   for (const id of selected) {
     const definition = TAXONOMY_TAG_BY_ID.get(id);
     if (!definition) continue;
-    const values = required.get(definition.dimension) || new Set<string>();
-    values.add(id);
-    required.set(definition.dimension, values);
+    const values = groups.get(definition.dimension) || [];
+    values.push(id);
+    groups.set(definition.dimension, values);
   }
-  if (!required.size) return true;
-  const documentTags = new Set(documentTaxonomyTags(document).map((tag: any) => tag.id));
-  return [...required.values()].every((alternatives) =>
-    [...alternatives].some((id) => documentTags.has(id)),
-  );
+  return [...groups.values()];
 }
 
 function matchReasonFor(document: any, query: string): string {
@@ -137,26 +128,29 @@ export function ExplorePage(props: {
     return () => window.cancelAnimationFrame(frame);
   }, [searchStarted, state.area, state.connectedOnly, state.filter, state.kind, state.publisher, state.query, state.sort]);
 
-  const documentsBeforeTags = useMemo(() => {
+  const baseLibraryFilters = useMemo(() => ({
+    catalog_id: state.filter || undefined,
+    catalog_ids: selectedAreaCatalogIds,
+    connected_only: connectedOnly,
+    object_types: state.kind ? [...rawTypesForKind(state.kind)] : [],
+    publisher_name: state.publisher || undefined,
+  }), [connectedOnly, selectedAreaCatalogIds, state.filter, state.kind, state.publisher]);
+
+  const documents = useMemo(() => {
     if (!searchStarted) return [];
     return bundle.runtime.searchLibrary(state.query, {
-      catalog_id: state.filter || undefined,
-      catalog_ids: selectedAreaCatalogIds,
-      publisher_name: state.publisher || undefined,
-    }).filter((document: any) => {
-      const area = areaPresentationForCatalog(document.catalog_id);
-      if (!area) return false;
-      if (state.kind && libraryKindForRawType(document.object_type) !== state.kind) return false;
-      if (state.area && area?.id !== state.area) return false;
-      if (connectedOnly && Number(document.published_connection_count || 0) === 0) return false;
-      return true;
+      ...baseLibraryFilters,
+      taxonomy_tag_groups: taxonomyTagGroups(state.tags),
     });
-  }, [bundle.runtime, connectedOnly, searchStarted, selectedAreaCatalogIds, state.area, state.filter, state.kind, state.publisher, state.query]);
+  }, [baseLibraryFilters, bundle.runtime, searchStarted, state.query, state.tags]);
 
-  const documents = useMemo(
-    () => documentsBeforeTags.filter((document: any) => matchesTagSelection(document, state.tags)),
-    [documentsBeforeTags, state.tags],
-  );
+  const resultContext = useMemo(() => {
+    if (!searchStarted) return { result_count: 0, tags: {} as Record<string, number> };
+    return (bundle.runtime as any).getLibraryTagContext?.(state.query, {
+      ...baseLibraryFilters,
+      taxonomy_tag_groups: taxonomyTagGroups(state.tags),
+    }) || { result_count: documents.length, tags: {} };
+  }, [baseLibraryFilters, bundle.runtime, documents.length, searchStarted, state.query, state.tags]);
 
   const rows = useMemo(() => {
     const prepared = documents.map((document: any) => {
@@ -228,27 +222,26 @@ export function ExplorePage(props: {
   })).filter((kind) => kind.count > 0), [libraryBrowseCounts]);
   const tagFacetOptions = useMemo(() => TAXONOMY_CONTRACT.dimensions.map((dimension) => {
     const selectedOutsideDimension = state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension !== dimension.id);
-    const contextualDocuments = documentsBeforeTags.filter((document: any) =>
-      matchesTagSelection(document, selectedOutsideDimension),
-    );
+    const contextualCounts = searchStarted
+      ? ((bundle.runtime as any).getLibraryTagContext?.(state.query, {
+          ...baseLibraryFilters,
+          taxonomy_tag_groups: taxonomyTagGroups(selectedOutsideDimension),
+        })?.tags || {})
+      : libraryBrowseCounts.tags || {};
     const options = TAXONOMY_CONTRACT.tags
       .filter((tag) => tag.dimension === dimension.id)
       .map((tag) => ({
         aliases: tag.aliases,
-        count: searchStarted
-          ? contextualDocuments.filter((document: any) =>
-              documentTaxonomyTags(document).some((recordTag: any) => recordTag.id === tag.id),
-            ).length
-          : Number(libraryBrowseCounts.tags?.[tag.id] || 0),
+        count: Number(contextualCounts[tag.id] || 0),
         label: tag.label,
         value: tag.id,
       }))
       .filter((tag) => tag.count > 0)
       .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label));
     return { ...dimension, options };
-  }), [documentsBeforeTags, libraryBrowseCounts, searchStarted, state.tags]);
+  }), [baseLibraryFilters, bundle.runtime, libraryBrowseCounts, searchStarted, state.query, state.tags]);
 
-  const mapItems: LibraryMapItem[] = useMemo(() => state.viewMode !== "map" ? [] : rows.map((row: any) => ({
+  const mapItems: LibraryMapItem[] = useMemo(() => state.viewMode !== "map" ? [] : rows.slice(0, 75).map((row: any) => ({
     id: row.document.id,
     kind: displayNameFor("object_type", row.document.object_type),
     label: row.identity,
@@ -402,7 +395,9 @@ export function ExplorePage(props: {
       purpose={SITE_COPY.routes.library.purpose}
       queryDraft={queryDraft}
       renderFacets={renderFacets}
-      resultCountLabel={`${rows.length.toLocaleString()} result${rows.length === 1 ? "" : "s"}`}
+      resultCountLabel={resultContext.result_count > rows.length
+        ? `Showing ${rows.length.toLocaleString()} of ${resultContext.result_count.toLocaleString()} results`
+        : `${resultContext.result_count.toLocaleString()} result${resultContext.result_count === 1 ? "" : "s"}`}
       resultsId="library-results"
       searchLabel="Filter results by ID, title, or topic"
       searchPlaceholder={SITE_COPY.product.searchPlaceholder}
