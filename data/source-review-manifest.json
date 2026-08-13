@@ -1,0 +1,491 @@
+{
+  "schema_version": "1.0",
+  "review_policy": {
+    "minimum_samples_per_catalog": 3,
+    "statement": "A disposition records a human comparison of representative normalized records with publisher material and a separate official-source currentness check. It does not convert parser or count reconciliation into semantic proof, and it keeps known remediation visible."
+  },
+  "catalogs": [
+    {
+      "catalog_id": "cmmc-2",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "LEVEL-1", "review_note": "Level 1 scope and FAR 52.204-21 dependency agree with 32 CFR 170.14(c)(2)." },
+        { "record_id": "LEVEL-2", "review_note": "Level 2 retains the regulation's NIST SP 800-171 Revision 2 basis; NIST Revision 3 does not silently replace the rule text." },
+        { "record_id": "LEVEL-3", "review_note": "Level 3 preserves the selected SP 800-172 requirement and DoD parameter context." }
+      ],
+      "official_sources": [
+        { "url": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-G/part-170/section-170.14", "supports": "Current CMMC level requirements and regulatory locators." }
+      ],
+      "rationale": "All three normalized level summaries were checked against the current regulation and retain the publisher's distinct dependency language.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "csf-2",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "GV.OC-01", "review_note": "Govern outcome, category, examples, and references preserve the CSF 2.0 structured record." },
+        { "record_id": "PR.AA-02", "review_note": "Identity proofing outcome and implementation examples agree with the publisher core." },
+        { "record_id": "RC.RP-06", "review_note": "Recovery completion outcome and examples agree with the publisher core." }
+      ],
+      "official_sources": [
+        { "url": "https://www.nist.gov/publications/nist-cybersecurity-framework-csf-20", "supports": "Current CSF 2.0 publication identity." },
+        { "url": "https://www.nist.gov/cyberframework", "supports": "Current CSF 2.0 resource center and structured resources." }
+      ],
+      "rationale": "Samples span Govern, Protect, and Recover and retain outcome prose plus source-provided examples and informative references.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "cui-policy",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "CUI-PROGRAM", "review_note": "Program purpose agrees with 32 CFR Part 2002." },
+        { "record_id": "CATEGORY-TERRORIST-SCREENING", "review_note": "Category grouping and LSCRN marking agree with the NARA registry." },
+        { "record_id": "CATEGORY-SENSITIVE-SECURITY-INFO", "review_note": "Transportation grouping, description, authorities, and SSI marking remain publisher-derived." }
+      ],
+      "official_sources": [
+        { "url": "https://www.ecfr.gov/current/title-32/subtitle-B/chapter-XX/part-2002", "supports": "Current CUI implementing regulation." },
+        { "url": "https://www.archives.gov/cui/registry/category-list", "supports": "Current authoritative category registry." }
+      ],
+      "rationale": "The policy root and two registry categories were compared with the regulation and live NARA registry, including markings and organizational grouping.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "disa-cci",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "CCI-000001", "review_note": "Legacy Revision 3 and later NIST references remain distinct rather than being collapsed." },
+        { "record_id": "CCI-002599", "review_note": "Requirement prose and Revision 4 MP-8 reference agree with the official CCI XML." },
+        { "record_id": "CCI-005169", "review_note": "Recent access-token requirement and Revision 5 IA-13(03)(f) reference agree with the official list." }
+      ],
+      "official_sources": [
+        { "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip", "supports": "Official DISA CCI XML and reference inventory." },
+        { "url": "https://www.cyber.mil/stigs/downloads/", "supports": "Current official DISA STIG and supporting-content download surface." }
+      ],
+      "rationale": "Samples cover the beginning, middle, and current end of the official list and preserve status, dates, contributor labels, and versioned NIST references.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "disa-srg",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "V-204636", "review_note": "AAA account-management requirement preserves check, fix, severity, and benchmark identity." },
+        { "record_id": "V-203616", "review_note": "Operating-system audit protection requirement remains tied to its SRG identifier." },
+        { "record_id": "V-279029", "review_note": "Current web-server support requirement preserves publisher rationale and severity." }
+      ],
+      "official_sources": [
+        { "url": "https://www.cyber.mil/stigs/downloads/", "supports": "Official current SRG/STIG packages and release inventory." }
+      ],
+      "rationale": "Samples span AAA, operating-system, and web-server SRGs and retain the ordered publisher check/fix fields without editorial rewriting.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "disa-stig",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "V-243466", "review_note": "Active Directory rule retains benchmark, rule, severity, check, and fix context." },
+        { "record_id": "V-223383", "review_note": "PowerPoint macro rule preserves policy semantics and publisher procedure order." },
+        { "record_id": "V-256609", "review_note": "Required regression: multiline rsyslog configuration, quotes, paths, glob characters, command pipeline, and line breaks match the V1R2 XCCDF content." }
+      ],
+      "official_sources": [
+        { "url": "https://www.cyber.mil/stigs/downloads/", "supports": "Official current and retained STIG packages." },
+        { "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_VMW_vSphere_7-0_Y23M07_STIG.zip", "supports": "Official package containing the reviewed V-256609 V1R2 record." }
+      ],
+      "rationale": "The review covers prose-heavy policy, application policy, and a configuration-sensitive rule. The corpus intentionally retains versioned historical releases alongside current packages.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "dod-rai",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "remediation_required",
+      "upstream_currentness_review": "refresh_required",
+      "representative_samples": [
+        { "record_id": "PRINCIPLE-MODULAR", "review_note": "The modular and tailorable principle agrees with the DoD release description." },
+        { "record_id": "SHIELD-SET", "review_note": "The Set activity remains clearly identified as a SHIELD lifecycle activity." },
+        { "record_id": "SHIELD-DETECT", "review_note": "Continuous-monitoring wording is consistent with the toolkit's lifecycle framing." }
+      ],
+      "official_sources": [
+        { "url": "https://www.ai.mil/Initiatives/Responsible-AI/index.html", "supports": "Current CDAO Responsible AI program and toolkit surface." },
+        { "url": "https://www.defense.gov/News/Releases/Release/Article/3588743/cdao-releases-responsible-ai-rai-toolkit-for-ensuring-alignment-with-rai-best-p/", "supports": "Official release describing the original modular, tailorable toolkit." }
+      ],
+      "rationale": "The normalized concepts agree with official DoD descriptions, but the registered artifact locator uses an AcqBot host rather than the current CDAO publisher surface.",
+      "follow_up": "Replace or qualify the AcqBot artifact locator and rehydrate from a current publisher-controlled toolkit artifact before calling the source current."
+    },
+    {
+      "catalog_id": "dod-zt",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "TENET-1", "review_note": "Hostile-environment tenet retains the reference-architecture wording and page locator." },
+        { "record_id": "ACT-4-7-4", "review_note": "Data-pillar activity preserves numbered outcomes, multiline text, and table row locator." },
+        { "record_id": "ACT-7-5-2-OT", "review_note": "Operational-technology activity remains distinct from the base capability roadmap and preserves its OT source." }
+      ],
+      "official_sources": [
+        { "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-ExecutionRoadmap-v1.1.pdf", "supports": "Current execution roadmap v1.1 and activity context." },
+        { "url": "https://dodcio.defense.gov/Portals/0/Documents/Library/(U)ZT_RA_v2.0(U)_Sep22.pdf", "supports": "Official reference architecture and tenets." }
+      ],
+      "rationale": "Samples span architecture tenets, base activities, and the separate OT overlay with page, table, and row evidence retained.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "fedramp-rev5",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "LI-SAAS", "review_note": "Low-impact SaaS baseline remains explicitly labeled as the retained Rev. 5 baseline." },
+        { "record_id": "MODERATE", "review_note": "Moderate control membership agrees with the official legacy workbook." },
+        { "record_id": "HIGH", "review_note": "High control membership agrees with the official legacy workbook." }
+      ],
+      "official_sources": [
+        { "url": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx", "supports": "Official retained Rev. 5 baseline workbook." },
+        { "url": "https://github.com/FedRAMP/rules", "supports": "Current FedRAMP rules repository used to preserve transition context." }
+      ],
+      "rationale": "The profile is intentionally a legacy Rev. 5 baseline view, not a claim that legacy artifacts are the whole current FedRAMP authorization process.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "fips-199",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "justified",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "FIPS-199-LOW", "review_note": "Low impact definition preserves the limited-adverse-effect threshold." },
+        { "record_id": "FIPS-199-MODERATE", "review_note": "Moderate impact definition preserves the serious-adverse-effect threshold." },
+        { "record_id": "FIPS-199-HIGH", "review_note": "High impact definition preserves the severe-or-catastrophic threshold." }
+      ],
+      "official_sources": [
+        { "url": "https://csrc.nist.gov/pubs/fips/199/final", "supports": "Current official FIPS 199 publication identity." }
+      ],
+      "rationale": "All three impact definitions were reviewed. Fragment-like local locators are editorial aids backed by the official publication landing page, not claimed publisher deep links.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "fips-200",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "justified",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "AC", "review_note": "Access Control minimum requirement preserves the published outcome." },
+        { "record_id": "MA", "review_note": "Maintenance requirement preserves timely and controlled maintenance wording." },
+        { "record_id": "SI", "review_note": "System and Information Integrity requirement preserves flaw, malware, monitoring, and alerting scope." }
+      ],
+      "official_sources": [
+        { "url": "https://csrc.nist.gov/pubs/fips/200/final", "supports": "Current official FIPS 200 publication identity." }
+      ],
+      "rationale": "Samples span the standard and remain concise publisher-derived requirements. Local fragments are fallback locators, not asserted NIST anchors.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "microsoft-zt-maturity",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "MSZT-2-1", "review_note": "Device-pillar question and answer choices preserve workbook ordering." },
+        { "record_id": "MSZT-1-11", "review_note": "Publisher-supplied French text is retained rather than silently translated or normalized." },
+        { "record_id": "MSZT-3-12", "review_note": "Application-pillar question remains tied to its sheet and cell." }
+      ],
+      "official_sources": [
+        { "url": "https://www.microsoft.com/en-us/download/details.aspx?id=103935", "supports": "Official download page identifying version 1.1, publication date, filename, and six-pillar scope." }
+      ],
+      "rationale": "Samples cover multiple worksheets, ordered answer choices, and a publisher-language anomaly without editorial correction.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "mitre-attack",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "T1001", "review_note": "Technique name, tactic, platforms, description, and procedure relationships agree with ATT&CK v19.1." },
+        { "record_id": "T1530", "review_note": "Cloud-storage technique retains publisher platforms and relationship evidence." },
+        { "record_id": "T1690", "review_note": "Recent technique remains present with current ATT&CK identity and hierarchy." }
+      ],
+      "official_sources": [
+        { "url": "https://attack.mitre.org/resources/versions/", "supports": "Current ATT&CK version 19.1." },
+        { "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json", "supports": "Official current enterprise STIX dataset." }
+      ],
+      "rationale": "Samples cover long-lived, cloud, and recent techniques; the normalized record count matches the current enterprise technique and sub-technique set selected by the adapter.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "mitre-attack-ics",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "T0800", "review_note": "ICS technique retains tactic, asset/platform, and description context." },
+        { "record_id": "T0860", "review_note": "Wireless compromise technique remains in the ICS matrix with publisher relationships." },
+        { "record_id": "T1695.003", "review_note": "New ICS sub-technique preserves dotted identifier and parent hierarchy." }
+      ],
+      "official_sources": [
+        { "url": "https://attack.mitre.org/resources/updates/", "supports": "ATT&CK v19 release notes identify the current ICS sub-technique expansion and counts." },
+        { "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json", "supports": "Official current ICS STIX dataset." }
+      ],
+      "rationale": "Samples cover established and new sub-technique content introduced in the current ATT&CK release.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "mitre-d3fend",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "refresh_required",
+      "representative_samples": [
+        { "record_id": "D3-AA", "review_note": "Administrative countermeasure identity and hierarchy agree with the official technique API." },
+        { "record_id": "D3-ITF", "review_note": "Inbound Traffic Filtering retains its publisher definition and tactic placement." },
+        { "record_id": "D3-WSAM", "review_note": "Web Session Activity Mapping retains the official D3FEND identifier and description." }
+      ],
+      "official_sources": [
+        { "url": "https://d3fend.mitre.org/version/", "supports": "Current ontology version 1.4.0 and release hash." },
+        { "url": "https://d3fend.mitre.org/api/technique/all.json", "supports": "Official technique API used by the adapter." }
+      ],
+      "rationale": "Sample semantics agree, but the publication registry reports version '4' while the official ontology identifies version 1.4.0.",
+      "follow_up": "Correct the D3FEND publication version and re-run the source presentation checks without changing publisher content."
+    },
+    {
+      "catalog_id": "nist-800-171",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "3.1.1", "review_note": "Access-control requirement retains statement, discussion, parameters, and OSCAL identity." },
+        { "record_id": "3.7.3", "review_note": "Maintenance requirement remains in the Revision 3 family structure." },
+        { "record_id": "3.17.3", "review_note": "Supply-chain requirement preserves the new Revision 3 family and source parameters." }
+      ],
+      "official_sources": [
+        { "url": "https://csrc.nist.gov/pubs/sp/800/171/r3/final", "supports": "Current final Revision 3 publication and structured-data links." },
+        { "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json", "supports": "Official current OSCAL catalog." }
+      ],
+      "rationale": "Samples span established and new Revision 3 families and retain OSCAL parameters and discussion separately from requirement prose.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "nist-800-171-rev2",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "superseded",
+      "representative_samples": [
+        { "record_id": "3.1.1", "review_note": "Revision 2 access-control text is retained as historical publisher content." },
+        { "record_id": "3.6.2", "review_note": "Incident-response requirement remains tied to the archived Revision 2 dataset." },
+        { "record_id": "3.14.7", "review_note": "System-monitoring requirement remains Revision 2 content and is not presented as Revision 3." }
+      ],
+      "official_sources": [
+        { "url": "https://csrc.nist.gov/pubs/sp/800/171/r3/final", "supports": "Revision 3 explicitly supersedes Revision 2." },
+        { "url": "https://csrc.nist.gov/files/pubs/sp/800/171/r2/upd1/final/docs/sp800-171r2-security-reqs.csv", "supports": "Official archived Revision 2 CSV used by this historical profile." }
+      ],
+      "rationale": "The records remain faithful to their historical source, but the profile is superseded and must stay visibly distinguished from the current Revision 3 profile.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "nist-800-172",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "3.1.1E", "review_note": "Dual Authorization requirement retains assignments and cyber-resiliency effects." },
+        { "record_id": "3.11.3E", "review_note": "Predictive Cyber Analytics retains assignments and threat-effect context." },
+        { "record_id": "3.17.5E", "review_note": "Supply Chain Integrity—Pedigree retains its Revision 3 identifier and parameters." }
+      ],
+      "official_sources": [
+        { "url": "https://csrc.nist.gov/pubs/sp/800/172/r3/final", "supports": "Current May 2026 Revision 3 publication and official datasets." },
+        { "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-172/rev3/json/NIST_SP800-172_rev3_catalog.json", "supports": "Official current OSCAL catalog." }
+      ],
+      "rationale": "Samples span three families and preserve requirement statements, assignments, and resiliency-effect annotations from the current Revision 3 OSCAL source.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "nist-800-37",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "justified",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "RMF-PREPARE", "review_note": "Prepare step retains organization and system preparation purpose." },
+        { "record_id": "RMF-IMPLEMENT", "review_note": "Implement step retains deployment and documentation purpose." },
+        { "record_id": "RMF-MONITOR", "review_note": "Monitor step retains ongoing system-change and risk awareness purpose." }
+      ],
+      "official_sources": [
+        { "url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final", "supports": "Current final Revision 2 publication and seven-step RMF." }
+      ],
+      "rationale": "Three lifecycle steps were checked. Local fragments are stable editorial locators with fallback to the official publication, not claimed NIST anchors.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "nist-800-53",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "AC-1", "review_note": "Policy and Procedures preserves ordered statement parts, parameters, discussion, and assessment metadata." },
+        { "record_id": "PE-11.2", "review_note": "Dotted enhancement ID is normalized without losing the publisher's PE-11(02) label or statement." },
+        { "record_id": "SR-12", "review_note": "Component Disposal retains assignments, discussion, and related assessment objectives and methods." }
+      ],
+      "official_sources": [
+        { "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final", "supports": "Current Release 5.2.0 publication identity and change notice." },
+        { "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json", "supports": "Official OSCAL catalog with control and related assessment content." }
+      ],
+      "rationale": "Samples cover base controls, enhancements, assignments, ordered prose, and assessment content. New 5.2.0 controls SA-15(13), SA-24, and SI-02(07) are present in the corpus.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "nist-800-53a",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "remediation_required",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "AC-1", "review_note": "Assessment objectives preserve statement references and EXAMINE/INTERVIEW methods from the official OSCAL representation." },
+        { "record_id": "PE-11.2", "review_note": "Enhancement objectives and all three assessment methods remain ordered and linked to PE-11(02)." },
+        { "record_id": "SA-24", "review_note": "Release 5.2.0 regression: all eleven objectives and three assessment methods are present." }
+      ],
+      "official_sources": [
+        { "url": "https://csrc.nist.gov/pubs/sp/800/53/a/r5/final", "supports": "Current SP 800-53A Release 5.2.0 publication and assessment-procedure identity." },
+        { "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json", "supports": "Official OSCAL catalog carrying the 800-53A assessment objectives and methods." }
+      ],
+      "rationale": "The assessment content is current and publisher-derived, but the publication source presently links only to the shared OSCAL control catalog, which can be mistaken for the 800-53 control publication rather than the 800-53A source identity.",
+      "follow_up": "Make the SP 800-53A landing page the visible publication source while retaining the shared official OSCAL artifact as the structured download."
+    },
+    {
+      "catalog_id": "nist-800-53b",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "justified",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "LOW", "review_note": "Low baseline remains distinct from the Moderate and High profiles." },
+        { "record_id": "HIGH", "review_note": "High baseline retains its official profile identity." },
+        { "record_id": "PRIVACY", "review_note": "Privacy baseline is preserved as the fourth, impact-independent profile." }
+      ],
+      "official_sources": [
+        { "url": "https://csrc.nist.gov/pubs/sp/800/53/b/upd1/final", "supports": "Current Release 5.2.0 publication identity and four official baselines." },
+        { "url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53B-r5", "supports": "Official OSCAL baseline profiles." }
+      ],
+      "rationale": "The four profile identities match SP 800-53B. Editorial fragments are justified by fallback to the official landing page and structured profiles.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "nist-ai-rmf",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "GOVERN 1.1", "review_note": "Govern outcome and suggested-action context agree with the live Playbook JSON." },
+        { "record_id": "MAP 1.5", "review_note": "Risk-tolerance outcome and references remain publisher-authored Playbook content." },
+        { "record_id": "MEASURE 4.3", "review_note": "Performance-change outcome preserves affected-community and field-data context." }
+      ],
+      "official_sources": [
+        { "url": "https://airc.nist.gov/airmf-resources/playbook/", "supports": "Current living AI RMF Playbook and download formats." },
+        { "url": "https://airc.nist.gov/docs/playbook.json", "supports": "Official Playbook JSON consumed by the adapter." }
+      ],
+      "rationale": "Samples span Govern, Map, and Measure. AI RMF 1.0 is under revision, but the current Playbook remains the publisher's live resource until that revision is released.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "nist-iot-cybersecurity",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "refresh_required",
+      "representative_samples": [
+        { "record_id": "DOMAIN-NON-TECHNICAL-MANUFACTURER-CAPABILITIES-1925D28A4B", "review_note": "Non-technical domain remains distinct from device technical capabilities." },
+        { "record_id": "ELEMENT-NON-TECHNICAL-MANUFACTURER-CAPABILITIES-D-EDUCATION-AN-FD75DB2A12", "review_note": "Spreadsheet cell locator and publisher line breaks are retained." },
+        { "record_id": "ELEMENT-TECHNICAL-CAPABILITIES-DEVICE-SECURITY-SECURE-DEVICE-O-5DF1240EA2", "review_note": "Long technical capability text, examples, and multiline bullets remain intact." }
+      ],
+      "official_sources": [
+        { "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/", "supports": "Current published Spring 2021 IoT capabilities catalog." },
+        { "url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/background/", "supports": "Publisher version and scope context." }
+      ],
+      "rationale": "Representative normalized content agrees with the live catalog and workbooks, but the publication registry's generic 'Draft catalog' version obscures the publisher's Spring 2021 version and the draft status belongs to individual mapping artifacts.",
+      "follow_up": "Correct the publication version label to the publisher's Spring 2021 catalog and keep draft state on the mapping workbooks."
+    },
+    {
+      "catalog_id": "nist-mobile-threats",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "CATEGORY-VULNERABLE-APPLICATIONS-A3D0ACF7C6", "review_note": "Derived category label is explicitly structural and does not invent threat prose." },
+        { "record_id": "CEL-1", "review_note": "Threat origin, exploit example, countermeasure actors/actions, citations, and JSON pointer agree with publisher data." },
+        { "record_id": "SPC-9", "review_note": "Supply-chain threat preserves sparse publisher fields and does not fill absent CVEs or examples." }
+      ],
+      "official_sources": [
+        { "url": "https://pages.nist.gov/mobile-threat-catalogue/", "supports": "Current living Mobile Threat Catalogue and scope." },
+        { "url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-data.json", "supports": "Official current JSON consumed by the adapter." },
+        { "url": "https://pages.nist.gov/mobile-threat-catalogue/mtc-cve-list.csv", "supports": "Official current CVE list used as supplemental evidence." }
+      ],
+      "rationale": "The review covers structural categories, populated threats, and intentionally sparse threats. Seven structural category records are separately reconciled from 268 publisher threat records.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "nist-ssdf",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "PO.1.1", "review_note": "Practice, task, examples, and references retain the SSDF 1.1 structured content." },
+        { "record_id": "PW.4.1", "review_note": "Third-party component task preserves open-source and configuration-as-code examples." },
+        { "record_id": "RV.3.4", "review_note": "Root-cause and lessons-learned task remains distinct from vulnerability remediation tasks." }
+      ],
+      "official_sources": [
+        { "url": "https://csrc.nist.gov/pubs/sp/800/218/final", "supports": "Current final SSDF 1.1 publication." },
+        { "url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-218/ver1", "supports": "Official OSCAL representation." }
+      ],
+      "rationale": "Samples span Prepare, Produce, and Respond. A Version 1.2 draft exists, but it has not superseded the current final Version 1.1 profile.",
+      "follow_up": null
+    },
+    {
+      "catalog_id": "nist-zt",
+      "reviewed_at": "2026-08-13",
+      "semantic_content_review": "reviewed_no_known_mismatch",
+      "locator_only_review": "none",
+      "upstream_currentness_review": "current_as_checked",
+      "representative_samples": [
+        { "record_id": "SP800-207", "review_note": "Zero trust definition and publication identity agree with the official final SP 800-207." },
+        { "record_id": "PRODUCT-COMPONENT-ZSCALER-ZSCALER-ZPA-RESOURCE-PROTECTION-APPLICATION-CO-FA85E6F045", "review_note": "Zscaler component is presented as a documented SP 1800-35 build component, not a NIST endorsement." },
+        { "record_id": "MAPPING-DOCUMENT-NIST-SP-1800-35-SP80053-MAPPINGS-8AF2346667", "review_note": "Mapping workbook stays distinct from the 24 official technology collaborators and records its 16 worksheet contributor labels separately." }
+      ],
+      "official_sources": [
+        { "url": "https://pages.nist.gov/zero-trust-architecture/", "supports": "Final June 2025 SP 1800-35 content, collaborators, builds, and mapping downloads." },
+        { "url": "https://csrc.nist.gov/pubs/sp/800/207/final", "supports": "Current final SP 800-207 publication." },
+        { "url": "https://csrc.nist.gov/pubs/sp/800/207/a/final", "supports": "Current final SP 800-207A publication." }
+      ],
+      "rationale": "Samples cover publication truth, vendor participation context, product-component text, and mapping-workbook provenance without conflating participation, contribution labels, or endorsement.",
+      "follow_up": null
+    }
+  ]
+}

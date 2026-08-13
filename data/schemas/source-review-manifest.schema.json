@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://control-atlas.local/schemas/source-review-manifest.schema.json",
+  "title": "Control Atlas source semantic and currentness review manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "review_policy", "catalogs"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "review_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_samples_per_catalog", "statement"],
+      "properties": {
+        "minimum_samples_per_catalog": { "type": "integer", "minimum": 1 },
+        "statement": { "type": "string", "minLength": 1 }
+      }
+    },
+    "catalogs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "catalog_id",
+          "reviewed_at",
+          "semantic_content_review",
+          "locator_only_review",
+          "upstream_currentness_review",
+          "representative_samples",
+          "official_sources",
+          "rationale",
+          "follow_up"
+        ],
+        "properties": {
+          "catalog_id": { "type": "string", "minLength": 1 },
+          "reviewed_at": { "type": "string", "format": "date" },
+          "semantic_content_review": {
+            "enum": ["reviewed_no_known_mismatch", "remediation_required", "blocked"]
+          },
+          "locator_only_review": {
+            "enum": ["none", "justified", "remediation_required", "blocked"]
+          },
+          "upstream_currentness_review": {
+            "enum": ["current_as_checked", "refresh_required", "superseded", "blocked"]
+          },
+          "representative_samples": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["record_id", "review_note"],
+              "properties": {
+                "record_id": { "type": "string", "minLength": 1 },
+                "review_note": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "official_sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["url", "supports"],
+              "properties": {
+                "url": { "type": "string", "format": "uri" },
+                "supports": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "rationale": { "type": "string", "minLength": 1 },
+          "follow_up": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

@@ -18,6 +18,11 @@ regexes = [
   # as document/source provenance across deterministic PDF fragments, so the
   # generic-api-key heuristic sees the identifier next to `*_key` fields.
   '''^dod-zt-newsletter-2024-11$''',
+  # Exact public publication identifiers emitted by the governed source-review
+  # artifact under `source_key`; none is a credential or authentication value.
+  '''^mitre-d3fend-ontology$''',
+  '''^nist-800-172-rev3$''',
+  '''^nist-800-37-rev2$''',
 ]
 commits = [
   "8993f4968ef5e019f6cdffe0d6bffec606f30b38",
