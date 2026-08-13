@@ -897,7 +897,11 @@ export function buildNistMobileThreatCatalog(snapshotDate, curatedRoot) {
     framework: 'nist-mobile-threats',
     title: entry.title,
     family: entry.category || 'NIST Mobile Threat Catalogue',
-    description: entry.description,
+    // Mobile threat titles and their structured publisher fields are the
+    // official record content. Older snapshots included an adapter-generated
+    // description for entries without ThreatOrigin; suppress it at the
+    // presentation boundary so it cannot be mistaken for a publisher excerpt.
+    description: entry.type === 'mobile_threat' ? '' : entry.description,
     locator: entry.locator || 'https://pages.nist.gov/mobile-threat-catalogue/',
     source: source(NIST_MOBILE_THREAT_SOURCE, snapshotDate, entry.locator || 'https://pages.nist.gov/mobile-threat-catalogue/'),
     metadata: {

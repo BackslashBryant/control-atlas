@@ -792,10 +792,10 @@ test('every blocked graph-health relationship has checked upstream provenance an
 test('every catalog stays within its documented description-completeness budget', () => {
   const nodes = generated('nodes').nodes;
   // Regression guard for the source-first contract in docs/PAGE_CONTRACTS.md: a record
-  // whose description ends in an ellipsis, or is blank, reads as partial
-  // where a visitor expects the whole thing. Every catalog defaults to a
-  // zero budget; add an entry here ONLY with a written reason the publisher's
-  // own text is short or ends that way (none currently need one).
+  // whose primary publisher content ends in an ellipsis, or is blank, reads as partial
+  // where a visitor expects the whole thing. NIST Mobile threats use the publisher's
+  // Threat title as their primary field; their optional publisher fields render only
+  // when the catalogue provides them.
   const EXCEPTIONS = {};
   const byCatalog = new Map();
   for (const node of nodes) {
@@ -813,7 +813,14 @@ test('every catalog stays within its documented description-completeness budget'
       const description = (node.metadata?.description || '').trim();
       return description.endsWith('...') || description.endsWith('…');
     });
-    const empty = records.filter((node) => !(node.metadata?.description || '').trim());
+    const empty = records.filter((node) => {
+      if (catalogId === 'nist-mobile-threats' && node.node_type === 'mobile_threat') {
+        const title = String(node.metadata?.title || '').trim();
+        const threatFragment = (node.metadata?.source_fragments || []).find((fragment) => fragment.field === 'Threat');
+        return !title || threatFragment?.text !== JSON.stringify(title);
+      }
+      return !(node.metadata?.description || '').trim();
+    });
     assert.ok(
       truncated.length <= budget.truncated,
       `${catalogId}: ${truncated.length} truncated descriptions exceed the budget of ${budget.truncated} (${truncated

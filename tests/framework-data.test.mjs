@@ -83,6 +83,27 @@ test("every public record has an approved presentation profile and required sour
   assert.doesNotThrow(() => validateRecordPresentation(generated("nodes").nodes));
 });
 
+test("NIST Mobile uses publisher fields instead of adapter-generated threat prose", () => {
+  const record = generated("nodes").nodes.find(
+    (node) => node.id === "nist-mobile-threats:APP-0",
+  );
+  assert.ok(record, "APP-0 must remain in the Mobile Threat Catalogue");
+  assert.equal(record.metadata.description, "");
+  assert.equal(record.metadata.title, "Eavesdropping on Unencrypted App Traffic");
+  assert.ok(record.metadata.countermeasures.length > 0);
+});
+
+test("NIST Mobile title-only records disclose publisher field availability instead of rendering empty", () => {
+  const record = generated("nodes").nodes.find((node) => node.id === "nist-mobile-threats:CEL-10");
+  assert.ok(record);
+  assert.equal(record.metadata.description, "");
+  assert.match(record.metadata.publisher_field_availability, /publishes a title/i);
+  assert.equal(
+    record.metadata.title,
+    "Use of weaker, nonstandard handset authentication mechanism for consumer-grade femtocells",
+  );
+});
+
 test("OLIR adapter preserves source and target identifiers", () => {
   const relationships = parseOlirCsv(
     readFileSync("tests/fixtures/olir/sample-crosswalk.csv", "utf8"),

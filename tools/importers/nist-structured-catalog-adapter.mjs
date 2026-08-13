@@ -246,7 +246,11 @@ export function parseNistMobileThreatCatalogue(jsonBytes, csvBytes, sources) {
       id: threatId,
       type: 'mobile_threat',
       title: text(entry.Threat),
-      description: text(entry.ThreatOrigin) || `Threat ${threatId} published in the NIST Mobile Threat Catalogue.`,
+      // The Mobile Threat Catalogue publishes a title and separate structured
+      // fields, not a narrative description for every entry. Do not turn an
+      // absent ThreatOrigin into Control Atlas prose and then present it as
+      // publisher content.
+      description: '',
       parent_id: categoryId,
       category,
       threat_origin: entry.ThreatOrigin,

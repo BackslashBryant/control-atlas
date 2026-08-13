@@ -994,7 +994,27 @@ function buildNodes(registry) {
             source_locator: record.source?.locator || `${filename}#${record.id}`,
             item_id: record.id,
             title: record.title || record.id,
-            description: record.description || "",
+            // The NIST Mobile Threat Catalogue publishes a title plus
+            // structured origin/examples/countermeasures. Older normalized
+            // snapshots used a generated sentence when ThreatOrigin was
+            // absent; never emit that adapter prose as publisher text.
+            description:
+              catalogId === "nist-mobile-threats" && record.type === "mobile_threat"
+                ? ""
+                : record.description || "",
+            // The catalogue legitimately has three title-only entries. Surface
+            // that source coverage explicitly instead of rendering an empty
+            // record or inventing explanatory publisher prose.
+            ...(catalogId === "nist-mobile-threats" && record.type === "mobile_threat" &&
+            !record.metadata?.threat_origin &&
+            !record.metadata?.exploit_examples?.length &&
+            !record.metadata?.cve_examples?.length &&
+            !record.metadata?.countermeasures?.length
+              ? {
+                  publisher_field_availability:
+                    "NIST publishes a title for this threat but no origin, exploit example, CVE example, or possible countermeasure field.",
+                }
+              : {}),
             ...(record.publish_date
               ? { publication_date: record.publish_date }
               : {}),
