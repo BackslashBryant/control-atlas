@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-13T05:48:26.183Z",
+  "generated_at": "2026-08-13T10:53:49.972Z",
   "count_semantics": {
     "discovered_expected_records": "Independent publisher inventory expected by the completeness contract.",
     "parsed_source_records": "Publisher records emitted by the source adapter before graph construction.",
@@ -202,7 +202,7 @@
     {
       "artifact_id": "artifact-fedramp-2026-rules",
       "publication_source_id": "fedramp-2026-rules",
-      "source_role": "primary_data",
+      "source_role": "enrichment",
       "counts": {
         "parsed_source_records": 5,
         "published_source_relationships": 0,
@@ -400,7 +400,7 @@
     {
       "artifact_id": "artifact-nist-csf-53-supplemental",
       "publication_source_id": "nist-csf-53-supplemental",
-      "source_role": "primary_data",
+      "source_role": "mapping",
       "counts": {
         "parsed_source_records": 2,
         "published_source_relationships": 0,
@@ -525,8 +525,8 @@
       "counts": {
         "parsed_source_records": 1,
         "published_source_relationships": 0,
-        "runtime_node_citations": 1,
-        "runtime_edge_citations": 1
+        "runtime_node_citations": 25,
+        "runtime_edge_citations": 25
       }
     },
     {
@@ -1397,10 +1397,10 @@
         "normalized_records": 320,
         "parsed_primary_artifact_records": 32,
         "published_source_relationships": 2560,
-        "graph_nodes": 321,
-        "graph_edges_incident": 2068,
-        "runtime_navigable_count": 320,
-        "runtime_leaf_record_count": 320,
+        "graph_nodes": 345,
+        "graph_edges_incident": 2092,
+        "runtime_navigable_count": 344,
+        "runtime_leaf_record_count": 344,
         "runtime_structural_group_count": 0
       }
     }

@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "generated_from": {
-    "source_coverage_manifest": "2026-08-13T05:48:29.837Z",
+    "source_coverage_manifest": "2026-08-13T10:53:54.056Z",
     "catalog_source_inventory": "2026-08-12T15:27:07.669Z",
-    "source_count_ledger": "2026-08-13T05:48:26.183Z"
+    "source_count_ledger": "2026-08-13T10:53:49.972Z"
   },
   "purpose": "Per-catalog audit boundary for publisher structure, parser reconciliation, artifact provenance, and intentionally unverified semantic review.",
   "catalog_count": 27,
@@ -1982,7 +1982,12 @@
           [
             "catalog",
             "zt_publication",
-            "zt_collaborator",
+            "zt_collaborator"
+          ],
+          [
+            "catalog",
+            "zt_publication",
+            "zt_mapping_contributor",
             "zt_product_component"
           ]
         ],

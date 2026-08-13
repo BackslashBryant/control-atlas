@@ -1078,6 +1078,8 @@ function buildNodes(registry) {
             exploit_examples: record.metadata?.exploit_examples || null,
             cve_examples: record.metadata?.cve_examples || null,
             countermeasures: record.metadata?.countermeasures || null,
+            publisher_context: record.metadata?.publisher_context || null,
+            publisher_field: record.metadata?.publisher_field || null,
             publisher_status: record.metadata?.publisher_status || null,
             publisher_mappings: record.metadata?.publisher_mappings || null,
             collaborator: record.metadata?.collaborator || null,

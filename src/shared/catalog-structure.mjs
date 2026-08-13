@@ -35,7 +35,8 @@ export const CATALOG_STRUCTURE_PROFILES = Object.freeze({
     ["catalog", "zt_publication", "zt_build"],
     ["catalog", "zt_publication", "zt_reference_component"],
     ["catalog", "zt_publication", "zt_mapping_document"],
-    ["catalog", "zt_publication", "zt_collaborator", "zt_product_component"],
+    ["catalog", "zt_publication", "zt_collaborator"],
+    ["catalog", "zt_publication", "zt_mapping_contributor", "zt_product_component"],
   ]),
   "microsoft-zt-maturity": profile("microsoft-zt-maturity", "Microsoft Zero Trust Maturity Questionnaire", [
     ["catalog", "zt_pillar", "zt_assessment_question"],

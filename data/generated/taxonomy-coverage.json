@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-13T09:37:26.895Z",
+  "generated_at": "2026-08-13T10:44:44.865Z",
   "taxonomy_coverage": {
     "contract_version": "1.0.0",
-    "record_count": 30341,
+    "record_count": 30365,
     "tagged_record_count": 15244,
     "catalogs": [
       {
@@ -235,7 +235,7 @@
       {
         "catalog_id": "nist-zt",
         "catalog_name": "nist-zt",
-        "record_count": 320,
+        "record_count": 344,
         "tagged_record_count": 16,
         "tag_assignments": 16,
         "dimensions": {
@@ -427,7 +427,7 @@
       },
       {
         "record_type": "zt_collaborator",
-        "record_count": 16,
+        "record_count": 24,
         "tagged_record_count": 0,
         "tag_assignments": 0
       },
@@ -440,6 +440,12 @@
       {
         "record_type": "zt_logical_component",
         "record_count": 11,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_mapping_contributor",
+        "record_count": 16,
         "tagged_record_count": 0,
         "tag_assignments": 0
       },

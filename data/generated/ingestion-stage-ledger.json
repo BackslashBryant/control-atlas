@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-13T06:10:25.670Z",
+  "generated_at": "2026-08-13T10:55:40.356Z",
   "status": "COMPLETE",
   "stage_contract": [
     "discover",
@@ -18,9 +18,9 @@
     "version": "1.0",
     "status": "COMPLETE",
     "counts": {
-      "source_record_envelopes": 30178,
-      "publisher_structure_memberships": 30763,
-      "source_fragments": 20595
+      "source_record_envelopes": 30202,
+      "publisher_structure_memberships": 30787,
+      "source_fragments": 20619
     }
   },
   "artifacts": [
@@ -2573,7 +2573,7 @@
         },
         "normalize": {
           "status": "complete",
-          "evidence": "1 runtime node citation(s)"
+          "evidence": "25 runtime node citation(s)"
         },
         "structure": {
           "status": "complete",
@@ -2581,7 +2581,7 @@
         },
         "relationships": {
           "status": "complete",
-          "evidence": "1 runtime edge citation(s)"
+          "evidence": "25 runtime edge citation(s)"
         },
         "presentation": {
           "status": "complete",
@@ -6224,11 +6224,11 @@
         },
         "structure": {
           "status": "complete",
-          "evidence": "7 publisher-native path contract(s)"
+          "evidence": "8 publisher-native path contract(s)"
         },
         "relationships": {
           "status": "complete",
-          "evidence": "2068 incident graph edge(s)"
+          "evidence": "2092 incident graph edge(s)"
         },
         "presentation": {
           "status": "complete",

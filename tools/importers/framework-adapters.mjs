@@ -723,6 +723,40 @@ export function buildNistZeroTrustCatalog(snapshotDate, curatedRoot) {
     });
   }
 
+  const collaboratorContext = overview.sections
+    .flatMap((section) => section.source_fragments)
+    .find((fragment) => /Technology Collaborators who participated in this project/.test(fragment.text || ''));
+  if (!collaboratorContext) throw new Error('NIST SP 1800-35 technology collaborator context is missing');
+  const collaboratorRoster = overview.sections.flatMap((section) => section.source_fragments)
+    .filter((fragment) => {
+      const match = /:block-(\d+)$/.exec(fragment.locator || '');
+      return fragment.source_key === NIST_ZT_IMPLEMENTATION_SOURCE
+        && match
+        && Number(match[1]) >= 189
+        && Number(match[1]) <= 212;
+    });
+  if (collaboratorRoster.length !== 24) {
+    throw new Error(`Expected 24 NIST SP 1800-35 technology collaborators, found ${collaboratorRoster.length}`);
+  }
+  for (const collaborator of collaboratorRoster) {
+    records.push({
+      id: stableId('COLLABORATOR', collaborator.text),
+      type: 'zt_collaborator',
+      framework: 'nist-zt',
+      title: collaborator.text,
+      family: 'SP 1800-35 Technology Collaborators',
+      description: collaboratorContext.text,
+      locator: collaborator.locator,
+      source: source(NIST_ZT_IMPLEMENTATION_SOURCE, snapshotDate, collaborator.locator),
+      metadata: {
+        parent_id: 'SP1800-35',
+        publisher_context: collaboratorContext.text,
+        source_fragments: [collaborator],
+        contributing_artifact_ids: artifactIdsFromFragments([collaborator]),
+      },
+    });
+  }
+
   const aggregate = new Map();
   for (const mapping of mappings) {
     const collaborator = mapping.collaborator;
@@ -743,33 +777,34 @@ export function buildNistZeroTrustCatalog(snapshotDate, curatedRoot) {
     entry.mappings.push(mapping);
     entry.source_fragments.push(...mapping.source_fragments);
   }
-  const collaborators = new Map();
+  const mappingContributors = new Map();
   for (const entry of aggregate.values()) {
     if (!entry.collaborator) continue;
-    const id = stableId('COLLABORATOR', entry.collaborator);
-    if (!collaborators.has(id)) collaborators.set(id, { id, name: entry.collaborator, fragment: entry.source_fragments[0] });
+    const id = stableId('MAPPING-CONTRIBUTOR', entry.collaborator);
+    if (!mappingContributors.has(id)) mappingContributors.set(id, { id, name: entry.collaborator, fragment: entry.source_fragments[0] });
   }
-  for (const collaborator of collaborators.values()) {
+  for (const contributor of mappingContributors.values()) {
     records.push({
-      id: collaborator.id,
-      type: 'zt_collaborator',
+      id: contributor.id,
+      type: 'zt_mapping_contributor',
       framework: 'nist-zt',
-      title: collaborator.name,
-      family: 'SP 1800-35 Technology Collaborators',
-      description: `${collaborator.name} implementation mappings published with NIST SP 1800-35.`,
-      locator: collaborator.fragment.locator || 'https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html',
+      title: contributor.name,
+      family: 'SP 1800-35 Mapping Workbook Contributors',
+      description: contributor.fragment.text,
+      locator: contributor.fragment.locator || 'https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html',
       source: source(NIST_ZT_IMPLEMENTATION_SOURCE, snapshotDate, 'https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html'),
       metadata: {
         parent_id: 'SP1800-35',
-        source_fragments: [collaborator.fragment],
-        contributing_artifact_ids: artifactIdsFromFragments([collaborator.fragment]),
+        publisher_field: 'Collaborator',
+        source_fragments: [contributor.fragment],
+        contributing_artifact_ids: artifactIdsFromFragments([contributor.fragment]),
       },
     });
   }
   for (const entry of aggregate.values()) {
     const valueKey = `${entry.collaborator || 'reference'}\0${entry.product || ''}\0${entry.architecture_component}\0${entry.component_function}`;
     const id = stableId(entry.collaborator ? 'PRODUCT-COMPONENT' : 'REFERENCE-COMPONENT', valueKey);
-    const parentId = entry.collaborator ? stableId('COLLABORATOR', entry.collaborator) : 'SP1800-35';
+    const parentId = entry.collaborator ? stableId('MAPPING-CONTRIBUTOR', entry.collaborator) : 'SP1800-35';
     const relationshipByKey = new Map();
     for (const mapping of entry.mappings) {
       const target = normalizedNistTarget(mapping);
