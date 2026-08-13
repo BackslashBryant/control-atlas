@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-12T15:27:07.669Z",
+  "generated_at": "2026-08-13T16:29:35.465Z",
   "count_boundary": "source adapter output before structural groups, graph nodes, or relationship expansion",
   "catalogs": {
     "cmmc-2": {
@@ -214,9 +214,9 @@
     "nist-zt": {
       "source_file": "data/nist-zt.json",
       "source_selection": "all normalized publisher records",
-      "discovered_records": 320,
-      "normalized_records": 320,
-      "unique_record_ids": 320,
+      "discovered_records": 344,
+      "normalized_records": 344,
+      "unique_record_ids": 344,
       "evidence_class": "pre_graph_adapter_inventory"
     }
   }
