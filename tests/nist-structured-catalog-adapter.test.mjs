@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
+import { parseNistMobileThreatCatalogue } from '../tools/importers/nist-structured-catalog-adapter.mjs';
+
 const manifest = JSON.parse(readFileSync('data/curated/nist-structured-catalogs/source-manifest.json', 'utf8'));
 const iot = JSON.parse(readFileSync('data/curated/nist-structured-catalogs/iot-requirements.json', 'utf8'));
 const mobile = JSON.parse(readFileSync('data/curated/nist-structured-catalogs/mobile-threats.json', 'utf8'));
@@ -39,6 +41,28 @@ test('NIST Mobile Threat JSON and CSV reconcile threats, categories, blanks, and
   assert.equal(mobile.records.length, 268);
   assert.ok(mobile.records.every((record) => record.parent_id));
   assert.ok(mobile.records.filter((record) => record.type === 'mobile_threat').every((record) => record.source_fragments.length > 0));
+});
+
+test('NIST Mobile threats do not turn an absent publisher origin into synthetic prose', () => {
+  const source = {
+    json: { source_key: 'mobile-json', url: 'https://example.invalid/mobile.json' },
+  };
+  const result = parseNistMobileThreatCatalogue(
+    Buffer.from(JSON.stringify([{
+      ThreatID: 'APP-0',
+      Threat: 'Eavesdropping on Unencrypted App Traffic',
+      ThreatCategory: 'Vulnerable Applications',
+      ThreatOrigin: '',
+      ExploitExample: [],
+      CVEExample: [],
+      PossibleCountermeasures: [],
+    }])),
+    Buffer.from('CVE\n'),
+    source,
+  );
+  const threat = result.records.find((record) => record.id === 'APP-0');
+  assert.equal(threat.description, '');
+  assert.equal(threat.title, 'Eavesdropping on Unencrypted App Traffic');
 });
 
 test('every discovered NIST structured asset has an explicit ingestion disposition', () => {

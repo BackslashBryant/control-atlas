@@ -73,6 +73,25 @@ test("WS2 CCI records expose publisher references and a bounded first set of con
   await expect(connected.getByRole("link", { name: "Explore all connections in Atlas", exact: true })).toBeVisible();
 });
 
+test("WS2 NIST Mobile records show publisher fields without adapter-generated threat prose", async ({ page }) => {
+  await openRecord(page, "/#/record/nist-mobile-threats/APP-0");
+
+  await expect(page.locator("[data-record-source-error]")).toHaveCount(0);
+  await expect(page.getByText("Eavesdropping on Unencrypted App Traffic", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Possible Countermeasures", exact: true })).toBeVisible();
+  await expect(page.locator("main")).not.toContainText("Threat APP-0 published in the NIST Mobile Threat Catalogue.");
+});
+
+test("WS2 NIST Mobile title-only records explain the publisher field boundary", async ({ page }) => {
+  await openRecord(page, "/#/record/nist-mobile-threats/CEL-10");
+
+  await expect(page.locator("[data-record-source-error]")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "NIST Consumer-grade Femtocell CEL-10", level: 1 })).toBeVisible();
+  await expect(page.getByText(/weaker, nonstandard handset authentication/i)).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Publisher Field Availability", exact: true })).toBeVisible();
+  await expect(page.getByText(/NIST publishes a title for this threat/i)).toBeVisible();
+});
+
 test("WS2 preserves source-specific STIG fields and responsive flow", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await openRecord(page, "/#/record/disa-stig/V-222387");

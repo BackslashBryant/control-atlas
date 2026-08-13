@@ -44,6 +44,10 @@ test("catalog-specific profiles preserve source-native nouns", () => {
   assert.equal(recordPresentationProfile("dod-zt", "zt_activity").sections[1].field, "outcomes");
   assert.equal(recordPresentationProfile("nist-zt", "zt_product_component").sections[1].field, "mapping_targets");
   assert.equal(recordPresentationProfile("nist-iot-cybersecurity", "iot_capability_element").sections[1].field, "publisher_mappings");
+  const mobileThreat = recordPresentationProfile("nist-mobile-threats", "mobile_threat");
+  assert.deepEqual(mobileThreat.required, ["title"]);
+  assert.ok(mobileThreat.sections.every((section) => section.field !== "description"));
+  assert.ok(mobileThreat.sections.some((section) => section.field === "publisher_field_availability"));
 });
 
 test("every supported record form has a presentation contract", () => {
