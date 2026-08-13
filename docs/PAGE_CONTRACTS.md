@@ -2,14 +2,14 @@
 
 - **Owner:** Product owner and Muse
 - **Status:** Canonical
-- **Last reviewed:** 2026-08-11
+- **Last reviewed:** 2026-08-12
 - **Supersession:** New owner-approved page direction replaces the affected section here and its tests in the same change.
 
 Every route uses one of six shared jobs. A route renders one `<main>` and must not mount another page beneath it.
 
 ## Shared shell
 
-The header provides Atlas, Library, Resources, Search, and one overflow menu. Body content uses the shared spacing and width tokens. Interactive targets are at least 44 pixels, focus is visible, color is never the only signal, and layouts must reflow without page-level horizontal overflow.
+The desktop header provides Atlas, Library, Compare, Resources, Sources, About, and Search. Compact navigation preserves every destination, with Compare before editorial links. Body content uses the shared spacing and width tokens. Interactive targets are at least 44 pixels, focus is visible, color is never the only signal, and layouts must reflow without page-level horizontal overflow.
 
 ## A. Landing
 
@@ -26,7 +26,7 @@ Atlas has two modes over one route and one navigation state:
 - Overview: React Flow and ELK render only the bounded area and publication map.
 - Publisher structure: semantic DOM renders publication-native levels and immediate children.
 
-The structural sidebar contains the current path, immediate parent, immediate children with counts, and publication-scoped search. It is open by default at 1200 pixels and wider, collapsible from 768 through 1199 pixels, and a slide-over Browse drawer below 768 pixels. Mobile shows one structural level at a time with a sticky path control. The main pane contains selected details and immediate children. A local-connections view is optional and never changes structural ancestry. Do not render a permanent right inspector below publication level or a native select containing a large catalog.
+The structural sidebar contains the current path, immediate parent, immediate children with counts, and publication-scoped search. It is open by default at 1200 pixels and wider, collapsible from 768 through 1199 pixels, and a slide-over Browse drawer below 768 pixels. Mobile shows one structural level at a time with a sticky path control. The main pane contains selected details and immediate children. A local-connections view is optional and never changes structural ancestry. It must be a visible workspace destination or immediately focused after navigation; no task-critical connection result may begin below an unexplained Atlas canvas. Do not render a permanent right inspector below publication level or a native select containing a large catalog.
 
 ## D. Record detail
 
@@ -52,4 +52,4 @@ Compare, Templates, and other task flows present scope, working controls, result
 
 ## Responsive verification widths
 
-All page contracts are checked at 320, 375, 390, 768, 1024, and 1440 pixels. Required assertions cover visible primary content, document height, useful-space utilization, DOM size, overflow, focus order, keyboard operation, and preserved back/forward and deep-link state.
+All page contracts are checked at 320, 375, 390, 768, 1024, and 1440 pixels. Required assertions cover visible primary content, document height, useful-space utilization, DOM size, overflow, focus order, keyboard operation, and preserved back/forward and deep-link state. Atlas mobile is list-first; it never presents a shrunken canvas as the only way to reach evidence.

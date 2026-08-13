@@ -19,7 +19,8 @@ type AtlasConnectionMapProps = {
   selectedItemId: string;
   onExpandedGroupChange: (lensKey: string) => void;
   onOpenList: () => void;
-  onSelectItem: (row: AtlasRelationshipRow) => void;
+  onOpenRecord: (nodeId: string) => void;
+  onSelectItem?: (row: AtlasRelationshipRow) => void;
 };
 
 // A representative label for a connected record: the human title when it
@@ -48,6 +49,7 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
     selectedItemId,
     onExpandedGroupChange,
     onOpenList,
+    onOpenRecord,
     onSelectItem,
   } = props;
   // Structure (base control / enhancements) is publisher-declared parentage,
@@ -195,15 +197,28 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
           <ul>
             {visibleRows.map((row) => (
               <li key={row.counterpart.id}>
-                <button
-                  aria-pressed={row.counterpart.id === selectedItemId}
-                  onClick={() => onSelectItem(row)}
-                  type="button"
-                >
-                  <span>{groupLabelByNodeId.get(row.counterpart.id)}</span>
-                  <strong>{row.itemId}</strong>
-                  <small>{row.title}</small>
-                </button>
+                <div className="atlas-lens-detail__item">
+                  <button
+                    aria-label={`Open ${row.itemId}`}
+                    className="atlas-lens-detail__open"
+                    onClick={() => onOpenRecord(row.counterpart.id)}
+                    type="button"
+                  >
+                    <span>{groupLabelByNodeId.get(row.counterpart.id)}</span>
+                    <strong>{row.itemId}</strong>
+                    <small>{row.title}</small>
+                  </button>
+                  {onSelectItem ? (
+                    <button
+                      aria-pressed={row.counterpart.id === selectedItemId}
+                      className="atlas-lens-detail__preview"
+                      onClick={() => onSelectItem(row)}
+                      type="button"
+                    >
+                      Preview
+                    </button>
+                  ) : null}
+                </div>
               </li>
             ))}
           </ul>

@@ -14,17 +14,25 @@ import {
   UTILITY_NAV_ITEMS,
 } from "../../src/ui/lib/navigation";
 
-test("Epic 14 exposes three primary destinations and three overflow pages", () => {
+test("primary navigation exposes the task destinations while Guides remains in overflow", () => {
   assert.deepEqual(
     PRIMARY_NAV_ITEMS.map(({ label, path }) => [label, path]),
-    [["Atlas", "/atlas"], ["Library", "/library"], ["Resources", "/resources"]],
+    [
+      ["Atlas", "/atlas"],
+      ["Library", "/library"],
+      ["Compare", "/compare"],
+      ["Resources", "/resources"],
+    ],
   );
   assert.deepEqual(
     OVERFLOW_NAV_ITEMS.map(({ label, path }) => [label, path]),
-    [["Guides", "/guides"], ["Sources", "/sources"], ["About", "/about"]],
+    [["Guides", "/guides"]],
   );
   assert.deepEqual(UTILITY_NAV_ITEMS.map(({ label }) => label), ["Sources", "About"]);
-  assert.equal(new Set([...PRIMARY_NAV_ITEMS, ...OVERFLOW_NAV_ITEMS].map(({ path }) => path)).size, 6);
+  assert.equal(
+    new Set([...PRIMARY_NAV_ITEMS, ...UTILITY_NAV_ITEMS, ...OVERFLOW_NAV_ITEMS].map(({ path }) => path)).size,
+    7,
+  );
 });
 
 test("Library uses the canonical two-tier taxonomy", () => {

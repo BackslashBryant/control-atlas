@@ -1,4 +1,3 @@
-import ELK from "elkjs/lib/elk.bundled.js";
 import {
   Background,
   Controls,
@@ -134,7 +133,19 @@ type ElkGraph = ElkNode & {
   edges?: ElkEdge[];
 };
 
-const elk = new ELK();
+type ElkLayoutEngine = {
+  layout(graph: ElkGraph): Promise<ElkGraph>;
+};
+
+let elkPromise: Promise<ElkLayoutEngine> | null = null;
+
+async function getElk() {
+  if (!elkPromise) {
+    elkPromise = import("elkjs/lib/elk.bundled.js")
+      .then(({ default: Elk }) => new Elk());
+  }
+  return elkPromise;
+}
 const NODE_WIDTH = 172;
 const NODE_HEIGHT = 74;
 const CENTER_NODE_HEIGHT = 84;
@@ -457,10 +468,10 @@ const RelationshipGraphInner = forwardRef<
       `Arranging ${graphData.nodes.length} nodes / ${graphData.links.length} links.`,
     );
 
-    elk
-      .layout(
+    void getElk()
+      .then((elk) => elk.layout(
         buildElkGraph(graphData.nodes, graphData.links, layoutMode, narrowViewport),
-      )
+      ))
       .then((nextLayout) => {
         if (layoutRunRef.current !== runId) return;
         setLayout(nextLayout as ElkGraph);

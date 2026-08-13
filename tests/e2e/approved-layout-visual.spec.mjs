@@ -62,7 +62,11 @@ async function openApprovedAtlas(page, viewport, state) {
   const template = page.locator('[data-page-template="canvas"]');
   await expect(template).toBeVisible();
   await expect(template.locator('.atlas-tree')).toHaveAttribute('data-layout-status', 'ready');
-  if (viewport.width >= 1024) {
+  if (state === 'branch') {
+    await expect(
+      template.getByRole('heading', { name: 'SP 800-53 Rev. 5 Catalog' }),
+    ).toBeVisible();
+  } else if (viewport.width >= 1024) {
     await expect(
       template.getByRole('application', { name: 'Interactive Atlas map hierarchy' }),
     ).toBeVisible();
@@ -71,7 +75,7 @@ async function openApprovedAtlas(page, viewport, state) {
       template.getByRole('tree', { name: 'Atlas map hierarchy' }),
     ).toBeVisible();
   }
-  if (state === 'branch') {
+  if (state === 'branch' && viewport.width >= 1024) {
     await expect(
       template.getByRole('navigation', { name: 'Atlas breadcrumb' }),
     ).toContainText('SP 800-53 Rev. 5 Catalog');

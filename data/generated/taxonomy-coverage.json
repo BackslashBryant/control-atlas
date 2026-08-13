@@ -1,0 +1,540 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-08-13T06:15:54.668Z",
+  "taxonomy_coverage": {
+    "contract_version": "1.0.0",
+    "record_count": 30341,
+    "tagged_record_count": 15244,
+    "catalogs": [
+      {
+        "catalog_id": "cmmc-2",
+        "catalog_name": "CMMC 2.0",
+        "record_count": 3,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "csf-2",
+        "catalog_name": "NIST CSF 2.0",
+        "record_count": 134,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "cui-policy",
+        "catalog_name": "CUI Program",
+        "record_count": 128,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "disa-cci",
+        "catalog_name": "DISA CCI",
+        "record_count": 5137,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "disa-srg",
+        "catalog_name": "DISA SRG",
+        "record_count": 2516,
+        "tagged_record_count": 1613,
+        "tag_assignments": 1876,
+        "dimensions": {
+          "asset_class": 1850,
+          "environment": 26
+        }
+      },
+      {
+        "catalog_id": "disa-stig",
+        "catalog_name": "DISA STIG",
+        "record_count": 17021,
+        "tagged_record_count": 12788,
+        "tag_assignments": 28919,
+        "dimensions": {
+          "asset_class": 8786,
+          "vendor_brand": 9241,
+          "technology": 7084,
+          "product": 3179,
+          "environment": 629
+        }
+      },
+      {
+        "catalog_id": "dod-rai",
+        "catalog_name": "DoD RAI",
+        "record_count": 13,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "dod-zt",
+        "catalog_name": "DoD Zero Trust",
+        "record_count": 320,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "fedramp-rev5",
+        "catalog_name": "FedRAMP Rev. 5",
+        "record_count": 4,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "fips-199",
+        "catalog_name": "FIPS 199",
+        "record_count": 3,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "fips-200",
+        "catalog_name": "FIPS 200",
+        "record_count": 17,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "microsoft-zt-maturity",
+        "catalog_name": "microsoft-zt-maturity",
+        "record_count": 68,
+        "tagged_record_count": 11,
+        "tag_assignments": 11,
+        "dimensions": {
+          "asset_class": 11
+        }
+      },
+      {
+        "catalog_id": "mitre-attack",
+        "catalog_name": "MITRE ATT&CK",
+        "record_count": 712,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "mitre-attack-ics",
+        "catalog_name": "MITRE ATT&CK for ICS",
+        "record_count": 109,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "mitre-d3fend",
+        "catalog_name": "MITRE D3FEND",
+        "record_count": 278,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "nist-800-171",
+        "catalog_name": "SP 800-171 Rev. 3",
+        "record_count": 147,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "nist-800-171-rev2",
+        "catalog_name": "SP 800-171 Rev. 2",
+        "record_count": 124,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "nist-800-172",
+        "catalog_name": "SP 800-172 Rev. 3",
+        "record_count": 132,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "nist-800-37",
+        "catalog_name": "SP 800-37 Rev. 2",
+        "record_count": 7,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "nist-800-53",
+        "catalog_name": "SP 800-53 Rev. 5",
+        "record_count": 1216,
+        "tagged_record_count": 59,
+        "tag_assignments": 118,
+        "dimensions": {
+          "asset_class": 59,
+          "domain": 59
+        }
+      },
+      {
+        "catalog_id": "nist-800-53a",
+        "catalog_name": "SP 800-53A Rev. 5",
+        "record_count": 1034,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "nist-800-53b",
+        "catalog_name": "SP 800-53B",
+        "record_count": 4,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "nist-ai-rmf",
+        "catalog_name": "AI RMF",
+        "record_count": 91,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "nist-iot-cybersecurity",
+        "catalog_name": "nist-iot-cybersecurity",
+        "record_count": 489,
+        "tagged_record_count": 489,
+        "tag_assignments": 489,
+        "dimensions": {
+          "asset_class": 489
+        }
+      },
+      {
+        "catalog_id": "nist-mobile-threats",
+        "catalog_name": "nist-mobile-threats",
+        "record_count": 268,
+        "tagged_record_count": 268,
+        "tag_assignments": 314,
+        "dimensions": {
+          "asset_class": 314
+        }
+      },
+      {
+        "catalog_id": "nist-ssdf",
+        "catalog_name": "SSDF",
+        "record_count": 46,
+        "tagged_record_count": 0,
+        "tag_assignments": 0,
+        "dimensions": {}
+      },
+      {
+        "catalog_id": "nist-zt",
+        "catalog_name": "nist-zt",
+        "record_count": 320,
+        "tagged_record_count": 16,
+        "tag_assignments": 16,
+        "dimensions": {
+          "environment": 11,
+          "asset_class": 5
+        }
+      }
+    ],
+    "record_types": [
+      {
+        "record_type": "assessment_procedure",
+        "record_count": 1014,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "attack_technique",
+        "record_count": 794,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "baseline",
+        "record_count": 8,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "category",
+        "record_count": 22,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "control",
+        "record_count": 324,
+        "tagged_record_count": 23,
+        "tag_assignments": 46
+      },
+      {
+        "record_type": "control_enhancement",
+        "record_count": 872,
+        "tagged_record_count": 36,
+        "tag_assignments": 72
+      },
+      {
+        "record_type": "defend_countermeasure",
+        "record_count": 271,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "family",
+        "record_count": 88,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "function",
+        "record_count": 6,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "group",
+        "record_count": 25,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "impact_category",
+        "record_count": 3,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "iot_capability",
+        "record_count": 11,
+        "tagged_record_count": 11,
+        "tag_assignments": 11
+      },
+      {
+        "record_type": "iot_capability_domain",
+        "record_count": 2,
+        "tagged_record_count": 2,
+        "tag_assignments": 2
+      },
+      {
+        "record_type": "iot_capability_element",
+        "record_count": 243,
+        "tagged_record_count": 243,
+        "tag_assignments": 243
+      },
+      {
+        "record_type": "iot_capability_subelement",
+        "record_count": 181,
+        "tagged_record_count": 181,
+        "tag_assignments": 181
+      },
+      {
+        "record_type": "iot_subcapability",
+        "record_count": 52,
+        "tagged_record_count": 52,
+        "tag_assignments": 52
+      },
+      {
+        "record_type": "mobile_threat",
+        "record_count": 236,
+        "tagged_record_count": 236,
+        "tag_assignments": 282
+      },
+      {
+        "record_type": "mobile_threat_category",
+        "record_count": 32,
+        "tagged_record_count": 32,
+        "tag_assignments": 32
+      },
+      {
+        "record_type": "policy",
+        "record_count": 128,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "program",
+        "record_count": 3,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "requirement",
+        "record_count": 5740,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "rmf_step",
+        "record_count": 7,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "srg_requirement",
+        "record_count": 2516,
+        "tagged_record_count": 1613,
+        "tag_assignments": 1876
+      },
+      {
+        "record_type": "stig_rule",
+        "record_count": 17021,
+        "tagged_record_count": 12788,
+        "tag_assignments": 28919
+      },
+      {
+        "record_type": "tactic",
+        "record_count": 34,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_activity",
+        "record_count": 257,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_assessment_question",
+        "record_count": 62,
+        "tagged_record_count": 11,
+        "tag_assignments": 11
+      },
+      {
+        "record_type": "zt_build",
+        "record_count": 19,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_capability",
+        "record_count": 45,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_cloud_native_requirement",
+        "record_count": 11,
+        "tagged_record_count": 9,
+        "tag_assignments": 9
+      },
+      {
+        "record_type": "zt_collaborator",
+        "record_count": 16,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_document",
+        "record_count": 6,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_logical_component",
+        "record_count": 11,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_mapping_document",
+        "record_count": 4,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_pillar",
+        "record_count": 13,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_product_component",
+        "record_count": 197,
+        "tagged_record_count": 7,
+        "tag_assignments": 7
+      },
+      {
+        "record_type": "zt_publication",
+        "record_count": 3,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_reference_component",
+        "record_count": 52,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      },
+      {
+        "record_type": "zt_tenet",
+        "record_count": 12,
+        "tagged_record_count": 0,
+        "tag_assignments": 0
+      }
+    ],
+    "dimensions": [
+      {
+        "dimension": "asset_class",
+        "label": "Asset and system",
+        "record_count": 9963,
+        "tag_assignments": 11514
+      },
+      {
+        "dimension": "environment",
+        "label": "Environment",
+        "record_count": 666,
+        "tag_assignments": 666
+      },
+      {
+        "dimension": "technology",
+        "label": "Technology",
+        "record_count": 5737,
+        "tag_assignments": 7084
+      },
+      {
+        "dimension": "vendor_brand",
+        "label": "Vendor",
+        "record_count": 9241,
+        "tag_assignments": 9241
+      },
+      {
+        "dimension": "product",
+        "label": "Product",
+        "record_count": 3179,
+        "tag_assignments": 3179
+      },
+      {
+        "dimension": "domain",
+        "label": "Security domain",
+        "record_count": 59,
+        "tag_assignments": 59
+      }
+    ],
+    "source_fields": [
+      {
+        "source_field": "metadata.benchmark_title",
+        "tag_assignments": 23170
+      },
+      {
+        "source_field": "metadata.identity_category",
+        "tag_assignments": 7766
+      },
+      {
+        "source_field": "catalog_id",
+        "tag_assignments": 689
+      },
+      {
+        "source_field": "family",
+        "tag_assignments": 118
+      }
+    ]
+  }
+}

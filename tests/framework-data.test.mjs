@@ -554,6 +554,18 @@ test("epic 2 graph build emits a complete bounded library search artifact", () =
     true,
     "full search records are delivered through bounded runtime shards",
   );
+  const indexedSearchPath = join("data", "generated", "library-search-index.json");
+  assert.equal(
+    existsSync(indexedSearchPath),
+    true,
+    "the interactive search route has a result-only columnar index",
+  );
+  const indexedSearchArtifact = JSON.parse(readFileSync(indexedSearchPath, "utf8"));
+  const indexedSearch = indexedSearchArtifact.library_search_index;
+  assert.equal(indexedSearch.format, "columns-v1");
+  assert.equal(indexedSearch.document_count, publicRecordCount);
+  assert.equal(indexedSearch.columns.length, 0, "the manifest must not duplicate index columns");
+  assert.equal(indexedSearchArtifact.sharded_collection.record_count, publicRecordCount);
   assert.equal(
     existsSync(join("data", "generated", "library-search-manifest.json")),
     false,

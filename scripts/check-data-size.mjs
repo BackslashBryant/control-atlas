@@ -13,8 +13,8 @@ function walk(path) {
   });
 }
 
-function checkCompleteSearchBudget() {
-  const artifactPath = join("data", "generated", "library-search.json");
+function checkSearchShardBudget(artifactName, label) {
+  const artifactPath = join("data", "generated", artifactName);
   if (!existsSync(artifactPath)) {
     return;
   }
@@ -29,12 +29,12 @@ function checkCompleteSearchBudget() {
   );
   if (compressedBytes > MAX_COMPLETE_SEARCH_GZIP_BYTES) {
     throw new Error(
-      `Complete library search artifact exceeds ${MAX_COMPLETE_SEARCH_GZIP_BYTES} compressed bytes: ${compressedBytes}`,
+      `${label} exceeds ${MAX_COMPLETE_SEARCH_GZIP_BYTES} compressed bytes: ${compressedBytes}`,
     );
   }
 
   console.log(
-    `Search shard budget check passed: largest shard ${compressedBytes} compressed bytes`,
+    `${label} budget check passed: largest shard ${compressedBytes} compressed bytes`,
   );
 }
 
@@ -48,7 +48,8 @@ for (const file of files) {
   if (size > MAX_FILE_BYTES)
     throw new Error(`${file} exceeds 20 MiB static artifact budget`);
 }
-checkCompleteSearchBudget();
+checkSearchShardBudget("library-search.json", "Complete library search shard");
+checkSearchShardBudget("library-search-index.json", "Library search index shard");
 
 console.log(
   `Data inventory check passed: ${files.length} files, ${total} bytes total`,

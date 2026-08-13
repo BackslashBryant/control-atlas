@@ -63,7 +63,10 @@ test("graph layout source keeps required React Flow and ELK contract", () => {
   assert.match(graphLayout, /topologyFingerprint/);
   assert.match(graphLayout, /truncateCanvasLabel/);
   assert.match(relationshipGraph, /from "@xyflow\/react"/);
-  assert.match(relationshipGraph, /from "elkjs\/lib\/elk\.bundled\.js"/);
+  // ELK stays the deterministic layout engine, but must not join the initial
+  // application bundle. Relationship views load it only when the user opens a
+  // bounded graph.
+  assert.match(relationshipGraph, /import\("elkjs\/lib\/elk\.bundled\.js"\)/);
   assert.match(relationshipGraph, /elk\s*\.\s*layout/);
   assert.match(relationshipGraph, /<ReactFlow/);
   assert.match(relationshipGraph, /<MiniMap/);

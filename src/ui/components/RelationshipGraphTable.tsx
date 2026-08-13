@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { displayNameFor } from "../../app/display-names.mjs";
 import { ProvenanceTerm } from "./ProvenanceTerm";
 import { ProvenanceBadge } from "../lib/compareHelpers";
@@ -39,6 +41,11 @@ export function RelationshipGraphTable(props: {
   centerNodeId?: string;
 }) {
   const { rows, onOpenNode, conciseTrust = false, centerNodeId = "" } = props;
+  const [visibleCount, setVisibleCount] = useState(50);
+
+  useEffect(() => {
+    setVisibleCount(50);
+  }, [rows]);
 
   if (!rows.length) {
     return (
@@ -49,9 +56,15 @@ export function RelationshipGraphTable(props: {
     );
   }
 
+  const visibleRows = rows.slice(0, visibleCount);
+
   return (
-    <div className="compare-table-scroll">
-      <table
+    <div className="relationship-graph-table-wrap">
+      <p className="relationship-graph-table__count" role="status">
+        Showing {visibleRows.length.toLocaleString()} of {rows.length.toLocaleString()} connections.
+      </p>
+      <div className="compare-table-scroll">
+        <table
         aria-label="Relationship table"
         className="detail-table relationship-graph-table"
       >
@@ -66,7 +79,7 @@ export function RelationshipGraphTable(props: {
           </tr>
         </thead>
         <tbody>
-          {rows.map(({ edge, counterpart, itemId, title, lensLabel }) => {
+          {visibleRows.map(({ edge, counterpart, itemId, title, lensLabel }) => {
             const explanation = relationshipExplanation(edge);
             return (
               <tr
@@ -148,7 +161,17 @@ export function RelationshipGraphTable(props: {
             );
           })}
         </tbody>
-      </table>
+        </table>
+      </div>
+      {visibleRows.length < rows.length ? (
+        <button
+          className="atlas-spatial-more"
+          onClick={() => setVisibleCount((count) => Math.min(count + 50, rows.length))}
+          type="button"
+        >
+          Show 50 more · {rows.length - visibleRows.length} remaining
+        </button>
+      ) : null}
     </div>
   );
 }

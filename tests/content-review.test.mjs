@@ -177,7 +177,7 @@ test('Start here plans are traceable to real publications and routes', async () 
   assert.equal(guide.startingPlanFor('not-a-goal', 'federal'), null);
 });
 
-test('navigation keeps Atlas, Library, and Resources primary with Guides in overflow', () => {
+test('navigation exposes task destinations directly and keeps Guides in overflow', () => {
   const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
   for (const [view, label] of [
     ['start-here', 'Start here'],
@@ -202,16 +202,15 @@ test('navigation keeps Atlas, Library, and Resources primary with Guides in over
   const primaryViews = [...primaryItems[1].matchAll(/view: "([a-z-]+)"/g)].map(
     (match) => match[1],
   );
-  assert.deepEqual(primaryViews, ['atlas-map', 'search', 'commons']);
+  assert.deepEqual(primaryViews, ['atlas-map', 'search', 'matrix', 'commons']);
 
   const overflowItems = navigation.match(
     /export const OVERFLOW_NAV_ITEMS: NavItem\[\] = \[(.*?)\n\];/s,
   );
   assert.ok(overflowItems, 'overflow navigation items must remain explicitly declared');
   assert.match(overflowItems[1], /GUIDES_NAV_ITEM/);
-  assert.match(overflowItems[1], /\.\.\.UTILITY_NAV_ITEMS/);
   assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
-  assert.doesNotMatch(navigation, /view: "matrix"|view: "templates"/);
+  assert.doesNotMatch(navigation, /view: "templates"/);
 });
 
 test('old public paths redirect into the Phase 3 canonical hierarchy', () => {

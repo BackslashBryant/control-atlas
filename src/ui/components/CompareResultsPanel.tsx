@@ -268,7 +268,7 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
             groups={compareMapGroups}
             onExpandedGroupChange={setExpandedGroupId}
             onOpenList={() => setCompareView("list")}
-            onSelectItem={(row) => onOpenNode(row.counterpart.id)}
+            onOpenRecord={onOpenNode}
             selectedItemId=""
           />
         </section>

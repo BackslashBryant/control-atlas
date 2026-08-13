@@ -36,6 +36,7 @@ export type ArtifactFetchOptions = {
   bypassCache?: boolean;
   compressedTimeoutMs?: number;
   fallbackTimeoutMs?: number;
+  preferNativeEncoding?: boolean;
 };
 
 export function clearRuntimeArtifactCache(path?: string) {
@@ -116,6 +117,15 @@ export type LibrarySearchArtifact = {
     sourceClasses: string[];
     controlFamilies: string[];
     severities: string[];
+  };
+  browse_counts?: {
+    object_types?: Record<string, number>;
+    tags?: Record<string, number>;
+  };
+  indexed_transport?: {
+    columns: unknown[][];
+    fields: string[];
+    format: "columns-v1";
   };
   documents: Array<Record<string, unknown>>;
 };
@@ -426,26 +436,31 @@ export async function fetchArtifact(path: string, options: ArtifactFetchOptions 
     // with it: the .then() never ran, so the uncompressed fallback never got
     // its turn. Under load that intermittently left Resources reporting an
     // empty directory. Any failure of the compressed path now falls through.
-    const parseOffThread = path.includes("library-search.json");
-    try {
-      return await withDeadline(
-        options.compressedTimeoutMs ?? COMPRESSED_ARTIFACT_TIMEOUT_MS,
-        "artifact_timeout",
-        async (signal) => {
-          const response = await fetch(compressedArtifactPath(path), { signal });
-          if (!response.ok || typeof DecompressionStream === "undefined" || !response.body) {
-            throw new RuntimeLoadError("artifact_unavailable", "The compressed data is unavailable.");
-          }
-          const ds = new DecompressionStream("gzip");
-          const decompressedStream = response.body.pipeThrough(ds);
-          const decompressedResponse = new Response(decompressedStream);
-          return parseOffThread
-            ? await parseJsonResponseOffThread(decompressedResponse)
-            : await decompressedResponse.json();
-        },
-      );
-    } catch {
-      // Compressed fetch or decompression failed; use the uncompressed file.
+    // Search payloads are intentionally handled off the main thread. The
+    // columnar index avoids eager record expansion, and this keeps parsing its
+    // bounded chunks from delaying route paint.
+    const parseOffThread = path.includes("library-search");
+    if (!options.preferNativeEncoding) {
+      try {
+        return await withDeadline(
+          options.compressedTimeoutMs ?? COMPRESSED_ARTIFACT_TIMEOUT_MS,
+          "artifact_timeout",
+          async (signal) => {
+            const response = await fetch(compressedArtifactPath(path), { signal });
+            if (!response.ok || typeof DecompressionStream === "undefined" || !response.body) {
+              throw new RuntimeLoadError("artifact_unavailable", "The compressed data is unavailable.");
+            }
+            const ds = new DecompressionStream("gzip");
+            const decompressedStream = response.body.pipeThrough(ds);
+            const decompressedResponse = new Response(decompressedStream);
+            return parseOffThread
+              ? await parseJsonResponseOffThread(decompressedResponse)
+              : await decompressedResponse.json();
+          },
+        );
+      } catch {
+        // Compressed fetch or decompression failed; use the uncompressed file.
+      }
     }
     try {
       return await withDeadline(
@@ -757,32 +772,74 @@ export function selectAtlasStructuralPath(
   };
 }
 
+type LibrarySearchIndexChunk = {
+  library_search_index?: { columns?: unknown[][]; format?: string };
+};
+
+export async function loadIndexedLibrarySearchColumns(
+  fields: string[],
+  shards: Array<{ path?: string }>,
+  loadChunk: (path: string) => Promise<LibrarySearchIndexChunk>,
+  fallbackColumns: unknown[][],
+): Promise<unknown[][]> {
+  if (!shards.length) return fallbackColumns;
+  const chunks = await Promise.all(shards.map(async (shard) => {
+    if (!shard.path) throw new Error("Invalid library search index shard.");
+    const chunk = await loadChunk(shard.path);
+    if (chunk.library_search_index?.format !== "columns-v1" || !Array.isArray(chunk.library_search_index.columns)) {
+      throw new Error("Invalid library search index shard.");
+    }
+    return chunk.library_search_index.columns;
+  }));
+  return fields.map((_, fieldIndex) =>
+    chunks.flatMap((columns) => columns[fieldIndex] || []),
+  );
+}
+
 async function loadLibrarySearchBootstrap(): Promise<LibrarySearchBootstrap> {
   try {
-    const artifact = (await fetchArtifact(
-      artifactPath("library-search.json"),
-    )) as {
+    const [artifact, indexArtifact] = await Promise.all([
+      fetchArtifact(artifactPath("library-search.json")),
+      fetchArtifact(artifactPath("library-search-index.json"), {
+        // Browser-native HTTP decoding is substantially cheaper than
+        // DecompressionStream for this multi-megabyte columnar index.
+        fallbackTimeoutMs: 20_000,
+        preferNativeEncoding: true,
+      }),
+    ]) as [{
       library_search: LibrarySearchArtifact;
+    }, {
+      library_search_index?: {
+        columns?: unknown[][];
+        fields?: string[];
+        format?: string;
+      };
       sharded_collection?: {
         shards?: Array<{ path?: string }>;
       };
-    };
-    const shards = artifact.sharded_collection?.shards || [];
-    if (!shards.length) return { librarySearch: artifact.library_search };
-    const chunks = await Promise.all(
-      shards.map((shard) => {
-        if (!shard.path) throw new Error("Invalid library search shard.");
-        return fetchArtifact(artifactPath(shard.path)) as Promise<{
-          library_search?: { documents?: Array<Record<string, unknown>> };
-        }>;
-      }),
+    }];
+    const index = indexArtifact.library_search_index;
+    if (index?.format !== "columns-v1" || !Array.isArray(index.columns) || !Array.isArray(index.fields)) {
+      throw new Error("Invalid library search index.");
+    }
+    const indexColumns = await loadIndexedLibrarySearchColumns(
+      index.fields,
+      indexArtifact.sharded_collection?.shards || [],
+      (path) => fetchArtifact(artifactPath(path), {
+        fallbackTimeoutMs: 20_000,
+        preferNativeEncoding: true,
+      }) as Promise<LibrarySearchIndexChunk>,
+      index.columns,
     );
     return {
       librarySearch: {
         ...artifact.library_search,
-        documents: chunks.flatMap(
-          (chunk) => chunk.library_search?.documents || [],
-        ),
+        documents: artifact.library_search.documents || [],
+        indexed_transport: {
+          columns: indexColumns,
+          fields: index.fields,
+          format: "columns-v1",
+        },
       },
     };
   } catch (error) {

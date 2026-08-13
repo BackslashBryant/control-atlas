@@ -110,6 +110,22 @@ export function ComparePage(props: {
   const [relationshipPage, setRelationshipPage] = useState(1);
   const catalogs = bundle.runtime.getCatalogs();
   const catalogCoverageList = useCatalogCoverage(bundle);
+  const sourceCatalogOptions = useMemo(
+    () =>
+      catalogs
+        .filter((catalog: any) => catalog.cross_catalog_connected_count > 0)
+        .sort((left: any, right: any) => left.name.localeCompare(right.name))
+        .map((catalog: any) => ({ value: catalog.id, label: catalog.name })),
+    [catalogs],
+  );
+  const connectedTargetOptions = useMemo(
+    () =>
+      bundle.runtime.getConnectedCatalogs(state.source).map((catalog: any) => ({
+        value: catalog.id,
+        label: `${catalog.name} (${catalog.connection_count.toLocaleString()} published connection${catalog.connection_count === 1 ? "" : "s"})`,
+      })),
+    [bundle.runtime, state.source],
+  );
 
   const selectedCatalogVersion = useMemo(() => {
     const catalogId = state.source || state.target;
@@ -585,14 +601,12 @@ export function ComparePage(props: {
                   onNavigate("matrix", {
                     crosswalk,
                     source: value,
+                    target: "",
                     mappingSource: "",
                     compareRun: "",
                   })
                 }
-                options={catalogs.map((catalog: any) => ({
-                  value: catalog.id,
-                  label: catalog.name,
-                }))}
+                options={sourceCatalogOptions}
                 value={state.source}
               />
               <CatalogCoverageNotice
@@ -603,7 +617,12 @@ export function ComparePage(props: {
             </div>
             <div className="field-stack">
               <SelectField
-                hint="Choose the second publication or framework."
+                emptyLabel={
+                  state.source
+                    ? "No published comparison is available from this publication"
+                    : "Choose Publication A first"
+                }
+                hint="Only publications with a published connection to Publication A are available."
                 label="Publication B"
                 onChange={(value) =>
                   onNavigate("matrix", {
@@ -613,10 +632,7 @@ export function ComparePage(props: {
                     compareRun: "",
                   })
                 }
-                options={catalogs.map((catalog: any) => ({
-                  value: catalog.id,
-                  label: catalog.name,
-                }))}
+                options={connectedTargetOptions}
                 value={state.target}
               />
               <CatalogCoverageNotice
@@ -650,7 +666,8 @@ export function ComparePage(props: {
             </div>
             </div>
             <p className="compare-boundary">
-              A published mapping records a cited relationship. It does not establish
+              Publication B is limited to a pair with at least one published connection.
+              A published mapping records a cited relationship; it does not establish
               equivalence, applicability, implementation, compliance, or authorization.
             </p>
             {compareReady ? (

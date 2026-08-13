@@ -11,6 +11,7 @@ const DIST_SEGMENT = "dist/site";
 const DIST = join(ROOT, ...DIST_SEGMENT.split("/"));
 const REQUIRED_GENERATED_FILES = [
   "data/generated/build-manifest.json",
+  "data/generated/library-search-index.json",
   "data/generated/catalog-bootstrap.json",
   "data/generated/library-search.json",
   "data/generated/commons-search-index.json",

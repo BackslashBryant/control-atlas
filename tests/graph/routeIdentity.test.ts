@@ -138,11 +138,12 @@ test("every app state has one approved display identity", () => {
   assert.equal(routeIdentityFor("about").path, "/about");
 });
 
-test("the three primary destinations and three overflow pages own consistent active navigation", () => {
+test("direct task destinations and overflow pages own consistent active navigation", () => {
   assert.equal(selectedNavFor("start-here"), null);
-  for (const view of ["search", "catalog-detail", "matrix"] as const) {
+  for (const view of ["search", "catalog-detail"] as const) {
     assert.equal(selectedNavFor(view), "search", view);
   }
+  assert.equal(selectedNavFor("matrix"), "matrix");
   assert.equal(selectedNavFor("atlas-map"), "atlas-map");
   for (const view of ["commons", "commons-detail"] as const) {
     assert.equal(selectedNavFor(view), "commons", view);
@@ -155,6 +156,7 @@ test("the three primary destinations and three overflow pages own consistent act
   const destinations = new Map(CANONICAL_DESTINATIONS.map((entry) => [entry.view, entry]));
   assert.equal(destinations.get("start-here")?.label, "Start here");
   assert.equal(destinations.get("search")?.label, "Library");
+  assert.equal(destinations.get("matrix")?.label, "Compare");
   assert.equal(destinations.get("atlas-map")?.label, "Atlas");
   assert.equal(destinations.get("commons")?.label, "Resources");
   assert.equal(destinations.get("patterns")?.label, "Guides");

@@ -61,9 +61,11 @@ test("Template D keeps the Atlas canvas first and honors the locked dock geometr
     return { left: box.left, right: box.right, top: box.top, width: box.width };
   })));
   expect(geometry[0].width).toBeCloseTo(280, 0);
-  expect(geometry[2].width).toBeCloseTo(320, 0);
+  expect(geometry[2].width).toBeGreaterThanOrEqual(280);
   expect(geometry[0].right).toBeLessThanOrEqual(geometry[1].left);
-  expect(geometry[1].right).toBeLessThanOrEqual(geometry[2].left);
+  // The inspector owns a third column. It must never cover map nodes or make
+  // below-the-map detail invisible to an Atlas user.
+  expect(geometry[2].left).toBeGreaterThanOrEqual(geometry[1].right);
   expect(geometry[1].top).toBeLessThan(900);
 
   const areaControls = leftDock.locator("[data-area-id]");

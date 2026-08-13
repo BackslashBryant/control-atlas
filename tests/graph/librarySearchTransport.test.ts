@@ -30,6 +30,12 @@ test("library search transport preserves every result-answer field", async () =>
         provenance: "referenced",
       },
     ],
+    taxonomy_tags: [
+      {
+        id: "atlas:technology:identity",
+        kind: "atlas_evidence",
+      },
+    ],
     severity: "",
     published_connection_count: 7,
     published_cross_catalog_connection_count: 5,

@@ -48,7 +48,7 @@ const SELECTED_NAV_BY_VIEW: Record<AppView, AppView | null> = {
   // navigation destination. Do not imply Library ownership based on how the
   // visitor arrived.
   "library-detail": null,
-  matrix: "search",
+  matrix: "matrix",
   patterns: "patterns",
   templates: null,
   sources: "sources",

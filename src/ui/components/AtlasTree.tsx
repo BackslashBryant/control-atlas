@@ -269,7 +269,7 @@ function AtlasTreeStage(props: {
         zoomOnScroll
       >
         <Background color="var(--ca-border-subtle)" gap={24} />
-        <Controls position="bottom-right" showInteractive={false} />
+        <Controls position="bottom-left" showInteractive={false} />
       </ReactFlow>
     </div>
   );
@@ -344,11 +344,11 @@ function AtlasStructuralExplorer(props: {
       ? "Vulnerability IDs"
       : "Records";
   return (
-    <section className="atlas-publisher-explorer" data-atlas-structural-explorer>
+    <section aria-labelledby="atlas-structural-explorer-title" className="atlas-publisher-explorer" data-atlas-structural-explorer>
       <header className="atlas-publisher-explorer__header">
         <div>
           <p className="eyebrow">{props.node.nodeType.replaceAll("_", " ")}</p>
-          <h2>{props.node.label}</h2>
+          <h2 id="atlas-structural-explorer-title">{props.node.label}</h2>
           {props.node.blurb ? <p>{props.node.blurb}</p> : null}
         </div>
         <dl>

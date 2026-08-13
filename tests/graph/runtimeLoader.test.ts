@@ -5,6 +5,7 @@ import {
   clearRuntimeArtifactCache,
   compressedArtifactPath,
   fetchArtifact,
+  loadIndexedLibrarySearchColumns,
   parseJsonResponseOffThread,
   runtimeArtifactPlan,
   selectAtlasStructuralPath,
@@ -54,6 +55,29 @@ test("compressed artifacts without parameters append the gzip extension", () => 
     compressedArtifactPath("./data/template-registry.json"),
     "./data/template-registry.json.gz",
   );
+});
+
+test("Library index shards begin together and preserve manifest order", async () => {
+  const started: string[] = [];
+  const resolvers = new Map<string, (value: unknown) => void>();
+  const result = loadIndexedLibrarySearchColumns(
+    ["id", "title"],
+    [{ path: "first.json" }, { path: "second.json" }],
+    (path) => new Promise((resolve) => {
+      started.push(path);
+      resolvers.set(path, resolve);
+    }) as Promise<any>,
+    [],
+  );
+  await Promise.resolve();
+  assert.deepEqual(started, ["first.json", "second.json"]);
+  resolvers.get("second.json")?.({
+    library_search_index: { format: "columns-v1", columns: [["second"], ["Second title"]] },
+  });
+  resolvers.get("first.json")?.({
+    library_search_index: { format: "columns-v1", columns: [["first"], ["First title"]] },
+  });
+  assert.deepEqual(await result, [["first", "second"], ["First title", "Second title"]]);
 });
 
 test("route bootstrap loads only the smallest faithful artifact scope", () => {

@@ -15,6 +15,7 @@ import {
   buildSourceTextPresentation,
   isValidSourceTextPresentation,
 } from "../src/shared/source-text-presentation.mjs";
+import { writeJsonAtomically } from "./lib/write-json-atomically.mjs";
 import { validateGraphArtifacts } from "../tools/validators/federal-graph.mjs";
 import { loadSourceRegistry } from "../tools/validators/source-registry.mjs";
 import {
@@ -56,6 +57,7 @@ import {
   catalogStructureProfile,
   structurePathIsAllowed,
 } from "../src/shared/catalog-structure.mjs";
+import { TAXONOMY_CONTRACT } from "../src/shared/taxonomy-contract.mjs";
 import { taxonomyTagsForRecord } from "../src/shared/record-taxonomy.mjs";
 import {
   publisherStructureMembershipForEdge,
@@ -77,6 +79,29 @@ const RUNTIME_COLLECTIONS = [
 ];
 const SHARDED_RUNTIME_COLLECTIONS = new Set(["nodes", "edges", "evidence"]);
 const RUNTIME_COLLECTION_SHARD_COUNT = 64;
+// Search is intentionally a bounded, on-demand payload rather than an
+// initial-route payload. Ten chunks keep every compressed artifact under the
+// public 300 KB budget while avoiding the 64-request/worker fan-out that made
+// a cold Library deep link slow to become usable.
+const LIBRARY_SEARCH_SHARD_COUNT = 10;
+const LIBRARY_SEARCH_INDEX_FIELDS = [
+  "id",
+  "item_id",
+  "title",
+  "description_available",
+  "official_text_preview",
+  "object_type",
+  "source_id",
+  "source_name",
+  "publisher_name",
+  "catalog_id",
+  "control_family",
+  "identity_category",
+  "taxonomy_tags",
+  "published_connection_count",
+  "published_cross_catalog_connection_count",
+  "published_connection_catalog_count",
+];
 const GOVERNANCE_FILES = [
   "build-manifest.json",
   "source-manifests.json",
@@ -945,7 +970,7 @@ function buildNodes(registry) {
         catalogId,
         family: primaryClassification,
       });
-      const taxonomyTags = taxonomyTagsForRecord(record);
+      const taxonomyTags = taxonomyTagsForRecord({ ...record, catalog_id: catalogId });
       pushEligibleNode(
         state,
         registry,
@@ -2127,6 +2152,79 @@ function artifact(collection, values, generatedAt) {
   };
 }
 
+function buildTaxonomyCoverage(nodes, catalogs) {
+  const catalogNames = new Map(catalogs.map((catalog) => [catalog.id, catalog.name]));
+  const byCatalog = new Map();
+  const byRecordType = new Map();
+  const byDimension = new Map(
+    TAXONOMY_CONTRACT.dimensions.map((dimension) => [
+      dimension.id,
+      { dimension: dimension.id, label: dimension.label, record_count: 0, tag_assignments: 0 },
+    ]),
+  );
+  const bySourceField = new Map();
+  const records = nodes.filter(
+    (node) =>
+      node.metadata?.catalog_id &&
+      node.node_type !== "catalog" &&
+      node.node_type !== "benchmark",
+  );
+
+  for (const node of records) {
+    const catalogId = node.metadata.catalog_id;
+    const tags = node.metadata?.taxonomy_tags || [];
+    const catalog = byCatalog.get(catalogId) || {
+      catalog_id: catalogId,
+      catalog_name: catalogNames.get(catalogId) || catalogId,
+      record_count: 0,
+      tagged_record_count: 0,
+      tag_assignments: 0,
+      dimensions: {},
+    };
+    catalog.record_count += 1;
+    if (tags.length) catalog.tagged_record_count += 1;
+    byCatalog.set(catalogId, catalog);
+
+    const recordType = byRecordType.get(node.node_type) || {
+      record_type: node.node_type,
+      record_count: 0,
+      tagged_record_count: 0,
+      tag_assignments: 0,
+    };
+    recordType.record_count += 1;
+    if (tags.length) recordType.tagged_record_count += 1;
+    byRecordType.set(node.node_type, recordType);
+
+    const dimensionsSeen = new Set();
+    for (const tag of tags) {
+      const dimension = tag.kind;
+      const dimensionEntry = byDimension.get(dimension);
+      if (dimensionEntry) {
+        dimensionEntry.tag_assignments += 1;
+        if (!dimensionsSeen.has(dimension)) dimensionEntry.record_count += 1;
+      }
+      dimensionsSeen.add(dimension);
+      catalog.tag_assignments += 1;
+      catalog.dimensions[dimension] = (catalog.dimensions[dimension] || 0) + 1;
+      recordType.tag_assignments += 1;
+      const sourceField = tag.basis?.source_field || "unrecorded";
+      bySourceField.set(sourceField, (bySourceField.get(sourceField) || 0) + 1);
+    }
+  }
+
+  return {
+    contract_version: TAXONOMY_CONTRACT.version,
+    record_count: records.length,
+    tagged_record_count: records.filter((node) => (node.metadata?.taxonomy_tags || []).length > 0).length,
+    catalogs: [...byCatalog.values()].sort((left, right) => left.catalog_id.localeCompare(right.catalog_id)),
+    record_types: [...byRecordType.values()].sort((left, right) => left.record_type.localeCompare(right.record_type)),
+    dimensions: [...byDimension.values()],
+    source_fields: [...bySourceField.entries()]
+      .map(([source_field, tag_assignments]) => ({ source_field, tag_assignments }))
+      .sort((left, right) => right.tag_assignments - left.tag_assignments || left.source_field.localeCompare(right.source_field)),
+  };
+}
+
 function collectionFingerprint(values) {
   return createHash("sha256").update(JSON.stringify(values)).digest("hex");
 }
@@ -2303,6 +2401,7 @@ function buildLibraryDocuments(graph) {
       identity_category: node.metadata?.identity_category || "",
       classification_provenance: node.metadata?.classification_provenance,
       related_categories: node.metadata?.related_categories,
+      taxonomy_tags: node.metadata?.taxonomy_tags || [],
       severity: node.metadata?.severity || "",
       published_connection_count: publishedConnectionCounts.get(node.id) || 0,
       published_cross_catalog_connection_count:
@@ -2317,6 +2416,20 @@ function buildLibrarySearch(graph) {
   const documents = buildLibraryDocuments(graph);
   const facetValues = (field) =>
     [...new Set(documents.map((document) => document[field]).filter(Boolean))].sort();
+  const countBy = (key) => Object.fromEntries(
+    [...documents.reduce((counts, document) => {
+      const value = document[key];
+      if (value) counts.set(value, (counts.get(value) || 0) + 1);
+      return counts;
+    }, new Map()).entries()].sort(([left], [right]) => left.localeCompare(right)),
+  );
+  const tagCounts = new Map();
+  for (const document of documents) {
+    for (const tag of document.taxonomy_tags || []) {
+      if (!tag?.id) continue;
+      tagCounts.set(tag.id, (tagCounts.get(tag.id) || 0) + 1);
+    }
+  }
   return {
     document_count: documents.length,
     facets: {
@@ -2326,7 +2439,23 @@ function buildLibrarySearch(graph) {
       controlFamilies: facetValues("control_family"),
       severities: facetValues("severity"),
     },
+    browse_counts: {
+      object_types: countBy("object_type"),
+      tags: Object.fromEntries([...tagCounts.entries()].sort(([left], [right]) => left.localeCompare(right))),
+    },
     documents,
+  };
+}
+
+function buildLibrarySearchIndex(librarySearch) {
+  const documents = librarySearch.documents;
+  return {
+    document_count: documents.length,
+    fields: LIBRARY_SEARCH_INDEX_FIELDS,
+    columns: LIBRARY_SEARCH_INDEX_FIELDS.map((field) =>
+      documents.map((document) => document[field]),
+    ),
+    format: "columns-v1",
   };
 }
 
@@ -3215,6 +3344,7 @@ export function buildFrameworkData() {
     generatedAt,
   );
   const librarySearch = buildLibrarySearch(graph);
+  const librarySearchIndex = buildLibrarySearchIndex(librarySearch);
   const sourceById = new Map(graph.sources.map((source) => [source.id, source]));
   const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const evidenceById = new Map(
@@ -3300,11 +3430,12 @@ const catalogRecords = new Map();
     }
     // This sibling artifact is owned by build-commons-index.mjs. Framework
     // rebuilds must not erase another generator's committed output.
-    if (entry === "commons-search-index.json") {
+    if (entry === "commons-search-index.json" || entry === "source-semantic-audit.json") {
       continue;
     }
     if (
       entry === "library-search" ||
+      entry === "library-search-index" ||
       entry === "atlas-neighborhood" ||
       entry === "catalog-records" ||
       entry === "graph-data"
@@ -3376,14 +3507,27 @@ const catalogRecords = new Map();
   );
 
   writeFileSync(
+    join(GENERATED, "taxonomy-coverage.json"),
+    `${JSON.stringify(
+      artifact(
+        "taxonomy_coverage",
+        buildTaxonomyCoverage(graph.nodes, catalogs),
+        generatedAt,
+      ),
+      null,
+      2,
+    )}\n`,
+    "utf8",
+  );
+
+  writeFileSync(
     join(GENERATED, "source-manifests.json"),
     `${JSON.stringify(artifact("source_manifests", sourceManifests, generatedAt), null, 2)}\n`,
     "utf8",
   );
-  writeFileSync(
+  writeJsonAtomically(
     join(GENERATED, "build-manifest.json"),
-    `${JSON.stringify(artifact("build_manifest", buildManifest, generatedAt), null, 2)}\n`,
-    "utf8",
+    artifact("build_manifest", buildManifest, generatedAt),
   );
   writeFileSync(
     join(GENERATED, "graph-diff-summary.json"),
@@ -3396,7 +3540,9 @@ const catalogRecords = new Map();
   // when they search, while preserving every record and its title.
   const librarySearchDir = join(GENERATED, "library-search");
   mkdirSync(librarySearchDir, { recursive: true });
-  const searchChunkSize = Math.ceil(librarySearch.documents.length / 64);
+  const searchChunkSize = Math.ceil(
+    librarySearch.documents.length / LIBRARY_SEARCH_SHARD_COUNT,
+  );
   const searchShards = [];
   for (let index = 0; index < librarySearch.documents.length; index += searchChunkSize) {
     const shardId = String(searchShards.length).padStart(3, "0");
@@ -3422,6 +3568,46 @@ const catalogRecords = new Map();
   writeFileSync(
     join(GENERATED, "library-search.json"),
     `${JSON.stringify(librarySearchManifest)}\n`,
+    "utf8",
+  );
+  const librarySearchIndexDir = join(GENERATED, "library-search-index");
+  mkdirSync(librarySearchIndexDir, { recursive: true });
+  const indexChunkSize = Math.ceil(
+    librarySearchIndex.document_count / LIBRARY_SEARCH_SHARD_COUNT,
+  );
+  const indexShards = [];
+  for (let offset = 0; offset < librarySearchIndex.document_count; offset += indexChunkSize) {
+    const shardId = String(indexShards.length).padStart(3, "0");
+    const path = `library-search-index/${shardId}.json`;
+    const columns = librarySearchIndex.columns.map((column) =>
+      column.slice(offset, offset + indexChunkSize),
+    );
+    writeFileSync(
+      join(GENERATED, path),
+      `${JSON.stringify(artifact("library_search_index", {
+        columns,
+        document_count: columns[0]?.length || 0,
+        fields: LIBRARY_SEARCH_INDEX_FIELDS,
+        format: "columns-v1",
+      }, generatedAt))}\n`,
+      "utf8",
+    );
+    indexShards.push({ path, record_count: columns[0]?.length || 0 });
+  }
+  const librarySearchIndexManifest = artifact("library_search_index", {
+    columns: [],
+    document_count: librarySearchIndex.document_count,
+    fields: LIBRARY_SEARCH_INDEX_FIELDS,
+    format: "columns-v1",
+  }, generatedAt);
+  librarySearchIndexManifest.sharded_collection = {
+    collection: "library_search_index",
+    record_count: librarySearchIndex.document_count,
+    shards: indexShards,
+  };
+  writeFileSync(
+    join(GENERATED, "library-search-index.json"),
+    `${JSON.stringify(librarySearchIndexManifest)}\n`,
     "utf8",
   );
 
@@ -3549,23 +3735,18 @@ const catalogRecords = new Map();
       bytes: statSync(join(GENERATED, shardPath)).size,
     });
   }
-  writeFileSync(
+  writeJsonAtomically(
     join(GENERATED, "atlas-neighborhood-manifest.json"),
-    `${JSON.stringify(
-      artifact(
-        "atlas_neighborhood_manifest",
-        {
-          shard_count: ATLAS_NEIGHBORHOOD_SHARD_COUNT,
-          hash_algorithm: "fnv1a-32",
-          records: graph.nodes.length,
-          shards: atlasShardManifest,
-        },
-        generatedAt,
-      ),
-      null,
-      2,
-    )}\n`,
-    "utf8",
+    artifact(
+      "atlas_neighborhood_manifest",
+      {
+        shard_count: ATLAS_NEIGHBORHOOD_SHARD_COUNT,
+        hash_algorithm: "fnv1a-32",
+        records: graph.nodes.length,
+        shards: atlasShardManifest,
+      },
+      generatedAt,
+    ),
   );
 
   return {

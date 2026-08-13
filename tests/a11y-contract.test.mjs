@@ -82,6 +82,8 @@ test("relationship graph surfaces include accessible table fallback and provenan
   assert.match(explorer, /Map legend/);
   assert.match(table, /aria-label="Relationship table"/);
   assert.match(table, /ProvenanceBadge/);
+  assert.match(table, /Showing \{visibleRows\.length/);
+  assert.match(table, /Show 50 more/);
 });
 
 test("compare view state and provenance term support accessible descriptions", () => {

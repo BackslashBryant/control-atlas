@@ -1,4 +1,4 @@
-import { Fragment, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useState, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import {
@@ -34,6 +34,7 @@ import {
   recordPublisherName,
 } from "../lib/recordTitle";
 import { recordTagsFor, tagProvenanceExplanation } from "../lib/recordTags";
+import { TAXONOMY_TAG_BY_ID } from "../../shared/taxonomy-contract.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { normalizeViewState, type ViewState } from "../lib/viewState";
 
@@ -176,6 +177,47 @@ function SourceSectionContent(props: { kind: string; value: any; presentation?: 
   if (props.kind === "list") {
     return <ul className="source-structured-list">{props.value.map((item: string) => <li key={item}>{renderOdpText(item)}</li>)}</ul>;
   }
+  if (props.kind === "references") {
+    return (
+      <ul className="source-structured-list">
+        {props.value.map((reference: any, index: number) => {
+          const parts = [reference.creator, reference.title, reference.version ? `Version ${reference.version}` : "", reference.index]
+            .filter(Boolean);
+          const label = parts.join(" · ");
+          return (
+            <li key={`${label}-${index}`}>
+              {reference.location ? (
+                <a href={reference.location} rel="noopener noreferrer" target="_blank">{label}</a>
+              ) : label}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+  if (props.kind === "publisher_mappings") {
+    return (
+      <ul className="source-structured-list">
+        {props.value.map((mapping: any, index: number) => (
+          <li key={`${mapping.target_catalog}:${mapping.target_id}:${index}`}>
+            <strong>{mapping.target_catalog}</strong>{mapping.target_id ? ` · ${mapping.target_id}` : ""}
+            {mapping.relationship_type ? ` · ${formatRelationshipLabel({ relationship_type: mapping.relationship_type })}` : ""}
+          </li>
+        ))}
+      </ul>
+    );
+  }
+  if (props.kind === "mapping_targets") {
+    return (
+      <ul className="source-structured-list">
+        {props.value.map((mapping: any, index: number) => (
+          <li key={`${mapping.kind}:${mapping.target_id}:${index}`}>
+            <strong>{mapping.kind}</strong>{mapping.target_id ? ` · ${mapping.target_id}` : ""}
+          </li>
+        ))}
+      </ul>
+    );
+  }
   if (props.kind === "objectives") {
     return (
       <ul className="assessment-objectives">
@@ -229,6 +271,11 @@ export function ObjectDetailPage(props: {
   const { bundle, state, onNavigate } = props;
   const node = bundle.runtime.getNode(state.node);
   const document = bundle.runtime.getLibraryDocument(state.node);
+  const [visibleConnectionCount, setVisibleConnectionCount] = useState(50);
+
+  useEffect(() => {
+    setVisibleConnectionCount(50);
+  }, [state.node]);
 
   if (!node) {
     return (
@@ -298,6 +345,20 @@ export function ObjectDetailPage(props: {
     (total, group) => total + group.items.length,
     0,
   );
+  let remainingConnections = visibleConnectionCount;
+  const visibleConnectionGroups = connectionGroups.flatMap((group) => {
+    if (remainingConnections <= 0) return [];
+    const items = group.items.slice(0, remainingConnections);
+    remainingConnections -= items.length;
+    return items.length ? [{ ...group, items }] : [];
+  });
+  let immediateConnectionsRemaining = 12;
+  const immediateConnectionGroups = connectionGroups.flatMap((group) => {
+    if (immediateConnectionsRemaining <= 0) return [];
+    const items = group.items.slice(0, immediateConnectionsRemaining);
+    immediateConnectionsRemaining -= items.length;
+    return items.length ? [{ ...group, items }] : [];
+  });
   const displayPath = (node.display_path || []) as Array<{
     id: string;
     label: string;
@@ -373,7 +434,7 @@ export function ObjectDetailPage(props: {
             <div className="record-actions-popover">
               <AppLink
                 onNavigate={onNavigate}
-                patch={{ crosswalk: "relationships", items: document.item_id, source: document.catalog_id }}
+                patch={{ crosswalk: "relationships", intent: "item-mapping", items: document.item_id, source: document.catalog_id }}
                 variant="secondary"
                 view="matrix"
               >
@@ -410,6 +471,30 @@ export function ObjectDetailPage(props: {
 
       <div className="record-template-grid">
         <article className="record-template-main">
+          {document.catalog_id === "disa-cci" ? (
+            <section className="record-context-note" aria-labelledby="cci-context-heading">
+              <h2 id="cci-context-heading">Start here</h2>
+              <p>
+                CCI records deliberately publish a concise requirement, not an
+                implementation procedure. Read the official requirement below,
+                then use its evidence-backed related records to find the
+                applicable STIG, SRG, or control material.
+              </p>
+              <div className="card-actions">
+                <AppLink onNavigate={onNavigate} patch={{ node: node.id }} variant="secondary" view="atlas-map">
+                  Explore connections
+                </AppLink>
+                <AppLink
+                  onNavigate={onNavigate}
+                  patch={{ crosswalk: "relationships", intent: "item-mapping", items: document.item_id, source: document.catalog_id }}
+                  variant="secondary"
+                  view="matrix"
+                >
+                  Compare this CCI
+                </AppLink>
+              </div>
+            </section>
+          ) : null}
           {source ? (
             <p className="support-meta" data-record-source-identity>
               Source excerpt from {source.display_name || source.name}
@@ -443,6 +528,36 @@ export function ObjectDetailPage(props: {
               })}
             </div>
           )}
+          {document.catalog_id === "disa-cci" && immediateConnectionGroups.length ? (
+            <section className="record-connections record-connections--inline" data-record-section="related-records">
+              <div className="section-header">
+                <div>
+                  <h2>Evidence-backed connected records</h2>
+                  <p>Start with these {immediateConnectionGroups.reduce((total, group) => total + group.items.length, 0)} of {connectionCount} published links.</p>
+                </div>
+                <Badge tone="info">{connectionCount}</Badge>
+              </div>
+              <div className="record-connection-groups">
+                {immediateConnectionGroups.map((group) => (
+                  <section key={`${group.catalogId}:${group.relationshipType}`}>
+                    <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
+                    <ul>
+                      {group.items.map((item) => (
+                        <li data-record-connection-id={item.edgeId} key={item.edgeId}>
+                          <AppLink onNavigate={onNavigate} patch={{ node: item.nodeId }} view="library-detail">
+                            <strong>{item.itemId}</strong>{item.title !== item.itemId ? ` — ${item.title}` : ""}
+                          </AppLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ))}
+              </div>
+              <AppLink onNavigate={onNavigate} patch={{ node: node.id }} variant="secondary" view="atlas-map">
+                Explore all connections in Atlas
+              </AppLink>
+            </section>
+          ) : null}
 
         </article>
 
@@ -453,19 +568,32 @@ export function ObjectDetailPage(props: {
           <section>
             <h2>About This Record</h2>
             <div className="record-classification-tags">
-              {recordTags.map((tag) => tag.kind === "area" ? (
-                <BucketTag
-                  area={tag.label}
-                  explanation={tagProvenanceExplanation(tag.provenance)}
-                  key={tag.id}
-                >
-                  {tag.label}
-                </BucketTag>
-              ) : (
-                <LineTag explanation={tagProvenanceExplanation(tag.provenance)} key={tag.id}>
-                  <AcronymText>{tag.label}</AcronymText>
-                </LineTag>
-              ))}
+              {recordTags.map((tag) => {
+                const content = tag.kind === "area" ? (
+                  <BucketTag
+                    area={tag.label}
+                    explanation={tagProvenanceExplanation(tag.provenance)}
+                  >
+                    {tag.label}
+                  </BucketTag>
+                ) : (
+                  <LineTag explanation={tagProvenanceExplanation(tag.provenance)}>
+                    <AcronymText>{tag.label}</AcronymText>
+                  </LineTag>
+                );
+                return TAXONOMY_TAG_BY_ID.has(tag.id) ? (
+                  <AppLink
+                    aria-label={`Filter the Library by ${tag.label}`}
+                    className="record-taxonomy-link"
+                    key={tag.id}
+                    onNavigate={onNavigate}
+                    patch={{ tags: [tag.id] }}
+                    view="search"
+                  >
+                    {content}
+                  </AppLink>
+                ) : <Fragment key={tag.id}>{content}</Fragment>;
+              })}
             </div>
             <dl className="record-source-facts">
               <div>
@@ -515,17 +643,20 @@ export function ObjectDetailPage(props: {
           </section>
         </aside>
 
-        {connectionGroups.length ? (
+        {document.catalog_id !== "disa-cci" && connectionGroups.length ? (
           <section className="record-connections record-connections--related" data-record-section="related-records">
             <div className="section-header">
               <div>
                 <h2>Related records</h2>
-                <p>Formal published links to other publications.</p>
+                <p>
+                  Evidence-backed published links to other publications.
+                  Showing {visibleConnectionGroups.reduce((total, group) => total + group.items.length, 0)} at a time.
+                </p>
               </div>
               <Badge tone="info">{connectionCount}</Badge>
             </div>
             <div className="record-connection-groups">
-              {connectionGroups.map((group) => (
+              {visibleConnectionGroups.map((group) => (
                 <section key={`${group.catalogId}:${group.relationshipType}`}>
                   <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
                   <ul>
@@ -578,6 +709,19 @@ export function ObjectDetailPage(props: {
                 </section>
               ))}
             </div>
+            {visibleConnectionCount < connectionCount ? (
+              <button
+                className="atlas-spatial-more"
+                onClick={() =>
+                  setVisibleConnectionCount((count) =>
+                    Math.min(count + 50, connectionCount),
+                  )
+                }
+                type="button"
+              >
+                Show 50 more · {connectionCount - visibleConnectionCount} remaining
+              </button>
+            ) : null}
           </section>
         ) : null}
       </div>

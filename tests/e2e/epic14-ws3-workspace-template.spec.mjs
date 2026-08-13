@@ -25,7 +25,8 @@ test("WS3 Library uses Template C browse, facets, and fully linked record rows",
   }));
   expect(railStyle).toEqual({ position: "sticky", width: 280 });
   await expect(workspace.getByRole("button", { name: "Filters" })).toBeHidden();
-  await expect(workspace.locator(".workspace-area-card .bucket-tag")).toHaveCount(9);
+  // Empty editorial areas are intentionally not selectable Library facets.
+  await expect(workspace.locator(".workspace-area-card .bucket-tag")).toHaveCount(7);
 
   await page.getByRole("searchbox", { name: "Filter results by ID, title, or topic" }).fill("3.1.1");
   await page.getByRole("button", { name: "Search", exact: true }).click();

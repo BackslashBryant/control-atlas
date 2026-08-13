@@ -404,6 +404,7 @@ function FocusedAtlas(props: {
   );
   const [selectedRow, setSelectedRow] = useState<AtlasRelationshipRow | null>(null);
   const inspectorRef = useRef<HTMLElement | null>(null);
+  const previousRecordIdRef = useRef(record.center_node.id);
   const centerLabel =
     record.center_node.metadata?.item_id ||
     record.center_node.metadata?.title ||
@@ -502,6 +503,21 @@ function FocusedAtlas(props: {
     return () => window.cancelAnimationFrame(frame);
   }, [selectedRow]);
 
+  // A click in the Atlas must expose its next task. Previously a record
+  // change left Connections below the fold with no indication that it had
+  // rendered. Do not disturb an initial deep link, but move a subsequent
+  // Atlas selection to the now-ready workspace and announce it by focus.
+  useEffect(() => {
+    if (previousRecordIdRef.current === record.center_node.id) return;
+    previousRecordIdRef.current = record.center_node.id;
+    const frame = window.requestAnimationFrame(() => {
+      const heading = document.getElementById("atlas-connections-heading");
+      heading?.focus({ preventScroll: true });
+      heading?.scrollIntoView({ behavior: "auto", block: "start" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [record.center_node.id]);
+
   function updateFilters(patch: Partial<AtlasFilterState>) {
     setSelectedRow(null);
     patchAtlas({
@@ -590,7 +606,16 @@ function FocusedAtlas(props: {
               atlasParent: "",
             })
           }
-          onOpenCompare={() => onNavigate("matrix", { source: centerCatalogId })}
+          onOpenCompare={() =>
+            onNavigate("matrix", {
+              crosswalk: "relationships",
+              intent: "frameworks",
+              source: centerCatalogId,
+              target: "",
+              mappingSource: "",
+              compareRun: "",
+            })
+          }
           onOpenPublication={(atlasLimb, atlasFramework) =>
             patchAtlas({
               atlasAxis: "framework",
@@ -628,8 +653,20 @@ function FocusedAtlas(props: {
         <p role="alert">The Atlas view is unavailable. Reload the page to try again.</p>
       )}
 
-      <div className="atlas-focused-toolbar">
-        <h2 className="atlas-workspace-heading">Connections</h2>
+      <div className="atlas-focused-toolbar" id="atlas-connections-workspace">
+        <div>
+          <h2
+            className="atlas-workspace-heading"
+            id="atlas-connections-heading"
+            tabIndex={-1}
+          >
+            Connections
+          </h2>
+          <p className="atlas-workspace-orientation">
+            Choose a connection type to inspect a bounded set, open a record,
+            or switch to the evidence list.
+          </p>
+        </div>
         <div className="atlas-workspace-controls">
           <button
             aria-controls="atlas-hierarchy-panel"
@@ -784,11 +821,7 @@ function FocusedAtlas(props: {
                 <RelationshipGraphTable
                   centerNodeId={record.center_node.id}
                   conciseTrust
-                  onOpenNode={(node) =>
-                    setSelectedRow(
-                      rows.find((row) => row.counterpart.id === node) || null,
-                    )
-                  }
+                  onOpenNode={onOpenNode}
                   rows={listRows}
                 />
               ) : (

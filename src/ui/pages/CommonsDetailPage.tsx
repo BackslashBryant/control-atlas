@@ -15,6 +15,7 @@ import { AppLink } from "../components/AppLink";
 import type { CommonsResource } from "../lib/commonsTypes";
 import { serializeHashLocation } from "../lib/hashRoutes";
 import { resourceAccessLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
+import { taxonomyTagsForResource } from "../../shared/record-taxonomy.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
@@ -52,6 +53,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
   const children = dataset?.resources.filter((entry) => resource.childResourceIds?.includes(entry.id)) || [];
   const collections = dataset?.collections.filter((collection) => resource.featuredCollections?.includes(collection.id)) || [];
   const usefulFor = [...resource.lifecycleStages, ...(resource.technologyScopes || []), ...resource.audiences].filter(Boolean);
+  const taxonomyTags = taxonomyTagsForResource(resource);
   const warning = resource.resourceType === "community_forum"
     ? "Do not post CUI, credentials, system details, assessment evidence, or other non-public organizational information."
     : resource.warnings?.[0];
@@ -102,6 +104,16 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
               </DetailSection>
             ) : resource.resourceType === "tool" ? <DetailSection title="Screenshots"><p>{resource.media?.reason || "No attributable publisher screenshot was available."}</p></DetailSection> : null}
             <DetailSection title="Useful For"><div className="resource-detail-tags">{usefulFor.map((item) => <span key={item}>{display(item)}</span>)}</div></DetailSection>
+            {taxonomyTags.length ? (
+              <DetailSection title="Governed discovery tags">
+                <p>These tags come only from reviewed structured resource fields. They open the matching Library context; they do not claim that a framework applies to this resource.</p>
+                <div className="resource-detail-tags">
+                  {taxonomyTags.map((tag) => (
+                    <AppLink key={tag.id} onNavigate={onNavigate} patch={{ tags: [tag.id] }} view="search">{tag.label}</AppLink>
+                  ))}
+                </div>
+              </DetailSection>
+            ) : null}
             <DetailSection title="Compatibility">
               {resource.compatibility?.status === "documented" ? <div className="resource-detail-tags">{[...resource.compatibility.operatingSystems, ...resource.compatibility.environments].map((item) => <span key={item}>{item}</span>)}</div> : null}
               <p>{resource.compatibility?.note || "Compatibility was not stated in the reviewed publisher source."}</p>

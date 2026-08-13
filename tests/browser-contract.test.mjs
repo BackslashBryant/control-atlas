@@ -54,7 +54,7 @@ test('shell identifies Control Atlas and progressively boots the React workspace
   assert.equal(packageJson.dependencies['react-router'], undefined);
 });
 
-test('shell exposes three primary destinations and three overflow pages', () => {
+test('shell exposes direct task navigation and keeps Guides in overflow', () => {
   assert.doesNotMatch(html, /btn-toggle-mode/);
   assert.doesNotMatch(html, /Plain labels/);
   assert.doesNotMatch(html, /Technical labels/);
@@ -68,15 +68,17 @@ test('shell exposes three primary destinations and three overflow pages', () => 
   assert.match(routeIdentity, /label: "Guides"/);
   assert.match(routeIdentity, /Sources/);
   assert.match(routeIdentity, /About/);
+  const staticPrimaryNav = html.match(/<nav aria-label="Primary navigation"[\s\S]*?<\/nav>/)?.[0] || "";
+  assert.match(staticPrimaryNav, /#\/atlas[\s\S]*#\/library[\s\S]*#\/compare[\s\S]*#\/resources[\s\S]*#\/sources[\s\S]*#\/about/);
   assert.match(navigation, /PRIMARY_SECTION_LABEL = "Explore Control Atlas"/);
-  assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "atlas-map"[\s\S]*view: "search"[\s\S]*view: "commons"/);
+  assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "atlas-map"[\s\S]*view: "search"[\s\S]*view: "matrix"[\s\S]*view: "commons"/);
   assert.doesNotMatch(
     navigation.match(/PRIMARY_NAV_ITEMS:[\s\S]*?\n\];/)?.[0] || "",
     /view: "patterns"/,
   );
-  assert.match(navigation, /OVERFLOW_NAV_ITEMS[\s\S]*GUIDES_NAV_ITEM[\s\S]*UTILITY_NAV_ITEMS/);
+  assert.match(navigation, /OVERFLOW_NAV_ITEMS[\s\S]*GUIDES_NAV_ITEM/);
   assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
-  assert.doesNotMatch(navigation, /view: "start-here"|view: "matrix"|view: "templates"/);
+  assert.doesNotMatch(navigation, /view: "start-here"|view: "templates"/);
   assert.doesNotMatch(navigation, /The framework/);
   assert.doesNotMatch(navigation, /NAV_GROUPS/);
   assert.doesNotMatch(navigation, /Crosswalks/);
@@ -141,7 +143,7 @@ test('brand identity is immediate, animated, and does not use an entrance gate',
   assert.match(relationshipExplorer, /lazy\(\(\) => import\(/);
   assert.match(relationshipExplorer, /useClusteredGraph/);
   assert.match(relationshipGraph, /from "@xyflow\/react"/);
-  assert.match(relationshipGraph, /from "elkjs\/lib\/elk\.bundled\.js"/);
+  assert.match(relationshipGraph, /import\("elkjs\/lib\/elk\.bundled\.js"\)/);
   assert.match(relationshipGraph, /<ReactFlow/);
   assert.match(relationshipGraph, /<MiniMap/);
   assert.match(relationshipGraph, /<Controls/);
@@ -211,7 +213,7 @@ test('graph implementation references are documented', () => {
     'https://www.nist.gov/cyberframework',
     'https://csrc.nist.gov/projects/olir',
   ]) {
-    assert.match(references, new RegExp(link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.ok(references.includes(link), `missing graph reference: ${link}`);
   }
 });
 
@@ -390,6 +392,19 @@ test('mounted record surfaces render official descriptions rather than synthetic
   assert.match(detailPage, /data-source-text="published"/);
   assert.doesNotMatch(surfaces, /No narrative description was published for this record/);
   assert.doesNotMatch(surfaces, /plain_language_summary|plain_action/);
+});
+
+test('concise DISA CCI records orient the user before the publisher requirement', () => {
+  const detail = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
+  const startHere = detail.indexOf('CCI records deliberately publish a concise requirement');
+  const sourceExcerpt = detail.indexOf('Source excerpt from');
+  assert.ok(startHere >= 0, 'CCI records need an explicit source-first orientation');
+  assert.ok(sourceExcerpt > startHere, 'CCI orientation must appear before the terse publisher requirement');
+  assert.match(detail, /Explore connections/);
+  assert.match(detail, /Compare this CCI/);
+  assert.match(detail, /props\.kind === "references"/);
+  assert.match(detail, /Evidence-backed connected records/);
+  assert.match(detail, /Explore all connections in Atlas/);
 });
 
 test('Catalog controls stay anchored to the records section', () => {

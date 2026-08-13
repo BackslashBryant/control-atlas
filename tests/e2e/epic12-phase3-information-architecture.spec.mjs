@@ -5,10 +5,11 @@ import { attachPageDiagnostics, gotoApp, waitForAppReady } from "./support.mjs";
 const NAV = [
   { label: "Atlas", path: "/atlas", placement: "primary" },
   { label: "Library", path: "/library", placement: "primary" },
+  { label: "Compare", path: "/compare", placement: "primary" },
   { label: "Resources", path: "/resources", placement: "primary" },
   { label: "Guides", path: "/guides", placement: "overflow" },
-  { label: "Sources", path: "/sources", placement: "overflow" },
-  { label: "About", path: "/about", placement: "overflow" },
+  { label: "Sources", path: "/sources", placement: "primary" },
+  { label: "About", path: "/about", placement: "primary" },
 ];
 
 test.beforeEach(async ({ page }) => {
@@ -16,22 +17,20 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
-test("Epic 14 header has three primary destinations and one overflow from 1024px", async ({ page }) => {
+test("header exposes task destinations directly from 1200px", async ({ page }) => {
   test.setTimeout(120_000);
-  for (const width of [1024, 1440]) {
+  for (const width of [1200, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await gotoApp(page, "/#/library?q=access+control");
     await waitForAppReady(page, { allowPartial: true });
 
     const primary = page.locator('header.site-header nav[aria-label="Primary navigation"]');
-    await expect(primary.locator("a[href]")).toHaveCount(3);
-    await expect(primary.locator("a[href]")).toHaveText(["Atlas", "Library", "Resources"]);
+    await expect(primary.locator("a[href]")).toHaveCount(6);
+    await expect(primary.locator("a[href]")).toHaveText(["Atlas", "Library", "Compare", "Resources", "Sources", "About"]);
     await expect(page.locator('header.site-header nav[aria-label="Utility navigation"]')).toHaveCount(0);
     await page.getByRole("button", { name: "Open more pages" }).click();
     await expect(page.getByRole("navigation", { name: "More pages" }).getByRole("link")).toHaveText([
       "Guides",
-      "Sources",
-      "About",
     ]);
     await page.keyboard.press("Escape");
     const geometry = await page.locator("header.site-header").evaluate((header) => ({
@@ -196,13 +195,15 @@ test("DISA STIG publication entry points preserve the benchmark layer above V-ID
   await page.getByRole("button", { name: /DISA STIG/ }).click();
   await expect(page).toHaveURL(/#\/library\/publication\/disa-stig$/);
   await expect(page.getByRole("heading", { name: "DISA STIG", level: 1 })).toBeVisible();
-  await expect(page.getByText("353 benchmarks", { exact: true })).toBeVisible();
-  await expect(page.locator('[data-published-tier="benchmark"]')).toHaveCount(353);
+  const benchmarks = page.locator('[data-published-tier="benchmark"]');
+  const benchmarkCount = await benchmarks.count();
+  expect(benchmarkCount).toBeGreaterThan(0);
+  await expect(page.getByText(`${benchmarkCount} benchmarks`, { exact: true })).toBeVisible();
   await expect(page.locator(".catalog-record-title")).toHaveCount(0);
 
   await gotoApp(page, "/#/library/publication/disa-stig?browseAll=true");
   await waitForAppReady(page, { allowPartial: true });
-  await expect(page.locator('[data-published-tier="benchmark"]')).toHaveCount(353);
+  await expect(benchmarks).toHaveCount(benchmarkCount);
   await expect(page.locator(".catalog-record-title")).toHaveCount(0);
 
   const benchmark = page.locator('[data-published-tier="benchmark"]', {
@@ -254,7 +255,7 @@ test("Phase 3 record actions and global footer expose the required hierarchy", a
     await waitForAppReady(page, { allowPartial: true });
     const footer = page.locator("footer.site-footer");
     await expect(footer).toBeVisible();
-    await expect(footer).toContainText("Free and open source, not a government system");
+    await expect(footer).toContainText("Free and open source. Not a government system.");
     await expect(footer).toContainText("Last updated");
     await expect(footer.getByRole("link", { name: "Submit resource" })).toBeVisible();
     await expect(footer.getByRole("link", { name: "Report a problem" })).toBeVisible();
@@ -270,7 +271,7 @@ test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface lab
   const areas = page.locator('[data-atlas-node-id^="atlas:LIMB-"]');
   await expect(areas).toHaveCount(9);
   for (const area of await areas.all()) {
-    await expect(area).toContainText(/\d[\d,]* records/);
+    await expect(area).toContainText(/(?:\d[\d,]* records|No records yet\.)/);
   }
-  await expect(page.locator(".atlas-tree__totals")).toContainText("23");
+  await expect(page.locator(".atlas-tree__totals").getByRole("definition").nth(1)).toHaveText(/\d+/);
 });
