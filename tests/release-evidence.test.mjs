@@ -14,3 +14,15 @@ test("release evidence is owned by executable gates and keeps external proof bou
   assert.match(operations, /Automated axe is not hands-on NVDA, VoiceOver, or TalkBack evidence/);
   assert.doesNotMatch(operations, /docs\/audits/);
 });
+
+test("footer freshness separates product release from generated source data", () => {
+  const footer = readFileSync("src/ui/components/SiteFooter.tsx", "utf8");
+  const builder = readFileSync("tools/build-static-site.mjs", "utf8");
+
+  assert.match(footer, /Product release \{PRODUCT_RELEASE_DATE\}/);
+  assert.match(footer, /Source data built \{SOURCE_DATA_DATE\}/);
+  assert.doesNotMatch(footer, /source-registry\.json|Last updated/);
+  assert.match(builder, /data\/generated\/sources\.json/);
+  assert.match(builder, /source_data_generated_at: sourceDataGeneratedAt/);
+  assert.match(builder, /released_at: releaseDate/);
+});

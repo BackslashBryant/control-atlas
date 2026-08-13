@@ -82,6 +82,24 @@ test("WS6 About states the research boundary exactly", async ({ page }) => {
     "Use Control Atlas for research, not compliance or authorization decisions.",
     { exact: true },
   )).toBeVisible();
+  for (const title of [
+    "What It Is",
+    "Why It Exists",
+    "How It Works",
+    "Built for Shared Work",
+    "Private by Default",
+    "Limits",
+    "About the Project",
+  ]) {
+    const heading = page.getByRole("heading", { level: 2, name: title });
+    await expect(heading).toBeVisible();
+    const headingId = await heading.getAttribute("id");
+    expect(headingId).toBeTruthy();
+    await expect(heading.locator("xpath=ancestor::article")).toHaveAttribute(
+      "aria-labelledby",
+      headingId,
+    );
+  }
 });
 
 test("WS5 Guides implements a numbered, icon-bearing, whole-card Template F directory", async ({ page }) => {

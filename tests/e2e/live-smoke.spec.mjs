@@ -110,5 +110,7 @@ test("live smoke: deployed artifact matches the expected commit", async ({
   );
   expect(response.ok()).toBeTruthy();
   const release = await response.json();
-  expect(release).toEqual({ schema_version: "1.0", commit_sha: expectedSha });
+  expect(release).toMatchObject({ schema_version: "1.1", commit_sha: expectedSha });
+  expect(release.released_at).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+  expect(release.source_data_generated_at).toMatch(/^\d{4}-\d{2}-\d{2}T/);
 });

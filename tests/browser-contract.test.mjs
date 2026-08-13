@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
 import { HOME_CONTENT, HOME_DESTINATIONS } from '../src/shared/home-content.mjs';
@@ -28,6 +29,18 @@ const relationshipGraph = existsSync('src/ui/components/RelationshipGraph.tsx')
 const graphLayout = existsSync('src/ui/lib/graphLayout.ts')
   ? readFileSync('src/ui/lib/graphLayout.ts', 'utf8')
   : '';
+
+test('tracked product and documentation files forbid the obsolete public hostname', () => {
+  const obsoleteUrl = ['https://', 'ash', 'bryant.github.io/control-atlas'].join('');
+  const textExtensions = new Set(['.css', '.html', '.js', '.json', '.md', '.mjs', '.ts', '.tsx', '.yaml', '.yml']);
+  const trackedFiles = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' })
+    .split('\0')
+    .filter(Boolean)
+    .filter((path) => textExtensions.has(path.slice(path.lastIndexOf('.'))));
+  const offenders = trackedFiles.filter((path) => readFileSync(path, 'utf8').includes(obsoleteUrl));
+
+  assert.deepEqual(offenders, [], `obsolete public hostname found in: ${offenders.join(', ')}`);
+});
 
 test('shell identifies Control Atlas and progressively boots the React workspace', () => {
   assert.match(html, /Control Atlas/);

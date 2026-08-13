@@ -11,12 +11,12 @@ export function AboutPage() {
     <Panel>
       <PageHeader primary summary={SITE_COPY.routes.about.purpose} title={SITE_COPY.routes.about.title} />
 
-      <div className="flex flex-col gap-[24px]">
-        <SummaryCard title="What It Is">
+      <div className="about-card-grid">
+        <SummaryCard headingLevel={2} title="What It Is">
           <p>{PRODUCT_DEFINITION}</p>
         </SummaryCard>
 
-        <SummaryCard title="Why It Exists" tone="trust">
+        <SummaryCard headingLevel={2} title="Why It Exists" tone="trust">
           <p>
             Security teams inherit guidance from many publishers, formats, and
             levels of detail. Control Atlas exists to make that guidance
@@ -26,7 +26,7 @@ export function AboutPage() {
           </p>
         </SummaryCard>
 
-        <SummaryCard title="How It Works">
+        <SummaryCard headingLevel={2} title="How It Works">
           <p>
             The Atlas keeps publisher hierarchy separate from cross-source
             relationships. It preserves official identifiers and locators,
@@ -37,7 +37,7 @@ export function AboutPage() {
           </p>
         </SummaryCard>
 
-        <SummaryCard title="Built for Shared Work">
+        <SummaryCard headingLevel={2} title="Built for Shared Work">
           <p>
             This is not a replacement GRC, assessment, ticketing, or document
             repository. It is the connective layer between them: a practical
@@ -46,18 +46,18 @@ export function AboutPage() {
           </p>
         </SummaryCard>
 
-        <SummaryCard title="Private by Default" tone="trust">
+        <SummaryCard headingLevel={2} title="Private by Default" tone="trust">
           <p>
             No account or upload is required. Document work runs in the browser
             and does not store organizational data.
           </p>
         </SummaryCard>
 
-        <SummaryCard title="Limits" tone="warning">
+        <SummaryCard headingLevel={2} title="Limits" tone="warning">
           <p>{PRODUCT_DECISION_BOUNDARY}</p>
         </SummaryCard>
 
-        <SummaryCard title="About the Project">
+        <SummaryCard headingLevel={2} title="About the Project">
           <p>
             Control Atlas is open source under the MIT license and is not a
             government system. Publication details and update dates are
