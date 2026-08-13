@@ -26,7 +26,7 @@ Use the cheapest faithful contract test during development. Run corpus rebuilds 
 4. Require exact-head CI and security checks to pass.
 5. Verify a fresh checkout of the remote branch.
 6. Merge through the repository ship flow; never merge locally around CI.
-7. Verify the deployed `release.json` commit equals merged `main`.
+7. Verify the deployed `release.json` commit equals merged `main` and that its separately labeled product-release and source-data timestamps match the rendered footer.
 8. Inspect representative live desktop and mobile routes, keyboard behavior, overflow, and key source records.
 9. Keep release evidence in CI artifacts, the pull request, and the release—not a dated documentation file.
 10. Delete the completed `docs/Plan.md`, remove clean temporary worktrees and merged local branches, and prune worktrees.

@@ -500,16 +500,14 @@ export function ComparePage(props: {
           <h2 className="visually-hidden" id="compare-kind-heading">
             Comparison types
           </h2>
-          <div aria-label="Comparison modes" className="compare-mode-tabs" role="tablist">
+          <div className="compare-mode-tabs">
             {comparisonCards.map((card) => (
               <button
                 className="intent-card intent-card-button"
-                aria-selected={false}
                 key={card.title}
                 onClick={() =>
                   onNavigate("matrix", activateCompareMode(card.id))
                 }
-                role="tab"
                 type="button"
               >
                 <span className="intent-card-title">{card.title}</span>

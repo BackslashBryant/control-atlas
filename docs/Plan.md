@@ -16,7 +16,9 @@ Ship a source-truthful, task-first Control Atlas without treating parser counts,
 - Source detail now separates publisher version, retrieval date, verification date, publication landing pages, and parser artifacts; fabricated date fallbacks and inaccurate third-party federal-source language are removed; compact headers are opaque.
 - The source register now uses typed recorded/derived/not-applicable/missing states, resolves artifact publishers through parent publications, exposes that basis, and gates required layer completeness without fabricating fields.
 - Source layers, contextual counts and filter options, deep links/history, layer-specific empty states, 25-row rendering, show-more focus, sticky orientation, compact labels, and 320/375/390/768 responsive behavior pass focused contracts and rendered review.
-- Next product milestone: close the remaining route/template polish inventory, starting with the legacy public URL, global freshness dates, Compare chooser semantics, and About heading semantics before the six-width whole-route audit.
+- Route-semantic polish is implemented locally: the footer separates product-release and source-data dates, Compare uses native workflow buttons, About has named H2 card regions and a bounded desktop measure, and compact footer trust links fit within the first viewport at all required compact widths.
+- The obsolete `ashbryant.github.io` host still returns 404 and is not available through the authenticated `BackslashBryant` repository account; the exact obsolete URL is forbidden in owned tracked files, but the external redirect remains open.
+- Next product milestone: complete the six-width whole-route audit and governed taxonomy/discovery proof before assistive-technology evidence and final release closure.
 
 ## Remaining work
 

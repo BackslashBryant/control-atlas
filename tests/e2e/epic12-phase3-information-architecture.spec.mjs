@@ -256,7 +256,8 @@ test("Phase 3 record actions and global footer expose the required hierarchy", a
     const footer = page.locator("footer.site-footer");
     await expect(footer).toBeVisible();
     await expect(footer).toContainText("Free and open source. Not a government system.");
-    await expect(footer).toContainText("Last updated");
+    await expect(footer).toContainText("Product release");
+    await expect(footer).toContainText("Source data built");
     await expect(footer.getByRole("link", { name: "Submit resource" })).toBeVisible();
     await expect(footer.getByRole("link", { name: "Report a problem" })).toBeVisible();
   }

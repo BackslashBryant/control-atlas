@@ -15,7 +15,12 @@ if (!/^[0-9a-f]{40}$/i.test(expectedSha)) {
 
 const path = join(process.cwd(), "dist", "site", "release.json");
 const release = JSON.parse(readFileSync(path, "utf8"));
-if (release.schema_version !== "1.0" || release.commit_sha !== expectedSha) {
+if (
+  release.schema_version !== "1.1" ||
+  release.commit_sha !== expectedSha ||
+  !/^\d{4}-\d{2}-\d{2}T/.test(release.released_at || "") ||
+  !/^\d{4}-\d{2}-\d{2}T/.test(release.source_data_generated_at || "")
+) {
   throw new Error(
     `Site artifact SHA mismatch: expected ${expectedSha}, found ${release.commit_sha || "missing"}`,
   );

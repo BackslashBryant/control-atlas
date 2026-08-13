@@ -144,5 +144,57 @@ test('B14: every Library select exposes a non-empty accessible name', async ({ p
 test('B16: the Compare intent screen offers a real link', async ({ page }) => {
   await page.goto('/#/compare');
   await expect(page.locator('.compare-mode-tabs').first()).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole('tablist', { name: 'Comparison modes' })).toHaveCount(0);
+  const choices = page.locator('.compare-mode-tabs').getByRole('button');
+  await expect(choices).toHaveCount(5);
+  for (const choice of await choices.all()) {
+    await expect(choice).not.toHaveAttribute('aria-selected');
+  }
   expect(await page.locator('main a[href]').count()).toBeGreaterThan(0);
+});
+
+test('route semantic polish holds at all required viewport widths', async ({ page }) => {
+  for (const viewport of [
+    { width: 320, height: 700 },
+    { width: 375, height: 812 },
+    { width: 390, height: 844 },
+    { width: 768, height: 1024 },
+    { width: 1024, height: 900 },
+    { width: 1440, height: 1000 },
+  ]) {
+    const { width, height } = viewport;
+    await page.setViewportSize(viewport);
+
+    await page.goto('/#/compare');
+    const choices = page.locator('.compare-mode-tabs').getByRole('button');
+    await expect(choices).toHaveCount(5);
+    await expect(page.getByRole('tablist', { name: 'Comparison modes' })).toHaveCount(0);
+    expect(await choices.first().evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+
+    await page.goto('/#/about');
+    await expect(page.locator('main article[aria-labelledby]')).toHaveCount(7);
+    await expect(page.locator('main h2')).toHaveCount(7);
+    await expect(page.locator('footer')).toContainText('Product release');
+    await expect(page.locator('footer')).toContainText('Source data built');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    if (width <= 390) {
+      const footerReach = await page.locator('footer').evaluate((footer) => {
+        const required = [
+          ...footer.querySelectorAll('.site-footer-release > *, a[href*="report-broken-link"]'),
+        ];
+        return Math.max(...required.map((element) =>
+          element.getBoundingClientRect().bottom - footer.getBoundingClientRect().top));
+      });
+      expect(footerReach).toBeLessThanOrEqual(height);
+      const links = page.locator('footer a');
+      for (const link of await links.all()) {
+        expect(await link.evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+      }
+    }
+    if (width >= 1024) {
+      const paragraph = page.locator('.about-card-grid .summary-card p').first();
+      expect(await paragraph.evaluate((element) => element.getBoundingClientRect().width)).toBeLessThan(650);
+    }
+  }
 });

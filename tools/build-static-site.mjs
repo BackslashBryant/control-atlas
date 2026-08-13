@@ -86,19 +86,46 @@ if (reuseGenerated) {
 
 assertGeneratedDataComplete();
 
-execFileSync("npx", VITE_BUILD_COMMAND.split(" "), {
-  cwd: ROOT,
-  stdio: "inherit",
-  shell: process.platform === "win32",
-});
-
 const commitSha =
   process.env.CONTROL_ATLAS_COMMIT_SHA ||
   process.env.GITHUB_SHA ||
   execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding: "utf8" }).trim();
+const releaseDate =
+  process.env.CONTROL_ATLAS_RELEASE_DATE ||
+  execFileSync("git", ["show", "-s", "--format=%cI", commitSha], {
+    cwd: ROOT,
+    encoding: "utf8",
+  }).trim();
+const sourceDataGeneratedAt = readGeneratedArtifact(
+  "data/generated/sources.json",
+).generated_at;
+
+if (!/^\d{4}-\d{2}-\d{2}T/.test(releaseDate)) {
+  throw new Error(`Unable to determine release date for ${commitSha}`);
+}
+if (!/^\d{4}-\d{2}-\d{2}T/.test(sourceDataGeneratedAt || "")) {
+  throw new Error("Generated sources are missing a valid generated_at timestamp");
+}
+
+execFileSync("npx", VITE_BUILD_COMMAND.split(" "), {
+  cwd: ROOT,
+  env: {
+    ...process.env,
+    VITE_CONTROL_ATLAS_RELEASE_DATE: releaseDate,
+    VITE_CONTROL_ATLAS_SOURCE_DATA_DATE: sourceDataGeneratedAt,
+  },
+  stdio: "inherit",
+  shell: process.platform === "win32",
+});
+
 writeFileSync(
   join(DIST, "release.json"),
-  `${JSON.stringify({ schema_version: "1.0", commit_sha: commitSha })}\n`,
+  `${JSON.stringify({
+    schema_version: "1.1",
+    commit_sha: commitSha,
+    released_at: releaseDate,
+    source_data_generated_at: sourceDataGeneratedAt,
+  })}\n`,
   "utf8",
 );
 

@@ -1,6 +1,6 @@
 import * as Accordion from "@radix-ui/react-accordion";
 import { IconArrowRight } from "@tabler/icons-react";
-import type { ReactNode } from "react";
+import { useId, type ElementType, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import {
@@ -278,11 +278,23 @@ export function WorkbenchControlSurface(props: {
 export function SummaryCard(props: {
   title: string;
   children: ReactNode;
+  headingLevel?: 2 | 3 | 4;
   tone?: "default" | "trust" | "warning";
 }) {
+  const titleId = useId();
+  const HeadingTag = (props.headingLevel
+    ? `h${props.headingLevel}`
+    : "span") as ElementType;
+
   return (
-    <article className={`summary-card tone-${props.tone || "default"}`}>
-      <span className="summary-card-title">{props.title}</span>
+    <article
+      aria-label={props.headingLevel ? undefined : props.title}
+      aria-labelledby={props.headingLevel ? titleId : undefined}
+      className={`summary-card tone-${props.tone || "default"}`}
+    >
+      <HeadingTag className="summary-card-title" id={props.headingLevel ? titleId : undefined}>
+        {props.title}
+      </HeadingTag>
       <div>{props.children}</div>
     </article>
   );
