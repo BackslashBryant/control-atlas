@@ -12,11 +12,24 @@ import {
 } from "../../src/ui/lib/viewState";
 
 test("governed taxonomy defines ownership, review, layers, and requested discovery categories", () => {
-  assert.equal(TAXONOMY_CONTRACT.version, "1.0.0");
+  assert.equal(TAXONOMY_CONTRACT.version, "1.1.0");
   assert.ok(TAXONOMY_CONTRACT.owner);
   assert.match(TAXONOMY_CONTRACT.review_date, /^\d{4}-\d{2}-\d{2}$/);
   assert.match(TAXONOMY_CONTRACT.supersession_rule, /replaces/i);
   assert.deepEqual(Object.keys(TAXONOMY_CONTRACT.layers).sort(), ["atlas_evidence", "editorial", "publisher"]);
+  assert.deepEqual(TAXONOMY_CONTRACT.assignment_provenance_layers, {
+    publisher: "publisher",
+    inferred: "atlas_evidence",
+  });
+  assert.deepEqual(Object.keys(TAXONOMY_CONTRACT.applicability_states).sort(), ["applicable", "not_applicable", "unreviewed"]);
+  assert.match(TAXONOMY_CONTRACT.applicability_resolution.absence_rule, /unreviewed/i);
+  assert.deepEqual(TAXONOMY_CONTRACT.filter_semantics, {
+    within_dimension: "or",
+    across_dimensions: "and",
+    url_parameter: "tag",
+    unavailable_values: "suppress",
+    aliases: "search_only",
+  });
   for (const id of [
     "technology.operating-system", "asset.database", "asset.network-device",
     "asset.application", "environment.cloud", "asset.container",

@@ -56,7 +56,13 @@ test("V1 workflow 04 — verify official record identity and source", async ({ p
   await expect(facts).toContainText("NIST");
   await expect(facts).toContainText("Version");
   await expect(facts).toContainText(/Revision 5|Rev\. 5/);
-  await expect(facts).toContainText("Last Checked");
+  await expect(facts).toContainText("Retrieved");
+  await expect(facts).toContainText("Last verified");
+
+  await open(page, "/#/record/nist-mobile-threats/CEL-1");
+  const retrievedOnlyFacts = page.locator(".record-source-facts");
+  await expect(retrievedOnlyFacts).toContainText("Retrieved");
+  await expect(retrievedOnlyFacts).not.toContainText("Last verified");
 });
 
 test("V1 workflow 05 — follow a record and return without losing search state", async ({

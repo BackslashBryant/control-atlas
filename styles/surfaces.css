@@ -1284,10 +1284,20 @@ a {
     min-width: 0;
   }
 
+  .detail-page .record-actions-menu {
+    width: 100%;
+  }
+
+  .detail-page .record-actions-menu summary {
+    width: 100%;
+    justify-content: center;
+  }
+
   .detail-page .record-actions-popover {
-    right: auto;
+    right: 0;
     left: 0;
-    max-width: calc(100vw - 2 * var(--ca-space-4));
+    min-width: 0;
+    max-width: none;
   }
 }
 
@@ -7241,17 +7251,41 @@ button.atlas-leverage-row:hover {
 }
 
 .home-footer {
-  padding: 10px 24px;
-  text-align: center;
+  padding: var(--ca-space-3) var(--ca-space-6);
   border-top: 1px solid var(--ca-border-strong);
   background: var(--ca-surface-raised);
 }
 
-.home-footer p {
+.home-footer__trust {
+  display: flex;
   max-width: 1280px;
   margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--ca-space-1) var(--ca-space-4);
+}
+
+.home-footer p,
+.home-footer a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  max-width: 1280px;
+  margin: 0;
   color: var(--ca-text-subtle);
   font-size: 12px;
+}
+
+.home-footer a {
+  color: var(--ca-link);
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 720px) {
+  .home-footer__trust {
+    justify-content: flex-start;
+  }
 }
 
 .build-lane-grid {

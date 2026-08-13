@@ -1,0 +1,160 @@
+import { expect, test } from "@playwright/test";
+
+import { dismissOnboarding, waitForAppReady } from "./support.mjs";
+
+async function open(page, route) {
+  await page.goto(route);
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+}
+
+async function resultTotal(page) {
+  const label = await page.locator(".workspace-result-count").innerText();
+  const showing = label.match(/of ([\d,]+) results?/i);
+  const exact = label.match(/([\d,]+) results?/i);
+  return Number((showing?.[1] || exact?.[1] || "0").replaceAll(",", ""));
+}
+
+test("governed tags keep stable URL, OR/AND, alias, count, and unavailable-value behavior", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page, "/#/library");
+
+  const facets = page.locator(".workspace-facet-rail");
+  const assetFacet = facets.getByRole("group", { name: "Asset and system" });
+  await assetFacet.getByPlaceholder("Find asset and system").fill("dbms");
+  await expect(assetFacet.getByRole("checkbox", { name: /Database/ })).toBeVisible();
+  await assetFacet.getByPlaceholder("Find asset and system").fill("");
+
+  await assetFacet.getByRole("checkbox", { name: /Server/ }).click();
+  await expect(page).toHaveURL(/tag=asset\.server/);
+  const serverCount = await resultTotal(page);
+
+  await assetFacet.getByRole("checkbox", { name: /Workstation/ }).click();
+  await expect(page).toHaveURL(/tag=asset\.server.*tag=asset\.workstation/);
+  const withinDimensionCount = await resultTotal(page);
+  expect(withinDimensionCount).toBeGreaterThanOrEqual(serverCount);
+
+  const vendorFacet = facets.getByRole("group", { name: "Vendor" });
+  await vendorFacet.getByRole("checkbox", { name: /Microsoft/ }).click();
+  await expect(page).toHaveURL(/tag=asset\.server.*tag=asset\.workstation.*tag=vendor\.microsoft/);
+  const acrossDimensionCount = await resultTotal(page);
+  expect(acrossDimensionCount).toBeLessThanOrEqual(withinDimensionCount);
+
+  await open(page, "/#/library?tag=asset.iot");
+  const contextualVendorFacet = page.locator(".workspace-facet-rail").getByRole("group", { name: "Vendor" });
+  await expect(contextualVendorFacet.getByText("No governed tags are available in this context.")).toBeVisible();
+  await expect(contextualVendorFacet.getByRole("checkbox")).toHaveCount(0);
+});
+
+test("record and Resource governed tags hand off to the filtered Library", async ({ page }) => {
+  await open(page, "/#/record/nist-mobile-threats/CEL-1");
+  await page.getByRole("link", { name: "Filter the Library by Mobile" }).click();
+  await expect(page).toHaveURL(/#\/library\?tag=asset\.mobile/);
+  await expect(page.getByRole("button", { name: /Mobile/ })).toBeVisible();
+
+  await open(page, "/#/resources/tool-cisa-cset");
+  const governedTags = page.getByRole("heading", { name: "Governed discovery tags" }).locator("..");
+  await governedTags.getByRole("link", { name: "Microsoft Windows" }).click();
+  await expect(page).toHaveURL(/#\/library\?tag=product\.microsoft-windows/);
+  await expect(page.getByRole("button", { name: /Microsoft Windows/ })).toBeVisible();
+});
+
+test("global navigation has no breakpoint dead zone", async ({ page }) => {
+  for (const width of [1023, 1024, 1119, 1199]) {
+    await page.setViewportSize({ width, height: 800 });
+    await open(page, "/#/about");
+    const toggle = page.getByRole("button", { name: "Open navigation menu" });
+    await expect(toggle).toBeVisible();
+    await expect(toggle).toHaveCSS("min-height", "44px");
+  }
+
+  await page.setViewportSize({ width: 1024, height: 800 });
+  await open(page, "/#/about");
+  await page.getByRole("button", { name: "Open navigation menu" }).click();
+  await page.getByRole("navigation", { name: "Primary navigation (mobile)" }).getByRole("link", { name: "Guides" }).click();
+  await expect(page).toHaveURL(/#\/guides$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/about$/);
+  await page.goForward();
+  await expect(page).toHaveURL(/#\/guides$/);
+
+  await page.setViewportSize({ width: 1200, height: 800 });
+  await open(page, "/#/about");
+  await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open more pages" })).toBeVisible();
+});
+
+test("record actions stay in the viewport and Escape restores focus", async ({ page }) => {
+  for (const width of [320, 375, 390, 768]) {
+    await page.setViewportSize({ width, height: 800 });
+    await open(page, "/#/record/nist-800-53/AC-2");
+    const summary = page.locator(".record-actions-menu summary");
+    await summary.click();
+    const metrics = await page.locator(".record-actions-popover").evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return {
+        documentWidth: globalThis.document.documentElement.scrollWidth,
+        left: rect.left,
+        right: rect.right,
+        viewportWidth: globalThis.innerWidth,
+      };
+    });
+    expect(metrics.left).toBeGreaterThanOrEqual(0);
+    expect(metrics.right).toBeLessThanOrEqual(metrics.viewportWidth);
+    expect(metrics.documentWidth).toBeLessThanOrEqual(metrics.viewportWidth);
+    await page.keyboard.press("Escape");
+    await expect(page.locator(".record-actions-menu")).not.toHaveAttribute("open", "");
+    await expect(summary).toBeFocused();
+  }
+});
+
+test("Home exposes compact release, source, and contribution trust links", async ({ page }) => {
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
+    await page.goto("/");
+    const home = page.locator("[data-static-home]:not([hidden])");
+    await expect(home.locator('[data-app-ready="true"]')).toBeVisible();
+    const footer = home.locator(".home-footer");
+    await expect(footer).toContainText("Free and open source. Not a government system.");
+    await expect(footer).toContainText("Product release");
+    await expect(footer).toContainText("Source data built");
+    await expect(footer.getByRole("link", { name: "Source attribution" })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Submit resource" })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Report a problem" })).toBeVisible();
+  }
+});
+
+test("Resources presents governed labels instead of raw enums", async ({ page }) => {
+  await open(page, "/#/resources/official-cisa-kev-catalog");
+  await expect(page.getByText("General IT", { exact: true })).toBeVisible();
+  await expect(page.getByText("Public URL", { exact: true })).toBeVisible();
+  await expect(page.getByText("Active", { exact: true })).toBeVisible();
+  const access = page.getByRole("heading", { name: "Access", exact: true }).locator("..");
+  await expect(access.getByText("Access type", { exact: true })).toBeVisible();
+});
+
+test("Guide context hands governed tags to the Library", async ({ page }) => {
+  await open(page, "/#/guides?pattern=cloud-and-shared-responsibility");
+  const guideTags = page.getByRole("region", { name: /Related Library tags for Cloud and shared responsibility/i });
+  const guideTag = guideTags.getByRole("link").first();
+  await expect(guideTag).toBeVisible();
+  await guideTag.click();
+  await expect(page).toHaveURL(/#\/library\?tag=/);
+});
+
+test("starter-document context exposes governed Library tags", async ({ page }) => {
+  await open(page, "/#/build/documents/security_plan_starter?framework=nist-800-53&baseline=LOW");
+  const templateTags = page.getByRole("region", { name: /Governed record tags for Security Plan Starter/ });
+  await expect(templateTags.getByRole("link").first()).toBeVisible();
+});
+
+test("Compare STIG context hands governed tags to the Library", async ({ page }) => {
+  test.setTimeout(75_000);
+  await page.goto("/#/compare/stig-chain?chainCatalog=disa-stig", { waitUntil: "domcontentloaded" });
+  await expect(page.locator(".compare-control-surface")).toBeVisible({ timeout: 60_000 });
+  const compareTags = page.getByRole("region", { name: /Governed record tags for the current STIG or SRG comparison/ });
+  const compareTag = compareTags.getByRole("link").first();
+  await expect(compareTag).toBeVisible();
+  await compareTag.click();
+  await expect(page).toHaveURL(/#\/library\?tag=/);
+});

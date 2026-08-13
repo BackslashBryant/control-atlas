@@ -22,7 +22,7 @@ import {
 } from "../components/WorkspaceTemplate";
 import { Button } from "../components/lsm";
 import type { CommonsCollection, CommonsResource } from "../lib/commonsTypes";
-import { resourceAccessLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
+import { resourceAccessLabel, resourceFieldLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
 import {
   filterDirectoryResources,
   searchDirectoryResources,
@@ -258,7 +258,7 @@ export function CommonsPage(props: {
                     <tr><th scope="row">Type</th>{selectedResources.map((resource) => <td key={resource.id}>{resourceTypeLabel(resource.resourceType)}</td>)}</tr>
                     <tr><th scope="row">Owner</th>{selectedResources.map((resource) => <td key={resource.id}>{resource.publisher}</td>)}</tr>
                     <tr><th scope="row">Access</th>{selectedResources.map((resource) => <td key={resource.id}>{resourceAccessLabel(resource)}</td>)}</tr>
-                    <tr><th scope="row">Maintenance</th>{selectedResources.map((resource) => <td key={resource.id}>{resource.maintenanceStatus.replaceAll("_", " ")}</td>)}</tr>
+                    <tr><th scope="row">Maintenance</th>{selectedResources.map((resource) => <td key={resource.id}>{resourceFieldLabel(resource.maintenanceStatus)}</td>)}</tr>
                   </tbody>
                 </table>
               </div>
@@ -297,7 +297,7 @@ export function CommonsPage(props: {
                         <p className="workspace-result-row__snippet">{resource.cardPurpose || resource.summary}</p>
                         <div className="workspace-result-row__signals">
                           <span>{resourceAccessLabel(resource)}</span>
-                          <span>{resource.maintenanceStatus.replaceAll("_", " ")}</span>
+                          <span>{resourceFieldLabel(resource.maintenanceStatus)}</span>
                         </div>
                       </div>
                     </AppLink>

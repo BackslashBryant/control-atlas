@@ -3,6 +3,7 @@ import { IconBook2, IconExternalLink, IconChevronRight } from "@tabler/icons-rea
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import { contextualResourceRecommendations } from "../lib/contextualResourceRecommendations.mjs";
+import { resourceFieldLabel } from "../lib/resourceBrands.mjs";
 import { AppLink } from "./AppLink";
 
 type ContextualCommonsModuleProps = {
@@ -93,8 +94,8 @@ export function ContextualCommonsModule({
                 >
                   {res.name}
                 </AppLink> : <span className="text-xs font-semibold text-[var(--ca-text)]">{res.name}</span>}
-                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[var(--ca-surface-raised)] text-[var(--ca-text)] capitalize">
-                  {res.resourceLane.replace("_", " ")}
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[var(--ca-surface-raised)] text-[var(--ca-text)]">
+                  {resourceFieldLabel(res.resourceLane)}
                 </span>
               </div>
               <p className="text-[11px] text-[var(--ca-secondary)] mt-0.5">

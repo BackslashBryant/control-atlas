@@ -408,7 +408,7 @@ function connectStaticHeader() {
   );
   staticMenuToggle?.setAttribute(
     'aria-label',
-    window.matchMedia('(max-width: 1023px)').matches
+    window.matchMedia('(max-width: 1199px)').matches
       ? 'Open navigation menu'
       : 'Open more pages',
   );

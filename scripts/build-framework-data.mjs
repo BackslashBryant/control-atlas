@@ -2174,17 +2174,27 @@ function artifact(collection, values, generatedAt) {
   };
 }
 
-function buildTaxonomyCoverage(nodes, catalogs) {
+export function buildTaxonomyCoverage(nodes, catalogs) {
   const catalogNames = new Map(catalogs.map((catalog) => [catalog.id, catalog.name]));
   const byCatalog = new Map();
   const byRecordType = new Map();
   const byDimension = new Map(
     TAXONOMY_CONTRACT.dimensions.map((dimension) => [
       dimension.id,
-      { dimension: dimension.id, label: dimension.label, record_count: 0, tag_assignments: 0 },
+      {
+        dimension: dimension.id,
+        label: dimension.label,
+        record_count: 0,
+        applicable_record_count: 0,
+        not_applicable_record_count: 0,
+        unreviewed_record_count: 0,
+        tag_assignments: 0,
+      },
     ]),
   );
   const bySourceField = new Map();
+  const bySourceBasis = new Map();
+  const byNotApplicableBasis = new Map();
   const records = nodes.filter(
     (node) =>
       node.metadata?.catalog_id &&
@@ -2212,6 +2222,7 @@ function buildTaxonomyCoverage(nodes, catalogs) {
       record_count: 0,
       tagged_record_count: 0,
       tag_assignments: 0,
+      dimensions: {},
     };
     recordType.record_count += 1;
     if (tags.length) recordType.tagged_record_count += 1;
@@ -2223,27 +2234,124 @@ function buildTaxonomyCoverage(nodes, catalogs) {
       const dimensionEntry = byDimension.get(dimension);
       if (dimensionEntry) {
         dimensionEntry.tag_assignments += 1;
-        if (!dimensionsSeen.has(dimension)) dimensionEntry.record_count += 1;
       }
       dimensionsSeen.add(dimension);
       catalog.tag_assignments += 1;
-      catalog.dimensions[dimension] = (catalog.dimensions[dimension] || 0) + 1;
       recordType.tag_assignments += 1;
       const sourceField = tag.basis?.source_field || "unrecorded";
-      bySourceField.set(sourceField, (bySourceField.get(sourceField) || 0) + 1);
+      const sourceFieldEntry = bySourceField.get(sourceField) || {
+        source_field: sourceField,
+        record_ids: new Set(),
+        tag_assignments: 0,
+      };
+      sourceFieldEntry.record_ids.add(node.id);
+      sourceFieldEntry.tag_assignments += 1;
+      bySourceField.set(sourceField, sourceFieldEntry);
+
+      const assignmentProvenance = tag.provenance || "unrecorded";
+      const taxonomyLayer = TAXONOMY_CONTRACT.assignment_provenance_layers[assignmentProvenance] || "unrecorded";
+      const basisKey = [taxonomyLayer, assignmentProvenance, sourceField, tag.basis?.rule || "unrecorded"].join("|");
+      const basisEntry = bySourceBasis.get(basisKey) || {
+        taxonomy_layer: taxonomyLayer,
+        assignment_provenance: assignmentProvenance,
+        source_field: sourceField,
+        rule: tag.basis?.rule || "unrecorded",
+        record_ids: new Set(),
+        tag_assignments: 0,
+      };
+      basisEntry.record_ids.add(node.id);
+      basisEntry.tag_assignments += 1;
+      bySourceBasis.set(basisKey, basisEntry);
+    }
+
+    for (const dimension of TAXONOMY_CONTRACT.dimensions) {
+      const explicitDecision = node.metadata?.taxonomy_dimension_states?.[dimension.id];
+      const hasExplicitNotApplicable = explicitDecision?.state === "not_applicable" &&
+        explicitDecision.source_field && explicitDecision.rule;
+      const state = dimensionsSeen.has(dimension.id)
+        ? "applicable"
+        : hasExplicitNotApplicable
+          ? "not_applicable"
+          : "unreviewed";
+      const key = `${state}_record_count`;
+      const dimensionEntry = byDimension.get(dimension.id);
+      dimensionEntry.record_count += 1;
+      dimensionEntry[key] += 1;
+
+      const catalogDimension = catalog.dimensions[dimension.id] || {
+        applicable_record_count: 0,
+        not_applicable_record_count: 0,
+        unreviewed_record_count: 0,
+        tag_assignments: 0,
+      };
+      catalogDimension[key] += 1;
+      catalogDimension.tag_assignments += tags.filter((tag) => tag.kind === dimension.id).length;
+      catalog.dimensions[dimension.id] = catalogDimension;
+
+      const recordTypeDimension = recordType.dimensions[dimension.id] || {
+        applicable_record_count: 0,
+        not_applicable_record_count: 0,
+        unreviewed_record_count: 0,
+        tag_assignments: 0,
+      };
+      recordTypeDimension[key] += 1;
+      recordTypeDimension.tag_assignments += tags.filter((tag) => tag.kind === dimension.id).length;
+      recordType.dimensions[dimension.id] = recordTypeDimension;
+
+      if (state === "not_applicable") {
+        const basisKey = [dimension.id, explicitDecision.source_field, explicitDecision.rule].join("|");
+        const basisEntry = byNotApplicableBasis.get(basisKey) || {
+          dimension: dimension.id,
+          source_field: explicitDecision.source_field,
+          rule: explicitDecision.rule,
+          record_ids: new Set(),
+        };
+        basisEntry.record_ids.add(node.id);
+        byNotApplicableBasis.set(basisKey, basisEntry);
+      }
     }
   }
+
+  const decisionCounts = [...byDimension.values()].reduce((summary, dimension) => ({
+    applicable: summary.applicable + dimension.applicable_record_count,
+    not_applicable: summary.not_applicable + dimension.not_applicable_record_count,
+    unreviewed: summary.unreviewed + dimension.unreviewed_record_count,
+  }), { applicable: 0, not_applicable: 0, unreviewed: 0 });
 
   return {
     contract_version: TAXONOMY_CONTRACT.version,
     record_count: records.length,
     tagged_record_count: records.filter((node) => (node.metadata?.taxonomy_tags || []).length > 0).length,
+    record_dimension_decision_count: records.length * TAXONOMY_CONTRACT.dimensions.length,
+    decision_counts: decisionCounts,
     catalogs: [...byCatalog.values()].sort((left, right) => left.catalog_id.localeCompare(right.catalog_id)),
     record_types: [...byRecordType.values()].sort((left, right) => left.record_type.localeCompare(right.record_type)),
     dimensions: [...byDimension.values()],
-    source_fields: [...bySourceField.entries()]
-      .map(([source_field, tag_assignments]) => ({ source_field, tag_assignments }))
+    source_fields: [...bySourceField.values()]
+      .map((entry) => ({
+        source_field: entry.source_field,
+        record_count: entry.record_ids.size,
+        tag_assignments: entry.tag_assignments,
+      }))
       .sort((left, right) => right.tag_assignments - left.tag_assignments || left.source_field.localeCompare(right.source_field)),
+    source_basis: [...bySourceBasis.values()]
+      .map((entry) => ({
+        taxonomy_layer: entry.taxonomy_layer,
+        assignment_provenance: entry.assignment_provenance,
+        source_field: entry.source_field,
+        rule: entry.rule,
+        record_count: entry.record_ids.size,
+        tag_assignments: entry.tag_assignments,
+      }))
+      .sort((left, right) => right.tag_assignments - left.tag_assignments || left.rule.localeCompare(right.rule)),
+    not_applicable_source_basis: [...byNotApplicableBasis.values()]
+      .map((entry) => ({
+        dimension: entry.dimension,
+        source_field: entry.source_field,
+        rule: entry.rule,
+        record_count: entry.record_ids.size,
+      }))
+      .sort((left, right) => right.record_count - left.record_count || left.rule.localeCompare(right.rule)),
   };
 }
 

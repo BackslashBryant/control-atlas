@@ -9,6 +9,16 @@ import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from './src/shared/site-copy.mjs';
 import { AREA_BROWSE_PRESENTATIONS, areaCssVariables } from './src/ui/lib/areaVisualLanguage';
 
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
+const DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
+  day: 'numeric',
+  month: 'long',
+  timeZone: 'UTC',
+  year: 'numeric',
+});
+
+function formatBuildDate(value: string | undefined) {
+  return value ? DATE_FORMATTER.format(new Date(value)) : 'local development build';
+}
 
 function escapeHtml(value: string) {
   return value.replace(/[&<>"']/g, (character) => ({
@@ -64,7 +74,9 @@ export default defineConfig({
               '<!-- CONTROL_ATLAS_COPY -->',
               `<script id="control-atlas-copy" type="application/json">${JSON.stringify(FIRST_PAINT_ROUTE_COPY).replace(/</g, '\\u003c')}</script>`,
             )
-            .replaceAll('CONTROL_ATLAS_PRODUCT_DESCRIPTION', escapeHtml(SITE_COPY.product.definition)),
+            .replaceAll('CONTROL_ATLAS_PRODUCT_DESCRIPTION', escapeHtml(SITE_COPY.product.definition))
+            .replaceAll('CONTROL_ATLAS_RELEASE_DATE', escapeHtml(formatBuildDate(globalThis.process.env.VITE_CONTROL_ATLAS_RELEASE_DATE)))
+            .replaceAll('CONTROL_ATLAS_SOURCE_DATA_DATE', escapeHtml(formatBuildDate(globalThis.process.env.VITE_CONTROL_ATLAS_SOURCE_DATA_DATE))),
           tags: [
           {
             tag: 'meta',

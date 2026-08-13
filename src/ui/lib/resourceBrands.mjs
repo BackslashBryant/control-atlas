@@ -336,6 +336,46 @@ const ACCESS_LABELS = Object.freeze({
   access_varies: "Access varies",
 });
 
+const FIELD_LABELS = Object.freeze({
+  active: "Active",
+  archived: "Archived",
+  community: "Community",
+  commercial: "Commercial",
+  general_it: "General IT",
+  manual_restricted: "Manual restricted review",
+  manual_review: "Manual review",
+  no_cost: "No cost",
+  official_repository: "Official repository",
+  open_source: "Open source",
+  public_url: "Public URL",
+});
+
+const APPROVED_ACRONYMS = Object.freeze({
+  "3pao": "3PAO",
+  api: "API",
+  ciso: "CISO",
+  cmmc: "CMMC",
+  cui: "CUI",
+  disa: "DISA",
+  disn: "DISN",
+  devsecops: "DevSecOps",
+  dod: "DoD",
+  fedramp: "FedRAMP",
+  hr: "HR",
+  inspec: "InSpec",
+  isso: "ISSO",
+  issm: "ISSM",
+  it: "IT",
+  oscal: "OSCAL",
+  pmo: "PMO",
+  sca: "SCA",
+  scap: "SCAP",
+  siem: "SIEM",
+  soc: "SOC",
+  stig: "STIG",
+  url: "URL",
+});
+
 const RESTRICTED_ACCESS = new Set([
   "commercial_account",
   "commercial_account_required",
@@ -469,4 +509,19 @@ export function resourceAccessLabel(resource) {
     return "Access varies";
   }
   return ACCESS_LABELS[accessType] || "Access varies";
+}
+
+export function resourceFieldLabel(value) {
+  const normalized = normalizedText(value);
+  if (!normalized) return "Not documented";
+  if (FIELD_LABELS[normalized]) return FIELD_LABELS[normalized];
+  return normalized
+    .split(/([ _-]+)/)
+    .filter(Boolean)
+    .map((part) => {
+      if (/^[ _-]+$/.test(part)) return part.includes("-") ? "-" : " ";
+      return APPROVED_ACRONYMS[part] || `${part[0].toUpperCase()}${part.slice(1)}`;
+    })
+    .join("")
+    .replaceAll(/\s+/g, " ");
 }

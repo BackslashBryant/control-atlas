@@ -429,7 +429,15 @@ export function ObjectDetailPage(props: {
           >
             See connections
           </AppLink>
-          <details className="record-actions-menu">
+          <details
+            className="record-actions-menu"
+            onKeyDown={(event) => {
+              if (event.key !== "Escape" || !event.currentTarget.open) return;
+              event.preventDefault();
+              event.currentTarget.open = false;
+              event.currentTarget.querySelector<HTMLElement>("summary")?.focus();
+            }}
+          >
             <summary>More actions</summary>
             <div className="record-actions-popover">
               <AppLink
@@ -616,10 +624,16 @@ export function ObjectDetailPage(props: {
                   <dd>{node.metadata.publication_date}</dd>
                 </div>
               ) : null}
-              {source?.last_checked || source?.retrieved_at ? (
+              {source?.retrieved_at ? (
                 <div>
-                  <dt>Last Checked</dt>
-                  <dd>{source.last_checked || source.retrieved_at}</dd>
+                  <dt>Retrieved</dt>
+                  <dd>{source.retrieved_at}</dd>
+                </div>
+              ) : null}
+              {source?.last_checked ? (
+                <div>
+                  <dt>Last verified</dt>
+                  <dd>{source.last_checked}</dd>
                 </div>
               ) : null}
               {authorityItems.length ? (

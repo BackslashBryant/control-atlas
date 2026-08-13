@@ -54,3 +54,4 @@ export function resourceBrandIdentity(
 export function resourceTypeLabel(resourceType: string | null | undefined): string;
 
 export function resourceAccessLabel(resource: BrandableResource): string;
+export function resourceFieldLabel(value: string | null | undefined): string;

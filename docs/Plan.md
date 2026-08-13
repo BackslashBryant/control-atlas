@@ -9,6 +9,57 @@
 
 Ship a source-truthful, task-first Control Atlas without treating parser counts, unit tests, or desktop emulation as proof of content completeness or accessibility.
 
+## Executive verdict
+
+**Not whole-product complete.** The source-review, taxonomy, route, and compact-layout milestones are locally met, but the current branch is not yet deployed and hands-on Android Chrome/TalkBack plus desktop NVDA evidence remains unverified. The legacy `ashbryant.github.io` 404 is an external ownership limitation, not a product-code fix. No test, structural reconciliation, or emulated viewport is being promoted into those missing evidence classes.
+
+## Objective matrix
+
+| Objective | Verdict | Evidence type | Current evidence |
+| --- | --- | --- | --- |
+| Reproducible secure build | Met locally | Automated | Supported portable Node runtime; audit and focused build/test gates pass. Exact-head CI and merged-main CI remain release-sequence gates. |
+| Official-source semantic/currentness review | Met | Official-source review + automated manifest validation | All 27 profiles have three named samples, official sources, semantic, locator-only, and currentness dispositions. Structural counts remain a separate evidence class. |
+| Publisher-field presentation | Met locally | Automated + local rendered browser | Source dates are separated; source text blocks, locators, procedure/config formats, and copy behavior retain focused regressions. Live proof awaits deployment. |
+| Governed taxonomy contract and coverage | Partial by design | Automated | 28,845 of 182,190 record-dimension decisions are applicable; 153,345 are explicitly unreviewed; none are silently classified negative. URL/filter/link/export behavior is implemented and tested. |
+| Six-width route/template quality | Met locally | Local rendered browser | Independent 24-route/state matrix at 320/375/390/768/1024/1440 found no remaining persistent overflow, unnamed visible control, duplicate footer, invalid-date/null text, or navigation-mode mismatch. |
+| Android Chrome + TalkBack | Blocked | Emulator + unverified assistive technology | `ControlAtlas_API_35_Play` boots and contains Chrome and TalkBack, but Chrome stops at its first-run screen: continuing via **Use without an account** accepts Google's Terms of Service and usage/crash-data notice. No consent was accepted, so the site and TalkBack interaction remain unverified. |
+| Desktop NVDA | Unmet | Environment inspection + unverified assistive technology | NVDA is absent from the standard system, 32-bit, and per-user installation paths. It was not installed because the owner must personally accept any installer or licensing terms; hands-on evidence remains unverified. |
+| Canonical live release | Unmet for this branch | Live browser | Deployed SHA remains the prior main release until PR, CI, merge, Pages, and matching `release.json` verification complete. |
+
+## 27-publication source audit
+
+The governed details, official URLs, rationale, follow-up, and exact sample locators live in `data/source-review-manifest.json`; `data/generated/source-semantic-audit.json` joins them to independent structural/count evidence.
+
+| Publication | Semantic review | Locator-only review | Currentness | Samples |
+| --- | --- | --- | --- | --- |
+| cmmc-2 | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| csf-2 | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| cui-policy | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| disa-cci | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| disa-srg | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| disa-stig | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| dod-rai | reviewed_no_known_mismatch | justified | current_as_checked | 3 |
+| dod-zt | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| fedramp-rev5 | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| fips-199 | reviewed_no_known_mismatch | justified | current_as_checked | 3 |
+| fips-200 | reviewed_no_known_mismatch | justified | current_as_checked | 3 |
+| microsoft-zt-maturity | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| mitre-attack | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| mitre-attack-ics | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| mitre-d3fend | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| nist-800-171 | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| nist-800-171-rev2 | reviewed_no_known_mismatch | none | superseded | 3 |
+| nist-800-172 | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| nist-800-37 | reviewed_no_known_mismatch | justified | current_as_checked | 3 |
+| nist-800-53 | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| nist-800-53a | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| nist-800-53b | reviewed_no_known_mismatch | justified | current_as_checked | 3 |
+| nist-ai-rmf | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| nist-iot-cybersecurity | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| nist-mobile-threats | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| nist-ssdf | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+| nist-zt | reviewed_no_known_mismatch | none | current_as_checked | 3 |
+
 ## Current checkpoint
 
 - Reproducible dependency/security baseline and the weighted Home area pool are shipped.
@@ -16,9 +67,10 @@ Ship a source-truthful, task-first Control Atlas without treating parser counts,
 - Source detail now separates publisher version, retrieval date, verification date, publication landing pages, and parser artifacts; fabricated date fallbacks and inaccurate third-party federal-source language are removed; compact headers are opaque.
 - The source register now uses typed recorded/derived/not-applicable/missing states, resolves artifact publishers through parent publications, exposes that basis, and gates required layer completeness without fabricating fields.
 - Source layers, contextual counts and filter options, deep links/history, layer-specific empty states, 25-row rendering, show-more focus, sticky orientation, compact labels, and 320/375/390/768 responsive behavior pass focused contracts and rendered review.
-- Route-semantic polish is implemented locally: the footer separates product-release and source-data dates, Compare uses native workflow buttons, About has named H2 card regions and a bounded desktop measure, and compact footer trust links fit within the first viewport at all required compact widths.
+- Route-semantic polish is shipped and live-verified: the footer separates product-release and source-data dates, Compare uses native workflow buttons, About has named H2 card regions and a bounded desktop measure, and compact footer trust links fit within the first viewport at all required compact widths.
+- The governed taxonomy contract now defines publisher, Atlas-evidence, and editorial layers plus explicit `applicable`, `not_applicable`, and `unreviewed` decisions. The generated report shows that 153,345 of 182,190 record-dimension decisions remain unreviewed, so taxonomy applicability is explicitly partial.
 - The obsolete `ashbryant.github.io` host still returns 404 and is not available through the authenticated `BackslashBryant` repository account; the exact obsolete URL is forbidden in owned tracked files, but the external redirect remains open.
-- Next product milestone: complete the six-width whole-route audit and governed taxonomy/discovery proof before assistive-technology evidence and final release closure.
+- Next release milestone: finish the consolidated quality gate and ship the branch through exact-head CI, fresh-checkout verification, merged-main CI, Pages, and live browser proof. Assistive-technology conformance remains explicitly blocked/unverified at the consent and installation boundaries above.
 
 ## Remaining work
 
@@ -35,7 +87,7 @@ Ship a source-truthful, task-first Control Atlas without treating parser counts,
    - Keep CCI, STIG/SRG, 800-53/800-53A, ATT&CK/D3FEND, NIST Zero Trust, DoD Zero Trust, IoT, and Mobile as mandatory regression samples.
 
 3. **Taxonomy and discovery proof**
-   - Measure governed tag coverage by publication, record type, taxonomy dimension, and source basis, separating `applicable`, `not_applicable`, and `unreviewed` records.
+   - Keep governed tag coverage reproducible by publication, record type, taxonomy dimension, and source basis, separating `applicable`, `not_applicable`, and `unreviewed` records.
    - Reconcile publisher classifications, evidence-backed Atlas facets, and editorial concepts; prohibit prose-only applicability inference.
    - Prove tag URL round trips, contextual counts, hidden unavailable choices, bounded vendor/product selection, search aliases, record/resource/template/playbook/compare links, and export context.
 
