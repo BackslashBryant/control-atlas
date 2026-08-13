@@ -118,6 +118,14 @@ export function ExplorePage(props: {
     () => buildCatalogCoverageList(runtimeCatalogs, 1),
     [runtimeCatalogs],
   );
+  const selectedAreaCatalogIds = useMemo(
+    () => state.area
+      ? runtimeCatalogs
+        .filter((catalog: any) => areaPresentationForCatalog(catalog.id)?.id === state.area)
+        .map((catalog: any) => String(catalog.id))
+      : [],
+    [runtimeCatalogs, state.area],
+  );
 
   useEffect(() => setQueryDraft(state.query), [state.query]);
 
@@ -133,6 +141,7 @@ export function ExplorePage(props: {
     if (!searchStarted) return [];
     return bundle.runtime.searchLibrary(state.query, {
       catalog_id: state.filter || undefined,
+      catalog_ids: selectedAreaCatalogIds,
       publisher_name: state.publisher || undefined,
     }).filter((document: any) => {
       const area = areaPresentationForCatalog(document.catalog_id);
@@ -142,7 +151,7 @@ export function ExplorePage(props: {
       if (connectedOnly && Number(document.published_connection_count || 0) === 0) return false;
       return true;
     });
-  }, [bundle.runtime, connectedOnly, searchStarted, state.area, state.filter, state.kind, state.publisher, state.query]);
+  }, [bundle.runtime, connectedOnly, searchStarted, selectedAreaCatalogIds, state.area, state.filter, state.kind, state.publisher, state.query]);
 
   const documents = useMemo(
     () => documentsBeforeTags.filter((document: any) => matchesTagSelection(document, state.tags)),
