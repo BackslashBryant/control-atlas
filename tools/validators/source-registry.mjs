@@ -115,6 +115,7 @@ export function validateSourceRegistry(registry) {
       seenPubs.add(pub.id);
     }
     if (!pub.name) errors.push(`publication ${pub.id || '<unknown>'} missing required field: name`);
+    if (!pub.owner) errors.push(`publication ${pub.id || '<unknown>'} missing required field: owner`);
     if (!pub.license_or_use) errors.push(`publication ${pub.id || '<unknown>'} missing required field: license_or_use`);
     if (pub.provenance_class && !PROVENANCE_CLASSES.has(pub.provenance_class)) {
       errors.push(`publication ${pub.id} has unsupported provenance_class: ${pub.provenance_class}`);
@@ -271,11 +272,20 @@ export function loadSourceRegistry(registry) {
 
   for (const art of artifacts) {
     if (!byId.has(art.id)) {
+      const parentPublication = byId.get(art.publication_source_id);
       const artObj = {
         ...art,
         name: art.name || art.id,
         display_name: art.display_name || art.name || art.id,
-        owner: art.owner || 'Publisher not recorded',
+        owner: art.owner || parentPublication?.owner || null,
+        metadata: {
+          ...(art.metadata || {}),
+          owner_resolution: art.owner
+            ? 'artifact'
+            : parentPublication?.owner
+              ? 'parent_publication'
+              : 'missing',
+        },
         provenance_class: art.authority_class || 'federal_published',
         eligibility_status: art.lifecycle_status === 'active' ? 'eligible' : 'limited',
         lifecycle_status: art.lifecycle_status || 'active',

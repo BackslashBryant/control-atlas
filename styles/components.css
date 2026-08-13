@@ -288,7 +288,127 @@
   }
 }
 
+/* Source register cells retain their meaning when the desktop header is hidden. */
+.ca-source-cell {
+  min-width: 0;
+}
+
+.ca-source-cell__label {
+  display: none;
+}
+
+.ca-source-cell__value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.ca-source-cell--identity .ca-source-cell__value {
+  display: grid;
+  gap: var(--ca-space-1);
+}
+
+.ca-source-id {
+  max-width: 100%;
+  color: var(--ca-text-muted);
+}
+
+.ca-source-id code {
+  overflow-wrap: anywhere;
+}
+
+.ca-source-id__copy {
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--ca-space-2);
+  opacity: 1;
+  white-space: nowrap;
+}
+
+.ca-source-field--missing,
+.ca-source-field--not_applicable {
+  color: var(--ca-text-muted);
+}
+
+.ca-source-field__basis {
+  display: block;
+  margin-top: 2px;
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-xs);
+}
+
+.source-results-orientation {
+  position: sticky;
+  z-index: 3;
+  top: var(--ca-header-safe-offset, 0);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ca-space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border: 1px solid var(--ca-border);
+  border-bottom: 0;
+  background: var(--ca-surface-deep);
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+}
+
+.source-results-orientation strong {
+  color: var(--ca-text);
+}
+
+.source-register-more {
+  display: flex;
+  justify-content: center;
+  padding: var(--ca-space-4);
+}
+
+.source-supporting-evidence {
+  display: grid;
+  gap: var(--ca-space-3);
+  margin-top: var(--ca-space-6);
+}
+
+@media (max-width: 899px) {
+  .source-view-toggle {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: var(--ca-space-1);
+    scroll-snap-type: x proximity;
+  }
+
+  .source-view-toggle button {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  .ca-source-cell {
+    display: grid;
+    gap: 3px;
+  }
+
+  .ca-source-cell__label {
+    display: block;
+    color: var(--ca-text-muted);
+    font-size: var(--ca-text-xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .source-results-orientation {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
 /* ── Step indicator ── */
+@media (max-width: 767px) {
+  .sources-page .source-register-control-surface {
+    gap: var(--ca-space-2);
+    margin-block: var(--ca-space-2);
+    padding: var(--ca-space-2);
+  }
+}
+
 .ca-steps {
   display: flex;
   align-items: center;

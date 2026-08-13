@@ -329,9 +329,10 @@ test("connection transparency distinguishes inventory from completeness", () => 
 
   // SourcesPage is a factual trust register and never presents a traffic-light
   // completeness judgment.
-  assert.match(sourcesPage, /buildSourceRegister/);
-  assert.match(sourcesPage, /Source \/ publication/);
-  assert.match(sourcesPage, /Version \/ current through/);
+  assert.match(sourcesPage, /buildSourceLayers/);
+  assert.match(sourcesPage, /Catalog coverage/);
+  assert.match(sourcesPage, /Publisher version/);
+  assert.match(sourcesPage, /Last verified/);
   assert.doesNotMatch(sourcesPage, /Preview \/ low coverage/);
   assert.doesNotMatch(sourcesPage, /data-level=/);
   assert.doesNotMatch(sourcesPage, /catalog\.pct/);

@@ -26,6 +26,25 @@ export type RelationshipViewMode = "path" | "map" | "list" | "purpose" | "rmf";
 
 export type CompareViewMode = "map" | "list";
 
+export type SourceLayerMode =
+  | "publication"
+  | "connection"
+  | "ingestion"
+  | "organization";
+
+const SOURCE_LAYER_MODES = new Set<SourceLayerMode>([
+  "publication",
+  "connection",
+  "ingestion",
+  "organization",
+]);
+
+function sourceLayerMode(value: unknown): SourceLayerMode {
+  return SOURCE_LAYER_MODES.has(value as SourceLayerMode)
+    ? (value as SourceLayerMode)
+    : "publication";
+}
+
 export type ViewState =
   | { view: "home" }
   | {
@@ -132,6 +151,7 @@ export type ViewState =
     }
   | {
       view: "sources";
+      layer: SourceLayerMode;
       query: string;
       source: string;
       publisher: string;
@@ -401,6 +421,7 @@ export function parseViewState(search: string): ViewState {
   if (view === "sources") {
     return {
       view,
+      layer: sourceLayerMode(params.get("layer")),
       query: params.get("q") || "",
       source: params.get("source") || "",
       publisher: params.get("publisher") || "",
@@ -581,6 +602,7 @@ export function normalizeViewState(
     const incoming = state as Extract<ViewState, { view: "sources" }>;
     return {
       view,
+      layer: sourceLayerMode(incoming.layer),
       query: incoming.query || "",
       source: incoming.source || "",
       publisher: incoming.publisher || "",
@@ -791,6 +813,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "q", state.query);
   } else if (state.view === "sources") {
     params.set("view", state.view);
+    if (state.layer !== "publication") setIfValue(params, "layer", state.layer);
     setIfValue(params, "q", state.query);
     setIfValue(params, "source", state.source);
     setIfValue(params, "publisher", state.publisher);

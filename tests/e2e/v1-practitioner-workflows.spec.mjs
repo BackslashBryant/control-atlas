@@ -127,7 +127,7 @@ test("V1 workflow 07 — compare with a shareable explicit configuration", async
 test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) => {
   await open(page, "/#/sources?q=NIST");
   await expect(page.getByRole("table", { name: "Control Atlas source register" })).toBeVisible();
-  await expect(page.getByLabel("Search sources")).toHaveValue("NIST");
+  await expect(page.getByLabel("Search publications")).toHaveValue("NIST");
   await expect(page.locator(".source-register-row").first()).toBeVisible();
 
   await open(

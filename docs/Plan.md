@@ -14,7 +14,9 @@ Ship a source-truthful, task-first Control Atlas without treating parser counts,
 - Reproducible dependency/security baseline and the weighted Home area pool are shipped.
 - The 27-profile review register records source-linked semantic samples and separate locator/currentness dispositions. DoD RAI, D3FEND, SP 800-53A, and NIST IoT registry/presentation defects are corrected in the active milestone; NIST SP 800-171 Revision 2 remains explicitly superseded.
 - Source detail now separates publisher version, retrieval date, verification date, publication landing pages, and parser artifacts; fabricated date fallbacks and inaccurate third-party federal-source language are removed; compact headers are opaque.
-- Next source milestone: replace the flat sentinel-filled register model with parent-publication joins and layer-specific fields, then make layer state, counts, filters, and bounded rendering contextual and URL-stable.
+- The source register now uses typed recorded/derived/not-applicable/missing states, resolves artifact publishers through parent publications, exposes that basis, and gates required layer completeness without fabricating fields.
+- Source layers, contextual counts and filter options, deep links/history, layer-specific empty states, 25-row rendering, show-more focus, sticky orientation, compact labels, and 320/375/390/768 responsive behavior pass focused contracts and rendered review.
+- Next product milestone: close the remaining route/template polish inventory, starting with the legacy public URL, global freshness dates, Compare chooser semantics, and About heading semantics before the six-width whole-route audit.
 
 ## Remaining work
 

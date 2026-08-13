@@ -13,9 +13,26 @@ test('source registry schema 5.0 validates the federal source contract', () => {
   assert.ok(Array.isArray(registry.artifacts));
   assert.ok(Array.isArray(registry.catalog_source_bundles));
   assert.ok(registry.publications.every((pub) => pub.authority_class));
+  assert.ok(registry.publications.every((pub) => pub.owner));
   assert.ok(registry.publications.every((pub) => pub.lifecycle_status));
   assert.ok(registry.publications.every((pub) => pub.access_status));
   assert.ok(registry.publications.every((pub) => pub.license_or_use));
+});
+
+test('artifact publishers inherit from their declared parent publication', () => {
+  const { artifacts, byId } = loadSourceRegistry(registry);
+  for (const artifact of artifacts) {
+    const loaded = byId.get(artifact.id);
+    const parent = byId.get(artifact.publication_source_id);
+    assert.ok(parent, `${artifact.id} parent publication is unresolved`);
+    assert.equal(loaded.owner, artifact.owner || parent.owner, artifact.id);
+    assert.equal(
+      loaded.metadata.owner_resolution,
+      artifact.owner ? 'artifact' : 'parent_publication',
+      artifact.id,
+    );
+    assert.notEqual(loaded.owner, 'Publisher not recorded', artifact.id);
+  }
 });
 
 test('loaded sources expose additive freshness fields', () => {

@@ -109,3 +109,138 @@ test("Sources connection inventory reflows on a compact viewport", async ({
     path: "artifacts/release-readiness/sources-connection-inventory-compact.png",
   });
 });
+
+test("Sources layers keep contextual URL state, filters, counts, and bounded rows", async ({
+  page,
+}) => {
+  await page.goto("/#/sources?layer=ingestion&publisher=ComplianceAsCode");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await expect(page.getByRole("tab", { name: /Source material/ })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await expect(page.locator(".source-register-total")).toContainText(
+    "1 of 94 source materials",
+  );
+
+  await page.setViewportSize({ width: 768, height: 844 });
+  const totalBox = await page.locator(".source-register-total").boundingBox();
+  expect(totalBox?.width || 0).toBeGreaterThan(120);
+
+  await page.getByRole("tab", { name: /Connection sources/ }).click();
+  await expect(page).toHaveURL(/#\/sources\?layer=connection$/);
+  await expect(page.locator(".source-register-total")).toContainText(
+    "13 of 13 connection sources",
+  );
+  await expect(page.getByLabel("Publisher")).not.toHaveValue("ComplianceAsCode");
+
+  await page.goBack();
+  await expect(page.getByRole("tab", { name: /Source material/ })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await expect(page.getByLabel("Publisher")).toHaveValue("ComplianceAsCode");
+
+  await page.goto("/#/sources?layer=connection&publisher=ComplianceAsCode");
+  await waitForAppReady(page);
+  await expect(page).toHaveURL(/#\/sources\?layer=connection$/);
+  await expect(page.getByLabel("Publisher")).not.toHaveValue("ComplianceAsCode");
+
+  await page.goto("/#/sources?layer=ingestion");
+  await waitForAppReady(page);
+  await expect(page.locator(".source-register-row")).toHaveCount(25);
+  await page.getByRole("button", { name: /Show 25 more source materials/ }).click();
+  await expect(page.locator(".source-register-row")).toHaveCount(50);
+  await expect(page.locator(".source-register-row").nth(25)).toBeFocused();
+  await expect(page.locator(".source-results-orientation")).toContainText(
+    "Showing 50 of 94 source materials",
+  );
+
+  await page.goto("/#/sources?layer=ingestion&q=no-such-source-material");
+  await waitForAppReady(page);
+  await expect(
+    page.getByRole("heading", {
+      name: "No source materials match these filters.",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Clear source material filters" }),
+  ).toBeVisible();
+
+  await page.goto("/#/sources?layer=ingestion&q=artifact-disa-cci-list");
+  await waitForAppReady(page);
+  const cciPublisher = page.locator(".source-register-row").first().getByText("DISA", { exact: true });
+  await expect(cciPublisher).toBeVisible();
+  await expect(cciPublisher.locator("..")).toContainText("From parent publication");
+});
+
+test("Sources rows stay self-describing from 320 through 768 pixels", async ({
+  page,
+}) => {
+  for (const width of [320, 375, 390, 768]) {
+    const viewportHeight = width === 320 ? 700 : 844;
+    await page.setViewportSize({ width, height: viewportHeight });
+    await page.goto("/#/sources?layer=ingestion");
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+
+    const firstRow = page.locator(".source-register-row").first();
+    await expect(firstRow.getByRole("link", { name: "ComplianceAsCode/content" })).toBeVisible();
+    await expect(firstRow.locator("code")).toHaveText("artifact-complianceascode-content");
+
+    if (width <= 768) {
+      for (const label of ["Source material", "Publisher", "Format", "Retrieved", "Imported records", "Status"]) {
+        await expect(firstRow.locator(".ca-source-cell__label", { hasText: label })).toBeVisible();
+      }
+    }
+
+    const copy = firstRow.getByRole("button", {
+      name: "Copy source ID artifact-complianceascode-content",
+    });
+    const box = await copy.boundingBox();
+    expect(box?.width || 0).toBeGreaterThanOrEqual(44);
+    expect(box?.height || 0).toBeGreaterThanOrEqual(44);
+    await copy.click();
+    await expect(copy).toHaveText("Copied");
+
+    const dimensions = await page.evaluate(() => ({
+      client: globalThis.document.documentElement.clientWidth,
+      scroll: globalThis.document.documentElement.scrollWidth,
+    }));
+    expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.client + 1);
+
+    if (width < 768) {
+      const layerTop = await page
+        .locator(".source-view-toggle")
+        .evaluate((element) => element.getBoundingClientRect().top);
+      const resultTop = await firstRow.evaluate(
+        (element) => element.getBoundingClientRect().top + globalThis.scrollY,
+      );
+      expect(layerTop).toBeLessThan(700);
+      expect(resultTop).toBeLessThanOrEqual(viewportHeight * 1.25);
+    }
+
+    if (width === 390) {
+      await page.evaluate(() => {
+        globalThis.document.documentElement.style.scrollBehavior = "auto";
+        globalThis.scrollTo(0, 1200);
+      });
+      await page.waitForFunction(() => globalThis.scrollY >= 1000);
+      const orientationBox = await page.locator(".source-results-orientation").boundingBox();
+      expect(orientationBox?.y || 0).toBeGreaterThanOrEqual(75);
+      expect(orientationBox?.y || 0).toBeLessThan(110);
+    }
+
+    if (width === 768) {
+      const publisherBox = await firstRow
+        .locator(".ca-source-cell", { hasText: "Publisher" })
+        .boundingBox();
+      const formatBox = await firstRow
+        .locator(".ca-source-cell", { hasText: "Format" })
+        .boundingBox();
+      expect(Math.abs((publisherBox?.y || 0) - (formatBox?.y || 0))).toBeLessThan(2);
+    }
+  }
+});

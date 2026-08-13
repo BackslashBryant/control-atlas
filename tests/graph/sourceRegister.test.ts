@@ -1,39 +1,126 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import catalogBootstrap from "../../data/generated/catalog-bootstrap.json";
 import sources from "../../data/generated/sources.json";
-import { buildSourceRegister } from "../../src/ui/lib/sourceRegister";
+import {
+  buildSourceLayers,
+  sourceLayerCompleteness,
+  sourceLayerEntityLabel,
+  sourceLayerOptions,
+} from "../../src/ui/lib/sourceRegister";
 
-test("source register exposes exact identity and trust fields for the full registry", () => {
-  const rows = buildSourceRegister(sources.sources);
-  assert.equal(rows.length, sources.sources.length);
-  for (const row of rows) {
-    assert.ok(row.publication, row.id);
-    assert.ok(row.publisher, row.id);
-    assert.ok(row.coverage, row.id);
-    assert.ok(row.version, row.id);
-    assert.ok(row.currentThrough, row.id);
-    assert.ok(row.status, row.id);
+const catalogs = catalogBootstrap.catalog_bootstrap.catalogs;
+
+test("source layers preserve truthful nullable fields and exact layer counts", () => {
+  const layers = buildSourceLayers(sources.sources, catalogs);
+  assert.deepEqual(
+    Object.fromEntries(Object.entries(layers).map(([layer, rows]) => [layer, rows.length])),
+    { organization: 2, publication: 83, connection: 13, ingestion: 94 },
+  );
+
+  for (const row of Object.values(layers).flat()) {
+    assert.ok(row.displayTitle, row.id);
+    assert.notEqual(row.displayTitle, row.id, `${row.id} uses its stable ID as its title`);
+    assert.ok(["recorded", "derived", "not_applicable", "missing"].includes(row.publisher.state));
+    assert.notEqual(row.publisher.value, "Publisher not recorded");
+    for (const field of [
+      row.publisher,
+      row.coverage,
+      row.format,
+      row.version,
+      row.retrievedAt,
+      row.verifiedAt,
+      row.lifecycle,
+      row.recordCount,
+      row.relationshipCount,
+    ]) {
+      assert.ok(field.reason, `${row.id} field state has no reason`);
+      assert.ok(
+        !String(field.value || "").includes("Not recorded"),
+        `${row.id} stores a presentation sentinel instead of a nullable field`,
+      );
+    }
   }
 });
 
-test("source register applies query and facets before presentation", () => {
-  const rows = buildSourceRegister(sources.sources, {
-    query: "800-53",
-    lifecycle: "active",
-  });
-  assert.ok(rows.length > 0);
-  assert.ok(rows.every((row) => /800-53|disa|cci/i.test(
-    `${row.id} ${row.publication} ${row.publisher} ${row.coverage}`,
-  )));
-  assert.ok(rows.every((row) => row.status === "active"));
-  assert.equal(buildSourceRegister(sources.sources, { query: "not-a-source" }).length, 0);
+test("artifact publishers resolve from their parent publications without fabrication", () => {
+  const layers = buildSourceLayers(sources.sources, catalogs);
+  const derived = [...layers.connection, ...layers.ingestion].filter(
+    (row) => row.publicationSourceId,
+  );
+  assert.equal(derived.length, 91);
+  assert.ok(derived.every((row) => row.publisher.value), "every parent-linked artifact resolves a publisher");
+  assert.ok(derived.some((row) => row.publisher.state === "derived"));
+
+  const cci = layers.ingestion.find((row) => row.id === "artifact-disa-cci-list");
+  assert.equal(cci?.publisher.value, "DISA");
+  assert.equal(cci?.publisher.state, "derived");
 });
 
-test("source register filters by a named publisher without exposing source taxonomy", () => {
-  const publisher = sources.sources.find((source) => source.owner)?.owner;
-  assert.ok(publisher);
-  const rows = buildSourceRegister(sources.sources, { publisher });
-  assert.ok(rows.length > 0);
-  assert.ok(rows.every((row) => row.publisher === publisher));
+test("layer-specific fields distinguish missing values from non-applicable concepts", () => {
+  const layers = buildSourceLayers(sources.sources, catalogs);
+  const reference = layers.ingestion.find(
+    (row) => row.id === "artifact-complianceascode-content",
+  );
+  assert.equal(reference?.format.state, "not_applicable");
+  assert.equal(reference?.recordCount.state, "not_applicable");
+
+  const mapping = layers.connection[0];
+  assert.equal(mapping.recordCount.state, "recorded");
+  assert.equal(mapping.relationshipCount.state, "recorded");
+  assert.equal(mapping.coverage.state, "not_applicable");
+
+  const authority = layers.publication.find(
+    (row) => row.id === "authority-32-cfr-170",
+  );
+  assert.equal(authority?.coverage.state, "not_applicable");
+});
+
+test("source layer query and facets use resolved presentation values", () => {
+  const nist = buildSourceLayers(sources.sources, catalogs, {
+    query: "800-53",
+    lifecycle: "active",
+  }).publication;
+  assert.ok(nist.length > 0);
+  assert.ok(nist.every((row) => row.lifecycle.value === "active"));
+  assert.equal(
+    Object.values(buildSourceLayers(sources.sources, catalogs, { query: "not-a-source" })).flat().length,
+    0,
+  );
+
+  const disaArtifacts = buildSourceLayers(sources.sources, catalogs, {
+    publisher: "DISA",
+  }).ingestion;
+  assert.ok(disaArtifacts.length > 0);
+  assert.ok(disaArtifacts.every((row) => row.publisher.value === "DISA"));
+});
+
+test("source filter options and entity labels are contextual to a layer", () => {
+  const layers = buildSourceLayers(sources.sources, catalogs);
+  const publicationOptions = sourceLayerOptions(layers.publication);
+  const connectionOptions = sourceLayerOptions(layers.connection);
+  assert.notDeepEqual(publicationOptions.publishers, connectionOptions.publishers);
+  assert.ok(connectionOptions.publishers.includes("MITRE"));
+  assert.equal(sourceLayerEntityLabel("publication", 1), "publication");
+  assert.equal(sourceLayerEntityLabel("ingestion", 94), "source materials");
+});
+
+test("generated layer completeness accounts for every field state and fails required metadata gaps", () => {
+  const layers = buildSourceLayers(sources.sources, catalogs);
+  for (const rows of Object.values(layers)) {
+    const completeness = sourceLayerCompleteness(rows);
+    for (const counts of Object.values(completeness.fields)) {
+      assert.equal(
+        Object.values(counts).reduce((sum, count) => sum + count, 0),
+        completeness.total,
+      );
+    }
+    assert.equal(completeness.fields.publisher.missing, 0);
+    assert.equal(completeness.fields.lifecycle.missing, 0);
+  }
+  assert.equal(
+    sourceLayerCompleteness(layers.ingestion).fields.format.missing,
+    0,
+  );
 });

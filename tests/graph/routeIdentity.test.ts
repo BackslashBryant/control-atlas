@@ -215,6 +215,24 @@ test("durable Phase 3 view fields survive canonicalization", () => {
   }
 });
 
+test("Sources layer state survives canonicalization and rejects unknown layers", () => {
+  const canonical = canonicalizeHashLocation("/sources?layer=ingestion&publisher=DISA");
+  assert.equal(canonical.canonicalPath, "/sources?layer=ingestion&publisher=DISA");
+  assert.equal(canonical.recoveryMessage, "");
+
+  const parsed = parseHashLocation("/sources", "?layer=connection");
+  assert.equal(parsed.view, "sources");
+  assert.equal(
+    (parsed as Extract<typeof parsed, { view: "sources" }>).layer,
+    "connection",
+  );
+  assert.equal(serializeHashLocation(parsed), "/sources?layer=connection");
+
+  const invalid = canonicalizeHashLocation("/sources?layer=everything");
+  assert.equal(invalid.canonicalPath, "/sources");
+  assert.match(invalid.recoveryMessage, /removed/i);
+});
+
 test("unrecognized retired aliases remain honest not-found routes", () => {
   for (const path of [
     "/menu", "/home", "/start-here", "/atlas-map", "/map", "/browse",

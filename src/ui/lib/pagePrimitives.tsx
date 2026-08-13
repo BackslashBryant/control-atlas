@@ -37,17 +37,28 @@ export function openAtlasMapForNode(
   navigate("atlas-map", { node: nodeId });
 }
 
-export function copyText(value: string) {
-  if (navigator.clipboard?.writeText) {
-    return navigator.clipboard.writeText(value);
-  }
+function copyTextWithSelection(value: string) {
   const area = document.createElement("textarea");
   area.value = value;
+  area.setAttribute("readonly", "");
+  area.style.position = "fixed";
+  area.style.opacity = "0";
   document.body.appendChild(area);
   area.select();
   document.execCommand("copy");
   area.remove();
-  return Promise.resolve();
+}
+
+export async function copyText(value: string) {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(value);
+      return;
+    } catch {
+      // Clipboard permissions can be denied in otherwise supported browsers.
+    }
+  }
+  copyTextWithSelection(value);
 }
 
 export function downloadBlobFile(
