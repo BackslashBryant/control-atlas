@@ -11,20 +11,20 @@ Ship a source-truthful, task-first Control Atlas without treating parser counts,
 
 ## Executive verdict
 
-**Not whole-product complete.** The source-review, taxonomy, route, and compact-layout milestones are locally met, but the current branch is not yet deployed and hands-on Android Chrome/TalkBack plus desktop NVDA evidence remains unverified. The legacy `ashbryant.github.io` 404 is an external ownership limitation, not a product-code fix. No test, structural reconciliation, or emulated viewport is being promoted into those missing evidence classes.
+**Not whole-product complete.** The source-review, governed-discovery, route, and compact-layout milestone is deployed at `be34acb80892441d42fc8d5151cbe1370117c6bd`, but 153,345 record-dimension taxonomy decisions remain explicitly unreviewed and hands-on Android Chrome/TalkBack plus desktop NVDA evidence remains unavailable. The legacy `ashbryant.github.io` 404 is an external ownership limitation, not a product-code fix. No test, structural reconciliation, or emulated viewport is being promoted into those missing evidence classes.
 
 ## Objective matrix
 
 | Objective | Verdict | Evidence type | Current evidence |
 | --- | --- | --- | --- |
-| Reproducible secure build | Met locally | Automated | Supported portable Node runtime; audit and focused build/test gates pass. Exact-head CI and merged-main CI remain release-sequence gates. |
+| Reproducible secure build | Met | Automated + exact-head CI + merged-main CI | Supported Node runtime, dependency audit, complete local gate, remote feature-head checks, fresh checkout, and merged-main checks pass. |
 | Official-source semantic/currentness review | Met | Official-source review + automated manifest validation | All 27 profiles have three named samples, official sources, semantic, locator-only, and currentness dispositions. Structural counts remain a separate evidence class. |
-| Publisher-field presentation | Met locally | Automated + local rendered browser | Source dates are separated; source text blocks, locators, procedure/config formats, and copy behavior retain focused regressions. Live proof awaits deployment. |
+| Publisher-field presentation | Met | Automated + local rendered browser + live browser | Source dates are separated; source text blocks, locators, procedure/config formats, and copy behavior retain focused regressions. Live AC-2 and Sources checks match the contract. |
 | Governed taxonomy contract and coverage | Partial by design | Automated | 28,845 of 182,190 record-dimension decisions are applicable; 153,345 are explicitly unreviewed; none are silently classified negative. URL/filter/link/export behavior is implemented and tested. |
-| Six-width route/template quality | Met locally | Local rendered browser | Independent 24-route/state matrix at 320/375/390/768/1024/1440 found no remaining persistent overflow, unnamed visible control, duplicate footer, invalid-date/null text, or navigation-mode mismatch. |
+| Six-width route/template quality | Met locally; focused live checks met | Local rendered browser + live browser | Independent 24-route/state matrix at 320/375/390/768/1024/1440 found no remaining persistent defect. Live Home, Library, record, Resource, Sources, About/navigation, and Compare checks confirm the shipped fixes. |
 | Android Chrome + TalkBack | Blocked | Emulator + unverified assistive technology | `ControlAtlas_API_35_Play` boots and contains Chrome and TalkBack, but Chrome stops at its first-run screen: continuing via **Use without an account** accepts Google's Terms of Service and usage/crash-data notice. No consent was accepted, so the site and TalkBack interaction remain unverified. |
 | Desktop NVDA | Unmet | Environment inspection + unverified assistive technology | NVDA is absent from the standard system, 32-bit, and per-user installation paths. It was not installed because the owner must personally accept any installer or licensing terms; hands-on evidence remains unverified. |
-| Canonical live release | Unmet for this branch | Live browser | Deployed SHA remains the prior main release until PR, CI, merge, Pages, and matching `release.json` verification complete. |
+| Canonical live release | Met | CI + Pages + live browser | PR #87 merged as `be34acb80892441d42fc8d5151cbe1370117c6bd`; merged-main checks and Pages succeeded; live `release.json` reports the same SHA and precise product/source dates. |
 
 ## 27-publication source audit
 
@@ -69,8 +69,9 @@ The governed details, official URLs, rationale, follow-up, and exact sample loca
 - Source layers, contextual counts and filter options, deep links/history, layer-specific empty states, 25-row rendering, show-more focus, sticky orientation, compact labels, and 320/375/390/768 responsive behavior pass focused contracts and rendered review.
 - Route-semantic polish is shipped and live-verified: the footer separates product-release and source-data dates, Compare uses native workflow buttons, About has named H2 card regions and a bounded desktop measure, and compact footer trust links fit within the first viewport at all required compact widths.
 - The governed taxonomy contract now defines publisher, Atlas-evidence, and editorial layers plus explicit `applicable`, `not_applicable`, and `unreviewed` decisions. The generated report shows that 153,345 of 182,190 record-dimension decisions remain unreviewed, so taxonomy applicability is explicitly partial.
+- PR #87 is deployed and live-verified. The compact record action menu, 1024–1199 navigation owner, Home trust footer, and governed Resource labels meet their written closure criteria and are removed from the open-only backlog.
 - The obsolete `ashbryant.github.io` host still returns 404 and is not available through the authenticated `BackslashBryant` repository account; the exact obsolete URL is forbidden in owned tracked files, but the external redirect remains open.
-- Next release milestone: finish the consolidated quality gate and ship the branch through exact-head CI, fresh-checkout verification, merged-main CI, Pages, and live browser proof. Assistive-technology conformance remains explicitly blocked/unverified at the consent and installation boundaries above.
+- Next product milestone: continue source-backed taxonomy review without converting missing tags into negative applicability, and obtain hands-on assistive-technology evidence when the owner-controlled Chrome/NVDA consent and installation boundaries are available.
 
 ## Remaining work
 
