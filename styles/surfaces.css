@@ -7328,7 +7328,7 @@ button.atlas-leverage-row:hover {
 .source-register-heading,
 .source-register-row {
   display: grid;
-  grid-template-columns: minmax(190px, 1.4fr) minmax(100px, 0.7fr) minmax(180px, 1.2fr) minmax(150px, 1fr) minmax(90px, 0.6fr);
+  grid-template-columns: minmax(190px, 1.5fr) minmax(110px, 0.8fr) minmax(110px, 0.75fr) minmax(110px, 0.75fr) minmax(110px, 0.75fr) minmax(90px, 0.6fr);
   gap: 12px;
   align-items: center;
   padding: 9px 12px;
@@ -7365,6 +7365,34 @@ button.atlas-leverage-row:hover {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin: 0;
+}
+
+@media (max-width: 1023px) {
+  .source-register-controls {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .source-register-total {
+    margin-bottom: 0;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 899px) {
+  .source-register-heading {
+    display: none;
+  }
+
+  .source-register-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 14px 12px;
+  }
+
+  .source-register-row .ca-source-cell--identity {
+    grid-column: 1 / -1;
+  }
 }
 
 .source-detail-grid > div {
@@ -7806,23 +7834,9 @@ button.atlas-leverage-row:hover {
   }
 
   .source-register-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 4px 10px;
-    padding: 9px 10px;
-  }
-
-  .source-register-row > :nth-child(3),
-  .source-register-row > :nth-child(4) {
-    grid-column: 1 / -1;
-  }
-
-  .source-register-row > :nth-child(3) {
-    color: var(--ca-text-muted);
-  }
-
-  .source-register-row > :nth-child(5) {
-    grid-column: 2;
-    grid-row: 1;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 14px 12px;
   }
 
   .source-detail-grid {

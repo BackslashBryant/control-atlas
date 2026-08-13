@@ -132,7 +132,8 @@ const COMPARE_PARAMS = new Set(["crosswalk", "workbench", "source", "target", "i
 const COMPARE_MODES = new Set(["intent", "relationships", "stig-chain", "baseline-compare", "threat-chain"]);
 const LEARN_PARAMS = new Set(["pattern"]);
 const BUILD_PARAMS = new Set(["templateType", "framework", "format", "environment", "baseline", "controlFamily", "category", "q"]);
-const SOURCE_PARAMS = new Set(["q", "source", "publisher", "provenance", "eligibility", "lifecycle", "access"]);
+const SOURCE_PARAMS = new Set(["layer", "q", "source", "publisher", "provenance", "eligibility", "lifecycle", "access"]);
+const SOURCE_LAYERS = new Set(["publication", "connection", "ingestion", "organization"]);
 const RESOURCE_PARAMS = new Set(["q", "resourceType", "collection", "owner", "sort", "showAll", "viewMode"]);
 const RETIRED_PARAMS = new Set(["q"]);
 
@@ -325,6 +326,14 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   } else if (params.size > 0 && !path.startsWith("/catalog/")) {
     params = new URLSearchParams();
     discarded = true;
+  }
+
+  if (path === "/sources") {
+    const layer = params.get("layer") || "";
+    if (layer && !SOURCE_LAYERS.has(layer)) {
+      params.delete("layer");
+      discarded = true;
+    }
   }
 
   const taskMatch = path.match(/^\/build\/tasks\/([^/]+)$/);

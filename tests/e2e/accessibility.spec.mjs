@@ -88,6 +88,10 @@ const ROUTES = [
   },
   { label: "sources registry", path: "/#/sources" },
   {
+    label: "source material register",
+    path: "/#/sources?layer=ingestion",
+  },
+  {
     label: "source detail",
     path: "/#/sources?source=nist-iot-device-cybersecurity-requirement-catalogs",
   },
