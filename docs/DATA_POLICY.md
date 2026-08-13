@@ -45,6 +45,20 @@ Official published relationships are visually and semantically distinct from inf
 
 Presentation is a required ingestion stage, not a browser-only cleanup. Every generated record type has a declared presentation profile. Publisher strings remain untouched. `StructuredContentBlock` stores presentation-only offsets for paragraphs, ordered lists, unordered lists, and exact code or configuration. Explicit upstream markup wins. Deterministic detection is permitted only at high confidence; ambiguity stays prose. Copy operations use the exact source slice, not visually reconstructed text. Content without a record page must carry an explicit not-applicable presentation outcome in its ingestion ledger.
 
+## Semantic and currentness review
+
+`data/source-review-manifest.json` is the governed human-review register for every publication profile. Its JSON Schema is validated with the repository's existing AJV 2020 runtime. The generator requires an exact match with the catalog coverage inventory, at least three source-linked samples per profile, official currentness sources, and explicit dispositions for semantic content, locator-only content, and upstream currency. A reviewed sample proves only the named comparison; it does not promote structural or count reconciliation into whole-corpus semantic proof.
+
+The disposition vocabulary is intentionally bounded:
+
+- Semantic: `reviewed_no_known_mismatch`, `remediation_required`, or `blocked`.
+- Locator-only: `none`, `justified`, `remediation_required`, or `blocked`.
+- Currentness: `current_as_checked`, `refresh_required`, `superseded`, or `blocked`.
+
+Known remediation remains in the generated audit and must not be converted to a passing state merely to satisfy a gate. Publisher landing pages establish publication identity; direct structured artifacts establish parser input. When those are different, both are retained and labeled.
+
+The platform gate considered OSCAL assessment-results for this register, but rejected it because that model represents system assessment findings rather than publication-source review. JSON Schema 2020-12 plus AJV is the existing MIT-licensed, maintained, repository-native validation path and avoids a semantically false OSCAL document.
+
 ## Reconciliation gates
 
 Builds fail on invalid or abbreviated checksums, byte or record-count disagreement, missing discovery artifacts, duplicate releases or canonical IDs, missing containment parents, undeclared duplicate parents, cycles, undeclared levels, foreign-catalog ancestors, invalid structured-content offsets, or relationship edges appearing in ancestry. `verify:discovery`, `verify:manifests`, AJV internal-schema validation, and the independent NIST OSCAL check remain separate scopes.
