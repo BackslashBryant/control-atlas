@@ -12,8 +12,8 @@ Ship a source-truthful, task-first Control Atlas without treating parser counts,
 ## Current checkpoint
 
 - Reproducible dependency/security baseline and the weighted Home area pool are shipped.
-- The 27-profile review register now records source-linked semantic samples and separate locator/currentness dispositions. Four profiles retain explicit remediation: DoD RAI locator/currentness, D3FEND version currentness, SP 800-53A publication-vs-artifact source identity, and NIST IoT catalog version labeling. NIST SP 800-171 Revision 2 remains explicitly superseded.
-- Next source milestone: remediate those four registry/presentation defects, then re-run source-field presentation and copy-output regressions before taxonomy work.
+- The 27-profile review register records source-linked semantic samples and separate locator/currentness dispositions. DoD RAI, D3FEND, SP 800-53A, and NIST IoT registry/presentation defects are corrected in the active milestone; NIST SP 800-171 Revision 2 remains explicitly superseded.
+- Next source milestone: re-run source-field presentation and copy-output regressions, then address the Sources metadata/date/layout backlog before taxonomy work.
 
 ## Remaining work
 

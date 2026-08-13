@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-13T10:55:40.356Z",
+  "generated_at": "2026-08-13T16:37:01.733Z",
   "status": "COMPLETE",
   "stage_contract": [
     "discover",
@@ -6220,7 +6220,7 @@
         },
         "normalize": {
           "status": "complete",
-          "evidence": "320 normalized record(s)"
+          "evidence": "344 normalized record(s)"
         },
         "structure": {
           "status": "complete",

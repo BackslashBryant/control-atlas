@@ -1,9 +1,9 @@
 {
   "schema_version": "2.0",
   "generated_from": {
-    "source_coverage_manifest": "2026-08-13T10:53:54.056Z",
-    "catalog_source_inventory": "2026-08-12T15:27:07.669Z",
-    "source_count_ledger": "2026-08-13T10:53:49.972Z"
+    "source_coverage_manifest": "2026-08-13T16:36:58.613Z",
+    "catalog_source_inventory": "2026-08-13T16:29:35.465Z",
+    "source_count_ledger": "2026-08-13T16:33:49.883Z"
   },
   "purpose": "Per-catalog audit boundary for publisher structure, parser reconciliation, artifact provenance, representative semantic review, locator disposition, and official-source currentness review.",
   "catalog_count": 27,
@@ -803,7 +803,7 @@
         {
           "source_id": "dod-rai-toolkit",
           "display_name": "DoD RAI",
-          "version": "2026-08-07",
+          "version": "4.0.0",
           "retrieved_at": "2026-08-07",
           "last_checked": "2026-06-09",
           "artifact_url": "https://rai.acqbot.com/executive-summary",
@@ -814,8 +814,8 @@
       "evidence_boundary": {
         "reviewed_at": "2026-08-13",
         "semantic_content_review": "reviewed_no_known_mismatch",
-        "locator_only_review": "remediation_required",
-        "upstream_currentness_review": "refresh_required",
+        "locator_only_review": "justified",
+        "upstream_currentness_review": "current_as_checked",
         "representative_samples": [
           {
             "record_id": "PRINCIPLE-MODULAR",
@@ -846,8 +846,8 @@
             "supports": "Official release describing the original modular, tailorable toolkit."
           }
         ],
-        "rationale": "The normalized concepts agree with official DoD descriptions, but the registered artifact locator uses an AcqBot host rather than the current CDAO publisher surface.",
-        "follow_up": "Replace or qualify the AcqBot artifact locator and rehydrate from a current publisher-controlled toolkit artifact before calling the source current.",
+        "rationale": "The normalized concepts agree with official DoD descriptions. The registry now separates the current CDAO-branded Tradewinds landing page from the AcqBot operational application and qualifies that application locator instead of presenting it as a direct CDAO-owned host.",
+        "follow_up": null,
         "statement": "Automated reconciliation and the recorded human review are separate evidence classes. The review covers the named samples and currentness sources; it is not a claim that automation proved semantic completeness or that every publisher record was manually re-authored."
       }
     },
@@ -1593,7 +1593,7 @@
         {
           "source_id": "mitre-d3fend-ontology",
           "display_name": "D3FEND",
-          "version": "4",
+          "version": "1.4.0",
           "retrieved_at": "2026-06-19",
           "last_checked": "2026-08-13",
           "artifact_url": "https://d3fend.mitre.org/api/technique/all.json",
@@ -1605,7 +1605,7 @@
         "reviewed_at": "2026-08-13",
         "semantic_content_review": "reviewed_no_known_mismatch",
         "locator_only_review": "none",
-        "upstream_currentness_review": "refresh_required",
+        "upstream_currentness_review": "current_as_checked",
         "representative_samples": [
           {
             "record_id": "D3-AA",
@@ -1636,8 +1636,8 @@
             "supports": "Official technique API used by the adapter."
           }
         ],
-        "rationale": "Sample semantics agree, but the publication registry reports version '4' while the official ontology identifies version 1.4.0.",
-        "follow_up": "Correct the D3FEND publication version and re-run the source presentation checks without changing publisher content.",
+        "rationale": "Sample semantics agree and the publication registry now reports the official ontology version 1.4.0 while retaining the API artifact separately from the human browse page.",
+        "follow_up": null,
         "statement": "Automated reconciliation and the recorded human review are separate evidence classes. The review covers the named samples and currentness sources; it is not a claim that automation proved semantic completeness or that every publisher record was manually re-authored."
       }
     },
@@ -2104,7 +2104,7 @@
         {
           "source_id": "nist-800-53a-assessment-procedures",
           "display_name": "SP 800-53A Rev. 5",
-          "version": "2026-06-09",
+          "version": "Revision 5, Release 5.2.0",
           "retrieved_at": "2026-06-13",
           "last_checked": "2026-08-13",
           "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
@@ -2228,7 +2228,7 @@
         {
           "source_id": "nist-800-53a-assessment-procedures",
           "display_name": "SP 800-53A Rev. 5",
-          "version": "2026-06-09",
+          "version": "Revision 5, Release 5.2.0",
           "retrieved_at": "2026-06-13",
           "last_checked": "2026-08-13",
           "artifact_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
@@ -2239,7 +2239,7 @@
       "evidence_boundary": {
         "reviewed_at": "2026-08-13",
         "semantic_content_review": "reviewed_no_known_mismatch",
-        "locator_only_review": "remediation_required",
+        "locator_only_review": "none",
         "upstream_currentness_review": "current_as_checked",
         "representative_samples": [
           {
@@ -2271,8 +2271,8 @@
             "supports": "Official OSCAL catalog carrying the 800-53A assessment objectives and methods."
           }
         ],
-        "rationale": "The assessment content is current and publisher-derived, but the publication source presently links only to the shared OSCAL control catalog, which can be mistaken for the 800-53 control publication rather than the 800-53A source identity.",
-        "follow_up": "Make the SP 800-53A landing page the visible publication source while retaining the shared official OSCAL artifact as the structured download.",
+        "rationale": "The assessment content is current and publisher-derived. The visible publication source now opens the SP 800-53A landing page while the shared official OSCAL catalog remains the structured parser artifact.",
+        "follow_up": null,
         "statement": "Automated reconciliation and the recorded human review are separate evidence classes. The review covers the named samples and currentness sources; it is not a claim that automation proved semantic completeness or that every publisher record was manually re-authored."
       }
     },
@@ -2489,7 +2489,7 @@
         {
           "source_id": "nist-iot-device-cybersecurity-requirement-catalogs",
           "display_name": "NIST IoT Device Cybersecurity",
-          "version": "Draft catalog",
+          "version": "Spring 2021",
           "retrieved_at": "2026-08-12",
           "last_checked": null,
           "artifact_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/",
@@ -2521,7 +2521,7 @@
         "reviewed_at": "2026-08-13",
         "semantic_content_review": "reviewed_no_known_mismatch",
         "locator_only_review": "none",
-        "upstream_currentness_review": "refresh_required",
+        "upstream_currentness_review": "current_as_checked",
         "representative_samples": [
           {
             "record_id": "DOMAIN-NON-TECHNICAL-MANUFACTURER-CAPABILITIES-1925D28A4B",
@@ -2552,8 +2552,8 @@
             "supports": "Publisher version and scope context."
           }
         ],
-        "rationale": "Representative normalized content agrees with the live catalog and workbooks, but the publication registry's generic 'Draft catalog' version obscures the publisher's Spring 2021 version and the draft status belongs to individual mapping artifacts.",
-        "follow_up": "Correct the publication version label to the publisher's Spring 2021 catalog and keep draft state on the mapping workbooks.",
+        "rationale": "Representative normalized content agrees with the live catalog and workbooks. The publication is now labeled as the active Spring 2021 catalog, while draft status remains on the individual mapping workbooks.",
+        "follow_up": null,
         "statement": "Automated reconciliation and the recorded human review are separate evidence classes. The review covers the named samples and currentness sources; it is not a claim that automation proved semantic completeness or that every publisher record was manually re-authored."
       }
     },
@@ -2768,17 +2768,17 @@
       "catalog_id": "nist-zt",
       "automated_evidence": {
         "status": "reconciled",
-        "expected_records": 320,
-        "imported_records": 320,
+        "expected_records": 344,
+        "imported_records": 344,
         "excluded_records": 0,
         "exclusions": [],
         "missing_records": 0,
         "source_inventory": {
           "source_file": "data/nist-zt.json",
           "source_selection": "all normalized publisher records",
-          "discovered_records": 320,
-          "normalized_records": 320,
-          "unique_record_ids": 320,
+          "discovered_records": 344,
+          "normalized_records": 344,
+          "unique_record_ids": 344,
           "evidence_class": "pre_graph_adapter_inventory"
         },
         "published_source_relationships": 0,

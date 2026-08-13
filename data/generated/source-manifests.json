@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-13T10:44:44.865Z",
+  "generated_at": "2026-08-13T16:36:17.154Z",
   "source_manifests": [
     {
       "source_id": "artifact-ai-mil-responsible-ai",
@@ -231,7 +231,7 @@
       "display_name": "DoD RAI Toolkit Artifact",
       "frameworks": [],
       "owner": "Publisher not recorded",
-      "version": "2026-08-07",
+      "version": "4.0.0",
       "retrieved_at": "2026-08-07",
       "artifact_url": "https://rai.acqbot.com/executive-summary",
       "artifact_type": "html",
@@ -567,7 +567,7 @@
       "display_name": "D3FEND Artifact",
       "frameworks": [],
       "owner": "Publisher not recorded",
-      "version": "4",
+      "version": "1.4.0",
       "retrieved_at": "2026-08-07",
       "artifact_url": "https://d3fend.mitre.org/api/technique/all.json",
       "artifact_type": "json_ld",
@@ -2518,7 +2518,7 @@
         "dod-rai"
       ],
       "owner": "DoD",
-      "version": "2026-08-07",
+      "version": "4.0.0",
       "sync_model": "curated",
       "last_checked": "2026-06-09",
       "last_imported": "2026-06-09",
@@ -2936,7 +2936,7 @@
         "mitre-d3fend"
       ],
       "owner": "MITRE",
-      "version": "4",
+      "version": "1.4.0",
       "sync_model": "auto_synced",
       "last_checked": "2026-08-13",
       "last_imported": "2026-08-08",
@@ -3173,7 +3173,7 @@
         "nist-800-53"
       ],
       "owner": "NIST",
-      "version": "2026-06-09",
+      "version": "Revision 5, Release 5.2.0",
       "sync_model": "auto_synced",
       "last_checked": "2026-08-13",
       "last_imported": "2026-08-08",
@@ -3383,11 +3383,11 @@
         "nist-iot-cybersecurity"
       ],
       "owner": "NIST",
-      "version": "Draft catalog",
+      "version": "Spring 2021",
       "retrieved_at": "2026-08-12",
       "artifact_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/",
       "access_status": "public",
-      "lifecycle_status": "draft",
+      "lifecycle_status": "active",
       "graph_eligible": true,
       "node_count": 490,
       "relationship_count": 489,

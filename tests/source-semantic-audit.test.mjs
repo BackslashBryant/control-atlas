@@ -19,7 +19,7 @@ test("source semantic audit records reviewed dispositions without conflating the
   }
 });
 
-test("required source regressions and unresolved dispositions remain explicit", () => {
+test("required source regressions and remediated dispositions remain explicit", () => {
   const report = JSON.parse(readFileSync("data/generated/source-semantic-audit.json", "utf8"));
   const byId = new Map(report.catalogs.map((catalog) => [catalog.catalog_id, catalog]));
 
@@ -28,9 +28,15 @@ test("required source regressions and unresolved dispositions remain explicit", 
       .some((sample) => sample.record_id === "V-256609" && sample.source_locator.includes("#V-256609")),
   );
   assert.equal(byId.get("nist-800-171-rev2").evidence_boundary.upstream_currentness_review, "superseded");
-  assert.equal(byId.get("dod-rai").evidence_boundary.locator_only_review, "remediation_required");
-  assert.equal(byId.get("dod-rai").evidence_boundary.upstream_currentness_review, "refresh_required");
-  assert.equal(byId.get("mitre-d3fend").evidence_boundary.upstream_currentness_review, "refresh_required");
-  assert.equal(byId.get("nist-800-53a").evidence_boundary.locator_only_review, "remediation_required");
-  assert.equal(byId.get("nist-iot-cybersecurity").evidence_boundary.upstream_currentness_review, "refresh_required");
+  assert.equal(byId.get("dod-rai").evidence_boundary.locator_only_review, "justified");
+  assert.equal(byId.get("dod-rai").evidence_boundary.upstream_currentness_review, "current_as_checked");
+  assert.equal(byId.get("mitre-d3fend").evidence_boundary.upstream_currentness_review, "current_as_checked");
+  assert.equal(byId.get("nist-800-53a").evidence_boundary.locator_only_review, "none");
+  assert.equal(byId.get("nist-iot-cybersecurity").evidence_boundary.upstream_currentness_review, "current_as_checked");
+  assert.ok(
+    report.catalogs.every((catalog) => catalog.evidence_boundary.locator_only_review !== "remediation_required"),
+  );
+  assert.ok(
+    report.catalogs.every((catalog) => catalog.evidence_boundary.upstream_currentness_review !== "refresh_required"),
+  );
 });

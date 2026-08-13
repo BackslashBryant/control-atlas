@@ -26,6 +26,32 @@ test('loaded sources expose additive freshness fields', () => {
   assert.equal(byId.get('community-cci-research').hash, null);
 });
 
+test('reviewed publication identity stays distinct from parser artifacts', () => {
+  const { byId } = loadSourceRegistry(registry);
+
+  const rai = byId.get('dod-rai-toolkit');
+  assert.equal(rai.version, '4.0.0');
+  assert.equal(rai.catalog_browse_url, 'https://www.tradewindai.com/rai-toolkit');
+  assert.equal(rai.artifact_url, 'https://rai.acqbot.com/executive-summary');
+  assert.match(rai.metadata.provenance_note, /retained separately/);
+
+  const d3fend = byId.get('mitre-d3fend-ontology');
+  assert.equal(d3fend.version, '1.4.0');
+  assert.equal(d3fend.catalog_browse_url, 'https://d3fend.mitre.org/');
+  assert.equal(d3fend.artifact_url, 'https://d3fend.mitre.org/api/technique/all.json');
+
+  const assessment = byId.get('nist-800-53a-assessment-procedures');
+  assert.equal(assessment.version, 'Revision 5, Release 5.2.0');
+  assert.equal(assessment.catalog_browse_url, 'https://csrc.nist.gov/pubs/sp/800/53/a/r5/final');
+  assert.match(assessment.artifact_url, /NIST_SP-800-53_rev5_catalog\.json$/);
+
+  const iot = byId.get('nist-iot-device-cybersecurity-requirement-catalogs');
+  assert.equal(iot.version, 'Spring 2021');
+  assert.equal(iot.lifecycle_status, 'active');
+  assert.equal(byId.get('nist-iot-requirements-80053-mapping-draft').lifecycle_status, 'draft');
+  assert.equal(byId.get('nist-iot-requirements-csf11-mapping-draft').lifecycle_status, 'draft');
+});
+
 test('source registry rejects invalid or incomplete freshness metadata', () => {
   const invalid = structuredClone(registry);
   invalid.freshness.sources[0].last_checked = '2026-02-30';
