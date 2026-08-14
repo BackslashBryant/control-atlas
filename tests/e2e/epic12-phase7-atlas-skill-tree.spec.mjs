@@ -171,13 +171,16 @@ test("opened connection filters stay inside their panel at every governed width"
   for (const width of [320, 375, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
     await gotoApp(page, "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=list");
+    await page.reload({ waitUntil: "domcontentloaded" });
     await waitForAppReady(page);
     await dismissOnboarding(page);
     await expect(page.locator(".route-transition")).toBeHidden();
     await expect(page.locator(".atlas-workspace-heading")).toHaveText("Connections");
 
     const disclosure = page.locator("details.atlas-connection-filters");
-    await disclosure.locator("summary").click();
+    if (!(await disclosure.evaluate((element) => element.open))) {
+      await disclosure.locator("summary").click();
+    }
     await expect(disclosure).toHaveAttribute("open", "");
     const panel = disclosure.getByRole("group", { name: "Connection filters" });
     await expect(panel).toBeVisible();
