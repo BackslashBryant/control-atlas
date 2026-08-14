@@ -7,9 +7,6 @@ import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { sourceLinkFor } from "../graph/sourceLinks";
 import connectionInventoryArtifact from "../../../data/generated/connection-inventory.json";
 import catalogBootstrapArtifact from "../../../data/generated/catalog-bootstrap.json";
-
-const connectionInventory = connectionInventoryArtifact.connection_inventory;
-const sourceCatalogs = catalogBootstrapArtifact.catalog_bootstrap.catalogs;
 import { Button, Panel } from "../components/lsm";
 import { AppLink } from "../components/AppLink";
 import {
@@ -24,13 +21,19 @@ import {
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import {
   buildSourceLayers,
+  publicationReviewsForSource,
   sourceLayerEntityLabel,
   sourceLayerOptions,
+  type CatalogSummary,
   type SourceField,
   type SourceLayerId,
   type SourceRegisterRow,
 } from "../lib/sourceRegister";
 import type { ViewState } from "../lib/viewState";
+
+const connectionInventory = connectionInventoryArtifact.connection_inventory;
+const sourceCatalogs = catalogBootstrapArtifact.catalog_bootstrap
+  .catalogs as CatalogSummary[];
 
 const SOURCE_LAYER_TABS: Array<{
   id: SourceLayerId;
@@ -144,6 +147,17 @@ export function SourcesPage(props: {
   const selectedSource = state.source
     ? bundle.runtime.getSource(state.source)
     : null;
+  const selectedPublicationReviews = useMemo(
+    () =>
+      selectedSource
+        ? publicationReviewsForSource(
+            selectedSource.id,
+            allSources,
+            sourceCatalogs,
+          )
+        : [],
+    [allSources, selectedSource],
+  );
   const registerFilters = {
     query: state.query,
     publisher: state.publisher,
@@ -274,7 +288,23 @@ export function SourcesPage(props: {
           <div><dt>Publisher</dt><dd>{selectedSource.owner || "Not recorded"}</dd></div>
           <div><dt>Publisher version</dt><dd>{selectedSource.version || "Not recorded"}</dd></div>
           <div><dt>Retrieved</dt><dd>{selectedSource.retrieved_at || "Not recorded"}</dd></div>
-          <div><dt>Last verified</dt><dd>{selectedSource.last_checked || "Not recorded"}</dd></div>
+          <div><dt>Source last checked</dt><dd>{selectedSource.last_checked || "Not recorded"}</dd></div>
+          {selectedPublicationReviews.map((review) => (
+            <div key={review.catalogId}>
+              <dt>
+                {selectedPublicationReviews.length > 1
+                  ? `${review.publicationName} currentness review`
+                  : "Publication currentness review"}
+              </dt>
+              <dd>
+                {displayNameFor(
+                  "source_currentness_review",
+                  review.upstreamCurrentnessReview,
+                )} · Reviewed{" "}
+                <time dateTime={review.reviewedAt}>{review.reviewedAt}</time>
+              </dd>
+            </div>
+          ))}
           <div><dt>Lifecycle</dt><dd>{displayNameFor("lifecycle_status", selectedSource.lifecycle_status)}</dd></div>
           {selectedSource.source_role && selectedSource.source_role !== "publication" ? (
             <div><dt>Update method</dt><dd>{selectedSource.retrieval_method ? displayNameFor("retrieval_method", selectedSource.retrieval_method) : "Not recorded"}</dd></div>
@@ -458,7 +488,7 @@ export function SourcesPage(props: {
                   <span role="columnheader">Publisher</span>
                   <span role="columnheader">Catalog coverage</span>
                   <span role="columnheader">Publisher version</span>
-                  <span role="columnheader">Last verified</span>
+                  <span role="columnheader">Source last checked</span>
                   <span role="columnheader">Status</span>
                 </>
               )}
@@ -542,8 +572,8 @@ export function SourcesPage(props: {
                     <SourceRegisterCell label="Publisher version">
                       <SourceFieldValue field={row.version} missingLabel="Version not recorded" notApplicableLabel="Not applicable" />
                     </SourceRegisterCell>
-                    <SourceRegisterCell label="Last verified">
-                      <SourceFieldValue field={row.verifiedAt} missingLabel="Verification date not recorded" notApplicableLabel="Not applicable" />
+                    <SourceRegisterCell label="Source last checked">
+                      <SourceFieldValue field={row.verifiedAt} missingLabel="Source check date not recorded" notApplicableLabel="Not applicable" />
                     </SourceRegisterCell>
                     <SourceRegisterCell label="Status">
                       <SourceFieldValue field={row.lifecycle} format={(value) => displayNameFor("lifecycle_status", value)} missingLabel="Status not recorded" notApplicableLabel="Not applicable" />

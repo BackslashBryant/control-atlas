@@ -79,6 +79,25 @@ test('federal use does not imply federal publication', () => {
   );
 });
 
+test('source review dispositions use governed plain-language labels', () => {
+  assert.equal(
+    displayNameFor('source_currentness_review', 'current_as_checked'),
+    'Current as checked',
+  );
+  assert.equal(
+    displayNameFor('source_currentness_review', 'refresh_required'),
+    'Refresh required',
+  );
+  assert.equal(
+    displayNameFor('source_currentness_review', 'superseded'),
+    'Superseded',
+  );
+  assert.equal(
+    displayNameFor('source_semantic_review', 'reviewed_no_known_mismatch'),
+    'Reviewed; no known mismatch',
+  );
+});
+
 test('template types use registry-aligned display names', () => {
   assert.equal(
     displayNameFor('template_type', 'inheritance_worksheet'),

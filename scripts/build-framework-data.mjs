@@ -3485,6 +3485,15 @@ export function buildFrameworkData() {
   const librarySearch = buildLibrarySearch(graph);
   const librarySearchIndex = buildLibrarySearchIndex(librarySearch);
   const sourceById = new Map(graph.sources.map((source) => [source.id, source]));
+  const sourceReviews = readJson(
+    join(ROOT, "data", "source-review-manifest.json"),
+  ).catalogs;
+  const sourceReviewByCatalog = new Map(
+    sourceReviews.map((review) => [review.catalog_id, review]),
+  );
+  if (sourceReviewByCatalog.size !== sourceReviews.length) {
+    throw new Error("Source review manifest contains duplicate catalog IDs.");
+  }
   const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const evidenceById = new Map(
     graph.evidence.map((entry) => [entry.id, entry]),
@@ -3502,12 +3511,33 @@ export function buildFrameworkData() {
           (node) => node.metadata?.catalog_id === catalog.id,
         );
       const source = sourceById.get(root?.source_id);
+      const sourceReview = sourceReviewByCatalog.get(catalog.id);
+      if (!sourceReview) {
+        throw new Error(`Catalog ${catalog.id} has no governed source review.`);
+      }
       return {
         ...catalog,
         source_id: root?.source_id || "",
         source_version: source?.version || source?.source_version || "",
+        source_review: {
+          reviewed_at: sourceReview.reviewed_at,
+          semantic_content_review: sourceReview.semantic_content_review,
+          upstream_currentness_review:
+            sourceReview.upstream_currentness_review,
+        },
       };
     });
+  const emittedCatalogIds = new Set(catalogs.map((catalog) => catalog.id));
+  const unusedSourceReviews = sourceReviews.filter(
+    (review) => !emittedCatalogIds.has(review.catalog_id),
+  );
+  if (unusedSourceReviews.length) {
+    throw new Error(
+      `Source reviews do not resolve to catalog profiles: ${unusedSourceReviews
+        .map((review) => review.catalog_id)
+        .join(", ")}`,
+    );
+  }
   const mappingSourcesByPair = new Map();
   for (const edge of graph.edges) {
     if (edge.publication_status !== "published") continue;

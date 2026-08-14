@@ -126,6 +126,17 @@ const DISPLAY_NAMES = {
     xlsx: 'Excel workbook',
     oscal: 'OSCAL document',
   },
+  source_currentness_review: {
+    current_as_checked: 'Current as checked',
+    refresh_required: 'Refresh required',
+    superseded: 'Superseded',
+    blocked: 'Review blocked',
+  },
+  source_semantic_review: {
+    reviewed_no_known_mismatch: 'Reviewed; no known mismatch',
+    remediation_required: 'Remediation required',
+    blocked: 'Review blocked',
+  },
   template_type: {
     security_plan_starter: 'Security Plan Starter',
     implementation_statement_worksheet: 'Implementation Statement Worksheet',

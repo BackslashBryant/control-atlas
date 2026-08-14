@@ -11,7 +11,7 @@ Ship a source-truthful, task-first Control Atlas without treating parser counts,
 
 ## Executive verdict
 
-**Not whole-product complete.** Product code `6958cffb6690fbb252f3b87fc5b3b66319e0c6ce` shipped the corrected runtime and was live-verified; `release.json` remains the authority for later evidence-only release SHAs. Official-source review, exact source-locator presentation, governed publication labels, and the exact-family taxonomy milestone are shipped and live-verified. The active taxonomy milestone adds exact publisher-retained DISA CCI family references and reduces the generated unreviewed count to 145,859 without manufacturing negative decisions. Hands-on Android Chrome/TalkBack plus desktop NVDA evidence remains unavailable. The legacy `ashbryant.github.io` 404 is an external ownership limitation, not a product-code fix. No test, structural reconciliation, or emulated viewport is being promoted into those missing evidence classes.
+**Not whole-product complete.** Deployed main `aa9287e9c49f97b55a7e93a7f7baaa0ab7dd54f5` passed exact-head and merged-main CI, Pages deployment, live smoke, and focused production verification. Official-source review, exact source-locator presentation, governed publication labels, DISA CCI taxonomy coverage, and Atlas local-filter containment are shipped and live-verified. The active milestone exposes the governed publication-currentness review without rewriting or backfilling the distinct source check date. Hands-on Android Chrome/TalkBack plus desktop NVDA evidence remains unavailable. The legacy `ashbryant.github.io` 404 is an external ownership limitation, not a product-code fix. No test, structural reconciliation, or emulated viewport is being promoted into those missing evidence classes.
 
 ## Objective matrix
 
@@ -21,10 +21,10 @@ Ship a source-truthful, task-first Control Atlas without treating parser counts,
 | Official-source semantic/currentness review | Met | Official-source review + automated manifest validation | All 27 profiles have three named samples, official sources, semantic, locator-only, and currentness dispositions. Structural counts remain a separate evidence class. |
 | Publisher-field presentation | Partial | Automated + live browser | Source text blocks, exact retained locators, procedure/config formats, governed publication names, and copy behavior pass focused regressions. The trust surface still labels `last_checked` ambiguously and omits the distinct governed currentness-review date and disposition for reviewed publications (POLISH-022). |
 | Governed taxonomy contract and coverage | Partial by design | Automated | 36,331 of 182,190 record-dimension decisions are applicable; 145,859 are explicitly unreviewed; none are silently classified negative. Exact NIST family fields and exact publisher-retained DISA CCI related-family tuples support 22 governed security-domain tags. URL/filter/link/export behavior is implemented and tested. |
-| Six-width route/template quality | Partial | Local rendered browser + live browser | The route matrix remains clean for page overflow, navigation, empty states, and bounded rendering, but fresh live Atlas local-connections loads clip filter controls at 1024 and 1440 (POLISH-021). |
+| Six-width route/template quality | Met for the current route matrix | Automated + local rendered browser + live browser | The route matrix is clean for page overflow, navigation, empty states, bounded rendering, and Atlas local-filter containment at 320, 375, 390, 768, 1024, and 1440. Newly found record-identity polish remains separately tracked as POLISH-023. |
 | Android Chrome + TalkBack | Blocked | Emulator + unverified assistive technology | `ControlAtlas_API_35_Play` boots and contains Chrome and TalkBack, but Chrome stops at its first-run screen: continuing via **Use without an account** accepts Google's Terms of Service and usage/crash-data notice. No consent was accepted, so the site and TalkBack interaction remain unverified. |
 | Desktop NVDA | Unmet | Environment inspection + unverified assistive technology | NVDA is absent from the standard system, 32-bit, and per-user installation paths. It was not installed because the owner must personally accept any installer or licensing terms; hands-on evidence remains unverified. |
-| Canonical live release | Met | CI + Pages + live browser | Product code `6958cffb6690fbb252f3b87fc5b3b66319e0c6ce` passed exact-head and merged-main CI, fresh checkout, GitHub Pages, Pages Live Smoke, and focused live verification. `release.json` is authoritative for later evidence-only release SHAs. |
+| Canonical live release | Met | CI + Pages + live browser | Release `aa9287e9c49f97b55a7e93a7f7baaa0ab7dd54f5` passed exact-head and merged-main CI, fresh checkout, GitHub Pages, Pages Live Smoke, and the six-width live Atlas regression. `release.json` matched the merged SHA. |
 
 ## 27-publication source audit
 
@@ -71,9 +71,10 @@ The governed details, official URLs, rationale, follow-up, and exact sample loca
 - The governed taxonomy contract now defines publisher, Atlas-evidence, and editorial layers plus explicit `applicable`, `not_applicable`, and `unreviewed` decisions. Contract 1.3 preserves stable IDs, retains exact publisher-family security domains for NIST SP 800-53, 800-53A, 800-171, and 800-172, and adds exact publisher-retained DISA CCI related-family tuples. The generated report shows 36,331 applicable and 145,859 unreviewed decisions, so taxonomy applicability remains explicitly partial.
 - The deployed milestone corrects stale STIG, DoD AI Assurance, and NIST SP 800-53B official locators/currentness metadata; all 46 governed official URLs pass a bounded currentness probe.
 - The live release exposes exact retained source locators with copy feedback and governed publication labels in record facts and breadcrumbs. Its rendered regression covers 13 representative source families plus 320/375/390/768/1024/1440 wrapping.
-- The latest live polish pass found two P1 details that remain open: Atlas local filter controls clip inside their panel at 1024/1440, and Sources omits the governed publication-currentness review while ambiguously labeling `last_checked`. Both have bounded acceptance criteria in `docs/BACKLOG.md`.
+- Atlas local connection filters now claim a full toolbar row while open; the checked-in regression and production rerun keep the panel and every control inside the container at all six governed widths with zero horizontal overflow.
+- The active P1 is source-currentness presentation: expose the governed publication review separately from `retrieved_at` and `last_checked`, retain honest unavailable dates, and reconcile the runtime summary to all 27 reviewed profiles.
 - The obsolete `ashbryant.github.io` host still returns 404 and is not available through the authenticated `BackslashBryant` repository account; the exact obsolete URL is forbidden in owned tracked files, but the external redirect remains open.
-- Next product milestone: continue source-backed taxonomy review without converting missing tags into negative applicability, and obtain hands-on assistive-technology evidence when the owner-controlled Chrome/NVDA consent and installation boundaries are available.
+- Next product milestone after source-currentness presentation: correct generated record identity (POLISH-023), then continue source-backed taxonomy review without converting missing tags into negative applicability.
 
 ## Remaining work
 
@@ -83,7 +84,7 @@ The governed details, official URLs, rationale, follow-up, and exact sample loca
    - Prove tag URL round trips, contextual counts, hidden unavailable choices, bounded vendor/product selection, search aliases, record/resource/template/playbook/compare links, and export context.
 
 2. **Product and accessibility evidence**
-   - Fix and live-verify POLISH-021 and POLISH-022 before restoring a met route/publisher-presentation verdict.
+   - Fix and live-verify POLISH-022 and POLISH-023 before restoring a met publisher-presentation verdict.
    - Keep Home area browsing source-backed: size populated areas by current leaf-record count on a logarithmic scale, show the exact count, and suppress zero-result links.
    - Re-run route/template review at 320, 375, 390, 768, 1024, and 1440 for Atlas landscape, hierarchy, local connections, record detail, Library, Compare, Resources, Sources, and About.
    - Verify no inert action, hidden below-the-fold result, zero-result selectable facet, excessive DOM/list rendering, broken history/deep link, or unlabeled keyboard/focus behavior remains.
