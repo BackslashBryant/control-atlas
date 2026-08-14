@@ -5198,6 +5198,17 @@ a:focus-visible {
   position: relative;
 }
 
+.atlas-focused-toolbar:has(.atlas-connection-filters[open]) > .atlas-workspace-controls {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.atlas-focused-toolbar .atlas-connection-filters[open] {
+  flex: 1 1 100%;
+  width: 100%;
+  min-width: 0;
+}
+
 .atlas-focused-toolbar .atlas-connection-filters > summary {
   display: flex;
   align-items: center;
