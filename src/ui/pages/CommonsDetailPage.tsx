@@ -1,6 +1,5 @@
 import {
   IconAlertTriangle,
-  IconArrowLeft,
   IconBook2,
   IconCheck,
   IconCopy,
@@ -17,11 +16,11 @@ import { serializeHashLocation } from "../lib/hashRoutes";
 import { resourceAccessLabel, resourceFieldLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
 import { taxonomyTagsForResource } from "../../shared/record-taxonomy.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
-import type { ViewState } from "../lib/viewState";
+import { normalizeViewState, type ViewState } from "../lib/viewState";
 
 type Props = {
   bundle: RuntimeBundle | null;
-  viewState: ViewState;
+  viewState: Extract<ViewState, { view: "commons-detail" }>;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 };
 
@@ -36,13 +35,13 @@ function EvidenceCopy({ section }: { section?: { status: string; text: string; s
 }
 
 export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
-  const id = viewState.view === "commons-detail" ? viewState.id : "";
+  const id = viewState.id;
   const [copied, setCopied] = useState(false);
   const dataset = bundle?.commonsDataset;
   const resource = useMemo(() => dataset?.resources.find((entry) => entry.id === id) as CommonsResource | undefined, [dataset, id]);
 
   if (!resource) {
-    return <div className="resource-detail-page"><section className="empty-state"><IconAlertTriangle aria-hidden="true" size={36} /><h1>Resource not found</h1><p>This directory does not contain “{id}”.</p><AppLink onNavigate={onNavigate} view="commons">Return to Resources</AppLink></section></div>;
+    return <div className="resource-detail-page"><section className="empty-state"><IconAlertTriangle aria-hidden="true" size={36} /><h1>Resource not found</h1><p>This directory does not contain “{id}”.</p></section></div>;
   }
 
   const parent = resource.parentEcosystemId ? dataset?.resources.find((entry) => entry.id === resource.parentEcosystemId) : null;
@@ -55,7 +54,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
     : resource.warnings?.[0];
 
   const copyLink = async () => {
-    await navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#${serializeHashLocation({ view: "commons-detail", id })}`);
+    await navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#${serializeHashLocation(normalizeViewState("commons-detail", { id }))}`);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   };
@@ -63,7 +62,6 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
     <div className="resource-detail-page">
       <div className="ca-content-container resource-detail-shell">
         <nav aria-label="Resource detail actions" className="resource-detail-nav">
-          <AppLink onNavigate={onNavigate} view="commons"><IconArrowLeft aria-hidden="true" size={16} />Back</AppLink>
           <div>
             <button onClick={copyLink} type="button">{copied ? <IconCheck aria-hidden="true" size={15} /> : <IconCopy aria-hidden="true" size={15} />}{copied ? "Link copied" : "Copy link"}</button>
             <a href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank"><IconFlag aria-hidden="true" size={15} />Report a problem</a>
@@ -147,8 +145,8 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
           <aside className="resource-detail-side">
             {parent || children.length > 0 || collections.length > 0 ? (
               <DetailSection title="Related Resources">
-                {parent ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ id: parent.id }} view="commons-detail"><span>Part of</span><strong>{parent.name}</strong></AppLink> : null}
-                {children.map((child) => <AppLink className="resource-context-link" key={child.id} onNavigate={onNavigate} patch={{ id: child.id }} view="commons-detail"><span>Related service</span><strong>{child.name}</strong></AppLink>)}
+                {parent ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ ...viewState, id: parent.id }} view="commons-detail"><span>Part of</span><strong>{parent.name}</strong></AppLink> : null}
+                {children.map((child) => <AppLink className="resource-context-link" key={child.id} onNavigate={onNavigate} patch={{ ...viewState, id: child.id }} view="commons-detail"><span>Related service</span><strong>{child.name}</strong></AppLink>)}
                 {collections.map((collection) => <AppLink className="resource-context-link" key={collection.id} onNavigate={onNavigate} patch={{ collection: collection.id, showAll: "true" }} view="commons"><span>Collection</span><strong>{collection.title}</strong></AppLink>)}
               </DetailSection>
             ) : null}

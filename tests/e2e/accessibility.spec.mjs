@@ -43,7 +43,7 @@ const ROUTES = [
   { label: "resources directory", path: "/#/resources?collection=official-portals" },
   {
     label: "resource detail",
-    path: "/#/resources/official-nist-oscal",
+    path: "/#/resources/official-nist-oscal?q=OSCAL&resourceType=specification&owner=NIST%20OSCAL%20Team&showAll=true&viewMode=map",
   },
   { label: "retired recovery", path: "/#/retired?q=old-control" },
   { label: "not found recovery", path: "/#/does-not-exist" },
@@ -127,6 +127,11 @@ for (const route of ROUTES) {
         }),
       ).toBeVisible();
       await expect(page.getByRole("article", { name: "Source status summary" })).toBeVisible();
+    }
+    if (route.label === "resource detail") {
+      await expect(
+        page.getByRole("link", { name: "Back to resources", exact: true }),
+      ).toHaveCount(1);
     }
     if (route.label === "source not found") {
       await expect(

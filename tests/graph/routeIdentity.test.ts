@@ -28,6 +28,56 @@ test("Source detail context preserves the active Sources workspace on return", (
   });
 });
 
+test("Resource detail context preserves the active Resources workspace on return", () => {
+  const state = normalizeViewState("commons-detail", {
+    view: "commons-detail",
+    id: "tool-cisa-scubagear",
+    query: "ScubaGear",
+    resourceType: "tool",
+    collection: "cloud-devsecops-software-factories",
+    owner: "Cybersecurity and Infrastructure Security Agency",
+    sort: "name",
+    showAll: "true",
+    viewMode: "map",
+  });
+  assert.equal(
+    serializeHashLocation(state),
+    "/resources/tool-cisa-scubagear?q=ScubaGear&resourceType=tool&collection=cloud-devsecops-software-factories&owner=Cybersecurity+and+Infrastructure+Security+Agency&sort=name&showAll=true&viewMode=map",
+  );
+  const canonical = canonicalizeHashLocation(serializeHashLocation(state));
+  assert.equal(canonical.canonicalPath, serializeHashLocation(state));
+  assert.equal(canonical.recoveryMessage, "");
+  assert.equal(
+    serializeHashLocation(normalizeViewState("commons-detail", { id: state.id })),
+    "/resources/tool-cisa-scubagear",
+  );
+  assert.deepEqual(
+    orbitalRouteContext(state).back,
+    {
+      label: "Back to resources",
+      view: "commons",
+      patch: {
+        query: "ScubaGear",
+        resourceType: "tool",
+        collection: "cloud-devsecops-software-factories",
+        owner: "Cybersecurity and Infrastructure Security Agency",
+        sort: "name",
+        showAll: "true",
+        viewMode: "map",
+      },
+    },
+  );
+  assert.deepEqual(
+    parseHashLocation(serializeHashLocation(state), ""),
+    state,
+  );
+  const unsupported = canonicalizeHashLocation(
+    `${serializeHashLocation(state)}&from=templates`,
+  );
+  assert.equal(unsupported.canonicalPath, serializeHashLocation(state));
+  assert.match(unsupported.recoveryMessage, /removed/i);
+});
+
 test("Phase 3 durable paths and old bookmarks resolve to one canonical IA", () => {
   const cases = [
     ["/atlas?node=nist-800-53%3AAC-2&relationshipView=map", "/atlas/nist-800-53:AC-2?relationshipView=map"],

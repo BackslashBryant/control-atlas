@@ -39,7 +39,19 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         mode: "operational",
         label: routeIdentityFor("commons-detail").contextLabel,
         scope: entityName || "Resource detail",
-        back: { label: "All resources", view: "commons" },
+        back: {
+          label: "Back to resources",
+          view: "commons",
+          patch: {
+            query: state.query,
+            resourceType: state.resourceType,
+            collection: state.collection,
+            owner: state.owner,
+            sort: state.sort,
+            showAll: state.showAll,
+            viewMode: state.viewMode,
+          },
+        },
       };
     case "not-found":
       return {

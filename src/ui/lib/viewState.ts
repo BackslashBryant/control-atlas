@@ -180,6 +180,13 @@ export type ViewState =
   | {
       view: "commons-detail";
       id: string;
+      query: string;
+      resourceType: string;
+      collection: string;
+      owner: string;
+      sort: string;
+      showAll: string;
+      viewMode: "list" | "map";
     }
   | { view: "start-here"; goal: string; context: string }
   | {
@@ -456,6 +463,13 @@ export function parseViewState(search: string): ViewState {
     return {
       view,
       id: params.get("id") || "",
+      query: params.get("q") || params.get("query") || "",
+      resourceType: params.get("resourceType") || "",
+      collection: params.get("collection") || "",
+      owner: params.get("owner") || "",
+      sort: params.get("sort") || "relevance",
+      showAll: params.get("showAll") === "true" ? "true" : "",
+      viewMode: params.get("viewMode") === "map" ? "map" : "list",
     };
   }
 
@@ -639,6 +653,13 @@ export function normalizeViewState(
     return {
       view,
       id: incoming.id || "",
+      query: incoming.query || "",
+      resourceType: incoming.resourceType || "",
+      collection: incoming.collection || "",
+      owner: incoming.owner || "",
+      sort: incoming.sort || "relevance",
+      showAll: incoming.showAll === "true" ? "true" : "",
+      viewMode: incoming.viewMode === "map" ? "map" : "list",
     };
   }
 
@@ -833,6 +854,13 @@ export function serializeViewState(state: ViewState): string {
   } else if (state.view === "commons-detail") {
     params.set("view", state.view);
     setIfValue(params, "id", state.id);
+    setIfValue(params, "q", state.query);
+    setIfValue(params, "resourceType", state.resourceType);
+    setIfValue(params, "collection", state.collection);
+    setIfValue(params, "owner", state.owner);
+    if (state.sort && state.sort !== "relevance") setIfValue(params, "sort", state.sort);
+    setIfValue(params, "showAll", state.showAll);
+    if (state.viewMode === "map") setIfValue(params, "viewMode", "map");
   } else if (state.view === "start-here") {
     params.set("view", state.view);
     setIfValue(params, "goal", state.goal);
