@@ -220,6 +220,61 @@ test("source detail routes use specific identity at every governed width", async
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(sources[1].id);
 });
 
+test("source detail has one return action and preserves the Sources workspace", async ({ page }) => {
+  test.setTimeout(120_000);
+  const detailPath =
+    "/#/sources?layer=ingestion&q=DISA&source=cyber-mil-stig-downloads&publisher=DISA&lifecycle=active";
+
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    await gotoApp(page, detailPath);
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+
+    const returnLink = page.getByRole("link", { name: "Back to sources", exact: true });
+    await expect(returnLink).toHaveCount(1);
+    await expect(page.locator(".sources-page .link-action")).toHaveCount(0);
+    await expect(page.locator(".sources-page .page-header")).toBeVisible();
+    const target = await returnLink.boundingBox();
+    expect(target).not.toBeNull();
+    if (width <= 390) {
+      expect(target.height).toBeGreaterThanOrEqual(44);
+      expect(target.width).toBeGreaterThanOrEqual(44);
+    }
+    expect(
+      await page.evaluate(() =>
+        globalThis.document.documentElement.scrollWidth -
+        globalThis.document.documentElement.clientWidth,
+      ),
+    ).toBeLessThanOrEqual(1);
+
+    await returnLink.click();
+    await waitForAppReady(page);
+    await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
+    await expect(page.locator("#source-layer-tab-ingestion")).toHaveAttribute("aria-selected", "true");
+    await expect(page.locator("#source-search")).toHaveValue("DISA");
+    await expect(page.getByLabel("Publisher", { exact: true })).toHaveValue("DISA");
+    await expect(page.getByLabel("Status", { exact: true })).toHaveValue("active");
+    expect(
+      await page.evaluate(() =>
+        new URLSearchParams(globalThis.location.hash.split("?")[1]).has("source"),
+      ),
+    ).toBe(false);
+
+    await page.goBack();
+    await waitForAppReady(page);
+    await expect(
+      page.getByRole("heading", { name: "DISA STIG Downloads Landing Page", level: 1 }),
+    ).toBeVisible();
+    await expect(returnLink).toHaveCount(1);
+
+    await page.goForward();
+    await waitForAppReady(page);
+    await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
+    await expect(page.locator("#source-search")).toHaveValue("DISA");
+  }
+});
+
 test("source and publication review dates remain distinct at every governed width", async ({
   page,
 }) => {

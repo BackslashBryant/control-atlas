@@ -646,7 +646,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: var(--ca-space-2);
-  min-height: 32px;
+  min-height: var(--ca-touch-target);
   padding-inline: var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-radius: var(--ca-radius-sm);
