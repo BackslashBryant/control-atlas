@@ -316,6 +316,12 @@
   overflow-wrap: anywhere;
 }
 
+.ca-source-not-found-id code {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .ca-record-stable-id {
   max-width: 100%;
   flex-wrap: wrap;

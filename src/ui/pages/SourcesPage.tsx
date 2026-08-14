@@ -342,6 +342,29 @@ export function SourcesPage(props: {
     );
   }
 
+  if (state.source) {
+    return (
+      <Panel className="sources-page" data-visual-identity="provenance-ledger">
+        <PageHeader
+          eyebrow="Source not found"
+          primary
+          summary="Control Atlas does not include this source ID in the current public register. Check the link or return to Sources."
+          title={
+            <>
+              Source not found
+              <span className="visually-hidden">
+                : Requested source ID {state.source}
+              </span>
+            </>
+          }
+        />
+        <p className="ca-source-not-found-id">
+          Requested source ID: <code>{state.source}</code>
+        </p>
+      </Panel>
+    );
+  }
+
   return (
     <Panel className="sources-page" data-visual-identity="provenance-ledger" overflow="visible">
       <PageHeader

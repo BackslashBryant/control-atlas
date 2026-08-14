@@ -30,6 +30,10 @@ test("source detail document titles use the specific source name", () => {
     routeDocumentTitle({ view: "sources" }),
     "Sources — Control Atlas",
   );
+  assert.equal(
+    routeDocumentTitle({ view: "sources" }, null, "Source not found"),
+    "Source not found — Control Atlas",
+  );
 });
 
 test("shared record titles do not repeat leading official identifiers", () => {

@@ -275,6 +275,68 @@ test("source detail has one return action and preserves the Sources workspace", 
   }
 });
 
+test("unknown Source detail links fail closed and preserve recovery state", async ({ page }) => {
+  test.setTimeout(120_000);
+  const sourceId = `not-a-real-source-${"x".repeat(140)}`;
+  const detailPath =
+    `/#/sources?layer=ingestion&q=DISA&source=${encodeURIComponent(sourceId)}` +
+    "&publisher=DISA&lifecycle=active";
+
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    await gotoApp(page, detailPath);
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+    await page.reload();
+    await waitForAppReady(page);
+
+    await expect(page.getByRole("heading", { name: "Source not found", level: 1 })).toBeVisible();
+    await expect(page).toHaveTitle("Source not found — Control Atlas");
+    await expect(
+      page.getByText(
+        "Control Atlas does not include this source ID in the current public register. Check the link or return to Sources.",
+      ),
+    ).toBeVisible();
+    await expect(page.locator("h1")).toContainText(sourceId);
+    const requestedSourceId = page.locator(".ca-source-not-found-id code");
+    await expect(requestedSourceId).toHaveText(sourceId);
+    const requestedSourceIdBox = await requestedSourceId.boundingBox();
+    expect(requestedSourceIdBox).not.toBeNull();
+    if (width <= 390) expect(requestedSourceIdBox.height).toBeGreaterThan(30);
+    await expect(page.getByRole("table", { name: "Control Atlas source register" })).toHaveCount(0);
+    await expect(page.getByRole("tablist", { name: "Source register layers" })).toHaveCount(0);
+
+    const returnLink = page.getByRole("link", { name: "Back to sources", exact: true });
+    await expect(returnLink).toHaveCount(1);
+    const target = await returnLink.boundingBox();
+    expect(target).not.toBeNull();
+    if (width <= 390) expect(target.height).toBeGreaterThanOrEqual(44);
+    expect(
+      await page.evaluate(() =>
+        globalThis.document.documentElement.scrollWidth -
+        globalThis.document.documentElement.clientWidth,
+      ),
+    ).toBeLessThanOrEqual(1);
+
+    await returnLink.click();
+    await waitForAppReady(page);
+    await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
+    await expect(page.locator("#source-layer-tab-ingestion")).toHaveAttribute("aria-selected", "true");
+    await expect(page.locator("#source-search")).toHaveValue("DISA");
+    await expect(page.getByLabel("Publisher", { exact: true })).toHaveValue("DISA");
+    await expect(page.getByLabel("Status", { exact: true })).toHaveValue("active");
+
+    await page.goBack();
+    await waitForAppReady(page);
+    await expect(page.getByRole("heading", { name: "Source not found", level: 1 })).toBeVisible();
+    await expect(page.locator("h1")).toContainText(sourceId);
+    await expect(page.locator(".ca-source-not-found-id code")).toHaveText(sourceId);
+    await page.goForward();
+    await waitForAppReady(page);
+    await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
+  }
+});
+
 test("source and publication review dates remain distinct at every governed width", async ({
   page,
 }) => {
