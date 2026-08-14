@@ -98,6 +98,26 @@ test('source review dispositions use governed plain-language labels', () => {
   );
 });
 
+test('generated record types preserve source meaning and acronym casing', () => {
+  const expected = {
+    zt_collaborator: 'Technology collaborator',
+    zt_mapping_contributor: 'Mapping workbook contributor',
+    zt_mapping_document: 'Mapping workbook',
+    zt_product_component: 'Product component',
+    zt_reference_component: 'Reference architecture component',
+    iot_capability_domain: 'IoT capability domain',
+    iot_capability: 'IoT capability',
+    iot_subcapability: 'IoT subcapability',
+    iot_capability_element: 'IoT capability element',
+    iot_capability_subelement: 'IoT capability subelement',
+    mobile_threat_category: 'Mobile threat category',
+  };
+  for (const [type, label] of Object.entries(expected)) {
+    assert.equal(displayNameFor('object_type', type), label);
+    assert.equal(displayNameFor('node_type', type), label);
+  }
+});
+
 test('template types use registry-aligned display names', () => {
   assert.equal(
     displayNameFor('template_type', 'inheritance_worksheet'),

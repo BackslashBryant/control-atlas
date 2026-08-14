@@ -46,19 +46,15 @@ import {
 import { resolveAtlasSearchTransition } from "../lib/atlasSearch";
 import { scrollElementBelowHeader } from "../lib/pagePrimitives";
 import { relationshipExplanation } from "../lib/relationshipProvenance";
+import { catalogDisplayNameFor } from "../lib/catalogProfiles";
 import {
   loadAtlasNeighborhood,
   selectAtlasStructuralPath,
   type AtlasNeighborhoodRecord,
   type RuntimeBundle,
 } from "../lib/runtimeLoader";
+import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
 import { nodeIdFromItemId, type ViewState } from "../lib/viewState";
-import {
-  officialRecordName,
-  recordDisplayTitle,
-  recordIdentityFor,
-  recordPublisherName,
-} from "../lib/recordTitle";
 
 import { Button, Panel } from "../components/lsm";
 import { AppLink, shouldInterceptAppLink } from "../components/AppLink";
@@ -105,20 +101,11 @@ function requestedNodeId(bundle: RuntimeBundle, rawNode: string) {
 }
 
 function focusedAtlasTitle(bundle: RuntimeBundle, record: AtlasNeighborhoodRecord) {
-  const node = record.center_node;
-  const document = bundle.runtime.getLibraryDocument(node.id);
-  const source = bundle.runtime.getSource(document?.source_id || node.source_id);
-  return recordIdentityFor({
-    publisher: recordPublisherName(
-      document?.publisher_name,
-      source?.owner,
-      source?.publisher,
-    ),
-    catalogId: document?.catalog_id || node.metadata?.catalog_id || "",
-    family: document?.control_family || node.metadata?.family || "",
-    itemId: document?.item_id || node.metadata?.item_id || recordDisplayTitle(node),
-    metadata: node.metadata,
-  }) || "Selected record";
+  return runtimeRecordIdentityFor(
+    bundle,
+    record.center_node.id,
+    record.center_node,
+  ).primary || "Selected record";
 }
 
 export function AtlasMapPage(props: AtlasMapPageProps) {
@@ -402,6 +389,12 @@ function FocusedAtlas(props: {
     () => buildStructuralChildren(record),
     [record],
   );
+  const neighborhoodNodeById = useMemo(
+    () => new Map(record.nodes.map((node) => [node.id, node] as const)),
+    [record.nodes],
+  );
+  const identityForNode = (nodeId: string) =>
+    runtimeRecordIdentityFor(bundle, nodeId, neighborhoodNodeById.get(nodeId));
   const [selectedRow, setSelectedRow] = useState<AtlasRelationshipRow | null>(null);
   const inspectorRef = useRef<HTMLElement | null>(null);
   const previousRecordIdRef = useRef(record.center_node.id);
@@ -409,16 +402,21 @@ function FocusedAtlas(props: {
     record.center_node.metadata?.item_id ||
     record.center_node.metadata?.title ||
     record.center_node.label;
+  const centerIdentity = identityForNode(record.center_node.id);
+  const centerStableIdIsGenerated = centerIdentity.stableIdIsGenerated;
   // Publication name, never the raw catalog id: `NIST-800-53` is a slug, and
   // the eyebrow printed it verbatim until the catalog lookup was added.
   const centerCatalogId = record.center_node.metadata?.catalog_id || "";
-  const centerPublication =
-    bundle.runtime
-      .getCatalogs()
-      .find((catalog: any) => catalog.id === centerCatalogId)?.name ||
-    bundle.runtime.getSource(record.center_node.source_id)?.display_name ||
-    bundle.runtime.getSource(record.center_node.source_id)?.name ||
-    "";
+  const centerCatalog = bundle.runtime
+    .getCatalogs()
+    .find((catalog: any) => catalog.id === centerCatalogId);
+  const centerPublication = catalogDisplayNameFor(
+    centerCatalogId,
+    centerCatalog?.name ||
+      bundle.runtime.getSource(record.center_node.source_id)?.display_name ||
+      bundle.runtime.getSource(record.center_node.source_id)?.name ||
+      "",
+  );
   const centerTitle =
     record.center_node.metadata?.title || record.center_node.label || centerLabel;
   const inspectedId = selectedRow?.counterpart.id || record.center_node.id;
@@ -439,22 +437,8 @@ function FocusedAtlas(props: {
     inspectedItemId.trim().toLocaleLowerCase();
   const inspectedSynopsis =
     inspectedDocument?.description || inspectedNode?.metadata?.description || "";
-  const inspectedSource = bundle.runtime.getSource(
-    inspectedDocument?.source_id || inspectedNode?.source_id || "",
-  );
-  const inspectedPublisher = recordPublisherName(
-    inspectedDocument?.publisher_name,
-    inspectedSource?.owner,
-    inspectedSource?.publisher,
-  );
-  const inspectedIdentity = recordIdentityFor({
-    publisher: inspectedPublisher,
-    catalogId: inspectedDocument?.catalog_id || inspectedNode?.metadata?.catalog_id || "",
-    family: inspectedDocument?.control_family || inspectedNode?.metadata?.family || "",
-    itemId: inspectedItemId,
-    metadata: inspectedNode?.metadata,
-  });
-  const inspectedOfficialName = officialRecordName(inspectedItemId, inspectedTitle);
+  const inspectedIdentity = identityForNode(inspectedId);
+  const inspectedOfficialName = inspectedIdentity.secondary;
   const inspectedType = inspectedDocument?.object_type || inspectedNode?.node_type || "";
   const inspectedPresentation = SUPPORTED_RECORD_TYPES.includes(inspectedType)
     ? recordPresentationProfile(
@@ -595,6 +579,7 @@ function FocusedAtlas(props: {
           catalogSummaries={bundle.catalogSummaries || []}
           focusedRecord={record}
           focusPath={record.structural_path}
+          identityForNode={identityForNode}
           onOpenArea={(atlasLimb) =>
             patchAtlas({
               atlasAxis: "landscape",
@@ -757,10 +742,12 @@ function FocusedAtlas(props: {
                       <dd>{centerPublication}</dd>
                     </div>
                   ) : null}
-                  <div>
-                    <dt>Identifier</dt>
-                    <dd>{centerLabel}</dd>
-                  </div>
+                  {!centerStableIdIsGenerated ? (
+                    <div>
+                      <dt>Identifier</dt>
+                      <dd>{centerLabel}</dd>
+                    </div>
+                  ) : null}
                 </dl>
 
                 <section
@@ -771,18 +758,22 @@ function FocusedAtlas(props: {
                   {structuralChildren.length ? (
                     <>
                       <ul className="atlas-path-child-list">
-                        {structuralChildren.map((child) => (
+                        {structuralChildren.map((child) => {
+                          const childIdentity = identityForNode(child.id);
+                          return (
                           <li key={child.id}>
                             <AppLink
+                              aria-label={childIdentity.stableIdIsGenerated ? `Open ${childIdentity.accessibleName}` : undefined}
                               onNavigate={onNavigate}
                               patch={{ ...state, node: child.id, atlasParent: state.atlasParent || record.center_node.id, atlasStage: "", relationshipGroup: "" }}
                               title={child.title}
                               view="atlas-map"
                             >
-                              {child.itemId}
+                              {childIdentity.stableIdIsGenerated ? childIdentity.primary : child.itemId}
                             </AppLink>
                           </li>
-                        ))}
+                          );
+                        })}
                       </ul>
                       <p className="muted">
                         {structuralChildren.length} child record
@@ -841,9 +832,12 @@ function FocusedAtlas(props: {
               <section className="atlas-workspace-children">
                 <h3>Child records</h3>
                 <ul className="atlas-path-child-list">
-                  {structuralChildren.slice(0, 12).map((child) => (
+                  {structuralChildren.slice(0, 12).map((child) => {
+                    const childIdentity = identityForNode(child.id);
+                    return (
                     <li key={child.id}>
                       <button
+                        aria-label={childIdentity.stableIdIsGenerated ? `Open ${childIdentity.accessibleName}` : undefined}
                         onClick={() =>
                           patchAtlas({
                             node: child.id,
@@ -855,10 +849,11 @@ function FocusedAtlas(props: {
                         title={child.title}
                         type="button"
                       >
-                        {child.itemId}
+                        {childIdentity.stableIdIsGenerated ? childIdentity.primary : child.itemId}
                       </button>
                     </li>
-                  ))}
+                    );
+                  })}
                 </ul>
                 {structuralChildren.length > 12 ? (
                   <p className="muted">
@@ -872,7 +867,7 @@ function FocusedAtlas(props: {
 
           <aside
               aria-atomic="true"
-              aria-label={selectedRow ? `${inspectedItemId} record brief` : "Selected item"}
+              aria-label={selectedRow ? `${inspectedIdentity.accessibleName} record brief` : "Selected item"}
               aria-live="polite"
               className={`atlas-record-inspector header-offset-target${selectedRow ? " atlas-record-inspector--selected" : ""}`}
               ref={inspectorRef}
@@ -895,10 +890,12 @@ function FocusedAtlas(props: {
                         nodeId={inspectedId}
                         onOpenNode={onOpenNode}
                       >
-                        <AcronymText>{inspectedIdentity}</AcronymText>
+                        <AcronymText>{inspectedIdentity.primary}</AcronymText>
                       </RecordLink>
                     </h2>
-                    {showInspectedTitle && inspectedOfficialName ? (
+                    {inspectedIdentity.stableIdIsGenerated ? (
+                      <p><AcronymText>{inspectedIdentity.context}</AcronymText></p>
+                    ) : showInspectedTitle && inspectedOfficialName ? (
                       <p><AcronymText>{inspectedOfficialName}</AcronymText></p>
                     ) : null}
                   </div>
@@ -1079,6 +1076,7 @@ function AtlasGuidedPath(props: {
           benchmarkChildren={structuralChildrenFromNeighborhood(benchmarkRecord)}
           benchmarkId={state.atlasBenchmark}
           catalogSummaries={bundle.catalogSummaries || []}
+          identityForNode={(nodeId) => runtimeRecordIdentityFor(bundle, nodeId)}
           onOpenArea={(atlasLimb) => {
             setOpenLimbId(atlasLimb);
             resetDrill({ atlasAxis: "landscape", atlasLimb });
@@ -1149,16 +1147,21 @@ function AtlasGuidedPath(props: {
           </header>
           {rmfStep.results.length ? (
             <ul className="atlas-path-record-list">
-              {rmfStep.results.map((result) => (
+              {rmfStep.results.map((result) => {
+                const identity = runtimeRecordIdentityFor(bundle, result.id);
+                return (
                 <li key={`${result.id}:${result.relationshipType}`}>
                   <RecordLink
+                    aria-label={identity.stableIdIsGenerated ? `Open ${identity.accessibleName}` : undefined}
                     className="atlas-path-record"
                     nodeId={result.id}
                     onOpenNode={onOpenNode}
                   >
                     <span className="atlas-path-record-text">
-                      <strong>{result.itemId}</strong>
-                      <small>{result.label}</small>
+                      <strong>{identity.stableIdIsGenerated ? identity.primary : result.itemId}</strong>
+                      {identity.stableIdIsGenerated && identity.context ? (
+                        <small>{identity.context}</small>
+                      ) : <small>{result.label}</small>}
                     </span>
                     <span className="badge tone-applicability">
                       {displayNameFor("relationship_type", result.relationshipType)}
@@ -1166,7 +1169,8 @@ function AtlasGuidedPath(props: {
                     <IconChevronRight aria-hidden="true" size={20} />
                   </RecordLink>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           ) : (
             <p className="muted">

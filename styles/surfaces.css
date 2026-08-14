@@ -8327,6 +8327,17 @@ button.atlas-leverage-row:hover {
   letter-spacing: -0.03em;
 }
 
+.record-title-block--generated h1 {
+  font-family: var(--ca-font-display);
+  overflow-wrap: anywhere;
+}
+
+.record-identity-context {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-weight: 700;
+}
+
 .record-official-name {
   max-width: 780px;
   margin: 0;

@@ -40,6 +40,7 @@ import {
   rankAtlasMappingOverlay,
 } from "../lib/atlasTreeOverlay";
 import type { AtlasNeighborhoodRecord } from "../lib/runtimeLoader";
+import type { RecordIdentityPresentation } from "../lib/recordTitle";
 import { catalogMandateLabel } from "../lib/catalogMandate";
 import {
   AREA_IDS,
@@ -84,6 +85,7 @@ export type AtlasTreeProps = {
   onOpenRecord: (nodeId: string, parentId: string) => void;
   onSelectBenchmark: (benchmarkId: string) => void;
   onOpenCompare: () => void;
+  identityForNode: (nodeId: string) => RecordIdentityPresentation;
 };
 
 const nodeTypes = { atlasTree: memo(AtlasTreeNodeView) };
@@ -330,6 +332,7 @@ function AtlasStructuralExplorer(props: {
   query: string;
   setQuery: (value: string) => void;
   showConnections: boolean;
+  identityForNode: (nodeId: string) => RecordIdentityPresentation;
 }) {
   const [visibleCount, setVisibleCount] = useState(40);
   useEffect(() => setVisibleCount(40), [props.node.id, props.query]);
@@ -374,17 +377,26 @@ function AtlasStructuralExplorer(props: {
             </label>
           </div>
           <ul className="atlas-publisher-explorer__list">
-            {visible.map((node) => (
+            {visible.map((node) => {
+              const identity = props.identityForNode(node.id);
+              return (
               <li key={node.id}>
-                <button onClick={() => props.onOpen(node)} type="button">
+                <button
+                  aria-label={identity.stableIdIsGenerated ? `Open ${identity.accessibleName}` : undefined}
+                  onClick={() => props.onOpen(node)}
+                  type="button"
+                >
                   <span>
-                    <strong>{node.itemId}</strong>
-                    <small>{node.label}</small>
+                    <strong>{identity.stableIdIsGenerated ? identity.primary : node.itemId}</strong>
+                    {identity.stableIdIsGenerated && identity.context ? (
+                      <small>{identity.context}</small>
+                    ) : <small>{node.label}</small>}
                   </span>
                   <span>{node.descendantRecordCount.toLocaleString()}</span>
                 </button>
               </li>
-            ))}
+              );
+            })}
           </ul>
           {!matches.length ? <p role="status">No records match that search.</p> : null}
           {visible.length < matches.length ? (
@@ -694,14 +706,21 @@ export function AtlasTree(props: AtlasTreeProps) {
               </label>
               <p>{structuralChildren.length.toLocaleString()} immediate children</p>
               <ul>
-                {sidebarChildren.map((node) => (
+                {sidebarChildren.map((node) => {
+                  const identity = props.identityForNode(node.id);
+                  return (
                   <li key={node.id}>
-                    <button onClick={() => activateNode(node)} type="button">
-                      <span>{node.itemId}</span>
+                    <button
+                      aria-label={identity.stableIdIsGenerated ? `Open ${identity.accessibleName}` : undefined}
+                      onClick={() => activateNode(node)}
+                      type="button"
+                    >
+                      <span>{identity.stableIdIsGenerated ? identity.primary : node.itemId}</span>
                       <small>{node.descendantRecordCount.toLocaleString()}</small>
                     </button>
                   </li>
-                ))}
+                  );
+                })}
               </ul>
               {sidebarChildren.length < structuralChildren.length ? (
                 <small>Refine the search to browse the remaining records.</small>
@@ -790,6 +809,7 @@ export function AtlasTree(props: AtlasTreeProps) {
         {structuralExplorer && focusedNode ? (
           <AtlasStructuralExplorer
             children={structuralChildren}
+            identityForNode={props.identityForNode}
             node={focusedNode}
             onOpen={activateNode}
             onShowConnections={() => setOverlayEnabled((value) => !value)}

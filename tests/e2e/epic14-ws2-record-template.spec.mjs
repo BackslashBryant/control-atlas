@@ -34,6 +34,90 @@ test("WS2 record template leads with qualified identity and one source action", 
   await expect(page.getByText(/What this is|What you need to do|How to satisfy it/i)).toHaveCount(0);
 });
 
+test("generated record identities stay human-first at every governed width", async ({ page }) => {
+  test.setTimeout(180_000);
+  const generatedRecords = [
+    {
+      route: "/#/record/nist-zt/COLLABORATOR-APPGATE-835EC7F121",
+      primary: "Appgate",
+      context: "Technology collaborator · NIST Zero Trust",
+      stableId: "COLLABORATOR-APPGATE-835EC7F121",
+    },
+    {
+      route: "/#/record/nist-zt/MAPPING-CONTRIBUTOR-APPGATE-835EC7F121",
+      primary: "Appgate",
+      context: "Mapping workbook contributor · NIST Zero Trust",
+      stableId: "MAPPING-CONTRIBUTOR-APPGATE-835EC7F121",
+    },
+    {
+      route: "/#/record/nist-zt/PRODUCT-COMPONENT-APPGATE-APPGATE-HEADLESS-CLIENT-RESOURCE-PROTECTION-CL-E65DEBF0E8",
+      primary: "Appgate Headless Client — Resource Protection – Cloud Workload Protection",
+      context: "Product component · NIST Zero Trust",
+      stableId: "PRODUCT-COMPONENT-APPGATE-APPGATE-HEADLESS-CLIENT-RESOURCE-PROTECTION-CL-E65DEBF0E8",
+    },
+    {
+      route: "/#/record/nist-iot-cybersecurity/DOMAIN-NON-TECHNICAL-MANUFACTURER-CAPABILITIES-1925D28A4B",
+      primary: "Non-Technical Manufacturer Capabilities",
+      context: "IoT capability domain · NIST IoT Device Cybersecurity",
+      stableId: "DOMAIN-NON-TECHNICAL-MANUFACTURER-CAPABILITIES-1925D28A4B",
+    },
+  ];
+
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    for (const record of generatedRecords) {
+      await page.goto(record.route);
+      await waitForAppReady(page);
+      await dismissOnboarding(page);
+      await expect(page.getByRole("heading", { name: record.primary, level: 1 })).toBeVisible();
+      await expect(page.locator(".record-identity-context")).toHaveText(record.context);
+      await expect(page.locator(".record-source-facts")).toContainText(
+        `Control Atlas stable ID${record.stableId}`,
+      );
+      await expect(page.locator("h1")).not.toContainText(record.stableId);
+      const copy = page.getByRole("button", {
+        name: `Copy Control Atlas stable ID ${record.stableId}`,
+      });
+      const copyBox = await copy.boundingBox();
+      expect(copyBox?.width || 0).toBeGreaterThanOrEqual(44);
+      expect(copyBox?.height || 0).toBeGreaterThanOrEqual(44);
+      expect(
+        await page.evaluate(
+          () => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
+        ),
+        `${width}px overflow on ${record.route}`,
+      ).toBeLessThanOrEqual(1);
+    }
+  }
+});
+
+test("publisher-native record headings remain identifier-led at every governed width", async ({ page }) => {
+  test.setTimeout(120_000);
+  /** @type {Array<[string, RegExp]>} */
+  const nativeRecords = [
+    ["/#/record/nist-800-53/AC-2", /NIST AC-2/],
+    ["/#/record/disa-cci/CCI-000366", /DISA Policy and Technical CCI-000366/],
+    ["/#/record/disa-stig/V-256609", /DISA .* V-256609/],
+  ];
+
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    for (const [route, heading] of nativeRecords) {
+      await page.goto(route);
+      await waitForAppReady(page);
+      await dismissOnboarding(page);
+      await expect(page.locator("h1")).toContainText(heading);
+      await expect(page.getByText("Control Atlas stable ID", { exact: true })).toHaveCount(0);
+      expect(
+        await page.evaluate(
+          () => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
+        ),
+        `${width}px overflow on ${route}`,
+      ).toBeLessThanOrEqual(1);
+    }
+  }
+});
+
 test("WS2 related records exclude structural parents and public pages expose no developer fields", async ({ page }) => {
   await openRecord(page, "/#/record/nist-800-53/AC-2");
 
@@ -59,6 +143,29 @@ test("WS2 related records exclude structural parents and public pages expose no 
   expect(visibleText).not.toMatch(/\/data\/|Node ID/);
   await expect(page.locator("[data-record-source-locator] code")).toHaveText("controls-800-53.json#AC-2");
   await expect(page.getByText("Developer details", { exact: true })).toHaveCount(0);
+});
+
+test("WS2 related-record links present generated identities as human records at every governed width", async ({ page }) => {
+  test.setTimeout(120_000);
+  const stableId = "PRODUCT-COMPONENT-APPGATE-APPGATE-HEADLESS-CLIENT-RESOURCE-PROTECTION-CL-E65DEBF0E8";
+  const accessibleName = /Open Appgate Headless Client.*Product component, NIST Zero Trust/;
+
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    await openRecord(page, "/#/record/nist-800-53/SC-3");
+    const related = page.locator('[data-record-section="related-records"]');
+    const link = related.getByRole("link", { name: accessibleName });
+    await expect(link).toBeVisible();
+    await expect(link).toContainText("Appgate Headless Client");
+    await expect(link).toContainText("Product component · NIST Zero Trust");
+    await expect(related).not.toContainText(stableId);
+    expect(
+      await page.evaluate(
+        () => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
+      ),
+      `${width}px related-record overflow`,
+    ).toBeLessThanOrEqual(1);
+  }
 });
 
 test("WS2 CCI records expose publisher references and a bounded first set of connected records", async ({ page }) => {

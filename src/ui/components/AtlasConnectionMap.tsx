@@ -5,6 +5,7 @@ import {
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
 import { RELATIONSHIP_LENS_LEGEND, lensColor } from "../lib/graphTheme";
+import type { RecordIdentityPresentation } from "../lib/recordTitle";
 import type { AtlasNeighborhoodNode } from "../lib/runtimeLoader";
 
 type AtlasConnectionMapProps = {
@@ -17,6 +18,10 @@ type AtlasConnectionMapProps = {
   expandedGroupId: string;
   compact: boolean;
   selectedItemId: string;
+  identityForNode: (
+    nodeId: string,
+    fallbackNode?: AtlasNeighborhoodNode | null,
+  ) => RecordIdentityPresentation;
   onExpandedGroupChange: (lensKey: string) => void;
   onOpenList: () => void;
   onOpenRecord: (nodeId: string) => void;
@@ -47,6 +52,7 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
     expandedGroupId,
     compact,
     selectedItemId,
+    identityForNode,
     onExpandedGroupChange,
     onOpenList,
     onOpenRecord,
@@ -94,8 +100,7 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
     });
   }, [groupsByLens]);
 
-  const centerLabel = center.metadata?.item_id || center.label || center.id;
-  const centerTitle = center.metadata?.title || "";
+  const centerIdentity = identityForNode(center.id, center);
 
   return (
     <section className="atlas-relationship-map" aria-label="Relationship map">
@@ -109,8 +114,14 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
           role="group"
         >
           <div className="atlas-radial-center">
-            <strong>{centerLabel}</strong>
-            {centerTitle ? <span>{centerTitle}</span> : null}
+            <strong>
+              {centerIdentity.stableIdIsGenerated
+                ? centerIdentity.primary
+                : center.metadata?.item_id || center.label || center.id}
+            </strong>
+            {centerIdentity.stableIdIsGenerated && centerIdentity.context ? (
+              <span>{centerIdentity.context}</span>
+            ) : center.metadata?.title ? <span>{center.metadata.title}</span> : null}
           </div>
           <ul className="atlas-radial-stack-list">
             {spokes.map((group) => (
@@ -159,8 +170,14 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
             ))}
           </svg>
           <div className="atlas-radial-center">
-            <strong>{centerLabel}</strong>
-            {centerTitle ? <span>{centerTitle}</span> : null}
+            <strong>
+              {centerIdentity.stableIdIsGenerated
+                ? centerIdentity.primary
+                : center.metadata?.item_id || center.label || center.id}
+            </strong>
+            {centerIdentity.stableIdIsGenerated && centerIdentity.context ? (
+              <span>{centerIdentity.context}</span>
+            ) : center.metadata?.title ? <span>{center.metadata.title}</span> : null}
           </div>
           {spokes.map((group) => (
             <button
@@ -195,18 +212,22 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
           role="group"
         >
           <ul>
-            {visibleRows.map((row) => (
+            {visibleRows.map((row) => {
+              const identity = identityForNode(row.counterpart.id, row.counterpart);
+              return (
               <li key={row.counterpart.id}>
                 <div className="atlas-lens-detail__item">
                   <button
-                    aria-label={`Open ${row.itemId}`}
+                    aria-label={`Open ${identity.stableIdIsGenerated ? identity.accessibleName : row.itemId}`}
                     className="atlas-lens-detail__open"
                     onClick={() => onOpenRecord(row.counterpart.id)}
                     type="button"
                   >
                     <span>{groupLabelByNodeId.get(row.counterpart.id)}</span>
-                    <strong>{row.itemId}</strong>
-                    <small>{row.title}</small>
+                    <strong>{identity.stableIdIsGenerated ? identity.primary : row.itemId}</strong>
+                    {identity.stableIdIsGenerated && identity.context ? (
+                      <small>{identity.context}</small>
+                    ) : <small>{row.title}</small>}
                   </button>
                   {onSelectItem ? (
                     <button
@@ -220,7 +241,8 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
                   ) : null}
                 </div>
               </li>
-            ))}
+              );
+            })}
           </ul>
           {activeLens.total > visibleRows.length ? (
             <button className="atlas-spatial-more" onClick={onOpenList} type="button">

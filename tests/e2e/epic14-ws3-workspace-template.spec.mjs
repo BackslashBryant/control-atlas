@@ -119,3 +119,87 @@ test("WS3 compact Library rows preserve a readable vertical information hierarch
   expect(layout.direction).toBe("column");
   expect(layout.overlaps).toBe(false);
 });
+
+test("WS3 Library presents generated records with human identity at every governed width", async ({ page }) => {
+  test.setTimeout(120_000);
+  const records = [
+    {
+      id: "nist-zt:COLLABORATOR-APPGATE-835EC7F121",
+      primary: "Appgate",
+      type: "Technology collaborator",
+    },
+    {
+      id: "nist-zt:MAPPING-CONTRIBUTOR-APPGATE-835EC7F121",
+      primary: "Appgate",
+      type: "Mapping workbook contributor",
+    },
+    {
+      id: "nist-zt:PRODUCT-COMPONENT-APPGATE-APPGATE-HEADLESS-CLIENT-RESOURCE-PROTECTION-CL-E65DEBF0E8",
+      primary: "Appgate Headless Client — Resource Protection – Cloud Workload Protection",
+      type: "Product component",
+    },
+  ];
+
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    await gotoApp(page, "/#/library?q=Appgate");
+    await waitForAppReady(page, { allowPartial: true });
+    for (const record of records) {
+      const row = page.locator(`[data-record-id="${record.id}"]`);
+      await expect(row).toBeVisible();
+      await expect(row.getByRole("heading", { name: record.primary, level: 3 })).toBeVisible();
+      await expect(row.locator(".workspace-result-row__meta")).toContainText(record.type);
+      await expect(row.locator(".workspace-result-row__meta")).toContainText("NIST Zero Trust");
+      await expect(row.locator(".workspace-result-row__meta")).not.toContainText("nist-zt");
+      const link = row.getByRole("link");
+      await expect(link).toHaveAttribute(
+        "aria-label",
+        `Open ${record.primary}, ${record.type}, NIST Zero Trust`,
+      );
+      await expect(row.getByRole("heading", { level: 3 })).not.toContainText(/-[0-9A-F]{10}$/);
+      await expect(link).not.toHaveAttribute("aria-label", /-[0-9A-F]{10}$/);
+    }
+    expect(
+      await page.evaluate(
+        () => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
+      ),
+      `${width}px Library overflow`,
+    ).toBeLessThanOrEqual(1);
+  }
+});
+
+test("WS3 global search and publication rows use the same generated identity contract", async ({ page }) => {
+  test.setTimeout(120_000);
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+
+    await gotoApp(page, "/#/library");
+    await waitForAppReady(page, { allowPartial: true });
+    await page.getByRole("button", { name: "Open search" }).click();
+    const dialog = page.getByRole("dialog", { name: "Search Control Atlas" });
+    const search = dialog.getByRole("searchbox", { name: "Search Control Atlas" });
+    await search.fill("Appgate");
+    const collaborator = dialog.getByRole("link", {
+      name: "Open Appgate, Technology collaborator, NIST Zero Trust",
+    });
+    await expect(collaborator).toBeVisible();
+    await expect(collaborator.getByRole("heading", { name: "Appgate", level: 3 })).toBeVisible();
+    await expect(collaborator).toContainText("Technology collaborator · NIST Zero Trust");
+
+    await gotoApp(page, "/#/library/publication/nist-zt?browseAll=true&q=Appgate");
+    await waitForAppReady(page, { allowPartial: true });
+    const row = page.getByRole("link", {
+      name: "Open Appgate, Technology collaborator, NIST Zero Trust",
+    });
+    await expect(row).toBeVisible();
+    await expect(row).toContainText("Appgate");
+    await expect(row).toContainText("Technology collaborator · NIST Zero Trust");
+    await expect(row).not.toContainText("COLLABORATOR-APPGATE-835EC7F121");
+    expect(
+      await page.evaluate(
+        () => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
+      ),
+      `${width}px publication overflow`,
+    ).toBeLessThanOrEqual(1);
+  }
+});

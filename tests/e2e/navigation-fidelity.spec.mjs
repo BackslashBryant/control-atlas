@@ -32,11 +32,42 @@ test('detail titles resolve official entity names instead of IDs', async ({ page
   await gotoApp(page, '/#/record/nist-800-53/AC-2');
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(page).toHaveTitle(/^AC-2.*Account Management.*Control Atlas$/, { timeout: 20000 });
+  await expect(page).toHaveTitle(/^NIST AC-2.*Account Management.*Control Atlas$/, { timeout: 20000 });
 
   await gotoApp(page, '/#/resources/official-nist-oscal');
   await waitForAppReady(page);
   await expect(page).toHaveTitle(/NIST.*Control Atlas$/, { timeout: 20000 });
+});
+
+test('generated record routes keep stable history while browser titles distinguish record type', async ({ page }) => {
+  test.setTimeout(120_000);
+  const collaboratorRoute = '/#/record/nist-zt/COLLABORATOR-APPGATE-835EC7F121';
+  const mappingRoute = '/#/record/nist-zt/MAPPING-CONTRIBUTOR-APPGATE-835EC7F121';
+
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    await gotoApp(page, collaboratorRoute);
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+    await expect(page).toHaveTitle(
+      'Appgate — Technology collaborator · NIST Zero Trust — Control Atlas',
+    );
+    await expect(page).toHaveURL(/COLLABORATOR-APPGATE-835EC7F121$/);
+
+    await gotoApp(page, mappingRoute);
+    await waitForAppReady(page);
+    await expect(page).toHaveTitle(
+      'Appgate — Mapping workbook contributor · NIST Zero Trust — Control Atlas',
+    );
+  }
+
+  await page.goBack();
+  await expect(page).toHaveURL(/COLLABORATOR-APPGATE-835EC7F121$/);
+  await expect(page).toHaveTitle(
+    'Appgate — Technology collaborator · NIST Zero Trust — Control Atlas',
+  );
+  await page.goForward();
+  await expect(page).toHaveURL(/MAPPING-CONTRIBUTOR-APPGATE-835EC7F121$/);
 });
 
 test('legacy public aliases canonicalize while retired structural aliases remain not found', async ({ page }) => {

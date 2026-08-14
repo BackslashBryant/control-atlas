@@ -47,18 +47,41 @@ for (const [label, width, height] of viewports) {
 
 test('NIST SP 1800-35 keeps official technology collaborators distinct from mapping workbook labels', async ({ page }) => {
   attachPageDiagnostics(page);
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText: async (value) => { globalThis.__copiedStableRecordId = value; } },
+    });
+  });
   await page.goto('/#/record/nist-zt/COLLABORATOR-APPGATE-835EC7F121');
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.locator('.record-official-name')).toHaveText('Appgate');
+  await expect(page.getByRole('heading', { name: 'Appgate', level: 1 })).toBeVisible();
+  await expect(page.locator('.record-official-name')).toHaveCount(0);
+  await expect(page.locator('.record-identity-context')).toHaveText(
+    'Technology collaborator · NIST Zero Trust',
+  );
+  await expect(page.getByText('Control Atlas stable ID', { exact: true })).toBeVisible();
+  const collaboratorCopy = page.getByRole('button', {
+    name: 'Copy Control Atlas stable ID COLLABORATOR-APPGATE-835EC7F121',
+  });
+  await collaboratorCopy.click();
+  await expect(collaboratorCopy).toHaveText('Copied');
+  await expect.poll(() => page.evaluate(() => globalThis.__copiedStableRecordId)).toBe(
+    'COLLABORATOR-APPGATE-835EC7F121',
+  );
   await expect(page.locator('[data-source-field="publisher_context"]'))
     .toContainText('The Technology Collaborators who participated in this project');
   await expect(page.getByText('Mapping Workbook Contributors', { exact: true })).toHaveCount(0);
 
   await page.goto('/#/record/nist-zt/MAPPING-CONTRIBUTOR-APPGATE-835EC7F121');
   await waitForAppReady(page);
-  await expect(page.locator('.record-official-name')).toHaveText('Appgate');
+  await expect(page.getByRole('heading', { name: 'Appgate', level: 1 })).toBeVisible();
+  await expect(page.locator('.record-official-name')).toHaveCount(0);
+  await expect(page.locator('.record-identity-context')).toHaveText(
+    'Mapping workbook contributor · NIST Zero Trust',
+  );
   await expect(page.locator('[data-source-field="publisher_field"]')).toContainText('Collaborator');
   await expect(page.locator('[data-source-field="publisher_context"]')).toHaveCount(0);
   await expect(page.locator('[data-record-source-error]')).toHaveCount(0);
