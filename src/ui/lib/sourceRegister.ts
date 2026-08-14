@@ -210,14 +210,31 @@ export function classifySourceLayer(source: any): SourceLayerId {
   return "publication";
 }
 
+function recordedSourceDisplayName(source: any): string | null {
+  const candidate = [source?.display_name, source?.name].find(
+    (value) => isRecordedString(value) && value.trim() !== source?.id,
+  );
+  return candidate ? candidate.trim() : null;
+}
+
+function sourceDisplayName(source: any): string {
+  return recordedSourceDisplayName(source) || humanizeSlug(source.id);
+}
+
+function parentPublicationReason(parent: any): string {
+  const parentName = recordedSourceDisplayName(parent);
+  return parentName
+    ? `Inherited from parent publication ${parentName}.`
+    : "Inherited from the linked parent publication.";
+}
+
 function sourceTitle(source: any, parent: any | null): string {
   const candidate = [source.display_name, source.name].find(
     (value) => isRecordedString(value) && value !== source.id,
   );
   if (candidate) return candidate.trim();
   if (parent) {
-    const parentTitle =
-      parent.display_name || parent.name || humanizeSlug(parent.id);
+    const parentTitle = sourceDisplayName(parent);
     return `${parentTitle} ${humanizeSlug(source.source_role || "source material")}`;
   }
   return humanizeSlug(source.id);
@@ -230,14 +247,14 @@ function publisherField(source: any, parent: any | null): SourceField<string> {
   ) {
     return derived(
       parent.owner.trim(),
-      `Inherited from parent publication ${parent.id}.`,
+      parentPublicationReason(parent),
     );
   }
   if (isRecordedString(source.owner)) return recorded(source.owner.trim());
   if (isRecordedString(parent?.owner)) {
     return derived(
       parent.owner.trim(),
-      `Inherited from parent publication ${parent.id}.`,
+      parentPublicationReason(parent),
     );
   }
   return missing("Publisher is not recorded on this source or its parent publication.");
