@@ -427,7 +427,7 @@ export const CATALOG_TIERS = {
     title: (record) => record.family,
     edgeDataset: "dod-rai-group-membership",
     rationale: (record, title) =>
-      `${record.id} is part of the ${title} section of the DoD Responsible AI Toolkit.`,
+      `${record.id} is part of the ${title} section of the CDAO AI Assurance Toolkit.`,
   },
 };
 
@@ -822,6 +822,10 @@ function pushEligibleNode(state, registry, node, sourceId) {
 function buildAssessmentNode(record, ingestionSourceId) {
   const assessment = record.metadata?.assessment;
   if (!assessment?.source_key) return null;
+  const taxonomyTags = taxonomyTagsForRecord({
+    catalog_id: "nist-800-53a",
+    family: record.family || "",
+  });
   return {
     id: assessmentNodeId(record.id),
     node_type: "assessment_procedure",
@@ -839,6 +843,7 @@ function buildAssessmentNode(record, ingestionSourceId) {
       title: `${record.title || record.id} Assessment Procedure`,
       description: assessment.procedure_text || "",
       family: record.family || "",
+      taxonomy_tags: taxonomyTags,
       type: "assessment_procedure",
       assessment_methods: assessment.methods.map((entry) => entry.method),
       assessment_method_details: assessment.methods,

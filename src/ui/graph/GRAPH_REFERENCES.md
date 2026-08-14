@@ -64,7 +64,7 @@ Key source families from that manifest:
 | Family                                   | Examples                                                                                                          |
 | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | **Rules**                                | FISMA, OMB A-130, 32 CFR Part 2002, FIPS 199, FIPS 200, CNSSI 1253, DoDI 8500.01, DoDI 8510.01, FAR/DFARS clauses |
-| **Frameworks**                           | NIST RMF, NIST CSF 2.0, AI RMF, DoD RAI, DoD Zero Trust                                                           |
+| **Frameworks**                           | NIST RMF, NIST CSF 2.0, AI RMF, DoD AI Assurance, DoD Zero Trust                                                  |
 | **Controls**                             | SP 800-53, SP 800-171, SP 800-172, SSDF                                                                           |
 | **Baselines**                            | SP 800-53B, FedRAMP Rev. 5, CMMC, DoD Zero Trust overlays                                                         |
 | **Implementation**                       | DISA SRGs, DISA STIGs, STIG/SRG CCI references                                                                    |

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-13T05:44:24.631Z",
-  "hydrated": 90,
+  "generated_at": "2026-08-14T00:05:18.702Z",
+  "hydrated": 1,
   "removed_orphans": [],
   "results": [
     {
@@ -416,18 +416,6 @@
       "byte_length": 41933,
       "record_count": null,
       "retrieved_at": "2026-08-07"
-    },
-    {
-      "id": "artifact-ai-mil-responsible-ai",
-      "status": "OK",
-      "http": 200,
-      "url": "https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/",
-      "sha256": "sha256:08291350010897d9750fe7e8056c249b7ec3c027db395d5c1f95dbae4d3be1ab",
-      "byte_length": 154957,
-      "record_count": null,
-      "retrieved_at": "2026-08-09",
-      "carried_forward_from": "2026-08-12T13:30:15.194Z",
-      "carried_forward_reason": "HTTP 403"
     },
     {
       "id": "artifact-isoo-cui-regulation",
@@ -939,6 +927,16 @@
       "byte_length": 47594,
       "record_count": null,
       "retrieved_at": "2026-08-12"
+    },
+    {
+      "id": "artifact-ai-mil-responsible-ai",
+      "status": "OK",
+      "http": 200,
+      "url": "https://www.ai.mil/Initiatives/About/Resources/Pathway-to-AI-Readiness/Responsible-AI/",
+      "sha256": "sha256:89ee5d7b65cf317fd101e27e0d25e3e68fb01ea13d458867f12d54a6e8eb8a5d",
+      "byte_length": 104423,
+      "record_count": null,
+      "retrieved_at": "2026-08-14"
     }
   ]
 }

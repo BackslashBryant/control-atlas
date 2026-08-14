@@ -1,15 +1,15 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-13T10:44:44.865Z",
+  "generated_at": "2026-08-14T00:47:19.690Z",
   "taxonomy_coverage": {
-    "contract_version": "1.1.0",
+    "contract_version": "1.2.0",
     "record_count": 30365,
-    "tagged_record_count": 15244,
+    "tagged_record_count": 17750,
     "record_dimension_decision_count": 182190,
     "decision_counts": {
-      "applicable": 28845,
+      "applicable": 31418,
       "not_applicable": 0,
-      "unreviewed": 153345
+      "unreviewed": 150772
     },
     "catalogs": [
       {
@@ -284,7 +284,7 @@
       },
       {
         "catalog_id": "dod-rai",
-        "catalog_name": "DoD RAI",
+        "catalog_name": "DoD AI Assurance",
         "record_count": 13,
         "tagged_record_count": 0,
         "tag_assignments": 0,
@@ -691,14 +691,14 @@
         "catalog_id": "nist-800-171",
         "catalog_name": "SP 800-171 Rev. 3",
         "record_count": 147,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 130,
+        "tag_assignments": 138,
         "dimensions": {
           "asset_class": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 8,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 147,
-            "tag_assignments": 0
+            "unreviewed_record_count": 139,
+            "tag_assignments": 8
           },
           "environment": {
             "applicable_record_count": 0,
@@ -725,10 +725,10 @@
             "tag_assignments": 0
           },
           "domain": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 130,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 147,
-            "tag_assignments": 0
+            "unreviewed_record_count": 17,
+            "tag_assignments": 130
           }
         }
       },
@@ -736,14 +736,14 @@
         "catalog_id": "nist-800-171-rev2",
         "catalog_name": "SP 800-171 Rev. 2",
         "record_count": 124,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 110,
+        "tag_assignments": 116,
         "dimensions": {
           "asset_class": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 6,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 124,
-            "tag_assignments": 0
+            "unreviewed_record_count": 118,
+            "tag_assignments": 6
           },
           "environment": {
             "applicable_record_count": 0,
@@ -770,10 +770,10 @@
             "tag_assignments": 0
           },
           "domain": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 110,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 124,
-            "tag_assignments": 0
+            "unreviewed_record_count": 14,
+            "tag_assignments": 110
           }
         }
       },
@@ -781,14 +781,14 @@
         "catalog_id": "nist-800-172",
         "catalog_name": "SP 800-172 Rev. 3",
         "record_count": 132,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 115,
+        "tag_assignments": 117,
         "dimensions": {
           "asset_class": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 2,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 132,
-            "tag_assignments": 0
+            "unreviewed_record_count": 130,
+            "tag_assignments": 2
           },
           "environment": {
             "applicable_record_count": 0,
@@ -815,10 +815,10 @@
             "tag_assignments": 0
           },
           "domain": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 115,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 132,
-            "tag_assignments": 0
+            "unreviewed_record_count": 17,
+            "tag_assignments": 115
           }
         }
       },
@@ -871,8 +871,8 @@
         "catalog_id": "nist-800-53",
         "catalog_name": "SP 800-53 Rev. 5",
         "record_count": 1216,
-        "tagged_record_count": 59,
-        "tag_assignments": 118,
+        "tagged_record_count": 1196,
+        "tag_assignments": 1255,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 59,
@@ -905,10 +905,10 @@
             "tag_assignments": 0
           },
           "domain": {
-            "applicable_record_count": 59,
+            "applicable_record_count": 1196,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 1157,
-            "tag_assignments": 59
+            "unreviewed_record_count": 20,
+            "tag_assignments": 1196
           }
         }
       },
@@ -916,14 +916,14 @@
         "catalog_id": "nist-800-53a",
         "catalog_name": "SP 800-53A Rev. 5",
         "record_count": 1034,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 1014,
+        "tag_assignments": 1065,
         "dimensions": {
           "asset_class": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 51,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 1034,
-            "tag_assignments": 0
+            "unreviewed_record_count": 983,
+            "tag_assignments": 51
           },
           "environment": {
             "applicable_record_count": 0,
@@ -950,10 +950,10 @@
             "tag_assignments": 0
           },
           "domain": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 1014,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 1034,
-            "tag_assignments": 0
+            "unreviewed_record_count": 20,
+            "tag_assignments": 1014
           }
         }
       },
@@ -1232,14 +1232,14 @@
       {
         "record_type": "assessment_procedure",
         "record_count": 1014,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 1014,
+        "tag_assignments": 1065,
         "dimensions": {
           "asset_class": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 51,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 1014,
-            "tag_assignments": 0
+            "unreviewed_record_count": 963,
+            "tag_assignments": 51
           },
           "environment": {
             "applicable_record_count": 0,
@@ -1266,10 +1266,10 @@
             "tag_assignments": 0
           },
           "domain": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 1014,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 1014,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 1014
           }
         }
       },
@@ -1408,8 +1408,8 @@
       {
         "record_type": "control",
         "record_count": 324,
-        "tagged_record_count": 23,
-        "tag_assignments": 46,
+        "tagged_record_count": 324,
+        "tag_assignments": 347,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 23,
@@ -1442,18 +1442,18 @@
             "tag_assignments": 0
           },
           "domain": {
-            "applicable_record_count": 23,
+            "applicable_record_count": 324,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 301,
-            "tag_assignments": 23
+            "unreviewed_record_count": 0,
+            "tag_assignments": 324
           }
         }
       },
       {
         "record_type": "control_enhancement",
         "record_count": 872,
-        "tagged_record_count": 36,
-        "tag_assignments": 72,
+        "tagged_record_count": 872,
+        "tag_assignments": 908,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 36,
@@ -1486,10 +1486,10 @@
             "tag_assignments": 0
           },
           "domain": {
-            "applicable_record_count": 36,
+            "applicable_record_count": 872,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 836,
-            "tag_assignments": 36
+            "unreviewed_record_count": 0,
+            "tag_assignments": 872
           }
         }
       },
@@ -2112,14 +2112,14 @@
       {
         "record_type": "requirement",
         "record_count": 5740,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 355,
+        "tag_assignments": 371,
         "dimensions": {
           "asset_class": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 16,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 5740,
-            "tag_assignments": 0
+            "unreviewed_record_count": 5724,
+            "tag_assignments": 16
           },
           "environment": {
             "applicable_record_count": 0,
@@ -2146,10 +2146,10 @@
             "tag_assignments": 0
           },
           "domain": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 355,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 5740,
-            "tag_assignments": 0
+            "unreviewed_record_count": 5385,
+            "tag_assignments": 355
           }
         }
       },
@@ -2995,10 +2995,10 @@
         "dimension": "asset_class",
         "label": "Asset and system",
         "record_count": 30365,
-        "applicable_record_count": 9963,
+        "applicable_record_count": 10030,
         "not_applicable_record_count": 0,
-        "unreviewed_record_count": 20402,
-        "tag_assignments": 11514
+        "unreviewed_record_count": 20335,
+        "tag_assignments": 11581
       },
       {
         "dimension": "environment",
@@ -3040,10 +3040,10 @@
         "dimension": "domain",
         "label": "Security domain",
         "record_count": 30365,
-        "applicable_record_count": 59,
+        "applicable_record_count": 2565,
         "not_applicable_record_count": 0,
-        "unreviewed_record_count": 30306,
-        "tag_assignments": 59
+        "unreviewed_record_count": 27800,
+        "tag_assignments": 2565
       }
     ],
     "source_fields": [
@@ -3058,14 +3058,14 @@
         "tag_assignments": 7766
       },
       {
+        "source_field": "family",
+        "record_count": 2565,
+        "tag_assignments": 2691
+      },
+      {
         "source_field": "catalog_id",
         "record_count": 689,
         "tag_assignments": 689
-      },
-      {
-        "source_field": "family",
-        "record_count": 59,
-        "tag_assignments": 118
       }
     ],
     "source_basis": [
@@ -3092,6 +3092,14 @@
         "rule": "explicit-product-title",
         "record_count": 3179,
         "tag_assignments": 3179
+      },
+      {
+        "taxonomy_layer": "publisher",
+        "assignment_provenance": "publisher",
+        "source_field": "family",
+        "rule": "exact-publisher-family",
+        "record_count": 2565,
+        "tag_assignments": 2691
       },
       {
         "taxonomy_layer": "atlas_evidence",
@@ -3188,14 +3196,6 @@
         "rule": "explicit-container-term",
         "record_count": 407,
         "tag_assignments": 407
-      },
-      {
-        "taxonomy_layer": "publisher",
-        "assignment_provenance": "publisher",
-        "source_field": "family",
-        "rule": "exact-publisher-family",
-        "record_count": 59,
-        "tag_assignments": 118
       },
       {
         "taxonomy_layer": "atlas_evidence",

@@ -14,7 +14,7 @@ import { AppLink } from "../components/AppLink";
 import { CanonicalBreadcrumb } from "../components/CanonicalBreadcrumb";
 import { Button, ButtonLink } from "../components/lsm";
 import { BucketTag, LineTag } from "../components/TaxonomyTag";
-import { catalogProfileFor } from "../lib/catalogProfiles";
+import { catalogDisplayNameFor, catalogProfileFor } from "../lib/catalogProfiles";
 import {
   buildAtlasTreeModel,
   extendDisplayedAuthorityTrace,
@@ -34,6 +34,7 @@ import {
   recordPublisherName,
 } from "../lib/recordTitle";
 import { recordTagsFor, tagProvenanceExplanation } from "../lib/recordTags";
+import { sourceLocatorKind } from "../lib/sourceLocator";
 import { TAXONOMY_TAG_BY_ID } from "../../shared/taxonomy-contract.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { normalizeViewState, type ViewState } from "../lib/viewState";
@@ -82,6 +83,52 @@ function CopyableCodeSnippet(props: { value: string }) {
         </span>
       </div>
       <pre><code>{props.value}</code></pre>
+    </div>
+  );
+}
+
+function CopyableSourceLocator(props: {
+  value: string;
+  copied: boolean;
+  open: boolean;
+  onCopy: () => void;
+  onToggle: () => void;
+}) {
+  const kind = sourceLocatorKind(props.value);
+  return (
+    <div className="record-source-locator" data-record-source-locator>
+      <Button
+        aria-controls="record-source-locator-content"
+        aria-expanded={props.open}
+        onClick={props.onToggle}
+        type="button"
+        variant="secondary"
+      >
+        Source location
+      </Button>
+      <div
+        className="record-source-locator__content"
+        hidden={!props.open}
+        id="record-source-locator-content"
+      >
+        <p>
+          Exact retained location in the publisher material. It is shown as evidence,
+          not converted into an unverified deep link.
+        </p>
+        <span className="record-source-locator__kind" data-source-locator-kind={kind}>{kind}</span>
+        <code>{props.value}</code>
+        <Button
+          aria-label="Copy source locator"
+          onClick={props.onCopy}
+          type="button"
+          variant="secondary"
+        >
+          {props.copied ? "Copied" : "Copy locator"}
+        </Button>
+        <span aria-live="polite" className="visually-hidden">
+          {props.copied ? "Source locator copied to clipboard" : ""}
+        </span>
+      </div>
     </div>
   );
 }
@@ -272,9 +319,13 @@ export function ObjectDetailPage(props: {
   const node = bundle.runtime.getNode(state.node);
   const document = bundle.runtime.getLibraryDocument(state.node);
   const [visibleConnectionCount, setVisibleConnectionCount] = useState(50);
+  const [sourceLocatorOpen, setSourceLocatorOpen] = useState(false);
+  const [sourceLocatorCopied, setSourceLocatorCopied] = useState(false);
 
   useEffect(() => {
     setVisibleConnectionCount(50);
+    setSourceLocatorOpen(false);
+    setSourceLocatorCopied(false);
   }, [state.node]);
 
   if (!node) {
@@ -306,7 +357,10 @@ export function ObjectDetailPage(props: {
     ? bundle.catalogSummaries
     : bundle.runtime.getCatalogs();
   const catalog = catalogs.find((entry: any) => entry.id === document.catalog_id);
-  const catalogName = catalog?.name || document.catalog_name || document.catalog_id;
+  const catalogName = catalogDisplayNameFor(
+    document.catalog_id,
+    catalog?.name || document.catalog_name || "",
+  );
   const catalogProfile = catalogProfileFor(document.catalog_id, catalogName);
   const area = catalogProfile.area;
   const family = document.control_family || node.metadata?.family || "";
@@ -386,6 +440,9 @@ export function ObjectDetailPage(props: {
     ...node.metadata,
     description: document.description || node.metadata?.description || "",
   };
+  const sourceLocator = String(
+    document.source_locator || node.metadata?.source_locator || "",
+  ).trim();
   const presentation = recordPresentationProfile(document.catalog_id, node.node_type || document.object_type);
   const missingSourceFields = missingRequiredRecordFields(presentation, sourceMetadata);
   const recordTags = recordTagsFor({
@@ -647,6 +704,20 @@ export function ObjectDetailPage(props: {
                 </div>
               ) : null}
             </dl>
+            {sourceLocator ? (
+              <CopyableSourceLocator
+                copied={sourceLocatorCopied}
+                onCopy={() => {
+                  void copyText(sourceLocator).then(() => {
+                    setSourceLocatorCopied(true);
+                    window.setTimeout(() => setSourceLocatorCopied(false), 1800);
+                  });
+                }}
+                onToggle={() => setSourceLocatorOpen((current) => !current)}
+                open={sourceLocatorOpen}
+                value={sourceLocator}
+              />
+            ) : null}
             <AppLink
               onNavigate={onNavigate}
               patch={{ source: source?.id || "" }}

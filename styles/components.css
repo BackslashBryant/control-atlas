@@ -1183,3 +1183,49 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+.record-source-locator {
+  min-width: 0;
+  border-top: 1px solid var(--ca-border);
+  padding-top: var(--ca-space-3);
+}
+
+.record-source-locator > button {
+  min-height: 44px;
+}
+
+.record-source-locator__content {
+  display: grid;
+  min-width: 0;
+  gap: var(--ca-space-3);
+  padding-top: var(--ca-space-2);
+}
+
+.record-source-locator__content > p {
+  margin: 0;
+}
+
+.record-source-locator__kind {
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-xs);
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.record-source-locator__content > code {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  padding: var(--ca-space-3);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--ca-radius-sm);
+  background: var(--ca-surface-deep);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.record-source-locator__content > button {
+  justify-self: start;
+}

@@ -29,7 +29,28 @@ const TAXONOMY_TAG_SEED = [
   ["product.microsoft-windows", "Microsoft Windows", ["windows"], "product"],
   ["product.red-hat-enterprise-linux", "Red Hat Enterprise Linux", ["rhel"], "product"],
   ["product.vmware-vsphere", "VMware vSphere", ["vsphere", "esxi"], "product"],
+  ["domain.access-control", "Access Control", ["ac"], "domain"],
+  ["domain.assessment-authorization-monitoring", "Assessment, Authorization, and Monitoring", ["assessment authorization monitoring", "ca"], "domain"],
+  ["domain.audit-accountability", "Audit and Accountability", ["audit", "au"], "domain"],
+  ["domain.awareness-training", "Awareness and Training", ["training", "at"], "domain"],
+  ["domain.configuration-management", "Configuration Management", ["configuration", "cm"], "domain"],
+  ["domain.contingency-planning", "Contingency Planning", ["contingency", "cp"], "domain"],
+  ["domain.identification-authentication", "Identification and Authentication", ["identity and authentication", "ia"], "domain"],
+  ["domain.incident-response", "Incident Response", ["ir"], "domain"],
+  ["domain.maintenance", "Maintenance", ["ma"], "domain"],
+  ["domain.media-protection", "Media Protection", ["mp"], "domain"],
+  ["domain.pii-processing-transparency", "PII Processing and Transparency", ["personally identifiable information processing and transparency", "pt"], "domain"],
+  ["domain.personnel-security", "Personnel Security", ["ps"], "domain"],
   ["domain.physical-security", "Physical Security", ["physical protection"], "domain"],
+  ["domain.planning", "Planning", ["pl"], "domain"],
+  ["domain.program-management", "Program Management", ["pm"], "domain"],
+  ["domain.risk-assessment", "Risk Assessment", ["ra"], "domain"],
+  ["domain.security-assessment", "Security Assessment", ["security assessment", "ca"], "domain"],
+  ["domain.security-assessment-monitoring", "Security Assessment and Monitoring", ["security assessment monitoring", "ca"], "domain"],
+  ["domain.supply-chain-risk-management", "Supply Chain Risk Management", ["supply chain", "scrm", "sr"], "domain"],
+  ["domain.system-communications-protection", "System and Communications Protection", ["communications protection", "sc"], "domain"],
+  ["domain.system-information-integrity", "System and Information Integrity", ["information integrity", "si"], "domain"],
+  ["domain.system-services-acquisition", "System and Services Acquisition", ["services acquisition", "sa"], "domain"],
 ];
 
 /**
@@ -40,9 +61,9 @@ const TAXONOMY_TAG_SEED = [
  * publisher, Atlas evidence-backed, and editorial layers remain distinct.
  */
 export const TAXONOMY_CONTRACT = {
-  version: "1.1.0",
+  version: "1.2.0",
   owner: "Control Atlas data stewardship",
-  review_date: "2026-11-12",
+  review_date: "2026-08-13",
   supersession_rule: "A later version replaces this contract only through a reviewed migration with stable-ID reconciliation.",
   layers: {
     publisher: "Publisher-declared classifications and identifiers.",
@@ -99,7 +120,7 @@ export const TAXONOMY_CONTRACT = {
     confidence: "high",
     validation_state: "approved",
     owner: "Control Atlas data stewardship",
-    review_date: "2026-11-12",
+    review_date: "2026-08-13",
   })),
 };
 

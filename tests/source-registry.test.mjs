@@ -55,10 +55,23 @@ test('reviewed publication identity stays distinct from parser artifacts', () =>
   const { byId } = loadSourceRegistry(registry);
 
   const rai = byId.get('dod-rai-toolkit');
-  assert.equal(rai.version, '4.0.0');
-  assert.equal(rai.catalog_browse_url, 'https://www.tradewindai.com/rai-toolkit');
+  assert.equal(rai.version, null);
+  assert.equal(
+    rai.catalog_browse_url,
+    'https://www.ai.mil/Initiatives/About/Resources/Pathway-to-AI-Readiness/Responsible-AI/',
+  );
   assert.equal(rai.artifact_url, 'https://rai.acqbot.com/executive-summary');
-  assert.match(rai.metadata.provenance_note, /retained separately/);
+  assert.match(rai.metadata.version_unknown_reason, /do not expose a release version/);
+  assert.match(rai.metadata.provenance_note, /do not expose a release number/);
+
+  assert.match(
+    byId.get('artifact-ai-mil-responsible-ai').metadata.version_unknown_reason,
+    /does not expose a release version/,
+  );
+  assert.match(
+    byId.get('artifact-dod-rai-toolkit').metadata.version_unknown_reason,
+    /does not expose a release version/,
+  );
 
   const d3fend = byId.get('mitre-d3fend-ontology');
   assert.equal(d3fend.version, '1.4.0');
@@ -75,6 +88,12 @@ test('reviewed publication identity stays distinct from parser artifacts', () =>
   assert.equal(iot.lifecycle_status, 'active');
   assert.equal(byId.get('nist-iot-requirements-80053-mapping-draft').lifecycle_status, 'draft');
   assert.equal(byId.get('nist-iot-requirements-csf11-mapping-draft').lifecycle_status, 'draft');
+
+  assert.equal(
+    byId.get('nist-800-53b-baselines').artifact_url,
+    'https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53/rev5',
+  );
+  assert.equal(byId.get('nist-800-53b-baselines').version, 'Revision 5, Release 5.2.0');
 });
 
 test('source registry rejects invalid or incomplete freshness metadata', () => {

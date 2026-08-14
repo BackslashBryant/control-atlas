@@ -10,7 +10,7 @@
     "disa-cci": "DISA CCI",
     "disa-srg": "DISA SRG",
     "disa-stig": "DISA STIG",
-    "dod-rai": "DoD RAI",
+    "dod-rai": "DoD AI Assurance",
     "dod-zt": "DoD Zero Trust",
     "fedramp-rev5": "FedRAMP Rev. 5",
     "fips-199": "FIPS 199",

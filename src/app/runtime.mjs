@@ -359,7 +359,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
   // Plain-language overrides for catalogs whose shared "group" node_type
   // would otherwise read as vague — each name matches or plainly reflects
   // that framework's own published vocabulary (SSDF calls these "Practice
-  // Groups"; AI RMF nests them under its four Functions; DoD RAI's are
+  // Groups"; AI RMF nests them under its four Functions; DoD AI Assurance's are
   // titled sections, not a named taxonomy).
   const CATALOG_TIER_LABEL_OVERRIDES = {
     "nist-ai-rmf": ["function area", "function areas"],
@@ -373,7 +373,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     "disa-cci": { name: "DISA CCI", group: "DISA" },
     "disa-srg": { name: "DISA SRG", group: "DISA" },
     "disa-stig": { name: "DISA STIG", group: "DISA" },
-    "dod-rai": { name: "DoD RAI", group: "DoD" },
+    "dod-rai": { name: "DoD AI Assurance", group: "DoD" },
     "dod-zt": { name: "DoD Zero Trust", group: "DoD" },
     "fedramp-rev5": { name: "FedRAMP Rev. 5", group: "Other" },
     "fips-199": { name: "FIPS 199", group: "NIST" },

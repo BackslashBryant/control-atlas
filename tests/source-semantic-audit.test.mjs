@@ -30,9 +30,19 @@ test("required source regressions and remediated dispositions remain explicit", 
   assert.equal(byId.get("nist-800-171-rev2").evidence_boundary.upstream_currentness_review, "superseded");
   assert.equal(byId.get("dod-rai").evidence_boundary.locator_only_review, "justified");
   assert.equal(byId.get("dod-rai").evidence_boundary.upstream_currentness_review, "current_as_checked");
+  assert.ok(
+    byId.get("dod-rai").evidence_boundary.official_sources.some(
+      (source) => source.url === "https://www.ai.mil/Initiatives/About/Resources/Pathway-to-AI-Readiness/Responsible-AI/",
+    ),
+  );
   assert.equal(byId.get("mitre-d3fend").evidence_boundary.upstream_currentness_review, "current_as_checked");
   assert.equal(byId.get("nist-800-53a").evidence_boundary.locator_only_review, "none");
   assert.equal(byId.get("nist-iot-cybersecurity").evidence_boundary.upstream_currentness_review, "current_as_checked");
+  assert.ok(
+    byId.get("nist-800-53b").evidence_boundary.official_sources.some(
+      (source) => source.url.endsWith("/nist.gov/SP800-53/rev5"),
+    ),
+  );
   assert.ok(
     report.catalogs.every((catalog) => catalog.evidence_boundary.locator_only_review !== "remediation_required"),
   );

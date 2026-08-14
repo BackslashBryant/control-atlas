@@ -139,7 +139,7 @@ const RESOLUTIONS = [
   { id: 'artifact-dod-zt-operational-technology', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-OperationalTechnologyActivitiesOutcomes_v2.pdf', fragmentManifest: 'data/curated/dod-zt/source-fragments/ot.json', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
   { id: 'artifact-dod-zt-newsletter-2024-11', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-NewsletterNov.pdf', fragmentManifest: 'data/curated/dod-zt/source-fragments/newsletter.json', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
   { id: 'artifact-dod-zt-strategy-placemats', url: 'https://dodcio.defense.gov/Portals/0/Documents/Library/ZT-StrategyPlacemats.pdf', fragmentManifest: 'data/curated/dod-zt/source-fragments/placemats.json', format: 'pdf', parser: 'pdfplumber-located-lines', parser_version: '1.0.0' },
-  // DoD RAI Toolkit: rai.acqbot.com is CDAO's own designated public host for
+  // DoD AI Assurance Toolkit: rai.acqbot.com is CDAO's own designated public host for
   // the AIA/RAI Toolkit — confirmed by the official ai.mil Responsible-AI
   // initiative page's "SEE THE TOOLKITS" button (href=https://rai.acqbot.com/)
   // and the acqbot.com page itself carrying the CDAO logo asset. Not a
@@ -147,7 +147,7 @@ const RESOLUTIONS = [
   { id: 'artifact-dod-rai-toolkit', url: 'https://rai.acqbot.com/executive-summary', format: 'html', parser: 'dod-rai-toolkit-html', parser_version: '1.0.0' },
   // Reconciliation evidence: the official ai.mil page that links to the
   // acqbot.com toolkit, establishing CDAO's endorsement of that hosting.
-  { id: 'artifact-ai-mil-responsible-ai', url: 'https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/', format: 'html', parser: 'ai-mil-responsible-ai-html', parser_version: '1.0.0', noBotUa: true },
+  { id: 'artifact-ai-mil-responsible-ai', url: 'https://www.ai.mil/Initiatives/About/Resources/Pathway-to-AI-Readiness/Responsible-AI/', format: 'html', parser: 'ai-mil-responsible-ai-html', parser_version: '1.0.0', userAgent: 'Control-Atlas-source-currentness-review/1.0' },
   // CUI: 32 CFR Part 2002 from the eCFR versioner API (date-pinned = byte-stable).
   { id: 'artifact-isoo-cui-regulation', url: 'https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-32.xml?part=2002', format: 'xml', parser: 'ecfr-xml', parser_version: '1.0.0' },
   // CMMC: 32 CFR Part 170 from the eCFR versioner API (date-pinned).
@@ -226,7 +226,9 @@ function sleep(ms) {
 // Retrying here means one flaky response doesn't wipe out a previously
 // attested artifact's evidence just because this particular run hit it.
 async function fetchBytes(url, options = {}) {
-  const headers = options.noBotUa ? {} : { 'User-Agent': 'ControlAtlas-ingestion/1.0 (+https://github.com/BackslashBryant/control-atlas)' };
+  const headers = options.noBotUa
+    ? {}
+    : { 'User-Agent': options.userAgent || 'ControlAtlas-ingestion/1.0 (+https://github.com/BackslashBryant/control-atlas)' };
   let lastError;
   for (let attempt = 0; attempt < 3; attempt += 1) {
     if (attempt > 0) await sleep(1500 * attempt);
@@ -350,7 +352,7 @@ async function main() {
       }
       const { buf, status } = r.local
         ? { buf: readFileSync(join(ROOT, r.local)), status: 'local' }
-        : await fetchBytes(r.url, { noBotUa: r.noBotUa });
+        : await fetchBytes(r.url, { noBotUa: r.noBotUa, userAgent: r.userAgent });
       const sha256 = 'sha256:' + createHash('sha256').update(buf).digest('hex');
       const byteLength = buf.length;
       const recordCount = await countRecords(r.count, buf);

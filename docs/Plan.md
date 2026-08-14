@@ -11,7 +11,7 @@ Ship a source-truthful, task-first Control Atlas without treating parser counts,
 
 ## Executive verdict
 
-**Not whole-product complete.** The source-review, governed-discovery, route, and compact-layout milestone is deployed at `be34acb80892441d42fc8d5151cbe1370117c6bd`, but 153,345 record-dimension taxonomy decisions remain explicitly unreviewed and hands-on Android Chrome/TalkBack plus desktop NVDA evidence remains unavailable. The legacy `ashbryant.github.io` 404 is an external ownership limitation, not a product-code fix. No test, structural reconciliation, or emulated viewport is being promoted into those missing evidence classes.
+**Not whole-product complete.** The current deployed baseline is `7571ee7ec4c8d99d6f1b9b43414bed1102770a44`. The active branch corrects stale official-source locators, expands exact-family taxonomy coverage, exposes retained record locators, and removes raw publication slugs, but those changes are not live yet. The generated taxonomy still records 150,772 unreviewed record-dimension decisions, and hands-on Android Chrome/TalkBack plus desktop NVDA evidence remains unavailable. The legacy `ashbryant.github.io` 404 is an external ownership limitation, not a product-code fix. No test, structural reconciliation, or emulated viewport is being promoted into those missing evidence classes.
 
 ## Objective matrix
 
@@ -19,12 +19,12 @@ Ship a source-truthful, task-first Control Atlas without treating parser counts,
 | --- | --- | --- | --- |
 | Reproducible secure build | Met | Automated + exact-head CI + merged-main CI | Supported Node runtime, dependency audit, complete local gate, remote feature-head checks, fresh checkout, and merged-main checks pass. |
 | Official-source semantic/currentness review | Met | Official-source review + automated manifest validation | All 27 profiles have three named samples, official sources, semantic, locator-only, and currentness dispositions. Structural counts remain a separate evidence class. |
-| Publisher-field presentation | Met | Automated + local rendered browser + live browser | Source dates are separated; source text blocks, locators, procedure/config formats, and copy behavior retain focused regressions. Live AC-2 and Sources checks match the contract. |
-| Governed taxonomy contract and coverage | Partial by design | Automated | 28,845 of 182,190 record-dimension decisions are applicable; 153,345 are explicitly unreviewed; none are silently classified negative. URL/filter/link/export behavior is implemented and tested. |
+| Publisher-field presentation | Met locally; live pending | Automated + local rendered browser | Source dates are separated; source text blocks, exact retained locators, procedure/config formats, human publication names, and copy behavior pass focused regressions across the required widths and source families. The current live release still lacks locator disclosure and exposes two raw catalog slugs. |
+| Governed taxonomy contract and coverage | Partial by design | Automated | 31,418 of 182,190 record-dimension decisions are applicable; 150,772 are explicitly unreviewed; none are silently classified negative. Exact NIST family fields now support 22 governed security-domain tags. URL/filter/link/export behavior is implemented and tested. |
 | Six-width route/template quality | Met locally; focused live checks met | Local rendered browser + live browser | Independent 24-route/state matrix at 320/375/390/768/1024/1440 found no remaining persistent defect. Live Home, Library, record, Resource, Sources, About/navigation, and Compare checks confirm the shipped fixes. |
 | Android Chrome + TalkBack | Blocked | Emulator + unverified assistive technology | `ControlAtlas_API_35_Play` boots and contains Chrome and TalkBack, but Chrome stops at its first-run screen: continuing via **Use without an account** accepts Google's Terms of Service and usage/crash-data notice. No consent was accepted, so the site and TalkBack interaction remain unverified. |
 | Desktop NVDA | Unmet | Environment inspection + unverified assistive technology | NVDA is absent from the standard system, 32-bit, and per-user installation paths. It was not installed because the owner must personally accept any installer or licensing terms; hands-on evidence remains unverified. |
-| Canonical live release | Met | CI + Pages + live browser | PR #87 merged as `be34acb80892441d42fc8d5151cbe1370117c6bd`; merged-main checks and Pages succeeded; live `release.json` reports the same SHA and precise product/source dates. |
+| Canonical live release | Met for current main; active branch pending | CI + Pages + live browser | Live `release.json` reports `7571ee7ec4c8d99d6f1b9b43414bed1102770a44`. This branch must still pass the full gate, PR/exact-head/fresh-checkout checks, merge, Pages, and matching live verification. |
 
 ## 27-publication source audit
 
@@ -63,42 +63,31 @@ The governed details, official URLs, rationale, follow-up, and exact sample loca
 ## Current checkpoint
 
 - Reproducible dependency/security baseline and the weighted Home area pool are shipped.
-- The 27-profile review register records source-linked semantic samples and separate locator/currentness dispositions. DoD RAI, D3FEND, SP 800-53A, and NIST IoT registry/presentation defects are corrected in the active milestone; NIST SP 800-171 Revision 2 remains explicitly superseded.
+- The 27-profile review register records source-linked semantic samples and separate locator/currentness dispositions. DoD AI Assurance, D3FEND, SP 800-53A, and NIST IoT registry/presentation defects are corrected in the active milestone; NIST SP 800-171 Revision 2 remains explicitly superseded.
 - Source detail now separates publisher version, retrieval date, verification date, publication landing pages, and parser artifacts; fabricated date fallbacks and inaccurate third-party federal-source language are removed; compact headers are opaque.
 - The source register now uses typed recorded/derived/not-applicable/missing states, resolves artifact publishers through parent publications, exposes that basis, and gates required layer completeness without fabricating fields.
 - Source layers, contextual counts and filter options, deep links/history, layer-specific empty states, 25-row rendering, show-more focus, sticky orientation, compact labels, and 320/375/390/768 responsive behavior pass focused contracts and rendered review.
 - Route-semantic polish is shipped and live-verified: the footer separates product-release and source-data dates, Compare uses native workflow buttons, About has named H2 card regions and a bounded desktop measure, and compact footer trust links fit within the first viewport at all required compact widths.
-- The governed taxonomy contract now defines publisher, Atlas-evidence, and editorial layers plus explicit `applicable`, `not_applicable`, and `unreviewed` decisions. The generated report shows that 153,345 of 182,190 record-dimension decisions remain unreviewed, so taxonomy applicability is explicitly partial.
-- PR #87 is deployed and live-verified. The compact record action menu, 1024–1199 navigation owner, Home trust footer, and governed Resource labels meet their written closure criteria and are removed from the open-only backlog.
+- The governed taxonomy contract now defines publisher, Atlas-evidence, and editorial layers plus explicit `applicable`, `not_applicable`, and `unreviewed` decisions. Contract 1.2 adds exact publisher-family security domains for NIST SP 800-53, 800-53A, 800-171, and 800-172. The generated report shows 31,418 applicable and 150,772 unreviewed decisions, so taxonomy applicability remains explicitly partial.
+- The active branch corrects stale STIG, DoD AI Assurance, and NIST SP 800-53B official locators/currentness metadata; all 46 governed official URLs now pass a bounded currentness probe.
+- The active branch exposes exact retained source locators with copy feedback and canonical human publication labels. Its rendered regression covers 13 representative source families plus 320/375/390/768/1024/1440 wrapping.
 - The obsolete `ashbryant.github.io` host still returns 404 and is not available through the authenticated `BackslashBryant` repository account; the exact obsolete URL is forbidden in owned tracked files, but the external redirect remains open.
 - Next product milestone: continue source-backed taxonomy review without converting missing tags into negative applicability, and obtain hands-on assistive-technology evidence when the owner-controlled Chrome/NVDA consent and installation boundaries are available.
 
 ## Remaining work
 
-1. **Reproducible baseline and security policy**
-   - Use a repository-compatible Node runtime (`>=22.22.0`) for every local gate.
-   - Keep dependency changes limited to verified lockfile deltas and require the audit gate to reject stale or expired exceptions.
-   - Record the initial executive verdict and objective matrix from current repository, generated, CI, and live evidence.
-
-2. **Source semantics and currency**
-   - Record and review a representative, source-linked semantic sample for every one of the 27 publication profiles.
-   - Store review dispositions in a versioned manifest: semantic review (`reviewed_no_known_mismatch`, `remediation_required`, or `blocked`), locator-only review (`none`, `justified`, `remediation_required`, or `blocked`), and currentness (`current_as_checked`, `refresh_required`, `superseded`, or `blocked`).
-   - Reconcile substantive upstream content that is currently locator-only, generic, missing from presentation, or represented by the wrong object type. Explicitly classify justified locator-only records.
-   - Check current upstream identity/version for each source; update evidence only from official source material and retain publisher-native hierarchy and declared multi-parent cases.
-   - Keep CCI, STIG/SRG, 800-53/800-53A, ATT&CK/D3FEND, NIST Zero Trust, DoD Zero Trust, IoT, and Mobile as mandatory regression samples.
-
-3. **Taxonomy and discovery proof**
+1. **Taxonomy and discovery proof**
    - Keep governed tag coverage reproducible by publication, record type, taxonomy dimension, and source basis, separating `applicable`, `not_applicable`, and `unreviewed` records.
    - Reconcile publisher classifications, evidence-backed Atlas facets, and editorial concepts; prohibit prose-only applicability inference.
    - Prove tag URL round trips, contextual counts, hidden unavailable choices, bounded vendor/product selection, search aliases, record/resource/template/playbook/compare links, and export context.
 
-4. **Product and accessibility evidence**
+2. **Product and accessibility evidence**
    - Keep Home area browsing source-backed: size populated areas by current leaf-record count on a logarithmic scale, show the exact count, and suppress zero-result links.
    - Re-run route/template review at 320, 375, 390, 768, 1024, and 1440 for Atlas landscape, hierarchy, local connections, record detail, Library, Compare, Resources, Sources, and About.
    - Verify no inert action, hidden below-the-fold result, zero-result selectable facet, excessive DOM/list rendering, broken history/deep link, or unlabeled keyboard/focus behavior remains.
    - Complete Android Emulator Chrome + TalkBack and desktop NVDA checks. Record any prerequisite that requires user legal acceptance instead of simulating it.
 
-5. **Release discipline**
+3. **Release discipline**
    - Add the smallest durable contracts needed for any discovered defect; do not weaken performance, integrity, or source-truth gates.
    - Ship through feature PR, exact-head CI, fresh remote checkout, merged-main CI, Pages deployment, matching live `release.json` SHA, focused live-browser verification, and cleanup.
 
