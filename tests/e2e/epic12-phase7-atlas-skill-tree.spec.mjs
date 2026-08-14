@@ -166,6 +166,76 @@ test("two cold publication loads produce identical structural result order", asy
   expect(snapshots[1]).toEqual(snapshots[0]);
 });
 
+test("opened connection filters stay inside their panel at every governed width", async ({ page }) => {
+  test.setTimeout(120_000);
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    await gotoApp(page, "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=list");
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+    await expect(page.locator(".route-transition")).toBeHidden();
+    await expect(page.locator(".atlas-workspace-heading")).toHaveText("Connections");
+
+    const disclosure = page.locator("details.atlas-connection-filters");
+    if ((await disclosure.getAttribute("open")) === null) {
+      await disclosure.locator("summary").click();
+    }
+    await expect(disclosure).toHaveAttribute("open", "");
+    const panel = disclosure.getByRole("group", { name: "Connection filters" });
+    await expect(panel).toBeVisible();
+    await expect(panel.getByRole("combobox")).toHaveCount(4);
+    await expect(panel.getByRole("searchbox")).toBeVisible();
+    await expect(panel.getByRole("checkbox", { name: "Include candidate links" })).toBeVisible();
+
+    const fit = await panel.evaluate((element) => {
+      const panelRect = element.getBoundingClientRect();
+      const boxes = [...element.querySelectorAll("label, select, input")].map((control) => {
+        const rect = control.getBoundingClientRect();
+        return {
+          left: rect.left,
+          right: rect.right,
+          top: rect.top,
+          bottom: rect.bottom,
+        };
+      });
+      return {
+        panel: {
+          left: panelRect.left,
+          right: panelRect.right,
+          top: panelRect.top,
+          bottom: panelRect.bottom,
+        },
+        boxes,
+        documentOverflow:
+          globalThis.document.documentElement.scrollWidth -
+          globalThis.document.documentElement.clientWidth,
+        bodyOverflow:
+          globalThis.document.body.scrollWidth - globalThis.document.body.clientWidth,
+      };
+    });
+
+    expect(fit.documentOverflow, `${width}px document overflow`).toBe(0);
+    expect(fit.bodyOverflow, `${width}px body overflow`).toBe(0);
+    expect(fit.panel.left, `${width}px panel left edge`).toBeGreaterThanOrEqual(0);
+    expect(fit.panel.right, `${width}px panel right edge`).toBeLessThanOrEqual(width);
+    for (const [index, box] of fit.boxes.entries()) {
+      expect(box.left, `${width}px control ${index} left edge`).toBeGreaterThanOrEqual(
+        fit.panel.left,
+      );
+      expect(box.right, `${width}px control ${index} right edge`).toBeLessThanOrEqual(
+        fit.panel.right,
+      );
+      expect(box.top, `${width}px control ${index} top edge`).toBeGreaterThanOrEqual(
+        fit.panel.top,
+      );
+      expect(box.bottom, `${width}px control ${index} bottom edge`).toBeLessThanOrEqual(
+        fit.panel.bottom,
+      );
+    }
+  }
+});
+
 test("twenty consecutive Atlas map cold navigations resolve within five seconds", async ({ browser }) => {
   test.setTimeout(150_000);
   for (let index = 0; index < 20; index += 1) {
