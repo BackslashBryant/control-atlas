@@ -2,7 +2,7 @@
 
 - **Owner:** Control Atlas data stewardship
 - **Status:** Canonical contract; coverage remains partial
-- **Contract version:** 1.2.0
+- **Contract version:** 1.3.0
 - **Last reviewed:** 2026-08-13
 - **Supersession:** A later contract version must migrate stable tag IDs and update the generated coverage report in the same change.
 
@@ -47,14 +47,16 @@ Absence never means `not_applicable`. This prevents sparse metadata from being p
 
 ## Current coverage verdict
 
-The generated 2026-08-13 corpus contains 30,365 records and six governed dimensions, producing 182,190 record-dimension decisions.
+The current generated corpus contains 30,365 records and six governed dimensions, producing 182,190 record-dimension decisions. Contract 1.3 preserves the existing stable IDs and adds an exact publisher-classification rule for DISA CCI's retained NIST family references. The rule requires the complete publisher-retained category tuple (`code`, `label`, and `provenance=referenced`); descriptions and other free text are excluded.
 
 | Measure | Count | Interpretation |
 | --- | ---: | --- |
-| Records with at least one governed tag | 17,750 | 58.5% of records have one or more positive decisions. |
-| `applicable` decisions | 31,418 | 17.2% of all record-dimension decisions have positive source-backed evidence. |
+| Records with at least one governed tag | 22,663 | 74.6% of records have one or more positive decisions. |
+| `applicable` decisions | 36,331 | 19.9% of all record-dimension decisions have positive source-backed evidence. |
 | `not_applicable` decisions | 0 | No explicit negative decision has yet been recorded; this is not a claim that every dimension applies. |
-| `unreviewed` decisions | 150,772 | 82.8% of record-dimension decisions remain unreviewed. |
+| `unreviewed` decisions | 145,859 | 80.1% of record-dimension decisions remain unreviewed. |
+
+DISA CCI now has 4,913 of 5,137 records classified to a governed security domain from exact publisher-retained NIST family references. The remaining 224 CCI records stay `unreviewed`; no negative applicability is inferred from a missing reference.
 
 Dimension detail, all 27 publication rows, 40 record-type rows, source fields, assignment rules, and decision reconciliation are generated in `data/generated/taxonomy-coverage.json`. The taxonomy is therefore usable for the supported evidence-backed filters, but its overall applicability review is **partial**, not complete.
 
