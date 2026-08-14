@@ -43,6 +43,7 @@ import {
   recordPublisherName,
   routeDocumentTitle,
 } from "./lib/recordTitle";
+import { sourceIdentityPresentationFor } from "./lib/sourceIdentity";
 import {
   beginRouteTransition,
   completeRouteTransition,
@@ -474,6 +475,10 @@ export function App() {
     if (viewState.view === "commons-detail") {
       return bundle?.commonsDataset?.resources.find((resource) => resource.id === viewState.id)?.name || "";
     }
+    if (viewState.view === "sources" && viewState.source && bundle) {
+      const source = bundle.runtime.getSource(viewState.source);
+      return source ? sourceIdentityPresentationFor(source).primaryName : "";
+    }
     return "";
   })();
 
@@ -484,7 +489,9 @@ export function App() {
         : null;
     document.title = routeDocumentTitle(viewState, node, routeEntityName);
     if (
-      (viewState.view === "library-detail" || viewState.view === "atlas-map") &&
+      (viewState.view === "library-detail" ||
+        viewState.view === "atlas-map" ||
+        (viewState.view === "sources" && Boolean(viewState.source))) &&
       routeEntityName
     ) {
       const progressiveTitle = document.querySelector<HTMLElement>(

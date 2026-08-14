@@ -10,8 +10,36 @@ import {
   sourceLayerEntityLabel,
   sourceLayerOptions,
 } from "../../src/ui/lib/sourceRegister";
+import { sourceIdentityPresentationFor } from "../../src/ui/lib/sourceIdentity";
 
 const catalogs = catalogBootstrap.catalog_bootstrap.catalogs;
+
+test("source detail identity separates a specific name from shared family context", () => {
+  assert.deepEqual(
+    sourceIdentityPresentationFor({
+      id: "cyber-mil-stig-downloads",
+      name: "DISA STIG Downloads Landing Page",
+      display_name: "DISA STIG",
+    }),
+    {
+      primaryName: "DISA STIG Downloads Landing Page",
+      familyName: "DISA STIG",
+      stableId: "cyber-mil-stig-downloads",
+    },
+  );
+  assert.deepEqual(
+    sourceIdentityPresentationFor({
+      id: "source-without-human-name",
+      name: "source-without-human-name",
+      display_name: "source-without-human-name",
+    }),
+    {
+      primaryName: "Source detail",
+      familyName: "",
+      stableId: "source-without-human-name",
+    },
+  );
+});
 
 test("source layers preserve truthful nullable fields and exact layer counts", () => {
   const layers = buildSourceLayers(sources.sources, catalogs);
