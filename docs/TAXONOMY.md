@@ -2,6 +2,7 @@
 
 - **Owner:** Control Atlas data stewardship
 - **Status:** Canonical contract; coverage remains partial
+- **Contract version:** 1.2.0
 - **Last reviewed:** 2026-08-13
 - **Supersession:** A later contract version must migrate stable tag IDs and update the generated coverage report in the same change.
 
@@ -50,10 +51,10 @@ The generated 2026-08-13 corpus contains 30,365 records and six governed dimensi
 
 | Measure | Count | Interpretation |
 | --- | ---: | --- |
-| Records with at least one governed tag | 15,244 | 50.2% of records have one or more positive decisions. |
-| `applicable` decisions | 28,845 | 15.8% of all record-dimension decisions have positive source-backed evidence. |
+| Records with at least one governed tag | 17,750 | 58.5% of records have one or more positive decisions. |
+| `applicable` decisions | 31,418 | 17.2% of all record-dimension decisions have positive source-backed evidence. |
 | `not_applicable` decisions | 0 | No explicit negative decision has yet been recorded; this is not a claim that every dimension applies. |
-| `unreviewed` decisions | 153,345 | 84.2% of record-dimension decisions remain unreviewed. |
+| `unreviewed` decisions | 150,772 | 82.8% of record-dimension decisions remain unreviewed. |
 
 Dimension detail, all 27 publication rows, 40 record-type rows, source fields, assignment rules, and decision reconciliation are generated in `data/generated/taxonomy-coverage.json`. The taxonomy is therefore usable for the supported evidence-backed filters, but its overall applicability review is **partial**, not complete.
 

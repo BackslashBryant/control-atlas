@@ -20,7 +20,7 @@ export const CATALOG_STRUCTURE_PROFILES = Object.freeze({
   "disa-cci": profile("disa-cci", "DISA CCI", [["catalog", "requirement"]]),
   "disa-srg": profile("disa-srg", "DISA SRG", [["catalog", "benchmark", "srg_requirement"]]),
   "disa-stig": profile("disa-stig", "DISA STIG", [["catalog", "benchmark", "stig_rule"]]),
-  "dod-rai": profile("dod-rai", "DoD Responsible AI", [["catalog", "group", "requirement"]]),
+  "dod-rai": profile("dod-rai", "DoD AI Assurance", [["catalog", "group", "requirement"]]),
   "dod-zt": profile("dod-zt", "DoD Zero Trust", [
     ["catalog", "zt_pillar", "zt_capability", "zt_activity"],
     ["catalog", "zt_tenet"],

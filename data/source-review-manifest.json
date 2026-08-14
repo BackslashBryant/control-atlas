@@ -106,7 +106,7 @@
       ],
       "official_sources": [
         { "url": "https://www.cyber.mil/stigs/downloads/", "supports": "Official current and retained STIG packages." },
-        { "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_VMW_vSphere_7-0_Y23M07_STIG.zip", "supports": "Official package containing the reviewed V-256609 V1R2 record." }
+          { "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_VMW_vSphere_7-0_Y25M04_STIG.zip", "supports": "Reachable official retained package containing the reviewed V-256609 V1R2 record." }
       ],
       "rationale": "The review covers prose-heavy policy, application policy, and a configuration-sensitive rule. The corpus intentionally retains versioned historical releases alongside current packages.",
       "follow_up": null
@@ -123,10 +123,10 @@
         { "record_id": "SHIELD-DETECT", "review_note": "Continuous-monitoring wording is consistent with the toolkit's lifecycle framing." }
       ],
       "official_sources": [
-        { "url": "https://www.ai.mil/Initiatives/Responsible-AI/index.html", "supports": "Current CDAO Responsible AI program and toolkit surface." },
-        { "url": "https://www.defense.gov/News/Releases/Release/Article/3588743/cdao-releases-responsible-ai-rai-toolkit-for-ensuring-alignment-with-rai-best-p/", "supports": "Official release describing the original modular, tailorable toolkit." }
+          { "url": "https://www.ai.mil/Initiatives/About/Resources/Pathway-to-AI-Readiness/Responsible-AI/", "supports": "Current CDAO Responsible AI program page and official AI Assurance Toolkit handoff." },
+          { "url": "https://www.ai.mil/Latest/Blog/Article-Display/Article/3940314/responsible-ai-toolkit/", "supports": "Official CDAO article preserving the toolkit's modular and tailorable origin." }
       ],
-      "rationale": "The normalized concepts agree with official DoD descriptions. The registry now separates the current CDAO-branded Tradewinds landing page from the AcqBot operational application and qualifies that application locator instead of presenting it as a direct CDAO-owned host.",
+        "rationale": "The normalized concepts agree with current CDAO material. The publisher has renamed the operational product AI Assurance Toolkit while retaining the Responsible AI program lineage, modular and tailorable principles, and SHIELD activities. The stable catalog ID is retained, while current display identity and official-to-operational handoff stay explicit.",
       "follow_up": null
     },
     {
@@ -390,7 +390,7 @@
       ],
       "official_sources": [
         { "url": "https://csrc.nist.gov/pubs/sp/800/53/b/upd1/final", "supports": "Current Release 5.2.0 publication identity and four official baselines." },
-        { "url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53B-r5", "supports": "Official OSCAL baseline profiles." }
+          { "url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53/rev5", "supports": "Official OSCAL catalog and Low, Moderate, High, and Privacy baseline profiles." }
       ],
       "rationale": "The four profile identities match SP 800-53B. Editorial fragments are justified by fallback to the official landing page and structured profiles.",
       "follow_up": null

@@ -22,7 +22,8 @@ test("WS2 record template leads with qualified identity and one source action", 
   await expect(template.locator(".bucket-tag")).toHaveCount(1);
   await expect(template.locator(".bucket-tag")).toContainText("Compliance");
   await expect(page.locator(".record-classification-tags").locator(":scope > *"))
-    .toHaveCount(4);
+    .toHaveCount(5);
+  await expect(page.getByRole("link", { name: "Filter the Library by Access Control", exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "View official source", exact: true })).toHaveCount(1);
 
   await expect(page.getByRole("heading", { name: "Requirement", level: 2 })).toBeVisible();
@@ -55,7 +56,8 @@ test("WS2 related records exclude structural parents and public pages expose no 
 
   const visibleText = await page.locator("main").innerText();
   expect(visibleText).not.toContain("nist-800-53:AC-2");
-  expect(visibleText).not.toMatch(/\.json#|\/data\/|Node ID/);
+  expect(visibleText).not.toMatch(/\/data\/|Node ID/);
+  await expect(page.locator("[data-record-source-locator] code")).toHaveText("controls-800-53.json#AC-2");
   await expect(page.getByText("Developer details", { exact: true })).toHaveCount(0);
 });
 
@@ -155,6 +157,77 @@ test("WS2 turns clear DISA commands and file procedures into copyable source for
       globalThis.document.documentElement.clientWidth,
   );
   expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test("WS2 exposes exact retained locators and governed publication names at every supported width", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: async (value) => { globalThis.__copiedSourceLocator = value; } },
+    });
+  });
+  const widths = [320, 375, 390, 768, 1024, 1440];
+  const locator = "U_VMW_vSphere_7-0_Y25M04_STIG.zip/U_VMW_vSphere_7-0_vCA_PostgreSQL_V1R2_Manual_STIG/U_VMW_vSphere_7-0_vCA_PostgreSQL_STIG_V1R2_Manual-xccdf.xml#V-256609";
+
+  for (const width of widths) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1000 });
+    await openRecord(page, "/#/record/disa-stig/V-256609");
+    await waitForAppReady(page);
+    const disclosure = page.locator("[data-record-source-locator]");
+    const sourceLocationButton = disclosure.getByRole("button", { name: "Source location", exact: true });
+    if (await sourceLocationButton.getAttribute("aria-expanded") !== "true") {
+      await sourceLocationButton.click();
+    }
+    await expect(sourceLocationButton).toHaveAttribute("aria-expanded", "true");
+    await expect(disclosure.locator("code")).toHaveText(locator);
+    await expect(disclosure.getByText("Artifact path", { exact: true })).toBeVisible();
+    const overflow = await page.evaluate(() =>
+      globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
+    );
+    expect(overflow, `${width}px source locator overflow`).toBeLessThanOrEqual(1);
+  }
+
+  await page.getByRole("button", { name: "Copy source locator", exact: true }).click();
+  await expect.poll(() => page.evaluate(() => globalThis.__copiedSourceLocator)).toBe(locator);
+  await expect(page.getByText("Source locator copied to clipboard", { exact: true })).toBeAttached();
+
+  await openRecord(page, "/#/record/nist-mobile-threats/APP-0");
+  await expect(page.locator(".record-source-facts")).toContainText("NIST Mobile Threat Catalogue");
+  await expect(page.locator(".record-source-facts")).not.toContainText("nist-mobile-threats");
+  await openRecord(page, "/#/record/nist-zt/SP800-207");
+  await expect(page.locator(".record-source-facts")).toContainText("NIST Zero Trust");
+  await expect(page.locator(".record-source-facts")).not.toContainText("nist-zt");
+
+  const representativeLocators = [
+    ["/#/record/nist-800-171-rev2/3.1.1", "requirements-800-171-rev2.json#3.1.1"],
+    ["/#/record/nist-800-53/AC-2", "controls-800-53.json#AC-2"],
+    ["/#/record/nist-800-53a/AC-1", "controls-800-53.json#AC-1#assessment"],
+    ["/#/record/disa-cci/CCI-000366", "U_CCI_List.xml#CCI-000366"],
+    ["/#/record/disa-srg/V-202013", "U_NDM_V5R5_SRG.zip/U_NDM_V5R5_Manual_SRG/U_NDM_SRG_V5R5_Manual-xccdf.xml#V-202013"],
+    ["/#/record/mitre-attack/T1195.002", "enterprise-attack.json#T1195.002"],
+    ["/#/record/mitre-attack-ics/T0800", "ics-attack.json#T0800"],
+    ["/#/record/mitre-d3fend/D3-AA", "technique/all.json#D3-AA"],
+    ["/#/record/dod-zt/ACT-1-1-1", "capabilities.pdf#page=10&table=table-1&row=1"],
+    ["/#/record/nist-zt/SP800-207", "NIST.SP.800-207.pdf#page=13"],
+    ["/#/record/nist-mobile-threats/APP-0", "https://pages.nist.gov/mobile-threat-catalogue/mtc-data.json#/0"],
+    ["/#/record/nist-zt/COLLABORATOR-APPGATE-835EC7F121", "https://pages.nist.gov/zero-trust-architecture/#implementing-a-zero-trust-architecture-full-document:block-189"],
+    ["/#/record/nist-zt/MAPPING-CONTRIBUTOR-APPGATE-835EC7F121", "https://pages.nist.gov/zero-trust-architecture/VolumeE/Mappings.html"],
+  ];
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const [route, expectedLocator] of representativeLocators) {
+    await openRecord(page, route);
+    await waitForAppReady(page);
+    const representativeDisclosure = page.locator("[data-record-source-locator]");
+    const representativeToggle = representativeDisclosure.getByRole("button", { name: "Source location", exact: true });
+    await representativeToggle.click();
+    await expect(representativeDisclosure.locator("code")).toHaveText(expectedLocator);
+    await representativeDisclosure.getByRole("button", { name: "Copy source locator", exact: true }).click();
+    await expect.poll(() => page.evaluate(() => globalThis.__copiedSourceLocator)).toBe(expectedLocator);
+    expect(await page.evaluate(() =>
+      globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
+    )).toBeLessThanOrEqual(1);
+  }
 });
 
 test("WS2 keeps every published record form readable at compact width", async ({ page }) => {

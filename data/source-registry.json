@@ -1308,22 +1308,22 @@
     },
     {
       "id": "dod-rai-toolkit",
-      "name": "DoD Responsible AI Toolkit",
-      "display_name": "DoD RAI",
-      "display_group": "DoD",
-      "owner": "DoD",
+      "name": "CDAO AI Assurance Toolkit",
+      "display_name": "DoD AI Assurance",
+      "display_group": "CDAO",
+      "owner": "Chief Digital and Artificial Intelligence Office",
       "authority_class": "publisher",
       "provenance_class": "federal_published",
       "mandate_basis": [],
-      "license_or_use": "DoD Responsible AI Toolkit Public Domain",
+      "license_or_use": "CDAO public resource; no separate license stated",
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "4.0.0",
+      "version": null,
       "retrieved_at": "2026-08-07",
       "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://rai.acqbot.com/executive-summary",
-      "catalog_browse_url": "https://www.tradewindai.com/rai-toolkit",
+      "catalog_browse_url": "https://www.ai.mil/Initiatives/About/Resources/Pathway-to-AI-Readiness/Responsible-AI/",
       "federal_referenced_by": [],
       "graph_eligible": true,
       "metadata": {
@@ -1331,7 +1331,8 @@
           "dod-rai"
         ],
         "parser": "dod-rai-toolkit-html",
-        "provenance_note": "The current CDAO-branded Tradewinds RAI Toolkit page identifies the AcqBot application as the operational toolkit. The publisher landing page and the application locator are retained separately."
+        "version_unknown_reason": "The current publisher landing page and operational toolkit do not expose a release version.",
+        "provenance_note": "The current CDAO Responsible AI resource page links to the AI Assurance Toolkit through the CDAO-branded Tradewinds page, which identifies the AcqBot application as the operational toolkit. The publisher landing page and application locator are retained separately; the current publisher surfaces do not expose a release number."
       }
     },
     {
@@ -1745,7 +1746,7 @@
       "lifecycle_status": "active",
       "eligibility_status": "excluded",
       "access_status": "public",
-      "version": "2026-06-09",
+      "version": "Revision 5, Release 5.2.0",
       "retrieved_at": "2026-06-09",
       "retrieval_method": "direct_file_import",
       "artifact_url": "https://github.com/mitre/cis-cci-mappings",
@@ -2105,11 +2106,11 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "2026-06-09",
+      "version": "Revision 5, Release 5.2.0",
       "retrieved_at": "2026-06-09",
       "retrieval_method": "direct_file_import",
-      "artifact_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53B-r5",
-      "catalog_browse_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53B-r5",
+      "artifact_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53/rev5",
+      "catalog_browse_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53/rev5",
       "federal_referenced_by": [],
       "graph_eligible": true,
       "metadata": {
@@ -2918,23 +2919,26 @@
     {
       "id": "artifact-ai-mil-responsible-ai",
       "publication_source_id": "dod-rai-toolkit",
-      "name": "ai.mil CDAO Responsible AI Initiative Page",
-      "display_name": "ai.mil Responsible AI Reconciliation Artifact",
+      "name": "ai.mil CDAO Responsible AI Resource Page",
+      "display_name": "CDAO Responsible AI Resource Reconciliation Artifact",
       "source_role": "reconciliation",
       "authority_class": "publisher",
       "format": "html",
-      "version": "2026-08-07",
+      "version": null,
       "lifecycle_status": "active",
       "retrieval_method": "extracted_from_official_publication",
-      "retrieved_at": "2026-08-09",
-      "artifact_url": "https://www.ai.mil/Initiatives/AI-Assurance/Responsible-AI/",
-      "byte_length": 154957,
-      "sha256": "sha256:08291350010897d9750fe7e8056c249b7ec3c027db395d5c1f95dbae4d3be1ab",
+      "retrieved_at": "2026-08-14",
+      "artifact_url": "https://www.ai.mil/Initiatives/About/Resources/Pathway-to-AI-Readiness/Responsible-AI/",
+      "byte_length": 104423,
+      "sha256": "sha256:89ee5d7b65cf317fd101e27e0d25e3e68fb01ea13d458867f12d54a6e8eb8a5d",
       "parser": "ai-mil-responsible-ai-html",
       "parser_version": "1.0.0",
       "record_count": 0,
       "relationship_count": 0,
-      "license_or_use": "U.S. Government Work / Public Domain"
+      "license_or_use": "U.S. Government Work / Public Domain",
+      "metadata": {
+        "version_unknown_reason": "The current publisher landing page does not expose a release version."
+      }
     },
     {
       "id": "artifact-control-atlas-structure",
@@ -3090,12 +3094,12 @@
     {
       "id": "artifact-dod-rai-toolkit",
       "publication_source_id": "dod-rai-toolkit",
-      "name": "CDAO AI Assurance (Responsible AI) Toolkit Executive Summary",
-      "display_name": "DoD RAI Toolkit Artifact",
+      "name": "CDAO AI Assurance Toolkit Executive Summary",
+      "display_name": "DoD AI Assurance Toolkit Artifact",
       "source_role": "primary_data",
       "authority_class": "publisher",
       "format": "html",
-      "version": "4.0.0",
+      "version": null,
       "lifecycle_status": "active",
       "retrieval_method": "extracted_from_official_publication",
       "retrieved_at": "2026-08-07",
@@ -3106,7 +3110,10 @@
       "parser_version": "1.0.0",
       "record_count": 14,
       "relationship_count": 13,
-      "license_or_use": "DoD Responsible AI Toolkit Public Domain"
+      "license_or_use": "CDAO public resource; no separate license stated",
+      "metadata": {
+        "version_unknown_reason": "The current operational toolkit does not expose a release version."
+      }
     },
     {
       "id": "artifact-dod-zt-capabilities",
@@ -6435,20 +6442,20 @@
     },
     {
       "id": "dod-rai-toolkit",
-      "name": "DoD Responsible AI Toolkit",
-      "display_name": "DoD RAI",
-      "display_group": "DoD",
-      "owner": "DoD",
+      "name": "CDAO AI Assurance Toolkit",
+      "display_name": "DoD AI Assurance",
+      "display_group": "CDAO",
+      "owner": "Chief Digital and Artificial Intelligence Office",
       "provenance_class": "federal_published",
       "mandate_basis": [],
-      "version": "4.0.0",
+      "version": null,
       "retrieved_at": "2026-06-09",
       "retrieval_method": "extracted_from_official_publication",
       "artifact_url": "https://rai.acqbot.com/executive-summary",
       "artifact_type": "publication",
       "checksum": "sha256:26bed4c4a32b11224c7e42da17655710088685e69933d656a10d476506c1dbeb",
       "access_status": "public",
-      "license_or_use": "DoD Responsible AI Toolkit Public Domain",
+      "license_or_use": "CDAO public resource; no separate license stated",
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "federal_referenced_by": [],
@@ -6457,7 +6464,8 @@
         "frameworks": [
           "dod-rai"
         ],
-        "parser": "dod-rai-toolkit-html"
+        "parser": "dod-rai-toolkit-html",
+        "version_unknown_reason": "The current publisher landing page and operational toolkit do not expose a release version."
       }
     },
     {
@@ -6471,10 +6479,10 @@
         "FIPS 200",
         "OMB Circular A-130"
       ],
-      "version": "2026-06-09",
+      "version": "Revision 5, Release 5.2.0",
       "retrieved_at": "2026-06-09",
       "retrieval_method": "download",
-      "artifact_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53B-r5",
+      "artifact_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53/rev5",
       "artifact_type": "oscal_json",
       "checksum": "sha256:639a1e1cec09c9b697d87ae22da8970ee87762bf867f473020aeb573b9977f87",
       "access_status": "public",

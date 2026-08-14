@@ -52,7 +52,7 @@ export const SOURCE_LINKS: SourceLinkRecord[] = [
   { sourceId: "nist-csf-2-0", displayName: "NIST Cybersecurity Framework 2.0", canonicalUrl: "https://www.nist.gov/cyberframework" },
   { sourceId: "nist-ai-rmf", displayName: "NIST AI RMF", canonicalUrl: "https://www.nist.gov/itl/ai-risk-management-framework" },
   { sourceId: "nist-ai-rmf-playbook", displayName: "NIST AI RMF Playbook", canonicalUrl: "https://airc.nist.gov/AI_RMF_Knowledge_Base/Playbook" },
-  { sourceId: "dod-rai-toolkit", displayName: "DoD Responsible AI Toolkit", canonicalUrl: "https://rai.tradewindai.com/" },
+  { sourceId: "dod-rai-toolkit", displayName: "CDAO AI Assurance Toolkit", canonicalUrl: "https://www.ai.mil/Initiatives/About/Resources/Pathway-to-AI-Readiness/Responsible-AI/" },
   { sourceId: "dod-zero-trust-strategy", displayName: "DoD Zero Trust Strategy", canonicalUrl: "https://dodcio.defense.gov/Portals/0/Documents/Library/DoD-ZTStrategy.pdf" },
   { sourceId: "dod-zero-trust-ra-v2", displayName: "DoD Zero Trust Reference Architecture v2.0", canonicalUrl: "https://dodcio.defense.gov/Portals/0/Documents/Library/%28U%29ZT_RA_v2.0%28U%29_Sep22.pdf" },
   {

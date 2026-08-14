@@ -1,4 +1,5 @@
 import { areaPresentationForCatalog } from "./areaVisualLanguage";
+import { catalogStructureProfile } from "../../shared/catalog-structure.mjs";
 
 export type CatalogProfile = {
   synopsis: string;
@@ -46,6 +47,15 @@ const PUBLICATION_KINDS: Record<string, string> = {
 
 export function catalogAreaFor(catalogId: string): string {
   return areaPresentationForCatalog(catalogId)?.label || "";
+}
+
+export function catalogDisplayNameFor(
+  catalogId: string,
+  candidateName = "",
+): string {
+  const candidate = String(candidateName || "").trim();
+  if (candidate && candidate !== catalogId) return candidate;
+  return catalogStructureProfile(catalogId)?.label || candidate || catalogId;
 }
 
 const RECORD_LABELS: Record<string, string> = {
@@ -106,7 +116,7 @@ const SYNOPSES: Record<string, string> = {
   "nist-ai-rmf":
     "Actions for managing risk across an artificial intelligence system's life cycle.",
   "dod-rai":
-    "Department of Defense guidance for developing and using artificial intelligence responsibly.",
+    "CDAO guidance and self-assessment activities for assuring artificial intelligence across its lifecycle.",
   "nist-800-37":
     "The Risk Management Framework process for managing security and privacy risk.",
   "fips-200":

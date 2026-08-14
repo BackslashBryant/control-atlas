@@ -1,9 +1,9 @@
 {
   "schema_version": "2.0",
   "generated_from": {
-    "source_coverage_manifest": "2026-08-13T16:36:58.613Z",
+    "source_coverage_manifest": "2026-08-14T00:40:44.724Z",
     "catalog_source_inventory": "2026-08-13T16:29:35.465Z",
-    "source_count_ledger": "2026-08-13T16:33:49.883Z"
+    "source_count_ledger": "2026-08-14T00:29:11.893Z"
   },
   "purpose": "Per-catalog audit boundary for publisher structure, parser reconciliation, artifact provenance, representative semantic review, locator disposition, and official-source currentness review.",
   "catalog_count": 27,
@@ -395,7 +395,7 @@
         {
           "source_id": "mitre-cis-cci-mappings",
           "display_name": "DISA CCI",
-          "version": "2026-06-09",
+          "version": "Revision 5, Release 5.2.0",
           "retrieved_at": "2026-06-09",
           "last_checked": "2026-06-09",
           "artifact_url": "https://github.com/mitre/cis-cci-mappings",
@@ -758,8 +758,8 @@
             "supports": "Official current and retained STIG packages."
           },
           {
-            "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_VMW_vSphere_7-0_Y23M07_STIG.zip",
-            "supports": "Official package containing the reviewed V-256609 V1R2 record."
+            "url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_VMW_vSphere_7-0_Y25M04_STIG.zip",
+            "supports": "Reachable official retained package containing the reviewed V-256609 V1R2 record."
           }
         ],
         "rationale": "The review covers prose-heavy policy, application policy, and a configuration-sensitive rule. The corpus intentionally retains versioned historical releases alongside current packages.",
@@ -802,8 +802,8 @@
       "publisher_artifacts": [
         {
           "source_id": "dod-rai-toolkit",
-          "display_name": "DoD RAI",
-          "version": "4.0.0",
+          "display_name": "DoD AI Assurance",
+          "version": null,
           "retrieved_at": "2026-08-07",
           "last_checked": "2026-06-09",
           "artifact_url": "https://rai.acqbot.com/executive-summary",
@@ -838,15 +838,15 @@
         ],
         "official_sources": [
           {
-            "url": "https://www.ai.mil/Initiatives/Responsible-AI/index.html",
-            "supports": "Current CDAO Responsible AI program and toolkit surface."
+            "url": "https://www.ai.mil/Initiatives/About/Resources/Pathway-to-AI-Readiness/Responsible-AI/",
+            "supports": "Current CDAO Responsible AI program page and official AI Assurance Toolkit handoff."
           },
           {
-            "url": "https://www.defense.gov/News/Releases/Release/Article/3588743/cdao-releases-responsible-ai-rai-toolkit-for-ensuring-alignment-with-rai-best-p/",
-            "supports": "Official release describing the original modular, tailorable toolkit."
+            "url": "https://www.ai.mil/Latest/Blog/Article-Display/Article/3940314/responsible-ai-toolkit/",
+            "supports": "Official CDAO article preserving the toolkit's modular and tailorable origin."
           }
         ],
-        "rationale": "The normalized concepts agree with official DoD descriptions. The registry now separates the current CDAO-branded Tradewinds landing page from the AcqBot operational application and qualifies that application locator instead of presenting it as a direct CDAO-owned host.",
+        "rationale": "The normalized concepts agree with current CDAO material. The publisher has renamed the operational product AI Assurance Toolkit while retaining the Responsible AI program lineage, modular and tailorable principles, and SHIELD activities. The stable catalog ID is retained, while current display identity and official-to-operational handoff stay explicit.",
         "follow_up": null,
         "statement": "Automated reconciliation and the recorded human review are separate evidence classes. The review covers the named samples and currentness sources; it is not a claim that automation proved semantic completeness or that every publisher record was manually re-authored."
       }
@@ -2114,10 +2114,10 @@
         {
           "source_id": "nist-800-53b-baselines",
           "display_name": "SP 800-53B",
-          "version": "2026-06-09",
+          "version": "Revision 5, Release 5.2.0",
           "retrieved_at": "2026-06-09",
           "last_checked": "2026-08-13",
-          "artifact_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53B-r5",
+          "artifact_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53/rev5",
           "checksum": "sha256:0438254e54f22022d7b1f3b5ccb7d80ee81d20335db306784eb4001ce6e13398",
           "parser": "oscal-profile"
         },
@@ -2311,10 +2311,10 @@
         {
           "source_id": "nist-800-53b-baselines",
           "display_name": "SP 800-53B",
-          "version": "2026-06-09",
+          "version": "Revision 5, Release 5.2.0",
           "retrieved_at": "2026-06-09",
           "last_checked": "2026-08-13",
-          "artifact_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53B-r5",
+          "artifact_url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53/rev5",
           "checksum": "sha256:0438254e54f22022d7b1f3b5ccb7d80ee81d20335db306784eb4001ce6e13398",
           "parser": "oscal-profile"
         }
@@ -2350,8 +2350,8 @@
             "supports": "Current Release 5.2.0 publication identity and four official baselines."
           },
           {
-            "url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53B-r5",
-            "supports": "Official OSCAL baseline profiles."
+            "url": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53/rev5",
+            "supports": "Official OSCAL catalog and Low, Moderate, High, and Privacy baseline profiles."
           }
         ],
         "rationale": "The four profile identities match SP 800-53B. Editorial fragments are justified by fallback to the official landing page and structured profiles.",

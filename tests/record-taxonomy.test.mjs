@@ -23,8 +23,14 @@ test("taxonomy distinguishes workstation, cloud, and Active Directory from expli
   ]);
 });
 
-test("physical security uses the exact publisher family and ignores incidental free text", () => {
+test("publisher security domains use exact NIST family fields and ignore incidental free text", () => {
   assert.deepEqual(taxonomyTagsForRecord({ family: "Physical and Environmental Protection" }).map((tag) => tag.label), ["Physical security", "Physical Security"]);
+  assert.deepEqual(taxonomyTagsForRecord({ family: "Physical Protection" }).map((tag) => tag.label), ["Physical security", "Physical Security"]);
+  assert.deepEqual(taxonomyTagsForRecord({ family: "Access Control" }), [
+    { id: "domain.access-control", kind: "domain", label: "Access Control", provenance: "publisher", basis: { source_field: "family", rule: "exact-publisher-family" } },
+  ]);
+  assert.deepEqual(taxonomyTagsForRecord({ family: "Incident response" }).map((tag) => tag.id), ["domain.incident-response"]);
+  assert.deepEqual(taxonomyTagsForRecord({ family: "Catalog" }), []);
   assert.deepEqual(taxonomyTagsForRecord({ description: "Guide for physical server rooms" }), []);
 });
 

@@ -13,6 +13,33 @@ const VENDOR_PREFIXES = [
   ["Juniper", "vendor.juniper"],
 ];
 
+const PUBLISHER_DOMAIN_BY_FAMILY = new Map([
+  ["Access Control", "domain.access-control"],
+  ["Assessment, Authorization, and Monitoring", "domain.assessment-authorization-monitoring"],
+  ["Audit and Accountability", "domain.audit-accountability"],
+  ["Awareness and Training", "domain.awareness-training"],
+  ["Configuration Management", "domain.configuration-management"],
+  ["Contingency Planning", "domain.contingency-planning"],
+  ["Identification and Authentication", "domain.identification-authentication"],
+  ["Incident Response", "domain.incident-response"],
+  ["Incident response", "domain.incident-response"],
+  ["Maintenance", "domain.maintenance"],
+  ["Media Protection", "domain.media-protection"],
+  ["Personally Identifiable Information Processing and Transparency", "domain.pii-processing-transparency"],
+  ["Personnel Security", "domain.personnel-security"],
+  ["Physical and Environmental Protection", "domain.physical-security"],
+  ["Physical Protection", "domain.physical-security"],
+  ["Planning", "domain.planning"],
+  ["Program Management", "domain.program-management"],
+  ["Risk Assessment", "domain.risk-assessment"],
+  ["Security Assessment", "domain.security-assessment"],
+  ["Security Assessment and Monitoring", "domain.security-assessment-monitoring"],
+  ["Supply Chain Risk Management", "domain.supply-chain-risk-management"],
+  ["System and Communications Protection", "domain.system-communications-protection"],
+  ["System and Information Integrity", "domain.system-information-integrity"],
+  ["System and Services Acquisition", "domain.system-services-acquisition"],
+]);
+
 function normalized(value) {
   return String(value || "").trim();
 }
@@ -72,10 +99,11 @@ export function taxonomyTagsForRecord(record) {
     }
   }
 
-  if (family === "Physical and Environmental Protection") {
+  if (family === "Physical and Environmental Protection" || family === "Physical Protection") {
     add(tags, "asset.physical-security", "family", "exact-publisher-family", "publisher");
-    add(tags, "domain.physical-security", "family", "exact-publisher-family", "publisher");
   }
+  const publisherDomainId = PUBLISHER_DOMAIN_BY_FAMILY.get(family);
+  if (publisherDomainId) add(tags, publisherDomainId, "family", "exact-publisher-family", "publisher");
   if (catalogId === "nist-iot-cybersecurity") add(tags, "asset.iot", "catalog_id", "publisher-catalog-scope", "publisher");
   if (catalogId === "nist-mobile-threats") add(tags, "asset.mobile", "catalog_id", "publisher-catalog-scope", "publisher");
   return tags;
