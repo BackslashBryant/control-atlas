@@ -522,7 +522,8 @@ test('route interactions keep canonical context and synchronize visible state', 
   assert.doesNotMatch(atlasMap, /RelationshipExplorer/);
   assert.match(explore, /<WorkspaceTemplate/);
   assert.match(explore, /rows\.slice\(0, visibleCount\)/);
-  assert.match(explore, /recordIdentityFor/);
+  assert.match(explore, /recordIdentityPresentationFor/);
+  assert.match(explore, /catalogDisplayNameFor/);
   assert.match(explore, /areaPresentationForCatalog/);
   assert.match(explore, /data-result-class="published-record"/);
   assert.doesNotMatch(explore, /searchExploreResources|searchResourceDocuments/);

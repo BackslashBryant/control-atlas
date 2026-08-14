@@ -316,6 +316,16 @@
   overflow-wrap: anywhere;
 }
 
+.ca-record-stable-id {
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+.ca-record-stable-id code {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .ca-source-id__copy {
   min-width: 44px;
   min-height: 44px;

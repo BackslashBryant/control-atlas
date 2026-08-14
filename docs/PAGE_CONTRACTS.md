@@ -2,7 +2,7 @@
 
 - **Owner:** Product owner and Muse
 - **Status:** Canonical
-- **Last reviewed:** 2026-08-12
+- **Last reviewed:** 2026-08-14
 - **Supersession:** New owner-approved page direction replaces the affected section here and its tests in the same change.
 
 Every route uses one of six shared jobs. A route renders one `<main>` and must not mount another page beneath it.
@@ -41,6 +41,8 @@ Order is fixed:
 7. Advanced metadata only when genuinely useful.
 
 Commands and exact configuration render as copyable snippets. Explicit sequences render as ordered lists; independent actions render as bullets; ambiguous source text remains prose. `Related records` is a full-width final section grouped by publication and relationship type. Its description is “Formal published links to other publications.” Structural parents never appear in it.
+
+Publisher-native identifiers remain identity-led in record headings and browse results. When Control Atlas generates a stable record key, the publisher-authored title becomes the primary identity and the human record type plus governed publication name supplies nearby context. The generated key remains unchanged in routes and data, and appears only as a labeled, copyable `Control Atlas stable ID` detail rather than primary or accessible copy.
 
 ## E. Directory
 

@@ -28,15 +28,15 @@ import {
 } from "../lib/pagePrimitives";
 import {
   buildRecordConnectionGroups,
-  recordIdentityFor,
   humanReadableEvidenceLocator,
-  officialRecordName,
+  recordIdentityPresentationFor,
   recordPublisherName,
 } from "../lib/recordTitle";
 import { recordTagsFor, tagProvenanceExplanation } from "../lib/recordTags";
 import { sourceLocatorKind } from "../lib/sourceLocator";
 import { TAXONOMY_TAG_BY_ID } from "../../shared/taxonomy-contract.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
+import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
 import { normalizeViewState, type ViewState } from "../lib/viewState";
 
 const ODP_PATTERN = /\[(?:Assignment|Selection)[^\]]*\]/g;
@@ -321,11 +321,13 @@ export function ObjectDetailPage(props: {
   const [visibleConnectionCount, setVisibleConnectionCount] = useState(50);
   const [sourceLocatorOpen, setSourceLocatorOpen] = useState(false);
   const [sourceLocatorCopied, setSourceLocatorCopied] = useState(false);
+  const [stableIdCopied, setStableIdCopied] = useState(false);
 
   useEffect(() => {
     setVisibleConnectionCount(50);
     setSourceLocatorOpen(false);
     setSourceLocatorCopied(false);
+    setStableIdCopied(false);
   }, [state.node]);
 
   if (!node) {
@@ -366,24 +368,26 @@ export function ObjectDetailPage(props: {
   const area = catalogProfile.area;
   const family = document.control_family || node.metadata?.family || "";
   const itemId = node.metadata?.item_id || document.item_id || node.label || "";
+  const objectType = document.object_type || node.node_type || "";
   const publisherName = recordPublisherName(
     document.publisher_name,
     source?.owner,
     source?.publisher,
     catalog?.display_group,
   );
-  const recordIdentity = recordIdentityFor({
+  const identityPresentation = recordIdentityPresentationFor({
     publisher: publisherName,
     catalogId: document.catalog_id,
+    publicationName: catalogName,
     family,
     itemId,
+    title: node.metadata?.title || document.title || "",
+    objectType,
     metadata: node.metadata,
   });
-  const publishedName = officialRecordName(
-    itemId,
-    node.metadata?.title || document.title || "",
-  );
-  const kind = displayNameFor("object_type", document.object_type);
+  const recordIdentity = identityPresentation.primary;
+  const publishedName = identityPresentation.secondary;
+  const kind = displayNameFor("object_type", objectType);
   const officialSourceUrl = source?.artifact_url || source?.catalog_browse_url || "";
   const edges = bundle.runtime.getEdgesForNode(node.id, {
     publication_status: "published",
@@ -393,8 +397,10 @@ export function ObjectDetailPage(props: {
     document.catalog_id,
     edges,
     bundle.runtime.getNode,
-    (catalogId) =>
-      catalogs.find((entry: any) => entry.id === catalogId)?.name || "",
+    (catalogId) => {
+      const relatedCatalog = catalogs.find((entry: any) => entry.id === catalogId);
+      return catalogDisplayNameFor(catalogId, relatedCatalog?.name || "");
+    },
   );
   const connectionCount = connectionGroups.reduce(
     (total, group) => total + group.items.length,
@@ -457,16 +463,21 @@ export function ObjectDetailPage(props: {
 
   return (
     <section className="detail-page record-template" data-template="E">
-      <CanonicalBreadcrumb bundle={bundle} nodeId={node.id} recordLabel={itemId} />
+      <CanonicalBreadcrumb bundle={bundle} nodeId={node.id} recordLabel={recordIdentity} />
 
       <header
-        className="record-title-block"
+        className={`record-title-block${identityPresentation.stableIdIsGenerated ? " record-title-block--generated" : ""}`}
         data-route-primary-header="true"
         data-route-primary-copy="true"
       >
         <h1><AcronymText>{recordIdentity}</AcronymText></h1>
         {publishedName ? (
           <p className="record-official-name"><AcronymText>{publishedName}</AcronymText></p>
+        ) : null}
+        {identityPresentation.stableIdIsGenerated ? (
+          <p className="record-identity-context">
+            <AcronymText>{identityPresentation.context}</AcronymText>
+          </p>
         ) : null}
         <div className="record-title-actions" data-route-primary-support="true">
           {officialSourceUrl ? (
@@ -608,13 +619,26 @@ export function ObjectDetailPage(props: {
                   <section key={`${group.catalogId}:${group.relationshipType}`}>
                     <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
                     <ul>
-                      {group.items.map((item) => (
+                      {group.items.map((item) => {
+                        const relatedIdentity = runtimeRecordIdentityFor(bundle, item.nodeId);
+                        return (
                         <li data-record-connection-id={item.edgeId} key={item.edgeId}>
-                          <AppLink onNavigate={onNavigate} patch={{ node: item.nodeId }} view="library-detail">
-                            <strong>{item.itemId}</strong>{item.title !== item.itemId ? ` — ${item.title}` : ""}
+                          <AppLink
+                            aria-label={relatedIdentity.stableIdIsGenerated ? `Open ${relatedIdentity.accessibleName}` : undefined}
+                            onNavigate={onNavigate}
+                            patch={{ node: item.nodeId }}
+                            view="library-detail"
+                          >
+                            <strong>{relatedIdentity.stableIdIsGenerated ? relatedIdentity.primary : item.itemId}</strong>
+                            {relatedIdentity.stableIdIsGenerated && relatedIdentity.context
+                              ? ` — ${relatedIdentity.context}`
+                              : item.title !== item.itemId
+                                ? ` — ${item.title}`
+                                : ""}
                           </AppLink>
                         </li>
-                      ))}
+                        );
+                      })}
                     </ul>
                   </section>
                 ))}
@@ -670,6 +694,30 @@ export function ObjectDetailPage(props: {
                 <dt>Publication</dt>
                 <dd>{catalogName}</dd>
               </div>
+              {identityPresentation.stableIdIsGenerated ? (
+                <div>
+                  <dt>Control Atlas stable ID</dt>
+                  <dd className="ca-copy-wrap ca-record-stable-id">
+                    <code>{identityPresentation.stableId}</code>
+                    <Button
+                      aria-label={`Copy Control Atlas stable ID ${identityPresentation.stableId}`}
+                      onClick={() => {
+                        void copyText(identityPresentation.stableId).then(() => {
+                          setStableIdCopied(true);
+                          window.setTimeout(() => setStableIdCopied(false), 1800);
+                        });
+                      }}
+                      type="button"
+                      variant="secondary"
+                    >
+                      {stableIdCopied ? "Copied" : "Copy ID"}
+                    </Button>
+                    <span aria-live="polite" className="visually-hidden">
+                      {stableIdCopied ? "Control Atlas stable ID copied" : ""}
+                    </span>
+                  </dd>
+                </div>
+              ) : null}
               {source?.version ? (
                 <div>
                   <dt>Version</dt>
@@ -761,6 +809,7 @@ export function ObjectDetailPage(props: {
                   <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
                   <ul>
                     {group.items.map((item) => {
+                      const relatedIdentity = runtimeRecordIdentityFor(bundle, item.nodeId);
                       const sourceLabels = [...new Set(
                         item.sourceRefs
                           .map((reference) => {
@@ -786,12 +835,17 @@ export function ObjectDetailPage(props: {
                       return (
                         <li data-record-connection-id={item.edgeId} key={item.edgeId}>
                           <AppLink
+                            aria-label={relatedIdentity.stableIdIsGenerated ? `Open ${relatedIdentity.accessibleName}` : undefined}
                             onNavigate={onNavigate}
                             patch={{ node: item.nodeId }}
                             view="library-detail"
                           >
-                            <strong>{item.itemId}</strong>
-                            {item.title !== item.itemId ? ` — ${item.title}` : ""}
+                            <strong>{relatedIdentity.stableIdIsGenerated ? relatedIdentity.primary : item.itemId}</strong>
+                            {relatedIdentity.stableIdIsGenerated && relatedIdentity.context
+                              ? ` — ${relatedIdentity.context}`
+                              : item.title !== item.itemId
+                                ? ` — ${item.title}`
+                                : ""}
                           </AppLink>
                           <span className="relationship-meta">
                             {[

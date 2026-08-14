@@ -23,14 +23,14 @@ import {
   areaPresentationForCatalog,
 } from "../lib/areaVisualLanguage";
 import { buildCatalogCoverageList, catalogCoverageForId, isLowCatalogCoverage } from "../lib/catalogCoverage";
+import { catalogDisplayNameFor } from "../lib/catalogProfiles";
 import { LIBRARY_KINDS, libraryKindForRawType, libraryKindLabel, rawTypesForKind } from "../lib/informationArchitecture";
 import {
   TAXONOMY_CONTRACT,
   TAXONOMY_TAG_BY_ID,
 } from "../../shared/taxonomy-contract.mjs";
 import {
-  recordIdentityFor,
-  officialRecordName,
+  recordIdentityPresentationFor,
   recordPublisherName,
 } from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
@@ -102,7 +102,10 @@ export function ExplorePage(props: {
     [bundle.runtime],
   );
   const catalogNames = useMemo(
-    () => new Map<string, string>(runtimeCatalogs.map((catalog: any) => [String(catalog.id), String(catalog.name)])),
+    () => new Map<string, string>(runtimeCatalogs.map((catalog: any) => [
+      String(catalog.id),
+      catalogDisplayNameFor(String(catalog.id), String(catalog.name || "")),
+    ])),
     [runtimeCatalogs],
   );
   const catalogCoverage = useMemo(
@@ -164,35 +167,42 @@ export function ExplorePage(props: {
         source?.owner,
         source?.publisher,
       );
-      const identity = recordIdentityFor({
+      const publication = catalogNames.get(document.catalog_id) ||
+        catalogDisplayNameFor(document.catalog_id, document.catalog_name || "");
+      const identity = recordIdentityPresentationFor({
         publisher,
         catalogId: document.catalog_id || "",
+        publicationName: publication,
         family: document.control_family || "",
         itemId,
+        title: String(document.title || ""),
+        objectType: document.object_type || "",
         metadata: { identity_category: document.identity_category || "" },
       });
       return {
+        accessibleName: identity.accessibleName,
         area: areaPresentationForCatalog(document.catalog_id),
         crossFrameworkCatalogCount,
         crossFrameworkCount,
         document,
         identifier: itemId,
-        identity,
+        identity: identity.primary,
         lowCoverage: isLowCatalogCoverage(catalogCoverageForId(catalogCoverage, document.catalog_id)),
         matchReason: matchReasonFor(document, state.query),
-        publication: catalogNames.get(document.catalog_id) || document.catalog_name || "Publication unavailable",
+        publication,
         publisher,
         relationshipCount,
-        title: officialRecordName(itemId, String(document.title || "")),
+        sortTitle: identity.secondary || identity.primary,
+        title: identity.secondary,
       };
     });
-    const by = (key: "identifier" | "title" | "publication") => (left: any, right: any) =>
+    const by = (key: "identifier" | "sortTitle" | "publication") => (left: any, right: any) =>
       String(left[key]).localeCompare(String(right[key]), undefined, { numeric: true, sensitivity: "base" });
     if (state.sort === "identifier") return prepared.sort(by("identifier"));
-    if (state.sort === "title") return prepared.sort(by("title"));
+    if (state.sort === "title") return prepared.sort(by("sortTitle"));
     if (state.sort === "publication") return prepared.sort(by("publication"));
     return prepared.sort((left: any, right: any) =>
-      (RELEVANCE_ORDER[left.matchReason] ?? 9) - (RELEVANCE_ORDER[right.matchReason] ?? 9) || by("title")(left, right));
+      (RELEVANCE_ORDER[left.matchReason] ?? 9) - (RELEVANCE_ORDER[right.matchReason] ?? 9) || by("sortTitle")(left, right));
   }, [bundle.runtime, catalogCoverage, catalogNames, documents, state.query, state.sort]);
 
   const publishers = libraryFacets.publishers || [];
@@ -469,7 +479,7 @@ export function ExplorePage(props: {
                   {compareMode ? (
                     <label className="workspace-result-select">
                       <input
-                        aria-label={`Select ${row.identity} for comparison`}
+                        aria-label={`Select ${row.accessibleName} for comparison`}
                         checked={selected}
                         onChange={() => setSelectedRecords((items) => selected ? items.filter((id) => id !== row.document.item_id) : [...items, row.document.item_id])}
                         type="checkbox"
@@ -477,7 +487,7 @@ export function ExplorePage(props: {
                     </label>
                   ) : null}
                   <AppLink
-                    aria-label={`Open ${row.identity}`}
+                    aria-label={`Open ${row.accessibleName}`}
                     className="workspace-result-row__link"
                     onNavigate={onNavigate}
                     patch={{ node: row.document.id }}

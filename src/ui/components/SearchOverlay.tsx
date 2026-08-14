@@ -6,9 +6,9 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import { practitionerGuides } from "../../app/learn-content.mjs";
 import { requestSearchResultsFocus } from "../../shared/navigation-events";
 import { GLOBAL_SEARCH_PLACEHOLDER } from "../../shared/product-identity";
+import { catalogDisplayNameFor } from "../lib/catalogProfiles";
 import {
-  recordIdentityFor,
-  officialRecordName,
+  recordIdentityPresentationFor,
   recordPublisherName,
 } from "../lib/recordTitle";
 import {
@@ -248,21 +248,29 @@ export function SearchOverlay(props: SearchOverlayProps) {
                         source?.owner,
                         source?.publisher,
                       );
-                      const title = recordIdentityFor({
+                      const catalog = bundle?.runtime
+                        .getCatalogs()
+                        .find((entry: any) => entry.id === document.catalog_id);
+                      const publication = catalogDisplayNameFor(
+                        document.catalog_id || "",
+                        catalog?.name || document.catalog_name || "",
+                      );
+                      const identity = recordIdentityPresentationFor({
                         publisher,
                         catalogId: document.catalog_id || "",
+                        publicationName: publication,
                         family: document.control_family || "",
                         itemId: document.item_id || "",
+                        title: document.title || "",
+                        objectType: document.object_type || "",
                         metadata: { identity_category: document.identity_category || "" },
                       });
-                      const publishedName = officialRecordName(
-                        document.item_id || "",
-                        document.title || "",
-                      );
+                      const title = identity.primary;
+                      const publishedName = identity.secondary;
                       return (
                         <li key={document.id}>
                           <AppLink
-                            aria-label={title}
+                            aria-label={`Open ${identity.accessibleName}`}
                             className={`search-overlay-result${highlightedIndex === index ? " is-highlighted" : ""}`}
                             id={`search-suggestion-${index}`}
                             onFocus={() => setHighlightedIndex(index)}
@@ -275,8 +283,9 @@ export function SearchOverlay(props: SearchOverlayProps) {
                               <MarkedSearchText query={query} text={title} />
                             </h3>
                             <span className="search-overlay-result-meta">
-                              {publishedName ? `${publishedName} · ` : ""}
-                              {displayNameFor("object_type", document.object_type)}
+                              {identity.stableIdIsGenerated
+                                ? identity.context
+                                : `${publishedName ? `${publishedName} · ` : ""}${displayNameFor("object_type", document.object_type)}`}
                             </span>
                             <span className="search-overlay-result-summary">
                               <MarkedSearchText query={query} text={searchPreviewText(document)} />

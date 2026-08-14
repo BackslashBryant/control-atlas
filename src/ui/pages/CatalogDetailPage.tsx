@@ -11,8 +11,12 @@ import {
   paginateCatalogRecords,
   publicationSourceForCatalog,
 } from "../lib/catalogInventory";
-import { catalogProfileFor } from "../lib/catalogProfiles";
+import { catalogDisplayNameFor, catalogProfileFor } from "../lib/catalogProfiles";
 import { PageHeader, WorkbenchControlSurface } from "../lib/pagePrimitives";
+import {
+  recordIdentityPresentationFor,
+  recordPublisherName,
+} from "../lib/recordTitle";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
@@ -69,6 +73,12 @@ export function CatalogDetailPage(props: {
 
   const profile = catalogProfileFor(catalog.id, catalog.name);
   const source = publicationSourceForCatalog(bundle.runtime, catalog.id);
+  const catalogName = catalogDisplayNameFor(catalog.id, catalog.name);
+  const publisherName = recordPublisherName(
+    source?.owner,
+    source?.publisher,
+    catalog.display_group,
+  );
   const records = bundle.runtime
     .getNodes({ catalog_id: catalog.id })
     .filter((record: any) => !NON_LEAF_NODE_TYPES.has(record.node_type));
@@ -308,16 +318,30 @@ export function CatalogDetailPage(props: {
                 {pageRecords.map((record: any) => {
                   const itemId = record.metadata?.item_id || record.id;
                   const title = record.metadata?.title || itemId;
+                  const identity = recordIdentityPresentationFor({
+                    publisher: publisherName,
+                    catalogId: catalog.id,
+                    publicationName: catalogName,
+                    family: record.metadata?.family || "",
+                    itemId,
+                    title,
+                    objectType: record.node_type || "",
+                    metadata: record.metadata,
+                  });
+                  const supportingText = identity.stableIdIsGenerated
+                    ? identity.context
+                    : identity.secondary;
                   return (
                     <li key={record.id}><article className="catalog-record-row">
                       <h3><AppLink
+                        aria-label={`Open ${identity.accessibleName}`}
                         className="catalog-record-title"
                         onNavigate={onNavigate}
                         patch={{ node: record.id }}
                         view="library-detail"
                       >
-                        <strong>{itemId}</strong>
-                        {title !== itemId ? <span>{title}</span> : null}
+                        <strong>{identity.primary}</strong>
+                        {supportingText ? <span>{supportingText}</span> : null}
                       </AppLink></h3>
                       {record.description ? <p>{record.description}</p> : null}
                       {record.metadata?.family ? (

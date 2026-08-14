@@ -18,6 +18,7 @@ import type {
 } from "../lib/atlasModel";
 import type { CompareViewMode, ViewState } from "../lib/viewState";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
+import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
 
 function useCompactMapViewport() {
   const [compact, setCompact] = useState(
@@ -266,6 +267,9 @@ export function CompareResultsPanel(props: CompareResultsPanelProps) {
             compact={compact}
             expandedGroupId={expandedGroupId}
             groups={compareMapGroups}
+            identityForNode={(nodeId, fallbackNode) =>
+              runtimeRecordIdentityFor(bundle, nodeId, fallbackNode)
+            }
             onExpandedGroupChange={setExpandedGroupId}
             onOpenList={() => setCompareView("list")}
             onOpenRecord={onOpenNode}

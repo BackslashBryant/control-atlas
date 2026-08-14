@@ -170,3 +170,33 @@ test("Adaptive Explorer is bounded, responsive, and incrementally rendered at ev
     }
   }
 });
+
+test("Atlas hierarchy and local record controls keep generated IDs out of primary and accessible copy", async ({ page }) => {
+  test.setTimeout(120_000);
+  const stableId = "MAPPING-CONTRIBUTOR-APPGATE-835EC7F121";
+  const route = `/#/atlas?node=${encodeURIComponent(`nist-zt:${stableId}`)}&relationshipView=path`;
+
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await gotoApp(page, route);
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+
+    await expect(page.getByRole("region", { name: "Page context" })).toContainText("Appgate");
+    await expect(page.getByRole("region", { name: "Appgate" })).toBeVisible();
+    const hierarchy = page.locator("#atlas-hierarchy-panel");
+    await expect(hierarchy.getByRole("heading", { name: "Decomposes into", level: 3 })).toBeVisible();
+    const child = hierarchy.getByRole("link", {
+      name: /Open Appgate.*Product component, NIST Zero Trust/,
+    }).first();
+    await expect(child).toBeVisible();
+    await expect(child).toContainText("Appgate");
+    await expect(hierarchy).not.toContainText(/PRODUCT-COMPONENT-.*-[0-9A-F]{10}/);
+    await expect(page.locator("main")).not.toContainText(stableId);
+    expect(
+      await page.locator("html").evaluate((element) => element.scrollWidth - element.clientWidth),
+      `${width}px generated Atlas overflow`,
+    ).toBeLessThanOrEqual(1);
+  }
+});

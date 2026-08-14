@@ -177,6 +177,24 @@ test("record URLs serialize canonically without arrival or presentation state", 
   );
   assert.equal(parsed.view, "library-detail");
   assert.equal((parsed as Extract<typeof parsed, { view: "library-detail" }>).node, "nist-800-53:AC-2");
+
+  const generated = normalizeViewState("library-detail", {
+    view: "library-detail",
+    node: "nist-zt:COLLABORATOR-APPGATE-835EC7F121",
+  });
+  assert.equal(
+    serializeHashLocation(generated),
+    "/record/nist-zt/COLLABORATOR-APPGATE-835EC7F121",
+  );
+  const parsedGenerated = parseHashLocation(
+    "/record/nist-zt/COLLABORATOR-APPGATE-835EC7F121",
+    "",
+  );
+  assert.equal(parsedGenerated.view, "library-detail");
+  assert.equal(
+    (parsedGenerated as Extract<typeof parsedGenerated, { view: "library-detail" }>).node,
+    "nist-zt:COLLABORATOR-APPGATE-835EC7F121",
+  );
 });
 
 test("durable Phase 3 view fields survive canonicalization", () => {

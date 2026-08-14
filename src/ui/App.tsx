@@ -36,8 +36,9 @@ import {
 import { normalizeViewState, type ViewState } from "./lib/viewState";
 import { parseHashLocation, serializeHashLocation } from "./lib/hashRoutes";
 import { canonicalizeHashLocation } from "./lib/routeIdentity";
+import { catalogDisplayNameFor } from "./lib/catalogProfiles";
 import {
-  recordIdentityFor,
+  recordIdentityPresentationFor,
   recordDisplayTitle,
   recordPublisherName,
   routeDocumentTitle,
@@ -446,7 +447,11 @@ export function App() {
         const catalog = bundle.runtime
           .getCatalogs()
           .find((entry: any) => entry.id === document.catalog_id);
-        return recordIdentityFor({
+        const publication = catalogDisplayNameFor(
+          document.catalog_id || node.metadata?.catalog_id || "",
+          catalog?.name || document.catalog_name || "",
+        );
+        return recordIdentityPresentationFor({
           publisher: recordPublisherName(
             document.publisher_name,
             source?.owner,
@@ -454,12 +459,15 @@ export function App() {
             catalog?.display_group,
           ),
           catalogId: document.catalog_id || node.metadata?.catalog_id || "",
+          publicationName: publication,
           family: document.control_family || node.metadata?.family || "",
           itemId: document.item_id || node.metadata?.item_id || node.label || "",
+          title: document.title || node.metadata?.title || "",
+          objectType: document.object_type || node.node_type || "",
           metadata: {
             identity_category: document.identity_category || node.metadata?.identity_category,
           },
-        });
+        }).browserTitle;
       }
       return recordDisplayTitle(node);
     }
