@@ -178,7 +178,7 @@ test("opened connection filters stay inside their panel at every governed width"
     await expect(page.locator(".atlas-workspace-heading")).toHaveText("Connections");
 
     const disclosure = page.locator("details.atlas-connection-filters");
-    if (!(await disclosure.evaluate((element) => element.open))) {
+    if ((await disclosure.getAttribute("open")) === null) {
       await disclosure.locator("summary").click();
     }
     await expect(disclosure).toHaveAttribute("open", "");
