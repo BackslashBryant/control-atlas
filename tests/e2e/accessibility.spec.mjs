@@ -95,6 +95,10 @@ const ROUTES = [
     label: "source detail",
     path: "/#/sources?source=nist-iot-device-cybersecurity-requirement-catalogs",
   },
+  {
+    label: "source not found",
+    path: "/#/sources?source=not-a-real-source",
+  },
   { label: "build hub", path: "/#/build" },
   {
     label: "starter document detail",
@@ -123,6 +127,15 @@ for (const route of ROUTES) {
         }),
       ).toBeVisible();
       await expect(page.getByRole("article", { name: "Source status summary" })).toBeVisible();
+    }
+    if (route.label === "source not found") {
+      await expect(
+        page.getByRole("heading", { name: "Source not found", level: 1 }),
+      ).toBeVisible();
+      await expect(page.locator("h1")).toContainText("not-a-real-source");
+      await expect(page.locator(".ca-source-not-found-id code")).toHaveText(
+        "not-a-real-source",
+      );
     }
     await assertNoBlockingViolations(page, route.path);
   });

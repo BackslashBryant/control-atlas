@@ -477,7 +477,9 @@ export function App() {
     }
     if (viewState.view === "sources" && viewState.source && bundle) {
       const source = bundle.runtime.getSource(viewState.source);
-      return source ? sourceIdentityPresentationFor(source).primaryName : "";
+      return source
+        ? sourceIdentityPresentationFor(source).primaryName
+        : "Source not found";
     }
     return "";
   })();
