@@ -21,26 +21,26 @@ test('source freshness handles leap boundaries and invalid dates deterministical
   assert.equal(sourceFreshness({}, now).age_days, null);
 });
 
-test('newcomer-facing freshness wording keeps version and verification dates distinct', () => {
+test('newcomer-facing freshness wording names the source check date exactly', () => {
   const fresh = { version: 'Rev. 5', last_checked: '2026-06-09', stale_after_days: 45 };
   const stale = { version: 'Rev. 5', last_checked: '2025-01-23', stale_after_days: 45 };
-  assert.equal(sourceCurrentAsOf(fresh, now), 'Version Rev. 5 · Last verified 2026-06-09');
+  assert.equal(sourceCurrentAsOf(fresh, now), 'Version Rev. 5 · Source last checked 2026-06-09');
   assert.equal(
     sourceCurrentAsOf(stale, now),
-    'Version Rev. 5 · Last verified 2025-01-23',
+    'Version Rev. 5 · Source last checked 2025-01-23',
   );
   assert.doesNotMatch(sourceCurrentAsOf(stale, now), /Current as of/);
   assert.equal(
     sourceCurrentAsOf({ version: 'Spring 2021' }, now),
-    'Version Spring 2021 · Verification date not recorded',
+    'Version Spring 2021 · Source check date not recorded',
   );
   assert.equal(
     sourceFreshnessWarning(stale, now),
-    'Last verified against the source on 2025-01-23. The source may have changed since then; open the official source for the latest version.',
+    'Source last checked on 2025-01-23. The source may have changed since then; open the official source for the latest version.',
   );
   assert.equal(
     sourceFreshnessWarning({}, now),
-    'No verified check date is recorded. Open the official source for the latest version.',
+    'No source check date is recorded. Open the official source for the latest version.',
   );
   assert.equal(sourceFreshnessWarning(fresh, now), null);
 });

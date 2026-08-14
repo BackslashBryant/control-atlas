@@ -346,7 +346,8 @@ test("connection transparency distinguishes inventory from completeness", () => 
   assert.match(sourcesPage, /buildSourceLayers/);
   assert.match(sourcesPage, /Catalog coverage/);
   assert.match(sourcesPage, /Publisher version/);
-  assert.match(sourcesPage, /Last verified/);
+  assert.match(sourcesPage, /Source last checked/);
+  assert.match(sourcesPage, /Publication currentness review/);
   assert.doesNotMatch(sourcesPage, /Preview \/ low coverage/);
   assert.doesNotMatch(sourcesPage, /data-level=/);
   assert.doesNotMatch(sourcesPage, /catalog\.pct/);

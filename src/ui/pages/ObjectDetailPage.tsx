@@ -357,6 +357,7 @@ export function ObjectDetailPage(props: {
     ? bundle.catalogSummaries
     : bundle.runtime.getCatalogs();
   const catalog = catalogs.find((entry: any) => entry.id === document.catalog_id);
+  const catalogSourceReview = catalog?.source_review;
   const catalogName = catalogDisplayNameFor(
     document.catalog_id,
     catalog?.name || document.catalog_name || "",
@@ -689,8 +690,22 @@ export function ObjectDetailPage(props: {
               ) : null}
               {source?.last_checked ? (
                 <div>
-                  <dt>Last verified</dt>
+                  <dt>Source last checked</dt>
                   <dd>{source.last_checked}</dd>
+                </div>
+              ) : null}
+              {catalogSourceReview ? (
+                <div>
+                  <dt>Publication currentness review</dt>
+                  <dd>
+                    {displayNameFor(
+                      "source_currentness_review",
+                      catalogSourceReview.upstream_currentness_review,
+                    )} · Reviewed{" "}
+                    <time dateTime={catalogSourceReview.reviewed_at}>
+                      {catalogSourceReview.reviewed_at}
+                    </time>
+                  </dd>
                 </div>
               ) : null}
               {authorityItems.length ? (

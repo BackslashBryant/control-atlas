@@ -31,14 +31,14 @@ export function sourceFreshness(source, now = new Date()) {
 export function sourceCurrentAsOf(source, now = new Date()) {
   const version = source?.version || 'not recorded';
   return source?.last_checked
-    ? `Version ${version} · Last verified ${source.last_checked}`
-    : `Version ${version} · Verification date not recorded`;
+    ? `Version ${version} · Source last checked ${source.last_checked}`
+    : `Version ${version} · Source check date not recorded`;
 }
 
 export function sourceFreshnessWarning(source, now = new Date()) {
   const freshness = sourceFreshness(source, now);
   if (!freshness.is_stale) return null;
   return source?.last_checked
-    ? `Last verified against the source on ${source.last_checked}. The source may have changed since then; open the official source for the latest version.`
-    : 'No verified check date is recorded. Open the official source for the latest version.';
+    ? `Source last checked on ${source.last_checked}. The source may have changed since then; open the official source for the latest version.`
+    : 'No source check date is recorded. Open the official source for the latest version.';
 }

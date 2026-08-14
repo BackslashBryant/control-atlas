@@ -57,12 +57,14 @@ test("V1 workflow 04 — verify official record identity and source", async ({ p
   await expect(facts).toContainText("Version");
   await expect(facts).toContainText(/Revision 5|Rev\. 5/);
   await expect(facts).toContainText("Retrieved");
-  await expect(facts).toContainText("Last verified");
+  await expect(facts).toContainText("Source last checked");
+  await expect(facts).toContainText("Publication currentness review");
 
   await open(page, "/#/record/nist-mobile-threats/CEL-1");
   const retrievedOnlyFacts = page.locator(".record-source-facts");
   await expect(retrievedOnlyFacts).toContainText("Retrieved");
-  await expect(retrievedOnlyFacts).not.toContainText("Last verified");
+  await expect(retrievedOnlyFacts).not.toContainText("Source last checked");
+  await expect(retrievedOnlyFacts).toContainText("Publication currentness review");
 });
 
 test("V1 workflow 05 — follow a record and return without losing search state", async ({
@@ -144,9 +146,18 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
   await expect(iotDetail).toContainText("Publisher version");
   await expect(iotDetail).toContainText("Spring 2021");
   await expect(iotDetail).toContainText("Retrieved");
-  await expect(iotDetail).toContainText("Last verified");
+  await expect(iotDetail).toContainText("Source last checked");
   await expect(iotDetail).toContainText("Not recorded");
+  await expect(iotDetail).toContainText("Publication currentness review");
+  await expect(iotDetail).toContainText("Current as checked · Reviewed 2026-08-13");
   await expect(iotDetail).not.toContainText("undefined");
+
+  await open(page, "/#/sources?source=nist-800-53");
+  const checkedDetail = page.locator(".source-detail-grid");
+  await expect(checkedDetail).toContainText("Source last checked");
+  await expect(checkedDetail).toContainText("2026-07-28");
+  await expect(checkedDetail).toContainText("Publication currentness review");
+  await expect(checkedDetail).toContainText("Reviewed 2026-08-13");
 
   await open(page, "/#/sources?source=nist-800-53a-assessment-procedures");
   const assessmentDetail = page.locator(".source-detail-grid");
@@ -155,6 +166,87 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
   ).toBeVisible();
   await expect(assessmentDetail).toContainText("Retrieved artifact");
   await expect(assessmentDetail).toContainText("NIST_SP-800-53_rev5_catalog.json");
+});
+
+test("source and publication review dates remain distinct at every governed width", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    await open(
+      page,
+      "/#/sources?source=nist-iot-device-cybersecurity-requirement-catalogs",
+    );
+    const facts = page.locator(".source-detail-grid");
+    await expect(facts).toContainText("Retrieved2026-08-12");
+    await expect(facts).toContainText("Source last checkedNot recorded");
+    await expect(facts).toContainText(
+      "Publication currentness reviewCurrent as checked · Reviewed 2026-08-13",
+    );
+    expect(
+      await page.evaluate(
+        () =>
+          globalThis.document.documentElement.scrollWidth -
+          globalThis.document.documentElement.clientWidth,
+      ),
+      `${width}px document overflow`,
+    ).toBe(0);
+
+    await open(page, "/#/record/nist-800-53/AC-2");
+    const recordFacts = page.locator(".record-source-facts");
+    await expect(recordFacts).toContainText("Retrieved");
+    await expect(recordFacts).toContainText("Source last checked");
+    await expect(recordFacts).toContainText("Publication currentness review");
+    await expect(recordFacts).toContainText(
+      "Current as checked · Reviewed 2026-08-13",
+    );
+    expect(
+      await page.evaluate(
+        () =>
+          globalThis.document.documentElement.scrollWidth -
+          globalThis.document.documentElement.clientWidth,
+      ),
+      `${width}px record document overflow`,
+    ).toBe(0);
+  }
+});
+
+test("source review presents superseded and multiple-publication dispositions honestly", async ({
+  page,
+}) => {
+  await open(page, "/#/sources?source=nist-800-171-rev2");
+  await expect(page.locator(".source-detail-grid")).toContainText(
+    "Publication currentness reviewSuperseded · Reviewed 2026-08-13",
+  );
+
+  await open(page, "/#/record/nist-800-171-rev2/3.1.1");
+  await expect(page.locator(".record-source-facts")).toContainText(
+    "Publication currentness reviewSuperseded · Reviewed 2026-08-13",
+  );
+
+  for (const width of [320, 1440]) {
+    await page.setViewportSize({ width, height: width === 320 ? 844 : 1024 });
+    await open(
+      page,
+      "/#/sources?source=nist-800-53a-assessment-procedures",
+    );
+    const facts = page.locator(".source-detail-grid");
+    await expect(facts).toContainText(
+      "SP 800-53 Rev. 5 currentness reviewCurrent as checked · Reviewed 2026-08-13",
+    );
+    await expect(facts).toContainText(
+      "SP 800-53A Rev. 5 currentness reviewCurrent as checked · Reviewed 2026-08-13",
+    );
+    expect(
+      await page.evaluate(
+        () =>
+          globalThis.document.documentElement.scrollWidth -
+          globalThis.document.documentElement.clientWidth,
+      ),
+      `${width}px multi-review document overflow`,
+    ).toBe(0);
+  }
 });
 
 test("V1 workflow 09 — find an external tool or starter resource", async ({ page }) => {

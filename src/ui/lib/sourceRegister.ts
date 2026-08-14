@@ -1,4 +1,5 @@
 import { humanizeSlug } from "../../app/display-names.mjs";
+import { catalogDisplayNameFor } from "./catalogProfiles";
 
 export type SourceLayerId =
   | "publication"
@@ -32,6 +33,30 @@ export type CatalogSummary = {
   name: string;
   source_id: string;
   leaf_record_count: number;
+  source_review?: {
+    reviewed_at: string;
+    semantic_content_review:
+      | "reviewed_no_known_mismatch"
+      | "remediation_required"
+      | "blocked";
+    upstream_currentness_review:
+      | "current_as_checked"
+      | "refresh_required"
+      | "superseded"
+      | "blocked";
+  };
+};
+
+export type SourcePublicationReview = {
+  catalogId: string;
+  publicationName: string;
+  reviewedAt: string;
+  semanticContentReview: NonNullable<
+    CatalogSummary["source_review"]
+  >["semantic_content_review"];
+  upstreamCurrentnessReview: NonNullable<
+    CatalogSummary["source_review"]
+  >["upstream_currentness_review"];
 };
 
 export type SourceRegisterRow = {
@@ -130,6 +155,45 @@ export function canonicalSourceIdsFromCatalogs(
   catalogs: CatalogSummary[],
 ): Set<string> {
   return new Set(catalogs.map((catalog) => catalog.source_id));
+}
+
+export function publicationReviewsForSource(
+  sourceId: string,
+  sources: any[],
+  catalogs: CatalogSummary[],
+): SourcePublicationReview[] {
+  const sourceById = new Map(sources.map((source) => [source.id, source]));
+  const source = sourceById.get(sourceId);
+  if (!source) return [];
+
+  const catalogIds = new Set<string>();
+  const addSourceCatalogs = (candidate: any) => {
+    for (const catalogId of candidate?.metadata?.frameworks || []) {
+      catalogIds.add(catalogId);
+    }
+    for (const catalog of catalogs) {
+      if (catalog.source_id === candidate?.id) catalogIds.add(catalog.id);
+    }
+  };
+
+  addSourceCatalogs(source);
+  if (isRecordedString(source.publication_source_id)) {
+    addSourceCatalogs(sourceById.get(source.publication_source_id));
+  }
+
+  return catalogs
+    .filter((catalog) => catalogIds.has(catalog.id) && catalog.source_review)
+    .map((catalog) => ({
+      catalogId: catalog.id,
+      publicationName: catalogDisplayNameFor(catalog.id, catalog.name),
+      reviewedAt: catalog.source_review!.reviewed_at,
+      semanticContentReview: catalog.source_review!.semantic_content_review,
+      upstreamCurrentnessReview:
+        catalog.source_review!.upstream_currentness_review,
+    }))
+    .sort((left, right) =>
+      left.publicationName.localeCompare(right.publicationName),
+    );
 }
 
 export function classifySourceLayer(source: any): SourceLayerId {
@@ -254,7 +318,7 @@ function buildRows(sources: any[], catalogs: CatalogSummary[]): SourceRegisterRo
       format: formatField(source, layer),
       version: stringField(source.version, "Publisher version is not recorded."),
       retrievedAt: stringField(source.retrieved_at, "Retrieval date is not recorded."),
-      verifiedAt: stringField(source.last_checked, "Verification date is not recorded."),
+      verifiedAt: stringField(source.last_checked, "Source check date is not recorded."),
       lifecycle: stringField(source.lifecycle_status, "Lifecycle status is not recorded."),
       recordCount: isReference
         ? notApplicable("Reference pages do not import records.")

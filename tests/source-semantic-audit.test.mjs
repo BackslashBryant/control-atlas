@@ -4,6 +4,12 @@ import test from "node:test";
 
 test("source semantic audit records reviewed dispositions without conflating them with parser proof", () => {
   const report = JSON.parse(readFileSync("data/generated/source-semantic-audit.json", "utf8"));
+  const bootstrap = JSON.parse(
+    readFileSync("data/generated/catalog-bootstrap.json", "utf8"),
+  ).catalog_bootstrap;
+  const runtimeReviews = new Map(
+    bootstrap.catalogs.map((catalog) => [catalog.id, catalog.source_review]),
+  );
   assert.equal(report.schema_version, "2.0");
   assert.equal(report.catalog_count, 27);
   assert.equal(report.catalogs.length, 27);
@@ -16,7 +22,19 @@ test("source semantic audit records reviewed dispositions without conflating the
     assert.notEqual(catalog.evidence_boundary.semantic_content_review, "unverified");
     assert.notEqual(catalog.evidence_boundary.locator_only_review, "unverified");
     assert.notEqual(catalog.evidence_boundary.upstream_currentness_review, "unverified");
+    assert.deepEqual(
+      runtimeReviews.get(catalog.catalog_id),
+      {
+        reviewed_at: catalog.evidence_boundary.reviewed_at,
+        semantic_content_review:
+          catalog.evidence_boundary.semantic_content_review,
+        upstream_currentness_review:
+          catalog.evidence_boundary.upstream_currentness_review,
+      },
+      `${catalog.catalog_id} runtime review diverges from the governed audit`,
+    );
   }
+  assert.equal(runtimeReviews.size, report.catalog_count);
 });
 
 test("required source regressions and remediated dispositions remain explicit", () => {

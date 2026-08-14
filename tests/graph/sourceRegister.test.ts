@@ -5,6 +5,7 @@ import catalogBootstrap from "../../data/generated/catalog-bootstrap.json";
 import sources from "../../data/generated/sources.json";
 import {
   buildSourceLayers,
+  publicationReviewsForSource,
   sourceLayerCompleteness,
   sourceLayerEntityLabel,
   sourceLayerOptions,
@@ -122,5 +123,89 @@ test("generated layer completeness accounts for every field state and fails requ
   assert.equal(
     sourceLayerCompleteness(layers.ingestion).fields.format.missing,
     0,
+  );
+});
+
+test("all governed publication reviews resolve without replacing source check dates", () => {
+  const reviewedCatalogs = catalogs.filter((catalog) => catalog.source_review);
+  assert.equal(reviewedCatalogs.length, 27);
+
+  for (const catalog of reviewedCatalogs) {
+    const reviews = publicationReviewsForSource(
+      catalog.source_id,
+      sources.sources,
+      catalogs,
+    );
+    const review = reviews.find((entry) => entry.catalogId === catalog.id);
+    assert.ok(review, `${catalog.id} review does not resolve from its publication source`);
+    assert.equal(review.reviewedAt, catalog.source_review.reviewed_at);
+    assert.equal(
+      review.upstreamCurrentnessReview,
+      catalog.source_review.upstream_currentness_review,
+    );
+  }
+
+  const iotSource = sources.sources.find(
+    (source) =>
+      source.id === "nist-iot-device-cybersecurity-requirement-catalogs",
+  );
+  assert.equal(iotSource?.last_checked, undefined);
+  assert.deepEqual(
+    publicationReviewsForSource(iotSource!.id, sources.sources, catalogs).map(
+      (review) => ({
+        catalogId: review.catalogId,
+        reviewedAt: review.reviewedAt,
+        currentness: review.upstreamCurrentnessReview,
+      }),
+    ),
+    [
+      {
+        catalogId: "nist-iot-cybersecurity",
+        reviewedAt: "2026-08-13",
+        currentness: "current_as_checked",
+      },
+    ],
+  );
+
+  const checkedSource = sources.sources.find(
+    (source) => source.id === "nist-800-53",
+  );
+  assert.equal(checkedSource?.last_checked, "2026-07-28");
+  assert.equal(
+    publicationReviewsForSource(
+      checkedSource!.id,
+      sources.sources,
+      catalogs,
+    )[0]?.reviewedAt,
+    "2026-08-13",
+  );
+
+  const childReviews = publicationReviewsForSource(
+    "artifact-nist-iot-requirements-80053-mapping-draft",
+    sources.sources,
+    catalogs,
+  );
+  assert.ok(
+    childReviews.some(
+      (review) => review.catalogId === "nist-iot-cybersecurity",
+    ),
+  );
+
+  assert.deepEqual(
+    publicationReviewsForSource(
+      "control-atlas-structure",
+      sources.sources,
+      catalogs,
+    ),
+    [],
+  );
+
+  assert.deepEqual(
+    publicationReviewsForSource(
+      "nist-800-53a-assessment-procedures",
+      sources.sources,
+      catalogs,
+    ).map((review) => review.catalogId),
+    ["nist-800-53", "nist-800-53a"],
   );
 });
