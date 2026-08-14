@@ -322,7 +322,7 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   if (path === "/resources") permitted = RESOURCE_PARAMS;
   if (/^\/library\/publication\/[^/]+$/.test(path)) permitted = CATALOG_PARAMS;
   if (/^\/library\/resource\/[^/]+$/.test(path)) permitted = DETAIL_PARAMS;
-  if (/^\/resources\/[^/]+$/.test(path)) permitted = DETAIL_PARAMS;
+  if (/^\/resources\/[^/]+$/.test(path)) permitted = RESOURCE_PARAMS;
   if (path.startsWith("/record/")) permitted = DETAIL_PARAMS;
   if (path === "/start") permitted = START_PARAMS;
   if (path === "/compare" || /^\/compare\/[^/]+$/.test(path)) permitted = COMPARE_PARAMS;

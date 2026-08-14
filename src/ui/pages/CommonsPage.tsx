@@ -96,8 +96,21 @@ export function CommonsPage(props: {
     kind: resourceTypeLabel(resource.resourceType),
     label: resource.name,
     group: resource.featuredCollections?.map((id) => collectionTitles.get(id)).find(Boolean) || resource.publisher,
-    destination: { view: "commons-detail" as const, patch: { id: resource.id } },
-  })), [collectionTitles, filtered, state.viewMode]);
+    destination: {
+      view: "commons-detail" as const,
+      patch: {
+        view: "commons-detail" as const,
+        id: resource.id,
+        query: state.query,
+        resourceType: state.resourceType,
+        collection: state.collection,
+        owner: state.owner,
+        sort: state.sort,
+        showAll: state.showAll,
+        viewMode: state.viewMode,
+      },
+    },
+  })), [collectionTitles, filtered, state.collection, state.owner, state.query, state.resourceType, state.showAll, state.sort, state.viewMode]);
 
   const reset = () => {
     setQueryDraft("");
@@ -284,7 +297,17 @@ export function CommonsPage(props: {
                       aria-label={`Open ${resource.name}`}
                       className="workspace-result-row__link"
                       onNavigate={onNavigate}
-                      patch={{ id: resource.id }}
+                      patch={{
+                        view: "commons-detail",
+                        id: resource.id,
+                        query: state.query,
+                        resourceType: state.resourceType,
+                        collection: state.collection,
+                        owner: state.owner,
+                        sort: state.sort,
+                        showAll: state.showAll,
+                        viewMode: state.viewMode,
+                      }}
                       view="commons-detail"
                     >
                       <div className="workspace-resource-row__identity"><ResourceTypeIcon resourceType={resource.resourceType} /></div>

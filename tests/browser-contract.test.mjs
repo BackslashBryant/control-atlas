@@ -497,9 +497,9 @@ test('Build stays locally coherent while Resources owns resource discovery', () 
   assert.doesNotMatch(resourcesPage, /BuildLocalNav/);
   assert.doesNotMatch(resourceDetail, /BuildLocalNav/);
   assert.match(resourcesPage, /title="Resources"/);
-  assert.match(
+  assert.doesNotMatch(
     resourceDetail,
-    /<AppLink onNavigate=\{onNavigate\} view="commons"><IconArrowLeft[^>]+\/>Back<\/AppLink>/,
+    /<AppLink[^>]+view="commons"[^>]*>.*(?:Back|Return to Resources).*<\/AppLink>/s,
   );
 });
 
