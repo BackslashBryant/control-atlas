@@ -1,4 +1,5 @@
 import type { RuntimeBundle } from "./runtimeLoader";
+import { catalogDisplayNameFor } from "./catalogProfiles";
 
 const SECTION_TYPES = new Set([
   "benchmark",
@@ -45,8 +46,10 @@ export function canonicalBreadcrumbForNode(
     clean(source?.publisher) ||
     clean(source?.owner) ||
     "Publisher unavailable";
-  const publication =
-    clean(catalog?.name) || clean(document.catalog_name) || clean(document.catalog_id);
+  const publication = catalogDisplayNameFor(
+    clean(document.catalog_id),
+    clean(catalog?.name) || clean(document.catalog_name),
+  );
   const record = clean(recordLabel) || clean(document.item_id) || clean(node.label) || node.id;
   const items = [clean(area?.label), publisher, publication, clean(section?.label), record]
     .filter(Boolean)

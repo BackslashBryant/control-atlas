@@ -195,9 +195,13 @@ test("WS2 exposes exact retained locators and governed publication names at ever
   await openRecord(page, "/#/record/nist-mobile-threats/APP-0");
   await expect(page.locator(".record-source-facts")).toContainText("NIST Mobile Threat Catalogue");
   await expect(page.locator(".record-source-facts")).not.toContainText("nist-mobile-threats");
+  await expect(page.locator("[data-canonical-breadcrumb]")).toContainText("NIST Mobile Threat Catalogue");
+  await expect(page.locator("[data-canonical-breadcrumb]")).not.toContainText("nist-mobile-threats");
   await openRecord(page, "/#/record/nist-zt/SP800-207");
   await expect(page.locator(".record-source-facts")).toContainText("NIST Zero Trust");
   await expect(page.locator(".record-source-facts")).not.toContainText("nist-zt");
+  await expect(page.locator("[data-canonical-breadcrumb]")).toContainText("NIST Zero Trust");
+  await expect(page.locator("[data-canonical-breadcrumb]")).not.toContainText("nist-zt");
 
   const representativeLocators = [
     ["/#/record/nist-800-171-rev2/3.1.1", "requirements-800-171-rev2.json#3.1.1"],
