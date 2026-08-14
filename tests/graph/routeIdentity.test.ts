@@ -10,6 +10,23 @@ import {
 } from "../../src/ui/lib/routeIdentity";
 import { parseHashLocation, serializeHashLocation } from "../../src/ui/lib/hashRoutes";
 import { normalizeViewState } from "../../src/ui/lib/viewState";
+import { orbitalRouteContext } from "../../src/ui/components/OrbitalContextBar";
+
+test("Source detail context preserves the active Sources workspace on return", () => {
+  const state = normalizeViewState("sources", {
+    view: "sources",
+    layer: "ingestion",
+    query: "DISA",
+    source: "cyber-mil-stig-downloads",
+    publisher: "DISA",
+    lifecycle: "active",
+  });
+  assert.deepEqual(orbitalRouteContext(state).back, {
+    label: "Back to sources",
+    view: "sources",
+    patch: { ...state, source: "" },
+  });
+});
 
 test("Phase 3 durable paths and old bookmarks resolve to one canonical IA", () => {
   const cases = [

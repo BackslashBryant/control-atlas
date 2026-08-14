@@ -270,14 +270,6 @@ export function SourcesPage(props: {
   if (selectedSource) {
     return (
       <Panel className="sources-page" data-visual-identity="provenance-ledger">
-        <AppLink
-          className="link-action"
-          onNavigate={onNavigate}
-          patch={{ ...state, source: "" }}
-          view="sources"
-        >
-          ← Back to sources
-        </AppLink>
         <PageHeader
           eyebrow="Source detail"
           primary

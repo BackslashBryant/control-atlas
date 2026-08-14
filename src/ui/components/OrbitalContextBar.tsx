@@ -111,9 +111,9 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         scope: "",
         back: state.source
           ? {
-              label: "All sources",
+              label: "Back to sources",
               view: "sources",
-              patch: { view: "sources", source: "" },
+              patch: { ...state, source: "" },
             }
           : undefined,
       };
