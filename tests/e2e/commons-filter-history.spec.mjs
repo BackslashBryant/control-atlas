@@ -81,3 +81,37 @@ test("Resource detail has one return action and preserves the Resources workspac
     await expect(page.getByRole("button", { name: "Map" })).toHaveAttribute("aria-pressed", "true");
   }
 });
+
+test("Resource maintenance dates are semantic, consistent, and compact", async ({ page }) => {
+  test.setTimeout(120_000);
+
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    await gotoApp(page, "/#/resources/tool-cisa-scubagear");
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+
+    const maintenance = page.getByRole("heading", { name: "Maintenance", level: 2 }).locator("..");
+    await expect(maintenance.locator('time[datetime="2026-08-12T14:29:40Z"]')).toHaveText("August 12, 2026");
+    await expect(maintenance.locator('time[datetime="2026-08-12"]')).toHaveText("August 12, 2026");
+    await expect(maintenance.locator('time[datetime="2026-08-03"]')).toHaveText("August 3, 2026");
+    await expect(maintenance.locator('time[datetime="2026-11-03"]')).toHaveText("November 3, 2026");
+    await expect(maintenance).not.toContainText("2026-08-12T14:29:40Z");
+    expect(
+      await page.evaluate(() =>
+        globalThis.document.documentElement.scrollWidth -
+        globalThis.document.documentElement.clientWidth,
+      ),
+    ).toBeLessThanOrEqual(1);
+  }
+
+  await gotoApp(page, "/#/resources/training-cdse");
+  await waitForAppReady(page);
+  const maintenance = page.getByRole("heading", { name: "Maintenance", level: 2 }).locator("..");
+  const repositoryActivity = maintenance
+    .locator("dt", { hasText: "Last repository activity" })
+    .locator("xpath=following-sibling::dd[1]");
+  await expect(repositoryActivity).toHaveText("Not documented");
+  await expect(maintenance.locator('time[datetime="2026-08-03"]')).toHaveText("August 3, 2026");
+  await expect(maintenance.locator('time[datetime="2026-11-03"]')).toHaveText("November 3, 2026");
+});

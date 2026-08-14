@@ -24,6 +24,31 @@ const BRAND_HOSTS = {
   "microsoft.com": "microsoft",
 };
 
+const RESOURCE_DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  day: "numeric",
+  month: "long",
+  timeZone: "UTC",
+  year: "numeric",
+});
+
+/**
+ * Format a recorded Resource date as `Month D, YYYY` in UTC. Returning an
+ * empty label for missing or invalid input lets the caller keep a field-specific
+ * unavailable state without inventing a date.
+ */
+export function resourceDateLabel(value) {
+  if (typeof value !== "string" || !value.trim()) return "";
+  const isCalendarDate = /^\d{4}-\d{2}-\d{2}$/.test(value);
+  const isUtcInstant = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(value);
+  if (!isCalendarDate && !isUtcInstant) return "";
+
+  const parsed = new Date(isCalendarDate ? `${value}T00:00:00Z` : value);
+  if (Number.isNaN(parsed.valueOf())) return "";
+  if (isCalendarDate && parsed.toISOString().slice(0, 10) !== value) return "";
+  if (isUtcInstant && parsed.toISOString() !== `${value.slice(0, -1)}.000Z`) return "";
+  return RESOURCE_DATE_FORMATTER.format(parsed);
+}
+
 /**
  * Publishing organization per registrable domain. Each entry is checkable from
  * the hostname itself — no guessing. Hosts absent from this map fall back to a
