@@ -115,6 +115,15 @@ for (const route of ROUTES) {
     await gotoApp(page, route.path);
     await waitForAppReady(page, { allowPartial: true });
     await dismissOnboarding(page);
+    if (route.label === "source detail") {
+      await expect(
+        page.getByRole("heading", {
+          name: "NIST IoT Device Cybersecurity Requirement Catalogs",
+          level: 1,
+        }),
+      ).toBeVisible();
+      await expect(page.getByRole("article", { name: "Source status summary" })).toBeVisible();
+    }
     await assertNoBlockingViolations(page, route.path);
   });
 }

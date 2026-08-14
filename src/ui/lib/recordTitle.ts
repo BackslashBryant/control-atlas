@@ -301,6 +301,9 @@ export function routeDocumentTitle(
   if (state.view === "commons-detail") {
     return `${entityName || routeIdentityFor("commons-detail").title} — ${BASE_TITLE}`;
   }
+  if (state.view === "sources" && entityName) {
+    return `${entityName} — ${BASE_TITLE}`;
+  }
   const base = routeIdentityFor(state.view as import("./viewState").AppView).title;
   const label =
     state.view === "search" && state.query

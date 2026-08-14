@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { dismissOnboarding, waitForAppReady } from "./support.mjs";
+import { dismissOnboarding, gotoApp, waitForAppReady } from "./support.mjs";
 
 async function open(page, route) {
   await page.goto(route);
@@ -166,6 +166,58 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
   ).toBeVisible();
   await expect(assessmentDetail).toContainText("Retrieved artifact");
   await expect(assessmentDetail).toContainText("NIST_SP-800-53_rev5_catalog.json");
+});
+
+test("source detail routes use specific identity at every governed width", async ({ page, context }) => {
+  test.setTimeout(120_000);
+  const sources = [
+    {
+      id: "cyber-mil-stig-downloads",
+      name: "DISA STIG Downloads Landing Page",
+    },
+    {
+      id: "cyber-mil-stig-compilations",
+      name: "DISA STIG Compilations Landing Page",
+    },
+  ];
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    for (const source of sources) {
+      await gotoApp(page, `/#/sources?source=${source.id}`);
+      await waitForAppReady(page);
+      await dismissOnboarding(page);
+      await expect(page.getByRole("heading", { name: source.name, level: 1 })).toBeVisible();
+      await expect(page).toHaveTitle(`${source.name} — Control Atlas`);
+      await expect(page.locator(".source-card .badge")).toHaveText("DISA STIG");
+      await expect(page.getByText("Source family", { exact: true })).toBeVisible();
+      await expect(page.locator(".source-card .card-title")).toHaveCount(0);
+      const copy = page.getByRole("button", { name: `Copy source ID ${source.id}` });
+      await expect(copy).toBeVisible();
+      expect(await page.evaluate(() =>
+        globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
+      )).toBeLessThanOrEqual(1);
+    }
+  }
+
+  await gotoApp(page, `/#/sources?source=${sources[0].id}`);
+  await waitForAppReady(page);
+  await gotoApp(page, `/#/sources?source=${sources[1].id}`);
+  await waitForAppReady(page);
+  await page.goBack();
+  await waitForAppReady(page);
+  await expect(page.getByRole("heading", { name: sources[0].name, level: 1 })).toBeVisible();
+  await expect(page).toHaveTitle(`${sources[0].name} — Control Atlas`);
+  await page.goForward();
+  await waitForAppReady(page);
+  await expect(page.getByRole("heading", { name: sources[1].name, level: 1 })).toBeVisible();
+  await expect(page).toHaveTitle(`${sources[1].name} — Control Atlas`);
+
+  const copy = page.getByRole("button", { name: `Copy source ID ${sources[1].id}` });
+  await copy.click();
+  await expect(copy).toHaveText("Copied");
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(sources[1].id);
 });
 
 test("source and publication review dates remain distinct at every governed width", async ({

@@ -14,7 +14,23 @@ import {
   recordIdentityFor,
   recordDisplayTitle,
   recordPublisherName,
+  routeDocumentTitle,
 } from "../../src/ui/lib/recordTitle";
+
+test("source detail document titles use the specific source name", () => {
+  assert.equal(
+    routeDocumentTitle(
+      { view: "sources" },
+      null,
+      "DISA STIG Downloads Landing Page",
+    ),
+    "DISA STIG Downloads Landing Page — Control Atlas",
+  );
+  assert.equal(
+    routeDocumentTitle({ view: "sources" }),
+    "Sources — Control Atlas",
+  );
+});
 
 test("shared record titles do not repeat leading official identifiers", () => {
   assert.equal(

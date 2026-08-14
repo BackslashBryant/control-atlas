@@ -30,6 +30,7 @@ import {
   type SourceRegisterRow,
 } from "../lib/sourceRegister";
 import type { ViewState } from "../lib/viewState";
+import { sourceIdentityPresentationFor } from "../lib/sourceIdentity";
 
 const connectionInventory = connectionInventoryArtifact.connection_inventory;
 const sourceCatalogs = catalogBootstrapArtifact.catalog_bootstrap
@@ -146,6 +147,9 @@ export function SourcesPage(props: {
   const allSources = bundle.runtime.dataset.sources;
   const selectedSource = state.source
     ? bundle.runtime.getSource(state.source)
+    : null;
+  const selectedSourceIdentity = selectedSource
+    ? sourceIdentityPresentationFor(selectedSource)
     : null;
   const selectedPublicationReviews = useMemo(
     () =>
@@ -278,13 +282,17 @@ export function SourcesPage(props: {
           eyebrow="Source detail"
           primary
           summary="Details for this source."
-          title={selectedSource.display_name || selectedSource.name}
+          title={selectedSourceIdentity!.primaryName}
         />
-        <SourceSummaryCard source={selectedSource} />
+        <SourceSummaryCard detail source={selectedSource} />
         <SummaryCard title="How Control Atlas uses it">
           <p>{sourceUsageSummary(selectedSource)}.</p>
         </SummaryCard>
         <dl className="source-detail-grid">
+          <div>
+            <dt>Source ID</dt>
+            <dd><CopyStableSourceId id={selectedSourceIdentity!.stableId} /></dd>
+          </div>
           <div><dt>Publisher</dt><dd>{selectedSource.owner || "Not recorded"}</dd></div>
           <div><dt>Publisher version</dt><dd>{selectedSource.version || "Not recorded"}</dd></div>
           <div><dt>Retrieved</dt><dd>{selectedSource.retrieved_at || "Not recorded"}</dd></div>

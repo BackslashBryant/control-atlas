@@ -12,6 +12,7 @@ import { AcronymText } from "../components/AccessibleTerm";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { ButtonLink } from "../components/lsm/Button";
 import type { ViewState } from "./viewState";
+import { sourceIdentityPresentationFor } from "./sourceIdentity";
 
 export const PATTERN_RENAMES: Record<string, string> = {
   "rmf-lifecycle": "Plan Work Across the RMF Lifecycle",
@@ -405,10 +406,24 @@ export function CardTitle(props: {
   return <h3 className="card-title" id={props.id}>{props.children}</h3>;
 }
 
-export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
+export function SourceSummaryCard(props: { source: any; onOpen?: () => void; detail?: boolean }) {
   const { source, onOpen } = props;
+  const identity = sourceIdentityPresentationFor(source);
   return (
-    <article className="result-card source-card">
+    <article
+      aria-label={props.detail ? "Source status summary" : undefined}
+      className="result-card source-card"
+    >
+      {props.detail ? (
+        identity.familyName ? (
+          <div className="result-card-header source-detail-family">
+            <div>
+              <p className="result-meta">Source family</p>
+              <Badge>{identity.familyName}</Badge>
+            </div>
+          </div>
+        ) : null
+      ) : (
       <div className="result-card-header">
         <div>
           <p className="result-meta">Source</p>
@@ -417,13 +432,14 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void }) {
               sources rendered as identical "DISA STIG" cards when it was used
               as the title, which read as duplicate records. */}
           <CardTitle onOpen={onOpen}>
-            {source.name || source.display_name}
+            {identity.primaryName}
           </CardTitle>
         </div>
-        {source.display_name && source.display_name !== source.name ? (
-          <Badge>{source.display_name}</Badge>
+        {identity.familyName ? (
+          <Badge>{identity.familyName}</Badge>
         ) : null}
       </div>
+      )}
       <p className="result-summary">Maintained by {source.owner}.</p>
       <p className="support-meta">
         {sourceCurrentAsOf(source)}
