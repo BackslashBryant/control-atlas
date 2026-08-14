@@ -4,6 +4,7 @@ import { expect, test } from "@playwright/test";
 import {
   attachPageDiagnostics,
   dismissOnboarding,
+  gotoApp,
   waitForAppReady,
 } from "./support.mjs";
 
@@ -241,6 +242,43 @@ test("Sources rows stay self-describing from 320 through 768 pixels", async ({
         .locator(".ca-source-cell", { hasText: "Format" })
         .boundingBox();
       expect(Math.abs((publisherBox?.y || 0) - (formatBox?.y || 0))).toBeLessThan(2);
+    }
+  }
+});
+
+test("Sources inheritance explanations name the human parent at every governed width", async ({ page }) => {
+  const derivedRows = [
+    {
+      layer: "ingestion",
+      id: "artifact-disa-cci-list",
+      parentName: "DISA CCI",
+      parentId: "disa-cci-list",
+    },
+    {
+      layer: "connection",
+      id: "artifact-dod-zt-overlays-2024",
+      parentName: "DoD Zero Trust Overlays",
+      parentId: "dod-zt-overlays-2024",
+    },
+  ];
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    for (const fixture of derivedRows) {
+      await gotoApp(page, `/#/sources?layer=${fixture.layer}&q=${fixture.id}`);
+      await waitForAppReady(page);
+      await dismissOnboarding(page);
+
+      const row = page.locator(".source-register-row").first();
+      await expect(row.getByText("From parent publication", { exact: true })).toBeVisible();
+      const explanation = row.locator(".ca-source-field--derived .visually-hidden");
+      await expect(explanation).toContainText(
+        `Inherited from parent publication ${fixture.parentName}.`,
+      );
+      await expect(explanation).not.toContainText(fixture.parentId);
+      await expect(row.getByRole("button", { name: `Copy source ID ${fixture.id}` })).toBeVisible();
+      expect(await page.evaluate(() =>
+        globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
+      )).toBeLessThanOrEqual(1);
     }
   }
 });

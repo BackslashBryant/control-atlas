@@ -57,6 +57,53 @@ test("artifact publishers resolve from their parent publications without fabrica
   const cci = layers.ingestion.find((row) => row.id === "artifact-disa-cci-list");
   assert.equal(cci?.publisher.value, "DISA");
   assert.equal(cci?.publisher.state, "derived");
+  assert.equal(
+    cci?.publisher.reason,
+    "Inherited from parent publication DISA CCI.",
+  );
+
+  const sourcesById = new Map(sources.sources.map((source) => [source.id, source]));
+  for (const row of derived.filter((candidate) => candidate.publisher.state === "derived")) {
+    const parent = sourcesById.get(row.publicationSourceId);
+    assert.ok(parent, `${row.id} parent publication is unresolved`);
+    assert.ok(
+      row.publisher.reason.includes(parent.display_name || parent.name),
+      `${row.id} does not name its human parent publication`,
+    );
+    assert.ok(
+      !row.publisher.reason.includes(parent.id),
+      `${row.id} exposes raw parent ID ${parent.id}`,
+    );
+  }
+
+  const fallback = buildSourceLayers(
+    [
+      {
+        id: "parent-publication-id",
+        name: "parent-publication-id",
+        display_name: "parent-publication-id",
+        owner: "Example Publisher",
+        source_role: "publication",
+        lifecycle_status: "active",
+      },
+      {
+        id: "child-artifact-id",
+        name: "Example artifact",
+        publication_source_id: "parent-publication-id",
+        source_role: "primary_data",
+        lifecycle_status: "active",
+        metadata: { owner_resolution: "parent_publication" },
+      },
+    ],
+    [],
+  ).ingestion[0];
+  assert.equal(fallback.publisher.value, "Example Publisher");
+  assert.equal(fallback.publisher.state, "derived");
+  assert.equal(
+    fallback.publisher.reason,
+    "Inherited from the linked parent publication.",
+  );
+  assert.ok(!fallback.publisher.reason.includes("parent-publication-id"));
 });
 
 test("layer-specific fields distinguish missing values from non-applicable concepts", () => {
