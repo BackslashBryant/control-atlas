@@ -7,6 +7,7 @@ import {
   COMMONS_GROUPS,
   groupResourcesByKind,
   hostIdentity,
+  resourceDateLabel,
   resourceHost,
 } from "../src/ui/lib/commonsPresentation.mjs";
 import {
@@ -22,6 +23,36 @@ const dataset = JSON.parse(
   readFileSync(resolve("data/commons-resource-dataset.json"), "utf8"),
 );
 const resources = dataset.resources;
+
+test("Resource dates use one human-readable UTC convention without inventing missing values", () => {
+  assert.equal(resourceDateLabel("2026-08-10T16:48:29Z"), "August 10, 2026");
+  assert.equal(resourceDateLabel("2026-08-03"), "August 3, 2026");
+  assert.equal(resourceDateLabel(null), "");
+  assert.equal(resourceDateLabel(""), "");
+  assert.equal(resourceDateLabel("not-a-date"), "");
+  assert.equal(resourceDateLabel("08/03/2026"), "");
+  assert.equal(resourceDateLabel("2026-02-31"), "");
+  assert.equal(resourceDateLabel("2026-08-03T12:00:00"), "");
+  assert.equal(resourceDateLabel("2026-02-31T12:00:00Z"), "");
+});
+
+test("shipped Resource maintenance fields retain their governed date shapes", () => {
+  const calendarDate = /^\d{4}-\d{2}-\d{2}$/;
+  const utcInstant = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+
+  for (const resource of resources) {
+    assert.match(resource.lastCheckedAt, calendarDate, `${resource.id}/lastCheckedAt`);
+    if (resource.nextCheckAt) {
+      assert.match(resource.nextCheckAt, calendarDate, `${resource.id}/nextCheckAt`);
+    }
+    if (resource.publisherUpdatedAt) {
+      assert.match(resource.publisherUpdatedAt, calendarDate, `${resource.id}/publisherUpdatedAt`);
+    }
+    if (resource.lastCommitAt) {
+      assert.match(resource.lastCommitAt, utcInstant, `${resource.id}/lastCommitAt`);
+    }
+  }
+});
 
 test("resourceHost normalizes hostnames and refuses to guess at malformed URLs", () => {
   assert.equal(resourceHost("https://www.reddit.com/r/NISTControls/"), "reddit.com");

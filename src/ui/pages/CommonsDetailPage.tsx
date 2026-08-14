@@ -12,6 +12,7 @@ import "../../../styles/resources.css";
 import { ResourceIdentityMark } from "../components/CommonsResourceCard";
 import { AppLink } from "../components/AppLink";
 import type { CommonsResource } from "../lib/commonsTypes";
+import { resourceDateLabel } from "../lib/commonsPresentation.mjs";
 import { serializeHashLocation } from "../lib/hashRoutes";
 import { resourceAccessLabel, resourceFieldLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
 import { taxonomyTagsForResource } from "../../shared/record-taxonomy.mjs";
@@ -32,6 +33,11 @@ function EvidenceCopy({ section }: { section?: { status: string; text: string; s
       <p className="resource-detail-evidence"><a href={section.sourceUrl} rel="noopener noreferrer" target="_blank">Evidence <IconExternalLink aria-hidden="true" size={14} /></a></p>
     </div>
   );
+}
+
+function ResourceDate({ value, fallback }: { value?: string | null; fallback: string }) {
+  const label = resourceDateLabel(value);
+  return value && label ? <time dateTime={value}>{label}</time> : fallback;
 }
 
 export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
@@ -155,7 +161,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
               <AppLink className="resource-library-search" onNavigate={onNavigate} patch={{ query: resource.frameworks[0] || resource.programs?.[0] || resource.shortName }} view="search"><IconBook2 aria-hidden="true" size={16} />Search the Library</AppLink>
             </DetailSection>
             <DetailSection title="Maintenance">
-              <dl className="resource-detail-facts stacked"><div><dt>Release</dt><dd>{resource.currentVersion || (resource.toolProfile?.release.status === "not_published" ? "No published GitHub release" : "Not documented")}</dd></div><div><dt>Maintenance</dt><dd>{resourceFieldLabel(resource.maintenanceStatus)}</dd></div><div><dt>License</dt><dd>{resource.license || "Not documented"}</dd></div><div><dt>Last repository activity</dt><dd>{resource.lastCommitAt || resource.publisherUpdatedAt || "Not documented"}</dd></div><div><dt>Last checked</dt><dd>{resource.lastCheckedAt}</dd></div><div><dt>Next review</dt><dd>{resource.nextCheckAt || "Not scheduled"}</dd></div><div><dt>Method</dt><dd>{resourceFieldLabel(resource.verificationMethod || "manual_review")}</dd></div></dl>
+              <dl className="resource-detail-facts stacked"><div><dt>Release</dt><dd>{resource.currentVersion || (resource.toolProfile?.release.status === "not_published" ? "No published GitHub release" : "Not documented")}</dd></div><div><dt>Maintenance</dt><dd>{resourceFieldLabel(resource.maintenanceStatus)}</dd></div><div><dt>License</dt><dd>{resource.license || "Not documented"}</dd></div><div><dt>Last repository activity</dt><dd><ResourceDate fallback="Not documented" value={resource.lastCommitAt} /></dd></div>{resource.publisherUpdatedAt ? <div><dt>Publisher updated</dt><dd><ResourceDate fallback="Not documented" value={resource.publisherUpdatedAt} /></dd></div> : null}<div><dt>Last checked</dt><dd><ResourceDate fallback="Not documented" value={resource.lastCheckedAt} /></dd></div><div><dt>Next review</dt><dd><ResourceDate fallback="Not scheduled" value={resource.nextCheckAt} /></dd></div><div><dt>Method</dt><dd>{resourceFieldLabel(resource.verificationMethod || "manual_review")}</dd></div></dl>
               {resource.repositoryEvidence ? <p className="resource-detail-evidence"><a href={resource.repositoryEvidence.commitUrl} rel="noopener noreferrer" target="_blank">Evidence commit {resource.repositoryEvidence.commitSha.slice(0, 7)} <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}
             </DetailSection>
           </aside>
