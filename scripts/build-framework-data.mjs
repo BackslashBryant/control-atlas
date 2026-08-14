@@ -975,7 +975,11 @@ function buildNodes(registry) {
         catalogId,
         family: primaryClassification,
       });
-      const taxonomyTags = taxonomyTagsForRecord({ ...record, catalog_id: catalogId });
+      const taxonomyTags = taxonomyTagsForRecord({
+        ...record,
+        catalog_id: catalogId,
+        related_categories: relatedCategories,
+      });
       pushEligibleNode(
         state,
         registry,

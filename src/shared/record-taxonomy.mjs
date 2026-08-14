@@ -40,6 +40,29 @@ const PUBLISHER_DOMAIN_BY_FAMILY = new Map([
   ["System and Services Acquisition", "domain.system-services-acquisition"],
 ]);
 
+const PUBLISHER_DOMAIN_BY_RELATED_CATEGORY = new Map([
+  ["AC|Access Control", "domain.access-control"],
+  ["AT|Awareness and Training", "domain.awareness-training"],
+  ["AU|Audit and Accountability", "domain.audit-accountability"],
+  ["CA|Assessment, Authorization, and Monitoring", "domain.assessment-authorization-monitoring"],
+  ["CM|Configuration Management", "domain.configuration-management"],
+  ["CP|Contingency Planning", "domain.contingency-planning"],
+  ["IA|Identification and Authentication", "domain.identification-authentication"],
+  ["IR|Incident Response", "domain.incident-response"],
+  ["MA|Maintenance", "domain.maintenance"],
+  ["MP|Media Protection", "domain.media-protection"],
+  ["PE|Physical and Environmental Protection", "domain.physical-security"],
+  ["PL|Planning", "domain.planning"],
+  ["PM|Program Management", "domain.program-management"],
+  ["PS|Personnel Security", "domain.personnel-security"],
+  ["PT|Personally Identifiable Information Processing and Transparency", "domain.pii-processing-transparency"],
+  ["RA|Risk Assessment", "domain.risk-assessment"],
+  ["SA|System and Services Acquisition", "domain.system-services-acquisition"],
+  ["SC|System and Communications Protection", "domain.system-communications-protection"],
+  ["SI|System and Information Integrity", "domain.system-information-integrity"],
+  ["SR|Supply Chain Risk Management", "domain.supply-chain-risk-management"],
+]);
+
 function normalized(value) {
   return String(value || "").trim();
 }
@@ -104,6 +127,21 @@ export function taxonomyTagsForRecord(record) {
   }
   const publisherDomainId = PUBLISHER_DOMAIN_BY_FAMILY.get(family);
   if (publisherDomainId) add(tags, publisherDomainId, "family", "exact-publisher-family", "publisher");
+  for (const category of record.related_categories || record.metadata?.related_categories || []) {
+    if (category?.provenance !== "referenced") continue;
+    const relatedDomainId = PUBLISHER_DOMAIN_BY_RELATED_CATEGORY.get(
+      `${normalized(category.code)}|${normalized(category.label)}`,
+    );
+    if (relatedDomainId) {
+      add(
+        tags,
+        relatedDomainId,
+        "metadata.related_categories[]",
+        "exact-publisher-related-category",
+        "publisher",
+      );
+    }
+  }
   if (catalogId === "nist-iot-cybersecurity") add(tags, "asset.iot", "catalog_id", "publisher-catalog-scope", "publisher");
   if (catalogId === "nist-mobile-threats") add(tags, "asset.mobile", "catalog_id", "publisher-catalog-scope", "publisher");
   return tags;

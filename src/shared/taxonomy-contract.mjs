@@ -61,7 +61,7 @@ const TAXONOMY_TAG_SEED = [
  * publisher, Atlas evidence-backed, and editorial layers remain distinct.
  */
 export const TAXONOMY_CONTRACT = {
-  version: "1.2.0",
+  version: "1.3.0",
   owner: "Control Atlas data stewardship",
   review_date: "2026-08-13",
   supersession_rule: "A later version replaces this contract only through a reviewed migration with stable-ID reconciliation.",
@@ -110,8 +110,16 @@ export const TAXONOMY_CONTRACT = {
     entity_scope: ["record", "resource", "template", "playbook", "export"],
     applicability: "Requires an explicit publisher field or catalog classification named in source_basis; never infer from incidental prose.",
     source_basis: {
-      record: ["metadata.benchmark_title", "metadata.identity_category", "family", "catalog_id"],
-      resource: ["technologyScopes", "compatibility.operatingSystems"],
+      record: dimension === "domain"
+        ? ["family", "metadata.related_categories[]"]
+        : dimension === "asset_class"
+          ? ["metadata.benchmark_title", "metadata.identity_category", "family", "catalog_id"]
+          : ["metadata.benchmark_title"],
+      resource: dimension === "technology" || dimension === "product"
+        ? ["technologyScopes", "compatibility.operatingSystems"]
+        : dimension === "asset_class" || dimension === "environment"
+          ? ["technologyScopes"]
+          : [],
       template: [],
       playbook: [],
       export: ["from_taxonomy_tags", "to_taxonomy_tags"],

@@ -52,6 +52,11 @@ test("record and Resource governed tags hand off to the filtered Library", async
   await expect(page).toHaveURL(/#\/library\?tag=asset\.mobile/);
   await expect(page.getByRole("button", { name: /Mobile/ })).toBeVisible();
 
+  await open(page, "/#/record/disa-cci/CCI-000366");
+  await page.getByRole("link", { name: "Filter the Library by Configuration Management" }).click();
+  await expect(page).toHaveURL(/#\/library\?tag=domain\.configuration-management/);
+  await expect(page.getByRole("button", { name: /Configuration Management/ })).toBeVisible();
+
   await open(page, "/#/resources/tool-cisa-cset");
   const governedTags = page.getByRole("heading", { name: "Governed discovery tags" }).locator("..");
   await governedTags.getByRole("link", { name: "Microsoft Windows" }).click();

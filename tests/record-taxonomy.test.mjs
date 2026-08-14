@@ -34,6 +34,34 @@ test("publisher security domains use exact NIST family fields and ignore inciden
   assert.deepEqual(taxonomyTagsForRecord({ description: "Guide for physical server rooms" }), []);
 });
 
+test("DISA CCI related NIST families remain exact publisher classifications", () => {
+  assert.deepEqual(
+    taxonomyTagsForRecord({
+      catalog_id: "disa-cci",
+      family: "Policy",
+      related_categories: [
+        { code: "AC", label: "Access Control", provenance: "referenced" },
+        { code: "SC", label: "System and Communications Protection", provenance: "referenced" },
+      ],
+      description: "Mentions incident response, mobile devices, and cloud systems.",
+    }),
+    [
+      { id: "domain.access-control", kind: "domain", label: "Access Control", provenance: "publisher", basis: { source_field: "metadata.related_categories[]", rule: "exact-publisher-related-category" } },
+      { id: "domain.system-communications-protection", kind: "domain", label: "System and Communications Protection", provenance: "publisher", basis: { source_field: "metadata.related_categories[]", rule: "exact-publisher-related-category" } },
+    ],
+  );
+  assert.deepEqual(
+    taxonomyTagsForRecord({
+      related_categories: [
+        { code: "AC", label: "Access Control", provenance: "inferred" },
+        { code: "ZZ", label: "Access Control", provenance: "referenced" },
+        { code: "AC", label: "Access Controls", provenance: "referenced" },
+      ],
+    }),
+    [],
+  );
+});
+
 test("catalog scope may supply publisher classification without parsing prose", () => {
   assert.deepEqual(
     taxonomyTagsForRecord({ catalog_id: "nist-iot-cybersecurity", description: "mentions a mobile phone" }),

@@ -1,15 +1,15 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-14T00:47:19.690Z",
+  "generated_at": "2026-08-14T02:45:01.855Z",
   "taxonomy_coverage": {
-    "contract_version": "1.2.0",
+    "contract_version": "1.3.0",
     "record_count": 30365,
-    "tagged_record_count": 17750,
+    "tagged_record_count": 22663,
     "record_dimension_decision_count": 182190,
     "decision_counts": {
-      "applicable": 31418,
+      "applicable": 36331,
       "not_applicable": 0,
-      "unreviewed": 150772
+      "unreviewed": 145859
     },
     "catalogs": [
       {
@@ -151,8 +151,8 @@
         "catalog_id": "disa-cci",
         "catalog_name": "DISA CCI",
         "record_count": 5137,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 4913,
+        "tag_assignments": 4916,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -185,10 +185,10 @@
             "tag_assignments": 0
           },
           "domain": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 4913,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 5137,
-            "tag_assignments": 0
+            "unreviewed_record_count": 224,
+            "tag_assignments": 4916
           }
         }
       },
@@ -2112,8 +2112,8 @@
       {
         "record_type": "requirement",
         "record_count": 5740,
-        "tagged_record_count": 355,
-        "tag_assignments": 371,
+        "tagged_record_count": 5268,
+        "tag_assignments": 5287,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 16,
@@ -2146,10 +2146,10 @@
             "tag_assignments": 0
           },
           "domain": {
-            "applicable_record_count": 355,
+            "applicable_record_count": 5268,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 5385,
-            "tag_assignments": 355
+            "unreviewed_record_count": 472,
+            "tag_assignments": 5271
           }
         }
       },
@@ -3040,10 +3040,10 @@
         "dimension": "domain",
         "label": "Security domain",
         "record_count": 30365,
-        "applicable_record_count": 2565,
+        "applicable_record_count": 7478,
         "not_applicable_record_count": 0,
-        "unreviewed_record_count": 27800,
-        "tag_assignments": 2565
+        "unreviewed_record_count": 22887,
+        "tag_assignments": 7481
       }
     ],
     "source_fields": [
@@ -3056,6 +3056,11 @@
         "source_field": "metadata.identity_category",
         "record_count": 7028,
         "tag_assignments": 7766
+      },
+      {
+        "source_field": "metadata.related_categories[]",
+        "record_count": 4913,
+        "tag_assignments": 4916
       },
       {
         "source_field": "family",
@@ -3084,6 +3089,14 @@
         "rule": "explicit-operating-system-term",
         "record_count": 5694,
         "tag_assignments": 5694
+      },
+      {
+        "taxonomy_layer": "publisher",
+        "assignment_provenance": "publisher",
+        "source_field": "metadata.related_categories[]",
+        "rule": "exact-publisher-related-category",
+        "record_count": 4913,
+        "tag_assignments": 4916
       },
       {
         "taxonomy_layer": "atlas_evidence",

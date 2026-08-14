@@ -12,7 +12,7 @@ import {
 } from "../../src/ui/lib/viewState";
 
 test("governed taxonomy defines ownership, review, layers, and requested discovery categories", () => {
-  assert.equal(TAXONOMY_CONTRACT.version, "1.2.0");
+  assert.equal(TAXONOMY_CONTRACT.version, "1.3.0");
   assert.ok(TAXONOMY_CONTRACT.owner);
   assert.match(TAXONOMY_CONTRACT.review_date, /^\d{4}-\d{2}-\d{2}$/);
   assert.match(TAXONOMY_CONTRACT.supersession_rule, /replaces/i);
@@ -43,6 +43,14 @@ test("governed taxonomy defines ownership, review, layers, and requested discove
     assert.ok(tag.entity_scope.includes("record"));
     assert.equal(tag.validation_state, "approved");
   }
+  assert.deepEqual(
+    TAXONOMY_TAG_BY_ID.get("domain.access-control")?.source_basis.record,
+    ["family", "metadata.related_categories[]"],
+  );
+  assert.deepEqual(
+    TAXONOMY_TAG_BY_ID.get("vendor.microsoft")?.source_basis.resource,
+    [],
+  );
 });
 
 test("tag URLs round-trip repeatable values in stable order and aliases remain searchable", () => {

@@ -44,4 +44,17 @@ test("generated taxonomy coverage reconciles governed dimensions to the publishe
   );
   assert.ok(coverage.not_applicable_source_basis.every((basis) => basis.source_field && basis.rule));
   assert.ok(coverage.decision_counts.unreviewed > 0);
+
+  const cci = coverage.catalogs.find((catalog) => catalog.catalog_id === "disa-cci");
+  assert.ok(cci, "DISA CCI coverage row is required");
+  assert.equal(cci.record_count, 5137);
+  assert.equal(cci.tagged_record_count, 4913);
+  assert.equal(cci.dimensions.domain.applicable_record_count, 4913);
+  assert.equal(cci.dimensions.domain.unreviewed_record_count, 224);
+  assert.ok(coverage.source_basis.some((basis) =>
+    basis.taxonomy_layer === "publisher" &&
+    basis.source_field === "metadata.related_categories[]" &&
+    basis.rule === "exact-publisher-related-category" &&
+    basis.record_count === 4913
+  ));
 });
