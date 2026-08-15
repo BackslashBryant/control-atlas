@@ -32,7 +32,7 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   await expect(page.locator(".home-product-identity")).toHaveText(
     "Understand what applies, what it means, and what to do next.",
   );
-  await expect(page.locator(".home-ecosystem-areas .home-area-link")).toHaveCount(7);
+  await expect(page.locator(".home-tag-galaxies .home-tag-link")).toHaveCount(16);
   await expect(page.locator(".home-trust-boundary")).toHaveCount(0);
 
   await gotoApp(page, "/#/library?q=AC-2");

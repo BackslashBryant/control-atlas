@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
-test("WS5 Home implements Template B with one search, three cards, and a weighted area pool", async ({ page }) => {
+test("WS5 Home implements Template B with one search, three cards, and governed tag galaxies", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await gotoApp(page, "/");
   await waitForAppReady(page, { allowPartial: true });
@@ -32,15 +32,16 @@ test("WS5 Home implements Template B with one search, three cards, and a weighte
   await expect(template.locator(".home-ecosystem, .home-primary-actions")).toHaveCount(0);
   await expect(template.getByText("Start with your work", { exact: true })).toHaveCount(0);
 
-  const areaLinks = template.getByRole("navigation", { name: "Browse by area" }).getByRole("link");
-  await expect(areaLinks).toHaveCount(7);
-  await expect(template.getByText("Size reflects record count.", { exact: true })).toBeVisible();
-  await expect(areaLinks.first()).toHaveAttribute("data-record-count", "24674");
-  await expect(areaLinks.first()).toHaveAccessibleName("Implementation, 24,674 records");
-  await expect(template.getByRole("link", { name: /^Operations,/ })).toHaveCount(0);
-  await expect(template.getByRole("link", { name: /^Knowledge,/ })).toHaveCount(0);
-  const hrefs = await areaLinks.evaluateAll((links) => links.map((link) => link.getAttribute("href")));
-  expect(hrefs.every((href) => href?.startsWith("#/library?area="))).toBe(true);
+  const tagNavigation = template.getByRole("navigation", { name: "Browse by tag" });
+  const tagLinks = tagNavigation.locator(".home-tag-link");
+  await expect(tagNavigation.locator(".home-tag-galaxy")).toHaveCount(6);
+  await expect(tagLinks).toHaveCount(16);
+  await expect(template.getByText("More records, bigger tag.", { exact: true })).toBeVisible();
+  await expect(tagLinks.first()).toHaveAttribute("data-record-count", "2584");
+  await expect(tagLinks.first()).toHaveAccessibleName("Server, 2,584 records");
+  await expect(template.locator(".home-area-browse, .home-ecosystem-areas, .home-area-link")).toHaveCount(0);
+  const hrefs = await tagLinks.evaluateAll((links) => links.map((link) => link.getAttribute("href")));
+  expect(hrefs.every((href) => href?.startsWith("#/library?tag="))).toBe(true);
 
   const accentColors = await template.locator(".home-secondary-action").evaluateAll((cards) => (
     cards.map((card) => globalThis.getComputedStyle(card, "::before").backgroundColor)
@@ -48,26 +49,47 @@ test("WS5 Home implements Template B with one search, three cards, and a weighte
   expect(new Set(accentColors).size).toBe(1);
 });
 
-test("WS5 weighted areas each open a populated Library filter", async ({ page }) => {
-  const areas = [
-    ["Implementation", "24,674"],
-    ["Compliance", "1,910"],
-    ["Threats & Defense", "1,333"],
-    ["Architecture", "1,153"],
-    ["Assessment", "1,082"],
-    ["Governance", "35"],
-    ["Risk", "3"],
+test("WS5 representative tag galaxies open stable, populated Library filters", async ({ page }) => {
+  const tags = [
+    ["Server", "2,584"],
+    ["Cloud", "666"],
+    ["Operating system", "5,694"],
+    ["Microsoft", "1,870"],
+    ["Red Hat Enterprise Linux", "1,248"],
+    ["Access Control", "1,008"],
   ];
 
-  for (const [label, count] of areas) {
+  for (const [label, count] of tags) {
     await gotoApp(page, "/");
     await waitForAppReady(page, { allowPartial: true });
     await page.getByRole("link", { name: `${label}, ${count} records` }).click();
 
-    await expect(page).toHaveURL(/#\/library\?area=atlas(?::|%3A)LIMB-/);
+    await expect(page).toHaveURL(/#\/library\?tag=/);
     await expect(page.getByLabel("Active filters").getByRole("button", { name: label })).toBeVisible();
     await expect(page.getByRole("status")).not.toHaveText("0 results");
     await expect(page.getByRole("list", { name: "Search results" }).getByRole("listitem").first()).toBeVisible();
+  }
+});
+
+test("WS5 governed tags remain bounded and usable at all supported widths", async ({ page }) => {
+  test.setTimeout(90_000);
+  for (const width of [320, 375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: width < 768 ? 844 : 900 });
+    await gotoApp(page, "/");
+    await waitForAppReady(page, { allowPartial: true });
+
+    const navigation = page.getByRole("navigation", { name: "Browse by tag" });
+    await expect(navigation.locator(".home-tag-galaxy")).toHaveCount(6);
+    await expect(navigation.locator(".home-tag-link")).toHaveCount(16);
+    expect(
+      await page.locator("html").evaluate((element) => element.scrollWidth - element.clientWidth),
+      `${width}px Home overflow`,
+    ).toBeLessThanOrEqual(1);
+    const targets = await navigation.locator(".home-tag-link").evaluateAll((links) => links.map((link) => {
+      const box = link.getBoundingClientRect();
+      return { height: box.height, width: box.width };
+    }));
+    expect(targets.every((target) => target.height >= 44 && target.width >= 44), `${width}px tag targets`).toBe(true);
   }
 });
 

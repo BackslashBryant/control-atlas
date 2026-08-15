@@ -8,15 +8,16 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
 });
 
-test("WS1 Home uses a source-colored area pool weighted by record count", async ({ page }) => {
+test("WS1 Home uses governed dimension galaxies weighted by source-backed record count", async ({ page }) => {
   await gotoApp(page, "/#/");
   await waitForAppReady(page, { allowPartial: true });
 
-  const areaLinks = page.locator(".home-ecosystem-areas .home-area-link");
-  await expect(areaLinks).toHaveCount(7);
+  const tagLinks = page.locator(".home-tag-galaxies .home-tag-link");
+  await expect(page.locator(".home-tag-galaxy")).toHaveCount(6);
+  await expect(tagLinks).toHaveCount(16);
   await expect(page.locator(".home-ecosystem-authorities, .home-ecosystem")).toHaveCount(0);
 
-  const styles = await areaLinks.evaluateAll((tags) => tags.map((tag) => {
+  const styles = await tagLinks.evaluateAll((tags) => tags.map((tag) => {
     return {
       count: Number(tag.getAttribute("data-record-count")),
       fontSize: Number.parseFloat(globalThis.getComputedStyle(tag).fontSize),
@@ -24,9 +25,11 @@ test("WS1 Home uses a source-colored area pool weighted by record count", async 
     };
   }));
 
-  expect(styles[0].count).toBe(24674);
-  expect(styles.at(-1).count).toBe(3);
-  expect(styles[0].fontSize).toBeGreaterThan(styles.at(-1).fontSize);
+  const highest = [...styles].sort((left, right) => right.count - left.count)[0];
+  const lowest = [...styles].sort((left, right) => left.count - right.count)[0];
+  expect(highest.count).toBe(5694);
+  expect(lowest.count).toBe(520);
+  expect(highest.fontSize).toBeGreaterThan(lowest.fontSize);
   expect(styles.every((entry) => entry.label.length > 0)).toBe(true);
 });
 

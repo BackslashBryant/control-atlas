@@ -238,7 +238,7 @@ test('Home is an entry surface, not a lesson about the data model', () => {
   const viteConfig = readFileSync('vite.config.ts', 'utf8');
   assert.match(homeContent, /SITE_COPY\.home/);
   assert.match(homePage, /HOME_CONTENT\.headline/);
-  assert.match(homePage, /home-area-browse/);
+  assert.match(homePage, /home-tag-constellation/);
   assert.doesNotMatch(homePage, /home-ecosystem-authorities|Federal cybersecurity ecosystem preview/);
   assert.match(viteConfig, /renderStaticHome/);
   for (const path of ['src/ui/pages/HomePage.tsx', 'src/index.html']) {

@@ -6,7 +6,6 @@ import test from "node:test";
 import treeSpine from "../../data/curated/tree-spine.json";
 import {
   AREA_IDS,
-  AREA_BROWSE_PRESENTATIONS,
   AREA_PRESENTATIONS,
   AUTHORITY_PRESENTATION,
   areaCssVariables,
@@ -78,24 +77,6 @@ test("area presentation registry exactly follows the canonical nine-area spine",
     });
   }
   assert.equal(areaPresentationFor("not-an-area"), null);
-});
-
-test("Home area pool is record-backed, logarithmically weighted, and suppresses empty areas", () => {
-  assert.deepEqual(
-    AREA_BROWSE_PRESENTATIONS.map(({ id, recordCount }) => [id, recordCount]),
-    [
-      ["atlas:LIMB-IMPLEMENTATION", 24_674],
-      ["atlas:LIMB-COMPLIANCE", 1_910],
-      ["atlas:LIMB-THREAT", 1_333],
-      ["atlas:LIMB-ARCHITECTURE", 1_153],
-      ["atlas:LIMB-ASSESSMENT", 1_082],
-      ["atlas:LIMB-GOVERNANCE", 35],
-      ["atlas:LIMB-RISK", 3],
-    ],
-  );
-  assert.equal(AREA_BROWSE_PRESENTATIONS[0].scale, 1);
-  assert.equal(AREA_BROWSE_PRESENTATIONS.at(-1)?.scale, 0);
-  assert.ok(AREA_BROWSE_PRESENTATIONS.every((area) => area.scale >= 0 && area.scale <= 1));
 });
 
 test("catalogs and their families inherit one canonical area mapping", () => {

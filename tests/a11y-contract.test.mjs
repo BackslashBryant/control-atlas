@@ -232,7 +232,7 @@ test("search and glossary dialogs expose accessible control names", () => {
   assert.match(glossaryDrawer, /id="glossary-search"/);
 });
 
-test("Template B Home exposes one search, three destinations, and labelled area navigation", () => {
+test("Template B Home exposes one search, three destinations, and labelled governed-tag navigation", () => {
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
   assert.match(homePage, /data-template="B"/);
   assert.match(homePage, /className="home-search home-search-trigger"/);
@@ -240,10 +240,10 @@ test("Template B Home exposes one search, three destinations, and labelled area 
   assert.match(homePage, /Search Control Atlas/);
   assert.match(homePage, /HOME_DESTINATIONS\.map/);
   assert.match(homePage, /aria-label="Choose a Control Atlas destination"/);
-  assert.match(homePage, /aria-labelledby="home-area-heading"/);
-  assert.match(homePage, /AREA_BROWSE_PRESENTATIONS\.map/);
-  assert.match(homePage, /home-ecosystem-areas/);
-  assert.match(homePage, /aria-label=\{`\$\{area\.label\}, \$\{area\.recordCount\.toLocaleString\(\)\} records`\}/);
+  assert.match(homePage, /aria-labelledby="home-tag-heading"/);
+  assert.match(homePage, /HOME_TAG_GROUPS\.map/);
+  assert.match(homePage, /home-tag-galaxies/);
+  assert.match(homePage, /aria-label=\{`\$\{tag\.label\}, \$\{tag\.count\.toLocaleString\(\)\} records`\}/);
   assert.equal((homePage.match(/onOpenSearch/g) || []).length >= 2, true);
   assert.doesNotMatch(homePage, /home-ecosystem-authorities|home-start-here/);
   assert.doesNotMatch(homePage, /RMF|Risk Management Framework/);
@@ -294,9 +294,9 @@ test("compact icon and chip controls retain 44 pixel touch targets", () => {
   assert.match(block[1], /min-height:\s*44px;/);
   assert.match(block[1], /min-width:\s*44px;/);
 
-  const homeAreaLink = surfacesCss.match(/\.home-area-link\s*\{([^}]*)\}/);
-  assert.ok(homeAreaLink, "Missing Home area link rule");
-  assert.match(homeAreaLink[1], /min-height:\s*var\(--ca-touch-target\);/);
+  const homeTagLink = surfacesCss.match(/\.home-tag-link\s*\{([^}]*)\}/);
+  assert.ok(homeTagLink, "Missing Home governed tag link rule");
+  assert.match(homeTagLink[1], /min-height:\s*var\(--ca-touch-target\);/);
 });
 
 test("sticky surfaces and in-page jumps share one header-safe offset", () => {

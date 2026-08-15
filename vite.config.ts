@@ -6,7 +6,7 @@ import { resolve } from 'node:path';
 import { RUNTIME_CACHE_VERSION } from './src/shared/runtime-cache-version.mjs';
 import { HOME_CONTENT, HOME_DESTINATIONS } from './src/shared/home-content.mjs';
 import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from './src/shared/site-copy.mjs';
-import { AREA_BROWSE_PRESENTATIONS, areaCssVariables } from './src/ui/lib/areaVisualLanguage';
+import { HOME_TAG_GROUPS } from './src/ui/lib/homeTagConstellation';
 
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
 const DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
@@ -27,11 +27,12 @@ function escapeHtml(value: string) {
 }
 
 function renderStaticHome() {
-  const areas = AREA_BROWSE_PRESENTATIONS.map((area) => {
-    const href = `#/library?area=${encodeURIComponent(area.id)}`;
-    const variables = areaCssVariables(area);
-    const style = `${Object.entries(variables).map(([name, value]) => `${name}:${value}`).join(';')};--area-scale:${area.scale}`;
-    return `<li><a aria-label="${escapeHtml(`${area.label}, ${area.recordCount.toLocaleString()} records`)}" class="home-area-link" data-record-count="${area.recordCount}" data-route="${href}" href="${href}" style="${style}"><span class="home-area-link__label">${escapeHtml(area.label)}</span><span aria-hidden="true" class="home-area-link__count">${area.recordCount.toLocaleString()}</span></a></li>`;
+  const tagGroups = HOME_TAG_GROUPS.map((group) => {
+    const tags = group.tags.map((tag) => {
+      const href = `#/library?tag=${encodeURIComponent(tag.id)}`;
+      return `<li><a aria-label="${escapeHtml(`${tag.label}, ${tag.count.toLocaleString()} records`)}" class="home-tag-link" data-record-count="${tag.count}" data-route="${href}" href="${href}" style="--tag-scale:${tag.scale}"><span class="home-tag-link__label">${escapeHtml(tag.label)}</span><span aria-hidden="true" class="home-tag-link__count">${tag.count.toLocaleString()}</span></a></li>`;
+    }).join('');
+    return `<section aria-labelledby="home-tag-group-${escapeHtml(group.id)}" class="home-tag-galaxy" data-tag-dimension="${escapeHtml(group.id)}"><h3 id="home-tag-group-${escapeHtml(group.id)}">${escapeHtml(group.label)}</h3><ul>${tags}</ul></section>`;
   }).join('');
   const destinations = HOME_DESTINATIONS.map((destination) => `
     <a class="home-secondary-action" data-route="${destination.href}" href="${destination.href}">
@@ -53,9 +54,9 @@ function renderStaticHome() {
       </div>
     </div>
     <nav aria-label="Choose a Control Atlas destination" class="home-secondary-grid">${destinations}</nav>
-    <nav aria-labelledby="home-area-heading" class="home-area-browse">
-      <div class="home-area-browse__heading"><h2 id="home-area-heading">Browse by area</h2><p>Size reflects record count.</p></div>
-      <ul class="home-ecosystem-areas" data-area-count-scale="logarithmic">${areas}</ul>
+    <nav aria-labelledby="home-tag-heading" class="home-tag-constellation">
+      <div class="home-tag-constellation__heading"><div><h2 id="home-tag-heading">Browse by tag</h2><p>More records, bigger tag.</p></div><a class="home-tag-constellation__all" data-route="#/library" href="#/library">See all tags <span aria-hidden="true">→</span></a></div>
+      <div class="home-tag-galaxies" data-tag-count-scale="logarithmic">${tagGroups}</div>
     </nav>
   </section>`;
 }

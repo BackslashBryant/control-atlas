@@ -283,7 +283,7 @@ function CompactAtlasTree(props: {
 }) {
   function moveFocus(event: KeyboardEvent<HTMLButtonElement>) {
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
-    const buttons = [...event.currentTarget.closest("[role=tree]")!.querySelectorAll<HTMLButtonElement>("button[role=treeitem]")];
+    const buttons = [...event.currentTarget.closest("[role=tree]")!.querySelectorAll<HTMLButtonElement>("button[role=treeitem]:not(:disabled)")];
     const index = buttons.indexOf(event.currentTarget);
     const next = event.key === "ArrowDown" ? index + 1 : index - 1;
     if (buttons[next]) {
@@ -296,6 +296,7 @@ function CompactAtlasTree(props: {
       {props.nodes.map((flowNode) => {
         const node = flowNode.data.node;
         const empty = flowNode.data.empty;
+        const staticNode = node.nodeType === "technology_gate" || isAggregate(node);
         const detail = empty
           ? "No records yet."
           : node.nodeType === "authority_aggregate"
@@ -308,7 +309,8 @@ function CompactAtlasTree(props: {
             className={`atlas-tree-compact__node atlas-tree-compact__node--${nodeKind(node)}${empty ? " is-empty" : ""}`}
             data-atlas-node-id={node.id}
             data-empty={empty ? "true" : undefined}
-            disabled={empty}
+            data-static={staticNode ? "true" : undefined}
+            disabled={empty || staticNode}
             key={node.id}
             onClick={() => props.onSelectNode(node)}
             onKeyDown={moveFocus}
@@ -451,14 +453,37 @@ export function AtlasTree(props: AtlasTreeProps) {
   const [technologyQuery, setTechnologyQuery] = useState("");
   const [overlayEnabled, setOverlayEnabled] = useState(false);
   const [selectedId, setSelectedId] = useState(focusId || model.trunk.id);
+  const [inspectorOpen, setInspectorOpen] = useState(false);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const focusCanvasAfterNavigationRef = useRef(false);
+  const inspectorToggleRef = useRef<HTMLButtonElement>(null);
   const [sidebarOpen, setSidebarOpen] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(min-width: 1200px)").matches,
   );
   useEffect(() => {
     setSemanticLevel(focusId ? "justification" : "orientation");
     setOverlayEnabled(false);
+    setInspectorOpen(false);
     setSelectedId(focusId || model.trunk.id);
   }, [focusId, model.trunk.id]);
+
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 1200px)");
+    const onChange = (event: MediaQueryListEvent) => setSidebarOpen(event.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    if (!inspectorOpen) return;
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setInspectorOpen(false);
+      window.requestAnimationFrame(() => inspectorToggleRef.current?.focus());
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [inspectorOpen]);
 
   const rendered = useMemo(
     () => renderedAtlasSet({
@@ -489,10 +514,18 @@ export function AtlasTree(props: AtlasTreeProps) {
       cancelled = true;
     };
   }, [focusId, model, rendered]);
+  useEffect(() => {
+    if (!focusCanvasAfterNavigationRef.current || layoutStatus !== "ready") return;
+    const frame = window.requestAnimationFrame(() => {
+      canvasRef.current?.focus({ preventScroll: true });
+      focusCanvasAfterNavigationRef.current = false;
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [focusId, layoutStatus]);
   const positionById = useMemo(() => new Map(positions.map((entry) => [entry.id, entry])), [positions]);
   const layoutKey = useMemo(
-    () => positions.map(({ id, x, y }) => `${id}:${x}:${y}`).join("|"),
-    [positions],
+    () => `${positions.map(({ id, x, y }) => `${id}:${x}:${y}`).join("|")}|details:${inspectorOpen ? "open" : "closed"}|browse:${sidebarOpen ? "open" : "closed"}`,
+    [inspectorOpen, positions, sidebarOpen],
   );
   const mappingDegreeByCatalog = useMemo(
     () => new Map(
@@ -646,8 +679,16 @@ export function AtlasTree(props: AtlasTreeProps) {
 
   function activateNode(node: AtlasRenderableNode) {
     setSelectedId(node.id);
-    if (node.level === "area" && node.descendantRecordCount === 0) return;
-    if (typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches) {
+    const opensDetails = (node.level === "area" && node.descendantRecordCount === 0)
+      || node.nodeType === "technology_gate"
+      || isAggregate(node);
+    if (opensDetails) {
+      setInspectorOpen(true);
+      return;
+    }
+    setInspectorOpen(false);
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches) {
+      focusCanvasAfterNavigationRef.current = sidebarOpen;
       setSidebarOpen(false);
     }
     openNode(node);
@@ -661,8 +702,22 @@ export function AtlasTree(props: AtlasTreeProps) {
         </button>
         <span>{breadcrumb.at(-1)?.label || "Atlas"}</span>
       </div>
+      {!structuralExplorer && !compact ? (
+        <div className="atlas-tree__overview-toolbar">
+          <p>Use the map to open an area. Details explain the selected map item.</p>
+          <button
+            aria-controls="atlas-map-inspector"
+            aria-expanded={inspectorOpen}
+            onClick={() => setInspectorOpen((open) => !open)}
+            ref={inspectorToggleRef}
+            type="button"
+          >
+            {inspectorOpen ? "Hide map details" : "Map details"}
+          </button>
+        </div>
+      ) : null}
       {sidebarOpen ? <button aria-label="Close structure browser" className="atlas-tree__scrim" onClick={() => setSidebarOpen(false)} type="button" /> : null}
-      <div className={`atlas-tree__workbench${sidebarOpen ? " has-open-sidebar" : ""}${structuralExplorer ? " is-structural" : " is-overview"}`}>
+      <div className={`atlas-tree__workbench${sidebarOpen ? " has-open-sidebar" : ""}${inspectorOpen ? " has-open-inspector" : ""}${structuralExplorer ? " is-structural" : " is-overview"}`}>
         <aside aria-label="Atlas navigation" className="atlas-tree__dock atlas-tree__dock--left" id="atlas-structure-sidebar">
           <button className="atlas-tree__drawer-close" onClick={() => setSidebarOpen(false)} type="button">
             Close browse
@@ -805,7 +860,7 @@ export function AtlasTree(props: AtlasTreeProps) {
           ) : null}
         </aside>
 
-        <div className="atlas-tree__canvas">
+        <div className="atlas-tree__canvas" ref={canvasRef} tabIndex={-1}>
         {structuralExplorer && focusedNode ? (
           <AtlasStructuralExplorer
             children={structuralChildren}
@@ -836,7 +891,17 @@ export function AtlasTree(props: AtlasTreeProps) {
         )}
         </div>
 
-        {!structuralExplorer && !compact ? <aside aria-labelledby="atlas-inspector-title" className="atlas-tree__dock atlas-tree__inspector">
+        {!structuralExplorer && !compact && inspectorOpen ? <aside aria-labelledby="atlas-inspector-title" className="atlas-tree__dock atlas-tree__inspector" id="atlas-map-inspector">
+          <button
+            className="atlas-tree__inspector-close"
+            onClick={() => {
+              setInspectorOpen(false);
+              window.requestAnimationFrame(() => inspectorToggleRef.current?.focus());
+            }}
+            type="button"
+          >
+            Close details
+          </button>
           <p className="eyebrow">{selectedNodeIsRoot ? "Atlas overview" : nodeKind(selectedNode).replaceAll("-", " ")}</p>
           <h3 id="atlas-inspector-title">{selectedNode.label}</h3>
           <p>{selectedNodeIsRoot ? "Browse cybersecurity areas and the publications under them." : selectedNode.blurb}</p>

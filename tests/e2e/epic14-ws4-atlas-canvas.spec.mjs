@@ -35,38 +35,50 @@ async function clickFlowNode(page, id) {
   await node.dispatchEvent("click");
 }
 
-test("Template D keeps the Atlas canvas first and honors the locked dock geometry", async ({ page }) => {
+test("Template D is graph-first and discloses map details without covering the canvas", async ({ page }) => {
   await openAtlas(page);
 
   const template = page.locator('[data-page-template="canvas"]');
   const workbench = template.locator(".atlas-tree__workbench");
   const leftDock = workbench.locator(".atlas-tree__dock--left");
   const canvas = workbench.locator(".atlas-tree__canvas");
-  const inspector = workbench.locator(".atlas-tree__inspector");
+  const detailsToggle = template.locator('button[aria-controls="atlas-map-inspector"]');
 
   await expect(page.locator("main")).toHaveCount(1);
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
   await expect(page.getByText("Start with a topic and work toward the details.", { exact: true })).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Jump to a record" })).toBeVisible();
   await expect(template.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
-  await expect(inspector.getByText("Atlas overview", { exact: true })).toBeVisible();
-  await expect(inspector).toContainText("Browse cybersecurity areas and the publications under them.");
+  await expect(detailsToggle).toHaveAttribute("aria-expanded", "false");
+  await expect(workbench.locator(".atlas-tree__inspector")).toHaveCount(0);
   await expect(template).not.toContainText(/\b(?:trunks?|limbs?|twigs?|acorns?)\b/i);
   await expect(template.locator(".atlas-ancestry > .atlas-choice-trail")).toHaveCount(0);
   await expect(workbench).toBeVisible();
   await expect(canvas.getByRole("application", { name: "Interactive Atlas map hierarchy" })).toBeVisible();
 
-  const geometry = await Promise.all([leftDock, canvas, inspector].map((locator) => locator.evaluate((node) => {
+  const geometry = await Promise.all([leftDock, canvas].map((locator) => locator.evaluate((node) => {
     const box = node.getBoundingClientRect();
     return { left: box.left, right: box.right, top: box.top, width: box.width };
   })));
   expect(geometry[0].width).toBeCloseTo(280, 0);
-  expect(geometry[2].width).toBeGreaterThanOrEqual(280);
   expect(geometry[0].right).toBeLessThanOrEqual(geometry[1].left);
-  // The inspector owns a third column. It must never cover map nodes or make
-  // below-the-map detail invisible to an Atlas user.
-  expect(geometry[2].left).toBeGreaterThanOrEqual(geometry[1].right);
   expect(geometry[1].top).toBeLessThan(900);
+  expect(geometry[1].width).toBeGreaterThan(900);
+
+  await detailsToggle.click();
+  const inspector = workbench.locator(".atlas-tree__inspector");
+  await expect(detailsToggle).toHaveAttribute("aria-expanded", "true");
+  await expect(inspector.getByText("Atlas overview", { exact: true })).toBeVisible();
+  await expect(inspector).toContainText("Browse cybersecurity areas and the publications under them.");
+  const openGeometry = await Promise.all([canvas, inspector].map((locator) => locator.evaluate((node) => {
+    const box = node.getBoundingClientRect();
+    return { left: box.left, right: box.right, width: box.width };
+  })));
+  expect(openGeometry[1].width).toBeCloseTo(320, 0);
+  expect(openGeometry[1].left).toBeGreaterThanOrEqual(openGeometry[0].right);
+  await page.keyboard.press("Escape");
+  await expect(inspector).toHaveCount(0);
+  await expect(detailsToggle).toBeFocused();
 
   const areaControls = leftDock.locator("[data-area-id]");
   await expect(areaControls).toHaveCount(9);
@@ -93,9 +105,53 @@ test("every populated area drills directly and the live breadcrumb reverses the 
 
   await clickFlowNode(page, "atlas:LIMB-OPERATIONS");
   await expect(page).toHaveURL(/#\/atlas$/);
-  await expect(page.locator(".atlas-tree__inspector")).toContainText("Operations");
-  await expect(page.locator(".atlas-tree__inspector")).toContainText("No records yet.");
+  const inspector = page.locator(".atlas-tree__inspector");
+  await expect(inspector).toContainText("Operations");
+  await expect(inspector).toContainText("No records yet.");
+  await expect(page.getByRole("button", { name: "Hide map details" })).toHaveAttribute("aria-expanded", "true");
 });
+
+for (const width of [1024, 1199, 1200, 1440]) {
+  test(`graph-first Atlas uses the available workspace at ${width}px`, async ({ page }) => {
+    await openAtlas(page, { width, height: 900 });
+    const workbench = page.locator(".atlas-tree__workbench");
+    const canvas = workbench.locator(".atlas-tree__canvas");
+    await expect(workbench).toHaveClass(/is-overview/);
+    await expect(workbench).not.toHaveClass(/has-open-inspector/);
+    await expect(page.locator(".atlas-tree__inspector")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Map details", exact: true })).toBeVisible();
+    await expect(canvas.getByRole("application", { name: "Interactive Atlas map hierarchy" })).toBeVisible();
+    await expect(page.locator(".react-flow__node")).toHaveCount(13);
+
+    const occupancy = await page.locator(".react-flow__node").evaluateAll((nodes, canvasSelector) => {
+      const canvasElement = globalThis.document.querySelector(canvasSelector);
+      if (!canvasElement || !nodes.length) return null;
+      const canvasBox = canvasElement.getBoundingClientRect();
+      const boxes = nodes.map((node) => node.getBoundingClientRect());
+      const left = Math.min(...boxes.map((box) => box.left));
+      const right = Math.max(...boxes.map((box) => box.right));
+      const top = Math.min(...boxes.map((box) => box.top));
+      const bottom = Math.max(...boxes.map((box) => box.bottom));
+      return {
+        heightRatio: (bottom - top) / canvasBox.height,
+        widthRatio: (right - left) / canvasBox.width,
+      };
+    }, ".atlas-tree__canvas");
+    expect(occupancy?.widthRatio, `${width}px graph width occupancy`).toBeGreaterThanOrEqual(.55);
+    expect(occupancy?.heightRatio, `${width}px graph height occupancy`).toBeGreaterThanOrEqual(.7);
+    expect(
+      await page.locator("html").evaluate((element) => element.scrollWidth - element.clientWidth),
+      `${width}px Atlas overflow`,
+    ).toBeLessThanOrEqual(1);
+
+    if (width < 1200) {
+      await expect(workbench.locator(".atlas-tree__dock--left")).toBeHidden();
+      await expect(page.getByRole("button", { name: "Browse structure" })).toBeVisible();
+    } else {
+      await expect(workbench.locator(".atlas-tree__dock--left")).toBeVisible();
+    }
+  });
+}
 
 test("a populated node drills two levels without a second confirmation", async ({ page }) => {
   await openAtlas(page);
@@ -113,21 +169,71 @@ test("a populated node drills two levels without a second confirmation", async (
   await expect(page).not.toHaveURL(/atlasFramework=/);
 });
 
-test("compact Atlas preserves direct keyboard drill without horizontal overflow", async ({ page }) => {
-  await openAtlas(page, { width: 390, height: 844 });
+for (const width of [320, 375, 390, 768, 1023]) {
+  test(`compact Atlas keyboard navigation skips non-actionable nodes at ${width}px`, async ({ page }) => {
+    await openAtlas(page, { width, height: width < 768 ? 844 : 900 });
 
-  const tree = page.getByRole("tree", { name: "Atlas map hierarchy" });
-  await expect(tree).toBeVisible();
-  await expect(tree.getByRole("treeitem")).toHaveCount(13);
-  await expect(tree.getByRole("treeitem", { name: /Statutes 7 instruments/ })).toBeVisible();
-  await expect(tree.getByRole("treeitem", { name: /Operations/ })).toBeDisabled();
-  const compliance = tree.getByRole("treeitem", { name: /Compliance/ });
-  await compliance.focus();
-  await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
-  await expect(page.locator(".atlas-tree__mobile-bar")).toContainText("Compliance");
-  expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBe(0);
+    const tree = page.getByRole("tree", { name: "Atlas map hierarchy" });
+    await expect(tree).toBeVisible();
+    await expect(tree.getByRole("treeitem")).toHaveCount(13);
+    await expect(tree.getByRole("treeitem", { name: /Statutes 7 instruments/ })).toBeDisabled();
+    await expect(tree.getByRole("treeitem", { name: /Operations/ })).toBeDisabled();
+
+    const enabled = tree.locator('button[role="treeitem"]:not(:disabled)');
+    const enabledCount = await enabled.count();
+    expect(enabledCount).toBe(8);
+    await enabled.first().focus();
+    for (let index = 1; index < enabledCount; index += 1) {
+      await page.keyboard.press("ArrowDown");
+      await expect(enabled.nth(index)).toBeFocused();
+    }
+    for (let index = enabledCount - 2; index >= 0; index -= 1) {
+      await page.keyboard.press("ArrowUp");
+      await expect(enabled.nth(index)).toBeFocused();
+    }
+
+    const compliance = tree.getByRole("treeitem", { name: /Compliance/ });
+    await compliance.focus();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
+    await expect(page.locator(".atlas-tree__mobile-bar")).toContainText("Compliance");
+    expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBe(0);
+  });
+}
+
+test("Atlas navigation remains coherent across the 1199 and 1200 pixel breakpoint", async ({ page }) => {
+  await openAtlas(page, { width: 1199, height: 900 });
+  const workbench = page.locator(".atlas-tree__workbench");
+  const browse = page.getByRole("button", { name: "Browse structure" });
+  await expect(workbench.locator(".atlas-tree__dock--left")).toBeHidden();
+  await expect(browse).toBeVisible();
+
+  await page.setViewportSize({ width: 1200, height: 900 });
+  await expect(workbench.locator(".atlas-tree__dock--left")).toBeVisible();
+  await expect(browse).toBeHidden();
+
+  await page.setViewportSize({ width: 1199, height: 900 });
+  await expect(workbench.locator(".atlas-tree__dock--left")).toBeHidden();
+  await expect(browse).toBeVisible();
+  await browse.click();
+  await expect(workbench.locator(".atlas-tree__dock--left")).toBeVisible();
 });
+
+for (const width of [768, 1023]) {
+  test(`compact browse selection returns focus to updated Atlas content at ${width}px`, async ({ page }) => {
+    await openAtlas(page, { width, height: 900 });
+    const browse = page.getByRole("button", { name: "Browse structure" });
+    await browse.click();
+    const workbench = page.locator(".atlas-tree__workbench");
+    const canvas = workbench.locator(".atlas-tree__canvas");
+    await expect(workbench.locator(".atlas-tree__dock--left")).toBeVisible();
+    await workbench.locator('[data-area-id="atlas:LIMB-COMPLIANCE"]').click();
+    await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
+    await expect(workbench.locator(".atlas-tree__dock--left")).toBeHidden();
+    await expect(canvas).toBeFocused();
+    await expect(canvas.getByRole("tree", { name: "Atlas map hierarchy" })).toBeVisible();
+  });
+}
 
 test("Adaptive Explorer is bounded, responsive, and incrementally rendered at every supported width", async ({ page }) => {
   test.setTimeout(60_000);

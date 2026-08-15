@@ -9,14 +9,11 @@ import type { CSSProperties } from "react";
 
 import { HOME_CONTENT, HOME_DESTINATIONS } from "../../shared/home-content.mjs";
 import { AppLink } from "../components/AppLink";
-import { AREA_BROWSE_PRESENTATIONS, areaCssVariables } from "../lib/areaVisualLanguage";
+import { HOME_TAG_GROUPS } from "../lib/homeTagConstellation";
 import type { ViewState } from "../lib/viewState";
 
-type HomeAreaStyle = CSSProperties & {
-  "--area-scale": number;
-  "--ca-area-color": string;
-  "--ca-area-color-on-light": string;
-  "--ca-area-color-on-dark": string;
+type HomeTagStyle = CSSProperties & {
+  "--tag-scale": number;
 };
 
 type HomePageProps = {
@@ -80,29 +77,42 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
         })}
       </nav>
 
-      <nav aria-labelledby="home-area-heading" className="home-area-browse">
-        <div className="home-area-browse__heading">
-          <h2 id="home-area-heading">Browse by area</h2>
-          <p>Size reflects record count.</p>
+      <nav aria-labelledby="home-tag-heading" className="home-tag-constellation">
+        <div className="home-tag-constellation__heading">
+          <div>
+            <h2 id="home-tag-heading">Browse by tag</h2>
+            <p>More records, bigger tag.</p>
+          </div>
+          <AppLink className="home-tag-constellation__all" onNavigate={onNavigate} view="search">
+            See all tags
+            <IconArrowRight aria-hidden="true" size={16} stroke={2} />
+          </AppLink>
         </div>
-        <ul className="home-ecosystem-areas" data-area-count-scale="logarithmic">
-          {AREA_BROWSE_PRESENTATIONS.map((area) => (
-            <li key={area.id}>
-              <AppLink
-                aria-label={`${area.label}, ${area.recordCount.toLocaleString()} records`}
-                className="home-area-link"
-                data-record-count={area.recordCount}
-                onNavigate={onNavigate}
-                patch={{ area: area.id }}
-                style={{ ...areaCssVariables(area), "--area-scale": area.scale } as HomeAreaStyle}
-                view="search"
-              >
-                <span className="home-area-link__label">{area.label}</span>
-                <span aria-hidden="true" className="home-area-link__count">{area.recordCount.toLocaleString()}</span>
-              </AppLink>
-            </li>
+        <div className="home-tag-galaxies" data-tag-count-scale="logarithmic">
+          {HOME_TAG_GROUPS.map((group) => (
+            <section aria-labelledby={`home-tag-group-${group.id}`} className="home-tag-galaxy" data-tag-dimension={group.id} key={group.id}>
+              <h3 id={`home-tag-group-${group.id}`}>{group.label}</h3>
+              <ul>
+                {group.tags.map((tag) => (
+                  <li key={tag.id}>
+                    <AppLink
+                      aria-label={`${tag.label}, ${tag.count.toLocaleString()} records`}
+                      className="home-tag-link"
+                      data-record-count={tag.count}
+                      onNavigate={onNavigate}
+                      patch={{ tags: [tag.id] }}
+                      style={{ "--tag-scale": tag.scale } as HomeTagStyle}
+                      view="search"
+                    >
+                      <span className="home-tag-link__label">{tag.label}</span>
+                      <span aria-hidden="true" className="home-tag-link__count">{tag.count.toLocaleString()}</span>
+                    </AppLink>
+                  </li>
+                ))}
+              </ul>
+            </section>
           ))}
-        </ul>
+        </div>
       </nav>
 
     </section>
