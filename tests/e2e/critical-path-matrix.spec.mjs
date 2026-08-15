@@ -27,7 +27,7 @@ test("critical path: Template B landing hero and three entry cards are visible",
   await expect(page.locator(".home-search").getByRole("button", { name: "Search" })).toBeVisible();
   await expect(page.locator('[data-template="B"]')).toBeVisible();
   await expect(page.locator(".home-secondary-action")).toHaveCount(3);
-  await expect(page.locator(".home-ecosystem-areas .home-area-link")).toHaveCount(7);
+  await expect(page.locator(".home-tag-galaxies .home-tag-link")).toHaveCount(16);
 });
 
 test("critical path: the Atlas Path walks to a published connected record", async ({

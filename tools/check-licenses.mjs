@@ -17,6 +17,7 @@ const ALLOWED_LICENSES = new Set([
   '0BSD',
   'Python-2.0',
   '(MIT OR WTFPL)',
+  '(MIT OR CC0-1.0)',
   '(BSD-2-Clause OR MIT OR Apache-2.0)',
 ]);
 

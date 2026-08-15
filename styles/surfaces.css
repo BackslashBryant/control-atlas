@@ -6863,109 +6863,182 @@ button.atlas-leverage-row:hover {
   box-sizing: border-box;
 }
 
-.home-area-browse {
+.home-tag-constellation {
   display: grid;
   gap: var(--ca-space-4);
-  justify-items: center;
-  padding-block: var(--ca-space-2);
+  padding-block: var(--ca-space-3);
 }
 
-.home-area-browse__heading {
+.home-tag-constellation__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--ca-space-4);
+}
+
+.home-tag-constellation__heading > div {
   display: grid;
   gap: 2px;
-  justify-items: center;
-  text-align: center;
 }
 
-.home-area-browse h2,
-.home-area-browse p {
+.home-tag-constellation h2,
+.home-tag-constellation p,
+.home-tag-constellation h3 {
   margin: 0;
 }
 
-.home-area-browse h2 {
+.home-tag-constellation h2 {
   color: var(--ca-text);
   font-family: var(--font-display);
   font-size: var(--ca-text-lg);
 }
 
-.home-area-browse p {
+.home-tag-constellation p {
   color: var(--ca-text-muted);
   font-size: var(--ca-text-xs);
 }
 
-.home-ecosystem-areas {
+.home-tag-constellation__all {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  min-height: var(--ca-touch-target);
+  color: var(--ca-link);
+  font-size: var(--ca-text-sm);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.home-tag-constellation__all:hover,
+.home-tag-constellation__all:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.home-tag-galaxies {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ca-space-3);
+}
+
+.home-tag-galaxy {
+  --tag-galaxy-color: var(--ca-primary);
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-content: start;
+  gap: var(--ca-space-3);
+  min-width: 0;
+  min-height: 10rem;
+  padding: var(--ca-space-4);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--tag-galaxy-color) 42%, var(--ca-border));
+  border-radius: var(--ca-radius-md);
+  background: color-mix(in srgb, var(--tag-galaxy-color) 5%, var(--ca-surface-raised));
+}
+
+.home-tag-galaxy::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: auto -2.5rem -3.5rem auto;
+  width: 9rem;
+  height: 9rem;
+  border: 1px solid color-mix(in srgb, var(--tag-galaxy-color) 22%, transparent);
+  border-radius: 999px;
+  box-shadow: 0 0 3rem color-mix(in srgb, var(--tag-galaxy-color) 10%, transparent);
+}
+
+.home-tag-galaxy[data-tag-dimension="asset_class"] { --tag-galaxy-color: var(--ca-area-implementation); }
+.home-tag-galaxy[data-tag-dimension="environment"] { --tag-galaxy-color: var(--ca-area-architecture); }
+.home-tag-galaxy[data-tag-dimension="technology"] { --tag-galaxy-color: var(--ca-area-assessment); }
+.home-tag-galaxy[data-tag-dimension="vendor_brand"] { --tag-galaxy-color: var(--ca-area-governance); }
+.home-tag-galaxy[data-tag-dimension="product"] { --tag-galaxy-color: var(--ca-area-compliance); }
+.home-tag-galaxy[data-tag-dimension="domain"] { --tag-galaxy-color: var(--ca-area-threats-defense); }
+
+.home-tag-galaxy h3 {
+  color: color-mix(in srgb, var(--tag-galaxy-color) 68%, var(--ca-text));
+  font: 700 var(--ca-text-xs) / 1.3 var(--ca-font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.home-tag-galaxy ul {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: center;
-  gap: var(--ca-space-2) clamp(var(--ca-space-3), 2vw, var(--ca-space-6));
-  width: min(100%, 1080px);
+  align-items: center;
+  align-content: center;
+  gap: var(--ca-space-1) var(--ca-space-2);
   margin: 0;
-  padding: var(--ca-space-3) 0;
+  padding: 0;
   list-style: none;
 }
 
-.home-ecosystem-areas li {
-  display: contents;
+.home-tag-galaxy li {
+  min-width: 0;
+  max-width: 100%;
 }
 
-.home-area-link {
-  --area-font-min: 0.82rem;
-  --area-font-range: 1.5rem;
+.home-tag-link {
   position: relative;
   isolation: isolate;
   display: inline-flex;
+  max-width: 100%;
   align-items: baseline;
-  gap: 0.42em;
+  gap: .45em;
   min-height: var(--ca-touch-target);
-  padding: 0.22em 0.34em;
+  padding: .38em .5em;
   border-radius: var(--ca-radius-sm);
-  color: color-mix(in srgb, var(--ca-area-color) 86%, var(--ca-text));
+  color: color-mix(in srgb, var(--tag-galaxy-color) 74%, var(--ca-text));
   font-family: var(--ca-font-mono);
-  font-size: clamp(var(--area-font-min), calc(var(--area-font-min) + var(--area-scale) * var(--area-font-range)), 2.32rem);
-  font-weight: 680;
-  line-height: 1.12;
-  letter-spacing: -0.025em;
+  font-size: clamp(.84rem, calc(.84rem + var(--tag-scale) * .44rem), 1.28rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -.018em;
   text-decoration: none;
-  text-wrap: nowrap;
   transition: color 120ms ease, transform 120ms ease;
 }
 
-.home-area-link::before {
+.home-tag-link::before {
   content: "";
   position: absolute;
-  inset: 5% -0.08em;
+  inset: 4px;
   z-index: -1;
   border-radius: var(--ca-radius-sm);
-  background: color-mix(in srgb, var(--ca-area-color) 12%, transparent);
+  background: color-mix(in srgb, var(--tag-galaxy-color) 12%, transparent);
   opacity: 0;
-  transform: scale(0.92);
+  transform: scale(.94);
   transition: opacity 120ms ease, transform 120ms ease;
 }
 
-.home-area-link__count {
+.home-tag-link__label {
+  overflow-wrap: anywhere;
+}
+
+.home-tag-link__count {
+  flex: 0 0 auto;
   color: var(--ca-text-muted);
   font-family: var(--ca-font-mono);
-  font-size: clamp(0.62rem, calc(0.62rem + var(--area-scale) * 0.08rem), 0.7rem);
+  font-size: .68rem;
   font-weight: 600;
   letter-spacing: 0;
 }
 
-.home-area-link:hover,
-.home-area-link:focus-visible {
-  color: var(--ca-area-color);
+.home-tag-link:hover,
+.home-tag-link:focus-visible {
+  color: var(--tag-galaxy-color);
   transform: translateY(-1px);
 }
 
-.home-area-link:hover::before,
-.home-area-link:focus-visible::before {
+.home-tag-link:hover::before,
+.home-tag-link:focus-visible::before {
   opacity: 1;
   transform: scale(1);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-area-link,
-  .home-area-link::before {
+  .home-tag-link,
+  .home-tag-link::before {
     transition: none;
   }
 }
@@ -6974,17 +7047,29 @@ button.atlas-leverage-row:hover {
   .home-secondary-grid {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
+
+  .home-tag-galaxies {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 639px) {
-  .home-ecosystem-areas {
-    gap: var(--ca-space-2) var(--ca-space-3);
-    padding-block: var(--ca-space-2);
+  .home-tag-constellation__heading {
+    display: grid;
+    align-items: start;
+    gap: var(--ca-space-2);
   }
 
-  .home-area-link {
-    --area-font-min: 0.78rem;
-    --area-font-range: 0.92rem;
+  .home-tag-galaxies {
+    grid-template-columns: 1fr;
+  }
+
+  .home-tag-galaxy {
+    min-height: 0;
+  }
+
+  .home-tag-link {
+    font-size: clamp(.82rem, calc(.82rem + var(--tag-scale) * .28rem), 1.1rem);
   }
 }
 
@@ -10282,16 +10367,20 @@ input[type="checkbox"] {
 
 .atlas-tree__workbench {
   display: grid;
-  grid-template-columns: minmax(15rem, 17.5rem) minmax(0, 1fr) minmax(18rem, 21rem);
+  grid-template-columns: minmax(15rem, 17.5rem) minmax(0, 1fr);
   align-items: stretch;
   gap: 0;
-  min-height: 40rem;
-  height: clamp(40rem, calc(100dvh - var(--ca-header-safe-offset) - 7rem), 50rem);
+  min-height: 34rem;
+  height: clamp(34rem, 75dvh, 42rem);
   overflow: hidden;
   border: 1px solid var(--ca-border);
   border-radius: var(--ca-radius-md);
   background: var(--ca-surface-deep);
   position: relative;
+}
+
+.atlas-tree__workbench.is-overview.has-open-inspector {
+  grid-template-columns: minmax(15rem, 17.5rem) minmax(0, 1fr) 20rem;
 }
 
 .atlas-tree__workbench.is-structural {
@@ -10303,6 +10392,34 @@ input[type="checkbox"] {
 
 .atlas-tree__mobile-bar {
   display: none;
+}
+
+.atlas-tree__overview-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ca-space-4);
+  min-height: var(--ca-touch-target);
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border: 1px solid var(--ca-border);
+  border-block-end: 0;
+  background: var(--ca-surface-raised);
+}
+
+.atlas-tree__overview-toolbar p {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+}
+
+.atlas-tree__overview-toolbar button,
+.atlas-tree__inspector-close {
+  min-width: 44px;
+  min-height: var(--ca-touch-target);
+}
+
+.atlas-tree__inspector-close {
+  justify-self: end;
 }
 
 .atlas-tree__drawer-close {
@@ -10897,6 +11014,15 @@ input[type="checkbox"] {
   .atlas-tree__workbench,
   .atlas-tree__workbench.is-structural {
     grid-template-columns: 1fr;
+  }
+
+  .atlas-tree__workbench.is-overview {
+    height: clamp(34rem, 75dvh, 42rem);
+    min-height: 34rem;
+    overflow: hidden;
+  }
+
+  .atlas-tree__workbench.is-structural {
     height: auto;
     min-height: 0;
     overflow: visible;
@@ -10907,6 +11033,10 @@ input[type="checkbox"] {
   }
 
   .atlas-tree__workbench.is-overview:not(.has-open-sidebar) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .atlas-tree__workbench.is-overview.has-open-inspector:not(.has-open-sidebar) {
     grid-template-columns: minmax(0, 1fr) 20rem;
   }
 
@@ -10926,13 +11056,22 @@ input[type="checkbox"] {
   }
 
   .atlas-tree__workbench.has-open-sidebar.is-overview {
+    grid-template-columns: 17.5rem minmax(0, 1fr);
+  }
+
+  .atlas-tree__workbench.has-open-sidebar.has-open-inspector.is-overview {
     grid-template-columns: 17.5rem minmax(0, 1fr) 20rem;
   }
 
-  .atlas-tree__dock,
-  .atlas-tree__canvas {
+  .atlas-tree__workbench.is-structural .atlas-tree__dock,
+  .atlas-tree__workbench.is-structural .atlas-tree__canvas {
     height: auto;
     overflow: visible;
+  }
+
+  .atlas-tree__workbench.is-overview .atlas-tree__dock,
+  .atlas-tree__workbench.is-overview .atlas-tree__canvas {
+    height: 100%;
   }
 
   .atlas-tree__dock--left,
@@ -10963,6 +11102,28 @@ input[type="checkbox"] {
 
   .atlas-tree__inspector {
     border-block-start: 1px solid var(--ca-border);
+  }
+}
+
+@media (max-width: 1023px) {
+  .atlas-tree__overview-toolbar,
+  .atlas-tree__inspector {
+    display: none;
+  }
+
+  .atlas-tree__workbench.is-overview,
+  .atlas-tree__workbench.is-overview:not(.has-open-sidebar),
+  .atlas-tree__workbench.has-open-sidebar.is-overview,
+  .atlas-tree__workbench.has-open-sidebar.has-open-inspector.is-overview {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .atlas-tree__workbench.is-overview .atlas-tree__canvas {
+    height: auto;
+    overflow: visible;
   }
 }
 

@@ -373,10 +373,10 @@ test('landing page states what the product is before asking for action', () => {
     'Browse the Atlas', 'Search the Library', 'Browse Resources',
   ]);
   assert.doesNotMatch(homePage, /home-ecosystem-authorities|home-start-here/);
-  assert.match(homePage, /AREA_BROWSE_PRESENTATIONS\.map/);
-  assert.match(homePage, /home-ecosystem-areas/);
+  assert.match(homePage, /HOME_TAG_GROUPS\.map/);
+  assert.match(homePage, /home-tag-galaxies/);
   assert.match(homePage, /data-record-count/);
-  assert.doesNotMatch(homePage, /source-backed/i);
+  assert.match(homePage, /More records, bigger tag\./);
 });
 
 test('Guides implement the numbered Template F directory contract', () => {
