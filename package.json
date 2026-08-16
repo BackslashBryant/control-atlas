@@ -149,7 +149,7 @@
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.14",
-    "@radix-ui/react-dialog": "^1.1.17",
+    "@radix-ui/react-dialog": "^1.1.23",
     "@react-sigma/core": "^5.0.6",
     "@tabler/icons-react": "^3.44.0",
     "@xyflow/react": "^12.11.1",
