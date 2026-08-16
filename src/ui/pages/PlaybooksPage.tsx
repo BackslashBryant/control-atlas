@@ -163,7 +163,7 @@ export function PlaybooksPage(props: {
           <section className="ca-contextual-taxonomy" aria-label={`Related Library tags for ${selected.title}`}>
             <h3>Explore related Library records</h3>
             <p>
-              This is an editorial entry point based on the guide topic. It does not classify the guide or claim that every tagged record applies to your system.
+              These tags link to related records for this topic. They don't mean every one applies to your system.
             </p>
             <TaxonomyTagLinks onNavigate={onNavigate} tagIds={selectedPresentation.tagIds} />
           </section>

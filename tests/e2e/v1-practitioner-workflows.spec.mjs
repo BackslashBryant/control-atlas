@@ -54,17 +54,17 @@ test("V1 workflow 04 — verify official record identity and source", async ({ p
   const facts = page.locator(".record-source-facts");
   await expect(facts).toContainText("Publisher");
   await expect(facts).toContainText("NIST");
-  await expect(facts).toContainText("Version");
+  await expect(facts).toContainText("Publication");
   await expect(facts).toContainText(/Revision 5|Rev\. 5/);
-  await expect(facts).toContainText("Retrieved");
-  await expect(facts).toContainText("Source last checked");
-  await expect(facts).toContainText("Publication currentness review");
+  // Retrieval/currentness provenance now lives on the Sources page; the record
+  // sidebar stays user-first (who published it, which publication, how current).
+  await expect(facts).toContainText("Current as of");
+  await expect(facts).not.toContainText("Publication currentness review");
 
   await open(page, "/#/record/nist-mobile-threats/CEL-1");
   const retrievedOnlyFacts = page.locator(".record-source-facts");
-  await expect(retrievedOnlyFacts).toContainText("Retrieved");
-  await expect(retrievedOnlyFacts).not.toContainText("Source last checked");
-  await expect(retrievedOnlyFacts).toContainText("Publication currentness review");
+  await expect(retrievedOnlyFacts).toContainText("Publisher");
+  await expect(retrievedOnlyFacts).not.toContainText("Publication currentness review");
 });
 
 test("V1 workflow 05 — follow a record and return without losing search state", async ({
@@ -362,14 +362,14 @@ test("source and publication review dates remain distinct at every governed widt
       `${width}px document overflow`,
     ).toBe(0);
 
+    // The record sidebar is user-first: publisher, publication, and how current
+    // it is. Retrieval and currentness-review provenance stays on the Sources
+    // page (asserted above), not repeated on every record.
     await open(page, "/#/record/nist-800-53/AC-2");
     const recordFacts = page.locator(".record-source-facts");
-    await expect(recordFacts).toContainText("Retrieved");
-    await expect(recordFacts).toContainText("Source last checked");
-    await expect(recordFacts).toContainText("Publication currentness review");
-    await expect(recordFacts).toContainText(
-      "Current as checked · Reviewed 2026-08-13",
-    );
+    await expect(recordFacts).toContainText("Publisher");
+    await expect(recordFacts).toContainText("Current as of");
+    await expect(recordFacts).not.toContainText("Publication currentness review");
     expect(
       await page.evaluate(
         () =>
@@ -389,10 +389,10 @@ test("source review presents superseded and multiple-publication dispositions ho
     "Publication currentness reviewSuperseded · Reviewed 2026-08-13",
   );
 
+  // Superseded/currentness dispositions are Sources-page provenance (asserted
+  // above). The record keeps the plain "Current as of" date instead.
   await open(page, "/#/record/nist-800-171-rev2/3.1.1");
-  await expect(page.locator(".record-source-facts")).toContainText(
-    "Publication currentness reviewSuperseded · Reviewed 2026-08-13",
-  );
+  await expect(page.locator(".record-source-facts")).toContainText("Current as of");
 
   for (const width of [320, 1440]) {
     await page.setViewportSize({ width, height: width === 320 ? 844 : 1024 });

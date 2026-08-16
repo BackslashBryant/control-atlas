@@ -22,7 +22,10 @@
   --lsm-relay-deep: #205f78;
   --lsm-relay-deep-hover: #25677f;
   --lsm-gold: #cbae67;
-  --lsm-orange: #e66a2c;
+  /* v1.8.0 muted Ignition Orange (was #e66a2c). Orange is now the single
+     primary-action + editorial signal; teal narrows to state (see below). */
+  --lsm-orange: #cb7248;
+  --lsm-orange-hover: #d5814d;
   --lsm-signal: #7eb79e;
   --lsm-rust: #c97a60;
   --lsm-fault: #ea7468;
@@ -31,7 +34,10 @@
      same blue-grey. These three extend the same muted, desaturated family so
      colour can carry meaning instead of decorating. */
   --lsm-iris: #9d92d6;
-  --lsm-teal: #4fb3a5;
+  /* v1.8.0 Signal Teal (was #4fb3a5): the canonical active/focus/link/
+     selected/info state hue. Broad decorative surfaces stay teal; only the
+     primary action button and editorial emphasis use orange. */
+  --lsm-teal: #5ca3a6;
   --lsm-teal-deep: #236b64;
   --lsm-teal-deep-hover: #286e67;
   --lsm-amber: #e0a44a;
@@ -87,11 +93,17 @@
      separate because they communicate state rather than decoration. */
   --ca-accent: var(--lsm-teal);
   --ca-accent-hover: color-mix(in srgb, var(--ca-accent) 84%, var(--lsm-bone));
+  /* Mission Gold: the sparing v1.8 accent role. Used for occasional highlights
+     only — never a surface fill (keeps it distinct from primary/state). */
+  --ca-accent-gold: var(--lsm-gold);
   --ca-primary: var(--ca-accent);
   --ca-primary-hover: var(--ca-accent-hover);
-  --ca-action-primary: var(--lsm-teal-deep);
-  --ca-action-primary-hover: var(--lsm-teal-deep-hover);
-  --ca-on-primary: var(--lsm-bone);
+  /* v1.8 headline: the ONE primary action per surface is Ignition Orange with
+     dark (orbit) ink. Broad decorative --ca-primary stays teal above; only this
+     action-button pair carries orange, so orange never sprays onto chrome. */
+  --ca-action-primary: var(--lsm-orange);
+  --ca-action-primary-hover: var(--lsm-orange-hover);
+  --ca-on-primary: var(--lsm-orbit);
   --ca-secondary: var(--ca-accent);
   --ca-secondary-hover: var(--ca-accent-hover);
   --ca-link: var(--ca-accent);
@@ -217,10 +229,13 @@
   --ca-radius-xl: 6px;
   --ca-radius-round: 999px;
 
-  /* Font files are not bundled by Orbital Archive; these stacks preserve its contract. */
-  --ca-font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  /* Self-hosted via styles/fonts.css (Oswald/Inter/IBM Plex Mono/Silkscreen,
+     all SIL OFL). v1.8 switched the display face from Barlow Condensed to
+     Oswald. --ca-font-pixel drives the CRT/telemetry signal micro-labels. */
+  --ca-font-display: "Oswald", "Arial Narrow", "Roboto Condensed", sans-serif;
   --ca-font-body: Inter, system-ui, sans-serif;
   --ca-font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  --ca-font-pixel: "Silkscreen", "IBM Plex Mono", monospace;
 
   --ca-text-micro: 0.75rem;
   --ca-text-xs: 0.8125rem;
@@ -238,6 +253,15 @@
   --line-height-compact: 1.25;
   --line-height-normal: 1.55;
   --line-height-relaxed: 1.7;
+
+  /* Letter-spacing / tracking scale (Orbital Archive v1.8). Eyebrows and
+     signal micro-type are tracked wide; body/heading stay tight-to-normal. */
+  --ca-tracking-tight: -0.02em;
+  --ca-tracking-normal: 0em;
+  --ca-tracking-wide: 0.08em;
+  --ca-tracking-label: 0.11em;
+  --ca-tracking-eyebrow: 0.18em;
+  --ca-tracking-signal: 0.28em;
 
   --ca-control-sm: 2rem;
   --ca-control-md: 2.5rem;

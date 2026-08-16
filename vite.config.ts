@@ -39,7 +39,19 @@ function renderStaticHome() {
       <span><strong>${escapeHtml(destination.label)}</strong><small>${escapeHtml(destination.description)}</small></span>
       <span aria-hidden="true" class="home-secondary-arrow">→</span>
     </a>`).join('');
-  return `<section class="home-entry" aria-labelledby="home-title" data-template="B" data-visual-identity="universal-front-door">
+  const coverFreshness = formatBuildDate(globalThis.process.env.VITE_CONTROL_ATLAS_SOURCE_DATA_DATE);
+  // Depth-0 Signal cover, part of the static first paint (React does not boot on
+  // Home). Hidden by default so no-JS users see the Home underneath; main.tsx
+  // reveals it, gates it to once per session, and wires dismissal.
+  const cover = SITE_COPY.home.cover;
+  const coverStats = [
+    ...cover.stats.map((stat) =>
+      `<div class="signal-cover__stat"><span class="signal-cover__stat-value">${escapeHtml(stat.value).replace('-', '&#8209;')}</span><span class="signal-cover__stat-label">${escapeHtml(stat.label)}</span>${stat.detail ? `<span class="signal-cover__stat-detail">${escapeHtml(stat.detail)}</span>` : ''}</div>`,
+    ),
+    `<div class="signal-cover__stat"><span class="signal-cover__stat-value">${escapeHtml(coverFreshness)}</span><span class="signal-cover__stat-label">${escapeHtml(cover.freshnessLabel)}</span></div>`,
+  ].join('');
+  const signalCover = `<div class="signal-cover" data-signal-cover hidden role="button" tabindex="0" aria-label="Welcome to Control Atlas. Click or press Enter to start."><div class="signal-cover__grid" aria-hidden="true"></div><div class="signal-cover__inner"><div class="signal-cover__brand"><span class="signal-cover__name">${escapeHtml(cover.wordmark)}</span><span class="signal-cover__keys" aria-hidden="true"><kbd>Ctrl</kbd><span>+</span><kbd>Alt</kbd><span>+</span><kbd class="signal-cover__rotor">Learn</kbd></span></div><p class="signal-cover__tagline">${escapeHtml(cover.tagline)}</p><div class="signal-cover__stats">${coverStats}</div><p class="signal-cover__prompt" aria-hidden="true">${escapeHtml(cover.prompt)}</p></div></div>`;
+  return `${signalCover}<section class="home-entry" aria-labelledby="home-title" data-template="B" data-visual-identity="universal-front-door">
     <div class="home-hero">
       <div class="home-hero-lead">
         <header class="home-entry-header">
@@ -49,7 +61,7 @@ function renderStaticHome() {
         <form class="home-search" data-home-search role="search">
           <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="20"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
           <input aria-label="Search Control Atlas" name="query" placeholder="${escapeHtml(HOME_CONTENT.searchPlaceholder)}" type="search">
-          <button class="button button--secondary" type="submit">Search</button>
+          <button class="home-search-submit" type="submit">Search</button>
         </form>
       </div>
     </div>

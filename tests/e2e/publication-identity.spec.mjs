@@ -74,7 +74,7 @@ test("a missing publication identity fails closed without guessed attribution", 
   ).toBeVisible();
   await expect(
     page.getByText(
-      "Official source identity unavailable. This record is not shown as official content until its publication identity can be verified.",
+      "Can't confirm which publisher this came from, so it isn't shown as official yet.",
       { exact: true },
     ),
   ).toBeVisible();

@@ -1,4 +1,6 @@
 import { Fragment, useEffect, useState, type ReactNode } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { IconX } from "@tabler/icons-react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import {
@@ -33,7 +35,6 @@ import {
   recordPublisherName,
 } from "../lib/recordTitle";
 import { recordTagsFor, tagProvenanceExplanation } from "../lib/recordTags";
-import { sourceLocatorKind } from "../lib/sourceLocator";
 import { TAXONOMY_TAG_BY_ID } from "../../shared/taxonomy-contract.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
@@ -83,52 +84,6 @@ function CopyableCodeSnippet(props: { value: string }) {
         </span>
       </div>
       <pre><code>{props.value}</code></pre>
-    </div>
-  );
-}
-
-function CopyableSourceLocator(props: {
-  value: string;
-  copied: boolean;
-  open: boolean;
-  onCopy: () => void;
-  onToggle: () => void;
-}) {
-  const kind = sourceLocatorKind(props.value);
-  return (
-    <div className="record-source-locator" data-record-source-locator>
-      <Button
-        aria-controls="record-source-locator-content"
-        aria-expanded={props.open}
-        onClick={props.onToggle}
-        type="button"
-        variant="secondary"
-      >
-        Source location
-      </Button>
-      <div
-        className="record-source-locator__content"
-        hidden={!props.open}
-        id="record-source-locator-content"
-      >
-        <p>
-          Exact retained location in the publisher material. It is shown as evidence,
-          not converted into an unverified deep link.
-        </p>
-        <span className="record-source-locator__kind" data-source-locator-kind={kind}>{kind}</span>
-        <code>{props.value}</code>
-        <Button
-          aria-label="Copy source locator"
-          onClick={props.onCopy}
-          type="button"
-          variant="secondary"
-        >
-          {props.copied ? "Copied" : "Copy locator"}
-        </Button>
-        <span aria-live="polite" className="visually-hidden">
-          {props.copied ? "Source locator copied to clipboard" : ""}
-        </span>
-      </div>
     </div>
   );
 }
@@ -319,15 +274,11 @@ export function ObjectDetailPage(props: {
   const node = bundle.runtime.getNode(state.node);
   const document = bundle.runtime.getLibraryDocument(state.node);
   const [visibleConnectionCount, setVisibleConnectionCount] = useState(50);
-  const [sourceLocatorOpen, setSourceLocatorOpen] = useState(false);
-  const [sourceLocatorCopied, setSourceLocatorCopied] = useState(false);
-  const [stableIdCopied, setStableIdCopied] = useState(false);
+  const [connectionsOpen, setConnectionsOpen] = useState(false);
 
   useEffect(() => {
     setVisibleConnectionCount(50);
-    setSourceLocatorOpen(false);
-    setSourceLocatorCopied(false);
-    setStableIdCopied(false);
+    setConnectionsOpen(false);
   }, [state.node]);
 
   if (!node) {
@@ -359,7 +310,6 @@ export function ObjectDetailPage(props: {
     ? bundle.catalogSummaries
     : bundle.runtime.getCatalogs();
   const catalog = catalogs.find((entry: any) => entry.id === document.catalog_id);
-  const catalogSourceReview = catalog?.source_review;
   const catalogName = catalogDisplayNameFor(
     document.catalog_id,
     catalog?.name || document.catalog_name || "",
@@ -442,14 +392,10 @@ export function ObjectDetailPage(props: {
         node_type: node.node_type || document.object_type,
         origin: "structural" as const,
       }];
-  const authorityItems = displayedTrace.filter((entry) => entry.origin === "authority");
   const sourceMetadata = {
     ...node.metadata,
     description: document.description || node.metadata?.description || "",
   };
-  const sourceLocator = String(
-    document.source_locator || node.metadata?.source_locator || "",
-  ).trim();
   const presentation = recordPresentationProfile(document.catalog_id, node.node_type || document.object_type);
   const missingSourceFields = missingRequiredRecordFields(presentation, sourceMetadata);
   const recordTags = recordTagsFor({
@@ -580,7 +526,7 @@ export function ObjectDetailPage(props: {
           {!source ? (
             <section className="notice" data-record-source-error role="alert">
               <h2>Source identity unavailable</h2>
-              <p>Official source identity unavailable. This record is not shown as official content until its publication identity can be verified.</p>
+              <p>Can't confirm which publisher this came from, so it isn't shown as official yet.</p>
             </section>
           ) : missingSourceFields.length ? (
             <section className="notice" data-record-source-error role="alert">
@@ -671,18 +617,31 @@ export function ObjectDetailPage(props: {
                     <AcronymText>{tag.label}</AcronymText>
                   </LineTag>
                 );
-                return TAXONOMY_TAG_BY_ID.has(tag.id) ? (
+                // Prefer a governed taxonomy id (precise Library filter) even
+                // when the visible chip came from a publisher category with the
+                // same label; fall back to the area filter, then a plain search.
+                const governedId = TAXONOMY_TAG_BY_ID.has(tag.id)
+                  ? tag.id
+                  : (node.metadata?.taxonomy_tags || []).find(
+                      (candidate: { id?: string; label?: string }) => candidate.label === tag.label,
+                    )?.id;
+                const tagPatch = governedId
+                  ? { tags: [governedId] }
+                  : tag.kind === "area"
+                    ? { area: tag.id.replace(/^area:/, "") }
+                    : { query: tag.label };
+                return (
                   <AppLink
                     aria-label={`Filter the Library by ${tag.label}`}
                     className="record-taxonomy-link"
                     key={tag.id}
                     onNavigate={onNavigate}
-                    patch={{ tags: [tag.id] }}
+                    patch={tagPatch}
                     view="search"
                   >
                     {content}
                   </AppLink>
-                ) : <Fragment key={tag.id}>{content}</Fragment>;
+                );
               })}
             </div>
             <dl className="record-source-facts">
@@ -692,94 +651,20 @@ export function ObjectDetailPage(props: {
               </div>
               <div>
                 <dt>Publication</dt>
-                <dd>{catalogName}</dd>
+                <dd>{catalogName}{source?.version ? ` · ${source.version}` : ""}</dd>
               </div>
-              {identityPresentation.stableIdIsGenerated ? (
-                <div>
-                  <dt>Control Atlas stable ID</dt>
-                  <dd className="ca-copy-wrap ca-record-stable-id">
-                    <code>{identityPresentation.stableId}</code>
-                    <Button
-                      aria-label={`Copy Control Atlas stable ID ${identityPresentation.stableId}`}
-                      onClick={() => {
-                        void copyText(identityPresentation.stableId).then(() => {
-                          setStableIdCopied(true);
-                          window.setTimeout(() => setStableIdCopied(false), 1800);
-                        });
-                      }}
-                      type="button"
-                      variant="secondary"
-                    >
-                      {stableIdCopied ? "Copied" : "Copy ID"}
-                    </Button>
-                    <span aria-live="polite" className="visually-hidden">
-                      {stableIdCopied ? "Control Atlas stable ID copied" : ""}
-                    </span>
-                  </dd>
-                </div>
-              ) : null}
-              {source?.version ? (
-                <div>
-                  <dt>Version</dt>
-                  <dd>{source.version}</dd>
-                </div>
-              ) : null}
-              {node.metadata?.publication_date ? (
-                <div>
-                  <dt>Publication Date</dt>
-                  <dd>{node.metadata.publication_date}</dd>
-                </div>
-              ) : null}
-              {source?.retrieved_at ? (
-                <div>
-                  <dt>Retrieved</dt>
-                  <dd>{source.retrieved_at}</dd>
-                </div>
-              ) : null}
               {source?.last_checked ? (
                 <div>
-                  <dt>Source last checked</dt>
+                  <dt>Current as of</dt>
                   <dd>{source.last_checked}</dd>
                 </div>
               ) : null}
-              {catalogSourceReview ? (
-                <div>
-                  <dt>Publication currentness review</dt>
-                  <dd>
-                    {displayNameFor(
-                      "source_currentness_review",
-                      catalogSourceReview.upstream_currentness_review,
-                    )} · Reviewed{" "}
-                    <time dateTime={catalogSourceReview.reviewed_at}>
-                      {catalogSourceReview.reviewed_at}
-                    </time>
-                  </dd>
-                </div>
-              ) : null}
-              {authorityItems.length ? (
-                <div>
-                  <dt>Authority</dt>
-                  <dd>
-                    <ul className="record-authority-list">
-                      {authorityItems.map((authority) => <li key={authority.id}>{authority.label}</li>)}
-                    </ul>
-                  </dd>
-                </div>
-              ) : null}
             </dl>
-            {sourceLocator ? (
-              <CopyableSourceLocator
-                copied={sourceLocatorCopied}
-                onCopy={() => {
-                  void copyText(sourceLocator).then(() => {
-                    setSourceLocatorCopied(true);
-                    window.setTimeout(() => setSourceLocatorCopied(false), 1800);
-                  });
-                }}
-                onToggle={() => setSourceLocatorOpen((current) => !current)}
-                open={sourceLocatorOpen}
-                value={sourceLocator}
-              />
+            {document.catalog_id !== "disa-cci" && connectionGroups.length ? (
+              <button className="record-connections-trigger" onClick={() => setConnectionsOpen(true)} type="button">
+                <span>Related records</span>
+                <span className="record-connections-trigger__count">{connectionCount}</span>
+              </button>
             ) : null}
             <AppLink
               onNavigate={onNavigate}
@@ -792,18 +677,23 @@ export function ObjectDetailPage(props: {
         </aside>
 
         {document.catalog_id !== "disa-cci" && connectionGroups.length ? (
-          <section className="record-connections record-connections--related" data-record-section="related-records">
-            <div className="section-header">
-              <div>
-                <h2>Related records</h2>
-                <p>
-                  Evidence-backed published links to other publications.
-                  Showing {visibleConnectionGroups.reduce((total, group) => total + group.items.length, 0)} at a time.
-                </p>
-              </div>
-              <Badge tone="info">{connectionCount}</Badge>
-            </div>
-            <div className="record-connection-groups">
+          <Dialog.Root onOpenChange={setConnectionsOpen} open={connectionsOpen}>
+            <Dialog.Portal>
+              <Dialog.Overlay className="drawer-overlay" />
+              <Dialog.Content className="drawer-content record-connections-dialog" data-record-section="related-records">
+                <div className="drawer-header">
+                  <div>
+                    <Dialog.Title>Related records</Dialog.Title>
+                    <Dialog.Description>Published links from this record to other requirements and controls.</Dialog.Description>
+                  </div>
+                  <Dialog.Close asChild>
+                    <button aria-label="Close related records" className="icon-button" type="button">
+                      <IconX aria-hidden="true" size={18} stroke={1.8} />
+                    </button>
+                  </Dialog.Close>
+                </div>
+                <div className="drawer-list">
+                  <div className="record-connection-groups">
               {visibleConnectionGroups.map((group) => (
                 <section key={`${group.catalogId}:${group.relationshipType}`}>
                   <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
@@ -863,20 +753,26 @@ export function ObjectDetailPage(props: {
                 </section>
               ))}
             </div>
-            {visibleConnectionCount < connectionCount ? (
-              <button
-                className="atlas-spatial-more"
-                onClick={() =>
-                  setVisibleConnectionCount((count) =>
-                    Math.min(count + 50, connectionCount),
-                  )
-                }
-                type="button"
-              >
-                Show 50 more · {connectionCount - visibleConnectionCount} remaining
-              </button>
-            ) : null}
-          </section>
+                  {visibleConnectionCount < connectionCount ? (
+                    <button
+                      className="atlas-spatial-more"
+                      onClick={() =>
+                        setVisibleConnectionCount((count) =>
+                          Math.min(count + 50, connectionCount),
+                        )
+                      }
+                      type="button"
+                    >
+                      Show 50 more · {connectionCount - visibleConnectionCount} remaining
+                    </button>
+                  ) : null}
+                  <AppLink className="record-connections-explore" onNavigate={onNavigate} patch={{ node: node.id }} view="atlas-map">
+                    Explore all connections in Atlas
+                  </AppLink>
+                </div>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
         ) : null}
       </div>
 

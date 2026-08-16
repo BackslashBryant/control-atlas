@@ -11,6 +11,7 @@ import {
   ROUTE_TRANSITION_END_EVENT,
   SEARCH_RESULTS_FOCUS_EVENT,
 } from './shared/navigation-events';
+import '../styles/fonts.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
@@ -325,7 +326,60 @@ function syncProgressiveShell() {
   }
 }
 
+function connectSignalCover() {
+  const cover = rootElement.querySelector<HTMLElement>('[data-signal-cover]');
+  if (!cover) return;
+  let seen: boolean;
+  try {
+    seen = window.sessionStorage.getItem('ca-cover-seen') === '1';
+  } catch {
+    seen = false;
+  }
+  // Automation (navigator.webdriver) and returning-this-session visitors never
+  // see the cover, so the e2e/visual suite runs against the real Home.
+  if (seen || window.navigator.webdriver) {
+    cover.remove();
+    return;
+  }
+  // Lift out of the Home shell's stacking context so the fixed overlay covers
+  // the sticky header too — a full Depth-0 takeover.
+  document.body.appendChild(cover);
+  cover.removeAttribute('hidden');
+  cover.focus();
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let dismissed = false;
+  function dismiss() {
+    if (dismissed) return;
+    dismissed = true;
+    try {
+      window.sessionStorage.setItem('ca-cover-seen', '1');
+    } catch {
+      /* sessionStorage unavailable — dismiss anyway */
+    }
+    window.removeEventListener('keydown', onCoverKey);
+    window.removeEventListener('wheel', dismiss);
+    window.removeEventListener('touchmove', dismiss);
+    if (reduce) {
+      cover.remove();
+      return;
+    }
+    cover.classList.add('signal-cover--exiting');
+    window.setTimeout(() => cover.remove(), 460);
+  }
+  function onCoverKey(event: KeyboardEvent) {
+    if (['Enter', ' ', 'Spacebar', 'Escape'].includes(event.key)) {
+      event.preventDefault();
+      dismiss();
+    }
+  }
+  cover.addEventListener('click', dismiss);
+  window.addEventListener('keydown', onCoverKey);
+  window.addEventListener('wheel', dismiss, { passive: true });
+  window.addEventListener('touchmove', dismiss, { passive: true });
+}
+
 function connectStaticHome() {
+  connectSignalCover();
   rootElement.querySelector<HTMLElement>('[data-static-home]')?.removeAttribute('hidden');
   rootElement
     .querySelector<HTMLElement>('[data-skip-workspace]')
@@ -456,6 +510,7 @@ function onStaticSearchShortcut(event: KeyboardEvent) {
 async function bootReactApp() {
   if (reactBoot) return reactBoot;
 
+  document.querySelector('[data-signal-cover]')?.remove();
   window.removeEventListener('keydown', onStaticSearchShortcut);
   stopBrandRotation();
   const staticHome = rootElement.querySelector<HTMLElement>('[data-static-home]');

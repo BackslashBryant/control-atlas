@@ -109,8 +109,10 @@ test("locked area hue pairs and global layout tokens are exact", () => {
   assert.doesNotMatch(tokens, /--ca-space-(?:5|10|20|24|32):/);
 });
 
-test("decorative color resolves to one teal accent", () => {
-  assert.equal(tokenValue("--ca-accent"), "#4fb3a5");
+test("decorative color resolves to one teal accent, and the primary action is orange", () => {
+  // v1.8: teal (#5ca3a6) is the single broad decorative/state hue; the primary
+  // ACTION button is the only surface carrying orange, so it is asserted apart.
+  assert.equal(tokenValue("--ca-accent"), "#5ca3a6");
   for (const alias of [
     "--ca-primary",
     "--ca-secondary",
@@ -119,8 +121,11 @@ test("decorative color resolves to one teal accent", () => {
     "--ca-editorial",
     "--ca-info",
   ]) {
-    assert.equal(tokenValue(alias), "#4fb3a5", `${alias} must resolve to the one accent`);
+    assert.equal(tokenValue(alias), "#5ca3a6", `${alias} must resolve to the one accent`);
   }
+  assert.equal(tokenValue("--ca-action-primary"), "#cb7248", "primary action button must be Ignition Orange");
+  assert.equal(tokenValue("--ca-on-primary"), "#11181e", "primary action ink must be dark (orbit)");
+  assert.equal(tokenValue("--ca-accent-gold"), "#cbae67", "sparing gold accent must be defined");
 });
 
 test("bucket tags stay neutral and area fills remain inside Atlas", () => {
@@ -131,6 +136,19 @@ test("bucket tags stay neutral and area fills remain inside Atlas", () => {
   assert.doesNotMatch(components, /\.bucket-tag\s*\{[^}]*background:[^;}]*--ca-area-color/s);
   assert.match(surfaces, /\.atlas-tree-node--area\s*\{[^}]*background:[^;}]*--ca-area-color/s);
   assert.match(surfaces, /\.atlas-tree-node--authority\s*\{[^}]*background:[^;}]*--ca-area-color/s);
+});
+
+test("stylesheets never reference undefined font tokens (the canonical names are --ca-font-*)", () => {
+  // Guards the class of bug where `var(--font-display)` (no --ca- prefix) is
+  // undefined, silently falls back to inherited body/serif, and quietly drops
+  // the Oswald display face on headings. Only --ca-font-display/body/mono/pixel
+  // exist; a bare --font-* reference is always a typo.
+  const offenders = sourceFiles("styles")
+    .flatMap((path) => {
+      const hits = readFileSync(path, "utf8").match(/var\(--font-(?:display|body|mono|pixel)\)/g);
+      return hits ? [`${path}: ${[...new Set(hits)].join(", ")}`] : [];
+    });
+  assert.deepEqual(offenders, [], "use var(--ca-font-*), not var(--font-*)");
 });
 
 test("route and component sources contain no authored color literals", () => {

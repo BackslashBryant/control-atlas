@@ -28,20 +28,17 @@ export function AboutPage() {
 
         <SummaryCard headingLevel={2} title="How It Works">
           <p>
-            The Atlas keeps publisher hierarchy separate from cross-source
-            relationships. It preserves official identifiers and locators,
-            labels the basis and confidence of each connection, and gives the
-            same result as a graph, a record view, and an accessible evidence
-            list. Tags and filters narrow the catalog without treating an
-            incidental mention in prose as proof that a technology applies.
+            Control Atlas keeps a publisher's own structure separate from the
+            connections it draws between sources, and shows official IDs and
+            links for both. A mention in the text alone doesn't mean a
+            technology or control applies — you decide that.
           </p>
         </SummaryCard>
 
         <SummaryCard headingLevel={2} title="Built for Shared Work">
           <p>
-            This is not a replacement GRC, assessment, ticketing, or document
-            repository. It is the connective layer between them: a practical
-            place for ISSMs, engineers, assessors, and program teams to orient
+            Control Atlas isn't a GRC, assessment, or ticketing system. It's
+            where ISSMs, engineers, assessors, and program teams orient
             themselves, compare guidance, and get the next action moving.
           </p>
         </SummaryCard>

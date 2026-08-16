@@ -9,23 +9,18 @@
 body {
   background:
     linear-gradient(
-      color-mix(in srgb, var(--ca-primary) 5%, transparent) 1px,
+      color-mix(in srgb, var(--lsm-grid-line) 15%, transparent) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      color-mix(in srgb, var(--ca-primary) 5%, transparent) 1px,
+      color-mix(in srgb, var(--lsm-grid-line) 15%, transparent) 1px,
       transparent 1px
     ),
     radial-gradient(
       circle at 12% 0%,
-      color-mix(in srgb, var(--ca-primary) 8%, transparent),
+      color-mix(in srgb, var(--ca-primary) 4%, transparent),
       transparent 26rem
-    ),
-    radial-gradient(
-      circle at 92% 18%,
-      color-mix(in srgb, var(--ca-priority) 6%, transparent),
-      transparent 30rem
     ),
     var(--ca-bg);
   background-size: 24px 24px, 24px 24px, auto, auto, auto;
@@ -171,7 +166,7 @@ body {
   text-align: center;
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--ca-bg) 92%, transparent), var(--ca-bg)),
-    repeating-linear-gradient(90deg, transparent 0 31px, color-mix(in srgb, var(--ca-primary) 8%, transparent) 31px 32px);
+    repeating-linear-gradient(90deg, transparent 0 31px, color-mix(in srgb, var(--lsm-grid-line) 40%, transparent) 31px 32px);
   backdrop-filter: blur(7px);
   animation: route-transition-in 90ms ease-out both;
 }
@@ -540,17 +535,17 @@ body {
 }
 
 .home-search-submit {
-  border-color: var(--ca-primary);
-  background: var(--ca-primary);
-  color: var(--ca-surface-deep);
-  box-shadow: 0 8px 22px color-mix(in srgb, var(--ca-primary) 16%, transparent);
+  border-color: var(--ca-action-primary);
+  background: var(--ca-action-primary);
+  color: var(--ca-on-primary);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--ca-action-primary) 20%, transparent);
 }
 
 .home-search-submit:hover,
 .home-search-submit:focus-visible {
-  border-color: var(--ca-primary-hover);
-  background: var(--ca-primary-hover);
-  color: var(--ca-surface-deep);
+  border-color: var(--ca-action-primary-hover);
+  background: var(--ca-action-primary-hover);
+  color: var(--ca-on-primary);
 }
 
 .header-start-here {
@@ -889,14 +884,14 @@ body {
   z-index: 0;
   opacity: 0.4;
   background:
-    linear-gradient(var(--ca-primary), var(--ca-primary)) 0 0 / 15px 1px no-repeat,
-    linear-gradient(var(--ca-primary), var(--ca-primary)) 0 0 / 1px 15px no-repeat,
-    linear-gradient(var(--ca-primary), var(--ca-primary)) 100% 0 / 15px 1px no-repeat,
-    linear-gradient(var(--ca-primary), var(--ca-primary)) 100% 0 / 1px 15px no-repeat,
-    linear-gradient(var(--ca-primary), var(--ca-primary)) 0 100% / 15px 1px no-repeat,
-    linear-gradient(var(--ca-primary), var(--ca-primary)) 0 100% / 1px 15px no-repeat,
-    linear-gradient(var(--ca-primary), var(--ca-primary)) 100% 100% / 15px 1px no-repeat,
-    linear-gradient(var(--ca-primary), var(--ca-primary)) 100% 100% / 1px 15px no-repeat;
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 0 / 15px 1px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 0 / 1px 15px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 0 / 15px 1px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 0 / 1px 15px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 100% / 15px 1px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 100% / 1px 15px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 100% / 15px 1px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 100% / 1px 15px no-repeat;
   content: "";
   pointer-events: none;
 }
@@ -1095,12 +1090,12 @@ details > summary {
   border-bottom: 1px solid var(--ca-border);
   background:
     linear-gradient(
-      color-mix(in srgb, var(--ca-primary) 5%, transparent) 1px,
+      color-mix(in srgb, var(--lsm-grid-line) 15%, transparent) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      color-mix(in srgb, var(--ca-primary) 5%, transparent) 1px,
+      color-mix(in srgb, var(--lsm-grid-line) 15%, transparent) 1px,
       transparent 1px
     ),
     var(--ca-surface-deep);
@@ -1481,12 +1476,12 @@ details > summary {
 .relationship-graph {
   background:
     linear-gradient(
-      color-mix(in srgb, var(--ca-primary) 5%, transparent) 1px,
+      color-mix(in srgb, var(--lsm-grid-line) 15%, transparent) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      color-mix(in srgb, var(--ca-primary) 5%, transparent) 1px,
+      color-mix(in srgb, var(--lsm-grid-line) 15%, transparent) 1px,
       transparent 1px
     ),
     var(--ca-surface-deep);

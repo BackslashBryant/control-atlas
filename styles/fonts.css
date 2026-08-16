@@ -1,0 +1,37 @@
+/*
+ * Self-hosted typefaces for Orbital Archive No. 01 (v1.8).
+ * Oswald (display) · Inter (body) · IBM Plex Mono (data/labels) ·
+ * Silkscreen (pixel/CRT telemetry accent). All SIL Open Font License 1.1.
+ *
+ * Vendored under styles/fonts/ rather than loaded from a CDN so the site
+ * satisfies its own CSP (font-src 'self') and renders identically offline.
+ * Attribution + license: styles/fonts/README.md. Sources: fontsource.org.
+ */
+
+/* Oswald — variable weight axis (condensed editorial display). */
+@font-face {
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 200 700;
+  font-display: swap;
+  src: url("./fonts/oswald-latin-wght-normal.woff2") format("woff2");
+}
+
+/* Inter — variable weight axis (interface / body). */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./fonts/inter-latin-wght-normal.woff2") format("woff2");
+}
+
+/* IBM Plex Mono — telemetry, IDs, eyebrows, tabular metadata. */
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url("./fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 500; font-display: swap; src: url("./fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 600; font-display: swap; src: url("./fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 700; font-display: swap; src: url("./fonts/ibm-plex-mono-latin-700-normal.woff2") format("woff2"); }
+
+/* Silkscreen — pixel/CRT display accent for signal micro-labels only. */
+@font-face { font-family: "Silkscreen"; font-style: normal; font-weight: 400; font-display: swap; src: url("./fonts/silkscreen-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Silkscreen"; font-style: normal; font-weight: 700; font-display: swap; src: url("./fonts/silkscreen-latin-700-normal.woff2") format("woff2"); }

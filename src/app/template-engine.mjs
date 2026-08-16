@@ -145,11 +145,11 @@ const FEDRAMP_2026_CONTEXT = {
   ],
   hardware_baseline: [
     "Current rule connection: MAS-CSO-IIR requires machine-readable information-resource data, a human-readable explanation of how it was derived, and the code used to generate it.",
-    "This workbook can normalize working inventory, but it is not the authoritative system-generated scope evidence required by the rule.",
+    "This workbook helps organize your inventory. It doesn't replace the system-generated scope evidence the rule requires.",
   ],
   software_baseline: [
     "Current rule connection: MAS-CSO-IIR requires machine-readable information-resource data, a human-readable explanation of how it was derived, and the code used to generate it.",
-    "This workbook can normalize working inventory, but it is not the authoritative system-generated scope evidence required by the rule.",
+    "This workbook helps organize your inventory. It doesn't replace the system-generated scope evidence the rule requires.",
   ],
 };
 

@@ -61,7 +61,7 @@ test("site copy keeps every approved anchor exact", () => {
 test("third-party federal-use provenance is described without changing its publisher", () => {
   assert.equal(
     provenanceDescriptionMap.federal_utilized,
-    "Used in federal work; not federally published.",
+    "Used in federal work but not published by a federal agency.",
   );
 });
 

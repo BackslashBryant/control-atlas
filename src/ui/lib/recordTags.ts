@@ -42,7 +42,14 @@ export function recordTagsFor(input: {
   }
   if (input.area) tags.push({ id: `area:${input.area}`, kind: "area", label: input.area, provenance: "inferred" });
   for (const tag of input.taxonomyTags || []) {
-    if (!tag.id || !tag.kind || !tag.label || tags.some((existing) => existing.id === tag.id)) continue;
+    if (!tag.id || !tag.kind || !tag.label) continue;
+    // Dedupe by label as well as id: a publisher category ("Access Control")
+    // and its governed taxonomy tag ("domain.access-control") render the same
+    // words, so keeping both puts two identical chips on the record. The first
+    // occurrence wins so publisher provenance (and its explanation) survives;
+    // ObjectDetailPage still routes the chip through the governed taxonomy id
+    // when one exists, so the link filters precisely.
+    if (tags.some((existing) => existing.id === tag.id || existing.label === tag.label)) continue;
     tags.push({ id: tag.id, kind: tag.kind, label: tag.label, provenance: tag.provenance || "inferred", basis: tag.basis });
   }
   tags.push({ id: `publication:${input.publication}`, kind: "publication", label: input.publication, provenance: "publisher" });

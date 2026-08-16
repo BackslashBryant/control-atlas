@@ -218,7 +218,7 @@ export function WorkspaceTemplate(props: {
             <IconX aria-hidden="true" size={17} />
           </button>
         ) : null}
-        <button className="button button--secondary" type="submit">Search</button>
+        <button className="workspace-search__submit" type="submit">Search</button>
       </form>
 
       {props.showResultBar ? (

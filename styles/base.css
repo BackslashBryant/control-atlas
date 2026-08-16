@@ -14,17 +14,12 @@ html {
 body {
   margin: 0;
   background:
-    linear-gradient(color-mix(in srgb, var(--ca-primary) 5%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ca-primary) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--lsm-grid-line) 15%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--lsm-grid-line) 15%, transparent) 1px, transparent 1px),
     radial-gradient(
       circle at 14% 8%,
-      color-mix(in srgb, var(--ca-primary) 9%, transparent),
+      color-mix(in srgb, var(--ca-primary) 4%, transparent),
       transparent 24rem
-    ),
-    radial-gradient(
-      circle at 88% 24%,
-      color-mix(in srgb, var(--ca-priority) 7%, transparent),
-      transparent 28rem
     ),
     var(--ca-bg);
   background-size: 24px 24px, 24px 24px, auto, auto, auto;

@@ -11,6 +11,26 @@ export const SITE_COPY = Object.freeze({
     headline: "Make federal cybersecurity compliance make sense.",
     definition:
       "Understand what applies, what it means, and what to do next.",
+    // Depth-0 Signal cover (first paint, before the Home surface).
+    cover: Object.freeze({
+      wordmark: "CONTROL ATLAS",
+      tagline:
+        "Understand what applies, what it means, and what to do next.",
+      prompt: "Click anywhere or press Enter to start",
+      stats: Object.freeze([
+        Object.freeze({
+          value: "Federal-wide",
+          label: "coverage",
+          detail: "NIST · DISA · FedRAMP · MITRE · CISA",
+        }),
+        Object.freeze({
+          value: "Cross-mapped",
+          label: "requirements, controls & techniques",
+          detail: "",
+        }),
+      ]),
+      freshnessLabel: "source data current",
+    }),
     destinations: Object.freeze([
       Object.freeze({
         id: "atlas",

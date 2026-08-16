@@ -102,11 +102,11 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
               <DetailSection title="Screenshots">
                 <div className="resource-detail-media">{resource.media.items.map((item) => <figure key={`${item.url}-${item.sha256}`}><img alt={item.alt} height={item.height} loading="lazy" src={item.url} width={item.width} /><figcaption>Publisher image from commit {item.commitSha.slice(0, 7)} / {item.width}x{item.height} / {item.license}. <a href={item.sourceUrl} rel="noopener noreferrer" target="_blank">Source</a></figcaption></figure>)}</div>
               </DetailSection>
-            ) : resource.resourceType === "tool" ? <DetailSection title="Screenshots"><p>{resource.media?.reason || "No attributable publisher screenshot was available."}</p></DetailSection> : null}
+            ) : resource.resourceType === "tool" ? <DetailSection title="Screenshots"><p>{resource.media?.reason || "No publisher screenshot found."}</p></DetailSection> : null}
             <DetailSection title="Useful For"><div className="resource-detail-tags">{usefulFor.map((item) => <span key={item}>{resourceFieldLabel(item)}</span>)}</div></DetailSection>
             {taxonomyTags.length ? (
               <DetailSection title="Governed discovery tags">
-                <p>These tags come only from reviewed structured resource fields. They open the matching Library context; they do not claim that a framework applies to this resource.</p>
+                <p>These tags link to related Library records. They don't mean a framework applies to this resource.</p>
                 <div className="resource-detail-tags">
                   {taxonomyTags.map((tag) => (
                     <AppLink key={tag.id} onNavigate={onNavigate} patch={{ tags: [tag.id] }} view="search">{tag.label}</AppLink>
@@ -116,7 +116,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
             ) : null}
             <DetailSection title="Compatibility">
               {resource.compatibility?.status === "documented" ? <div className="resource-detail-tags">{[...resource.compatibility.operatingSystems, ...resource.compatibility.environments].map((item) => <span key={item}>{item}</span>)}</div> : null}
-              <p>{resource.compatibility?.note || "Compatibility was not stated in the reviewed publisher source."}</p>
+              <p>{resource.compatibility?.note || "The publisher didn't state compatibility."}</p>
               {resource.compatibility?.sourceUrl ? <p className="resource-detail-evidence"><a href={resource.compatibility.sourceUrl} rel="noopener noreferrer" target="_blank">Compatibility evidence <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}
             </DetailSection>
             {resource.toolProfile ? (

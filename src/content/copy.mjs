@@ -18,45 +18,45 @@ export const evidenceLabelMap = {
 };
 
 export const trustDescriptionMap = {
-  direct: "Direct source document from an official publisher.",
-  derived: "Relationship supported by source data from a published mapping.",
+  direct: "The official publisher's own source document.",
+  derived: "Backed by a published mapping between sources.",
   inferred:
-    "Relationship derived from available public mappings and should be reviewed before use.",
+    "Worked out from public mappings. Review it before you rely on it.",
 };
 
 export const evidenceDescriptionMap = {
-  primary: "The source directly supports this connection.",
-  secondary: "The source supports the connection indirectly.",
+  primary: "This source directly backs it.",
+  secondary: "This source backs it indirectly.",
 };
 
 export const provenanceDescriptionMap = {
   mandated:
-    "Direct requirement or mapping from an official authoritative source.",
+    "A direct requirement from an official source.",
   federal_published:
-    "Published federal mapping or catalog entry from the named source.",
+    "Published by the federal source shown.",
   federal_program:
-    "Program-specific published baseline or overlay from an official source.",
+    "A baseline or overlay published for this program.",
   federal_utilized:
-    "Used in federal work; not federally published.",
+    "Used in federal work but not published by a federal agency.",
   federal_referenced:
-    "Referenced federal guidance used as supporting public context.",
+    "Federal guidance cited for background.",
   third_party_published:
-    "Published by the named non-government organization.",
+    "Published by the non-government organization shown.",
   mitre_published:
-    "Published MITRE ATT&CK or D3FEND mapping from the official catalog.",
+    "Published by MITRE in the official ATT&CK or D3FEND catalog.",
   inferred:
-    "Derived from available public mappings and should be reviewed before use.",
+    "Worked out from public mappings. Review it before you rely on it.",
   deprecated:
-    "Marked deprecated or superseded; verify before relying on this link.",
+    "Marked deprecated or superseded. Check before you rely on this link.",
 };
 
 export const confidenceDescriptionMap = {
-  direct: "High-confidence mapping directly supported by the cited source.",
-  derived: "Supported by source data but may require contextual review.",
-  inferred: "Inferred from public data and should be validated before action.",
+  direct: "Directly backed by the cited source.",
+  derived: "Backed by source data. You may want to check the context.",
+  inferred: "Worked out from public data. Validate it before you act on it.",
 };
 
 export const publicationDescriptionMap = {
-  published: "Published mapping from the named catalog.",
+  published: "Published in the catalog shown.",
   candidate: "Candidate mapping that still needs review before you rely on it.",
 };

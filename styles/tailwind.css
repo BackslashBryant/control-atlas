@@ -1,9 +1,47 @@
 /*
- * Commons was authored with Tailwind utilities. Import only Tailwind's theme
- * and utilities: the existing Control Atlas base stylesheet remains the source
- * of truth for global element styling.
+ * Tailwind utilities are generated FROM the Orbital design tokens defined in
+ * styles/tokens.css (the single source of truth). The @theme inline block below
+ * maps Tailwind's theme namespaces to the existing ca- and lsm- custom
+ * properties via var(), so utility classes such as bg-orange, text-teal,
+ * bg-surface, border-line, and font-display resolve to the real system values
+ * and stay theme-aware. No color literals live here (var() references only), so
+ * the tokens-only color contract still holds.
  */
 @layer theme, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities) source(none) important;
 @source "../src/ui";
+
+@theme inline {
+  /* Orbital palette */
+  --color-orbit: var(--lsm-orbit);
+  --color-graphite: var(--lsm-graphite);
+  --color-slate: var(--lsm-slate);
+  --color-alloy: var(--lsm-alloy);
+  --color-line: var(--lsm-grid-line);
+  --color-dust: var(--lsm-dust);
+  --color-bone: var(--lsm-bone);
+  --color-teal: var(--lsm-teal);
+  --color-gold: var(--lsm-gold);
+  --color-orange: var(--lsm-orange);
+  --color-signal: var(--lsm-signal);
+  --color-rust: var(--lsm-rust);
+  --color-fault: var(--lsm-fault);
+
+  /* Semantic roles */
+  --color-surface: var(--ca-surface);
+  --color-surface-raised: var(--ca-surface-raised);
+  --color-surface-deep: var(--ca-surface-deep);
+  --color-border-line: var(--ca-border);
+  --color-ink: var(--ca-text);
+  --color-muted: var(--ca-text-muted);
+  --color-action: var(--ca-action-primary);
+  --color-on-action: var(--ca-on-primary);
+  --color-accent: var(--ca-accent);
+  --color-link: var(--ca-link);
+
+  /* Type */
+  --font-display: var(--ca-font-display);
+  --font-sans: var(--ca-font-body);
+  --font-mono: var(--ca-font-mono);
+}

@@ -387,9 +387,8 @@ function FedrampCurrentTruthPanel(props: {
             Consolidated Rules {transition.source.version}
           </h3>
           <p>
-            Updated {transition.source.last_updated}. The machine-readable rules
-            and schemas govern; legacy files remain available for migration and
-            comparison.
+            Updated {transition.source.last_updated}. These current rules are
+            authoritative. Older files are kept only for comparison.
           </p>
         </div>
         <Badge tone="success">Official current</Badge>
@@ -1354,8 +1353,8 @@ export function TemplatesPage(props: {
             {workflowArtifacts.length === 0 ? (
               <div className="notice" role="status">
                 <p>
-                  No published source is linked to this task yet. The full
-                  source list and starter documents remain available.
+                  No source is linked to this task yet. You can still browse the
+                  full source list and starter documents.
                 </p>
               </div>
             ) : null}
@@ -1395,8 +1394,8 @@ export function TemplatesPage(props: {
             {workflowTools.length === 0 ? (
               <div className="notice" role="status">
                 <p>
-                  No tool is joined to this workflow yet. The official resources
-                  and starter documents remain usable without one.
+                  No tool is linked to this step yet. You can still use the
+                  official resources and starter documents.
                 </p>
               </div>
             ) : null}
@@ -1662,8 +1661,7 @@ export function TemplatesPage(props: {
                 {catalogSource.version
                   ? ` (version ${catalogSource.version})`
                   : ""}
-                . Source references stay attached to the generated artifact for
-                review.
+                . You'll see the source cited in the document you download.
               </p>
             </SummaryCard>
           ) : null}

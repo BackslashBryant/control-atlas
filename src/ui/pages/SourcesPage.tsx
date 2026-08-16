@@ -677,7 +677,7 @@ export function SourcesPage(props: {
         <details className="connection-inventory" id="connection-inventory">
           <summary>Connection inventory</summary>
           <div className="disclosure-content">
-            <p>What Control Atlas currently loads and connects. These are build counts, not completeness scores.</p>
+            <p>What's loaded and connected right now — a count of what's built, not a score of how complete the picture is.</p>
             <p className="connection-inventory-summary">
               <strong>{connectionInventory.totalRecords.toLocaleString()}</strong> records across {connectionInventory.rows.length} practical categories with <strong>{connectionInventory.publishedLinks.toLocaleString()}</strong> published links.
             </p>
