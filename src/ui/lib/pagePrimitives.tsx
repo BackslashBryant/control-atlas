@@ -224,36 +224,32 @@ export function PageHeader(props: {
   action?: ReactNode;
   primary?: boolean;
 }) {
+  // Orbital task header: eyebrow, precise title, one sentence of decision
+  // context, and at most one primary action aligned to the end of the row.
   return (
-    <>
-      <header
-        className="page-header"
-        data-route-primary-header={props.primary ? "true" : undefined}
-      >
-        <div className="page-header-title" data-route-primary-copy="true">
-          {props.eyebrow ? (
-            <span className="eyebrow page-header-eyebrow">
-              <AcronymText>{props.eyebrow}</AcronymText>
-            </span>
-          ) : null}
-          <h1>{typeof props.title === "string" ? <AcronymText>{props.title}</AcronymText> : props.title}</h1>
-        </div>
-      </header>
-      {props.summary || props.action ? (
-        <div className="page-header-support">
-          {props.summary ? (
-            <p className="page-summary" data-route-primary-copy="true">
-              <AcronymText>{props.summary}</AcronymText>
-            </p>
-          ) : null}
-          {props.action ? (
-            <div className="page-header-action" data-route-primary-support="true">
-              {props.action}
-            </div>
-          ) : null}
+    <header
+      className="page-header"
+      data-route-primary-header={props.primary ? "true" : undefined}
+    >
+      <div className="page-header-title" data-route-primary-copy="true">
+        {props.eyebrow ? (
+          <span className="eyebrow page-header-eyebrow">
+            <AcronymText>{props.eyebrow}</AcronymText>
+          </span>
+        ) : null}
+        <h1>{typeof props.title === "string" ? <AcronymText>{props.title}</AcronymText> : props.title}</h1>
+        {props.summary ? (
+          <p className="page-summary" data-route-primary-copy="true">
+            <AcronymText>{props.summary}</AcronymText>
+          </p>
+        ) : null}
+      </div>
+      {props.action ? (
+        <div className="page-header-action" data-route-primary-support="true">
+          {props.action}
         </div>
       ) : null}
-    </>
+    </header>
   );
 }
 

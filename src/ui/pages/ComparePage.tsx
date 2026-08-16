@@ -118,13 +118,29 @@ export function ComparePage(props: {
   const [relationshipPage, setRelationshipPage] = useState(1);
   const catalogs = bundle.runtime.getCatalogs();
   const catalogCoverageList = useCatalogCoverage(bundle);
+  // Publication A must only offer publications that actually resolve to at
+  // least one Publication B. The catalog's own cross_catalog_connected_count
+  // counts connected records, which is not the same question, so a publication
+  // could be chosen and then dead-end with "No published comparison is
+  // available". Derive A from the same lookup that populates B.
   const sourceCatalogOptions = useMemo(
-    () =>
-      catalogs
-        .filter((catalog: any) => catalog.cross_catalog_connected_count > 0)
+    () => {
+      // Publication A must only offer publications that actually resolve to at
+      // least one Publication B, or the user picks one and dead-ends on "No
+      // published comparison is available". getConnectedCatalogs reads the
+      // published-connection map, which is only populated once the full graph
+      // loads, so fall back to the catalog's own connected count until then.
+      const withPartners = catalogs.filter(
+        (catalog: any) => bundle.runtime.getConnectedCatalogs(catalog.id).length > 0,
+      );
+      const selectable = withPartners.length
+        ? withPartners
+        : catalogs.filter((catalog: any) => catalog.cross_catalog_connected_count > 0);
+      return selectable
         .sort((left: any, right: any) => left.name.localeCompare(right.name))
-        .map((catalog: any) => ({ value: catalog.id, label: catalog.name })),
-    [catalogs],
+        .map((catalog: any) => ({ value: catalog.id, label: catalog.name }));
+    },
+    [bundle.runtime, catalogs, bundle.graphReady],
   );
   const connectedTargetOptions = useMemo(
     () =>

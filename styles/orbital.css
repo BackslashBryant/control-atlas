@@ -666,17 +666,18 @@ body {
 /* Shared page composition. The route title is a compact strip; explanatory
    copy and actions follow as content instead of inflating the strip into a
    second hero below the global header. */
+/* Orbital task header: eyebrow, precise title, one sentence of decision
+   context, and at most one primary action at the end of the row. It sizes to
+   its content instead of being clipped into a fixed bar. */
 .page-header {
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--ca-space-6);
   width: 100%;
-  height: 64px;
-  min-height: 64px;
-  max-height: 64px;
-  margin-bottom: 0;
-  padding: var(--ca-space-2) var(--ca-space-4);
-  overflow: hidden;
+  margin-bottom: var(--ca-space-6);
+  padding: var(--ca-space-2) var(--ca-space-4) var(--ca-space-5);
   border-bottom: 1px solid var(--ca-border);
   background: color-mix(in srgb, var(--ca-surface-deep) 72%, transparent);
 }
@@ -705,13 +706,26 @@ body {
 .page-header h1,
 .panel h1,
 .detail-page h1 {
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
   font-weight: 700;
-  letter-spacing: 0.01em;
+  line-height: var(--line-height-heading);
+  letter-spacing: -0.01em;
   text-transform: none;
 }
 
-.page-header-title,
+/* Title block stacks: eyebrow over title over the one context sentence. */
+.page-header-title {
+  display: grid;
+  gap: var(--ca-space-2);
+  min-width: 0;
+}
+
+.page-header-title .page-summary {
+  max-width: var(--ca-reading-measure);
+  margin: 0;
+  color: var(--ca-text-muted);
+}
+
 .page-header > .page-header-row,
 .page-header > .page-header-row > div {
   display: flex;
@@ -721,9 +735,7 @@ body {
   min-width: 0;
 }
 
-.page-header-title h1,
-.page-header > .page-header-row h1,
-.page-header-title h1 > button {
+.page-header > .page-header-row h1 {
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
@@ -731,9 +743,22 @@ body {
   white-space: nowrap;
 }
 
+.page-header-action {
+  flex: none;
+  align-self: end;
+}
+
 .page-header > .eyebrow,
 .page-header > .page-header-row .page-summary {
   display: none;
+}
+
+@media (max-width: 40rem) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ca-space-4);
+  }
 }
 
 .page-header-eyebrow {
