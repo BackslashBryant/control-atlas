@@ -27,7 +27,16 @@ export type AtlasGraphSourceEdge = {
 
 export type AtlasGraphNodeDisplayMetadata = {
   label: string;
+  /** Preserved legacy field: do not use as a global semantic taxonomy. */
   nodeType: string;
+  /** Publisher-facing record kind, retained without Atlas normalization. */
+  nativeType: string;
+  /** Optional Atlas-owned discovery facet; empty when no facet is asserted. */
+  atlasClass: string;
+  /** Separates Atlas presentation from publisher and authority content. */
+  objectLayer: "atlas_structure" | "authority_document" | "publisher_content";
+  /** Derived Atlas presentation role, never a publisher record kind. */
+  atlasStructureRole: "root" | "area" | "";
   sourceId: string;
   catalogId: string;
   itemId: string;
@@ -43,6 +52,8 @@ export type AtlasGraphEdgeDisplayMetadata = {
   provenanceClass: string;
   publicationStatus: string;
   directed: boolean;
+  /** Edge-local connection provenance, not a landscape node classification. */
+  connectionSourceIds: string[];
 };
 
 export type AtlasGraphNodeAttributes = {
@@ -82,11 +93,46 @@ function count(value: unknown) {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
 }
 
+function textList(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string" && item.length > 0);
+  }
+  return typeof value === "string" && value.length > 0 ? [value] : [];
+}
+
+function nativeType(node: AtlasGraphSourceNode, metadata: Record<string, unknown>) {
+  const nodeType = text(node.node_type);
+  if (nodeType === "requirement" && text(metadata.catalog_id) === "disa-cci") return "cci";
+  return text(metadata.native_type) || text(metadata.type) || nodeType;
+}
+
+function atlasClass(node: AtlasGraphSourceNode, metadata: Record<string, unknown>) {
+  return text(metadata.atlas_class) || (text(node.node_type) === "requirement" ? "requirement" : "");
+}
+
+function objectLayer(node: AtlasGraphSourceNode, metadata: Record<string, unknown>): AtlasGraphNodeDisplayMetadata["objectLayer"] {
+  const kind = text(node.node_type);
+  if (kind === "trunk" || kind === "limb" || text(metadata.atlas_structure_role)) return "atlas_structure";
+  if (["statute", "regulation", "policy_directive", "authority_document"].includes(kind)) return "authority_document";
+  return "publisher_content";
+}
+
+function atlasStructureRole(node: AtlasGraphSourceNode, metadata: Record<string, unknown>): AtlasGraphNodeDisplayMetadata["atlasStructureRole"] {
+  const role = text(metadata.atlas_structure_role);
+  if (role === "root" || text(node.node_type) === "trunk") return "root";
+  if (role === "area" || text(node.node_type) === "limb") return "area";
+  return "";
+}
+
 function nodeDisplay(node: AtlasGraphSourceNode): AtlasGraphNodeDisplayMetadata {
   const metadata = asRecord(node.metadata);
   return {
     label: text(node.label) || text(metadata.title) || node.id,
     nodeType: text(node.node_type),
+    nativeType: nativeType(node, metadata),
+    atlasClass: atlasClass(node, metadata),
+    objectLayer: objectLayer(node, metadata),
+    atlasStructureRole: atlasStructureRole(node, metadata),
     sourceId:
       text(node.source_id) ||
       text(node.publication_source_id) ||
@@ -141,6 +187,17 @@ function edgeDisplay(
     provenanceClass: text(edge.provenance_class),
     publicationStatus: text(edge.publication_status),
     directed,
+    connectionSourceIds: [...new Set([
+      ...textList(edge.source_artifact_id),
+      ...textList(edge.artifact_ids),
+      ...(Array.isArray(edge.source_refs)
+        ? edge.source_refs.flatMap((reference) => {
+          const source = asRecord(reference);
+          const id = text(source.source_id) || text(source.artifact_id) || text(source.id);
+          return id ? [id] : [];
+        })
+        : []),
+    ])].sort(),
   };
 }
 

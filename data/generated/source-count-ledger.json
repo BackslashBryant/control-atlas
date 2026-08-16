@@ -1,15 +1,22 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-13T16:33:49.883Z",
+  "generated_at": "2026-08-16T19:57:25.667Z",
   "count_semantics": {
     "discovered_expected_records": "Independent publisher inventory expected by the completeness contract.",
     "parsed_source_records": "Publisher records emitted by the source adapter before graph construction.",
     "normalized_records": "Normalized catalog records named by the bundle imported-evidence locator.",
+    "parsed_primary_artifact_records": "Registry-declared primary artifact total. It may include publisher structural containers and must not be compared directly with leaf records.",
     "published_source_relationships": "Relationships explicitly parsed from publisher material.",
     "graph_nodes": "Generated graph nodes assigned to the catalog, including its catalog node.",
     "runtime_node_citations": "Generated graph nodes whose provenance cites the artifact.",
     "runtime_edge_citations": "Generated graph edges whose provenance cites the artifact.",
-    "runtime_navigable_count": "Non-catalog nodes present in the generated catalog browsing payload."
+    "runtime_navigable_count": "Non-catalog nodes present in the generated catalog browsing payload.",
+    "runtime_leaf_record_count": "Canonical publisher-native leaf records in the generated catalog browsing payload.",
+    "runtime_structural_group_count": "Publisher structural groups represented for browsing, such as benchmarks, families, categories, or functions.",
+    "catalog_anchor_count": "The one canonical catalog anchor (or another explicit catalog-level object) retained with leaf records and publisher structural groups.",
+    "explained_graph_node_count": "Sum of canonical leaf records, publisher structural groups, and catalog anchors.",
+    "unexplained_graph_node_delta": "Graph node count minus the explicit structural reconciliation; this must be zero.",
+    "normalized_to_leaf_delta": "Normalized publisher records minus canonical publisher-native leaf records; zero means the record transformation is lossless."
   },
   "artifacts": [
     {
@@ -1037,7 +1044,11 @@
         "graph_edges_incident": 118,
         "runtime_navigable_count": 3,
         "runtime_leaf_record_count": 0,
-        "runtime_structural_group_count": 3
+        "runtime_structural_group_count": 3,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 4,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 3
       }
     },
     {
@@ -1051,7 +1062,11 @@
         "graph_edges_incident": 1827,
         "runtime_navigable_count": 134,
         "runtime_leaf_record_count": 106,
-        "runtime_structural_group_count": 28
+        "runtime_structural_group_count": 28,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 135,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1065,7 +1080,11 @@
         "graph_edges_incident": 134,
         "runtime_navigable_count": 128,
         "runtime_leaf_record_count": 0,
-        "runtime_structural_group_count": 128
+        "runtime_structural_group_count": 128,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 129,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 128
       }
     },
     {
@@ -1079,7 +1098,11 @@
         "graph_edges_incident": 38895,
         "runtime_navigable_count": 5137,
         "runtime_leaf_record_count": 5137,
-        "runtime_structural_group_count": 0
+        "runtime_structural_group_count": 0,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 5138,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1093,7 +1116,11 @@
         "graph_edges_incident": 5184,
         "runtime_navigable_count": 2516,
         "runtime_leaf_record_count": 2516,
-        "runtime_structural_group_count": 25
+        "runtime_structural_group_count": 25,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 2542,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1107,7 +1134,11 @@
         "graph_edges_incident": 43148,
         "runtime_navigable_count": 17021,
         "runtime_leaf_record_count": 17021,
-        "runtime_structural_group_count": 354
+        "runtime_structural_group_count": 354,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 17376,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1121,7 +1152,11 @@
         "graph_edges_incident": 14,
         "runtime_navigable_count": 13,
         "runtime_leaf_record_count": 11,
-        "runtime_structural_group_count": 2
+        "runtime_structural_group_count": 2,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 14,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1135,7 +1170,11 @@
         "graph_edges_incident": 2227,
         "runtime_navigable_count": 320,
         "runtime_leaf_record_count": 320,
-        "runtime_structural_group_count": 0
+        "runtime_structural_group_count": 0,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 321,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1149,7 +1188,11 @@
         "graph_edges_incident": 1053,
         "runtime_navigable_count": 4,
         "runtime_leaf_record_count": 4,
-        "runtime_structural_group_count": 0
+        "runtime_structural_group_count": 0,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 5,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1163,7 +1206,11 @@
         "graph_edges_incident": 12,
         "runtime_navigable_count": 3,
         "runtime_leaf_record_count": 3,
-        "runtime_structural_group_count": 0
+        "runtime_structural_group_count": 0,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 4,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1177,7 +1224,11 @@
         "graph_edges_incident": 38,
         "runtime_navigable_count": 17,
         "runtime_leaf_record_count": 17,
-        "runtime_structural_group_count": 0
+        "runtime_structural_group_count": 0,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 18,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1191,7 +1242,11 @@
         "graph_edges_incident": 69,
         "runtime_navigable_count": 68,
         "runtime_leaf_record_count": 68,
-        "runtime_structural_group_count": 0
+        "runtime_structural_group_count": 0,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 69,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": -6
       }
     },
     {
@@ -1205,7 +1260,11 @@
         "graph_edges_incident": 3875,
         "runtime_navigable_count": 712,
         "runtime_leaf_record_count": 697,
-        "runtime_structural_group_count": 15
+        "runtime_structural_group_count": 15,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 713,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1219,7 +1278,11 @@
         "graph_edges_incident": 751,
         "runtime_navigable_count": 109,
         "runtime_leaf_record_count": 97,
-        "runtime_structural_group_count": 12
+        "runtime_structural_group_count": 12,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 110,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1233,7 +1296,11 @@
         "graph_edges_incident": 4075,
         "runtime_navigable_count": 278,
         "runtime_leaf_record_count": 271,
-        "runtime_structural_group_count": 7
+        "runtime_structural_group_count": 7,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 279,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1247,7 +1314,11 @@
         "graph_edges_incident": 620,
         "runtime_navigable_count": 147,
         "runtime_leaf_record_count": 130,
-        "runtime_structural_group_count": 17
+        "runtime_structural_group_count": 17,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 148,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1261,7 +1332,11 @@
         "graph_edges_incident": 239,
         "runtime_navigable_count": 124,
         "runtime_leaf_record_count": 110,
-        "runtime_structural_group_count": 14
+        "runtime_structural_group_count": 14,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 125,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1275,7 +1350,11 @@
         "graph_edges_incident": 135,
         "runtime_navigable_count": 132,
         "runtime_leaf_record_count": 115,
-        "runtime_structural_group_count": 17
+        "runtime_structural_group_count": 17,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 133,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1289,7 +1368,11 @@
         "graph_edges_incident": 24,
         "runtime_navigable_count": 7,
         "runtime_leaf_record_count": 7,
-        "runtime_structural_group_count": 0
+        "runtime_structural_group_count": 0,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 8,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1303,7 +1386,11 @@
         "graph_edges_incident": 13950,
         "runtime_navigable_count": 1216,
         "runtime_leaf_record_count": 1196,
-        "runtime_structural_group_count": 20
+        "runtime_structural_group_count": 20,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 1217,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1317,7 +1404,11 @@
         "graph_edges_incident": 2051,
         "runtime_navigable_count": 1034,
         "runtime_leaf_record_count": 1014,
-        "runtime_structural_group_count": 20
+        "runtime_structural_group_count": 20,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 1035,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1331,7 +1422,11 @@
         "graph_edges_incident": 919,
         "runtime_navigable_count": 4,
         "runtime_leaf_record_count": 4,
-        "runtime_structural_group_count": 0
+        "runtime_structural_group_count": 0,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 5,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1345,7 +1440,11 @@
         "graph_edges_incident": 92,
         "runtime_navigable_count": 91,
         "runtime_leaf_record_count": 72,
-        "runtime_structural_group_count": 19
+        "runtime_structural_group_count": 19,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 92,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1359,7 +1458,11 @@
         "graph_edges_incident": 940,
         "runtime_navigable_count": 489,
         "runtime_leaf_record_count": 489,
-        "runtime_structural_group_count": 0
+        "runtime_structural_group_count": 0,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 490,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1373,7 +1476,11 @@
         "graph_edges_incident": 269,
         "runtime_navigable_count": 268,
         "runtime_leaf_record_count": 268,
-        "runtime_structural_group_count": 0
+        "runtime_structural_group_count": 0,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 269,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1387,7 +1494,11 @@
         "graph_edges_incident": 47,
         "runtime_navigable_count": 46,
         "runtime_leaf_record_count": 42,
-        "runtime_structural_group_count": 4
+        "runtime_structural_group_count": 4,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 47,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     },
     {
@@ -1401,7 +1512,11 @@
         "graph_edges_incident": 2092,
         "runtime_navigable_count": 344,
         "runtime_leaf_record_count": 344,
-        "runtime_structural_group_count": 0
+        "runtime_structural_group_count": 0,
+        "catalog_anchor_count": 1,
+        "explained_graph_node_count": 345,
+        "unexplained_graph_node_delta": 0,
+        "normalized_to_leaf_delta": 0
       }
     }
   ]

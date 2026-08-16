@@ -97,28 +97,27 @@ test("Template D is graph-first and discloses map details without covering the c
   await expect(page.getByRole("button", { name: /Open this (?:area|publication|branch)/ })).toHaveCount(0);
 });
 
-test("global Atlas selection and filters preserve the deterministic layout", async ({ page }) => {
+test("semantic Atlas drills from landmarks to publisher-native records without a global graph", async ({ page }) => {
   await openNetwork(page, { width: 1440, height: 900 });
   const network = page.getByTestId("atlas-network");
-  const initialHash = await network.getAttribute("data-layout-hash");
-  expect(initialHash).toMatch(/^[a-f0-9]{64}$/);
+  await expect(network).toHaveAttribute("data-projection-level", "landscape");
+  await expect(network).toHaveAttribute("data-projection-node-count", "13");
   expect(await network.locator("canvas").count()).toBeGreaterThan(0);
-
-  await page.getByLabel("Record category").selectOption("statute");
-  await expect(page.getByText("Accessible network list (7 records)")).toBeVisible();
   await page.getByLabel("Relationship class").selectOption("correlation");
-  await expect(network).toHaveAttribute("data-layout-hash", initialHash);
-  await page.getByLabel("Record category").selectOption("");
-  await page.getByLabel("Area").selectOption("atlas:LIMB-COMPLIANCE");
-  await network.locator("label", { hasText: /^Publication/ }).locator("select").selectOption("nist-800-53");
-  await expect(network).toHaveAttribute("data-layout-hash", initialHash);
-
-  const search = page.getByRole("searchbox", { name: "Jump to a record" });
-  await search.fill("nist-800-53:AC-2");
-  await search.press("Enter");
+  await network.getByRole("button", { name: /Compliance/ }).click();
+  await expect(page).toHaveURL(/atlasLimb=.*LIMB-COMPLIANCE/);
+  await expect(network).toHaveAttribute("data-projection-level", "area");
+  await network.locator("summary").click();
+  await network.getByRole("button", { name: /SP 800-53 Rev\. 5 Catalog/ }).click();
+  await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
+  await expect(network).toHaveAttribute("data-projection-level", "publication");
+  await network.locator("summary").click();
+  await network.getByRole("button", { name: /Access Control/ }).click();
+  await expect(network).toHaveAttribute("data-projection-level", "detail");
+  await network.locator("summary").click();
+  await network.getByRole("button", { name: /^AC-2 \u2014 Account Management/ }).click();
   await expect(page).toHaveURL(/#\/atlas\/nist-800-53:AC-2/);
-  await expect(network).toHaveAttribute("data-selected-node", "nist-800-53:AC-2");
-  await expect(network).toHaveAttribute("data-layout-hash", initialHash);
+  await expect(network).toHaveAttribute("data-selected-canonical", "nist-800-53:AC-2");
 });
 
 test("every populated area drills directly and the live breadcrumb reverses the path", async ({ page }) => {
@@ -144,44 +143,22 @@ test("every populated area drills directly and the live breadcrumb reverses the 
 });
 
 for (const width of [1024, 1199, 1200, 1440]) {
-  test(`graph-first Atlas uses the available workspace at ${width}px`, async ({ page }) => {
-    await openAtlas(page, { width, height: 900 });
-    const workbench = page.locator(".atlas-tree__workbench");
-    const canvas = workbench.locator(".atlas-tree__canvas");
-    await expect(workbench).toHaveClass(/is-overview/);
-    await expect(workbench).not.toHaveClass(/has-open-inspector/);
-    await expect(page.locator(".atlas-tree__inspector")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Map details", exact: true })).toBeVisible();
-    await expect(canvas.getByRole("application", { name: "Interactive Atlas map hierarchy" })).toBeVisible();
-    await expect(page.locator(".react-flow__node")).toHaveCount(13);
+  test(`semantic Atlas uses the available workspace at ${width}px`, async ({ page }) => {
+    await openNetwork(page, { width, height: 900 });
+    const network = page.getByTestId("atlas-network");
+    const stage = network.locator(".atlas-network-stage");
+    await expect(network).toHaveAttribute("data-projection-level", "landscape");
+    await expect(network).toHaveAttribute("data-projection-node-count", "13");
+    expect(await network.locator("canvas").count()).toBeGreaterThan(0);
+    await expect(network.locator("summary")).toHaveText("Accessible landmarks (13)");
 
-    const occupancy = await page.locator(".react-flow__node").evaluateAll((nodes, canvasSelector) => {
-      const canvasElement = globalThis.document.querySelector(canvasSelector);
-      if (!canvasElement || !nodes.length) return null;
-      const canvasBox = canvasElement.getBoundingClientRect();
-      const boxes = nodes.map((node) => node.getBoundingClientRect());
-      const left = Math.min(...boxes.map((box) => box.left));
-      const right = Math.max(...boxes.map((box) => box.right));
-      const top = Math.min(...boxes.map((box) => box.top));
-      const bottom = Math.max(...boxes.map((box) => box.bottom));
-      return {
-        heightRatio: (bottom - top) / canvasBox.height,
-        widthRatio: (right - left) / canvasBox.width,
-      };
-    }, ".atlas-tree__canvas");
-    expect(occupancy?.widthRatio, `${width}px graph width occupancy`).toBeGreaterThanOrEqual(.55);
-    expect(occupancy?.heightRatio, `${width}px graph height occupancy`).toBeGreaterThanOrEqual(.7);
+    const stageBox = await stage.boundingBox();
+    expect(stageBox?.width, `${width}px semantic graph width`).toBeGreaterThan(Math.min(640, width * .8));
+    expect(stageBox?.height, `${width}px semantic graph height`).toBeGreaterThanOrEqual(320);
     expect(
       await page.locator("html").evaluate((element) => element.scrollWidth - element.clientWidth),
       `${width}px Atlas overflow`,
     ).toBeLessThanOrEqual(1);
-
-    if (width < 1200) {
-      await expect(workbench.locator(".atlas-tree__dock--left")).toBeHidden();
-      await expect(page.getByRole("button", { name: "Browse structure" })).toBeVisible();
-    } else {
-      await expect(workbench.locator(".atlas-tree__dock--left")).toBeVisible();
-    }
   });
 }
 
@@ -271,7 +248,7 @@ test("Adaptive Explorer is bounded, responsive, and incrementally rendered at ev
   test.setTimeout(60_000);
   for (const width of [320, 375, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: width < 768 ? 844 : 900 });
-    await gotoApp(page, "/#/atlas?atlasLimb=atlas:LIMB-IMPLEMENTATION&atlasFramework=disa-stig");
+    await gotoApp(page, "/#/atlas?atlasLimb=atlas:LIMB-IMPLEMENTATION&atlasFramework=disa-stig&relationshipView=path");
     await waitForAppReady(page);
     await dismissOnboarding(page);
 

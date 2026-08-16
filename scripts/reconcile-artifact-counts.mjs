@@ -25,7 +25,7 @@ function readJson(rel) {
   return JSON.parse(readFileSync(full, 'utf8'));
 }
 
-function catalogRuntimeCounts(catalogId) {
+function catalogRuntimeCounts(catalogId, graphNodes) {
   const rootPath = join(CATALOG_RECORDS, `${catalogId}.json`);
   if (!existsSync(rootPath)) return null;
   const root = JSON.parse(readFileSync(rootPath, 'utf8')).catalog_records;
@@ -38,11 +38,17 @@ function catalogRuntimeCounts(catalogId) {
     }
   }
   const nonCatalog = nodes.filter((node) => node.node_type !== 'catalog');
+  const catalogGraphNodes = graphNodes.filter((node) => node.metadata?.catalog_id === catalogId);
+  const runtimeLeafRecordCount = catalogGraphNodes.filter((node) => node.node_type !== 'catalog' && !GROUP_TYPES.has(node.node_type)).length;
+  const runtimeStructuralGroupCount = catalogGraphNodes.filter((node) => node.node_type !== 'catalog' && GROUP_TYPES.has(node.node_type)).length;
+  const catalogAnchorCount = catalogGraphNodes.filter((node) => node.node_type === 'catalog').length;
   return {
     runtime_navigable_count: nonCatalog.length,
-    runtime_leaf_record_count: nonCatalog.filter((node) => !GROUP_TYPES.has(node.node_type)).length,
-    runtime_structural_group_count: nonCatalog.filter((node) => GROUP_TYPES.has(node.node_type)).length
-      + (root.published_groups || []).length,
+    runtime_leaf_record_count: runtimeLeafRecordCount,
+    runtime_structural_group_count: runtimeStructuralGroupCount,
+    catalog_anchor_count: catalogAnchorCount,
+    explained_graph_node_count: runtimeLeafRecordCount + runtimeStructuralGroupCount + catalogAnchorCount,
+    unexplained_graph_node_delta: catalogGraphNodes.length - (runtimeLeafRecordCount + runtimeStructuralGroupCount + catalogAnchorCount),
   };
 }
 
@@ -97,17 +103,22 @@ const catalogs = (registry.catalog_source_bundles || []).map((bundle) => {
   const imported = bundle.expected_inventory?.imported_evidence_locator
     ? resolveExpectedLocator(bundle.expected_inventory.imported_evidence_locator, readJson)
     : null;
+  const runtime = catalogRuntimeCounts(bundle.catalog_id, nodes) || {};
+  const normalizedRecords = imported ?? primary.reduce((total, artifact) => total + artifact.record_count, 0);
   return {
     catalog_id: bundle.catalog_id,
     counts: {
       discovered_expected_records: expected,
-      normalized_records: imported ?? primary.reduce((total, artifact) => total + artifact.record_count, 0),
+      normalized_records: normalizedRecords,
       parsed_primary_artifact_records: primary.reduce((total, artifact) => total + artifact.record_count, 0),
       published_source_relationships: all.reduce((total, artifact) => total + artifact.relationship_count, 0),
       graph_nodes: nodes.filter((node) => node.metadata?.catalog_id === bundle.catalog_id).length,
       graph_edges_incident: edges.filter((edge) => String(edge.source_node_id || '').startsWith(`${bundle.catalog_id}:`)
         || String(edge.target_node_id || '').startsWith(`${bundle.catalog_id}:`)).length,
-      ...catalogRuntimeCounts(bundle.catalog_id),
+      ...runtime,
+      normalized_to_leaf_delta: typeof runtime.runtime_leaf_record_count === 'number'
+        ? normalizedRecords - runtime.runtime_leaf_record_count
+        : null,
     },
   };
 });
@@ -119,11 +130,18 @@ const ledger = {
     discovered_expected_records: 'Independent publisher inventory expected by the completeness contract.',
     parsed_source_records: 'Publisher records emitted by the source adapter before graph construction.',
     normalized_records: 'Normalized catalog records named by the bundle imported-evidence locator.',
+    parsed_primary_artifact_records: 'Registry-declared primary artifact total. It may include publisher structural containers and must not be compared directly with leaf records.',
     published_source_relationships: 'Relationships explicitly parsed from publisher material.',
     graph_nodes: 'Generated graph nodes assigned to the catalog, including its catalog node.',
     runtime_node_citations: 'Generated graph nodes whose provenance cites the artifact.',
     runtime_edge_citations: 'Generated graph edges whose provenance cites the artifact.',
     runtime_navigable_count: 'Non-catalog nodes present in the generated catalog browsing payload.',
+    runtime_leaf_record_count: 'Canonical publisher-native leaf records in the generated catalog browsing payload.',
+    runtime_structural_group_count: 'Publisher structural groups represented for browsing, such as benchmarks, families, categories, or functions.',
+    catalog_anchor_count: 'The one canonical catalog anchor (or another explicit catalog-level object) retained with leaf records and publisher structural groups.',
+    explained_graph_node_count: 'Sum of canonical leaf records, publisher structural groups, and catalog anchors.',
+    unexplained_graph_node_delta: 'Graph node count minus the explicit structural reconciliation; this must be zero.',
+    normalized_to_leaf_delta: 'Normalized publisher records minus canonical publisher-native leaf records; zero means the record transformation is lossless.',
   },
   artifacts,
   catalogs,

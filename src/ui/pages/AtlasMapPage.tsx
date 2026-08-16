@@ -23,6 +23,7 @@ import {
 import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
 import { AtlasGraph } from "../components/AtlasGraph";
+import type { AtlasProjectionDrill } from "../lib/atlasGraphProjection";
 import {
   AtlasTree,
   structuralChildrenFromNeighborhood,
@@ -121,10 +122,24 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     [bundle, state.node],
   );
   const view = atlasView(state.relationshipView, Boolean(nodeId));
-  const hierarchyRequested = Boolean(
-    state.atlasAxis || state.atlasLimb || state.atlasFramework ||
-    state.atlasFamily || state.atlasBenchmark || state.relationshipView === "path",
-  );
+  // The publisher hierarchy is a deliberate alternate projection. Area and
+  // publication route state now drives the semantic Sigma projection instead
+  // of suppressing it and falling back to a tree by default.
+  const hierarchyRequested = Boolean(state.relationshipView || state.atlasAxis === "framework");
+  const atlasProjection = useMemo(() => {
+    const artifact = bundle.atlasNetwork;
+    if (!artifact) return null;
+    if (state.atlasFamily && artifact.details[state.atlasFamily]) {
+      return artifact.details[state.atlasFamily];
+    }
+    if (state.atlasFramework && artifact.publications[state.atlasFramework]) {
+      return artifact.publications[state.atlasFramework];
+    }
+    if (state.atlasLimb && artifact.areas[state.atlasLimb]) {
+      return artifact.areas[state.atlasLimb];
+    }
+    return artifact.landscape;
+  }, [bundle.atlasNetwork, state.atlasFamily, state.atlasFramework, state.atlasLimb]);
   const [record, setRecord] = useState<AtlasNeighborhoodRecord | null>(null);
   const [recordStatus, setRecordStatus] = useState<
     "idle" | "loading" | "ready" | "missing" | "error"
@@ -210,10 +225,86 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     onNavigate("atlas-map", patch);
   }
 
+  function drillAtlas(drill: AtlasProjectionDrill) {
+    if (drill.kind === "area") {
+      patchAtlas({
+        node: "",
+        atlasAxis: "",
+        atlasLimb: drill.targetId,
+        atlasFramework: "",
+        atlasFamily: "",
+        relationshipView: "",
+      });
+      return;
+    }
+    if (drill.kind === "publication") {
+      const areaId = bundle.atlasNetwork?.record_locations[`${drill.targetId}:CATALOG`]?.areaId || state.atlasLimb;
+      patchAtlas({
+        node: "",
+        atlasLimb: areaId,
+        atlasFramework: drill.targetId,
+        atlasFamily: "",
+        relationshipView: "",
+      });
+      return;
+    }
+    if (drill.kind === "detail") {
+      patchAtlas({ atlasFamily: drill.targetId, relationshipView: "" });
+      return;
+    }
+    patchAtlas({ node: drill.targetId, atlasParent: "", relationshipSearch: "", relationshipView: "" });
+  }
+
+  function atlasHome() {
+    patchAtlas({
+      node: "",
+      atlasAxis: "",
+      atlasLimb: "",
+      atlasFramework: "",
+      atlasFamily: "",
+      relationshipView: "",
+    });
+  }
+
+  function atlasUp() {
+    if (state.atlasFamily) {
+      patchAtlas({ atlasFamily: "", relationshipView: "" });
+      return;
+    }
+    if (state.atlasFramework) {
+      patchAtlas({ atlasFramework: "", relationshipView: "" });
+      return;
+    }
+    if (state.atlasLimb) {
+      patchAtlas({ atlasLimb: "", relationshipView: "" });
+      return;
+    }
+    atlasHome();
+  }
+
   function submitSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const query = mapSearchDraft.trim();
     if (!query) return;
+    const exactSemanticRecord = Object.entries(bundle.atlasNetwork?.record_locations || {})
+      .find(([nodeId]) => nodeId.toLocaleLowerCase() === query.toLocaleLowerCase());
+    if (exactSemanticRecord) {
+      const [nodeId, location] = exactSemanticRecord;
+      setNoMatchQuery("");
+      setSearchAnnouncement(`Opened ${location.label} in its publisher context.`);
+      patchAtlas({
+        node: nodeId,
+        atlasParent: "",
+        atlasLimb: location.areaId,
+        atlasFramework: location.publicationId,
+        atlasFamily: location.detailId || "",
+        relationshipSearch: "",
+        relationshipGroup: "",
+        atlasStage: "",
+        relationshipView: "",
+      });
+      return;
+    }
     const transition = resolveAtlasSearchTransition(bundle.runtime, query);
     setSearchAnnouncement(transition.announcement);
     if (transition.kind === "search") {
@@ -225,12 +316,17 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       return;
     }
     setNoMatchQuery("");
+    const location = bundle.atlasNetwork?.record_locations[transition.nodeId];
     patchAtlas({
       node: transition.nodeId,
       atlasParent: "",
+      atlasLimb: location?.areaId || "",
+      atlasFramework: location?.publicationId || "",
+      atlasFamily: location?.detailId || "",
       relationshipSearch: "",
       relationshipGroup: "",
       atlasStage: "",
+      relationshipView: "",
     });
   }
 
@@ -290,11 +386,14 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         </div>
       ) : null}
 
-      {bundle.atlasNetwork && !hierarchyRequested ? (
+      {bundle.atlasNetwork && atlasProjection && !hierarchyRequested ? (
         <AtlasGraph
-          artifact={bundle.atlasNetwork}
-          onSelect={(node) => patchAtlas({ node, atlasParent: "", relationshipSearch: "" })}
-          selectedId={nodeId || undefined}
+          canGoUp={Boolean(state.atlasFamily || state.atlasFramework || state.atlasLimb)}
+          onDrill={drillAtlas}
+          onHome={atlasHome}
+          onUp={atlasUp}
+          projection={atlasProjection}
+          selectedCanonicalId={nodeId || undefined}
         />
       ) : !bundle.atlasNetwork ? (
         <p className="atlas-load-inline-error" role="alert">The global Atlas network is unavailable. Reload the page to try again.</p>

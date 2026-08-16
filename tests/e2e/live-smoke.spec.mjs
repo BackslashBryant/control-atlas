@@ -68,12 +68,11 @@ test("live smoke: Resources and Atlas workbench are first-class routes", async (
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
   const network = page.getByTestId("atlas-network");
-  await expect(network).toHaveAttribute("data-layout-hash", /^[a-f0-9]{64}$/);
+  await expect(network).toHaveAttribute("data-projection-level", "landscape");
+  await expect(network).toHaveAttribute("data-projection-node-count", /^(?:[89]|1\d|2[0-5])$/);
   expect(await network.locator("canvas").count()).toBeGreaterThan(0);
-  await network.locator("summary").click();
-  await network.locator(".atlas-network-list li button").first().click();
-  await expect(page).toHaveURL(/#\/atlas\/.+/);
-  await expect(network).not.toHaveAttribute("data-selected-node", "");
+  await network.getByRole("button", { name: /Compliance/ }).click();
+  await expect(network).toHaveAttribute("data-projection-level", "area");
 });
 
 test("live smoke: compare hub loads", async ({ page }) => {

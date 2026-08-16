@@ -36,7 +36,8 @@ test('tracked product and documentation files forbid the obsolete public hostnam
   const trackedFiles = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' })
     .split('\0')
     .filter(Boolean)
-    .filter((path) => textExtensions.has(path.slice(path.lastIndexOf('.'))));
+    .filter((path) => textExtensions.has(path.slice(path.lastIndexOf('.'))))
+    .filter((path) => existsSync(path));
   const offenders = trackedFiles.filter((path) => readFileSync(path, 'utf8').includes(obsoleteUrl));
 
   assert.deepEqual(offenders, [], `obsolete public hostname found in: ${offenders.join(', ')}`);

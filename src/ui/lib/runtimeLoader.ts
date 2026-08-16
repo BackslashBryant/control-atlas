@@ -7,6 +7,7 @@ import type {
 } from "./commonsTypes";
 import type { ViewState } from "./viewState";
 import type { AtlasSpine } from "./atlasDrilldown";
+import type { AtlasSemanticProjectionArtifact } from "./atlasGraphProjection";
 import { expandLibrarySearchTransport } from "./librarySearchTransport";
 
 const CACHE_VERSION = RUNTIME_CACHE_VERSION;
@@ -130,34 +131,7 @@ export type LibrarySearchArtifact = {
   documents: Array<Record<string, unknown>>;
 };
 
-export type AtlasNetworkArtifact = {
-  schema_version: "1.0";
-  generated_at: string;
-  selection: {
-    full_node_count: number;
-    full_edge_count: number;
-    rendered_node_count: number;
-    rendered_edge_count: number;
-    relationship_classes: string[];
-    relationship_types: string[];
-  };
-  layout: {
-    algorithm: "forceatlas2-noverlap";
-    position_hash: string;
-  };
-  graph: {
-    attributes?: Record<string, unknown>;
-    options?: Record<string, unknown>;
-    nodes: Array<{ key: string; attributes: Record<string, any> }>;
-    edges: Array<{
-      key: string;
-      source: string;
-      target: string;
-      attributes: Record<string, any>;
-      undirected?: boolean;
-    }>;
-  };
-};
+export type AtlasNetworkArtifact = AtlasSemanticProjectionArtifact;
 
 export type RuntimeBundle = {
   runtime: ReturnType<typeof createFederalGraphRuntime>;
@@ -1146,8 +1120,8 @@ async function loadRouteScopedPhase(
   if (plan.atlasSpine && !atlasSpine?.entries?.length) {
     throw new Error("Atlas spine artifact has no entries.");
   }
-  if (plan.atlasNetwork && !atlasNetwork?.graph?.nodes?.length) {
-    throw new Error("Atlas network artifact has no nodes.");
+  if (plan.atlasNetwork && !atlasNetwork?.landscape?.nodes?.length) {
+    throw new Error("Atlas semantic projection artifact has no landscape landmarks.");
   }
   const catalogRecords =
     (
@@ -1264,8 +1238,8 @@ async function loadCatalogShellPhase(
   if (plan.atlasSpine && !atlasSpine?.entries?.length) {
     throw new Error("Atlas spine artifact has no entries.");
   }
-  if (plan.atlasNetwork && !atlasNetwork?.graph?.nodes?.length) {
-    throw new Error("Atlas network artifact has no nodes.");
+  if (plan.atlasNetwork && !atlasNetwork?.landscape?.nodes?.length) {
+    throw new Error("Atlas semantic projection artifact has no landscape landmarks.");
   }
 
   return {

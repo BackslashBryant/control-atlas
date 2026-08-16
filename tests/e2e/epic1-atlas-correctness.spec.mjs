@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
   await dismissOnboarding(page);
 });
 
-test("exact Atlas identifier focuses the record and keeps choices out of ancestry", async ({
+test("exact Atlas identifier opens its bounded semantic publisher context", async ({
   page,
 }) => {
   await page
@@ -20,19 +20,12 @@ test("exact Atlas identifier focuses the record and keeps choices out of ancestr
     .fill("nist-800-53:AC-2");
   await page.getByRole("searchbox", { name: "Jump to a record" }).press("Enter");
 
-  await expect(page).toHaveURL(/node=nist-800-53%3AAC-2/);
+  await expect(page).toHaveURL(/#\/atlas\/nist-800-53:AC-2/);
   await expect(page.getByRole("heading", { level: 1, name: "Atlas" })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("Access Control");
-  // Hierarchy is closed by default in the record workspace (Connections is
-  // the default surface); open it to reach "Where this sits".
-  await page.getByRole("button", { name: "Hierarchy" }).click();
-  const structuralPosition = page.getByRole("navigation", {
-    name: "Where this sits",
-  }).first();
-  await expect(structuralPosition).toContainText("SP 800-53 Rev. 5");
-  await expect(structuralPosition).toContainText("Access Control");
-  await expect(structuralPosition).not.toContainText("CSF");
-  await expect(structuralPosition).not.toContainText("Moderate");
+  const semanticAtlas = page.getByTestId("atlas-network");
+  await expect(semanticAtlas).toHaveAttribute("data-projection-level", "detail");
+  await expect(semanticAtlas).toHaveAttribute("data-selected-canonical", "nist-800-53:AC-2");
+  await expect(semanticAtlas).toContainText("Access Control");
 });
 
 test("ambiguous Atlas text hands off to canonical Search", async ({ page }) => {

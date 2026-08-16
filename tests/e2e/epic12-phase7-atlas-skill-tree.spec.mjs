@@ -95,7 +95,7 @@ test("focused trace matches the record rail and local connections never replace 
     .getAttribute("data-displayed-trace");
   expect(recordTrace).toBeTruthy();
 
-  await openAtlas(page, "/#/atlas?node=disa-cci%3ACCI-000366");
+  await openAtlas(page, "/#/atlas?node=disa-cci%3ACCI-000366&relationshipView=path");
   const tree = page.locator(".atlas-tree");
   const atlasTrace = await tree.locator("[data-authority-trace]").getAttribute("data-authority-trace");
   expect(atlasTrace).toBe(recordTrace);
