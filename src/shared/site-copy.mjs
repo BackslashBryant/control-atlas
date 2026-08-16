@@ -11,25 +11,26 @@ export const SITE_COPY = Object.freeze({
     headline: "Make federal cybersecurity compliance make sense.",
     definition:
       "Understand what applies, what it means, and what to do next.",
-    // Depth-0 Signal cover (first paint, before the Home surface).
+    // Depth-0 Signal cover (first paint, before the Home surface). Composed as
+    // the Orbital "editorial split, one invitation" landing recipe: eyebrow,
+    // display headline with a signal word, lead, one action, and an archival
+    // metadata aside.
     cover: Object.freeze({
-      wordmark: "CONTROL ATLAS",
-      tagline:
-        "Understand what applies, what it means, and what to do next.",
-      prompt: "Click anywhere or press Enter to start",
-      stats: Object.freeze([
-        Object.freeze({
-          value: "Federal-wide",
-          label: "coverage",
-          detail: "NIST · DISA · FedRAMP · MITRE · CISA",
-        }),
-        Object.freeze({
-          value: "Cross-mapped",
-          label: "requirements, controls & techniques",
-          detail: "",
-        }),
+      eyebrow: "Control Atlas / Ctrl + Alt + Learn",
+      headlineLead: "Make federal compliance",
+      headlineSignal: "make sense.",
+      lead:
+        "A free, public research tool that connects the requirements, controls, and guidance published by NIST, DISA, FedRAMP, MITRE, and CISA. Not a government system and not a GRC platform — a place to find what applies to your system and what to do next.",
+      action: "Enter the Atlas",
+      metaTitle: "Archive",
+      meta: Object.freeze([
+        Object.freeze({ label: "Coverage", value: "Federal-wide" }),
+        Object.freeze({ label: "Publishers", value: "NIST · DISA · FedRAMP" }),
+        Object.freeze({ label: "Connections", value: "Cross-mapped" }),
       ]),
-      freshnessLabel: "source data current",
+      freshnessLabel: "Source data",
+      railLeft: "Find what applies · understand it · act on it",
+      prompt: "Click anywhere or press Enter to start",
     }),
     destinations: Object.freeze([
       Object.freeze({

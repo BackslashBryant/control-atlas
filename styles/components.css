@@ -11,141 +11,214 @@
   color: var(--ca-on-primary);
 }
 
-/* ── Signal cover (Depth-0 orient-and-invite) ── */
+/* ── Signal cover (Depth-0 orient-and-invite) ──
+   Composed from the Orbital "editorial split, one invitation" landing recipe:
+   copy column plus an archival metadata aside, over a plotted flight plan and
+   an orbital arc, closed by a calibration rail. Geometry stays in the safe
+   corridor (margins and the empty side of the split), never behind the copy. */
 .signal-cover {
   position: fixed;
   inset: 0;
   z-index: 2000;
   display: grid;
-  place-items: center;
-  padding: var(--ca-space-8) var(--ca-space-6);
-  background:
-    radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--lsm-teal) 8%, transparent), transparent 60%),
-    var(--ca-bg);
-  color: var(--ca-text);
-  cursor: pointer;
+  grid-template-rows: 1fr auto;
   overflow: hidden;
-  animation: signal-cover-in 500ms var(--motion-ease) both;
-}
-
-.signal-cover__grid {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: var(--ca-opacity-grid);
+  cursor: pointer;
+  color: var(--ca-text);
   background:
-    linear-gradient(color-mix(in srgb, var(--lsm-grid-line) 40%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--lsm-grid-line) 40%, transparent) 1px, transparent 1px);
-  background-size: 40px 40px;
-  -webkit-mask-image: radial-gradient(circle at 50% 42%, black, transparent 78%);
-  mask-image: radial-gradient(circle at 50% 42%, black, transparent 78%);
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--ca-shadow-color) 24%, transparent) 0 1px, transparent 1px 3px),
+    radial-gradient(circle at 82% 10%, color-mix(in srgb, var(--lsm-teal) 14%, transparent), transparent 30rem),
+    radial-gradient(circle at 64% 100%, color-mix(in srgb, var(--lsm-gold) 7%, transparent), transparent 38rem),
+    linear-gradient(color-mix(in srgb, var(--lsm-teal) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--lsm-teal) 5%, transparent) 1px, transparent 1px),
+    var(--lsm-orbit);
+  background-size: auto, auto, auto, 32px 32px, 32px 32px, auto;
+  animation: signal-cover-in 460ms var(--motion-ease) both;
 }
 
-.signal-cover__inner {
+.signal-cover__hero {
   position: relative;
-  z-index: 1;
+  isolation: isolate;
   display: grid;
-  justify-items: center;
-  gap: var(--ca-space-6);
-  width: min(100%, 62rem);
-  text-align: center;
-  animation: signal-cover-rise 620ms var(--motion-ease) both;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.55fr);
+  align-items: end;
+  gap: clamp(28px, 6vw, 88px);
+  width: min(100%, var(--ca-content-max));
+  margin-inline: auto;
+  padding: clamp(58px, 9vw, 136px) clamp(22px, 4vw, 60px) clamp(42px, 6vw, 78px);
+  overflow: hidden;
 }
 
-.signal-cover__brand {
-  display: grid;
-  justify-items: center;
-  gap: var(--ca-space-3);
-  will-change: transform, opacity;
+/* Orbital arc: establishes scale from the empty corner, never crossing copy. */
+.signal-cover__hero::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  right: -31%;
+  bottom: -88%;
+  width: min(78vw, 1100px);
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--lsm-teal) 58%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 68px color-mix(in srgb, var(--lsm-grid-line) 20%, transparent),
+    0 0 0 164px color-mix(in srgb, var(--lsm-gold) 10%, transparent),
+    0 0 0 292px color-mix(in srgb, var(--lsm-grid-line) 9%, transparent);
 }
 
-.signal-cover__name {
-  font-family: var(--ca-font-display);
-  font-weight: 700;
-  font-size: clamp(3rem, 9vw, 6.5rem);
-  line-height: 0.95;
-  letter-spacing: 0.01em;
+/* Horizon hairline. */
+.signal-cover__hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -5%;
+  bottom: 9%;
+  width: 58%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--lsm-gold) 34%, var(--lsm-teal) 76%, transparent);
+  opacity: 0.78;
+  transform: rotate(-6deg);
+  transform-origin: right;
 }
 
-.signal-cover__keys {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ca-space-2);
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono);
-  font-size: var(--ca-text-sm);
+.signal-cover__flightplan {
+  position: absolute;
+  z-index: 0;
+  inset: auto -4% 10% 43%;
+  width: 63%;
+  height: 54%;
+  opacity: 0.68;
+  pointer-events: none;
 }
 
-.signal-cover__keys kbd {
-  padding: 2px 8px;
-  border: 1px solid var(--ca-border-strong);
-  border-radius: var(--ca-radius-sm);
-  background: var(--ca-surface-raised);
-  font: inherit;
+.signal-cover__copy,
+.signal-cover__meta {
+  position: relative;
+  z-index: 2;
 }
 
-.signal-cover__rotor {
-  border-color: color-mix(in srgb, var(--ca-link) 60%, var(--ca-border-strong));
+.signal-cover__eyebrow {
+  margin: 0 0 var(--ca-space-4);
   color: var(--ca-link);
+  font: var(--ca-text-micro) / 1.55 var(--ca-font-mono);
+  letter-spacing: var(--ca-tracking-eyebrow, 0.18em);
+  text-transform: uppercase;
 }
 
-.signal-cover__tagline {
-  max-width: 42rem;
+.signal-cover__headline {
   margin: 0;
+  font-family: var(--ca-font-display);
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  font-weight: 700;
+  line-height: 0.79;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+/* The one signal word carries Ignition Orange with a fine scanline fill. */
+.signal-cover__signal-word {
+  color: var(--lsm-orange);
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .signal-cover__signal-word {
+    color: transparent;
+    background-image: repeating-linear-gradient(
+      0deg,
+      var(--lsm-orange) 0 2px,
+      color-mix(in srgb, var(--lsm-orange) 42%, transparent) 2px 4px
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+.signal-cover__lead {
+  max-width: 46rem;
+  margin: var(--ca-space-6) 0 0;
   color: var(--ca-text-muted);
-  font-size: var(--ca-text-lg);
+  font-size: var(--ca-text-base);
   line-height: var(--line-height-normal);
 }
 
-.signal-cover__stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--ca-space-4);
-  width: 100%;
-  margin-top: var(--ca-space-2);
+.signal-cover__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ca-space-3);
+  margin: var(--ca-space-6) 0 0;
 }
 
-.signal-cover__stat {
-  display: grid;
-  gap: 4px;
-  padding: var(--ca-space-5) var(--ca-space-4);
-  border: 1px solid var(--ca-border);
-  border-top: 2px solid color-mix(in srgb, var(--ca-link) 50%, transparent);
-  border-radius: var(--ca-radius-md);
-  background: color-mix(in srgb, var(--ca-surface) 70%, transparent);
-}
-
-.signal-cover__stat-value {
-  font-family: var(--ca-font-display);
-  font-weight: 700;
-  font-size: clamp(1.75rem, 4vw, 2.75rem);
-  line-height: 1;
-  color: var(--ca-text);
-}
-
-.signal-cover__stat-label {
-  font-family: var(--ca-font-mono);
-  font-size: var(--ca-text-xs);
-  letter-spacing: 0.1em;
+.signal-cover__action {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--ca-control-md);
+  padding-inline: var(--ca-space-6);
+  border: 1px solid var(--ca-action-primary);
+  border-radius: var(--ca-radius-sm);
+  background: var(--ca-action-primary);
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--ca-action-primary) 16%, transparent);
+  color: var(--ca-on-primary);
+  font: 700 var(--ca-text-sm) / 1 var(--ca-font-mono);
+  letter-spacing: 0.07em;
   text-transform: uppercase;
+}
+
+/* Archival metadata aside — gold-ruled, mono, label/value rows. */
+.signal-cover__meta {
+  align-self: end;
+  display: grid;
+  gap: 9px;
+  padding: var(--ca-space-4);
+  border: 1px solid color-mix(in srgb, var(--lsm-gold) 58%, transparent);
+  background: color-mix(in srgb, var(--lsm-orbit) 78%, transparent);
+  font: var(--ca-text-micro) / 1.5 var(--ca-font-mono);
+  text-transform: uppercase;
+}
+
+.signal-cover__meta-title {
+  color: var(--ca-text-muted);
+  letter-spacing: var(--ca-tracking-eyebrow, 0.18em);
+}
+
+.signal-cover__meta div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ca-space-4);
+}
+
+.signal-cover__meta span {
   color: var(--ca-text-muted);
 }
 
-.signal-cover__stat-detail {
-  margin-top: 2px;
-  font-family: var(--ca-font-mono);
-  font-size: var(--ca-text-micro);
-  letter-spacing: 0.04em;
-  color: var(--ca-text-subtle);
+.signal-cover__meta strong {
+  color: var(--lsm-gold);
+  font-weight: 500;
+  text-align: right;
+}
+
+.signal-cover__rail {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ca-space-4);
+  width: min(100%, var(--ca-content-max));
+  margin-inline: auto;
+  padding: 15px clamp(22px, 4vw, 60px) clamp(18px, 3vw, 34px);
+  color: var(--ca-text-muted);
+  font: var(--ca-text-micro) / 1.5 var(--ca-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.signal-cover__rail::before {
+  content: "";
+  position: absolute;
+  inset: 0 clamp(22px, 4vw, 60px) auto;
+  height: 7px;
+  background: repeating-linear-gradient(90deg, var(--lsm-grid-line) 0 1px, transparent 1px 22px);
 }
 
 .signal-cover__prompt {
-  margin: var(--ca-space-2) 0 0;
-  font-family: var(--ca-font-mono);
-  font-size: var(--ca-text-xs);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
   color: var(--ca-text-subtle);
   animation: signal-cover-pulse 2.6s ease-in-out infinite;
 }
@@ -154,34 +227,63 @@
   animation: signal-cover-out 440ms var(--motion-ease) forwards;
 }
 
-.signal-cover--exiting .signal-cover__brand {
-  animation: signal-cover-brand-exit 440ms var(--motion-ease) forwards;
+.signal-cover--exiting .signal-cover__copy {
+  animation: signal-cover-copy-exit 440ms var(--motion-ease) forwards;
 }
 
-@keyframes signal-cover-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes signal-cover-out { to { opacity: 0; visibility: hidden; } }
-@keyframes signal-cover-rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; }
+@keyframes signal-cover-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-@keyframes signal-cover-brand-exit {
-  to { transform: translate(-38vw, -42vh) scale(0.32); opacity: 0.15; }
+
+@keyframes signal-cover-out {
+  to { opacity: 0; visibility: hidden; }
 }
+
+@keyframes signal-cover-copy-exit {
+  to { transform: translate(-6vw, -34vh) scale(0.42); opacity: 0; }
+}
+
 @keyframes signal-cover-pulse {
-  0%, 100% { opacity: 0.45; }
+  0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
 
-@media (max-width: 40rem) {
-  .signal-cover__stats { grid-template-columns: 1fr; }
+@media (max-width: 52rem) {
+  .signal-cover__hero {
+    grid-template-columns: 1fr;
+    align-content: end;
+    padding-top: clamp(72px, 12vw, 108px);
+  }
+
+  .signal-cover__hero::before {
+    right: -650px;
+    bottom: -580px;
+    width: 920px;
+  }
+
+  .signal-cover__flightplan {
+    inset: 6% -16% auto 30%;
+    width: 86%;
+    height: 44%;
+    opacity: 0.46;
+  }
+
+  .signal-cover__meta {
+    max-width: 26rem;
+  }
+
+  .signal-cover__rail {
+    flex-direction: column;
+    gap: var(--ca-space-2);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .signal-cover,
-  .signal-cover__inner,
   .signal-cover__prompt,
   .signal-cover--exiting,
-  .signal-cover--exiting .signal-cover__brand {
+  .signal-cover--exiting .signal-cover__copy {
     animation: none !important;
   }
 }

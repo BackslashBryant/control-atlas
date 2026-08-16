@@ -44,13 +44,18 @@ function renderStaticHome() {
   // Home). Hidden by default so no-JS users see the Home underneath; main.tsx
   // reveals it, gates it to once per session, and wires dismissal.
   const cover = SITE_COPY.home.cover;
-  const coverStats = [
-    ...cover.stats.map((stat) =>
-      `<div class="signal-cover__stat"><span class="signal-cover__stat-value">${escapeHtml(stat.value).replace('-', '&#8209;')}</span><span class="signal-cover__stat-label">${escapeHtml(stat.label)}</span>${stat.detail ? `<span class="signal-cover__stat-detail">${escapeHtml(stat.detail)}</span>` : ''}</div>`,
+  const coverMeta = [
+    ...cover.meta.map(
+      (row) =>
+        `<div><span>${escapeHtml(row.label)}</span><strong>${escapeHtml(row.value)}</strong></div>`,
     ),
-    `<div class="signal-cover__stat"><span class="signal-cover__stat-value">${escapeHtml(coverFreshness)}</span><span class="signal-cover__stat-label">${escapeHtml(cover.freshnessLabel)}</span></div>`,
+    `<div><span>${escapeHtml(cover.freshnessLabel)}</span><strong>${escapeHtml(coverFreshness)}</strong></div>`,
   ].join('');
-  const signalCover = `<div class="signal-cover" data-signal-cover hidden role="button" tabindex="0" aria-label="Welcome to Control Atlas. Click or press Enter to start."><div class="signal-cover__grid" aria-hidden="true"></div><div class="signal-cover__inner"><div class="signal-cover__brand"><span class="signal-cover__name">${escapeHtml(cover.wordmark)}</span><span class="signal-cover__keys" aria-hidden="true"><kbd>Ctrl</kbd><span>+</span><kbd>Alt</kbd><span>+</span><kbd class="signal-cover__rotor">Learn</kbd></span></div><p class="signal-cover__tagline">${escapeHtml(cover.tagline)}</p><div class="signal-cover__stats">${coverStats}</div><p class="signal-cover__prompt" aria-hidden="true">${escapeHtml(cover.prompt)}</p></div></div>`;
+  // Orbital landing recipe: editorial split (copy + archival metadata aside)
+  // over a plotted flight plan, closed by a calibration rail. The geometry is
+  // decorative, so it stays aria-hidden and outside the reading corridor.
+  const coverFlightPlan = `<svg class="signal-cover__flightplan" viewBox="0 0 760 430" aria-hidden="true" focusable="false"><g fill="none" stroke-linecap="round"><path d="M32 392C182 144 422 58 752 146" stroke="var(--lsm-grid-line)" opacity=".62"/><path d="M80 420C252 238 482 186 746 232" stroke="var(--lsm-teal)" opacity=".8"/><path d="M180 440C340 326 536 294 728 318" stroke="var(--lsm-gold)" stroke-dasharray="8 10" opacity=".74"/><path d="M476 306C572 260 650 248 734 252" stroke="var(--lsm-orange)" opacity=".66"/><circle cx="540" cy="214" r="7" stroke="var(--lsm-teal)"/><path d="M540 194v40M520 214h40" stroke="var(--lsm-dust)" opacity=".4"/></g><circle cx="540" cy="214" r="3" fill="var(--lsm-bone)"/><circle cx="670" cy="258" r="5" fill="var(--lsm-orange)"/></svg>`;
+  const signalCover = `<div class="signal-cover" data-signal-cover hidden role="button" tabindex="0" aria-label="Welcome to Control Atlas. Click or press Enter to start."><section class="signal-cover__hero">${coverFlightPlan}<div class="signal-cover__copy"><p class="signal-cover__eyebrow">${escapeHtml(cover.eyebrow)}</p><h1 class="signal-cover__headline">${escapeHtml(cover.headlineLead)}<br><span class="signal-cover__signal-word">${escapeHtml(cover.headlineSignal)}</span></h1><p class="signal-cover__lead">${escapeHtml(cover.lead)}</p><p class="signal-cover__actions"><span class="signal-cover__action">${escapeHtml(cover.action)}</span></p></div><aside class="signal-cover__meta"><span class="signal-cover__meta-title">${escapeHtml(cover.metaTitle)}</span>${coverMeta}</aside></section><div class="signal-cover__rail"><span>${escapeHtml(cover.railLeft)}</span><span class="signal-cover__prompt">${escapeHtml(cover.prompt)}</span></div></div>`;
   return `${signalCover}<section class="home-entry" aria-labelledby="home-title" data-template="B" data-visual-identity="universal-front-door">
     <div class="home-hero">
       <div class="home-hero-lead">
