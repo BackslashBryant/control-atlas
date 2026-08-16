@@ -1,0 +1,72 @@
+name: AI Control-Plane Hygiene
+
+on: [push, pull_request]
+
+jobs:
+  ai-leak-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for AI control-plane files in tracked content
+        shell: bash
+        run: |
+          # Skip template repo
+          if [ -f ".repo-mode" ] && grep -qi "template" ".repo-mode"; then
+            echo "Template repo — AI files are expected. Skipping."
+            exit 0
+          fi
+
+          BLOCKED_PATTERNS=(
+            "^AGENTS\.md$"
+            "^CLAUDE\.md$"
+            "^GEMINI\.md$"
+            "^\.agents/"
+            "^\.ai/"
+            "^\.claude/"
+            "^\.codex"
+            "^\.gemini/"
+            "^\.cursor/agents/"
+            "^settings\.local\.json$"
+            "^docs/agents/"
+            "^docs/plans/"
+            "\.plan-status"
+            "WORKLOG-"
+            "SYSTEM_INSTRUCTIONS\.md"
+          )
+
+          FOUND=()
+          while IFS= read -r file; do
+            for pat in "${BLOCKED_PATTERNS[@]}"; do
+              if echo "$file" | grep -qE "$pat"; then
+                FOUND+=("$file")
+                break
+              fi
+            done
+          done < <(git ls-files)
+
+          # Content-based scan on suspicious files
+          CONTENT_MARKERS=(
+            "BEGIN core-engineering-doctrine"
+            "guardrails-kit:"
+            "MIRRORED from.*claude"
+            "Required Startup Sequence"
+          )
+          while IFS= read -r file; do
+            for marker in "${CONTENT_MARKERS[@]}"; do
+              if grep -qiE "$marker" "$file" 2>/dev/null; then
+                FOUND+=("CONTENT_MATCH[$marker]: $file")
+                break
+              fi
+            done
+          done < <(git ls-files -- "*.md" "*.json")
+
+          if [ ${#FOUND[@]} -gt 0 ]; then
+            echo "::error::AI control-plane files detected in tracked content:"
+            for f in "${FOUND[@]}"; do
+              echo "  - $f"
+            done
+            exit 1
+          fi
+
+          echo "? No AI control-plane files found in tracked content."
