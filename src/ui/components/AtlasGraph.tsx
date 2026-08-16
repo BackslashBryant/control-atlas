@@ -4,28 +4,34 @@ import {
   ControlsContainer,
   FullScreenControl,
   SigmaContainer,
-  useCamera,
   useRegisterEvents,
   useSetSettings,
+  useSigma,
   ZoomControl,
 } from "@react-sigma/core";
 import { EdgeArrowProgram, EdgeLineProgram } from "sigma/rendering";
 import "@react-sigma/core/lib/style.css";
 
-import type { AtlasNetworkArtifact } from "../lib/runtimeLoader";
+import type {
+  AtlasGraphProjection,
+  AtlasProjectionDrill,
+  AtlasProjectionNode,
+} from "../lib/atlasGraphProjection";
 import {
-  AREA_PRESENTATIONS,
   areaPresentationFor,
   areaPresentationForCatalog,
 } from "../lib/areaVisualLanguage";
 
 type AtlasGraphProps = {
-  artifact: AtlasNetworkArtifact;
-  selectedId?: string;
-  onSelect: (nodeId: string) => void;
+  projection: AtlasGraphProjection;
+  selectedCanonicalId?: string;
+  onDrill: (drill: AtlasProjectionDrill) => void;
+  onHome: () => void;
+  onUp: () => void;
+  canGoUp: boolean;
 };
 
-type NetworkNode = Record<string, any>;
+type NetworkNode = AtlasProjectionNode & Record<string, any>;
 type NetworkEdge = Record<string, any>;
 type NetworkGraph = Graph<NetworkNode, NetworkEdge>;
 
@@ -33,102 +39,87 @@ function token(name: string) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
-function nodeSize(attributes: NetworkNode) {
-  const descendants = Number(attributes.display?.descendantRecordCount || 0);
-  const degree = Number(attributes.analysis?.weightedDegree || 0);
-  return Math.min(18, Math.max(2.5, 2.5 + Math.log1p(descendants || degree) * 1.8));
+function nodeColor(node: AtlasProjectionNode) {
+  if (node.objectLayer === "authority_document") return token("--ca-area-authority");
+  if (node.nativeType === "catalog") return token("--ca-action-primary");
+  const area = areaPresentationFor(node.areaId)
+    || areaPresentationForCatalog(node.publicationId);
+  return area ? token(area.token) : token("--ca-primary");
 }
 
-function presentationLabel(nodeId: string, attributes: NetworkNode) {
-  const sourceTitle = attributes.source?.metadata?.title;
-  const label = String(attributes.display?.label || "");
-  const generatedItemId = attributes.source?.metadata?.item_id;
-  if (
-    typeof sourceTitle === "string" &&
-    typeof generatedItemId === "string" &&
-    label.startsWith(generatedItemId)
-  ) {
-    return sourceTitle;
+function nodeSize(node: AtlasProjectionNode) {
+  if (node.nativeType === "catalog") return 10.5;
+  const layerWeight = node.objectLayer === "atlas_structure" ? 2.2 : 0;
+  return Math.min(18, Math.max(3.4, 2.7 + node.importance * 1.15 + layerWeight));
+}
+
+function relationshipColor(classes: string[]) {
+  if (classes.includes("structural")) return token("--ca-text-muted");
+  if (classes.includes("applicability")) return token("--ca-applicability");
+  if (classes.includes("organizing")) return token("--ca-accent");
+  return token("--ca-border-strong");
+}
+
+function edgeLabel(edge: NetworkEdge) {
+  const types = edge.relationshipTypes as string[];
+  const count = Number(edge.relationshipCount || 0);
+  return `${types.slice(0, 2).join(" / ")} · ${count.toLocaleString()}`;
+}
+
+function prepareGraph(projection: AtlasGraphProjection): NetworkGraph {
+  const graph = new Graph<NetworkNode, NetworkEdge>({
+    type: "mixed",
+    multi: true,
+    allowSelfLoops: false,
+  });
+  for (const node of projection.nodes) {
+    graph.addNode(node.id, {
+      ...node,
+      label: node.label,
+      color: nodeColor(node),
+      size: nodeSize(node),
+    });
   }
-  return label || nodeId;
-}
-
-function prepareGraph(artifact: AtlasNetworkArtifact): NetworkGraph {
-  const graph = Graph.from({
-    attributes: artifact.graph.attributes || {},
-    options: artifact.graph.options || {},
-    nodes: artifact.graph.nodes,
-    edges: artifact.graph.edges,
-  }) as NetworkGraph;
-  const colors = [
-    token("--ca-area-governance"), token("--ca-area-assessment"),
-    token("--ca-area-risk"), token("--ca-area-operations"),
-    token("--ca-area-compliance"), token("--ca-area-threats-defense"),
-    token("--ca-area-architecture"), token("--ca-area-knowledge"),
-    token("--ca-area-implementation"), token("--ca-area-authority"),
-  ];
-  graph.forEachNode((nodeId, attributes) => {
-    const community = Number(attributes.analysis?.computedCommunity || 0);
-    const area = areaPresentationFor(nodeId) ||
-      areaPresentationForCatalog(String(attributes.display?.catalogId || ""));
-    const nodeType = String(attributes.display?.nodeType || "");
-    const authoritativeColor = area
-      ? token(area.token)
-      : ["statute", "regulation", "policy_directive"].includes(nodeType)
-        ? token("--ca-area-authority")
-        : "";
-    graph.mergeNodeAttributes(nodeId, {
-      label: presentationLabel(nodeId, attributes),
-      size: nodeSize(attributes),
-      color: authoritativeColor || colors[Math.abs(community) % colors.length],
-      areaId: area?.id || "",
-      areaLabel: area?.label || "",
-      publicationId: attributes.display?.catalogId || attributes.display?.sourceId || "",
-    });
-  });
-  graph.forEachEdge((edgeId, attributes) => {
-    const relationshipClass = String(attributes.display?.relationshipClass || "");
-    const color = relationshipClass === "structural"
-      ? token("--ca-text-muted")
-      : relationshipClass === "applicability"
-        ? token("--ca-applicability")
-        : relationshipClass === "organizing"
-          ? token("--ca-accent")
-          : token("--ca-border-strong");
-    graph.mergeEdgeAttributes(edgeId, {
-      color,
-      label: attributes.display?.label || edgeId,
-      size: relationshipClass === "structural" ? 1.2 : 0.7,
-      type: attributes.display?.directed ? "arrow" : "line",
-    });
-  });
+  for (const edge of projection.edges) {
+    if (!graph.hasNode(edge.source) || !graph.hasNode(edge.target)) continue;
+    const attributes = {
+      ...edge,
+      sourceId: edge.source,
+      targetId: edge.target,
+      color: relationshipColor(edge.relationshipClasses),
+      label: edgeLabel(edge),
+      size: Math.min(3.4, Math.max(.9, .8 + Math.log1p(edge.relationshipCount) * .35)),
+      type: edge.directedCount > 0 && edge.undirectedCount === 0 ? "arrow" : "line",
+    };
+    if (edge.directedCount > 0 && edge.undirectedCount === 0) {
+      graph.addDirectedEdgeWithKey(edge.id, edge.source, edge.target, attributes);
+    } else {
+      graph.addUndirectedEdgeWithKey(edge.id, edge.source, edge.target, attributes);
+    }
+  }
   return graph;
 }
 
 function GraphController({
   graph,
-  selectedId,
-  hoveredId,
-  nodeType,
+  projectionLevel,
+  focusedId,
+  selectedCanonicalId,
   relationshipClass,
-  areaId,
-  publicationId,
   onHover,
   onSelect,
 }: {
   graph: NetworkGraph;
-  selectedId?: string;
-  hoveredId: string;
-  nodeType: string;
+  projectionLevel: AtlasGraphProjection["level"];
+  focusedId: string;
+  selectedCanonicalId?: string;
   relationshipClass: string;
-  areaId: string;
-  publicationId: string;
   onHover: (nodeId: string) => void;
   onSelect: (nodeId: string) => void;
 }) {
   const registerEvents = useRegisterEvents();
   const setSettings = useSetSettings();
-  const { gotoNode } = useCamera({ duration: 420 });
+  const sigma = useSigma();
 
   useEffect(() => registerEvents({
     clickNode: ({ node }) => onSelect(node),
@@ -138,116 +129,147 @@ function GraphController({
   }), [onHover, onSelect, registerEvents]);
 
   useEffect(() => {
-    if (selectedId && graph.hasNode(selectedId)) gotoNode(selectedId);
-  }, [gotoNode, graph, selectedId]);
-
-  useEffect(() => {
-    const focusId = hoveredId || selectedId || "";
-    const neighbors = focusId && graph.hasNode(focusId)
-      ? new Set(graph.neighbors(focusId))
+    const neighbors = focusedId && graph.hasNode(focusedId)
+      ? new Set(graph.neighbors(focusedId))
       : new Set<string>();
     setSettings({
       nodeReducer: (node, data) => {
-        const typeHidden = nodeType && data.display?.nodeType !== nodeType;
-        const areaHidden = areaId && data.areaId !== areaId;
-        const publicationHidden = publicationId && data.publicationId !== publicationId;
-        const emphasized = node === focusId || neighbors.has(node);
+        const focused = node === focusedId;
+        const related = focused || neighbors.has(node);
+        const landmark = (projectionLevel === "landscape" && data.objectLayer !== "publisher_content")
+          || data.nativeType === "catalog";
         return {
           ...data,
-          hidden: Boolean(typeHidden || areaHidden || publicationHidden),
-          forceLabel: node === focusId || (Boolean(selectedId) && emphasized),
-          color: focusId && !emphasized ? token("--ca-surface-lifted") : data.color,
-          zIndex: emphasized ? 2 : 0,
+          color: focusedId && !related ? token("--ca-surface-lifted") : data.color,
+          forceLabel: focused || landmark,
+          zIndex: related ? 2 : 0,
         };
       },
       edgeReducer: (edge, data) => {
-        const classHidden = relationshipClass && data.display?.relationshipClass !== relationshipClass;
-        const incident = focusId && graph.hasExtremity(edge, focusId);
+        const matchesClass = !relationshipClass
+          || (data.relationshipClasses as string[]).includes(relationshipClass);
+        const incident = focusedId && (data.sourceId === focusedId || data.targetId === focusedId);
         return {
           ...data,
-          hidden: Boolean(classHidden || (focusId && !incident)),
-          label: incident ? data.display?.label : "",
+          hidden: !matchesClass || Boolean(focusedId && !incident),
+          label: incident ? data.label : "",
           size: incident ? Math.max(2, Number(data.size || 1)) : data.size,
         };
       },
     });
-  }, [areaId, graph, hoveredId, nodeType, publicationId, relationshipClass, selectedId, setSettings]);
+  }, [focusedId, graph, projectionLevel, relationshipClass, setSettings]);
+
+  useEffect(() => {
+    if (!selectedCanonicalId || !graph.hasNode(selectedCanonicalId)) return;
+    const target = sigma.getNodeDisplayData(selectedCanonicalId);
+    if (target) sigma.getCamera().animate({ ...target, ratio: .62 }, { duration: 160 });
+  }, [graph, selectedCanonicalId, sigma]);
 
   return null;
 }
 
-export function AtlasGraph({ artifact, selectedId, onSelect }: AtlasGraphProps) {
-  const graph = useMemo(() => prepareGraph(artifact), [artifact]);
-  const [hoveredId, setHoveredId] = useState("");
-  const [nodeType, setNodeType] = useState("");
-  const [relationshipClass, setRelationshipClass] = useState("");
-  const [areaId, setAreaId] = useState("");
-  const [publicationId, setPublicationId] = useState("");
-  const [listPage, setListPage] = useState(0);
-  const nodeTypes = useMemo(() => [...new Set(graph.mapNodes((_id, data) => String(data.display?.nodeType || "Other")))].sort(), [graph]);
-  const publications = useMemo(() => [...new Set(graph.mapNodes((_id, data) => String(data.publicationId || "")))].filter(Boolean).sort(), [graph]);
-  const visibleNodes = useMemo(() => graph.nodes().filter((id) => {
-    const data = graph.getNodeAttributes(id);
-    return (!nodeType || data.display?.nodeType === nodeType) &&
-      (!areaId || data.areaId === areaId) &&
-      (!publicationId || data.publicationId === publicationId);
-  }), [areaId, graph, nodeType, publicationId]);
-  const pageCount = Math.max(1, Math.ceil(visibleNodes.length / 50));
-  const listNodes = visibleNodes.slice(listPage * 50, listPage * 50 + 50);
-  const tooltipId = hoveredId || (selectedId && graph.hasNode(selectedId) ? selectedId : "");
-  const tooltip = tooltipId ? graph.getNodeAttributes(tooltipId) : null;
+function roleLabel(node: AtlasProjectionNode) {
+  if (node.objectLayer === "atlas_structure") {
+    return node.atlasStructureRole === "root" ? "Atlas root" : "Atlas area";
+  }
+  if (node.objectLayer === "authority_document") return "Authority";
+  if (node.nodeType === "publisher_group") return "Publisher group";
+  return (node.nativeType || node.atlasClass || "Publisher record")
+    .replace(/[-_]/g, " ");
+}
 
-  useEffect(() => setListPage(0), [areaId, nodeType, publicationId]);
+export function AtlasGraph({
+  projection,
+  selectedCanonicalId,
+  onDrill,
+  onHome,
+  onUp,
+  canGoUp,
+}: AtlasGraphProps) {
+  const graph = useMemo(() => prepareGraph(projection), [projection]);
+  const [hoveredId, setHoveredId] = useState("");
+  const [localSelectedId, setLocalSelectedId] = useState("");
+  const [relationshipClass, setRelationshipClass] = useState("");
+  const [listOpen, setListOpen] = useState(projection.level === "landscape");
+
+  useEffect(() => {
+    setListOpen(projection.level === "landscape");
+  }, [projection.id, projection.level]);
+  const externalSelectedId = selectedCanonicalId && graph.hasNode(selectedCanonicalId)
+    ? selectedCanonicalId
+    : "";
+  const focusedId = hoveredId || localSelectedId || externalSelectedId;
+  const focusedNode = focusedId && graph.hasNode(focusedId)
+    ? graph.getNodeAttributes(focusedId)
+    : null;
+  const relationshipClasses = useMemo(
+    () => [...new Set(projection.edges.flatMap((edge) => edge.relationshipClasses))].sort(),
+    [projection.edges],
+  );
+
+  useEffect(() => {
+    setHoveredId("");
+    setLocalSelectedId("");
+    setRelationshipClass("");
+  }, [projection.id]);
+
+  function select(nodeId: string) {
+    const node = projection.nodes.find((entry) => entry.id === nodeId);
+    if (!node) return;
+    if (node.drill) {
+      onDrill(node.drill);
+      return;
+    }
+    setLocalSelectedId(nodeId);
+  }
+
+  const publishedRelationships = projection.edges.reduce(
+    (total, edge) => total + edge.relationshipCount,
+    0,
+  );
 
   return (
     <section
       aria-labelledby="atlas-network-title"
-      className="atlas-network"
-      data-layout-hash={artifact.layout.position_hash}
-      data-selected-node={selectedId || ""}
+      className="atlas-network atlas-network--semantic"
+      data-projection-id={projection.id}
+      data-projection-level={projection.level}
+      data-projection-node-count={projection.nodes.length}
+      data-projection-edge-count={projection.edges.length}
+      data-selected-canonical={selectedCanonicalId || ""}
       data-testid="atlas-network"
     >
       <div className="atlas-network-heading">
         <div>
-          <p className="eyebrow">Global relationship network</p>
-          <h2 id="atlas-network-title">Explore the control landscape</h2>
-          <p>{artifact.selection.rendered_node_count.toLocaleString()} records and {artifact.selection.rendered_edge_count.toLocaleString()} published relationships. Select a point to inspect it without rearranging the map.</p>
+          <p className="eyebrow">Semantic Atlas · {projection.level}</p>
+          <h2 id="atlas-network-title">{projection.label}</h2>
+          <p>{projection.description}</p>
+          <p className="atlas-network-measure">
+            {projection.nodes.length.toLocaleString()} visible landmarks represent {projection.representedCanonicalNodeCount.toLocaleString()} canonical records and {publishedRelationships.toLocaleString()} published relationships.
+          </p>
         </div>
-        <div className="atlas-network-filters" aria-label="Atlas network filters">
-          <label>Record category
-            <select value={nodeType} onChange={(event) => setNodeType(event.target.value)}>
-              <option value="">All categories</option>
-              {nodeTypes.map((value) => <option key={value} value={value}>{value.replaceAll("_", " ")}</option>)}
-            </select>
-          </label>
-          <label>Relationship class
-            <select value={relationshipClass} onChange={(event) => setRelationshipClass(event.target.value)}>
-              <option value="">All relationships</option>
-              {artifact.selection.relationship_classes.map((value) => <option key={value} value={value}>{value}</option>)}
-            </select>
-          </label>
-          <label>Area
-            <select value={areaId} onChange={(event) => setAreaId(event.target.value)}>
-              <option value="">All areas</option>
-              {AREA_PRESENTATIONS.map((area) => <option key={area.id} value={area.id}>{area.label}</option>)}
-            </select>
-          </label>
-          <label>Publication
-            <select value={publicationId} onChange={(event) => setPublicationId(event.target.value)}>
-              <option value="">All publications</option>
-              {publications.map((value) => <option key={value} value={value}>{value}</option>)}
+        <div className="atlas-network-controls">
+          <nav aria-label="Atlas location" className="atlas-network-breadcrumb">
+            <button disabled={projection.level === "landscape"} onClick={onHome} type="button">Landscape</button>
+            <button disabled={!canGoUp} onClick={onUp} type="button">Up one level</button>
+          </nav>
+          <label className="atlas-network-filter">Relationship class
+            <select onChange={(event) => setRelationshipClass(event.target.value)} value={relationshipClass}>
+              <option value="">All displayed connections</option>
+              {relationshipClasses.map((value) => <option key={value} value={value}>{value}</option>)}
             </select>
           </label>
         </div>
       </div>
       <div className="atlas-network-stage">
         <SigmaContainer
+          key={projection.id}
           graph={graph}
           settings={{
             allowInvalidContainer: true,
-            labelDensity: 0.08,
+            labelDensity: projection.level === "landscape" ? .32 : .12,
             labelColor: { color: token("--ca-text") },
-            labelGridCellSize: 140,
+            labelGridCellSize: 160,
             labelRenderedSizeThreshold: 8,
             edgeLabelColor: { color: token("--ca-text-muted") },
             edgeProgramClasses: { arrow: EdgeArrowProgram, line: EdgeLineProgram },
@@ -256,42 +278,50 @@ export function AtlasGraph({ artifact, selectedId, onSelect }: AtlasGraphProps) 
           }}
         >
           <GraphController
+            focusedId={focusedId}
             graph={graph}
-            hoveredId={hoveredId}
-            areaId={areaId}
-            nodeType={nodeType}
             onHover={setHoveredId}
-            onSelect={onSelect}
-            publicationId={publicationId}
+            onSelect={select}
+            projectionLevel={projection.level}
             relationshipClass={relationshipClass}
-            selectedId={selectedId}
+            selectedCanonicalId={externalSelectedId}
           />
           <ControlsContainer position="bottom-right"><ZoomControl /><FullScreenControl /></ControlsContainer>
         </SigmaContainer>
-        {tooltip ? (
+        {focusedNode ? (
           <aside className="atlas-network-tooltip" data-testid="atlas-network-tooltip">
-            <strong>{String(tooltip.label || tooltipId)}</strong>
-            <span>{String(tooltip.display?.nodeType || "record").replaceAll("_", " ")}</span>
-            {tooltip.display?.descendantRecordCount ? <span>{Number(tooltip.display.descendantRecordCount).toLocaleString()} records below</span> : null}
-            {tooltip.display?.mandateClassification ? <span>{String(tooltip.display.mandateClassification)} mandate</span> : null}
-            {tooltip.publicationId ? <span>Publication: {String(tooltip.publicationId)}</span> : null}
+            <strong>{focusedNode.label}</strong>
+            <span>{roleLabel(focusedNode)}</span>
+            <span>{focusedNode.canonicalRecordCount.toLocaleString()} canonical records</span>
+            {focusedNode.internalRelationshipCount ? <span>{focusedNode.internalRelationshipCount.toLocaleString()} internal published relationships</span> : null}
+            {focusedNode.drill ? <span>Open to continue</span> : null}
           </aside>
         ) : null}
       </div>
-      <details className="atlas-network-list">
-        <summary>Accessible network list ({visibleNodes.length.toLocaleString()} records)</summary>
-        <p>Use this list to reach every point currently shown by the category filter.</p>
-        <ol start={listPage * 50 + 1}>
-          {listNodes.map((id) => {
-            const data = graph.getNodeAttributes(id);
-            return <li key={id}><button aria-current={id === selectedId ? "true" : undefined} onClick={() => onSelect(id)} type="button"><span>{String(data.label || id)}</span><small>{String(data.display?.nodeType || "record").replaceAll("_", " ")}</small></button></li>;
-          })}
+      {projection.suppressedRelationshipCount ? (
+        <p className="atlas-network-suppression">{projection.suppressedRelationshipCount.toLocaleString()} lower-priority aggregate relationships stay out of this view. Drill in or select a landmark to reveal relevant context.</p>
+      ) : null}
+      <details
+        className="atlas-network-list"
+        open={listOpen}
+        onToggle={(event) => setListOpen(event.currentTarget.open)}
+      >
+        <summary>Accessible landmarks ({projection.nodes.length.toLocaleString()})</summary>
+        <p>Use this list to navigate the same bounded Atlas projection.</p>
+        <ol>
+          {projection.nodes.map((node) => (
+            <li key={node.id}>
+              <button
+                aria-current={node.id === focusedId ? "true" : undefined}
+                onClick={() => select(node.id)}
+                type="button"
+              >
+                <span>{node.label}</span>
+                <small>{roleLabel(node)} · {node.canonicalRecordCount.toLocaleString()} records</small>
+              </button>
+            </li>
+          ))}
         </ol>
-        <div className="atlas-network-pagination">
-          <button disabled={listPage === 0} onClick={() => setListPage((page) => Math.max(0, page - 1))} type="button">Previous</button>
-          <span>Page {listPage + 1} of {pageCount}</span>
-          <button disabled={listPage + 1 >= pageCount} onClick={() => setListPage((page) => Math.min(pageCount - 1, page + 1))} type="button">Next</button>
-        </div>
       </details>
     </section>
   );
