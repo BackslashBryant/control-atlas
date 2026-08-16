@@ -67,13 +67,13 @@ test("live smoke: Resources and Atlas workbench are first-class routes", async (
 
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
-  await expect(page.locator(".atlas-tree")).toHaveAttribute("data-tree-node-count", "13");
-  await expect(page.getByRole("button", { name: "Map details", exact: true })).toBeVisible();
-  await expect(page.locator(".atlas-tree__inspector")).toHaveCount(0);
-  await page
-    .locator('.react-flow__node:has([data-atlas-node-id="atlas:LIMB-COMPLIANCE"])')
-    .dispatchEvent("click");
-  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
+  const network = page.getByTestId("atlas-network");
+  await expect(network).toHaveAttribute("data-layout-hash", /^[a-f0-9]{64}$/);
+  expect(await network.locator("canvas").count()).toBeGreaterThan(0);
+  await network.locator("summary").click();
+  await network.locator(".atlas-network-list li button").first().click();
+  await expect(page).toHaveURL(/#\/atlas\/.+/);
+  await expect(network).not.toHaveAttribute("data-selected-node", "");
 });
 
 test("live smoke: compare hub loads", async ({ page }) => {
