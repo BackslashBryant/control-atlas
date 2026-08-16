@@ -19,7 +19,7 @@ test("WS0 direct routes own exactly one main landmark without Home stacked above
 
   const routes = [
     { path: "/#/", view: "home", marker: page.locator(".home-entry") },
-    { path: "/#/atlas", view: "atlas-map", marker: page.getByRole("application", { name: "Interactive Atlas map hierarchy" }) },
+    { path: "/#/atlas", view: "atlas-map", marker: page.getByTestId("atlas-network") },
     { path: "/#/library", view: "search", marker: page.getByRole("heading", { name: "Library", exact: true }) },
     { path: "/#/resources", view: "commons", marker: page.getByRole("heading", { name: "Resources", exact: true, level: 1 }) },
     { path: "/#/guides", view: "patterns", marker: page.getByRole("heading", { name: "Guides", exact: true }) },

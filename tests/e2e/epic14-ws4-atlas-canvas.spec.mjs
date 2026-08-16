@@ -24,6 +24,14 @@ test.beforeEach(async ({ page }) => {
 async function openAtlas(page, viewport = { width: 1440, height: 900 }) {
   await page.setViewportSize(viewport);
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await gotoApp(page, "/#/atlas?relationshipView=path");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+}
+
+async function openNetwork(page, viewport = { width: 1440, height: 900 }) {
+  await page.setViewportSize(viewport);
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
@@ -62,7 +70,7 @@ test("Template D is graph-first and discloses map details without covering the c
   })));
   expect(geometry[0].width).toBeCloseTo(280, 0);
   expect(geometry[0].right).toBeLessThanOrEqual(geometry[1].left);
-  expect(geometry[1].top).toBeLessThan(900);
+  expect(geometry[1].top).toBeLessThan(1_000);
   expect(geometry[1].width).toBeGreaterThan(900);
 
   await detailsToggle.click();
@@ -89,6 +97,30 @@ test("Template D is graph-first and discloses map details without covering the c
   await expect(page.getByRole("button", { name: /Open this (?:area|publication|branch)/ })).toHaveCount(0);
 });
 
+test("global Atlas selection and filters preserve the deterministic layout", async ({ page }) => {
+  await openNetwork(page, { width: 1440, height: 900 });
+  const network = page.getByTestId("atlas-network");
+  const initialHash = await network.getAttribute("data-layout-hash");
+  expect(initialHash).toMatch(/^[a-f0-9]{64}$/);
+  expect(await network.locator("canvas").count()).toBeGreaterThan(0);
+
+  await page.getByLabel("Record category").selectOption("statute");
+  await expect(page.getByText("Accessible network list (7 records)")).toBeVisible();
+  await page.getByLabel("Relationship class").selectOption("correlation");
+  await expect(network).toHaveAttribute("data-layout-hash", initialHash);
+  await page.getByLabel("Record category").selectOption("");
+  await page.getByLabel("Area").selectOption("atlas:LIMB-COMPLIANCE");
+  await network.locator("label", { hasText: /^Publication/ }).locator("select").selectOption("nist-800-53");
+  await expect(network).toHaveAttribute("data-layout-hash", initialHash);
+
+  const search = page.getByRole("searchbox", { name: "Jump to a record" });
+  await search.fill("nist-800-53:AC-2");
+  await search.press("Enter");
+  await expect(page).toHaveURL(/#\/atlas\/nist-800-53:AC-2/);
+  await expect(network).toHaveAttribute("data-selected-node", "nist-800-53:AC-2");
+  await expect(network).toHaveAttribute("data-layout-hash", initialHash);
+});
+
 test("every populated area drills directly and the live breadcrumb reverses the path", async ({ page }) => {
   await openAtlas(page);
   const breadcrumb = page.getByRole("navigation", { name: "Atlas breadcrumb" });
@@ -100,11 +132,11 @@ test("every populated area drills directly and the live breadcrumb reverses the 
   }
 
   await breadcrumb.getByRole("button", { name: "Atlas", exact: true }).click();
-  await expect(page).toHaveURL(/#\/atlas$/);
+  await expect(page).toHaveURL(/#\/atlas\?relationshipView=path$/);
   await expect(breadcrumb.getByText("Atlas", { exact: true })).toHaveAttribute("aria-current", "page");
 
   await clickFlowNode(page, "atlas:LIMB-OPERATIONS");
-  await expect(page).toHaveURL(/#\/atlas$/);
+  await expect(page).toHaveURL(/#\/atlas\?relationshipView=path$/);
   const inspector = page.locator(".atlas-tree__inspector");
   await expect(inspector).toContainText("Operations");
   await expect(inspector).toContainText("No records yet.");
@@ -255,7 +287,7 @@ test("Adaptive Explorer is bounded, responsive, and incrementally rendered at ev
     ).toBeLessThanOrEqual(1);
 
     const explorerBox = await explorer.boundingBox();
-    expect(explorerBox?.y, `${width}px useful content position`).toBeLessThan(600);
+    expect(explorerBox?.y, `${width}px useful content position`).toBeLessThan(700);
     expect(explorerBox?.width, `${width}px useful content width`).toBeGreaterThan(Math.min(280, width * 0.7));
 
     const browse = page.getByRole("button", { name: "Browse structure" });

@@ -130,9 +130,39 @@ export type LibrarySearchArtifact = {
   documents: Array<Record<string, unknown>>;
 };
 
+export type AtlasNetworkArtifact = {
+  schema_version: "1.0";
+  generated_at: string;
+  selection: {
+    full_node_count: number;
+    full_edge_count: number;
+    rendered_node_count: number;
+    rendered_edge_count: number;
+    relationship_classes: string[];
+    relationship_types: string[];
+  };
+  layout: {
+    algorithm: "forceatlas2-noverlap";
+    position_hash: string;
+  };
+  graph: {
+    attributes?: Record<string, unknown>;
+    options?: Record<string, unknown>;
+    nodes: Array<{ key: string; attributes: Record<string, any> }>;
+    edges: Array<{
+      key: string;
+      source: string;
+      target: string;
+      attributes: Record<string, any>;
+      undirected?: boolean;
+    }>;
+  };
+};
+
 export type RuntimeBundle = {
   runtime: ReturnType<typeof createFederalGraphRuntime>;
   templateRegistry: TemplateRegistry;
+  atlasNetwork?: AtlasNetworkArtifact;
   atlasSpine?: AtlasSpine;
   catalogSummaries?: Array<Record<string, any>>;
   catalogPublishedGroups?: Array<{
@@ -267,6 +297,7 @@ type LibrarySearchBootstrap = {
 };
 
 export type RuntimeArtifactPlan = {
+  atlasNetwork: boolean;
   atlasSpine: boolean;
   catalogBootstrap: boolean;
   catalogFamily: string;
@@ -322,6 +353,7 @@ export function runtimeArtifactPlan(
         state.crosswalk === "threat-chain")) ||
     (state.view === "templates" && Boolean(state.templateType));
   return {
+    atlasNetwork: state.view === "atlas-map",
     atlasSpine: state.view === "atlas-map" || state.view === "library-detail",
     catalogBootstrap:
       state.view === "atlas-map" ||
@@ -397,6 +429,9 @@ export async function preloadRuntimeArtifacts(state: ViewState) {
   }
   if (plan.atlasSpine) {
     add(artifactPath("atlas-spine.json"));
+  }
+  if (plan.atlasNetwork) {
+    add(artifactPath("atlas-network.json"));
   }
   // A catalog route first paints from sources + catalog-bootstrap. Its larger
   // record shard starts after that shell is ready instead of competing with
@@ -913,6 +948,7 @@ export async function loadFullGraphPhase(
   commonsDataset?: CommonsResourceDataset,
   catalogSummaries: Array<Record<string, any>> = [],
   mappingSources: Record<string, Array<{ value: string; label: string }>> = {},
+  atlasNetwork?: AtlasNetworkArtifact,
   atlasSpine?: AtlasSpine,
 ): Promise<RuntimeBundle> {
   const [sources, nodes, edges, evidence, findings] = await Promise.all([
@@ -943,6 +979,7 @@ export async function loadFullGraphPhase(
     commonsDataset,
     catalogSummaries,
     mappingSources,
+    atlasNetwork,
     atlasSpine,
     routeReady: true,
     graphReady: true,
@@ -1036,6 +1073,7 @@ async function loadRouteScopedPhase(
     libraryBootstrap,
     sourcesArtifact,
     catalogArtifact,
+    atlasNetworkArtifact,
     atlasSpineArtifact,
     catalogRecordsArtifact,
     record,
@@ -1055,6 +1093,9 @@ async function loadRouteScopedPhase(
       : Promise.resolve(null),
     plan.catalogBootstrap
       ? fetchArtifact(artifactPath("catalog-bootstrap.json"))
+      : Promise.resolve(null),
+    plan.atlasNetwork
+      ? fetchArtifact(artifactPath("atlas-network.json"))
       : Promise.resolve(null),
     plan.atlasSpine
       ? fetchArtifact(artifactPath("atlas-spine.json"))
@@ -1101,8 +1142,12 @@ async function loadRouteScopedPhase(
     )?.catalog_bootstrap || {};
   const atlasSpine = (atlasSpineArtifact as AtlasSpineArtifact | null)
     ?.atlas_spine;
+  const atlasNetwork = atlasNetworkArtifact as AtlasNetworkArtifact | null;
   if (plan.atlasSpine && !atlasSpine?.entries?.length) {
     throw new Error("Atlas spine artifact has no entries.");
+  }
+  if (plan.atlasNetwork && !atlasNetwork?.graph?.nodes?.length) {
+    throw new Error("Atlas network artifact has no nodes.");
   }
   const catalogRecords =
     (
@@ -1175,6 +1220,7 @@ async function loadRouteScopedPhase(
         (commonsDatasetRaw as CommonsResourceDataset) || undefined,
       mappingSources: catalogBootstrap.mapping_sources || {},
       catalogSummaries: catalogBootstrap.catalogs || [],
+      atlasNetwork: atlasNetwork || undefined,
       atlasSpine,
       catalogPublishedGroups,
       catalogRecordsReady: plan.catalogId ? true : undefined,
@@ -1193,9 +1239,12 @@ async function loadRouteScopedPhase(
 async function loadCatalogShellPhase(
   plan: RuntimeArtifactPlan,
 ): Promise<RuntimeBundle> {
-  const [sourcesArtifact, catalogArtifact, atlasSpineArtifact] = await Promise.all([
+  const [sourcesArtifact, catalogArtifact, atlasNetworkArtifact, atlasSpineArtifact] = await Promise.all([
     fetchArtifact(artifactPath("sources.json")),
     fetchArtifact(artifactPath("catalog-bootstrap.json")),
+    plan.atlasNetwork
+      ? fetchArtifact(artifactPath("atlas-network.json"))
+      : Promise.resolve(null),
     plan.atlasSpine
       ? fetchArtifact(artifactPath("atlas-spine.json"))
       : Promise.resolve(null),
@@ -1211,8 +1260,12 @@ async function loadCatalogShellPhase(
     ).catalog_bootstrap || {};
   const atlasSpine = (atlasSpineArtifact as AtlasSpineArtifact | null)
     ?.atlas_spine;
+  const atlasNetwork = atlasNetworkArtifact as AtlasNetworkArtifact | null;
   if (plan.atlasSpine && !atlasSpine?.entries?.length) {
     throw new Error("Atlas spine artifact has no entries.");
+  }
+  if (plan.atlasNetwork && !atlasNetwork?.graph?.nodes?.length) {
+    throw new Error("Atlas network artifact has no nodes.");
   }
 
   return {
@@ -1225,6 +1278,7 @@ async function loadCatalogShellPhase(
     templateRegistry: { templates: [] },
     mappingSources: catalogBootstrap.mapping_sources || {},
     catalogSummaries: catalogBootstrap.catalogs || [],
+    atlasNetwork: atlasNetwork || undefined,
     atlasSpine,
     catalogRecordsReady: false,
     routeReady: true,
@@ -1304,6 +1358,7 @@ export async function loadRuntimeDatasetStaged(handlers: {
       routePhase.bundle.commonsDataset,
       routePhase.bundle.catalogSummaries || [],
       routePhase.bundle.mappingSources || {},
+      routePhase.bundle.atlasNetwork,
       routePhase.bundle.atlasSpine,
     );
     if (handlers.signal?.aborted) return;

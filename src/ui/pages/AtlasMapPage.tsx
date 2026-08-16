@@ -22,6 +22,7 @@ import {
 } from "../../shared/record-presentation.mjs";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
+import { AtlasGraph } from "../components/AtlasGraph";
 import {
   AtlasTree,
   structuralChildrenFromNeighborhood,
@@ -120,6 +121,10 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     [bundle, state.node],
   );
   const view = atlasView(state.relationshipView, Boolean(nodeId));
+  const hierarchyRequested = Boolean(
+    state.atlasAxis || state.atlasLimb || state.atlasFramework ||
+    state.atlasFamily || state.atlasBenchmark || state.relationshipView === "path",
+  );
   const [record, setRecord] = useState<AtlasNeighborhoodRecord | null>(null);
   const [recordStatus, setRecordStatus] = useState<
     "idle" | "loading" | "ready" | "missing" | "error"
@@ -285,6 +290,16 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         </div>
       ) : null}
 
+      {bundle.atlasNetwork && !hierarchyRequested ? (
+        <AtlasGraph
+          artifact={bundle.atlasNetwork}
+          onSelect={(node) => patchAtlas({ node, atlasParent: "", relationshipSearch: "" })}
+          selectedId={nodeId || undefined}
+        />
+      ) : !bundle.atlasNetwork ? (
+        <p className="atlas-load-inline-error" role="alert">The global Atlas network is unavailable. Reload the page to try again.</p>
+      ) : null}
+
       {/* No view switcher before a record exists: Map and List are views OF a
           chosen record. Offering them with nothing selected produced a
           dead-end that told the user to go choose a record. With no subject,
@@ -316,7 +331,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           state={state}
           view={view}
         />
-      ) : recordStatus === "idle" && bundle.routeReady ? (
+      ) : recordStatus === "idle" && bundle.routeReady && hierarchyRequested ? (
         <AtlasGuidedPath
           bundle={bundle}
           benchmarkRecord={benchmarkRecord}
@@ -325,7 +340,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           patchAtlas={patchAtlas}
           state={state}
         />
-      ) : recordStatus === "idle" ? (
+      ) : recordStatus === "idle" && !bundle.routeReady ? (
         <div className="atlas-loading" role="status">
           <div aria-hidden="true" className="atlas-loading-block" />
           Preparing the Atlas…

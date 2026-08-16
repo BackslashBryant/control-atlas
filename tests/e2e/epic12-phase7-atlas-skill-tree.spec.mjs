@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-async function openAtlas(page, path = "/#/atlas") {
+async function openAtlas(page, path = "/#/atlas?relationshipView=path") {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await gotoApp(page, path);
@@ -43,7 +43,7 @@ test("Atlas overview hands off to publisher-native navigation and preserves hist
   const stage = tree.locator(".atlas-tree__stage");
   await expect(stage).toHaveAttribute("data-semantic-level", "orientation");
   await page.waitForTimeout(550);
-  for (let step = 0; step < 4; step += 1) await page.getByTitle("Zoom in").click();
+  for (let step = 0; step < 4; step += 1) await page.locator(".atlas-tree").getByTitle("Zoom in").click();
   await expect(stage).toHaveAttribute("data-semantic-level", "justification");
 
   await drillNode(page, "atlas:LIMB-IMPLEMENTATION");
@@ -114,7 +114,7 @@ test("focused trace matches the record rail and local connections never replace 
 test("mobile Atlas keeps keyboard overview navigation and uses a structural Browse drawer", async ({ page }) => {
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 390, height: 844 });
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?relationshipView=path");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
