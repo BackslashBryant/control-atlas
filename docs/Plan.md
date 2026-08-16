@@ -14,11 +14,17 @@ Get `feat/orbital-task-headers` (commit `d06b656e`) to CI-green and merged to
 `main`. This branch contains the task-header rebuild and Compare dead-end fix but
 is blocked by 163 color-contrast violations.
 
-### O2 — Replace the Atlas graph paradigm
-Swap the rigid ELK tree layout (React Flow + `elkjs`) for Cytoscape.js with
-force-directed layout, node sizing by importance, edge weight encoding,
-clustering, progressive disclosure, and semantic edge labels. The current tree
-violates network-graph best practices and the owner rejected it.
+### O2 — Split the Atlas into network and hierarchy projections
+Replace the ELK-driven **global Atlas** with a true interactive network
+architecture: Graphology as the runtime graph model, Sigma.js as the WebGL
+renderer, and ForceAtlas2 + Noverlap for network spatialization. Preserve ELK
+for explicit hierarchy/provenance views where directional structure is the
+point.
+
+The canonical Control Atlas records and relationships remain the source of
+truth. Graphology, layout metrics, and computed communities are derived
+presentation/analysis layers only; they must never invent, replace, or
+reclassify authoritative relationships.
 
 ### O3 — Eliminate decorative teal saturation
 Teal (`--ca-primary` = `#5ca3a6`) is used ~322× across `orbital.css` and
@@ -60,37 +66,131 @@ interaction sweep, style system friction cleanup, visual baseline regeneration.
 
 ---
 
-### Phase 1 — Graph Paradigm Change
+### Phase 1 — Atlas Network Architecture
 
-- [ ] **T1.1** Install `cytoscape`, `cytoscape-cose-bilkent`,
-  `react-cytoscapejs`. Follow lockfile insertion procedure (gotcha #3).
-- [ ] **T1.2** Delete `src/ui/lib/atlasTreeLayout.ts` (ELK wrapper). Remove
-  `elkjs` dependency.
-- [ ] **T1.3** Create `src/ui/lib/atlasGraphLayout.ts` — Cytoscape layout
-  config + visual mapping:
-  - Node size scales with `descendantRecordCount` or connection degree
-  - Edge thickness: structural (thick), organizing (medium), cross-framework
-    mapping (thin dashed)
-  - Color by area (existing palette via `areaVisualLanguage.ts`, preserved)
-  - Clustering via compound/parent nodes — areas become containers
-- [ ] **T1.4** Rewrite `src/ui/components/AtlasTree.tsx` rendering from React
-  Flow to Cytoscape. Keep `AtlasTreeNodeView` data logic.
-- [ ] **T1.5** Implement interaction model:
-  - Click node → expand children (progressive disclosure) + highlight neighbors
-  - Hover → tooltip (name, type, record count, mandate classification)
-  - Search → highlight + zoom to match
-  - Filter → hide/show by node type, area, publication
-  - Semantic edge labels on hover/zoom-in (`contains`, `organizes`, `maps_to`)
-  - Zoom-level semantic detail transitions
-- [ ] **T1.6** Update `src/ui/pages/AtlasMapPage.tsx` integration.
-- [ ] **T1.7** Update `tests/e2e/epic14-ws4-atlas-canvas.spec.mjs` for
-  Cytoscape DOM structure.
-- [ ] **T1.8** Remove React Flow styles from `styles/surfaces.css`
-  (`.atlas-tree-node--*`, `.react-flow__node`). Add Cytoscape styles in
-  `styles/orbital.css`.
+- [ ] **T1.1** Establish a graph baseline and run a disposable proof-of-concept
+  before changing the production route:
+  - Use the same representative Control Atlas dataset for both views (target
+    1,000–5,000 nodes with all real relationship types; also test the full
+    production graph when locally available).
+  - Capture the current ELK Atlas screenshot, node/edge counts,
+    time-to-first-usable render, search/focus behavior, and pan/zoom behavior.
+  - Build a zero-commit Sigma.js + Graphology spike against the same data.
+  - Proceed with migration only if the spike materially improves network
+    legibility and exploration without unacceptable performance or interaction
+    regressions. Record the comparison in the phase evidence.
+
+- [ ] **T1.2** Install the stable network stack:
+  `graphology`, `sigma`, `@react-sigma/core`, `graphology-layout`,
+  `graphology-layout-forceatlas2`, `graphology-layout-noverlap`,
+  `graphology-operators`, and `graphology-communities-louvain`.
+  Follow lockfile insertion procedure (gotcha #3). Use the current stable Sigma
+  major; do not adopt a prerelease major for this migration.
+  **Keep `elkjs` and React Flow for now. Do not install Cytoscape.**
+
+- [ ] **T1.3** Create `src/ui/lib/atlasGraphModel.ts` as the runtime semantic
+  graph projection:
+  - Build a Graphology mixed multigraph when the source data requires directed,
+    undirected, or parallel relationships.
+  - Preserve canonical node IDs, edge IDs, relationship type, direction,
+    authority/source metadata, and parallel edges.
+  - Map display attributes separately from source semantics.
+  - Do not create canonical edges from proximity, layout, degree, community, or
+    visual grouping.
+  - Keep the existing generated/source datasets authoritative; Graphology is a
+    client/build projection, not a replacement data store.
+
+- [ ] **T1.4** Create `src/ui/lib/atlasGraphAnalysis.ts` for derived analysis:
+  - Produce a **simple undirected weighted projection** from the semantic graph
+    for layout/community analysis only.
+  - Aggregate parallel connections into a derived `layoutWeight`; never
+    overwrite canonical relationship weights or classifications.
+  - Compute degree/weighted-degree presentation metrics.
+  - Run Louvain only on this derived projection.
+  - Store community output as `computedCommunity` presentation metadata. It
+    must never replace area, publication, framework, family, category, mandate,
+    or any other authoritative classification.
+  - Use a stable seeded order/RNG so repeated builds do not arbitrarily
+    reshuffle computed communities.
+
+- [ ] **T1.5** Create `src/ui/lib/atlasGraphLayout.ts` for stable network
+  positions:
+  - Initialize `x`/`y` deterministically from stable node IDs.
+  - Run ForceAtlas2 with bounded iterations; enable Barnes-Hut optimization for
+    larger graphs when appropriate.
+  - Run Noverlap after ForceAtlas2 to reduce collisions.
+  - Prefer generating global Atlas positions during the existing build/data
+    pipeline and loading the derived coordinates at runtime.
+  - Treat `x`, `y`, `layoutWeight`, and computed community as disposable
+    derived visual metadata.
+  - Do not restart the global layout when the user filters, selects, searches,
+    or progressively reveals nodes. Preserve the mental map.
+  - If an interactive relaxation is needed for a local subgraph, run it in a
+    worker and never let it rewrite the global coordinates.
+
+- [ ] **T1.6** Create `src/ui/components/AtlasGraph.tsx` using
+  `@react-sigma/core` and make it the global Atlas renderer:
+  - Node size uses a bounded/log-scaled presentation metric based primarily on
+    `descendantRecordCount`, with connection degree as a fallback.
+  - Edge appearance encodes relationship class without changing semantics:
+    structural/contains, organizing, and cross-framework mapping remain
+    visually distinguishable.
+  - Preserve the existing area palette through `areaVisualLanguage.ts`.
+  - Show direction markers only where the canonical relationship is directed.
+  - Use progressive label disclosure by zoom, selection, and importance rather
+    than rendering every label at once.
+  - Use Sigma reducers/settings for hover, selected, hidden, and emphasized
+    states instead of rebuilding the renderer.
+
+- [ ] **T1.7** Implement the network interaction model:
+  - Click node → select it, reveal its relevant neighborhood/children, and
+    highlight immediate relationships **without changing global positions**.
+  - Hover → emphasize neighbors and show tooltip (name, type, record count,
+    mandate classification, source/publication).
+  - Search → highlight and camera-focus the best match.
+  - Filter → hide/show by node type, area, publication, or relationship class.
+  - Semantic edge labels appear for selected/hovered relationships and at
+    useful zoom levels (`contains`, `organizes`, `maps_to`, etc.).
+  - Progressive disclosure reveals detail; it does not trigger a whole-graph
+    re-layout.
+  - Computed communities may support subtle cluster annotation or analysis, but
+    must not override authoritative area colors or labels.
+
+- [ ] **T1.8** Preserve a separate hierarchy/provenance projection:
+  - Keep `src/ui/lib/atlasTreeLayout.ts` and `elkjs`; narrow their purpose to
+    explicit structural, publisher-hierarchy, lineage, or provenance views.
+  - Keep `atlasTreeModel.ts`, `atlasTreeAggregation.ts`,
+    `atlasTreeOverlay.ts`, and `areaVisualLanguage.ts`.
+  - Reuse the existing React Flow + ELK path for this projection if it remains
+    the lowest-risk implementation.
+  - If React Flow later has no remaining consumer, remove it in Phase 5 after
+    usage and regression audits. Do not delete it as part of the network
+    migration merely for dependency cleanup.
+
+- [ ] **T1.9** Update `src/ui/pages/AtlasMapPage.tsx`:
+  - Network view is the default Atlas experience.
+  - Inspector uses the selected Graphology node/edge state.
+  - Structural/hierarchy/provenance detail may invoke the retained ELK
+    projection where that representation is clearer than the global network.
+  - Preserve URL/deep-link behavior and existing record navigation.
+
+- [ ] **T1.10** Rebuild graph verification for the new architecture:
+  - Add unit tests proving node/edge parity, direction preservation, parallel
+    edge preservation, and zero algorithm-created canonical relationships.
+  - Add deterministic layout tests for the same input/configuration.
+  - Verify Louvain/community metadata never mutates authoritative
+    classifications.
+  - Update `tests/e2e/epic14-ws4-atlas-canvas.spec.mjs` for the Sigma canvas,
+    camera, search, selection, filter, and inspector behavior.
+  - Provide an accessible companion representation for graph selection/detail;
+    do not rely on individual WebGL nodes being DOM elements for keyboard or
+    screen-reader access.
+  - Remove old Atlas-only React Flow CSS only after confirming it is not used by
+    the retained hierarchy/provenance projection.
 
 **Keep:** `atlasTreeModel.ts`, `atlasTreeAggregation.ts`, `atlasTreeOverlay.ts`,
-`areaVisualLanguage.ts`.
+`atlasTreeLayout.ts`, `areaVisualLanguage.ts`, `elkjs`, and React Flow where
+they still serve the hierarchy/provenance projection.
 
 ---
 
@@ -126,8 +226,12 @@ For each page: fetch reference HTML from
 match its composition, sweep teal, migrate CSS, verify with live screenshot.
 
 - [ ] **T3.1 Atlas Map** (`AtlasMapPage.tsx`) — Recipes: `dashboard.html` +
-  `deep-systems.html`. Cytoscape graph (Phase 1). Inspector as Orbital
-  `.system-stat` panel. Custom header → shared `PageHeader`.
+  `deep-systems.html`. Sigma.js + Graphology network is the default Atlas
+  surface (Phase 1). Inspector as Orbital `.system-stat` panel. Preserve a
+  focused ELK hierarchy/provenance projection inside the inspector or a
+  secondary structure view where directional hierarchy is actually useful.
+  Do not force the global Atlas back into a tree. Custom header → shared
+  `PageHeader`.
 - [ ] **T3.2 Sources** (`SourcesPage.tsx`) — Recipe: `data-admin.html`. Collapse
   4 tabs into a single filterable register. Detail as slide-out inspector.
   Rename data-engineer labels to audience-appropriate terms.
@@ -209,15 +313,38 @@ Fetch `docs/AEROSPACE-GRAMMAR.md` from the Orbital repo for the full spec.
 - All subsequent phase branches pass `verify:quality`, `test:a11y:smoke`,
   `test:e2e:smoke` (77 tests) before merge.
 
-### M2 — Graph Quality
-- Atlas renders with Cytoscape.js using `cose-bilkent` layout.
-- Node sizes vary by `descendantRecordCount` — visible size difference between
-  high-record pubs (DISA STIG ~600+) and low-record pubs.
-- The 3 "Federal Policy or Regulation" nodes are visually distinct (different
-  sizes, different area clusters, tooltip reveals publication name).
-- Progressive disclosure works: click expands children, hover shows tooltip.
-- `elkjs` removed from `package.json`.
-- `tests/e2e/epic14-ws4-atlas-canvas.spec.mjs` passes with Cytoscape DOM.
+### M2 — Graph Quality and Semantic Integrity
+- The default Atlas renders with Sigma.js backed by Graphology; Cytoscape is not
+  part of the production graph stack.
+- The global Atlas uses stable ForceAtlas2 + Noverlap positions generated from
+  a derived layout/analysis projection, not ELK Layered.
+- ELK/React Flow may remain only for an explicit hierarchy/provenance
+  projection; no ELK layout drives the global network view.
+- Canonical node and relationship parity is exact for the loaded dataset:
+  source IDs, edge IDs, relationship types, direction, and parallel
+  relationships survive the Graphology projection without invention or loss.
+- Louvain/community output is derived presentation metadata only and never
+  changes authoritative area, framework, publication, family, category,
+  mandate, or relationship semantics.
+- Repeated builds with identical graph input and layout configuration produce
+  stable global coordinates/community output; filter, search, selection, and
+  progressive disclosure do not reshuffle the global map.
+- Node sizes vary with a bounded/log-scaled `descendantRecordCount` metric
+  (degree fallback) so high-record and low-record publications are visibly
+  different without a few hubs dominating the viewport.
+- The 3 "Federal Policy or Regulation" nodes are visually distinguishable by
+  label/size/context; selection or tooltip reveals the actual publication name
+  and authoritative metadata.
+- Progressive disclosure works: click reveals relevant neighbors/children,
+  hover emphasizes relationships, search focuses the camera, and semantic edge
+  labels appear only when useful.
+- Against the same representative dataset captured in T1.1, the new network
+  stack meets or beats the current time-to-first-usable render baseline or
+  stays within a documented 10% regression while materially improving network
+  legibility. Interaction actions must not trigger a whole-graph layout rerun.
+- `tests/e2e/epic14-ws4-atlas-canvas.spec.mjs` passes against Sigma behavior and
+  the accessible inspector/companion representation rather than per-node DOM
+  elements.
 
 ### M3 — Teal Elimination
 - Zero decorative teal on any non-state element across all pages.
@@ -275,6 +402,22 @@ Fetch `docs/AEROSPACE-GRAMMAR.md` from the Orbital repo for the full spec.
    after builds.
 10. **`--ca-primary`/`--ca-secondary`/`--ca-accent` are pinned** to `#5ca3a6` by
     tests. Change WHERE they're used, not WHAT they resolve to.
+11. **React Sigma container props are lifecycle-sensitive.** Keep the `graph`
+    and `settings` inputs stable; update the Graphology/Sigma instance through
+    its APIs so normal interactions do not kill/recreate the renderer and reset
+    useful state.
+12. **Louvain is analysis-only.** Never run community detection against the
+    canonical mixed graph and then treat the result as authoritative taxonomy.
+    Build the explicit derived simple directed/undirected projection described
+    in T1.4.
+13. **ForceAtlas2 requires initial coordinates and should not run forever.**
+    Initialize `x`/`y` deterministically, use bounded work, and prefer
+    build-time global positions. A local worker relaxation must never replace
+    the global mental map.
+14. **Sigma nodes are WebGL render objects, not per-node DOM elements.** E2E
+    and accessibility checks must use application state, camera behavior,
+    search/focus controls, and the accessible inspector/companion
+    representation instead of DOM queries for each node.
 
 ---
 
@@ -309,20 +452,36 @@ Base URL: `https://raw.githubusercontent.com/BackslashBryant/orbital-archive-no-
 | `styles/surfaces.css` | 249KB legacy, migrate incrementally | 2, 3, 5 |
 | `styles/components.css` | Target for migrated rules | 2, 3, 5 |
 | `styles/tailwind.css` | @theme inline mapping to tokens | 3, 5 |
-| `src/ui/components/AtlasTree.tsx` | Graph rendering (React Flow → Cytoscape) | 1 |
-| `src/ui/lib/atlasTreeLayout.ts` | ELK wrapper (delete) | 1 |
-| `src/ui/lib/atlasTreeModel.ts` | Tree model builder (keep) | 1 |
+| `src/ui/components/AtlasGraph.tsx` | Global Sigma.js network renderer (new) | 1 |
+| `src/ui/components/AtlasTree.tsx` | Retain/repurpose only for hierarchy/provenance if still needed | 1, 5 |
+| `src/ui/lib/atlasGraphModel.ts` | Graphology semantic runtime projection (new) | 1 |
+| `src/ui/lib/atlasGraphAnalysis.ts` | Derived layout/community/metric projection (new) | 1 |
+| `src/ui/lib/atlasGraphLayout.ts` | Stable ForceAtlas2 + Noverlap positions (new) | 1 |
+| `src/ui/lib/atlasTreeLayout.ts` | ELK hierarchy/provenance layout (keep, narrow scope) | 1 |
+| `src/ui/lib/atlasTreeModel.ts` | Tree/hierarchy model builder (keep) | 1 |
 | `src/ui/lib/atlasTreeAggregation.ts` | Node selection/aggregation (keep) | 1 |
-| `src/ui/lib/areaVisualLanguage.ts` | Area color palette (keep, extend) | 1 |
+| `src/ui/lib/atlasTreeOverlay.ts` | Existing tree/overlay logic (keep if consumed) | 1, 5 |
+| `src/ui/lib/areaVisualLanguage.ts` | Authoritative area visual palette (keep, extend) | 1 |
 | `src/ui/lib/pagePrimitives.tsx` | Shared PageHeader primitive | 3 |
 | `src/ui/pages/*.tsx` | Individual page components | 3 |
 | `vendor/orbital-archive/tokens.palette.json` | Vendored palette snapshot | — |
 | `tests/orbital-token-drift.test.mjs` | Drift guard | — |
 | `tests/graph/areaVisualLanguage.test.ts` | Visual token pins (don't change values) | 1 |
-
+| `tests/e2e/epic14-ws4-atlas-canvas.spec.mjs` | Sigma network interaction regression coverage | 1 |
 ---
 
 ## Verification Discipline
+
+Phase 1 graph migration additionally requires:
+1. Render the same dataset in the current ELK Atlas and the Sigma/Graphology
+   spike side by side.
+2. Assert canonical node/edge parity and relationship direction/type before
+   judging appearance.
+3. Verify repeated layout generation is stable for identical input/config.
+4. Verify selection, search, filtering, progressive disclosure, and
+   accessibility without triggering a whole-graph re-layout.
+5. Test the representative dataset and the full production graph when
+   available; record the before/after render baseline.
 
 Per page, per phase:
 1. `npm run build:site` → restart `serve:static`
@@ -332,7 +491,6 @@ Per page, per phase:
    `test:e2e:smoke`)
 5. Final: `npm run verify:quality` + visual baseline regen + full-site
    walkthrough
-
 ---
 
 ## Ship Flow
