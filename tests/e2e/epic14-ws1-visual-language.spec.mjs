@@ -60,7 +60,7 @@ test("WS1 decorative surfaces resolve to one teal accent", async ({ page }) => {
 
 test("WS1 Atlas spends the full area palette on its nine branch nodes", async ({ page }) => {
   test.setTimeout(120_000);
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?relationshipView=path");
   await waitForAppReady(page, { allowPartial: true });
 
   const tree = page.locator('.atlas-tree[data-layout-status="ready"]');

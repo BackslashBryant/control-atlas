@@ -133,6 +133,12 @@ for (const [sourceRelativePath, destRelativePath] of COPY_PATHS) {
   copyIntoDist(sourceRelativePath, destRelativePath);
 }
 
+execFileSync(
+  "npm",
+  ["run", "build:atlas-network", "--", "--output", "dist/site/data/generated/atlas-network.json"],
+  { cwd: ROOT, stdio: "inherit", shell: process.platform === "win32" },
+);
+
 console.log("Compressing JSON files with gzip...");
 function getFiles(dir) {
   const result = [];
