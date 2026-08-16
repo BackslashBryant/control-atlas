@@ -297,7 +297,7 @@ a {
 }
 
 .atlas-universe__level {
-  color: var(--ca-accent);
+  color: var(--lsm-teal-text);
   font: 700 0.62rem/1.3 var(--ca-font-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -414,7 +414,7 @@ a {
 }
 
 .atlas-tree-node--root > strong { color: var(--ca-text); font-size: 0.9rem; }
-.atlas-tree-node--root > small { color: var(--ca-primary); }
+.atlas-tree-node--root > small { color: var(--lsm-teal-text); }
 
 .atlas-tree-node__roots {
   display: grid;
@@ -553,7 +553,7 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: var(--ca-space-2);
-  color: var(--ca-accent);
+  color: var(--lsm-teal-text);
   font: 700 0.65rem/1 var(--ca-font-mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -973,7 +973,7 @@ a {
 .clear-filter-link {
   border-color: transparent;
   background: transparent;
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
 }
 
 .search-results-layout {
@@ -1010,7 +1010,7 @@ a {
 .search-filter-heading button {
   border: 0;
   background: transparent;
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
   font-size: 0.72rem;
 }
 
@@ -1132,7 +1132,7 @@ a {
 
 .search-result-row__path {
   margin-top: var(--ca-space-1);
-  color: var(--ca-secondary);
+  color: var(--lsm-teal-text);
 }
 
 .search-result-row__excerpt {
@@ -1193,7 +1193,7 @@ a {
   border: 1px solid transparent;
   border-radius: var(--ca-radius-sm);
   background: transparent;
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
   font: 650 0.65rem/1 var(--ca-font-mono);
 }
 
@@ -5415,7 +5415,7 @@ a:focus-visible {
   min-height: 44px;
   align-self: stretch;
   padding-inline: var(--ca-space-3);
-  color: var(--ca-secondary);
+  color: var(--lsm-teal-text);
   font-size: var(--ca-text-xs);
 }
 
@@ -5830,7 +5830,7 @@ a:focus-visible {
   display: none;
 }
 .atlas-leverage-eyebrow {
-  color: var(--ca-secondary);
+  color: var(--lsm-teal-text);
   font-size: var(--font-size-xs);
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -6758,7 +6758,7 @@ button.atlas-leverage-row:hover {
 }
 
 .home-entry-header > .eyebrow {
-  color: var(--ca-secondary);
+  color: var(--lsm-teal-text);
   font-size: var(--ca-text-xs);
   line-height: 1.3;
 }
@@ -7095,7 +7095,7 @@ button.atlas-leverage-row:hover {
 
 .home-trust-boundary button {
   flex: none;
-  color: var(--ca-link);
+  color: var(--lsm-teal-text);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -7286,7 +7286,7 @@ button.atlas-leverage-row:hover {
 }
 
 .record-suggestion-label {
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -7374,7 +7374,7 @@ button.atlas-leverage-row:hover {
 }
 
 .home-footer a {
-  color: var(--ca-link);
+  color: var(--lsm-teal-text);
   text-underline-offset: 3px;
 }
 
@@ -7405,7 +7405,7 @@ button.atlas-leverage-row:hover {
 
 .sources-resource-boundary button,
 .source-register-row button {
-  color: var(--ca-link);
+  color: var(--lsm-teal-text);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -9471,7 +9471,7 @@ input[type="checkbox"] {
   grid-column: 2;
   grid-row: 1 / 3;
   align-self: center;
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
   font-size: 0.72rem;
 }
 
@@ -9538,7 +9538,7 @@ input[type="checkbox"] {
 
 .start-here-primary-destination small,
 .start-here-publication small {
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
   font: 700 0.62rem/1.2 var(--ca-font-mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -9665,7 +9665,7 @@ input[type="checkbox"] {
   padding-inline: var(--ca-space-2);
   border: 0;
   background: transparent;
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
   font: 650 0.66rem/1 var(--ca-font-mono);
   transform: translateY(-50%);
 }
@@ -9946,7 +9946,7 @@ input[type="checkbox"] {
   justify-self: start;
   border: 0;
   background: transparent;
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
   font-size: 0.72rem;
 }
 
@@ -10237,7 +10237,7 @@ input[type="checkbox"] {
   min-height: var(--ca-control-md);
   border: 0;
   background: transparent;
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
   font-size: 0.75rem;
   font-weight: 700;
 }
@@ -10824,7 +10824,7 @@ input[type="checkbox"] {
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--ca-link);
+  color: var(--lsm-teal-text);
   cursor: pointer;
   font: inherit;
 }
@@ -10918,7 +10918,7 @@ input[type="checkbox"] {
 .atlas-tree__legend > summary,
 .atlas-tree__trace > summary {
   min-height: var(--ca-touch-target);
-  color: var(--ca-link);
+  color: var(--lsm-teal-text);
   cursor: pointer;
   font-weight: 700;
 }

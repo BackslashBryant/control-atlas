@@ -99,7 +99,7 @@
 
 .signal-cover__eyebrow {
   margin: 0 0 var(--ca-space-4);
-  color: var(--ca-link);
+  color: var(--lsm-teal-text);
   font: var(--ca-text-micro) / 1.55 var(--ca-font-mono);
   letter-spacing: var(--ca-tracking-eyebrow, 0.18em);
   text-transform: uppercase;

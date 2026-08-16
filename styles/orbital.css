@@ -459,7 +459,7 @@ body {
 .brand-key--active {
   border-color: color-mix(in srgb, var(--ca-priority) 68%, transparent);
   background: color-mix(in srgb, var(--ca-priority) 12%, transparent);
-  color: var(--ca-priority);
+  color: var(--lsm-teal-text);
 }
 
 .primary-nav {
@@ -590,11 +590,11 @@ body {
 }
 
 .orbital-depth {
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
 }
 
 .orbital-context[data-depth="2"] .orbital-depth {
-  color: var(--ca-priority);
+  color: var(--lsm-teal-text);
 }
 
 .orbital-context-datum {
@@ -655,7 +655,7 @@ body {
 .orbital-context-return:hover,
 .orbital-context-return:focus-visible {
   border-color: var(--ca-primary);
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
 }
 
 .orbital-context-state {
@@ -1016,7 +1016,7 @@ textarea:disabled {
 .badge.tone-info {
   border-color: color-mix(in srgb, var(--ca-info) 54%, transparent);
   background: color-mix(in srgb, var(--ca-info) 10%, transparent);
-  color: var(--ca-info);
+  color: var(--lsm-teal-text);
 }
 
 .badge.tone-warning {
@@ -1449,7 +1449,7 @@ details > summary {
 
 .landing-trust-link:hover,
 .landing-trust-link:focus-visible {
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
 }
 
 .landing-registration-mark {
@@ -1575,12 +1575,12 @@ details > summary {
 
 .commons-lane--official {
   border-color: color-mix(in srgb, var(--ca-primary) 58%, transparent);
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
 }
 
 .commons-lane--open-source {
   border-color: color-mix(in srgb, var(--ca-priority) 58%, transparent);
-  color: var(--ca-priority);
+  color: var(--lsm-teal-text);
 }
 
 .commons-lane--practitioner,
@@ -1596,7 +1596,7 @@ details > summary {
 .commons-priority-badge {
   border-color: color-mix(in srgb, var(--ca-priority) 58%, transparent);
   background: color-mix(in srgb, var(--ca-priority) 10%, transparent);
-  color: var(--ca-priority);
+  color: var(--lsm-teal-text);
 }
 
 .commons-warning-panel {
@@ -1643,7 +1643,7 @@ details > summary {
 .commons-practical-badge {
   border-color: color-mix(in srgb, var(--ca-priority) 55%, transparent);
   background: color-mix(in srgb, var(--ca-priority) 12%, var(--ca-surface-raised));
-  color: var(--ca-priority);
+  color: var(--lsm-teal-text);
   border-radius: var(--ca-radius-sm);
 }
 
@@ -1658,7 +1658,7 @@ details > summary {
 
 .commons-tag-button:hover {
   border-color: var(--ca-border-strong);
-  color: var(--ca-primary);
+  color: var(--lsm-teal-text);
 }
 
 .commons-practical-panel {
