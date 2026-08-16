@@ -179,6 +179,18 @@ a {
   backdrop-filter: blur(16px);
 }
 
+.brand-key--active {
+  border-color: color-mix(in srgb, var(--ca-priority) 68%, transparent);
+  background: color-mix(in srgb, var(--ca-priority) 12%, transparent);
+  color: var(--lsm-teal-text);
+}
+
+.brand-key-word {
+  display: inline-block;
+  min-width: 9.5ch;
+  text-align: center;
+}
+
 /* The explicit display:flex above otherwise beats the UA stylesheet's
    default [hidden] { display: none }, so the header stayed visually
    present (just occluded by the entrance overlay's opaque full-screen
