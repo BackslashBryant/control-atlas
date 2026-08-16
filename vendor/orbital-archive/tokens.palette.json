@@ -1,0 +1,65 @@
+{
+  "_source": "https://github.com/BackslashBryant/orbital-archive-no-01",
+  "_pinnedVersion": "v1.8.0",
+  "_pinnedCommit": "d38b43e1b94d14c3a24366252bee4d1e71472e2b",
+  "color": {
+    "palette": {
+      "orbit": {
+        "$value": "#11181E",
+        "$description": "Deep Orbit — deepest editorial surface"
+      },
+      "graphite": {
+        "$value": "#253139",
+        "$description": "Calm Graphite — default operational background"
+      },
+      "slate": {
+        "$value": "#2D3A42",
+        "$description": "Lunar Slate — raised surface"
+      },
+      "alloy": {
+        "$value": "#37464F",
+        "$description": "Elevated Alloy — controls and popovers"
+      },
+      "gridline": {
+        "$value": "#56656E",
+        "$description": "Grid Line — borders and schematics"
+      },
+      "dust": {
+        "$value": "#B3BBC2",
+        "$description": "Lunar Dust — muted content"
+      },
+      "bone": {
+        "$value": "#E7E1D5",
+        "$description": "Archive Bone — primary content"
+      },
+      "teal": {
+        "$value": "#5CA3A6",
+        "$description": "Signal Teal — active, focus, and linked state. Narrow role: never a primary or default action color."
+      },
+      "relay": {
+        "$value": "{color.palette.teal}",
+        "$description": "Deprecated compatibility alias for Signal Teal. Use color.palette.teal; remove this alias in v2."
+      },
+      "gold": {
+        "$value": "#CBAE67",
+        "$description": "Mission Gold — priority and editorial hierarchy"
+      },
+      "orange": {
+        "$value": "#CB7248",
+        "$description": "Ignition Orange — primary action and editorial signal. The dominant brand hue; ration it to one job per surface, not a flood."
+      },
+      "signal": {
+        "$value": "#7EB79E",
+        "$description": "Signal Green — nominal and success state"
+      },
+      "rust": {
+        "$value": "#C97A60",
+        "$description": "Alert Rust — warning and degraded state"
+      },
+      "fault": {
+        "$value": "#EA7468",
+        "$description": "Fault Red — error, critical, and destructive state"
+      }
+    }
+  }
+}

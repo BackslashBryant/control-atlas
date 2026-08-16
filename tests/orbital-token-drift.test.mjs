@@ -4,18 +4,19 @@ import test from "node:test";
 
 // Anti-drift guard for the Orbital Archive No. 01 design system.
 //
-// Control Atlas pins orbital-archive-no-01 as a git devDependency (see
-// package.json). Its tokens/tokens.json is the upstream source of truth for the
-// core --lsm-* palette. When the style guide is updated and the pin is bumped,
-// this test FAILS on any hue Control Atlas has not reconciled — so re-alignment
-// is a caught build error instead of a silent visual drift. This is the
-// mechanism that replaces hand-chasing hex values every time the guide moves.
+// vendor/orbital-archive/tokens.palette.json is a pinned snapshot of the
+// upstream release's colour palette (see its _pinnedVersion/_pinnedCommit
+// fields). It is vendored rather than installed as a git dependency because a
+// git dep makes `npm ci` resolve the design system's own devDependencies, which
+// breaks the locked install in CI.
+//
+// When the style guide is updated: replace the snapshot with the new release's
+// palette, then run this test. It FAILS on any hue Control Atlas has not
+// reconciled — so re-alignment is a caught build error instead of a silent
+// visual drift, which is what replaces hand-chasing hex values by eye.
 
 const upstream = JSON.parse(
-  readFileSync(
-    "node_modules/orbital-archive-no-01/tokens/tokens.json",
-    "utf8",
-  ),
+  readFileSync("vendor/orbital-archive/tokens.palette.json", "utf8"),
 );
 const tokens = readFileSync("styles/tokens.css", "utf8");
 
