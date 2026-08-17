@@ -44,9 +44,11 @@ export async function gotoApp(page, path = '/', options = undefined) {
 }
 
 export async function dismissOnboarding(page) {
+  // The signal-cover only dismisses on Enter or a click on its own "Enter the
+  // Atlas" button -- no click-anywhere, wheel, touchmove, or Escape shortcut.
   const brandEntrance = page.getByRole('dialog', { name: 'Control Atlas introduction' });
   if (await brandEntrance.isVisible()) {
-    await page.keyboard.press('Escape');
+    await brandEntrance.getByRole('button', { name: 'Enter the Atlas' }).click();
     await expect(brandEntrance).toBeHidden({ timeout: 3000 });
   }
   const skipOnboarding = page.getByRole('button', { name: 'Skip', exact: true });

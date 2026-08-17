@@ -232,7 +232,7 @@ test("search and glossary dialogs expose accessible control names", () => {
   assert.match(glossaryDrawer, /id="glossary-search"/);
 });
 
-test("Template B Home exposes one search, three destinations, and labelled governed-tag navigation", () => {
+test("Template B Home exposes one search, governed destinations, and labelled governed-tag navigation", () => {
   const homePage = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
   assert.match(homePage, /data-template="B"/);
   assert.match(homePage, /className="home-search home-search-trigger"/);

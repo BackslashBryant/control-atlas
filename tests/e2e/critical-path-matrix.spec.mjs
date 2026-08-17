@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("critical path: Template B landing hero and three entry cards are visible", async ({
+test("critical path: Template B landing hero and four entry cards are visible", async ({
   page,
 }) => {
   await gotoApp(page, "/");
@@ -26,7 +26,7 @@ test("critical path: Template B landing hero and three entry cards are visible",
   await expect(page.getByRole("searchbox", { name: "Search Control Atlas" })).toBeVisible();
   await expect(page.locator(".home-search").getByRole("button", { name: "Search" })).toBeVisible();
   await expect(page.locator('[data-template="B"]')).toBeVisible();
-  await expect(page.locator(".home-secondary-action")).toHaveCount(3);
+  await expect(page.locator(".home-secondary-action")).toHaveCount(4);
   await expect(page.locator(".home-tag-galaxies .home-tag-link")).toHaveCount(16);
 });
 
