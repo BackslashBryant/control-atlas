@@ -1386,12 +1386,17 @@ Rebuild every remaining public surface from the correct Orbital composition rath
   - **Fix:** added `src/ui/components/CollectionIcon.tsx`, a small id→icon map (mirroring the existing `ResourceTypeIcon` pattern already used for individual resource rows) assigning each of the 8 real collection IDs a semantically distinct Tabler icon — shield for DoD portals, repeat-arrows for reciprocity/reuse, wrench for implementation/assessment tools, storefront for product assurance, cloud for DevSecOps, factory for the defense industrial base, graduation cap for workforce/training, people for practitioner communities — falling back to the old `IconFolders` for any future unmapped collection. Wired into `CommonsPage.tsx` in place of the single hardcoded icon.
   - **Verified:** `npx playwright test --config playwright.e2e.config.mjs tests/e2e/resource-discovery.spec.mjs tests/e2e/commons-filter-history.spec.mjs` — 5/5 passing. `node --test tests/commons-presentation.test.mjs` — 21/21 passing. `npm run typecheck` — 0 errors. `npx eslint` on both touched files — 0 errors/warnings. `npm run build:site` — successful.
   - Wide and narrow screenshots captured for `/#/resources` before/after and reviewed by eye: all 8 collection cards now show distinct, topic-appropriate icons at both widths; filter rail remains compact/secondary; narrow view collapses filters into a disclosure with no overflow.
-- [ ] **T8.7 Documents/Templates** — use staged-flow plus settings:
+- [x] **T8.7 Documents/Templates** — use staged-flow plus settings:
   - lead with what the practitioner needs to produce;
   - preview before download;
   - official resources before Control Atlas companions;
   - one orange primary download/generate action;
   - no framework-first jargon gate.
+  - **Audit finding:** `TemplatesPage.tsx` (`/build`) already satisfies every acceptance bullet. Three lanes (Tasks, Starter Documents, Resources) all lead with outcome/artifact language, not framework selection — Starter Documents groups by RMF lifecycle phase (Plan/Implement/Assess/Remediate/Monitor) and Tasks groups by outcome ("Build an authorization package," "Write control implementation statements"); neither gates on picking a framework first. Opening a starter document and filling its required inputs (catalog/program, baseline) renders a full `TemplateDocumentPreview` — live section-by-section preview matching the eventual Word/Excel output, disclaimers, and source metadata — before the single orange "Download {name} ({format})" primary action, which stays disabled with an explanatory status line until required inputs are set. The Tasks lane's "Related resources" rail labels each reference "Official" so official material reads as such wherever it surfaces alongside Control Atlas companion content.
+  - **Wireframe (wide/narrow):** unchanged. Local tab bar (Tasks / Starter Documents / Resources) → page header → category-grouped card grid → (on open) configuration form → live preview → one primary download action → supporting "What this template is for" / "What it includes" / "Sources used" disclosures. Narrow stacks the same sections single-column.
+  - **Fix:** none needed.
+  - **Verified:** no code changed; visual/interaction audit only (form-fill through to preview and download-button enablement exercised manually via Playwright).
+  - Wide and narrow screenshots captured for `/#/build` (lane picker), `/#/build/tasks`, and `/#/build/documents` (both the list and a filled-in document with its live preview and enabled download action) and reviewed by eye at both widths — no defects found.
 
 ### Workstream D — Product explanation
 
