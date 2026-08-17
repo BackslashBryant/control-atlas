@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
-test("WS5 Home implements Template B with one search, three cards, and governed tag galaxies", async ({ page }) => {
+test("WS5 Home implements Template B with one search, four cards, and governed tag galaxies", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await gotoApp(page, "/");
   await waitForAppReady(page, { allowPartial: true });
@@ -20,8 +20,9 @@ test("WS5 Home implements Template B with one search, three cards, and governed 
   await expect(template).toBeVisible();
   await expect(template.locator(".home-hero")).toHaveCount(1);
   await expect(template.locator(".home-search")).toHaveCount(1);
-  await expect(template.locator(".home-secondary-action")).toHaveCount(3);
+  await expect(template.locator(".home-secondary-action")).toHaveCount(4);
   await expect(template.locator(".home-secondary-action strong")).toHaveText([
+    "Start guided setup",
     "Browse the Atlas",
     "Search the Library",
     "Browse Resources",
