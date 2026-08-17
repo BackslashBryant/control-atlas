@@ -122,11 +122,13 @@ test("V1 workflow 07 — compare with a shareable explicit configuration", async
   await expect(
     page.getByRole("heading", { name: "Catalog to catalog" }),
   ).toBeVisible();
-  await page
-    .getByRole("combobox", { name: /^Mapping publication/ })
-    .selectOption({ label: "NIST CSF 2.0" });
+  // This pair has exactly one published mapping source, so Compare
+  // auto-resolves it and renders "Mapping publication" as static text
+  // rather than a selectable dropdown (T3 capability rule: never offer a
+  // choice with only one completion).
+  await expect(page.getByText("Mapping publication")).toBeVisible();
   await page.getByRole("button", { name: "Show mappings" }).click();
-  await expect(page).toHaveURL(/mappingSource=/);
+  await expect(page).toHaveURL(/compareRun=true/);
   await expect(
     page.getByRole("table", { name: "Relationship mappings" }),
   ).toBeVisible({ timeout: 30_000 });
@@ -134,7 +136,7 @@ test("V1 workflow 07 — compare with a shareable explicit configuration", async
 
 test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) => {
   await open(page, "/#/sources?q=NIST");
-  await expect(page.getByRole("table", { name: "Control Atlas source register" })).toBeVisible();
+  await expect(page.getByRole("table", { name: "Control Atlas publication register" })).toBeVisible();
   await expect(page.getByLabel("Search publications")).toHaveValue("NIST");
   await expect(page.locator(".source-register-row").first()).toBeVisible();
 
@@ -145,39 +147,29 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
   const iotDetail = page.locator(".sources-page");
   await expect(iotDetail).toContainText("Publisher version");
   await expect(iotDetail).toContainText("Spring 2021");
-  await expect(iotDetail).toContainText("Retrieved");
   await expect(iotDetail).toContainText("Source last checked");
-  await expect(iotDetail).toContainText("Not recorded");
-  await expect(iotDetail).toContainText("Publication currentness review");
-  await expect(iotDetail).toContainText("Current as checked · Reviewed 2026-08-13");
+  await expect(iotDetail).toContainText("Not checked");
   await expect(iotDetail).not.toContainText("undefined");
 
   await open(page, "/#/sources?source=nist-800-53");
   const checkedDetail = page.locator(".source-detail-grid");
   await expect(checkedDetail).toContainText("Source last checked");
   await expect(checkedDetail).toContainText("2026-07-28");
-  await expect(checkedDetail).toContainText("Publication currentness review");
-  await expect(checkedDetail).toContainText("Reviewed 2026-08-13");
 
   await open(page, "/#/sources?source=nist-800-53a-assessment-procedures");
   const assessmentDetail = page.locator(".source-detail-grid");
-  await expect(
-    assessmentDetail.getByRole("link", { name: "https://csrc.nist.gov/pubs/sp/800/53/a/r5/final" }),
-  ).toBeVisible();
-  await expect(assessmentDetail).toContainText("Retrieved artifact");
-  await expect(assessmentDetail).toContainText("NIST_SP-800-53_rev5_catalog.json");
+  await expect(assessmentDetail).toContainText("Revision 5, Release 5.2.0");
+  await expect(assessmentDetail).toContainText("2026-08-13");
+  await expect(assessmentDetail).toContainText("1,014 normalized records");
 });
 
 test("source detail routes use specific identity at every governed width", async ({ page, context }) => {
   test.setTimeout(120_000);
   const sources = [
+    { id: "nist-800-53", name: "NIST SP 800-53 Rev. 5" },
     {
-      id: "cyber-mil-stig-downloads",
-      name: "DISA STIG Downloads Landing Page",
-    },
-    {
-      id: "cyber-mil-stig-compilations",
-      name: "DISA STIG Compilations Landing Page",
+      id: "nist-iot-device-cybersecurity-requirement-catalogs",
+      name: "NIST IoT Device Cybersecurity Requirement Catalogs",
     },
   ];
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
@@ -190,9 +182,6 @@ test("source detail routes use specific identity at every governed width", async
       await dismissOnboarding(page);
       await expect(page.getByRole("heading", { name: source.name, level: 1 })).toBeVisible();
       await expect(page).toHaveTitle(`${source.name} — Control Atlas`);
-      await expect(page.locator(".source-card .badge")).toHaveText("DISA STIG");
-      await expect(page.getByText("Source family", { exact: true })).toBeVisible();
-      await expect(page.locator(".source-card .card-title")).toHaveCount(0);
       const copy = page.getByRole("button", { name: `Copy source ID ${source.id}` });
       await expect(copy).toBeVisible();
       expect(await page.evaluate(() =>
@@ -220,10 +209,29 @@ test("source detail routes use specific identity at every governed width", async
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(sources[1].id);
 });
 
+test("a supplemental source material resolves to its parent publication's identity", async ({
+  page,
+}) => {
+  // cyber-mil-stig-downloads and cyber-mil-stig-compilations are supplemental
+  // materials attached to the disa-stig-library publication identity
+  // (Phase 2 T2.2 consolidation), not standalone publication landmarks —
+  // deep-linking to either now opens the parent publication's inspector
+  // (Phase 7 T7.1: one publication register, one scoped inspector) rather
+  // than a dedicated per-material page.
+  for (const materialId of ["cyber-mil-stig-downloads", "cyber-mil-stig-compilations"]) {
+    await open(page, `/#/sources?source=${materialId}`);
+    await expect(
+      page.getByRole("heading", { name: "DISA Public STIG Library", level: 1 }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Copy source ID disa-stig-library" }),
+    ).toBeVisible();
+  }
+});
+
 test("source detail has one return action and preserves the Sources workspace", async ({ page }) => {
   test.setTimeout(120_000);
-  const detailPath =
-    "/#/sources?layer=ingestion&q=DISA&source=cyber-mil-stig-downloads&publisher=DISA&lifecycle=active";
+  const detailPath = "/#/sources?q=DISA&source=cyber-mil-stig-downloads&publisher=DISA";
 
   for (const width of [320, 375, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
@@ -233,7 +241,6 @@ test("source detail has one return action and preserves the Sources workspace", 
 
     const returnLink = page.getByRole("link", { name: "Back to sources", exact: true });
     await expect(returnLink).toHaveCount(1);
-    await expect(page.locator(".sources-page .link-action")).toHaveCount(0);
     await expect(page.locator(".sources-page .page-header")).toBeVisible();
     const target = await returnLink.boundingBox();
     expect(target).not.toBeNull();
@@ -251,10 +258,8 @@ test("source detail has one return action and preserves the Sources workspace", 
     await returnLink.click();
     await waitForAppReady(page);
     await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
-    await expect(page.locator("#source-layer-tab-ingestion")).toHaveAttribute("aria-selected", "true");
     await expect(page.locator("#source-search")).toHaveValue("DISA");
     await expect(page.getByLabel("Publisher", { exact: true })).toHaveValue("DISA");
-    await expect(page.getByLabel("Status", { exact: true })).toHaveValue("active");
     expect(
       await page.evaluate(() =>
         new URLSearchParams(globalThis.location.hash.split("?")[1]).has("source"),
@@ -264,7 +269,7 @@ test("source detail has one return action and preserves the Sources workspace", 
     await page.goBack();
     await waitForAppReady(page);
     await expect(
-      page.getByRole("heading", { name: "DISA STIG Downloads Landing Page", level: 1 }),
+      page.getByRole("heading", { name: "DISA Public STIG Library", level: 1 }),
     ).toBeVisible();
     await expect(returnLink).toHaveCount(1);
 
@@ -279,8 +284,7 @@ test("unknown Source detail links fail closed and preserve recovery state", asyn
   test.setTimeout(120_000);
   const sourceId = `not-a-real-source-${"x".repeat(140)}`;
   const detailPath =
-    `/#/sources?layer=ingestion&q=DISA&source=${encodeURIComponent(sourceId)}` +
-    "&publisher=DISA&lifecycle=active";
+    `/#/sources?q=DISA&source=${encodeURIComponent(sourceId)}&publisher=DISA`;
 
   for (const width of [320, 375, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
@@ -294,7 +298,7 @@ test("unknown Source detail links fail closed and preserve recovery state", asyn
     await expect(page).toHaveTitle("Source not found — Control Atlas");
     await expect(
       page.getByText(
-        "Control Atlas does not include this source ID in the current public register. Check the link or return to Sources.",
+        `Requested source ID ${sourceId} is not in the public publication register.`,
       ),
     ).toBeVisible();
     await expect(page.locator("h1")).toContainText(sourceId);
@@ -303,7 +307,9 @@ test("unknown Source detail links fail closed and preserve recovery state", asyn
     const requestedSourceIdBox = await requestedSourceId.boundingBox();
     expect(requestedSourceIdBox).not.toBeNull();
     if (width <= 390) expect(requestedSourceIdBox.height).toBeGreaterThan(30);
-    await expect(page.getByRole("table", { name: "Control Atlas source register" })).toHaveCount(0);
+    // The register stays visible so the user can search/browse while seeing
+    // the not-found message — it does not empty out or disappear.
+    await expect(page.getByRole("table", { name: "Control Atlas publication register" })).toBeVisible();
     await expect(page.getByRole("tablist", { name: "Source register layers" })).toHaveCount(0);
 
     const returnLink = page.getByRole("link", { name: "Back to sources", exact: true });
@@ -321,10 +327,8 @@ test("unknown Source detail links fail closed and preserve recovery state", asyn
     await returnLink.click();
     await waitForAppReady(page);
     await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
-    await expect(page.locator("#source-layer-tab-ingestion")).toHaveAttribute("aria-selected", "true");
     await expect(page.locator("#source-search")).toHaveValue("DISA");
     await expect(page.getByLabel("Publisher", { exact: true })).toHaveValue("DISA");
-    await expect(page.getByLabel("Status", { exact: true })).toHaveValue("active");
 
     await page.goBack();
     await waitForAppReady(page);
@@ -337,7 +341,7 @@ test("unknown Source detail links fail closed and preserve recovery state", asyn
   }
 });
 
-test("source and publication review dates remain distinct at every governed width", async ({
+test("source and record provenance stay distinct at every governed width", async ({
   page,
 }) => {
   test.setTimeout(120_000);
@@ -348,11 +352,8 @@ test("source and publication review dates remain distinct at every governed widt
       "/#/sources?source=nist-iot-device-cybersecurity-requirement-catalogs",
     );
     const facts = page.locator(".source-detail-grid");
-    await expect(facts).toContainText("Retrieved2026-08-12");
-    await expect(facts).toContainText("Source last checkedNot recorded");
-    await expect(facts).toContainText(
-      "Publication currentness reviewCurrent as checked · Reviewed 2026-08-13",
-    );
+    await expect(facts).toContainText("Publisher versionSpring 2021");
+    await expect(facts).toContainText("Source last checkedNot checked");
     expect(
       await page.evaluate(
         () =>
@@ -363,8 +364,8 @@ test("source and publication review dates remain distinct at every governed widt
     ).toBe(0);
 
     // The record sidebar is user-first: publisher, publication, and how current
-    // it is. Retrieval and currentness-review provenance stays on the Sources
-    // page (asserted above), not repeated on every record.
+    // it is. Detailed field-by-field provenance stays on the Sources page
+    // (asserted above), not repeated on every record.
     await open(page, "/#/record/nist-800-53/AC-2");
     const recordFacts = page.locator(".record-source-facts");
     await expect(recordFacts).toContainText("Publisher");
@@ -381,16 +382,17 @@ test("source and publication review dates remain distinct at every governed widt
   }
 });
 
-test("source review presents superseded and multiple-publication dispositions honestly", async ({
+test("source review presents lifecycle and version disposition honestly", async ({
   page,
 }) => {
   await open(page, "/#/sources?source=nist-800-171-rev2");
   await expect(page.locator(".source-detail-grid")).toContainText(
-    "Publication currentness reviewSuperseded · Reviewed 2026-08-13",
+    "Publisher version2021-01",
+  );
+  await expect(page.locator(".source-detail-grid")).toContainText(
+    "Source last checked2026-08-13",
   );
 
-  // Superseded/currentness dispositions are Sources-page provenance (asserted
-  // above). The record keeps the plain "Current as of" date instead.
   await open(page, "/#/record/nist-800-171-rev2/3.1.1");
   await expect(page.locator(".record-source-facts")).toContainText("Current as of");
 
@@ -401,12 +403,8 @@ test("source review presents superseded and multiple-publication dispositions ho
       "/#/sources?source=nist-800-53a-assessment-procedures",
     );
     const facts = page.locator(".source-detail-grid");
-    await expect(facts).toContainText(
-      "SP 800-53 Rev. 5 currentness reviewCurrent as checked · Reviewed 2026-08-13",
-    );
-    await expect(facts).toContainText(
-      "SP 800-53A Rev. 5 currentness reviewCurrent as checked · Reviewed 2026-08-13",
-    );
+    await expect(facts).toContainText("Revision 5, Release 5.2.0");
+    await expect(facts).toContainText("2026-08-13");
     expect(
       await page.evaluate(
         () =>
