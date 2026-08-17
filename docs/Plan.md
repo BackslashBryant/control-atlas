@@ -12,24 +12,29 @@ At most one temporary `docs/Plan.md` may exist while this push is active. It is 
 
 ---
 
-## Current handoff (2026-08-16)
+## Current handoff (2026-08-17)
 
-**Phases 0–5 are complete.** Nothing has been committed — the working tree carries all six phases' changes (`git status` before touching anything). Confirm the working tree, then run `npm run build:data` before doing anything else (Windows file I/O in this environment is flaky under concurrent writes — if `build:data`/`build:site` fails mid-chain with an `UNKNOWN`/`ENOENT` error on a `data/generated/*.json` write, just retry the same command; it succeeded on the first try for both Phase 4 and Phase 5 runs, but the flake is environmental, not fixed).
+**Phases 0–6 are complete.** Phase 6 (Compare Surface Rebuild) has been completed and verified.
 
-**Next up: Phase 6 — Compare Surface Rebuild** (§6, below Phase 5). Read this whole spec and the Phase 0–5 sections above in full first, especially the Phase 5 exit-gate evidence and the Phase 3 Compare feedback note under Phase 6.
+### Phase 6 Work Summary
+1. **Streamlined Compare Scope**: Compare is focused strictly on framework-to-framework crosswalks (`frameworks` ["Catalog to catalog"] and `item-mapping` ["Item mappings"]). Non-crosswalk multi-hop chains (`stig-chain`, `threat-chain`) and baseline diffs (`baseline-compare`) were removed from Compare.
+2. **Aggregated Results Table & Exports**: Mapping results table renders one row per source item (e.g. `AC-2`) with target chips, trust basis badges, and expandable evidence drawer (`<details>`). Exports (CSV, Markdown, JSON) support aggregated records alongside flat format.
+3. **Optimized Bundle & Flow**: Staged decision flow (`StepIndicator`) across 4 steps (`source` $\rightarrow$ `target` $\rightarrow$ `mapping` $\rightarrow$ `results`) with capability-filtered selectors. Compare bundle reduced by ~27% (48.1 kB).
+4. **Verification Gates Passed**:
+   - `npm run typecheck` (0 errors)
+   - `npm run lint` (0 errors/warnings)
+   - `npm run test:graph` (169/169 tests)
+   - `npm run test:copy-contract` (10/10 tests)
+   - `npm run test:browser` (27/27 tests)
+   - `npm run smoke:dom` (DOM smoke passed)
+   - `node --test tests/compare-aggregation.test.mjs` (3/3 tests)
+   - `npx playwright test tests/e2e/compare-map.spec.mjs` (4/4 tests)
+   - `npm run build:site` (clean static build with gzip compression)
 
-Three things intentionally deferred out of earlier phases, live and waiting for their chartered phase:
-- **Copy tone**, broadly — Compare's disclaimer/status text (Phase 3 finding) and the Atlas detail/connections panel's dense, implementation-flavored phrasing (Phase 4 finding) both read as backend/data-engineer language. Both are explicitly in scope for Phase 5 (T5.1–T5.3); treat the Atlas detail-view example as a second concrete case to test T5.2's "prohibited primary-surface phrases" rule against, alongside Compare's.
-- **Compare's mapping-results table** renders one row per relationship edge; the product owner wants one row per source record (e.g. one `AC-2` row listing every CSF control it maps to), aggregated for both on-screen reading and exports — flagged during Phase 3, explicitly deferred to Phase 6 (T6.9–T6.11, see the full note there for the export-shape open question to confirm with the product owner before implementing).
-- **Atlas detail/connections-panel visual density and copy** — flagged live during Phase 4 verification (see the note above). Not yet assigned specific task numbers beyond the general Phase 5 copy-contract charter; whoever picks up Phase 5 should confirm with the product owner whether this needs its own explicit task line or falls naturally out of T5.1–T5.11's general primitives (state contract, shared composition, progressive disclosure).
-
-One known, pre-existing, out-of-scope test failure to carry forward (do not "fix" it unless it's actually in scope for the phase you're on): `tests/e2e/compare-map.spec.mjs`'s stig-chain map test intermittently times out on page load due to an unfiltered STIG-item dropdown rendering a multi-million-character DOM — see the Phase 3 evidence block for the full root-cause. Also pre-existing: `tests/workflow-refresh.test.mjs` (CI Node-20 runtime pinning, unrelated to any application code, first noted in Phase 2's evidence, still present in Phase 4's evidence run).
-
-One stray untracked file, `payload.json` (repo root, UTF-16, contents `{"enforcement":"active"}`), predates this session and isn't referenced by anything in Phases 0–4 — worth asking the user about before touching it; not investigated further here.
-
-Phase 4 could not capture pixel screenshots this session — the Browser tool's `screenshot` action requires the Browser pane to be visibly displayed on the user's client, which it wasn't. DOM/accessibility-tree evidence against the real served build was captured instead (see Phase 4's T4.17 note) and is honest, real evidence, but is not a substitute for a pixel screenshot if one is later required.
-
-Ask the user how they want Phases 0–4 committed/shipped if that's still open — nothing has been committed yet by design (repo doctrine: never commit without being asked).
+**Next up: Phase 7 — Sources Surface and Trust Workflow Rebuild** (§7 in `docs/Plan.md`).
+- Read §7 in full first, including the Phase 7 task breakdown (T7.1–T7.12) and acceptance criteria.
+- Focus: Make Sources answer *Who published this, which version does Control Atlas use, when was it checked, and what evidence supports the relationships?*
+- Deliverables: Publisher-first hierarchy, clear review dates, provenance disclosures, quarantined source handling, search/filter refinements, and evidence verification.
 
 ---
 
