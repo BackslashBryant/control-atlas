@@ -49,8 +49,17 @@ if (!(await exists(libraryDir))) {
   if (actualHash !== SHA1) {
     throw new Error(`OSCAL CLI checksum mismatch: expected ${SHA1}, got ${actualHash}`);
   }
+  // Windows' bundled bsdtar both misreads an absolute drive-letter path
+  // ("Cannot connect to D:") and lacks zip-format support ("This does not
+  // look like a tar archive"), so extract with PowerShell's native
+  // Expand-Archive there instead of tar.
   const extractCode = process.platform === 'win32'
-    ? await run('tar', ['-xf', archivePath, '-C', installDir])
+    ? await run('powershell.exe', [
+        '-NoProfile',
+        '-NonInteractive',
+        '-Command',
+        `Expand-Archive -LiteralPath '${archivePath}' -DestinationPath '${installDir}' -Force`,
+      ])
     : await run('unzip', ['-q', archivePath, '-d', installDir]);
   if (extractCode !== 0 || !(await exists(libraryDir))) {
     throw new Error(`OSCAL CLI archive extraction failed with exit code ${extractCode}`);
