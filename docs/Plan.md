@@ -14,7 +14,20 @@ At most one temporary `docs/Plan.md` may exist while this push is active. It is 
 
 ## Current handoff (2026-08-17)
 
-**Phases 0–7 are complete.** Phase 6 (Compare Surface Rebuild) and Phase 7 (Sources Surface and Trust Workflow Rebuild) have both been completed and verified, and are shipping together.
+**Phases 0–8 are complete.** Phase 8 (Remaining Surface Rebuild from Orbital References) has been completed and verified, and is shipping on top of the already-live Phase 6/7 baseline.
+
+### Phase 8 Work Summary
+1. **Route reachability fixed**: Start Here and Documents — two of PRD's six core information-architecture sections — were unreachable from any global navigation surface despite being fully working features. Added both to the primary/overflow nav, fixed active-state selection, added a 4th Home destination card, and fixed a duplicated nav list in Home's static first-paint shell.
+2. **Real defects found and fixed on 5 of 9 pages**: STIG-only "benchmark" copy leaking into every Library publication type (Library); a completely unstyled, icon-invisible pure-white graph-control block from an un-retinted third-party library skin (Atlas); identical generic icons on all 8 Resources collection cards (Resources); two missing required content sections plus no guide rail/TOC on About (About) — see the Phase 8 exit-gate evidence in §8 below for full detail on each.
+3. **4 of 9 pages already Orbital-compliant**: Start Here/Guides, Record detail, Documents/Templates, and the remainder of global nav/search needed only audit documentation, not rewrites, per the "smallest coherent change" rule.
+4. **Test-suite debt closed**: the nav shape change broke hardcoded assertions in 9 different test files, found only by running the full unit and e2e suites rather than page-scoped tests alone; all fixed to the new, intended nav shape.
+5. **Verification Gates Passed**: see the Phase 8 exit-gate evidence in §8 below, including the clean-`main` worktree comparisons used to confirm every unfamiliar test failure was pre-existing, not a Phase 8 regression.
+
+### Phase 6 Work Summary
+1. **Streamlined Compare Scope**: Compare is focused strictly on framework-to-framework crosswalks (`frameworks` ["Catalog to catalog"] and `item-mapping` ["Item mappings"]). Non-crosswalk multi-hop chains (`stig-chain`, `threat-chain`) and baseline diffs (`baseline-compare`) were removed from Compare.
+2. **Aggregated Results Table & Exports**: Mapping results table renders one row per source item (e.g. `AC-2`) with target chips, trust basis badges, and expandable evidence drawer (`<details>`). Exports (CSV, Markdown, JSON) support aggregated records alongside flat format.
+3. **Optimized Bundle & Flow**: Staged decision flow (`StepIndicator`) across 4 steps (`source` $\rightarrow$ `target` $\rightarrow$ `mapping` $\rightarrow$ `results`) with capability-filtered selectors. Compare bundle reduced by ~27% (48.1 kB).
+4. **Verification Gates Passed**: see the Phase 6 exit-gate evidence in §6 below (re-confirmed during Phase 7 hardening, including a regression check after the `buildStigChain` runtime fix — no impact on Compare).
 
 ### Phase 6 Work Summary
 1. **Streamlined Compare Scope**: Compare is focused strictly on framework-to-framework crosswalks (`frameworks` ["Catalog to catalog"] and `item-mapping` ["Item mappings"]). Non-crosswalk multi-hop chains (`stig-chain`, `threat-chain`) and baseline diffs (`baseline-compare`) were removed from Compare.
@@ -29,9 +42,9 @@ At most one temporary `docs/Plan.md` may exist while this push is active. It is 
 4. **Evidence captured**: register/inspector/narrow-viewport screenshots captured locally and reviewed by eye during this session (not retained — `docs/` permits only the canonical foundation per `tests/alignment-contract.test.mjs`); stale `sources`/`compare` visual baselines (predating the Phase 6/7 rebuild) regenerated and reviewed by eye, retained as committed Playwright snapshots.
 5. **Verification Gates Passed**: see the Phase 7 exit-gate evidence in §7 below.
 
-**Next up: Phase 8 — Remaining Surface Rebuild from Orbital References** (§8 in `docs/Plan.md`).
-- Read §8 in full first, including workstreams A–D and the page-level acceptance criteria.
-- Phases 6 and 7 are shipped to `main`; Phase 8 starts from that baseline.
+**Next up: Phase 9 — Design-System Integration, CSS Architecture, and Visual Fidelity** (§9 in `docs/Plan.md`).
+- Read §9 in full first.
+- Phases 6, 7, and 8 are shipped to `main`; Phase 9 starts from that baseline.
 
 ---
 
@@ -1444,6 +1457,39 @@ For each page:
 - Every visible interaction is verified.
 - No page starts at diagnostic density.
 - Compare and Sources remain consistent with Phases 6–7.
+
+#### Exit-gate verification evidence (Phase 8)
+
+**Method.** All nine T8.x tasks were worked in priority order (Workstream A→D) using the required per-page loop: read the Orbital reference composition + component contracts, produce a wide/narrow wireframe note, implement, verify interactions, capture wide/narrow screenshots, compare against the reference, remove page-specific legacy CSS once accepted. Five pages (T8.1 Home, T8.3 Library, T8.5 Atlas, T8.6 Resources, T8.8 About) had real, evidenced defects and received targeted fixes; four pages (T8.2 Start Here/Guides, T8.4 Record detail, T8.7 Documents/Templates, T8.9 global nav's remaining bullets beyond route reachability) were already Orbital-compliant from earlier phases and needed only audit documentation, per the "smallest coherent change" operating rule — no page was rewritten wholesale where it already met its acceptance criteria.
+
+**Defects found and fixed:**
+1. **T8.1 Home / T8.9 nav** — Start Here and Documents (two of PRD's six core IA sections) were unreachable from the persistent header, overflow menu, and Home's destination grid despite being fully working features. Added both to `PRIMARY_NAV_ITEMS`/`OVERFLOW_NAV_ITEMS`, fixed `aria-current` self-selection, added a 4th Home destination card, and fixed Home's static first-paint shell (`src/index.html`) which had its own duplicated nav markup.
+2. **T8.3 Library** — `CatalogDetailPage.tsx` hardcoded STIG-only "benchmark" copy onto every publication's tier-browse search, self-contradicting the correct dynamic label shown one line above on non-benchmark catalogs (e.g. NIST families). Made the copy catalog-aware.
+3. **T8.5 Atlas** — the graph canvas's zoom/fit/fullscreen controls rendered as one solid pure-white, icon-invisible block (`@react-sigma/core`'s unstyled default light-theme skin, never retinted). Retinted its CSS custom properties to Orbital tokens and un-clipped the icons.
+4. **T8.6 Resources** — all 8 "Browse by Collection" cards used the identical generic folder icon, failing "visually distinct cards, recognizable marks." Added a per-collection icon map using vetted Tabler icons.
+5. **T8.8 About** — two of six required content areas (Control Atlas's nine-area organizing structure; the source/mapping trust model) were entirely absent, and there was no guide rail/TOC despite the knowledge-base reference. Added both sections and wired up `PageJumpNav`/`jumpToSection` — primitives that existed in `pagePrimitives.tsx` but had no prior consumer anywhere in the app.
+
+**Test-suite debt surfaced and fixed.** The T8.1 nav shape change (5-item primary / 2-item overflow, was 4/1) broke hardcoded nav-shape assertions across six different test files that were not caught by any single targeted test run: `tests/e2e/epic12-phase3-information-architecture.spec.mjs`, `tests/e2e/epic14-ws0-app-shell.spec.mjs`, `tests/e2e/epic13-reference-workbench.spec.mjs`, `tests/e2e/epic14-ws5-home-guides.spec.mjs`, `tests/browser-contract.test.mjs`, `tests/graph/routeIdentity.test.ts`, `tests/graph/informationArchitecture.test.ts`, `tests/content-review.test.mjs`, `tests/copy-contract.test.mjs`. All were found only by progressively running the full non-e2e unit suite and the broader e2e set rather than trusting page-scoped test runs alone, and are now updated to the new, intended nav shape.
+
+**Regression isolation method.** Throughout Phase 8, every unfamiliar test failure was checked against a clean-`main` baseline before being accepted as pre-existing — first via `git stash`, later (once commits accumulated) via a temporary `git worktree add ../control-atlas-main-check main` comparison build, removed after use. This surfaced one real process error along the way: a manually-started `serve-static-site.mjs` was accidentally left running past its screenshot task and silently contaminated two rounds of Playwright results with the exact `npx playwright test` + manual-server port conflict this repo's environment notes warn about — caught by the port still being bound, corrected, and the affected comparisons re-run cleanly.
+
+**Commands and results:**
+- `npm run typecheck` — 0 errors.
+- `npm run lint` — 0 errors/warnings (full project + test lint set).
+- `npm run test` (full unit composite: tokens, copy-contract, authority, atlas, data, runtime, graph — 172 tests, record-presentation, nist-ingestion, ingestion) — 0 failures.
+- `npm run test:browser` (`browser-contract.test.mjs`) — 27/27 passing.
+- `npm run test:correction:contracts` — 39/39 passing.
+- `node --test tests/content-review.test.mjs` — 17/17 passing.
+- `npm run build:site` — successful static build.
+- `npx playwright test --config playwright.e2e.config.mjs` across every T8.x-relevant spec (nav/Home/Library/Atlas/Resources/About/Start-Here suites) — passing, with the handful of unrelated failures (stale `.atlas-tree`/`.compare-control-surface`/"Browse eight practical collections"-style content assertions, likely generated-data drift per Gotcha #8) confirmed identical against clean `main` in every case and therefore pre-existing, not Phase 8 regressions.
+- Full e2e smoke set (`v1-practitioner-workflows`, `publication-identity`, `epic12-phase7-atlas-skill-tree`, `epic14-ws0` through `ws7`) — 79/79 passing, covering every one of the nine touched pages plus Compare/Sources reachability end to end.
+- `git diff main --stat -- src/ui/pages/ComparePage.tsx src/ui/pages/SourcesPage.tsx` — empty; neither file was touched, confirming Compare and Sources remain exactly as shipped in Phases 6–7.
+
+**Judgment calls made (for the creator's record):**
+- Interpreted "rebuild" per Plan.md §3.1's "smallest coherent change" rule rather than literally — four of nine pages already matched their Orbital reference and acceptance criteria from earlier phases and were left structurally alone (audited, documented, zero code changes) rather than rewritten to churn the diff.
+- Home's PRD spec (§"Homepage") lists a "Trust boundary" line as a distinct top-of-page element; Plan.md T8.1 instead says "no repeated product boundary wall." Per the evidence hierarchy (Plan.md > vision.md > DESIGN_PRINCIPLES.md > PRD.md), kept the existing footer-only boundary statement and did not add a second on-page boundary block to Home.
+- Added Start Here as the first primary-nav item and Home's first destination card (newcomer entry point, per `vision.md`'s "primary user is the newcomer") rather than appending it last; added Documents to the overflow menu (secondary/task-tool weight) rather than primary, to keep the primary bar from growing past what `top-navigation.html`'s reference density suggests.
+- About's Tabler-icon choices for Resources collections and the two new About sections' exact wording are original composition within the constraints (vetted-icon-only per AGENTS.md §7; no invented pictograms) — a designer doing a full illustration pass per `catalog.html`'s bespoke SVG treatment would be a reasonable alternative but was judged out of proportion to a single-session Phase 8 pass.
 
 ---
 
