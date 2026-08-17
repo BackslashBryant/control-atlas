@@ -1,6 +1,7 @@
 import {
   IconArrowRight,
   IconBooks,
+  IconRocket,
   IconSearch,
   IconTopologyStar3,
   IconUsersGroup,
@@ -22,6 +23,7 @@ type HomePageProps = {
 };
 
 const DESTINATION_ICONS = {
+  "start-here": IconRocket,
   atlas: IconTopologyStar3,
   library: IconBooks,
   resources: IconUsersGroup,

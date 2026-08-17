@@ -65,6 +65,7 @@ test("desktop header exposes task destinations, Search, and Guides overflow", as
 
   const primary = page.getByRole("navigation", { name: "Primary navigation" });
   await expect(primary.getByRole("link")).toHaveText([
+    "Start here",
     "Atlas",
     "Library",
     "Compare",
@@ -82,6 +83,7 @@ test("desktop header exposes task destinations, Search, and Guides overflow", as
   await expect(overflow).toBeVisible();
   await expect(overflow.getByRole("link")).toHaveText([
     "Guides",
+    "Documents",
   ]);
 });
 
@@ -145,6 +147,7 @@ test("WS0 tablet and mobile use one navigation control with every destination", 
     const sheet = page.getByRole("navigation", { name: "Primary navigation (mobile)" });
     await expect(sheet).toBeVisible();
       await expect(sheet.getByRole("link")).toHaveText([
+        "Start here",
         "Atlas",
         "Library",
         "Compare",
@@ -152,6 +155,7 @@ test("WS0 tablet and mobile use one navigation control with every destination", 
         "Sources",
         "About",
         "Guides",
+        "Documents",
       ]);
     await page.keyboard.press("Escape");
     await expect(sheet).toHaveCount(0);

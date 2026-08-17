@@ -1,8 +1,10 @@
 import {
   IconCompass,
+  IconFileText,
   IconGitCompare,
   IconInfoCircle,
   IconLibrary,
+  IconRocket,
   IconTopologyStar3,
   IconUsersGroup,
   IconSourceCode,
@@ -34,6 +36,13 @@ export const PRIMARY_SECTION_LABEL = "Explore Control Atlas";
 export const UTILITY_SECTION_LABEL = "Guides and information";
 
 export const PRIMARY_NAV_ITEMS: NavItem[] = [
+  {
+    label: routeIdentityFor("start-here").label,
+    view: "start-here",
+    path: routeIdentityFor("start-here").path,
+    icon: IconRocket,
+    section: "discovery",
+  },
   {
     label: routeIdentityFor("atlas-map").label,
     view: "atlas-map",
@@ -72,6 +81,14 @@ export const GUIDES_NAV_ITEM: NavItem = {
   section: "toolkit",
 };
 
+export const DOCUMENTS_NAV_ITEM: NavItem = {
+  label: routeIdentityFor("templates").label,
+  view: "templates",
+  path: routeIdentityFor("templates").path,
+  icon: IconFileText,
+  section: "toolkit",
+};
+
 export const UTILITY_NAV_ITEMS: NavItem[] = [
   {
     label: routeIdentityFor("sources").label,
@@ -91,6 +108,7 @@ export const UTILITY_NAV_ITEMS: NavItem[] = [
 
 export const OVERFLOW_NAV_ITEMS: NavItem[] = [
   GUIDES_NAV_ITEM,
+  DOCUMENTS_NAV_ITEM,
 ];
 
 export const MOBILE_NAV_SECTIONS: NavSection[] = [

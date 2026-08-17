@@ -34,6 +34,13 @@ export const SITE_COPY = Object.freeze({
     }),
     destinations: Object.freeze([
       Object.freeze({
+        id: "start-here",
+        label: "Start guided setup",
+        description: "Answer two questions to find where to begin.",
+        view: "start-here",
+        href: "#/start",
+      }),
+      Object.freeze({
         id: "atlas",
         label: "Browse the Atlas",
         description: "Start with a topic.",

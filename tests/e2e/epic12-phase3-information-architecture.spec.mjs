@@ -3,11 +3,13 @@ import { expect, test } from "@playwright/test";
 import { attachPageDiagnostics, gotoApp, waitForAppReady } from "./support.mjs";
 
 const NAV = [
+  { label: "Start here", path: "/start", placement: "primary" },
   { label: "Atlas", path: "/atlas", placement: "primary" },
   { label: "Library", path: "/library", placement: "primary" },
   { label: "Compare", path: "/compare", placement: "primary" },
   { label: "Resources", path: "/resources", placement: "primary" },
   { label: "Guides", path: "/guides", placement: "overflow" },
+  { label: "Documents", path: "/build", placement: "overflow" },
   { label: "Sources", path: "/sources", placement: "primary" },
   { label: "About", path: "/about", placement: "primary" },
 ];
@@ -25,12 +27,13 @@ test("header exposes task destinations directly from 1200px", async ({ page }) =
     await waitForAppReady(page, { allowPartial: true });
 
     const primary = page.locator('header.site-header nav[aria-label="Primary navigation"]');
-    await expect(primary.locator("a[href]")).toHaveCount(6);
-    await expect(primary.locator("a[href]")).toHaveText(["Atlas", "Library", "Compare", "Resources", "Sources", "About"]);
+    await expect(primary.locator("a[href]")).toHaveCount(7);
+    await expect(primary.locator("a[href]")).toHaveText(["Start here", "Atlas", "Library", "Compare", "Resources", "Sources", "About"]);
     await expect(page.locator('header.site-header nav[aria-label="Utility navigation"]')).toHaveCount(0);
     await page.getByRole("button", { name: "Open more pages" }).click();
     await expect(page.getByRole("navigation", { name: "More pages" }).getByRole("link")).toHaveText([
       "Guides",
+      "Documents",
     ]);
     await page.keyboard.press("Escape");
     const geometry = await page.locator("header.site-header").evaluate((header) => ({
@@ -180,11 +183,11 @@ test("Phase 3 List and Map preserve Library state and never drop non-empty resul
   await expect(page.getByRole("group", { name: "Library view" })).toBeVisible();
 });
 
-test("Template B keeps three destination cards and retires the Start card", async ({ page }) => {
+test("Template B leads with guided setup and retires the legacy work-map card", async ({ page }) => {
   await gotoApp(page, "/#/");
   await waitForAppReady(page, { allowPartial: true });
   const homeTaxonomy = await page.locator(".home-secondary-action strong").allTextContents();
-  expect(homeTaxonomy).toEqual(["Browse the Atlas", "Search the Library", "Browse Resources"]);
+  expect(homeTaxonomy).toEqual(["Start guided setup", "Browse the Atlas", "Search the Library", "Browse Resources"]);
   await expect(page.locator(".home-work-map span")).toHaveCount(0);
   await expect(page.getByText("Start with your work", { exact: true })).toHaveCount(0);
 });

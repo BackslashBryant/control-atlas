@@ -13,7 +13,7 @@ test("homepage reads as a connected federal cybersecurity reference system", asy
   await expect(page.getByRole("heading", { name: "Make federal cybersecurity compliance make sense." })).toBeVisible();
   await expect(page.getByText("Understand what applies, what it means, and what to do next.", { exact: true })).toBeVisible();
   await expect(page.locator(".home-ecosystem")).toHaveCount(0);
-  await expect(page.getByRole("navigation", { name: "Choose a Control Atlas destination" }).getByRole("link")).toHaveCount(3);
+  await expect(page.getByRole("navigation", { name: "Choose a Control Atlas destination" }).getByRole("link")).toHaveCount(4);
   await expect(page.getByRole("navigation", { name: "Browse by tag" }).locator(".home-tag-link")).toHaveCount(16);
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Resources", exact: true })).toBeVisible();
   await expect(page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.document.documentElement.clientWidth)).resolves.toBe(true);

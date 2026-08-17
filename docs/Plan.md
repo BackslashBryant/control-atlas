@@ -1315,12 +1315,17 @@ Rebuild every remaining public surface from the correct Orbital composition rath
 
 ### Workstream A — Entry and orientation
 
-- [ ] **T8.1 Home** — use `landing-page.html` / editorial split:
+- [x] **T8.1 Home** — use `landing-page.html` / editorial split:
   - dramatic but brief identity;
   - one invitation;
   - no repeated product boundary wall;
   - stable global navigation;
   - no fake telemetry.
+  - **Audit finding:** the Depth-0 `signal-cover` (built in an earlier phase, `vite.config.ts` `renderStaticHome()` + `styles/components.css`) already implements the Orbital "editorial split, one invitation" landing recipe faithfully — eyebrow, display headline with signal word, lead, one action, archival-metadata aside, calibration rail. It needed no rebuild. The gap was downstream: the Depth-1 Home surface and global nav orphaned two of the six PRD information-architecture sections (Start Here, Documents) — neither was reachable from the persistent header, the overflow menu, or the Home destination grid, despite `StartHerePage.tsx` being a fully working two-question guided-setup flow. A pre-existing test (`epic12-phase5-links-semantics-touch.spec.mjs` — "Phase 5 applies aria-current only to the canonical active destination", already asserting `/#/start → "Start here"`) had anticipated this fix but the implementation hadn't caught up.
+  - **Wireframe (wide/narrow):** unchanged page anatomy — hero (headline + search) → 4-card destination grid (was 3) → tag constellation → footer. Card order: Start guided setup, Browse the Atlas, Search the Library, Browse Resources. Narrow: single-column stack, same order.
+  - **Fix:** added a "Start guided setup" destination to `HOME_DESTINATIONS` (`site-copy.mjs`) as the first card, wired its icon in `HomePage.tsx`, widened `.home-secondary-grid` to 4 columns (`surfaces.css`). Added "Start here" as the first `PRIMARY_NAV_ITEMS` entry and "Documents" to `OVERFLOW_NAV_ITEMS` (`navigation.ts`), and gave both routes a self-selecting `aria-current` state (`routeIdentity.ts`, previously both mapped to `null`). Home's static first-paint shell (`src/index.html` `data-static-header`, per Gotcha #2 — React does not boot on Home) had its own hand-authored nav link list that duplicates `PRIMARY_NAV_ITEMS`; added "Start here" there too after a screenshot showed the React-driven fix alone did not reach Home's static first paint.
+  - **Verified:** `npx playwright test --config playwright.e2e.config.mjs tests/e2e/epic12-phase3-information-architecture.spec.mjs tests/e2e/epic14-ws0-app-shell.spec.mjs tests/e2e/epic13-reference-workbench.spec.mjs tests/e2e/epic12-phase5-links-semantics-touch.spec.mjs` — 16 passed, 8 failed. Confirmed by running the identical command against clean `main` first: the same 8 failures pre-exist there (stale `.atlas-tree`/Resources-heading content assertions unrelated to Phase 8, likely generated-data drift per Gotcha #8) — zero regressions from this change. `npm run typecheck` — 0 errors. `npx eslint` on all touched files — 0 errors/warnings. `npm run build:site` — successful.
+  - Wide and narrow screenshots captured (`home-after2-wide.png`, `home-after2-narrow.png`) and reviewed by eye: 4-card grid renders correctly at both widths, "Start here" appears first in both the desktop primary nav and the mobile sheet, no visual overflow or clipping, dark theme/Orbital tokens intact, footer boundary statement unchanged (still appears once, not repeated on-page).
 - [ ] **T8.2 Start Here / Guides** — use staged-flow and knowledge-base references:
   - plain questions;
   - visible progress;
