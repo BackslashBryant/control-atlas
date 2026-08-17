@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-test("landing presents Template B search, three destinations, and governed tag browsing", async ({
+test("landing presents Template B search, four destinations, and governed tag browsing", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -30,7 +30,7 @@ test("landing presents Template B search, three destinations, and governed tag b
   // Pinned to the shape, not the literal: the word list is product copy and
   // has been trimmed before. src/shared/brand-rotation.ts owns the order.
   await expect(page.locator("[data-brand-word]")).toHaveText(/^[A-Z][a-z]+$/);
-  await expect(page.locator(".home-secondary-action")).toHaveCount(3);
+  await expect(page.locator(".home-secondary-action")).toHaveCount(4);
   await expect(page.locator(".home-tag-galaxies .home-tag-link")).toHaveCount(16);
   await expect(page.locator(".home-ecosystem, .home-capability-preview")).toHaveCount(0);
 

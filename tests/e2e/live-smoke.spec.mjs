@@ -27,7 +27,7 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   ).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Search Control Atlas" })).toBeVisible();
   await expect(page.locator(".home-search").getByRole("button", { name: "Search" })).toBeVisible();
-  await expect(page.locator(".home-secondary-action")).toHaveCount(3);
+  await expect(page.locator(".home-secondary-action")).toHaveCount(4);
   await expect(page.locator(".site-header .brand-key-word")).toBeVisible();
   await expect(page.locator(".home-product-identity")).toHaveText(
     "Understand what applies, what it means, and what to do next.",
