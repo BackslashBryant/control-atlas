@@ -4,7 +4,7 @@ import {
   IconSearch,
   IconX,
 } from "@tabler/icons-react";
-import type { KeyboardEvent, ReactNode } from "react";
+import type { KeyboardEvent, MouseEvent, ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
@@ -12,9 +12,10 @@ import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { sourceLinkFor } from "../graph/sourceLinks";
 import connectionInventoryArtifact from "../../../data/generated/connection-inventory.json";
 import catalogBootstrapArtifact from "../../../data/generated/catalog-bootstrap.json";
-import { Badge, Button, Panel } from "../components/lsm";
+import { Button, Panel } from "../components/lsm";
 import { AppLink } from "../components/AppLink";
 import {
+  Badge,
   EmptyState,
   InspectorDrawer,
   PageHeader,
@@ -202,9 +203,7 @@ function PublicationInspector(props: {
                 tone={
                   publication.lifecycle.value === "active"
                     ? "success"
-                    : publication.lifecycle.state === "blocked"
-                      ? "error"
-                      : "warning"
+                    : "warning"
                 }
               >
                 {displayNameFor("lifecycle_status", publication.lifecycle.value || "")}
@@ -540,7 +539,7 @@ export function SourcesPage(props: {
 
   const handleSelectPublication = (
     publicationId: string,
-    event?: React.MouseEvent<HTMLButtonElement>,
+    event?: MouseEvent<HTMLButtonElement>,
   ) => {
     if (event) {
       activeTriggerRef.current = event.currentTarget;
@@ -650,7 +649,7 @@ export function SourcesPage(props: {
             <Button
               onClick={handleResetFilters}
               type="button"
-              variant="subtle"
+              variant="secondary-quiet"
             >
               Reset filters
             </Button>
@@ -804,9 +803,7 @@ export function SourcesPage(props: {
                       tone={
                         row.lifecycle.value === "active"
                           ? "success"
-                          : row.lifecycle.state === "blocked"
-                            ? "error"
-                            : "warning"
+                          : "warning"
                       }
                     >
                       {displayNameFor(
