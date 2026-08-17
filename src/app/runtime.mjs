@@ -1541,11 +1541,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
         request.chain_catalog,
         request.chain_benchmark,
       );
-      const targetNodes =
-        !request.chain_benchmark && allNodes.length > 100
-          ? allNodes.slice(0, 100)
-          : allNodes;
-      const rows = targetNodes.map((node) => {
+      const rows = allNodes.map((node) => {
         const detail = buildChainDetail(node, includeCandidates);
         return {
           node_id: node.id,
