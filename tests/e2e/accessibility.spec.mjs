@@ -157,9 +157,10 @@ test("a11y: compare detailed mappings table has no serious or critical violation
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page
-    .getByRole("combobox", { name: /^Mapping publication/ })
-    .selectOption({ label: "NIST CSF 2.0" });
+  // This pair has exactly one published mapping source, so Compare auto-resolves
+  // it and renders "Mapping publication" as static text rather than a selectable
+  // dropdown (T3 capability rule: never offer a choice with only one completion).
+  await expect(page.getByText("Mapping publication")).toBeVisible();
   await page.getByRole("button", { name: "Show mappings" }).click();
   await expect(
     page.getByRole("table", { name: "Relationship mappings" }),
