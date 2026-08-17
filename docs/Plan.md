@@ -26,7 +26,7 @@ At most one temporary `docs/Plan.md` may exist while this push is active. It is 
 1. **Publication-centric register**: four registry-layer buttons replaced with one canonical publication register (47 rows), a scoped inspector, and an advanced-evidence disclosure group at the bottom of the page.
 2. **Source materials grouped by role**: primary, supplemental/enrichment, a newly separated **historical material** section (superseded documents no longer look equivalent to current ones), reference/community tools, and mapping evidence each render as visually distinct sections; community sources are labeled wherever they appear (fixed a dead-code gap where `isCommunity` was computed but never rendered).
 3. **Accurate page/inspector identity**: the page `<h1>` and inspector title now show each publication's full official name; an unknown source ID renders an accessible "Source not found" state naming the requested ID (fixed a real a11y regression — `npm run test:a11y` is 35/35 green).
-4. **Evidence captured**: screenshots in `docs/evidence/phase7-sources-rebuild/screenshots/`; stale `sources`/`compare` visual baselines (predating the Phase 6/7 rebuild) regenerated and reviewed by eye.
+4. **Evidence captured**: register/inspector/narrow-viewport screenshots captured locally and reviewed by eye during this session (not retained — `docs/` permits only the canonical foundation per `tests/alignment-contract.test.mjs`); stale `sources`/`compare` visual baselines (predating the Phase 6/7 rebuild) regenerated and reviewed by eye, retained as committed Playwright snapshots.
 5. **Verification Gates Passed**: see the Phase 7 exit-gate evidence in §7 below.
 
 **Next up: Phase 8 — Remaining Surface Rebuild from Orbital References** (§8 in `docs/Plan.md`).
@@ -1257,7 +1257,7 @@ Use the Orbital data-administration recipe:
   - missing publisher-provided version;
   - advanced evidence view;
   - narrow viewport.
-  - Captured in `docs/evidence/phase7-sources-rebuild/screenshots/` (register desktop/compact, inspector with many materials + mapping evidence, inspector with a missing version, advanced evidence disclosures expanded, narrow-viewport inspector including the new historical-material section). Also refreshed the stale `approved-layout-visual` baselines for `sources` (desktop + compact) and `compare` (desktop + compact), which predated the Phase 6/7 UI rebuild by ~9 hours and were failing pixel comparison; reviewed each regenerated PNG by eye before accepting, per the "a green test does not approve a screenshot" rule.
+  - Captured locally and reviewed by eye this session (register desktop/compact, inspector with many materials + mapping evidence, inspector with a missing version, advanced evidence disclosures expanded, narrow-viewport inspector including the new historical-material section), then cleared — `docs/` permits only the canonical foundation (`tests/alignment-contract.test.mjs`), so ad hoc evidence is not retained there. Also refreshed the stale `approved-layout-visual` baselines for `sources` (desktop + compact) and `compare` (desktop + compact), which predated the Phase 6/7 UI rebuild by ~9 hours and were failing pixel comparison; reviewed each regenerated PNG by eye before accepting, per the "a green test does not approve a screenshot" rule. Those baselines are committed Playwright snapshots under `tests/e2e/approved-layout-visual.spec.mjs-snapshots/`.
 
 ### Sources acceptance criteria
 
@@ -1291,7 +1291,7 @@ Use the Orbital data-administration recipe:
 - `npx playwright test --config playwright.a11y.config.mjs tests/e2e/accessibility.spec.mjs` — 35/35 passing (all routes, including the two Sources cases fixed in this pass and the pre-existing "compare detailed mappings table" test, whose stale `selectOption` assertion was updated to match Compare's existing single-source auto-resolution behavior — not a product change).
 - `npx playwright test --config playwright.e2e.config.mjs tests/e2e/compare-map.spec.mjs` — 4/4 passing (Phase 6 regression check).
 - `node --test tests/compare-aggregation.test.mjs` — 3/3 passing (Phase 6 regression check).
-- Screenshot evidence: `docs/evidence/phase7-sources-rebuild/screenshots/`.
+- Screenshot evidence: captured and reviewed locally this session (not retained in `docs/`, see rationale above); durable visual-regression evidence lives in the refreshed `tests/e2e/approved-layout-visual.spec.mjs-snapshots/route-{sources,compare}-*.png` baselines.
 
 ---
 
