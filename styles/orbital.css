@@ -116,12 +116,34 @@ body {
   border: 1px solid var(--ca-border);
   border-radius: var(--ca-radius-md);
   background: var(--ca-surface-deep);
+  /* @react-sigma/core ships a light-theme default skin (white control
+     background, clip-hidden icon content meant for background-image
+     icons). Retint its CSS custom properties to Orbital tokens instead
+     of leaving the raw white control stack visible on the canvas. */
+  --sigma-background-color: var(--ca-surface-deep);
+  --sigma-controls-background-color: var(--ca-surface-raised);
+  --sigma-controls-background-color-hover: var(--ca-accent-hover);
+  --sigma-controls-border-color: var(--ca-border-strong);
+  --sigma-controls-color: var(--ca-text);
 }
 
 .atlas-network-stage .react-sigma { height: min(66vh, 44rem); }
 .atlas-network-stage .sigma-container { background: var(--ca-surface-deep); }
 .atlas-network-stage canvas { cursor: grab; }
 .atlas-network-stage canvas:active { cursor: grabbing; }
+
+.atlas-network-stage .react-sigma-control > button {
+  display: flex;
+  clip: auto;
+  align-items: center;
+  justify-content: center;
+  color: var(--sigma-controls-color);
+}
+
+.atlas-network-stage .react-sigma-control > button svg {
+  width: 14px;
+  height: 14px;
+}
 
 .atlas-network-tooltip {
   position: absolute;
