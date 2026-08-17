@@ -22,15 +22,12 @@ export const SITE_COPY = Object.freeze({
       lead:
         "A free, public research tool that connects the requirements, controls, and guidance published by NIST, DISA, FedRAMP, MITRE, and CISA. Not a government system and not a GRC platform — a place to find what applies to your system and what to do next.",
       action: "Enter the Atlas",
-      metaTitle: "Archive",
-      meta: Object.freeze([
-        Object.freeze({ label: "Coverage", value: "Federal-wide" }),
-        Object.freeze({ label: "Publishers", value: "NIST · DISA · FedRAMP" }),
-        Object.freeze({ label: "Connections", value: "Cross-mapped" }),
-      ]),
+      // KPI values are computed at build time from generated data (see
+      // vite.config.ts renderStaticHome) — never hardcode counts here.
+      metaTitle: "At a glance",
       freshnessLabel: "Source data",
       railLeft: "Find what applies · understand it · act on it",
-      prompt: "Click anywhere or press Enter to start",
+      prompt: "Press Enter or select Enter the Atlas to start",
     }),
     destinations: Object.freeze([
       Object.freeze({

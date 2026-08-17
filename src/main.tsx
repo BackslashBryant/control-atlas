@@ -345,7 +345,8 @@ function connectSignalCover() {
   // the sticky header too — a full Depth-0 takeover.
   document.body.appendChild(cover);
   cover.removeAttribute('hidden');
-  cover.focus();
+  const enterButton = cover.querySelector<HTMLButtonElement>('[data-signal-cover-enter]');
+  (enterButton || cover).focus();
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let dismissed = false;
   function dismiss() {
@@ -357,8 +358,6 @@ function connectSignalCover() {
       /* sessionStorage unavailable — dismiss anyway */
     }
     window.removeEventListener('keydown', onCoverKey);
-    window.removeEventListener('wheel', dismiss);
-    window.removeEventListener('touchmove', dismiss);
     if (reduce) {
       cover.remove();
       return;
@@ -366,16 +365,18 @@ function connectSignalCover() {
     cover.classList.add('signal-cover--exiting');
     window.setTimeout(() => cover.remove(), 460);
   }
+  // Dismissal is intentionally narrow: only the Enter key or a direct click on
+  // the "Enter the Atlas" button ends the takeover. No click-anywhere, wheel,
+  // touchmove, Space, or Escape shortcuts — those let the cover disappear
+  // before a visitor has actually read or chosen to enter.
   function onCoverKey(event: KeyboardEvent) {
-    if (['Enter', ' ', 'Spacebar', 'Escape'].includes(event.key)) {
+    if (event.key === 'Enter') {
       event.preventDefault();
       dismiss();
     }
   }
-  cover.addEventListener('click', dismiss);
+  enterButton?.addEventListener('click', dismiss);
   window.addEventListener('keydown', onCoverKey);
-  window.addEventListener('wheel', dismiss, { passive: true });
-  window.addEventListener('touchmove', dismiss, { passive: true });
 }
 
 function connectStaticHome() {

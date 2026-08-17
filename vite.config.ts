@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
@@ -9,6 +10,36 @@ import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from './src/shared/site-copy.mjs';
 import { HOME_TAG_GROUPS } from './src/ui/lib/homeTagConstellation';
 
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
+
+function readGeneratedJson(relativePath: string) {
+  return JSON.parse(readFileSync(resolve(rootDir, 'data/generated', relativePath), 'utf8'));
+}
+
+// Real, build-time-computed counts for the signal-cover KPI readout. Never
+// hardcode these — they must move when the underlying generated data does.
+function computeSignalCoverKpis() {
+  const publicationIndex = readGeneratedJson('publication-identity-index.json');
+  const connectionInventory = readGeneratedJson('connection-inventory.json');
+  const catalogBootstrap = readGeneratedJson('catalog-bootstrap.json');
+
+  const publicationCount = publicationIndex.identity_count as number;
+
+  const controlsRow = (connectionInventory.connection_inventory.rows as Array<{ id: string; totalRecords: number }>)
+    .find((row) => row.id === 'controls');
+  const controlCount = controlsRow ? controlsRow.totalRecords : 0;
+
+  const crosswalkPairs = new Set(
+    Object.keys(catalogBootstrap.catalog_bootstrap.mapping_sources).map(
+      (pair) => pair.split('|').sort().join('|'),
+    ),
+  );
+
+  return [
+    { label: 'Publications', value: publicationCount.toLocaleString() },
+    { label: 'Crosswalks', value: crosswalkPairs.size.toLocaleString() },
+    { label: 'Controls', value: controlCount.toLocaleString() },
+  ];
+}
 const DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
   day: 'numeric',
   month: 'long',
@@ -45,7 +76,7 @@ function renderStaticHome() {
   // reveals it, gates it to once per session, and wires dismissal.
   const cover = SITE_COPY.home.cover;
   const coverMeta = [
-    ...cover.meta.map(
+    ...computeSignalCoverKpis().map(
       (row) =>
         `<div><span>${escapeHtml(row.label)}</span><strong>${escapeHtml(row.value)}</strong></div>`,
     ),
@@ -55,7 +86,7 @@ function renderStaticHome() {
   // over a plotted flight plan, closed by a calibration rail. The geometry is
   // decorative, so it stays aria-hidden and outside the reading corridor.
   const coverFlightPlan = `<svg class="signal-cover__flightplan" viewBox="0 0 760 430" aria-hidden="true" focusable="false"><g fill="none" stroke-linecap="round"><path d="M32 392C182 144 422 58 752 146" stroke="var(--lsm-grid-line)" opacity=".62"/><path d="M80 420C252 238 482 186 746 232" stroke="var(--lsm-teal)" opacity=".8"/><path d="M180 440C340 326 536 294 728 318" stroke="var(--lsm-gold)" stroke-dasharray="8 10" opacity=".74"/><path d="M476 306C572 260 650 248 734 252" stroke="var(--lsm-orange)" opacity=".66"/><circle cx="540" cy="214" r="7" stroke="var(--lsm-teal)"/><path d="M540 194v40M520 214h40" stroke="var(--lsm-dust)" opacity=".4"/></g><circle cx="540" cy="214" r="3" fill="var(--lsm-bone)"/><circle cx="670" cy="258" r="5" fill="var(--lsm-orange)"/></svg>`;
-  const signalCover = `<div class="signal-cover" data-signal-cover hidden role="button" tabindex="0" aria-label="Welcome to Control Atlas. Click or press Enter to start."><section class="signal-cover__hero">${coverFlightPlan}<div class="signal-cover__copy"><p class="signal-cover__eyebrow">${escapeHtml(cover.eyebrow)}</p><h1 class="signal-cover__headline">${escapeHtml(cover.headlineLead)}<br><span class="signal-cover__signal-word">${escapeHtml(cover.headlineSignal)}</span></h1><p class="signal-cover__lead">${escapeHtml(cover.lead)}</p><p class="signal-cover__actions"><span class="signal-cover__action">${escapeHtml(cover.action)}</span></p></div><aside class="signal-cover__meta"><span class="signal-cover__meta-title">${escapeHtml(cover.metaTitle)}</span>${coverMeta}</aside></section><div class="signal-cover__rail"><span>${escapeHtml(cover.railLeft)}</span><span class="signal-cover__prompt">${escapeHtml(cover.prompt)}</span></div></div>`;
+  const signalCover = `<div class="signal-cover" data-signal-cover hidden role="dialog" aria-modal="true" aria-labelledby="signal-cover-headline"><section class="signal-cover__hero">${coverFlightPlan}<div class="signal-cover__copy"><p class="signal-cover__eyebrow">${escapeHtml(cover.eyebrow)}</p><h1 class="signal-cover__headline" id="signal-cover-headline">${escapeHtml(cover.headlineLead)}<br><span class="signal-cover__signal-word">${escapeHtml(cover.headlineSignal)}</span></h1><p class="signal-cover__lead">${escapeHtml(cover.lead)}</p><p class="signal-cover__actions"><button class="signal-cover__action" data-signal-cover-enter type="button">${escapeHtml(cover.action)}</button></p></div><aside class="signal-cover__meta"><span class="signal-cover__meta-title">${escapeHtml(cover.metaTitle)}</span>${coverMeta}</aside></section><div class="signal-cover__rail"><span>${escapeHtml(cover.railLeft)}</span><span class="signal-cover__prompt">${escapeHtml(cover.prompt)}</span></div></div>`;
   return `${signalCover}<section class="home-entry" aria-labelledby="home-title" data-template="B" data-visual-identity="universal-front-door">
     <div class="home-hero">
       <div class="home-hero-lead">

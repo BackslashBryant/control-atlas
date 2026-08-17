@@ -33,7 +33,6 @@
     linear-gradient(90deg, color-mix(in srgb, var(--lsm-teal) 5%, transparent) 1px, transparent 1px),
     var(--lsm-orbit);
   background-size: auto, auto, auto, 32px 32px, 32px 32px, auto;
-  animation: signal-cover-in 460ms var(--motion-ease) both;
 }
 
 .signal-cover__hero {
@@ -95,6 +94,14 @@
 .signal-cover__meta {
   position: relative;
   z-index: 2;
+  /* The background layer (.signal-cover itself) is fully opaque the instant
+     it is unhidden, so the underlying Home surface never shows through
+     mid-transition. Only the content settles in, never the coverage. */
+  animation: signal-cover-copy-in 460ms var(--motion-ease) both;
+}
+
+.signal-cover__meta {
+  animation-delay: 60ms;
 }
 
 .signal-cover__eyebrow {
@@ -231,9 +238,9 @@
   animation: signal-cover-copy-exit 440ms var(--motion-ease) forwards;
 }
 
-@keyframes signal-cover-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes signal-cover-copy-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes signal-cover-out {
@@ -281,6 +288,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .signal-cover,
+  .signal-cover__copy,
+  .signal-cover__meta,
   .signal-cover__prompt,
   .signal-cover--exiting,
   .signal-cover--exiting .signal-cover__copy {
