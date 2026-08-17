@@ -83,16 +83,15 @@ test('shell exposes direct task navigation and keeps Guides in overflow', () => 
   assert.match(routeIdentity, /Sources/);
   assert.match(routeIdentity, /About/);
   const staticPrimaryNav = html.match(/<nav aria-label="Primary navigation"[\s\S]*?<\/nav>/)?.[0] || "";
-  assert.match(staticPrimaryNav, /#\/atlas[\s\S]*#\/library[\s\S]*#\/compare[\s\S]*#\/resources[\s\S]*#\/sources[\s\S]*#\/about/);
+  assert.match(staticPrimaryNav, /#\/start[\s\S]*#\/atlas[\s\S]*#\/library[\s\S]*#\/compare[\s\S]*#\/resources[\s\S]*#\/sources[\s\S]*#\/about/);
   assert.match(navigation, /PRIMARY_SECTION_LABEL = "Explore Control Atlas"/);
-  assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "atlas-map"[\s\S]*view: "search"[\s\S]*view: "matrix"[\s\S]*view: "commons"/);
+  assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "start-here"[\s\S]*view: "atlas-map"[\s\S]*view: "search"[\s\S]*view: "matrix"[\s\S]*view: "commons"/);
   assert.doesNotMatch(
     navigation.match(/PRIMARY_NAV_ITEMS:[\s\S]*?\n\];/)?.[0] || "",
     /view: "patterns"/,
   );
-  assert.match(navigation, /OVERFLOW_NAV_ITEMS[\s\S]*GUIDES_NAV_ITEM/);
+  assert.match(navigation, /OVERFLOW_NAV_ITEMS[\s\S]*GUIDES_NAV_ITEM[\s\S]*DOCUMENTS_NAV_ITEM/);
   assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
-  assert.doesNotMatch(navigation, /view: "start-here"|view: "templates"/);
   assert.doesNotMatch(navigation, /The framework/);
   assert.doesNotMatch(navigation, /NAV_GROUPS/);
   assert.doesNotMatch(navigation, /Crosswalks/);
@@ -369,11 +368,11 @@ test('landing page states what the product is before asking for action', () => {
   assert.match(html, /CONTROL_ATLAS_HOME/);
   assert.match(viteConfig, /renderStaticHome\(\)/);
   assert.match(viteConfig, /\.replace\('<!-- CONTROL_ATLAS_HOME -->'/);
-  assert.equal(HOME_DESTINATIONS.length, 3);
+  assert.equal(HOME_DESTINATIONS.length, 4);
   assert.deepEqual(HOME_DESTINATIONS.map(({ label }) => label), [
-    'Browse the Atlas', 'Search the Library', 'Browse Resources',
+    'Start guided setup', 'Browse the Atlas', 'Search the Library', 'Browse Resources',
   ]);
-  assert.doesNotMatch(homePage, /home-ecosystem-authorities|home-start-here/);
+  assert.doesNotMatch(homePage, /home-ecosystem-authorities/);
   assert.match(homePage, /HOME_TAG_GROUPS\.map/);
   assert.match(homePage, /home-tag-galaxies/);
   assert.match(homePage, /data-record-count/);
@@ -429,7 +428,7 @@ test('Catalog controls stay anchored to the records section', () => {
   assert.match(catalogPage, /className="catalog-record-toolbar"/);
   assert.match(catalogPage, />Published group</);
   assert.match(catalogPage, /Search records/);
-  assert.match(catalogPage, /Search benchmarks/);
+  assert.match(catalogPage, /Search \$\{catalog\.tier_label_plural/);
   assert.match(catalogPage, /data-published-tier/);
   assert.match(catalogPage, /className="catalog-source-link"/);
   assert.match(surfaces, /\.catalog-record-toolbar\s*\{/);

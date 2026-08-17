@@ -239,7 +239,7 @@ export function CatalogDetailPage(props: {
                     aria-label={showTierBrowser ? `Search ${catalog.name} ${catalog.tier_label_plural || "published groups"}` : "Search this catalog"}
                     onChange={(event) => setQueryDraft(event.target.value)}
                     placeholder={showTierBrowser
-                      ? `Benchmark or technology in ${catalog.name}`
+                      ? `Search ${catalog.tier_label_plural || "published groups"} in ${catalog.name}`
                       : `Identifier or title in ${catalog.name}`}
                     type="search"
                     value={queryDraft}
@@ -247,7 +247,7 @@ export function CatalogDetailPage(props: {
                 </span>
               </label>
             </div>
-            <Button type="submit" variant="secondary">{showTierBrowser ? "Search benchmarks" : "Search records"}</Button>
+            <Button type="submit" variant="secondary">{showTierBrowser ? `Search ${catalog.tier_label_plural || "published groups"}` : "Search records"}</Button>
           </form>
         </WorkbenchControlSurface>
 

@@ -58,6 +58,7 @@ test("site copy keeps every approved anchor exact", () => {
   assert.deepEqual(
     SITE_COPY.home.destinations.map(({ label, description }) => [label, description]),
     [
+      ["Start guided setup", "Answer two questions to find where to begin."],
       ["Browse the Atlas", "Start with a topic."],
       ["Search the Library", "Find a specific record."],
       ["Browse Resources", "Find tools, training, and guidance."],

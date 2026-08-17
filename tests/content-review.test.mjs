@@ -202,15 +202,15 @@ test('navigation exposes task destinations directly and keeps Guides in overflow
   const primaryViews = [...primaryItems[1].matchAll(/view: "([a-z-]+)"/g)].map(
     (match) => match[1],
   );
-  assert.deepEqual(primaryViews, ['atlas-map', 'search', 'matrix', 'commons']);
+  assert.deepEqual(primaryViews, ['start-here', 'atlas-map', 'search', 'matrix', 'commons']);
 
   const overflowItems = navigation.match(
     /export const OVERFLOW_NAV_ITEMS: NavItem\[\] = \[(.*?)\n\];/s,
   );
   assert.ok(overflowItems, 'overflow navigation items must remain explicitly declared');
   assert.match(overflowItems[1], /GUIDES_NAV_ITEM/);
+  assert.match(overflowItems[1], /DOCUMENTS_NAV_ITEM/);
   assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
-  assert.doesNotMatch(navigation, /view: "templates"/);
 });
 
 test('old public paths redirect into the Phase 3 canonical hierarchy', () => {

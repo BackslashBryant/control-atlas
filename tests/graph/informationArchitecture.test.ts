@@ -18,6 +18,7 @@ test("primary navigation exposes the task destinations while Guides remains in o
   assert.deepEqual(
     PRIMARY_NAV_ITEMS.map(({ label, path }) => [label, path]),
     [
+      ["Start here", "/start"],
       ["Atlas", "/atlas"],
       ["Library", "/library"],
       ["Compare", "/compare"],
@@ -26,12 +27,12 @@ test("primary navigation exposes the task destinations while Guides remains in o
   );
   assert.deepEqual(
     OVERFLOW_NAV_ITEMS.map(({ label, path }) => [label, path]),
-    [["Guides", "/guides"]],
+    [["Guides", "/guides"], ["Documents", "/build"]],
   );
   assert.deepEqual(UTILITY_NAV_ITEMS.map(({ label }) => label), ["Sources", "About"]);
   assert.equal(
     new Set([...PRIMARY_NAV_ITEMS, ...UTILITY_NAV_ITEMS, ...OVERFLOW_NAV_ITEMS].map(({ path }) => path)).size,
-    7,
+    9,
   );
 });
 
