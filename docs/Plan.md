@@ -14,27 +14,24 @@ At most one temporary `docs/Plan.md` may exist while this push is active. It is 
 
 ## Current handoff (2026-08-17)
 
-**Phases 0–6 are complete.** Phase 6 (Compare Surface Rebuild) has been completed and verified.
+**Phases 0–7 are complete.** Phase 6 (Compare Surface Rebuild) and Phase 7 (Sources Surface and Trust Workflow Rebuild) have both been completed and verified, and are shipping together.
 
 ### Phase 6 Work Summary
 1. **Streamlined Compare Scope**: Compare is focused strictly on framework-to-framework crosswalks (`frameworks` ["Catalog to catalog"] and `item-mapping` ["Item mappings"]). Non-crosswalk multi-hop chains (`stig-chain`, `threat-chain`) and baseline diffs (`baseline-compare`) were removed from Compare.
 2. **Aggregated Results Table & Exports**: Mapping results table renders one row per source item (e.g. `AC-2`) with target chips, trust basis badges, and expandable evidence drawer (`<details>`). Exports (CSV, Markdown, JSON) support aggregated records alongside flat format.
 3. **Optimized Bundle & Flow**: Staged decision flow (`StepIndicator`) across 4 steps (`source` $\rightarrow$ `target` $\rightarrow$ `mapping` $\rightarrow$ `results`) with capability-filtered selectors. Compare bundle reduced by ~27% (48.1 kB).
-4. **Verification Gates Passed**:
-   - `npm run typecheck` (0 errors)
-   - `npm run lint` (0 errors/warnings)
-   - `npm run test:graph` (169/169 tests)
-   - `npm run test:copy-contract` (10/10 tests)
-   - `npm run test:browser` (27/27 tests)
-   - `npm run smoke:dom` (DOM smoke passed)
-   - `node --test tests/compare-aggregation.test.mjs` (3/3 tests)
-   - `npx playwright test tests/e2e/compare-map.spec.mjs` (4/4 tests)
-   - `npm run build:site` (clean static build with gzip compression)
+4. **Verification Gates Passed**: see the Phase 6 exit-gate evidence in §6 below (re-confirmed during Phase 7 hardening, including a regression check after the `buildStigChain` runtime fix — no impact on Compare).
 
-**Next up: Phase 7 — Sources Surface and Trust Workflow Rebuild** (§7 in `docs/Plan.md`).
-- Read §7 in full first, including the Phase 7 task breakdown (T7.1–T7.12) and acceptance criteria.
-- Focus: Make Sources answer *Who published this, which version does Control Atlas use, when was it checked, and what evidence supports the relationships?*
-- Deliverables: Publisher-first hierarchy, clear review dates, provenance disclosures, quarantined source handling, search/filter refinements, and evidence verification.
+### Phase 7 Work Summary
+1. **Publication-centric register**: four registry-layer buttons replaced with one canonical publication register (47 rows), a scoped inspector, and an advanced-evidence disclosure group at the bottom of the page.
+2. **Source materials grouped by role**: primary, supplemental/enrichment, a newly separated **historical material** section (superseded documents no longer look equivalent to current ones), reference/community tools, and mapping evidence each render as visually distinct sections; community sources are labeled wherever they appear (fixed a dead-code gap where `isCommunity` was computed but never rendered).
+3. **Accurate page/inspector identity**: the page `<h1>` and inspector title now show each publication's full official name; an unknown source ID renders an accessible "Source not found" state naming the requested ID (fixed a real a11y regression — `npm run test:a11y` is 35/35 green).
+4. **Evidence captured**: screenshots in `docs/evidence/phase7-sources-rebuild/screenshots/`; stale `sources`/`compare` visual baselines (predating the Phase 6/7 rebuild) regenerated and reviewed by eye.
+5. **Verification Gates Passed**: see the Phase 7 exit-gate evidence in §7 below.
+
+**Next up: Phase 8 — Remaining Surface Rebuild from Orbital References** (§8 in `docs/Plan.md`).
+- Read §8 in full first, including workstreams A–D and the page-level acceptance criteria.
+- Phases 6 and 7 are shipped to `main`; Phase 8 starts from that baseline.
 
 ---
 
@@ -1189,26 +1186,32 @@ Use the Orbital data-administration recipe:
 
 #### Primary register
 
-- [ ] **T7.1** Remove the four equal top-level buttons:
+- [x] **T7.1** Remove the four equal top-level buttons:
   - Publication register;
   - Connection sources;
   - Source material;
   - Control Atlas structure.
-- [ ] **T7.2** Make canonical publications the primary register. The row count must equal canonical publication identities from Phase 2, not raw registry rows.
-- [ ] **T7.3** Use one search control with immediate filtering or one explicit Search action—not both.
-- [ ] **T7.4** Keep only useful first-view filters, normally publisher and status/currentness. Move provenance, access, eligibility, format, and artifact-role filters to advanced evidence view if still needed.
-- [ ] **T7.5** Use concise primary columns:
+  - Verified: `SourcesPage.tsx` renders no layer-tab buttons; three `<details>` disclosures ("Official primary source links", "Connection inventory", "Control Atlas structure & organizing methodology") sit below the register as an advanced, secondary group.
+- [x] **T7.2** Make canonical publications the primary register. The row count must equal canonical publication identities from Phase 2, not raw registry rows.
+  - Verified: `buildPublicationRegister` iterates `publicationIdentityIndexArtifact.identities`; `tests/graph/sourceRegister.test.ts` asserts exactly 47 rows.
+- [x] **T7.3** Use one search control with immediate filtering or one explicit Search action—not both.
+  - Verified: single labeled search input with immediate `onChange` filtering; the wrapping `<form>`'s `onSubmit` is a no-op safety net for Enter, not a second action.
+- [x] **T7.4** Keep only useful first-view filters, normally publisher and status/currentness. Move provenance, access, eligibility, format, and artifact-role filters to advanced evidence view if still needed.
+  - Verified: only Publisher and Status `SelectField`s render in the first view; provenance/eligibility/access are not exposed as filters anywhere.
+- [x] **T7.5** Use concise primary columns:
   - Publication;
   - Publisher;
   - Version;
   - Checked/updated;
   - Status;
   - optional coverage summary where it materially helps.
-- [ ] **T7.6** Remove repeated raw IDs and “Copy ID” actions from every row. Put stable ID and copy action in the selected inspector.
+  - Verified: table header is exactly Publication / Publisher / Publisher version / Source last checked / Status / Catalog profile.
+- [x] **T7.6** Remove repeated raw IDs and "Copy ID" actions from every row. Put stable ID and copy action in the selected inspector.
+  - Verified: `CopyStableSourceId` renders only inside `PublicationInspector`; no row exposes a raw ID or copy action.
 
 #### Inspector
 
-- [ ] **T7.7** Selecting a publication opens a scoped inspector/drawer with:
+- [x] **T7.7** Selecting a publication opens a scoped inspector/drawer with:
   - official publication identity;
   - publisher;
   - version/edition;
@@ -1219,25 +1222,34 @@ Use the Orbital data-administration recipe:
   - source materials;
   - published mapping evidence;
   - field provenance and limitations.
-- [ ] **T7.8** Group source materials by role. Reference pages, primary files, enrichment, historical material, and mapping evidence must not look equivalent.
-- [ ] **T7.9** Put recorded/derived/missing reasons in the inspector. Do not repeat “from parent publication” or “recorded by registry” across the table.
-- [ ] **T7.10** Move Control Atlas structure evidence to About/Methodology or an advanced system-evidence disclosure. It is not an equal user task beside publisher trust.
+  - Verified: all fields present in `PublicationInspector`; the inspector title and the page `<h1>` now show the full official publication name (`officialTitle`, sourced from the registry's `name` field) rather than the shortened table `displayTitle` — see screenshot evidence below.
+- [x] **T7.8** Group source materials by role. Reference pages, primary files, enrichment, historical material, and mapping evidence must not look equivalent.
+  - Verified: five visually distinct sections — Primary source files, Supplemental & enrichment documents, **Historical material** (new; items with `metadata.supplemental_role === "historical"` or `lifecycle_status === "historical"` carry a "Historical, superseded" badge and their own heading), Reference pages & community tools, Published crosswalks & mapping evidence.
+- [x] **T7.9** Put recorded/derived/missing reasons in the inspector. Do not repeat "from parent publication" or "recorded by registry" across the table.
+  - Verified: table cells show only the compact value/absence label with the reason as `visually-hidden`; the full reason text is surfaced once, in the inspector's "Field provenance & usage" disclosure.
+- [x] **T7.10** Move Control Atlas structure evidence to About/Methodology or an advanced system-evidence disclosure. It is not an equal user task beside publisher trust.
+  - Verified: "Control Atlas structure & organizing methodology" is a collapsed `<details>` at the bottom of the page, not a peer register tab.
 
 #### Missing and duplicate data
 
-- [ ] **T7.11** Correct data at the source projection before styling a missing field.
-- [ ] **T7.12** Show concise absence states:
+- [x] **T7.11** Correct data at the source projection before styling a missing field.
+  - Spot-checked against `data/source-registry.json`: `dod-rai-toolkit.version` is `null` in the raw record (renders "Not published"); `authority-32-cfr-170` has no `last_checked` field at all (renders "Not checked"). Both UI absence states trace to a genuine data gap, not a display trick.
+- [x] **T7.12** Show concise absence states:
   - publisher did not publish a version;
   - source has not yet been checked;
   - field does not apply;
   - data is quarantined.
-- [ ] **T7.13** Verify one canonical row for conceptual publications with many supporting artifacts. Preserve real editions and variants; remove only false duplicates.
-- [ ] **T7.14** Ensure community sources and tools are labeled as supporting/community sources rather than the official publication owner.
+  - Verified: "Not published" / "Not applicable" (version), "Not checked" (verifiedAt), and the `blocked` field state (quarantine) are all implemented and covered by `tests/graph/sourceRegister.test.ts`.
+- [x] **T7.13** Verify one canonical row for conceptual publications with many supporting artifacts. Preserve real editions and variants; remove only false duplicates.
+  - Verified: 47 canonical rows (Phase 2's reconciled identity count), confirmed by test.
+- [x] **T7.14** Ensure community sources and tools are labeled as supporting/community sources rather than the official publication owner.
+  - Fixed a real gap found during Phase 6/7 re-verification: `sourceRegister.ts` already computed `isCommunity` per source material but `SourcesPage.tsx` never read it, so a community item outside the `reference` role bucket rendered with no distinguishing label. Now every source-material section (primary, supplemental, historical, reference) renders a "Community source" badge when `item.isCommunity` is true.
 
 #### Accessibility and evidence
 
-- [ ] **T7.15** Verify table keyboard navigation, drawer focus management, Escape, focus return, narrow table scrolling, and readable missing states.
-- [ ] **T7.16** Capture screenshots for:
+- [x] **T7.15** Verify table keyboard navigation, drawer focus management, Escape, focus return, narrow table scrolling, and readable missing states.
+  - Fixed a real regression found during re-verification: `tests/e2e/accessibility.spec.mjs`'s "source detail" and "source not found" cases expected an `<h1>` that reflects the selected publication (or "Source not found") and a "Source status summary" article; `SourcesPage.tsx` always rendered the static "Sources" title regardless of selection. Added a dynamic page-header title (publication `officialTitle`, or a "Source not found: `<id>`" state with a `.ca-source-not-found-id` marker) plus an `<article aria-label="Source status summary">` wrapper around the inspector's status fields. Full `npm run test:a11y` suite (35/35) now passes, including this case.
+- [x] **T7.16** Capture screenshots for:
   - initial register;
   - publication inspector;
   - publication with many source materials;
@@ -1245,6 +1257,7 @@ Use the Orbital data-administration recipe:
   - missing publisher-provided version;
   - advanced evidence view;
   - narrow viewport.
+  - Captured in `docs/evidence/phase7-sources-rebuild/screenshots/` (register desktop/compact, inspector with many materials + mapping evidence, inspector with a missing version, advanced evidence disclosures expanded, narrow-viewport inspector including the new historical-material section). Also refreshed the stale `approved-layout-visual` baselines for `sources` (desktop + compact) and `compare` (desktop + compact), which predated the Phase 6/7 UI rebuild by ~9 hours and were failing pixel comparison; reviewed each regenerated PNG by eye before accepting, per the "a green test does not approve a screenshot" rule.
 
 ### Sources acceptance criteria
 
@@ -1252,10 +1265,33 @@ Use the Orbital data-administration recipe:
 - There is one primary register, not four registry-layer buttons.
 - The first viewport answers the trust question without exposing ingestion architecture.
 - One conceptual publication appears once unless the publisher/version contract requires separate identities.
-- “Recorded by the source registry” and “Inherited from parent publication” do not appear in ordinary table cells.
+- "Recorded by the source registry" and "Inherited from parent publication" do not appear in ordinary table cells.
 - Source materials and connection evidence remain fully discoverable through the selected publication.
 - Missing data looks honest and intentional, not broken.
 - The page has one clear primary task and no button overload.
+
+### Exit gate
+
+- Sources is a publication-centric primary register (47 canonical rows) with a scoped inspector, not a four-layer registry browser.
+- Source materials are grouped into five visually distinct roles (primary, supplemental/enrichment, historical, reference, mapping evidence); community sources are labeled wherever they appear, not only in the reference bucket.
+- The page `<h1>` and inspector title reflect the selected publication's full official name; unknown source IDs render an accessible "Source not found" state with the requested ID visible.
+- Absence states are honest (spot-checked against raw registry data) and accessible (field reasons available via disclosure, not repeated in table cells).
+- Full automated test verification passing: `npm run typecheck` (0 errors), `npm run lint` (0 errors/warnings), `npm run test:graph` (172/172), `npm run test:copy-contract` (10/10), `npm run test:browser` (27/27), `npm run smoke:dom` (pass), `npm run build:site` (clean static build), full `npx playwright test --config playwright.a11y.config.mjs` (35/35, all routes), Compare regression (`compare-map.spec.mjs` 4/4, `compare-aggregation.test.mjs` 3/3 — confirming the Sources fixes did not disturb Phase 6).
+- Screenshot and visual-baseline evidence captured and reviewed (T7.16).
+
+#### Exit-gate verification evidence (Phase 7)
+
+- `npm run typecheck` — 0 TypeScript errors.
+- `npm run lint` — 0 ESLint errors/warnings (`--max-warnings=0`).
+- `npm run test:graph` — 172/172 passing.
+- `npm run test:copy-contract` — 10/10 passing.
+- `npm run test:browser` — 27/27 passing.
+- `npm run smoke:dom` — passing.
+- `npm run build:site` — successful static build with gzip compression and 0 errors.
+- `npx playwright test --config playwright.a11y.config.mjs tests/e2e/accessibility.spec.mjs` — 35/35 passing (all routes, including the two Sources cases fixed in this pass and the pre-existing "compare detailed mappings table" test, whose stale `selectOption` assertion was updated to match Compare's existing single-source auto-resolution behavior — not a product change).
+- `npx playwright test --config playwright.e2e.config.mjs tests/e2e/compare-map.spec.mjs` — 4/4 passing (Phase 6 regression check).
+- `node --test tests/compare-aggregation.test.mjs` — 3/3 passing (Phase 6 regression check).
+- Screenshot evidence: `docs/evidence/phase7-sources-rebuild/screenshots/`.
 
 ---
 
