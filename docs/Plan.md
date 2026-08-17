@@ -1400,7 +1400,7 @@ Rebuild every remaining public surface from the correct Orbital composition rath
 
 ### Workstream D — Product explanation
 
-- [ ] **T8.8 About** — use knowledge-base:
+- [x] **T8.8 About** — use knowledge-base:
   - concise product purpose;
   - coverage and boundaries;
   - methodology;
@@ -1408,6 +1408,11 @@ Rebuild every remaining public surface from the correct Orbital composition rath
   - source and mapping trust model;
   - open-source/public-data statement;
   - guide rail/TOC.
+  - **Audit finding — real defect:** `AboutPage.tsx` covered product purpose, methodology (partially), limits, and the open-source statement, but had no section naming the nine-area organizing structure or the source/mapping trust model — two of the six required content areas were simply absent — and no guide rail/TOC at all, unlike the `knowledge-base.html` reference's `.toc` "ON THIS PAGE" sidebar. Also found `PageJumpNav`/`jumpToSection` — primitives built in `pagePrimitives.tsx` for exactly this pattern — were defined but never consumed anywhere in the app; About is now their first real usage.
+  - **Wireframe (wide/narrow):** page header → two-column card grid (unchanged 2-col-at-≥1024px layout) + a new sticky right-hand "On this page" rail at ≥1024px. Narrow: single-column card stack, rail hidden (matches the Orbital reference's own `.toc { display: none }` behavior below its breakpoint) since content order alone remains a complete linear read.
+  - **Fix:** added two `SummaryCard`s — "Organizing Structure" (names the nine Control Atlas areas and states they're a discovery overlay, not a replacement for publisher-native structure) and "Source & Mapping Trust" (states that every publication/mapping/connection names its publisher, cited version, and last-checked date, and points to Sources for the full register). Wrapped each card in an `id`-bearing container and wired a `PageJumpNav` rail (`.about-layout`/`.about-toc` CSS added to `components.css`) linking to all nine sections. First copy draft used "shared trunk" (lifted from `vision.md`'s internal tree-model language) and was caught by the pre-existing `tests/content-review.test.mjs` guard against internal tree vocabulary (`limb`/`trunk`/`twig`/`acorn`) leaking into rendered copy — reworded to avoid the banned term.
+  - **Verified:** `node --test tests/content-review.test.mjs` — 17/17 (was 16/17 before the copy fix). `npm run test:copy-contract` — 10/10. `npx playwright test --config playwright.e2e.config.mjs tests/e2e/epic14-ws5-home-guides.spec.mjs -g "WS6 About"` — 1/1 passing (pre-existing heading-structure assertions unaffected by the added wrapper divs). Manually verified the jump-nav is functionally wired, not just styled: clicking "Jump to Limits" scrolled the page and moved DOM focus to `#about-limits`. `npm run typecheck` — 0 errors. `npx eslint` on the touched file — 0 errors/warnings. `npm run build:site` — successful.
+  - Wide and narrow screenshots captured for `/#/about` before/after and reviewed by eye: the rail renders sticky beside the card grid at wide widths with all nine section links, hides cleanly on narrow with no orphaned whitespace, and the two new cards read consistently with the existing seven.
 - [ ] **T8.9 Global search and navigation** — use top-navigation reference and component contracts:
   - stable active state;
   - accessible overflow;
