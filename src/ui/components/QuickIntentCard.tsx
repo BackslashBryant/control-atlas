@@ -37,7 +37,7 @@ export function QuickIntentCard(props: {
       {props.actionLabel ? (
         <span className="mt-auto text-[var(--ca-secondary)] text-[12px] font-medium flex items-center gap-[4px] group-hover:translate-x-1 transition-transform">
           {props.actionLabel}
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
         </span>
       ) : null}
     </AppLink>

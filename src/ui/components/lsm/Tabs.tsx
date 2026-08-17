@@ -25,7 +25,7 @@ export function Tabs({ tabs, activeId, onChange, className = '' }: TabsProps) {
             type="button"
             aria-current={isActive ? "page" : undefined}
             onClick={() => onChange(tab.id)}
-            className={`shrink-0 whitespace-nowrap px-[16px] py-[8px] bg-transparent border-0 border-b-2 cursor-pointer transition-colors ${
+            className={`shrink-0 whitespace-nowrap min-h-[44px] px-[16px] py-[8px] bg-transparent border-0 border-b-2 cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-[var(--ca-primary)] focus-visible:outline-offset-2 ${
               isActive 
                 ? 'border-[var(--ca-primary)] text-[var(--ca-primary)] font-bold' 
                 : 'border-transparent text-[var(--ca-text)] hover:border-[var(--ca-border-strong)]'

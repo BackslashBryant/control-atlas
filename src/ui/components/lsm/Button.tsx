@@ -11,7 +11,7 @@ export type ButtonVariant = 'primary' | 'secondary' | 'secondary-quiet' | 'destr
  * twMerge resolves any caller overrides without duplicate utilities.
  */
 const button = cva(
-  "inline-flex items-center justify-center gap-[8px] min-h-[44px] px-[16px] border rounded-[3px] font-bold uppercase tracking-[0.06em] cursor-pointer transition-colors",
+  "inline-flex items-center justify-center gap-[8px] min-h-[44px] px-[16px] border rounded-[3px] font-bold uppercase tracking-[0.06em] cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-[var(--ca-primary)] focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed",
   {
     variants: {
       variant: {

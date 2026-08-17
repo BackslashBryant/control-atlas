@@ -20,6 +20,7 @@ import {
   SelectField,
   WorkbenchControlSurface,
   copyText,
+  scrollElementBelowHeader,
   sourceUsageSummary,
 } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
@@ -138,6 +139,7 @@ function PublicationInspector(props: {
     <InspectorDrawer
       ariaLabel={`Details for ${publication.officialTitle}`}
       eyebrow="Publication detail"
+      id="source-inspector-detail"
       isOpen={true}
       onClose={onClose}
       title={publication.officialTitle}
@@ -616,6 +618,12 @@ export function SourcesPage(props: {
       ...state,
       source: publicationId,
     });
+    window.requestAnimationFrame(() => {
+      const el = document.getElementById("source-inspector-detail");
+      if (el) {
+        scrollElementBelowHeader(el, "smooth");
+      }
+    });
   };
 
   const handleCloseInspector = () => {
@@ -662,6 +670,31 @@ export function SourcesPage(props: {
         summary={SITE_COPY.routes.sources.purpose}
         title={pageHeaderTitle}
       />
+
+      {selectedPublicationRow ? (
+        <PublicationInspector
+          onClose={handleCloseInspector}
+          publication={selectedPublicationRow}
+        />
+      ) : null}
+
+      {state.source && !selectedPublicationRow ? (
+        <div className="source-not-found-banner" role="alert">
+          <div>
+            <p>
+              Requested source ID <code>{state.source}</code> is not in the
+              public publication register.
+            </p>
+          </div>
+          <Button
+            onClick={handleCloseInspector}
+            type="button"
+            variant="secondary"
+          >
+            Clear selection
+          </Button>
+        </div>
+      ) : null}
 
       <WorkbenchControlSurface
         className="source-register-control-surface"
@@ -740,24 +773,6 @@ export function SourcesPage(props: {
           ) : null}
         </div>
       </WorkbenchControlSurface>
-
-      {state.source && !selectedPublicationRow ? (
-        <div className="source-not-found-banner" role="alert">
-          <div>
-            <p>
-              Requested source ID <code>{state.source}</code> is not in the
-              public publication register.
-            </p>
-          </div>
-          <Button
-            onClick={handleCloseInspector}
-            type="button"
-            variant="secondary"
-          >
-            Clear selection
-          </Button>
-        </div>
-      ) : null}
 
       <div
         id="source-register-results"
@@ -931,13 +946,6 @@ export function SourcesPage(props: {
           </div>
         ) : null}
       </div>
-
-      {selectedPublicationRow ? (
-        <PublicationInspector
-          onClose={handleCloseInspector}
-          publication={selectedPublicationRow}
-        />
-      ) : null}
 
       <p className="sources-resource-boundary">
         Looking for tools or training?{" "}

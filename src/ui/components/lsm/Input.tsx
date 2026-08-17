@@ -7,7 +7,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export function Input({ label, className = '', ...props }: InputProps) {
   const inputEl = (
     <input 
-      className={`min-h-[44px] w-full px-[12px] bg-[var(--ca-surface-raised)] text-[var(--ca-text)] border border-[var(--ca-border-strong)] rounded-[3px] focus-visible:outline-2 focus-visible:outline-[var(--ca-primary)] focus-visible:outline-offset-3 ${className}`} 
+      className={`min-h-[44px] w-full px-[12px] bg-[var(--ca-surface-raised)] text-[var(--ca-text)] border border-[var(--ca-border-strong)] rounded-[3px] placeholder:text-[var(--ca-text-muted)] focus-visible:outline-2 focus-visible:outline-[var(--ca-primary)] focus-visible:outline-offset-3 disabled:opacity-50 disabled:cursor-not-allowed ${className}`} 
       {...props} 
     />
   );

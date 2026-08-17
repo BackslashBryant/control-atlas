@@ -1,5 +1,5 @@
 import * as Accordion from "@radix-ui/react-accordion";
-import { IconArrowRight } from "@tabler/icons-react";
+import { IconArrowRight, IconX } from "@tabler/icons-react";
 import React, { useId, type ElementType, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
@@ -667,13 +667,16 @@ export function InspectorDrawer(props: {
   actions?: ReactNode;
   ariaLabel?: string;
   className?: string;
+  id?: string;
 }) {
   if (!props.isOpen) return null;
   return (
     <aside
       aria-label={props.ariaLabel || "Details inspector"}
       className={`inspector-drawer ${props.className || ""}`.trim()}
+      id={props.id}
       role="complementary"
+      tabIndex={-1}
     >
       <div className="inspector-drawer-header">
         <div>
@@ -686,7 +689,7 @@ export function InspectorDrawer(props: {
           onClick={props.onClose}
           type="button"
         >
-          &times;
+          <IconX aria-hidden="true" size={18} stroke={1.8} />
         </button>
       </div>
       <div className="inspector-drawer-body">{props.children}</div>

@@ -20,7 +20,7 @@ export function StatusChip({ status = 'neutral', children, className = '', icon 
 
   return (
     <span className={`inline-flex items-center min-h-[26px] px-[8px] py-[4px] border border-[var(--ca-border-strong)] rounded-full font-mono text-[9px] uppercase tracking-wider ${variants[status]} ${className}`}>
-      {icon ? <span className="mr-[6px]">{icon}</span> : <span className="w-[6px] h-[6px] mr-[6px] rounded-full bg-current" />}
+      {icon ? <span aria-hidden="true" className="mr-[6px]">{icon}</span> : <span aria-hidden="true" className="w-[6px] h-[6px] mr-[6px] rounded-full bg-current" />}
       {children}
     </span>
   );
