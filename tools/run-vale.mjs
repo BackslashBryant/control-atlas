@@ -68,7 +68,18 @@ if (!(await exists(binaryPath))) {
   if (actualHash !== asset.sha256) {
     throw new Error(`Vale checksum mismatch: expected ${asset.sha256}, got ${actualHash}`);
   }
-  const extractCode = await run('tar', [...asset.tarArgs, archivePath, '-C', installDir]);
+  // Windows' bundled bsdtar both misparses an absolute drive-letter path as
+  // a remote host:path spec ("Cannot connect to D:") and lacks zip-format
+  // support, so extract the Windows zip asset with PowerShell's native
+  // Expand-Archive instead of tar.
+  const extractCode = process.platform === 'win32'
+    ? await run('powershell.exe', [
+        '-NoProfile',
+        '-NonInteractive',
+        '-Command',
+        `Expand-Archive -LiteralPath '${archivePath}' -DestinationPath '${installDir}' -Force`,
+      ])
+    : await run('tar', [...asset.tarArgs, archivePath, '-C', installDir]);
   if (extractCode !== 0 || !(await exists(binaryPath))) {
     throw new Error(`Vale archive extraction failed with exit code ${extractCode}`);
   }
