@@ -578,7 +578,7 @@ export function normalizeViewState(
       ...compareState(),
       ...incoming,
       view,
-      crosswalk: incoming.crosswalk || "intent",
+      crosswalk: incoming.crosswalk || (incoming as any).workbench || "intent",
     };
   }
 

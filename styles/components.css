@@ -1477,3 +1477,124 @@
   text-underline-offset: 3px;
 }
 
+/* ── Staged flow step indicator ── */
+.staged-flow-steps {
+  margin-bottom: var(--ca-space-4);
+  padding: var(--ca-space-3) var(--ca-space-4);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--ca-radius-sm);
+  background: var(--ca-surface-subtle);
+}
+
+.step-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-3) var(--ca-space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  color: var(--ca-text-muted);
+}
+
+.step-item.step-active {
+  color: var(--ca-text);
+}
+
+.step-item.step-complete {
+  color: var(--ca-text-secondary);
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--ca-border-strong);
+  border-radius: 999px;
+  font-family: var(--ca-font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--ca-surface);
+}
+
+.step-item.step-active .step-number {
+  border-color: var(--ca-primary);
+  background: var(--ca-primary);
+  color: var(--ca-on-primary);
+}
+
+.step-item.step-complete .step-number {
+  border-color: var(--ca-secondary);
+  background: color-mix(in srgb, var(--ca-secondary) 20%, transparent);
+  color: var(--ca-secondary);
+}
+
+.step-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.step-label {
+  font-size: var(--ca-text-sm);
+}
+
+.step-description {
+  font-size: 0.7rem;
+  color: var(--ca-text-muted);
+}
+
+/* ── Aggregated mapping table items ── */
+.target-mapping-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.target-mapping-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--ca-space-1) 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--ca-border) 40%, transparent);
+}
+
+.target-mapping-item:last-child {
+  border-bottom: none;
+}
+
+.target-mapping-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ca-space-2);
+}
+
+.target-mapping-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--ca-radius-sm);
+  font-size: 0.7rem;
+  font-family: var(--ca-font-mono);
+  background: color-mix(in srgb, var(--ca-primary) 12%, transparent);
+  color: var(--ca-primary);
+}
+
+.target-item-title {
+  font-size: 0.8rem;
+  color: var(--ca-text-muted);
+}
+
+

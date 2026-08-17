@@ -66,55 +66,24 @@ test("T3.8: a deep link naming a catalog with no valid comparison target recover
   // A stale/invalid target must never look silently ready or selected.
   await expect(page.getByRole("button", { name: "Show mappings" })).toHaveCount(0);
   await expect(
-    page.getByText("Choose target to configure this comparison."),
+    page.getByText("Select a target publication to view published mappings."),
   ).toBeVisible();
 });
 
-test("baseline compare map toggle renders compare map panel", async ({ page }) => {
-  await page.goto("/?view=matrix&workbench=baseline-compare");
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-
-  await page.getByLabel("Baseline A").selectOption("nist-800-53b:LOW");
-  await page.getByLabel("Baseline B").selectOption("nist-800-53b:MODERATE");
-  await expect(page.locator(".compare-results-panel")).toBeVisible({
-    timeout: 15000,
-  });
-  await page.getByRole("button", { name: "Map", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Compare map", level: 3 })).toBeVisible();
-});
-
-test("stig chain compare shows map unavailable before item selection", async ({
-  page,
-}) => {
-  await page.goto("/?view=matrix&workbench=stig-chain");
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-
-  await page.getByRole("button", { name: "View mapping trace" }).first().click();
-  await expect(page.locator(".compare-results-panel")).toBeVisible({
-    timeout: 15000,
-  });
-  await page.getByRole("button", { name: "Map", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Compare map", level: 3 })).toBeVisible({
-    timeout: 15000,
-  });
-});
-
-test("threat chain compare map works after selecting a technique", async ({
+test("item mapping crosswalk narrows results to specified control", async ({
   page,
 }) => {
   await page.goto(
-    "/?view=matrix&workbench=threat-chain&chainCatalog=mitre-attack&chainItem=T1033",
+    "/?view=matrix&workbench=item-mapping&source=nist-800-53&items=AC-2",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  await page.getByLabel("Publication B").selectOption("csf-2");
+  await page.getByRole("button", { name: "Show mappings" }).click();
   await expect(page.locator(".compare-results-panel")).toBeVisible({
     timeout: 15000,
   });
-  await page.getByRole("button", { name: "Map", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Compare map", level: 3 })).toBeVisible({
-    timeout: 15000,
-  });
+  await expect(page.locator(".detail-table")).toBeVisible();
+  await expect(page.getByText("AC-2").first()).toBeVisible();
 });

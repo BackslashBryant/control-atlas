@@ -623,9 +623,49 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       },
     };
   };
-  const stigCatalogNodes = (chainCatalog, chainBenchmark) => {
+  const aggregateRelationshipRows = (rows = []) => {
+    const map = new Map();
+    for (const row of rows) {
+      const key = row.from_id || row.from_item_id;
+      if (!map.has(key)) {
+        map.set(key, {
+          from_id: row.from_id,
+          from_item_id: row.from_item_id,
+          from_title: row.from_title,
+          from_catalog_id: row.from_catalog_id,
+          from_taxonomy_tags: row.from_taxonomy_tags || [],
+          targets: [],
+        });
+      }
+      const group = map.get(key);
+      group.targets.push({
+        edge_id: row.edge_id,
+        to_id: row.to_id,
+        to_item_id: row.to_item_id,
+        to_title: row.to_title,
+        to_catalog_id: row.to_catalog_id,
+        to_taxonomy_tags: row.to_taxonomy_tags || [],
+        relationship_type: row.relationship_type,
+        provenance_class: row.provenance_class,
+        confidence: row.confidence,
+        publication_status: row.publication_status,
+        rationale: row.rationale || "",
+        navigation_note: row.navigation_note || "",
+        warning: row.warning || "",
+        inference_rule_id: row.inference_rule_id || "",
+        source_refs: row.source_refs || [],
+      });
+    }
+    return [...map.values()];
+  };
+  const stigCatalogNodes = (chainCatalog = "disa-stig", chainBenchmark) => {
+    const catalogId = chainCatalog || "disa-stig";
     return dataset.nodes
-      .filter((node) => node.metadata?.catalog_id === chainCatalog)
+      .filter(
+        (node) =>
+          node.metadata?.catalog_id === catalogId &&
+          (node.node_type === "stig_rule" || node.node_type === "rule"),
+      )
       .filter(
         (node) =>
           !chainBenchmark ||
@@ -1364,7 +1404,26 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     buildRelationshipRows(request = {}) {
       return visibleRelationshipRows(request);
     },
+    aggregateRelationshipRows(rows) {
+      return aggregateRelationshipRows(rows);
+    },
+    buildAggregatedRelationshipRows(request = {}) {
+      const flat = visibleRelationshipRows(request);
+      const aggregated = aggregateRelationshipRows(flat.rows);
+      return {
+        request,
+        rows: aggregated,
+        flat_rows: flat.rows,
+        summary: {
+          ...flat.summary,
+          source_record_count: aggregated.length,
+        },
+      };
+    },
     exportRelationshipRows(rows, format = "csv") {
+      if (rows.length > 0 && rows[0]?.targets) {
+        return this.exportAggregatedRelationshipRows(rows, format);
+      }
       if (format === "json") return exportJson(rows);
       if (format === "markdown") {
         return exportMarkdownTable(
@@ -1424,12 +1483,69 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       }
       return csvRows.map((row) => row.map(csvCell).join(",")).join("\n");
     },
+    exportAggregatedRelationshipRows(aggregatedRows, format = "csv") {
+      if (format === "json") return exportJson(aggregatedRows);
+      if (format === "markdown") {
+        return exportMarkdownTable(
+          [
+            "From ID",
+            "From Title",
+            "Mapped Target IDs",
+            "Mapped Target Titles",
+            "Connection Types",
+            "Source Bases",
+            "Confidence Levels",
+            "Source References",
+          ],
+          aggregatedRows.map((row) => [
+            row.from_item_id,
+            row.from_title,
+            row.targets.map((t) => t.to_item_id).join("; "),
+            row.targets.map((t) => t.to_title).join("; "),
+            [...new Set(row.targets.map((t) => t.relationship_type))].join("; "),
+            [...new Set(row.targets.map((t) => t.provenance_class))].join("; "),
+            [...new Set(row.targets.map((t) => t.confidence))].join("; "),
+            [...new Set(row.targets.flatMap((t) => (t.source_refs || []).map(sourceRefLabel)))].join("; "),
+          ]),
+        );
+      }
+      const csvRows = [
+        [
+          "From ID",
+          "From Title",
+          "Mapped Target IDs",
+          "Mapped Target Titles",
+          "Connection Types",
+          "Source Bases",
+          "Confidence Levels",
+          "Source References",
+        ],
+      ];
+      for (const row of aggregatedRows) {
+        csvRows.push([
+          row.from_item_id,
+          row.from_title,
+          row.targets.map((t) => t.to_item_id).join(" | "),
+          row.targets.map((t) => t.to_title).join(" | "),
+          [...new Set(row.targets.map((t) => t.relationship_type))].join(" | "),
+          [...new Set(row.targets.map((t) => t.provenance_class))].join(" | "),
+          [...new Set(row.targets.map((t) => t.confidence))].join(" | "),
+          [...new Set(row.targets.flatMap((t) => (t.source_refs || []).map(sourceRefLabel)))].join(" | "),
+        ]);
+      }
+      return csvRows.map((row) => row.map(csvCell).join(",")).join("\n");
+    },
     buildStigChain(request = {}) {
       const includeCandidates = request.include_candidates || false;
-      const rows = stigCatalogNodes(
+      const allNodes = stigCatalogNodes(
         request.chain_catalog,
         request.chain_benchmark,
-      ).map((node) => {
+      );
+      const targetNodes =
+        !request.chain_benchmark && allNodes.length > 100
+          ? allNodes.slice(0, 100)
+          : allNodes;
+      const rows = targetNodes.map((node) => {
         const detail = buildChainDetail(node, includeCandidates);
         return {
           node_id: node.id,
@@ -1447,7 +1563,11 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       });
       const selectedNode = request.chain_item
         ? nodeById.get(request.chain_item) ||
-          rows.find((row) => row.item_id === request.chain_item)
+          allNodes.find(
+            (node) =>
+              itemIdFor(node) === request.chain_item ||
+              node.id === request.chain_item,
+          )
         : null;
       const selectedChainNode = selectedNode
         ? nodeById.get(selectedNode.id || selectedNode.node_id)
@@ -1455,6 +1575,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       return {
         request,
         rows,
+        total_benchmark_records: allNodes.length,
         selected_chain: selectedChainNode
           ? buildChainDetail(selectedChainNode, includeCandidates)
           : null,
@@ -2101,3 +2222,40 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
 export function getFederalContext(runtime, nodeId) {
   return runtime.getFederalContext(nodeId);
 }
+
+export function aggregateRelationshipRows(rows = []) {
+  const map = new Map();
+  for (const row of rows) {
+    const key = row.from_id || row.from_item_id;
+    if (!map.has(key)) {
+      map.set(key, {
+        from_id: row.from_id,
+        from_item_id: row.from_item_id,
+        from_title: row.from_title,
+        from_catalog_id: row.from_catalog_id,
+        from_taxonomy_tags: row.from_taxonomy_tags || [],
+        targets: [],
+      });
+    }
+    const group = map.get(key);
+    group.targets.push({
+      edge_id: row.edge_id,
+      to_id: row.to_id,
+      to_item_id: row.to_item_id,
+      to_title: row.to_title,
+      to_catalog_id: row.to_catalog_id,
+      to_taxonomy_tags: row.to_taxonomy_tags || [],
+      relationship_type: row.relationship_type,
+      provenance_class: row.provenance_class,
+      confidence: row.confidence,
+      publication_status: row.publication_status,
+      rationale: row.rationale || "",
+      navigation_note: row.navigation_note || "",
+      warning: row.warning || "",
+      inference_rule_id: row.inference_rule_id || "",
+      source_refs: row.source_refs || [],
+    });
+  }
+  return [...map.values()];
+}
+

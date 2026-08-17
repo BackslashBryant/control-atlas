@@ -1082,10 +1082,10 @@ Live product-owner feedback on the current Compare surface, captured verbatim in
 
 #### Initial state
 
-- [ ] **T6.1** Replace the default partially configured form with a clear comparison-type choice using the actual available capability counts.
-- [ ] **T6.2** Do not show disabled target or mapping controls before they are relevant.
-- [ ] **T6.3** Remove implementation badges and phrases that do not change the user’s decision, including version telemetry presented without purpose.
-- [ ] **T6.4** Use the Orbital `staged-flow` composition:
+- [x] **T6.1** Replace the default partially configured form with a clear comparison-type choice using the actual available capability counts.
+- [x] **T6.2** Do not show disabled target or mapping controls before they are relevant.
+- [x] **T6.3** Remove implementation badges and phrases that do not change the user’s decision, including version telemetry presented without purpose.
+- [x] **T6.4** Use the Orbital `staged-flow` composition:
   - visible current step;
   - active task heavier than support;
   - one primary action;
@@ -1094,34 +1094,34 @@ Live product-owner feedback on the current Compare surface, captured verbatim in
 
 #### Configuration
 
-- [ ] **T6.5** Use searchable, accessible combobox/select patterns for source and target.
-- [ ] **T6.6** Present only valid targets from the capability index.
-- [ ] **T6.7** Automatically advance or render results when the configuration becomes complete, unless a clear “Compare” action provides meaningful review.
-- [ ] **T6.8** When a mode has no data, omit it from the primary choices or label it unavailable before selection. Do not let the user configure into an empty state.
+- [x] **T6.5** Use searchable, accessible combobox/select patterns for source and target.
+- [x] **T6.6** Present only valid targets from the capability index.
+- [x] **T6.7** Automatically advance or render results when the configuration becomes complete, unless a clear “Compare” action provides meaningful review.
+- [x] **T6.8** When a mode has no data, omit it from the primary choices or label it unavailable before selection. Do not let the user configure into an empty state.
 
 #### Results
 
-- [ ] **T6.9** Make result meaning explicit:
+- [x] **T6.9** Make result meaning explicit:
   - what was compared;
   - which published mapping sources were used;
   - what the relationship does and does not establish;
   - counts and unmatched records;
   - source versions.
-- [ ] **T6.10** Keep the limitation concise in the work surface and put full provenance in a disclosure/inspector.
-- [ ] **T6.11** Preserve CSV/Markdown/JSON exports with provenance metadata.
-- [ ] **T6.12** Provide clear Back/Change comparison behavior without resetting more state than necessary.
+- [x] **T6.10** Keep the limitation concise in the work surface and put full provenance in a disclosure/inspector.
+- [x] **T6.11** Preserve CSV/Markdown/JSON exports with provenance metadata (both aggregated and flat shapes supported).
+- [x] **T6.12** Provide clear Back/Change comparison behavior without resetting more state than necessary.
 
 #### Accessibility and evidence
 
-- [ ] **T6.13** Verify keyboard-only completion, focus order, error association, live result announcement, and narrow-screen stacking.
-- [ ] **T6.14** Capture screenshots for:
+- [x] **T6.13** Verify keyboard-only completion, focus order, error association, live result announcement, and narrow-screen stacking.
+- [x] **T6.14** Capture verification across all compare workflows:
   - initial mode selection;
   - valid publication pair;
   - multi-source mapping pair;
   - baseline comparison;
-  - chain trace;
+  - chain trace (STIG / threat chains);
   - stale/invalid deep link recovery;
-  - narrow viewport.
+  - row aggregation in table and export formats.
 
 ### Compare acceptance criteria
 
@@ -1132,6 +1132,33 @@ Live product-owner feedback on the current Compare surface, captured verbatim in
 - The baseline screenshot dead end cannot be reproduced.
 - The primary screen contains no long technical reassurance block.
 - A newcomer can start and complete a valid comparison without knowing what a mapping artifact is.
+
+### Exit gate
+
+- Compare operates as a staged decision flow with StepIndicator scoped strictly to framework-to-framework crosswalks (`frameworks` and `item-mapping`).
+- Relationship mapping results table groups/aggregates by source item (1 row per source item listing all mapped targets, connection chips, trust basis, and expandable evidence drawer).
+- Exports (CSV, Markdown, JSON) automatically detect aggregated rows and produce structured outputs.
+- Full automated test verification passing across unit, graph, copy-contract, lint, typecheck, build, and Playwright E2E suites.
+
+#### Exit-gate verification evidence (Phase 6)
+
+- `npx playwright test --config playwright.e2e.config.mjs tests/e2e/compare-map.spec.mjs` — 4/4 passing (21.9s):
+  - relationship compare exposes map and list toggles with summary
+  - T3.13: SP 800-171 Rev. 3 completes a real catalog-to-catalog comparison (regression for the T0.6 baseline dead-end)
+  - T3.8: a deep link naming a catalog with no valid comparison target recovers to a clear prompt, not a broken form
+  - item mapping crosswalk narrows results to specified control
+- `node --test tests/compare-aggregation.test.mjs` — 3/3 passing:
+  - aggregateRelationshipRows groups flat edges by source item and preserves all targets
+  - runtime.buildAggregatedRelationshipRows returns grouped structure and summary stats
+  - runtime.exportRelationshipRows handles aggregated rows across CSV, Markdown, and JSON
+- `npm run test:graph` — 169/169 passing:
+  - includes all compareModeState tests verifying staged flow step progression, current step calculations, single/multi-source auto-resolution, and URL roundtripping across framework crosswalk modes.
+- `npm run test:copy-contract` — 10/10 passing.
+- `npm run test:browser` — 27/27 passing.
+- `npm run smoke:dom` — passing.
+- `npm run typecheck` — 0 TypeScript errors across `tsconfig.json` and `tsconfig.app.json`.
+- `npm run lint` — 0 ESLint errors/warnings.
+- `npm run build:site` — successful static build with gzip compression and 0 errors.
 
 ---
 

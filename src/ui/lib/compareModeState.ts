@@ -2,10 +2,7 @@ import type { CompareCrosswalk, ViewState } from "./viewState";
 
 export type CompareModeId =
   | "frameworks"
-  | "item-mapping"
-  | "stig-chain"
-  | "threat-chain"
-  | "baseline-compare";
+  | "item-mapping";
 
 type CompareState = Extract<ViewState, { view: "matrix" }>;
 
@@ -27,30 +24,60 @@ export const COMPARE_MODES = Object.freeze([
     crosswalk: "relationships",
     required: ["source", "items"],
   },
-  {
-    id: "stig-chain",
-    label: "STIG / SRG chain",
-    crosswalk: "stig-chain",
-    required: ["chainItem"],
-  },
-  {
-    id: "threat-chain",
-    label: "Threat chain",
-    crosswalk: "threat-chain",
-    required: ["chainItem"],
-  },
-  {
-    id: "baseline-compare",
-    label: "Baseline comparison",
-    crosswalk: "baseline-compare",
-    required: ["baselineA", "baselineB"],
-  },
 ] as const);
+
+export type CompareStep = {
+  id: string;
+  label: string;
+  description?: string;
+};
+
+export const COMPARE_MODE_STEPS: Record<CompareModeId, readonly CompareStep[]> = {
+  frameworks: [
+    { id: "source", label: "Publication A", description: "Choose primary framework" },
+    { id: "target", label: "Publication B", description: "Choose target framework" },
+    { id: "mapping", label: "Mapping source", description: "Select evidence source" },
+    { id: "results", label: "Results", description: "Review comparison" },
+  ],
+  "item-mapping": [
+    { id: "source", label: "Publication", description: "Choose framework" },
+    { id: "item", label: "Control or rule", description: "Specify item ID" },
+    { id: "target", label: "Target / Scope", description: "Select comparison target" },
+    { id: "results", label: "Results", description: "Review mappings" },
+  ],
+};
+
+export function getCompareSteps(modeId: CompareModeId): readonly CompareStep[] {
+  return COMPARE_MODE_STEPS[modeId] || [];
+}
+
+export function getCompareCurrentStep(
+  modeId: CompareModeId,
+  state: CompareState,
+): number {
+  switch (modeId) {
+    case "frameworks":
+      if (state.compareRun === "true" && state.source && state.target) return 4;
+      if (state.target) return 3;
+      if (state.source) return 2;
+      return 1;
+    case "item-mapping":
+      if (state.compareRun === "true" && state.source && state.items) return 4;
+      if (state.items) return 3;
+      if (state.source) return 2;
+      return 1;
+    default:
+      return 1;
+  }
+}
 
 export function compareModeForState(state: CompareState) {
   return (
     COMPARE_MODES.find((mode) => mode.id === state.intent) ||
     COMPARE_MODES.find((mode) => mode.crosswalk === state.crosswalk) ||
+    COMPARE_MODES.find((mode) => mode.crosswalk === (state as any).workbench) ||
+    COMPARE_MODES.find((mode) => mode.id === (state as any).workbench) ||
+    (state.source || state.target ? COMPARE_MODES.find((mode) => mode.id === "frameworks") : null) ||
     null
   );
 }
@@ -123,12 +150,6 @@ export function nextMissingCompareInput(
     if (resolution.status === "invalid") {
       return "a valid published mapping source";
     }
-  }
-  if (
-    mode.id === "baseline-compare" &&
-    state.baselineA === state.baselineB
-  ) {
-    return "a different second baseline";
   }
   return "";
 }
