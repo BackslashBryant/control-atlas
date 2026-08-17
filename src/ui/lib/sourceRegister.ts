@@ -74,6 +74,7 @@ export type SourceMaterialItem = {
   role: "primary" | "enrichment" | "reference" | "supplemental";
   provenance: string;
   isCommunity: boolean;
+  isHistorical: boolean;
 };
 
 export type ConnectionEvidenceItem = {
@@ -110,6 +111,7 @@ export type SourceRegisterRow = {
 
 export type PublicationRegisterRow = SourceRegisterRow & {
   familyName: string;
+  officialTitle: string;
   catalogId: string | null;
   catalogCounts: { discovered_records: number; normalized_records: number } | null;
   coverageSummary: string;
@@ -373,6 +375,9 @@ function resolveSourceMaterialItems(
       const isCommunity =
         source.metadata?.identity_kind === "reference" ||
         /community|open source|unofficial/i.test(source.owner || "");
+      const isHistorical =
+        source.metadata?.supplemental_role === "historical" ||
+        source.lifecycle_status === "historical";
       return {
         id: source.id,
         displayTitle,
@@ -394,6 +399,7 @@ function resolveSourceMaterialItems(
         role,
         provenance: source.provenance_class || "",
         isCommunity,
+        isHistorical,
       };
     })
     .filter((item): item is SourceMaterialItem => item !== null)
@@ -589,6 +595,10 @@ export function buildPublicationRegister(
       id: identity.id,
       layer: "publication",
       displayTitle: identity.name || sourceTitle(source, null),
+      officialTitle:
+        (isRecordedString(source.name) ? source.name.trim() : null) ||
+        identity.name ||
+        sourceTitle(source, null),
       familyName: identityPresentation.familyName,
       publicationSourceId: null,
       publisher,

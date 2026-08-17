@@ -126,17 +126,21 @@ function PublicationInspector(props: {
 }) {
   const { publication, onClose } = props;
   const isAuthority = publication.id.startsWith("authority-");
-  const supplementalCount =
-    publication.sourceMaterials.enrichment.length +
-    publication.sourceMaterials.supplemental.length;
+  const allSupplemental = [
+    ...publication.sourceMaterials.enrichment,
+    ...publication.sourceMaterials.supplemental,
+  ];
+  const historicalItems = allSupplemental.filter((item) => item.isHistorical);
+  const supplementalItems = allSupplemental.filter((item) => !item.isHistorical);
+  const supplementalCount = supplementalItems.length;
 
   return (
     <InspectorDrawer
-      ariaLabel={`Details for ${publication.displayTitle}`}
+      ariaLabel={`Details for ${publication.officialTitle}`}
       eyebrow="Publication detail"
       isOpen={true}
       onClose={onClose}
-      title={publication.displayTitle}
+      title={publication.officialTitle}
     >
       <div className="source-inspector-content">
         {publication.familyName ? (
@@ -152,106 +156,108 @@ function PublicationInspector(props: {
           <CopyStableSourceId id={publication.id} />
         </div>
 
-        <dl className="source-detail-grid">
-          <div>
-            <dt>Publisher</dt>
-            <dd>
-              <strong>{publication.publisher.value || "Publisher not recorded"}</strong>
-            </dd>
-          </div>
+        <article aria-label="Source status summary">
+          <dl className="source-detail-grid">
+            <div>
+              <dt>Publisher</dt>
+              <dd>
+                <strong>{publication.publisher.value || "Publisher not recorded"}</strong>
+              </dd>
+            </div>
 
-          <div>
-            <dt>Official publication</dt>
-            <dd>
-              {publication.officialLink ? (
-                <a
-                  className="external-link-inline"
-                  href={publication.officialLink}
-                  rel="noopener noreferrer"
-                  target="_blank"
+            <div>
+              <dt>Official publication</dt>
+              <dd>
+                {publication.officialLink ? (
+                  <a
+                    className="external-link-inline"
+                    href={publication.officialLink}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <span>Official landing / catalog page</span>
+                    <IconExternalLink aria-hidden="true" size={14} />
+                  </a>
+                ) : (
+                  <span className="ca-source-field--missing">Link not recorded</span>
+                )}
+              </dd>
+            </div>
+
+            <div>
+              <dt>Publisher version</dt>
+              <dd>
+                {publication.version.value || (
+                  <span className={`ca-source-field--${publication.version.state}`}>
+                    {publication.version.state === "not_applicable"
+                      ? "Not applicable"
+                      : "Not published"}
+                  </span>
+                )}
+              </dd>
+            </div>
+
+            <div>
+              <dt>Source last checked</dt>
+              <dd>
+                {publication.verifiedAt.value ? (
+                  <time dateTime={publication.verifiedAt.value}>
+                    {publication.verifiedAt.value}
+                  </time>
+                ) : (
+                  <span className="ca-source-field--missing">Not checked</span>
+                )}
+              </dd>
+            </div>
+
+            <div>
+              <dt>Lifecycle status</dt>
+              <dd>
+                <Badge
+                  tone={
+                    publication.lifecycle.value === "active"
+                      ? "success"
+                      : "warning"
+                  }
                 >
-                  <span>Official landing / catalog page</span>
-                  <IconExternalLink aria-hidden="true" size={14} />
-                </a>
-              ) : (
-                <span className="ca-source-field--missing">Link not recorded</span>
-              )}
-            </dd>
-          </div>
-
-          <div>
-            <dt>Publisher version</dt>
-            <dd>
-              {publication.version.value || (
-                <span className={`ca-source-field--${publication.version.state}`}>
-                  {publication.version.state === "not_applicable"
-                    ? "Not applicable"
-                    : "Not published"}
-                </span>
-              )}
-            </dd>
-          </div>
-
-          <div>
-            <dt>Source last checked</dt>
-            <dd>
-              {publication.verifiedAt.value ? (
-                <time dateTime={publication.verifiedAt.value}>
-                  {publication.verifiedAt.value}
-                </time>
-              ) : (
-                <span className="ca-source-field--missing">Not checked</span>
-              )}
-            </dd>
-          </div>
-
-          <div>
-            <dt>Lifecycle status</dt>
-            <dd>
-              <Badge
-                tone={
-                  publication.lifecycle.value === "active"
-                    ? "success"
-                    : "warning"
-                }
-              >
-                {displayNameFor("lifecycle_status", publication.lifecycle.value || "")}
-              </Badge>
-            </dd>
-          </div>
-
-          {publication.reviews.map((review) => (
-            <div key={review.catalogId}>
-              <dt>
-                {publication.reviews.length > 1
-                  ? `${review.publicationName} review`
-                  : "Publication currentness review"}
-              </dt>
-              <dd>
-                {displayNameFor(
-                  "source_currentness_review",
-                  review.upstreamCurrentnessReview,
-                )} · Reviewed{" "}
-                <time dateTime={review.reviewedAt}>{review.reviewedAt}</time>
+                  {displayNameFor("lifecycle_status", publication.lifecycle.value || "")}
+                </Badge>
               </dd>
             </div>
-          ))}
 
-          {publication.catalogCounts ? (
-            <div>
-              <dt>Catalog profile coverage</dt>
-              <dd>
-                {publication.catalogCounts.normalized_records.toLocaleString()}{" "}
-                normalized records indexed in Search & Explore
-              </dd>
-            </div>
-          ) : isAuthority ? (
-            <div>
-              <dt>Authority citation</dt>
-              <dd>Statutory / regulatory reference document</dd>
-            </div>
-          ) : null}
-        </dl>
+            {publication.reviews.map((review) => (
+              <div key={review.catalogId}>
+                <dt>
+                  {publication.reviews.length > 1
+                    ? `${review.publicationName} review`
+                    : "Publication currentness review"}
+                </dt>
+                <dd>
+                  {displayNameFor(
+                    "source_currentness_review",
+                    review.upstreamCurrentnessReview,
+                  )} · Reviewed{" "}
+                  <time dateTime={review.reviewedAt}>{review.reviewedAt}</time>
+                </dd>
+              </div>
+            ))}
+
+            {publication.catalogCounts ? (
+              <div>
+                <dt>Catalog profile coverage</dt>
+                <dd>
+                  {publication.catalogCounts.normalized_records.toLocaleString()}{" "}
+                  normalized records indexed in Search & Explore
+                </dd>
+              </div>
+            ) : isAuthority ? (
+              <div>
+                <dt>Authority citation</dt>
+                <dd>Statutory / regulatory reference document</dd>
+              </div>
+            ) : null}
+          </dl>
+        </article>
 
         {publication.sourceMaterials.primary.length > 0 ? (
           <section className="source-inspector-section">
@@ -269,6 +275,9 @@ function PublicationInspector(props: {
                     <span className="format-badge">
                       {displayNameFor("format", item.format)}
                     </span>
+                    {item.isCommunity ? (
+                      <span className="support-badge">Community source</span>
+                    ) : null}
                   </div>
                   <div className="source-material-meta">
                     {item.retrievedAt ? (
@@ -301,10 +310,7 @@ function PublicationInspector(props: {
               Supplemental & enrichment documents ({supplementalCount})
             </h3>
             <ul className="source-material-list">
-              {[
-                ...publication.sourceMaterials.enrichment,
-                ...publication.sourceMaterials.supplemental,
-              ].map((item) => (
+              {supplementalItems.map((item) => (
                 <li className="source-material-item" key={item.id}>
                   <div className="source-material-header">
                     <IconFileText aria-hidden="true" size={16} />
@@ -314,6 +320,52 @@ function PublicationInspector(props: {
                     <span className="format-badge">
                       {displayNameFor("format", item.format)}
                     </span>
+                    {item.isCommunity ? (
+                      <span className="support-badge">Community source</span>
+                    ) : null}
+                  </div>
+                  <div className="source-material-meta">
+                    {item.retrievedAt ? (
+                      <span>Retrieved {item.retrievedAt}</span>
+                    ) : null}
+                  </div>
+                  {item.url ? (
+                    <a
+                      className="source-material-link"
+                      href={item.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span>Open document</span>
+                      <IconExternalLink aria-hidden="true" size={14} />
+                    </a>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        {historicalItems.length > 0 ? (
+          <section className="source-inspector-section">
+            <h3>
+              Historical material ({historicalItems.length})
+            </h3>
+            <ul className="source-material-list">
+              {historicalItems.map((item) => (
+                <li className="source-material-item" key={item.id}>
+                  <div className="source-material-header">
+                    <IconFileText aria-hidden="true" size={16} />
+                    <strong className="source-material-title">
+                      {item.displayTitle}
+                    </strong>
+                    <span className="format-badge">
+                      {displayNameFor("format", item.format)}
+                    </span>
+                    <span className="support-badge">Historical, superseded</span>
+                    {item.isCommunity ? (
+                      <span className="support-badge">Community source</span>
+                    ) : null}
                   </div>
                   <div className="source-material-meta">
                     {item.retrievedAt ? (
@@ -352,6 +404,9 @@ function PublicationInspector(props: {
                       {item.displayTitle}
                     </strong>
                     <span className="support-badge">Reference only</span>
+                    {item.isCommunity ? (
+                      <span className="support-badge">Community source</span>
+                    ) : null}
                   </div>
                   {item.url ? (
                     <a
@@ -580,6 +635,21 @@ export function SourcesPage(props: {
     });
   };
 
+  const pageHeaderTitle: ReactNode = selectedPublicationRow
+    ? selectedPublicationRow.officialTitle
+    : state.source
+      ? (
+          <>
+            Source not found:{" "}
+            <span className="ca-source-not-found-id">
+              <code>{state.source}</code>
+            </span>
+          </>
+        )
+      : SITE_COPY.routes.sources.title;
+  const pageHeaderEyebrow =
+    selectedPublicationRow || state.source ? SITE_COPY.routes.sources.title : undefined;
+
   return (
     <Panel
       className="sources-page"
@@ -587,9 +657,10 @@ export function SourcesPage(props: {
       overflow="visible"
     >
       <PageHeader
+        eyebrow={pageHeaderEyebrow}
         primary
         summary={SITE_COPY.routes.sources.purpose}
-        title={SITE_COPY.routes.sources.title}
+        title={pageHeaderTitle}
       />
 
       <WorkbenchControlSurface
@@ -673,7 +744,6 @@ export function SourcesPage(props: {
       {state.source && !selectedPublicationRow ? (
         <div className="source-not-found-banner" role="alert">
           <div>
-            <strong>Source not found</strong>
             <p>
               Requested source ID <code>{state.source}</code> is not in the
               public publication register.
