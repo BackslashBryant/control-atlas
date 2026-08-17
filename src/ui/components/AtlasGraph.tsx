@@ -245,7 +245,7 @@ export function AtlasGraph({
           <h2 id="atlas-network-title">{projection.label}</h2>
           <p>{projection.description}</p>
           <p className="atlas-network-measure">
-            {projection.nodes.length.toLocaleString()} visible landmarks represent {projection.representedCanonicalNodeCount.toLocaleString()} canonical records and {publishedRelationships.toLocaleString()} published relationships.
+            {projection.nodes.length.toLocaleString()} visible landmarks represent {projection.representedCanonicalNodeCount.toLocaleString()} published records and {publishedRelationships.toLocaleString()} relationships.
           </p>
         </div>
         <div className="atlas-network-controls">
@@ -292,7 +292,7 @@ export function AtlasGraph({
           <aside className="atlas-network-tooltip" data-testid="atlas-network-tooltip">
             <strong>{focusedNode.label}</strong>
             <span>{roleLabel(focusedNode)}</span>
-            <span>{focusedNode.canonicalRecordCount.toLocaleString()} canonical records</span>
+            <span>{focusedNode.canonicalRecordCount.toLocaleString()} records</span>
             {focusedNode.internalRelationshipCount ? <span>{focusedNode.internalRelationshipCount.toLocaleString()} internal published relationships</span> : null}
             {focusedNode.drill ? <span>Open to continue</span> : null}
           </aside>

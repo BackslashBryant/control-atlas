@@ -47,6 +47,7 @@ import { createFederalGraphRuntime } from "../src/app/runtime.mjs";
 import { validateAuthoritySpine } from "../src/app/authority-spine.mjs";
 import { referencedNistFamilies } from "../src/shared/nist-families.mjs";
 import { sourceNativeIdentityCategory } from "../src/shared/record-identity.mjs";
+import { isComparisonCapableEdge } from "../src/shared/compare-capability.mjs";
 import {
   missingRequiredRecordFields,
   recordPresentationProfile,
@@ -61,9 +62,19 @@ import { TAXONOMY_CONTRACT } from "../src/shared/taxonomy-contract.mjs";
 import { taxonomyTagsForRecord } from "../src/shared/record-taxonomy.mjs";
 import {
   publisherStructureMembershipForEdge,
+  resolveAtlasStructureRole,
+  resolveNativeType,
+  resolveObjectLayer,
+  resolvePublicationId,
   sourceRecordEnvelopeForNode,
+  validateCanonicalLayerAssignment,
+  validateConnectionEvidenceIsolation,
+  validateRelationshipEvidenceAttachment,
+  validateNativeTypeAssignment,
+  validatePublicationIdAssignment,
   validatePublisherStructureMembership,
   validateSourceFragment,
+  validateSourceMaterialIdAssignment,
   validateSourceRecordEnvelope,
 } from "../src/shared/data-trust-contracts.mjs";
 
@@ -112,6 +123,8 @@ const GOVERNANCE_FILES = [
   "ingestion-stage-ledger.json",
   "resource-ingestion-ledger.json",
   "catalog-source-inventory.json",
+  "publication-identity-index.json",
+  "publication-audit-report.json",
 ];
 const ATLAS_NEIGHBORHOOD_DIR = join(GENERATED, "atlas-neighborhood");
 
@@ -787,6 +800,16 @@ function attachNodeProvenance(node, sourceId, registry) {
       snapshot_date: source?.retrieved_at || "2026-08-05",
     },
   ];
+  // Phase 1 canonical layer contract (src/shared/data-trust-contracts.mjs):
+  // every node gets its objectLayer/atlasStructureRole/nativeType/publicationId
+  // stamped here, the single choke point every node construction path runs
+  // through, so no path can ship a node the contract hasn't classified.
+  node.metadata.object_layer = resolveObjectLayer(node);
+  const structureRole = resolveAtlasStructureRole(node);
+  if (structureRole) node.metadata.atlas_structure_role = structureRole;
+  node.metadata.native_type = resolveNativeType(node);
+  node.metadata.publication_id = resolvePublicationId(node);
+  node.source_material_id = primaryArtifactId;
   return node;
 }
 
@@ -2140,12 +2163,33 @@ export function validateDataTrustContracts(nodes, edges) {
         failures.push(`${node.id}: SourceFragment ${failure}`);
       }
     }
+    for (const failure of validateCanonicalLayerAssignment(node)) {
+      failures.push(`${node.id}: CanonicalLayer ${failure}`);
+    }
+    for (const failure of validateNativeTypeAssignment(node)) {
+      failures.push(`${node.id}: NativeType ${failure}`);
+    }
+    for (const failure of validatePublicationIdAssignment(node)) {
+      failures.push(`${node.id}: PublicationId ${failure}`);
+    }
+    for (const failure of validateSourceMaterialIdAssignment(node)) {
+      failures.push(`${node.id}: SourceMaterialId ${failure}`);
+    }
   }
+  const nodeIds = new Set(nodesById.keys());
+  const edgeIds = new Set(edges.map((edge) => edge.id));
   for (const edge of edges) {
-    if (edge.relationship_class !== RELATIONSHIP_CLASSES.structural) continue;
-    const membership = publisherStructureMembershipForEdge(edge, nodesById);
-    for (const failure of validatePublisherStructureMembership(membership)) {
-      failures.push(`${edge.id}: PublisherStructureMembership ${failure}`);
+    if (edge.relationship_class === RELATIONSHIP_CLASSES.structural) {
+      const membership = publisherStructureMembershipForEdge(edge, nodesById);
+      for (const failure of validatePublisherStructureMembership(membership)) {
+        failures.push(`${edge.id}: PublisherStructureMembership ${failure}`);
+      }
+    }
+    for (const failure of validateConnectionEvidenceIsolation(edge, nodeIds, edgeIds)) {
+      failures.push(`${edge.id}: ConnectionEvidence ${failure}`);
+    }
+    for (const failure of validateRelationshipEvidenceAttachment(edge)) {
+      failures.push(`${edge.id}: RelationshipEvidence ${failure}`);
     }
   }
   return failures;
@@ -3540,7 +3584,7 @@ export function buildFrameworkData() {
   }
   const mappingSourcesByPair = new Map();
   for (const edge of graph.edges) {
-    if (edge.publication_status !== "published") continue;
+    if (!isComparisonCapableEdge(edge)) continue;
     const sourceCatalog =
       nodeById.get(edge.source_node_id)?.metadata?.catalog_id || "";
     const targetCatalog =

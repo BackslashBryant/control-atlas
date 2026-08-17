@@ -1,6 +1,6 @@
 import * as Accordion from "@radix-ui/react-accordion";
 import { IconArrowRight } from "@tabler/icons-react";
-import { useId, type ElementType, type ReactNode } from "react";
+import React, { useId, type ElementType, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import {
@@ -10,7 +10,7 @@ import {
 } from "../../shared/source-freshness.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
-import { ButtonLink } from "../components/lsm/Button";
+import { Button, ButtonLink } from "../components/lsm/Button";
 import type { ViewState } from "./viewState";
 import { sourceIdentityPresentationFor } from "./sourceIdentity";
 
@@ -217,6 +217,21 @@ export function formatConfidence(value: string) {
   return displayNameFor("confidence", value);
 }
 
+function extractNodeText(node: ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node).trim();
+  }
+  if (!node || typeof node !== "object") return "";
+  if (Array.isArray(node)) {
+    return node.map(extractNodeText).join(" ").trim();
+  }
+  const candidate = node as any;
+  if (candidate && typeof candidate === "object" && candidate.props && "children" in candidate.props) {
+    return extractNodeText(candidate.props.children);
+  }
+  return "";
+}
+
 export function PageHeader(props: {
   eyebrow?: string;
   title: ReactNode;
@@ -224,17 +239,25 @@ export function PageHeader(props: {
   action?: ReactNode;
   primary?: boolean;
 }) {
-  // Orbital task header: eyebrow, precise title, one sentence of decision
-  // context, and at most one primary action aligned to the end of the row.
+  // Orbital task header: eyebrow (only when providing distinct scope, T5.10),
+  // precise title, one sentence of decision context, and at most one primary action (T5.9).
+  const titleText = extractNodeText(props.title);
+  const eyebrowText = props.eyebrow?.trim() || "";
+  const isDuplicate =
+    eyebrowText.length > 0 &&
+    titleText.length > 0 &&
+    eyebrowText.toLowerCase() === titleText.toLowerCase();
+  const showEyebrow = eyebrowText.length > 0 && !isDuplicate;
+
   return (
     <header
       className="page-header"
       data-route-primary-header={props.primary ? "true" : undefined}
     >
       <div className="page-header-title" data-route-primary-copy="true">
-        {props.eyebrow ? (
+        {showEyebrow ? (
           <span className="eyebrow page-header-eyebrow">
-            <AcronymText>{props.eyebrow}</AcronymText>
+            <AcronymText>{eyebrowText}</AcronymText>
           </span>
         ) : null}
         <h1>{typeof props.title === "string" ? <AcronymText>{props.title}</AcronymText> : props.title}</h1>
@@ -423,10 +446,6 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void; det
       <div className="result-card-header">
         <div>
           <p className="result-meta">Source</p>
-          {/* The specific name is the title. `display_name` is a family label
-              ("DISA STIG", "SP 800-53 Rev. 5") shared by many records — nine
-              sources rendered as identical "DISA STIG" cards when it was used
-              as the title, which read as duplicate records. */}
           <CardTitle onOpen={onOpen}>
             {identity.primaryName}
           </CardTitle>
@@ -498,6 +517,7 @@ export function DisclosurePanel(props: {
     </Accordion.Item>
   );
 }
+
 export function Field(props: { label: string; children: ReactNode }) {
   return (
     <label className="field">
@@ -537,5 +557,218 @@ export function SelectField(props: {
       </select>
       {props.hint ? <p className="field-hint">{props.hint}</p> : null}
     </label>
+  );
+}
+
+/**
+ * Standardized EmptyState component (T5.8).
+ */
+export function EmptyState(props: {
+  title: string;
+  message: string;
+  actionLabel?: string;
+  onAction?: () => void;
+  icon?: ReactNode;
+  tone?: "default" | "warning" | "info";
+  className?: string;
+}) {
+  return (
+    <div
+      className={`empty-state tone-${props.tone || "default"} ${props.className || ""}`.trim()}
+      role="status"
+    >
+      {props.icon ? <div aria-hidden="true" className="empty-state-icon">{props.icon}</div> : null}
+      <h3 className="empty-state-title">
+        <AcronymText>{props.title}</AcronymText>
+      </h3>
+      <p className="empty-state-message">
+        <AcronymText>{props.message}</AcronymText>
+      </p>
+      {props.actionLabel && props.onAction ? (
+        <div className="empty-state-action">
+          <Button onClick={props.onAction} variant="secondary">
+            {props.actionLabel}
+          </Button>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * Standardized Staged Flow StepIndicator (T5.8).
+ */
+export function StepIndicator(props: {
+  steps: Array<{ id: string; label: string; description?: string }>;
+  currentStep: number;
+  onSelectStep?: (stepIndex: number) => void;
+}) {
+  return (
+    <nav aria-label="Step progress" className="staged-flow-steps">
+      <ol className="step-list">
+        {props.steps.map((step, idx) => {
+          const stepNum = idx + 1;
+          const isActive = stepNum === props.currentStep;
+          const isComplete = stepNum < props.currentStep;
+          return (
+            <li
+              aria-current={isActive ? "step" : undefined}
+              className={`step-item ${isActive ? "step-active" : isComplete ? "step-complete" : "step-pending"}`}
+              key={step.id}
+            >
+              <span aria-hidden="true" className="step-number">
+                {stepNum}
+              </span>
+              <span className="step-info">
+                <strong className="step-label">{step.label}</strong>
+                {step.description ? <small className="step-description">{step.description}</small> : null}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
+
+/**
+ * Standardized FilterBar container (T5.8).
+ */
+export function FilterBar(props: {
+  children: ReactNode;
+  activeCount?: number;
+  onReset?: () => void;
+  resetLabel?: string;
+  className?: string;
+}) {
+  return (
+    <div className={`filter-bar ${props.className || ""}`.trim()} role="search">
+      <div className="filter-bar-controls">{props.children}</div>
+      {props.activeCount && props.activeCount > 0 && props.onReset ? (
+        <div className="filter-bar-actions">
+          <button className="filter-bar-reset" onClick={props.onReset} type="button">
+            {props.resetLabel || "Reset filters"}
+          </button>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * Standardized InspectorDrawer container (T5.8, T5.11).
+ */
+export function InspectorDrawer(props: {
+  isOpen: boolean;
+  onClose: () => void;
+  title: ReactNode;
+  eyebrow?: string;
+  children: ReactNode;
+  actions?: ReactNode;
+  ariaLabel?: string;
+  className?: string;
+}) {
+  if (!props.isOpen) return null;
+  return (
+    <aside
+      aria-label={props.ariaLabel || "Details inspector"}
+      className={`inspector-drawer ${props.className || ""}`.trim()}
+      role="complementary"
+    >
+      <div className="inspector-drawer-header">
+        <div>
+          {props.eyebrow ? <p className="eyebrow">{props.eyebrow}</p> : null}
+          <h2 className="inspector-drawer-title">{props.title}</h2>
+        </div>
+        <button
+          aria-label="Close inspector"
+          className="inspector-drawer-close"
+          onClick={props.onClose}
+          type="button"
+        >
+          &times;
+        </button>
+      </div>
+      <div className="inspector-drawer-body">{props.children}</div>
+      {props.actions ? <div className="inspector-drawer-actions">{props.actions}</div> : null}
+    </aside>
+  );
+}
+
+/**
+ * Standardized DataTable component (T5.8).
+ */
+export function DataTable<T>(props: {
+  columns: Array<{
+    key: string;
+    header: ReactNode;
+    className?: string;
+    render: (row: T, index: number) => ReactNode;
+  }>;
+  data: T[];
+  keyExtractor: (row: T, index: number) => string;
+  caption?: string;
+  emptyState?: ReactNode;
+  className?: string;
+}) {
+  if (props.data.length === 0 && props.emptyState) {
+    return <>{props.emptyState}</>;
+  }
+  return (
+    <div className={`data-table-container ${props.className || ""}`.trim()}>
+      <table className="data-table">
+        {props.caption ? <caption className="visually-hidden">{props.caption}</caption> : null}
+        <thead>
+          <tr>
+            {props.columns.map((col) => (
+              <th className={col.className} key={col.key} scope="col">
+                {col.header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {props.data.map((row, index) => (
+            <tr key={props.keyExtractor(row, index)}>
+              {props.columns.map((col) => (
+                <td className={col.className} key={col.key}>
+                  {col.render(row, index)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/**
+ * Standardized SourceProvenanceSummary component (T5.8).
+ */
+export function SourceProvenanceSummary(props: {
+  owner?: string;
+  version?: string;
+  lastChecked?: string;
+  provenanceClass?: string;
+  officialUrl?: string;
+  compact?: boolean;
+}) {
+  return (
+    <div className={`source-provenance-summary ${props.compact ? "compact" : ""}`}>
+      <span className="source-provenance-owner">{props.owner || "Publisher not recorded"}</span>
+      {props.version ? <span className="source-provenance-version"> · {props.version}</span> : null}
+      {props.lastChecked ? <span className="source-provenance-checked"> · Checked {props.lastChecked}</span> : null}
+      {props.officialUrl ? (
+        <a
+          className="source-provenance-link"
+          href={props.officialUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Official source
+        </a>
+      ) : null}
+    </div>
   );
 }

@@ -850,7 +850,8 @@
         "frameworks": [
           "disa-cci"
         ],
-        "parser": "community-research-register"
+        "parser": "community-research-register",
+        "identity_kind": "reference"
       }
     },
     {
@@ -919,7 +920,9 @@
             "nuwcdivnpt-github-org",
             "nuwcdivnpt-stig-manager"
           ]
-        }
+        },
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "disa-stig-library"
       }
     },
     {
@@ -960,7 +963,9 @@
             "stigviewer-catalog",
             "stigviewer-clkb-api"
           ]
-        }
+        },
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "disa-stig-library"
       }
     },
     {
@@ -998,7 +1003,9 @@
           "fallbacks": [
             "nuwcdivnpt-stig-manager"
           ]
-        }
+        },
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "disa-stig-library"
       }
     },
     {
@@ -1027,7 +1034,8 @@
         "frameworks": [
           "disa-cci"
         ],
-        "parser": "cci-xml"
+        "parser": "cci-xml",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1057,7 +1065,9 @@
           "disa-cci",
           "nist-800-53"
         ],
-        "parser": "cci-xml"
+        "parser": "cci-xml",
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "disa-cci-list"
       }
     },
     {
@@ -1177,7 +1187,8 @@
             "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Cloud_Computing_Y26M06_SRG.zip",
             "checksum": "sha256:9470b9caadd3ff44b90e608c524012fa719c9b3541b3f0bb027b38b5b9e67971"
           }
-        ]
+        ],
+        "identity_kind": "publication"
       }
     },
     {
@@ -1237,7 +1248,8 @@
             "artifact_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Traditional_Security_Checklist_V2R8.zip",
             "checksum": "sha256:7553bc92c09fdd53a32270f5b69971924725d478fb8ddf5ded430bc88f5b93b5"
           }
-        ]
+        ],
+        "identity_kind": "publication"
       }
     },
     {
@@ -1273,7 +1285,9 @@
           "tier": "gold",
           "resolved_from": "gold",
           "fallbacks": []
-        }
+        },
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "disa-stig-library"
       }
     },
     {
@@ -1303,7 +1317,8 @@
         "frameworks": [
           "cmmc-2"
         ],
-        "parser": "ecfr-xml"
+        "parser": "ecfr-xml",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1332,7 +1347,8 @@
         ],
         "parser": "dod-rai-toolkit-html",
         "version_unknown_reason": "The current publisher landing page and operational toolkit do not expose a release version.",
-        "provenance_note": "The current CDAO Responsible AI resource page links to the AI Assurance Toolkit through the CDAO-branded Tradewinds page, which identifies the AcqBot application as the operational toolkit. The publisher landing page and application locator are retained separately; the current publisher surfaces do not expose a release number."
+        "provenance_note": "The current CDAO Responsible AI resource page links to the AI Assurance Toolkit through the CDAO-branded Tradewinds page, which identifies the AcqBot application as the operational toolkit. The publisher landing page and application locator are retained separately; the current publisher surfaces do not expose a release number.",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1360,7 +1376,9 @@
           "dod-zt"
         ],
         "parser": "pdfplumber-located-lines",
-        "version_unknown_reason": "The publisher PDF does not state a release version."
+        "version_unknown_reason": "The publisher PDF does not state a release version.",
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "dod-zt-reference-architecture-v2"
       }
     },
     {
@@ -1387,7 +1405,9 @@
         "frameworks": [
           "dod-zt"
         ],
-        "parser": "pdfplumber-located-lines"
+        "parser": "pdfplumber-located-lines",
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "dod-zt-reference-architecture-v2"
       }
     },
     {
@@ -1414,8 +1434,11 @@
         "frameworks": [
           "dod-zt"
         ],
-        "parser": "pdfplumber-located-lines"
-      }
+        "parser": "pdfplumber-located-lines",
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "dod-zt-reference-architecture-v2"
+      },
+      "format": "pdf"
     },
     {
       "id": "dod-zt-operational-technology",
@@ -1441,8 +1464,11 @@
         "frameworks": [
           "dod-zt"
         ],
-        "parser": "pdfplumber-located-lines"
-      }
+        "parser": "pdfplumber-located-lines",
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "dod-zt-reference-architecture-v2"
+      },
+      "format": "pdf"
     },
     {
       "id": "dod-zt-overlays-2024",
@@ -1470,7 +1496,9 @@
         ],
         "parser": "pdfplumber-located-lines",
         "retirement_reason": "The previously published artifact URL now returns HTTP 404 and is no longer listed by DoD CIO.",
-        "successor_not_identified": true
+        "successor_not_identified": true,
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "dod-zt-reference-architecture-v2"
       }
     },
     {
@@ -1499,7 +1527,8 @@
         "frameworks": [
           "dod-zt"
         ],
-        "parser": "pdfplumber-located-lines"
+        "parser": "pdfplumber-located-lines",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1526,7 +1555,9 @@
         "frameworks": [
           "dod-zt"
         ],
-        "parser": "pdfplumber-located-lines"
+        "parser": "pdfplumber-located-lines",
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "dod-zt-reference-architecture-v2"
       }
     },
     {
@@ -1554,8 +1585,11 @@
           "dod-zt"
         ],
         "parser": "pdfplumber-located-lines",
-        "version_unknown_reason": "The publisher placemat PDF does not state a release version."
-      }
+        "version_unknown_reason": "The publisher placemat PDF does not state a release version.",
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "dod-zt-reference-architecture-v2"
+      },
+      "format": "pdf"
     },
     {
       "id": "fedramp-2026-rules",
@@ -1587,7 +1621,9 @@
         ],
         "parser": "fedramp-consolidated-rules-json",
         "schema_url": "https://raw.githubusercontent.com/FedRAMP/rules/main/schemas/fedramp-consolidated-rules.schema.json",
-        "source_repository": "https://github.com/FedRAMP/rules"
+        "source_repository": "https://github.com/FedRAMP/rules",
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "fedramp-rev5"
       }
     },
     {
@@ -1619,7 +1655,8 @@
           "nist-800-53"
         ],
         "parser": "fedramp-legacy-baseline-workbook",
-        "transition_note": "The workbook is an official legacy reference. Use the Consolidated Rules for 2026 and rule-specific effective dates for current decisions."
+        "transition_note": "The workbook is an official legacy reference. Use the Consolidated Rules for 2026 and rule-specific effective dates for current decisions.",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1649,7 +1686,8 @@
         "frameworks": [
           "cui-policy"
         ],
-        "parser": "ecfr-xml"
+        "parser": "ecfr-xml",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1676,7 +1714,8 @@
         "frameworks": [
           "microsoft-zt-maturity"
         ],
-        "parser": "zero-trust-questionnaire-xlsx"
+        "parser": "zero-trust-questionnaire-xlsx",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1703,7 +1742,8 @@
         "frameworks": [
           "mitre-attack"
         ],
-        "parser": "stix-json"
+        "parser": "stix-json",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1730,7 +1770,8 @@
         "frameworks": [
           "mitre-attack-ics"
         ],
-        "parser": "stix-json"
+        "parser": "stix-json",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1757,7 +1798,9 @@
         "frameworks": [
           "disa-cci"
         ],
-        "parser": "github-json"
+        "parser": "github-json",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "disa-cci-list"
       }
     },
     {
@@ -1786,7 +1829,9 @@
           "mitre-d3fend",
           "nist-800-53"
         ],
-        "parser": "json-ld"
+        "parser": "json-ld",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "mitre-d3fend-ontology"
       }
     },
     {
@@ -1813,7 +1858,8 @@
         "frameworks": [
           "mitre-d3fend"
         ],
-        "parser": "json-ld"
+        "parser": "json-ld",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1843,7 +1889,9 @@
         "frameworks": [
           "cui-policy"
         ],
-        "parser": "nara-cui-registry-html"
+        "parser": "nara-cui-registry-html",
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "isoo-cui-regulation"
       }
     },
     {
@@ -1903,7 +1951,9 @@
           "nist-800-53",
           "nist-800-171"
         ],
-        "parser": "oscal-json"
+        "parser": "oscal-json",
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "nist-800-171"
       }
     },
     {
@@ -1933,7 +1983,8 @@
         "frameworks": [
           "nist-800-171-rev2"
         ],
-        "parser": "csv"
+        "parser": "csv",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1960,7 +2011,8 @@
         "frameworks": [
           "nist-800-172"
         ],
-        "parser": "oscal-json"
+        "parser": "oscal-json",
+        "identity_kind": "publication"
       }
     },
     {
@@ -1989,7 +2041,8 @@
         "frameworks": [
           "nist-800-37"
         ],
-        "parser": "pdf-extract"
+        "parser": "pdf-extract",
+        "identity_kind": "publication"
       }
     },
     {
@@ -2057,7 +2110,9 @@
             "checksum": "sha256:d6307e5ca1e74863efb0c3fc086f757d431157de76c6e6e664cdf50754f3bf75",
             "purpose": "Revision 4 Appendix J privacy controls to Revision 5"
           }
-        ]
+        ],
+        "identity_kind": "mapping",
+        "canonical_publication_id": "disa-cci-list"
       }
     },
     {
@@ -2087,7 +2142,8 @@
           "nist-800-53a",
           "nist-800-53"
         ],
-        "parser": "oscal-assessment-procedures"
+        "parser": "oscal-assessment-procedures",
+        "identity_kind": "publication"
       }
     },
     {
@@ -2118,7 +2174,8 @@
           "nist-800-53",
           "nist-800-53b"
         ],
-        "parser": "oscal-profile"
+        "parser": "oscal-profile",
+        "identity_kind": "publication"
       }
     },
     {
@@ -2145,7 +2202,8 @@
         "frameworks": [
           "nist-ai-rmf"
         ],
-        "parser": "json"
+        "parser": "json",
+        "identity_kind": "publication"
       }
     },
     {
@@ -2205,7 +2263,9 @@
           "nist-800-53",
           "csf-2"
         ],
-        "parser": "olir-xlsx"
+        "parser": "olir-xlsx",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "nist-800-53"
       }
     },
     {
@@ -2235,7 +2295,9 @@
         "frameworks": [
           "csf-2"
         ],
-        "parser": "olir-xlsx"
+        "parser": "olir-xlsx",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "nist-csf-2"
       }
     },
     {
@@ -2264,7 +2326,8 @@
         "frameworks": [
           "fips-199"
         ],
-        "parser": "pdf-extract"
+        "parser": "pdf-extract",
+        "identity_kind": "publication"
       }
     },
     {
@@ -2293,7 +2356,8 @@
         "frameworks": [
           "fips-200"
         ],
-        "parser": "pdf-extract"
+        "parser": "pdf-extract",
+        "identity_kind": "publication"
       }
     },
     {
@@ -2320,7 +2384,8 @@
         "frameworks": [
           "nist-iot-cybersecurity"
         ],
-        "parser": "nist-iot-requirement-xlsx"
+        "parser": "nist-iot-requirement-xlsx",
+        "identity_kind": "publication"
       }
     },
     {
@@ -2347,7 +2412,9 @@
         "frameworks": [
           "nist-iot-cybersecurity"
         ],
-        "parser": "nist-iot-requirement-xlsx"
+        "parser": "nist-iot-requirement-xlsx",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "nist-iot-device-cybersecurity-requirement-catalogs"
       }
     },
     {
@@ -2374,7 +2441,9 @@
         "frameworks": [
           "nist-iot-cybersecurity"
         ],
-        "parser": "nist-iot-requirement-xlsx"
+        "parser": "nist-iot-requirement-xlsx",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "nist-iot-device-cybersecurity-requirement-catalogs"
       }
     },
     {
@@ -2401,7 +2470,8 @@
         "frameworks": [
           "nist-mobile-threats"
         ],
-        "parser": "nist-mobile-threat-json"
+        "parser": "nist-mobile-threat-json",
+        "identity_kind": "publication"
       }
     },
     {
@@ -2428,8 +2498,11 @@
         "frameworks": [
           "nist-mobile-threats"
         ],
-        "parser": "nist-mobile-threat-cve-csv"
-      }
+        "parser": "nist-mobile-threat-cve-csv",
+        "identity_kind": "supplemental",
+        "canonical_publication_id": "nist-mobile-threat-catalogue"
+      },
+      "format": "csv"
     },
     {
       "id": "nist-olir-csf2-to-sp800-171",
@@ -2459,7 +2532,9 @@
           "csf-2",
           "nist-800-171"
         ],
-        "parser": "olir-xlsx"
+        "parser": "olir-xlsx",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "nist-csf-2"
       }
     },
     {
@@ -2490,7 +2565,9 @@
           "csf-2",
           "nist-800-53"
         ],
-        "parser": "olir-xlsx"
+        "parser": "olir-xlsx",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "nist-csf-2"
       }
     },
     {
@@ -2551,7 +2628,8 @@
         "frameworks": [
           "nist-zt"
         ],
-        "parser": "explicit-html-markup"
+        "parser": "explicit-html-markup",
+        "identity_kind": "publication"
       }
     },
     {
@@ -2578,7 +2656,9 @@
         "frameworks": [
           "nist-zt"
         ],
-        "parser": "nist-zero-trust-mapping-xlsx"
+        "parser": "nist-zero-trust-mapping-xlsx",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "nist-sp-1800-35"
       }
     },
     {
@@ -2605,7 +2685,9 @@
         "frameworks": [
           "nist-zt"
         ],
-        "parser": "nist-zero-trust-mapping-xlsx"
+        "parser": "nist-zero-trust-mapping-xlsx",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "nist-sp-1800-35"
       }
     },
     {
@@ -2632,7 +2714,9 @@
         "frameworks": [
           "nist-zt"
         ],
-        "parser": "nist-zero-trust-mapping-xlsx"
+        "parser": "nist-zero-trust-mapping-xlsx",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "nist-sp-1800-35"
       }
     },
     {
@@ -2659,7 +2743,9 @@
         "frameworks": [
           "nist-zt"
         ],
-        "parser": "nist-zero-trust-mapping-xlsx"
+        "parser": "nist-zero-trust-mapping-xlsx",
+        "identity_kind": "mapping",
+        "canonical_publication_id": "nist-sp-1800-35"
       }
     },
     {
@@ -2686,7 +2772,8 @@
         "frameworks": [
           "nist-zt"
         ],
-        "parser": "pdfplumber-located-lines"
+        "parser": "pdfplumber-located-lines",
+        "identity_kind": "publication"
       }
     },
     {
@@ -2713,7 +2800,8 @@
         "frameworks": [
           "nist-zt"
         ],
-        "parser": "pdfplumber-located-lines"
+        "parser": "pdfplumber-located-lines",
+        "identity_kind": "publication"
       }
     },
     {
@@ -2803,7 +2891,8 @@
           "tier": "silver",
           "resolved_from": "silver",
           "fallbacks": []
-        }
+        },
+        "identity_kind": "reference"
       }
     },
     {
@@ -2839,7 +2928,8 @@
           "tier": "silver",
           "resolved_from": "silver",
           "fallbacks": []
-        }
+        },
+        "identity_kind": "reference"
       }
     },
     {
@@ -2875,7 +2965,8 @@
           "tier": "silver",
           "resolved_from": "silver",
           "fallbacks": []
-        }
+        },
+        "identity_kind": "reference"
       }
     },
     {
@@ -2911,7 +3002,8 @@
           "tier": "silver",
           "resolved_from": "silver",
           "fallbacks": []
-        }
+        },
+        "identity_kind": "reference"
       }
     }
   ],
@@ -5189,7 +5281,7 @@
     },
     {
       "catalog_id": "nist-800-171",
-      "publication_source_id": "nist-800-171-oscal-mappings",
+      "publication_source_id": "nist-800-171",
       "primary_artifact_ids": [
         "artifact-nist-800-171-oscal-mappings"
       ],

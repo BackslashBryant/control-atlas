@@ -11,6 +11,25 @@ export const SOURCE_ROLES = new Set([
   'historical',
 ]);
 
+// Every publications[] row must declare what kind of identity it is so no
+// row can silently fall through to "publication" by omission (Phase 2,
+// T2.1-T2.3). "publication" is a canonical, user-facing landmark;
+// "supplemental" is genuine publisher content that belongs to one but is
+// not itself the landmark; "mapping" is a crosswalk/mapping-workbook
+// identity; "reference"/"editorial"/"ingestion" are unchanged prior values.
+export const IDENTITY_KINDS = new Set([
+  'publication',
+  'supplemental',
+  'mapping',
+  'reference',
+  'editorial',
+  'ingestion',
+]);
+
+// identity_kind values that must resolve metadata.canonical_publication_id
+// to an existing "publication"-kind row (alias/child, never a rename).
+const REQUIRES_CANONICAL_PARENT = new Set(['supplemental', 'mapping']);
+
 export const AUTHORITY_CLASSES = new Set([
   'publisher',
   'publisher_supplement',
@@ -128,6 +147,29 @@ export function validateSourceRegistry(registry) {
     }
     if (pub.eligibility_status === 'excluded' && pub.graph_eligible) {
       errors.push(`excluded source ${pub.id} cannot be graph_eligible`);
+    }
+  }
+
+  const publicationKindById = new Map(
+    publications.map((pub) => [pub.id, pub.metadata?.identity_kind]),
+  );
+  for (const pub of publications) {
+    const kind = pub.metadata?.identity_kind;
+    if (!kind || !IDENTITY_KINDS.has(kind)) {
+      errors.push(`publication ${pub.id} has unsupported identity_kind: ${kind || 'missing'}`);
+      continue;
+    }
+    if (REQUIRES_CANONICAL_PARENT.has(kind)) {
+      const parentId = pub.metadata?.canonical_publication_id;
+      if (!parentId) {
+        errors.push(`publication ${pub.id} (${kind}) is missing canonical_publication_id`);
+      } else if (parentId === pub.id) {
+        errors.push(`publication ${pub.id} canonical_publication_id cannot reference itself`);
+      } else if (!publicationKindById.has(parentId)) {
+        errors.push(`publication ${pub.id} canonical_publication_id ${parentId} does not exist`);
+      } else if (publicationKindById.get(parentId) !== 'publication') {
+        errors.push(`publication ${pub.id} canonical_publication_id ${parentId} is not a canonical publication identity`);
+      }
     }
   }
 

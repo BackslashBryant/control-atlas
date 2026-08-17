@@ -1044,7 +1044,7 @@ function FocusedAtlas(props: {
                     <p className="eyebrow">Selected item</p>
                   </div>
                   <p className="atlas-inspector-count">
-                    <strong>{rows.length}</strong> related items across <strong>{groups.length}</strong> groups. Select one to read it here.
+                    <strong>{rows.length}</strong> published connections in <strong>{groups.length}</strong> categories. Select an item to inspect details.
                   </p>
                 </>
               )}

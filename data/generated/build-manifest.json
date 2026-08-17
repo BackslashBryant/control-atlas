@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-13T10:44:44.865Z",
+  "generated_at": "2026-08-16T22:50:51.977Z",
   "build_manifest": {
     "kind": "build_manifest",
     "runtime_artifacts": [
@@ -25,7 +25,9 @@
       "source-count-ledger.json",
       "ingestion-stage-ledger.json",
       "resource-ingestion-ledger.json",
-      "catalog-source-inventory.json"
+      "catalog-source-inventory.json",
+      "publication-identity-index.json",
+      "publication-audit-report.json"
     ],
     "source_registry_path": "data/source-registry.json",
     "source_registry_schema": "4.0",

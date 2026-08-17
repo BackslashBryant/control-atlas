@@ -7,6 +7,7 @@ import {
   validateIngestionPipelineDefinition,
 } from '../scripts/lib/ingestion-pipeline.mjs';
 import { preserveGeneratedAt } from '../scripts/lib/stable-generated-at.mjs';
+import { DELTA_REASONS } from '../scripts/lib/delta-reasons.mjs';
 
 test('generated ingestion ledgers preserve their timestamp when content is unchanged', () => {
   const path = 'data/generated/ingestion-stage-ledger.json';
@@ -41,6 +42,36 @@ test('SourceCountLedger never conflates parsed publisher counts with runtime cit
   assert.match(ledger.count_semantics.runtime_node_citations, /graph nodes/i);
   assert.ok(ledger.artifacts.every((entry) => Number.isInteger(entry.counts.parsed_source_records)));
   assert.ok(ledger.artifacts.every((entry) => Number.isInteger(entry.counts.runtime_node_citations)));
+});
+
+test('every shipped catalog reconciles to zero unexplained node and edge deltas (T2.8)', () => {
+  const ledger = JSON.parse(readFileSync('data/generated/source-count-ledger.json', 'utf8'));
+  for (const catalog of ledger.catalogs) {
+    assert.equal(
+      catalog.counts.unexplained_graph_node_delta,
+      0,
+      `${catalog.catalog_id} has an unexplained_graph_node_delta of ${catalog.counts.unexplained_graph_node_delta}`,
+    );
+    assert.equal(
+      catalog.counts.unexplained_graph_edge_delta,
+      0,
+      `${catalog.catalog_id} has an unexplained_graph_edge_delta of ${catalog.counts.unexplained_graph_edge_delta}`,
+    );
+  }
+});
+
+test('every nonzero normalized_to_leaf_delta carries a machine-readable reason (T2.9)', () => {
+  const ledger = JSON.parse(readFileSync('data/generated/source-count-ledger.json', 'utf8'));
+  for (const catalog of ledger.catalogs) {
+    if (catalog.counts.normalized_to_leaf_delta) {
+      assert.ok(
+        DELTA_REASONS.has(catalog.counts.normalized_to_leaf_delta_reason),
+        `${catalog.catalog_id} has a nonzero normalized_to_leaf_delta (${catalog.counts.normalized_to_leaf_delta}) with no valid reason`,
+      );
+    } else {
+      assert.equal(catalog.counts.normalized_to_leaf_delta_reason, null);
+    }
+  }
 });
 
 test('every artifact and catalog has an explicit outcome for every ingestion stage', () => {

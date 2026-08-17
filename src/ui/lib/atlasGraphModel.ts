@@ -111,6 +111,8 @@ function atlasClass(node: AtlasGraphSourceNode, metadata: Record<string, unknown
 }
 
 function objectLayer(node: AtlasGraphSourceNode, metadata: Record<string, unknown>): AtlasGraphNodeDisplayMetadata["objectLayer"] {
+  const canonical = text(metadata.object_layer);
+  if (canonical === "atlas_structure" || canonical === "authority_document" || canonical === "publisher_content") return canonical;
   const kind = text(node.node_type);
   if (kind === "trunk" || kind === "limb" || text(metadata.atlas_structure_role)) return "atlas_structure";
   if (["statute", "regulation", "policy_directive", "authority_document"].includes(kind)) return "authority_document";

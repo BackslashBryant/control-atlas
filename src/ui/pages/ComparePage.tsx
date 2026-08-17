@@ -28,6 +28,7 @@ import {
   compareConfigurationReady,
   COMPARE_MODES,
   nextMissingCompareInput,
+  resolveMappingSource,
 } from "../lib/compareModeState";
 import {
   Field,
@@ -119,37 +120,68 @@ export function ComparePage(props: {
   const catalogs = bundle.runtime.getCatalogs();
   const catalogCoverageList = useCatalogCoverage(bundle);
   // Publication A must only offer publications that actually resolve to at
-  // least one Publication B. The catalog's own cross_catalog_connected_count
-  // counts connected records, which is not the same question, so a publication
-  // could be chosen and then dead-end with "No published comparison is
-  // available". Derive A from the same lookup that populates B.
-  const sourceCatalogOptions = useMemo(
-    () => {
-      // Publication A must only offer publications that actually resolve to at
-      // least one Publication B, or the user picks one and dead-ends on "No
-      // published comparison is available". getConnectedCatalogs reads the
-      // published-connection map, which is only populated once the full graph
-      // loads, so fall back to the catalog's own connected count until then.
-      const withPartners = catalogs.filter(
-        (catalog: any) => bundle.runtime.getConnectedCatalogs(catalog.id).length > 0,
+  // least one Publication B with at least one resolvable mapping source, or
+  // the user picks one and dead-ends on "No published comparison is
+  // available". Before the full graph loads, runtime.getConnectedCatalogs
+  // reads live edges that are not resident yet, so it always returns [] in
+  // that phase — fall back to the build-time capability index
+  // (bundle.mappingSources, keyed "source|target") instead. Both this
+  // fallback and the live runtime path resolve pairs from the identical
+  // isComparisonCapableEdge predicate (src/shared/compare-capability.mjs),
+  // so the option list cannot disagree across the loading transition.
+  const catalogsWithValidTarget = useMemo(() => {
+    if (bundle.graphReady) {
+      return new Set(
+        catalogs
+          .filter((catalog: any) => bundle.runtime.getConnectedCatalogs(catalog.id).length > 0)
+          .map((catalog: any) => catalog.id),
       );
-      const selectable = withPartners.length
-        ? withPartners
-        : catalogs.filter((catalog: any) => catalog.cross_catalog_connected_count > 0);
-      return selectable
-        .sort((left: any, right: any) => left.name.localeCompare(right.name))
-        .map((catalog: any) => ({ value: catalog.id, label: catalog.name }));
-    },
-    [bundle.runtime, catalogs, bundle.graphReady],
-  );
-  const connectedTargetOptions = useMemo(
+    }
+    const withTarget = new Set<string>();
+    for (const key of Object.keys(bundle.mappingSources || {})) {
+      const sources = bundle.mappingSources?.[key];
+      if (!sources || !sources.length) continue;
+      const [sourceCatalogId] = key.split("|");
+      if (sourceCatalogId) withTarget.add(sourceCatalogId);
+    }
+    return withTarget;
+  }, [bundle.runtime, bundle.mappingSources, bundle.graphReady, catalogs]);
+  const sourceCatalogOptions = useMemo(
     () =>
-      bundle.runtime.getConnectedCatalogs(state.source).map((catalog: any) => ({
+      catalogs
+        .filter((catalog: any) => catalogsWithValidTarget.has(catalog.id))
+        .sort((left: any, right: any) => left.name.localeCompare(right.name))
+        .map((catalog: any) => ({ value: catalog.id, label: catalog.name })),
+    [catalogs, catalogsWithValidTarget],
+  );
+  // Same loading-phase split as sourceCatalogOptions above: getConnectedCatalogs
+  // reads live edges that are empty until the full graph loads, so Publication
+  // B must also fall back to the build-time bundle.mappingSources index or it
+  // would falsely read as "no valid target" (and, via T3.8's stale-value
+  // check below, falsely reject a deep-linked target that is actually valid)
+  // for the entire time the graph is still loading.
+  const connectedTargetOptions = useMemo(() => {
+    if (bundle.graphReady) {
+      return bundle.runtime.getConnectedCatalogs(state.source).map((catalog: any) => ({
         value: catalog.id,
         label: `${catalog.name} (${catalog.connection_count.toLocaleString()} published connection${catalog.connection_count === 1 ? "" : "s"})`,
-      })),
-    [bundle.runtime, state.source],
-  );
+      }));
+    }
+    if (!state.source) return [];
+    const targetIds = new Set<string>();
+    for (const key of Object.keys(bundle.mappingSources || {})) {
+      const sources = bundle.mappingSources?.[key];
+      if (!sources || !sources.length) continue;
+      const [sourceCatalogId, targetCatalogId] = key.split("|");
+      if (sourceCatalogId === state.source && targetCatalogId) {
+        targetIds.add(targetCatalogId);
+      }
+    }
+    return catalogs
+      .filter((catalog: any) => targetIds.has(catalog.id))
+      .sort((left: any, right: any) => left.name.localeCompare(right.name))
+      .map((catalog: any) => ({ value: catalog.id, label: catalog.name }));
+  }, [bundle.runtime, bundle.mappingSources, bundle.graphReady, catalogs, state.source]);
 
   const selectedCatalogVersion = useMemo(() => {
     const catalogId = state.source || state.target;
@@ -212,15 +244,31 @@ export function ComparePage(props: {
     state.source,
     state.target,
   ]);
+  const eligibleMappingSources = useMemo(
+    () => mappingSourceOptions.map((option) => option.value),
+    [mappingSourceOptions],
+  );
+  // T3.6/T3.7: a pair with exactly one mapping source is never a user
+  // decision (auto-selected); a pair with several defaults to showing every
+  // published mapping ("all") rather than forcing a choice before results
+  // can render. Only an explicit user-chosen filter narrows the rows.
+  const mappingResolution = useMemo(
+    () => resolveMappingSource(eligibleMappingSources, state.mappingSource),
+    [eligibleMappingSources, state.mappingSource],
+  );
+  const effectiveMappingSource =
+    mappingResolution.status === "auto" || mappingResolution.status === "filtered"
+      ? mappingResolution.value
+      : "";
   const relationshipRows =
-    relationshipRowsRaw && state.mappingSource
+    relationshipRowsRaw && effectiveMappingSource
       ? {
           ...relationshipRowsRaw,
           rows: relationshipRowsRaw.rows.filter((row: any) =>
             (row.source_refs || []).some(
               (reference: any) =>
                 (reference.source_id || reference.sourceId) ===
-                state.mappingSource,
+                effectiveMappingSource,
             ),
           ),
         }
@@ -495,22 +543,35 @@ export function ComparePage(props: {
     }
   }
 
-  const eligibleMappingSources = mappingSourceOptions.map(
-    (option) => option.value,
-  );
+  // T3.8: a deep link can name a source/target catalog that no longer has a
+  // valid completion (data changed, or the link is simply old). Rather than
+  // trusting the raw URL value and letting the query silently return zero
+  // rows, treat a value outside the currently valid option list as unset for
+  // readiness purposes — the missing-input message then points the user
+  // back at the live dropdown of valid choices instead of a dead form.
+  const sourceIsCurrentlyValid =
+    !state.source ||
+    sourceCatalogOptions.some((option) => option.value === state.source);
+  const targetIsCurrentlyValid =
+    !state.target ||
+    connectedTargetOptions.some((option) => option.value === state.target);
+  const compareStateForReadiness = {
+    ...state,
+    source: sourceIsCurrentlyValid ? state.source : "",
+    target: targetIsCurrentlyValid ? state.target : "",
+  };
   const missingCompareInput = nextMissingCompareInput(
-    state,
+    compareStateForReadiness,
     eligibleMappingSources,
   );
   const compareReady = compareConfigurationReady(
-    state,
+    compareStateForReadiness,
     eligibleMappingSources,
   );
 
   return (
     <Panel data-control-results data-visual-identity="aligned-analysis-workbench" id="compare-workspace">
       <PageHeader
-        eyebrow="Compare"
         primary
         summary={SITE_COPY.routes.compare.purpose}
         title={SITE_COPY.routes.compare.title}
@@ -536,14 +597,9 @@ export function ComparePage(props: {
               >
                 <span className="intent-card-title">{card.title}</span>
                 <span className="intent-card-body">{card.body}</span>
-                <span className="intent-card-action-hint">Choose this comparison</span>
               </button>
             ))}
           </div>
-          <p className="compare-help-link">
-            Not comparing yet?{" "}
-            <AppLink onNavigate={onNavigate} view="search">Browse the full Library</AppLink>
-          </p>
         </section>
       ) : (
         <div className="compare-mode-header">
@@ -573,32 +629,34 @@ export function ComparePage(props: {
       {crosswalk === "relationships" ? (
         <>
           <WorkbenchControlSurface
-            className="compare-control-surface"
-            label="Choose comparison inputs"
-            targetId="compare-workspace"
+            className="compare-controls"
+            label="Configure comparison"
+            targetId="compare-results-panel"
           >
-            <div className="filter-grid">
-            {state.intent === "item-mapping" ? (
-              <>
-                <SelectField
-                  hint="Required so identifiers such as AC-2 are resolved inside one publication."
-                  label="Publication"
-                  onChange={(source) =>
-                    onNavigate("matrix", {
-                      crosswalk,
-                      source,
-                      items: "",
-                      mappingSource: "",
-                      compareRun: "",
-                    })
-                  }
-                  options={catalogs.map((catalog: any) => ({
-                    value: catalog.id,
-                    label: catalog.name,
-                  }))}
-                  value={state.source}
-                />
-                <Field label="Published record identifier">
+            <div className="compare-control-grid">
+            <div className="field-row">
+              <SelectField
+                emptyLabel="Choose a primary publication"
+                label={
+                  state.intent === "item-mapping"
+                    ? "Publication"
+                    : "Publication A"
+                }
+                onChange={(source) =>
+                  onNavigate("matrix", {
+                    crosswalk,
+                    source,
+                    target: "",
+                    items: "",
+                    mappingSource: "",
+                    compareRun: "",
+                  })
+                }
+                options={sourceCatalogOptions}
+                value={state.source}
+              />
+              {state.intent === "item-mapping" ? (
+                <Field label="Specific control or rule">
                   <input
                     onChange={(event) =>
                       onNavigate("matrix", {
@@ -611,45 +669,30 @@ export function ComparePage(props: {
                     placeholder="For example, AC-2"
                     value={state.items}
                   />
+                  <p className="field-hint">
+                    Enter the exact control or rule identifier to see its published mappings.
+                  </p>
                 </Field>
-              </>
-            ) : (
-              <>
-            <div className="field-stack">
+              ) : null}
               <SelectField
-                hint="Choose the first publication or framework."
-                label="Publication A"
-                onChange={(value) =>
-                  onNavigate("matrix", {
-                    crosswalk,
-                    source: value,
-                    target: "",
-                    mappingSource: "",
-                    compareRun: "",
-                  })
-                }
-                options={sourceCatalogOptions}
-                value={state.source}
-              />
-              <CatalogCoverageNotice
-                catalogId={state.source}
-                coverageList={catalogCoverageList}
-                onNavigateSources={() => onNavigate("sources")}
-              />
-            </div>
-            <div className="field-stack">
-              <SelectField
+                disabled={!state.source}
                 emptyLabel={
                   state.source
-                    ? "No published comparison is available from this publication"
+                    ? connectedTargetOptions.length
+                      ? "Choose a target publication"
+                      : "No published comparison is available"
                     : "Choose Publication A first"
                 }
-                hint="Only publications with a published connection to Publication A are available."
+                hint={
+                  state.source && !connectedTargetOptions.length
+                    ? "No published mappings connect this publication to other frameworks."
+                    : undefined
+                }
                 label="Publication B"
-                onChange={(value) =>
+                onChange={(target) =>
                   onNavigate("matrix", {
                     crosswalk,
-                    target: value,
+                    target,
                     mappingSource: "",
                     compareRun: "",
                   })
@@ -657,40 +700,39 @@ export function ComparePage(props: {
                 options={connectedTargetOptions}
                 value={state.target}
               />
-              <CatalogCoverageNotice
-                catalogId={state.target}
-                coverageList={catalogCoverageList}
-                onNavigateSources={() => onNavigate("sources")}
-              />
-            </div>
-              </>
-            )}
-            <div className="field-stack">
-              <SelectField
-                emptyLabel={
-                  (state.intent === "item-mapping" && state.items) ||
-                  (state.source && state.target)
-                    ? "Select the publication that records the mapping"
-                    : "Complete the comparison scope first"
-                }
-                hint="Required. Results are limited to relationships cited to this source."
-                label="Mapping publication"
-                onChange={(mappingSource) =>
-                  onNavigate("matrix", {
-                    crosswalk,
-                    mappingSource,
-                    compareRun: "",
-                  })
-                }
-                options={mappingSourceOptions}
-                value={state.mappingSource}
-              />
+              {mappingResolution.status === "auto" ? (
+                <Field label="Mapping publication">
+                  <p className="field-value">
+                    {mappingSourceOptions[0]?.label || mappingResolution.value}
+                  </p>
+                </Field>
+              ) : (
+                <SelectField
+                  emptyLabel={
+                    (state.intent === "item-mapping" && state.items) ||
+                    (state.source && state.target)
+                      ? mappingSourceOptions.length
+                        ? "All published mappings"
+                        : "Select the publication that records the mapping"
+                      : "All published mappings"
+                  }
+                  hint="Optional. Leave blank to see every published mapping for this pair, or narrow to one cited source."
+                  label="Mapping publication"
+                  onChange={(mappingSource) =>
+                    onNavigate("matrix", {
+                      crosswalk,
+                      mappingSource,
+                      compareRun: "",
+                    })
+                  }
+                  options={mappingSourceOptions}
+                  value={state.mappingSource}
+                />
+              )}
             </div>
             </div>
             <p className="compare-boundary">
-              Publication B is limited to a pair with at least one published connection.
-              A published mapping records a cited relationship; it does not establish
-              equivalence, applicability, implementation, compliance, or authorization.
+              Published mappings show cited relationships from official sources.
             </p>
             {compareReady ? (
               <Button
@@ -704,7 +746,7 @@ export function ComparePage(props: {
               </Button>
             ) : (
               <p className="generation-status tone-warning" role="status">
-                Choose {missingCompareInput} to configure this comparison.
+                Select {missingCompareInput} to view published mappings.
               </p>
             )}
             {hasComparisonScope ? (

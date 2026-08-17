@@ -1,0 +1,531 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-08-16T23:27:23.668Z",
+  "summary": {
+    "canonical_publication_count": 47,
+    "alias_count": 29,
+    "standalone_reference_count": 24,
+    "unexplained_orphan_count": 0,
+    "unresolved_metadata_count": 0,
+    "quarantined_count": 0,
+    "nonzero_delta_catalog_count": 3
+  },
+  "canonical_publications": [
+    {
+      "id": "authority-32-cfr-170",
+      "name": "32 CFR Part 170",
+      "publisher": "Department of Defense",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-32-cfr-2002",
+      "name": "32 CFR Part 2002",
+      "publisher": "National Archives and Records Administration",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-dfars-252-204-7012",
+      "name": "DFARS 252.204-7012",
+      "publisher": "Department of Defense",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-dfars-252-204-7021",
+      "name": "DFARS 252.204-7021",
+      "publisher": "Department of Defense",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-dod-zt-strategy",
+      "name": "DoD Zero Trust Strategy",
+      "publisher": "Department of Defense Chief Information Officer",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-dodd-5144-02",
+      "name": "DoDD 5144.02",
+      "publisher": "Department of Defense",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-dodi-8500-01",
+      "name": "DoDI 8500.01",
+      "publisher": "Department of Defense",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-eo-13556",
+      "name": "Executive Order 13556",
+      "publisher": "Executive Office of the President",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-eo-13800",
+      "name": "Executive Order 13800",
+      "publisher": "Executive Office of the President",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-omb-circular-a-130",
+      "name": "OMB Circular A-130",
+      "publisher": "Office of Management and Budget",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-omb-m-24-15",
+      "name": "OMB M-24-15",
+      "publisher": "Office of Management and Budget",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-pl-116-92-sec-1648",
+      "name": "Pub. L. 116-92 § 1648",
+      "publisher": "United States Congress",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-usc-40-11331",
+      "name": "40 U.S.C. § 11331",
+      "publisher": "Office of the Law Revision Counsel",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-usc-41-1303",
+      "name": "41 U.S.C. § 1303",
+      "publisher": "Office of the Law Revision Counsel",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-usc-44-3504",
+      "name": "44 U.S.C. § 3504",
+      "publisher": "Office of the Law Revision Counsel",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-usc-44-3554",
+      "name": "44 U.S.C. § 3554",
+      "publisher": "Office of the Law Revision Counsel",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-usc-44-3608",
+      "name": "44 U.S.C. § 3608",
+      "publisher": "Office of the Law Revision Counsel",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "authority-usc-44-3614",
+      "name": "44 U.S.C. § 3614",
+      "publisher": "Office of the Law Revision Counsel",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "disa-cci-list",
+      "name": "DISA CCI",
+      "publisher": "DISA",
+      "catalog_id": "disa-cci",
+      "alias_source_ids": [
+        "disa-cci-nist-references",
+        "mitre-cis-cci-mappings",
+        "nist-800-53-rev4-rev5-crosswalk"
+      ],
+      "source_material_count": 2,
+      "connection_evidence_count": 3
+    },
+    {
+      "id": "disa-srg-library",
+      "name": "DISA SRG",
+      "publisher": "DISA",
+      "catalog_id": "disa-srg",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "disa-stig-library",
+      "name": "DISA STIG",
+      "publisher": "DISA",
+      "catalog_id": "disa-stig",
+      "alias_source_ids": [
+        "cyber-mil-stig-compilations",
+        "cyber-mil-stig-downloads",
+        "cyber-mil-stig-gpo",
+        "disa-stig-srg-cci-references"
+      ],
+      "source_material_count": 7,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "dod-cmmc-rule",
+      "name": "CMMC 2.0",
+      "publisher": "DoD",
+      "catalog_id": "cmmc-2",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "dod-rai-toolkit",
+      "name": "DoD AI Assurance",
+      "publisher": "Chief Digital and Artificial Intelligence Office",
+      "catalog_id": "dod-rai",
+      "alias_source_ids": [],
+      "source_material_count": 2,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "dod-zt-reference-architecture-v2",
+      "name": "DoD Zero Trust Reference Architecture",
+      "publisher": "Department of Defense Chief Information Officer",
+      "catalog_id": "dod-zt",
+      "alias_source_ids": [
+        "dod-zt-capabilities",
+        "dod-zt-execution-roadmap",
+        "dod-zt-newsletter-2024-11",
+        "dod-zt-operational-technology",
+        "dod-zt-overlays-2024",
+        "dod-zt-strategy",
+        "dod-zt-strategy-placemats"
+      ],
+      "source_material_count": 14,
+      "connection_evidence_count": 1
+    },
+    {
+      "id": "fedramp-rev5",
+      "name": "FedRAMP Rev. 5 (legacy transition)",
+      "publisher": "FedRAMP",
+      "catalog_id": "fedramp-rev5",
+      "alias_source_ids": [
+        "fedramp-2026-rules"
+      ],
+      "source_material_count": 3,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "isoo-cui-regulation",
+      "name": "CUI Program",
+      "publisher": "ISOO",
+      "catalog_id": "cui-policy",
+      "alias_source_ids": [
+        "nara-cui-registry"
+      ],
+      "source_material_count": 3,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "microsoft-zero-trust-maturity-questionnaire-v1-1",
+      "name": "Microsoft Zero Trust Maturity Questionnaire",
+      "publisher": "Microsoft",
+      "catalog_id": "microsoft-zt-maturity",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "mitre-attack-enterprise",
+      "name": "ATT&CK Enterprise",
+      "publisher": "MITRE",
+      "catalog_id": "mitre-attack",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "mitre-attack-ics",
+      "name": "ATT&CK for ICS",
+      "publisher": "MITRE",
+      "catalog_id": "mitre-attack-ics",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "mitre-d3fend-ontology",
+      "name": "D3FEND",
+      "publisher": "MITRE",
+      "catalog_id": "mitre-d3fend",
+      "alias_source_ids": [
+        "mitre-d3fend-mappings"
+      ],
+      "source_material_count": 1,
+      "connection_evidence_count": 2
+    },
+    {
+      "id": "nist-800-171",
+      "name": "SP 800-171 Rev. 3",
+      "publisher": "NIST",
+      "catalog_id": "nist-800-171",
+      "alias_source_ids": [
+        "nist-800-171-oscal-mappings"
+      ],
+      "source_material_count": 1,
+      "connection_evidence_count": 1
+    },
+    {
+      "id": "nist-800-171-rev2",
+      "name": "SP 800-171 Rev. 2",
+      "publisher": "NIST",
+      "catalog_id": "nist-800-171-rev2",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "nist-800-172-rev3",
+      "name": "SP 800-172 Rev. 3",
+      "publisher": "NIST",
+      "catalog_id": "nist-800-172",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "nist-800-37-rev2",
+      "name": "SP 800-37 Rev. 2",
+      "publisher": "NIST",
+      "catalog_id": "nist-800-37",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "nist-800-53",
+      "name": "SP 800-53 Rev. 5",
+      "publisher": "NIST",
+      "catalog_id": "nist-800-53",
+      "alias_source_ids": [
+        "nist-csf-53-supplemental"
+      ],
+      "source_material_count": 1,
+      "connection_evidence_count": 2
+    },
+    {
+      "id": "nist-800-53a-assessment-procedures",
+      "name": "SP 800-53A Rev. 5",
+      "publisher": "NIST",
+      "catalog_id": "nist-800-53a",
+      "alias_source_ids": [],
+      "source_material_count": 0,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "nist-800-53b-baselines",
+      "name": "SP 800-53B",
+      "publisher": "NIST",
+      "catalog_id": "nist-800-53b",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "nist-ai-rmf-playbook",
+      "name": "AI RMF",
+      "publisher": "NIST",
+      "catalog_id": "nist-ai-rmf",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "nist-csf-2",
+      "name": "Cybersecurity Framework 2.0",
+      "publisher": "NIST",
+      "catalog_id": "csf-2",
+      "alias_source_ids": [
+        "nist-csf11-csf20-crosswalk",
+        "nist-olir-csf2-to-sp800-171",
+        "nist-olir-csf2-to-sp800-53"
+      ],
+      "source_material_count": 2,
+      "connection_evidence_count": 6
+    },
+    {
+      "id": "nist-fips-199",
+      "name": "FIPS 199",
+      "publisher": "NIST",
+      "catalog_id": "fips-199",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "nist-fips-200",
+      "name": "FIPS 200",
+      "publisher": "NIST",
+      "catalog_id": "fips-200",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "nist-iot-device-cybersecurity-requirement-catalogs",
+      "name": "NIST IoT Device Cybersecurity",
+      "publisher": "NIST",
+      "catalog_id": "nist-iot-cybersecurity",
+      "alias_source_ids": [
+        "nist-iot-requirements-80053-mapping-draft",
+        "nist-iot-requirements-csf11-mapping-draft"
+      ],
+      "source_material_count": 1,
+      "connection_evidence_count": 3
+    },
+    {
+      "id": "nist-mobile-threat-catalogue",
+      "name": "NIST Mobile Threat Catalogue",
+      "publisher": "NIST",
+      "catalog_id": "nist-mobile-threats",
+      "alias_source_ids": [
+        "nist-mobile-threat-catalogue-cve-list"
+      ],
+      "source_material_count": 3,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "nist-sp-1800-35",
+      "name": "NIST Zero Trust Implementations",
+      "publisher": "NIST NCCoE",
+      "catalog_id": null,
+      "alias_source_ids": [
+        "nist-sp-1800-35-critical-software-mappings",
+        "nist-sp-1800-35-csf11-mappings",
+        "nist-sp-1800-35-csf2-mappings",
+        "nist-sp-1800-35-sp80053-mappings"
+      ],
+      "source_material_count": 39,
+      "connection_evidence_count": 8
+    },
+    {
+      "id": "nist-sp-800-207",
+      "name": "NIST Zero Trust Architecture",
+      "publisher": "NIST",
+      "catalog_id": "nist-zt",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "nist-sp-800-207a",
+      "name": "NIST Zero Trust Cloud-Native Access Control",
+      "publisher": "NIST",
+      "catalog_id": null,
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    },
+    {
+      "id": "nist-ssdf",
+      "name": "SP 800-218 SSDF Version 1.1",
+      "publisher": "NIST",
+      "catalog_id": "nist-ssdf",
+      "alias_source_ids": [],
+      "source_material_count": 1,
+      "connection_evidence_count": 0
+    }
+  ],
+  "standalone_reference_rows": [
+    "artifact-complianceascode-content",
+    "artifact-cyber-mil-stig-compilations",
+    "artifact-cyber-mil-stig-downloads",
+    "artifact-cyber-mil-stig-gpo",
+    "artifact-cybersecdef-stig",
+    "artifact-heimdall-tools",
+    "artifact-microsoft-powerstig",
+    "artifact-mitre-cis-cci-mappings",
+    "artifact-mitre-saf",
+    "artifact-nist-informative-references",
+    "artifact-nuwcdivnpt-github-org",
+    "artifact-nuwcdivnpt-stig-manager",
+    "artifact-stigviewer-catalog",
+    "artifact-stigviewer-clkb-api",
+    "artifact-vulcan-framework",
+    "authority-omb-m-26-05",
+    "community-cci-research",
+    "control-atlas-structure",
+    "nist-oscal",
+    "nist-ssdf-oscal",
+    "nuwcdivnpt-github-org",
+    "nuwcdivnpt-stig-manager",
+    "stigviewer-catalog",
+    "stigviewer-clkb-api"
+  ],
+  "unexplained_orphan_publications": [],
+  "unresolved_metadata": [],
+  "quarantined_rows": [],
+  "nonzero_deltas": [
+    {
+      "catalog_id": "cmmc-2",
+      "unexplained_graph_node_delta": 0,
+      "unexplained_graph_edge_delta": 0,
+      "normalized_to_leaf_delta": 3,
+      "normalized_to_leaf_delta_reason": "structural_group_expansion"
+    },
+    {
+      "catalog_id": "cui-policy",
+      "unexplained_graph_node_delta": 0,
+      "unexplained_graph_edge_delta": 0,
+      "normalized_to_leaf_delta": 128,
+      "normalized_to_leaf_delta_reason": "structural_group_expansion"
+    },
+    {
+      "catalog_id": "microsoft-zt-maturity",
+      "unexplained_graph_node_delta": 0,
+      "unexplained_graph_edge_delta": 0,
+      "normalized_to_leaf_delta": -6,
+      "normalized_to_leaf_delta_reason": "adapter_synthesized_node"
+    }
+  ]
+}

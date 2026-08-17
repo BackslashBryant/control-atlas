@@ -32,7 +32,7 @@ const input: AtlasGraphModelInput = {
     { id: "atlas:TRUNK", node_type: "trunk", label: "Cybersecurity", source_id: "control-atlas-structure", metadata: {} },
     ...areaNames.map((label) => ({ id: `atlas:LIMB-${label.toUpperCase()}`, node_type: "limb", label, source_id: "control-atlas-structure", metadata: {} })),
     { id: "csf-2:CATALOG", node_type: "catalog", label: "NIST CSF 2.0", source_id: "nist-csf", metadata: { catalog_id: "csf-2" } },
-    { id: "csf-2:GV.OC-01", node_type: "requirement", label: "Mission is understood", source_id: "nist-csf", metadata: { catalog_id: "csf-2", type: "csf-subcategory", family: "GV.OC" } },
+    { id: "csf-2:GV.OC-01", node_type: "requirement", label: "Mission is understood", source_id: "nist-csf", metadata: { catalog_id: "csf-2", type: "csf-subcategory", family: "GV.OC", atlas_class: "discovery-facet" } },
     { id: "csf-2:GV.OC-02", node_type: "requirement", label: "Stakeholders are understood", source_id: "nist-csf", metadata: { catalog_id: "csf-2", type: "csf-subcategory", family: "GV.OC" } },
     { id: "authority:USC-44-3554", node_type: "statute", label: "FISMA", source_id: "us-code", metadata: {} },
   ],
@@ -55,7 +55,16 @@ test("semantic Atlas separates publisher truth, presentation, and edge provenanc
     generatedAt: "2026-08-16T00:00:00.000Z",
   });
 
-  assert.ok(artifact.landscape.nodes.length >= 8 && artifact.landscape.nodes.length <= 25);
+  // T4.2/T4.3: the landscape is exactly one Cybersecurity root + one landmark per Atlas area,
+  // plus zero to three authority groups — never a record hairball, always inside the 10-20 budget.
+  assert.equal(artifact.landscape.nodes.filter((node) => node.atlasStructureRole === "root").length, 1);
+  assert.equal(artifact.landscape.nodes.filter((node) => node.atlasStructureRole === "area").length, areaNames.length);
+  const authorityCount = artifact.landscape.nodes.filter((node) => node.objectLayer === "authority_document").length;
+  assert.ok(authorityCount >= 0 && authorityCount <= 3, `authority group count: ${authorityCount}`);
+  assert.ok(
+    artifact.landscape.nodes.length >= 10 && artifact.landscape.nodes.length <= 20,
+    `landscape budget violated: ${artifact.landscape.nodes.length} nodes`,
+  );
   assert.equal(artifact.landscape.nodes.some((node) => node.id === "derived:unclassified"), false);
   assert.equal(new Set(artifact.landscape.nodes.flatMap((node) => node.canonicalNodeIds)).size, artifact.landscape.representedCanonicalNodeCount);
   assert.equal(artifact.areas["atlas:LIMB-COMPLIANCE"]!.nodes.some((node) => node.publicationId === "csf-2"), true);
@@ -68,7 +77,10 @@ test("semantic Atlas separates publisher truth, presentation, and edge provenanc
   const detail = artifact.details[group.id]!;
   const record = detail.nodes.find((node) => node.id === "csf-2:GV.OC-01")!;
   assert.equal(record.nativeType, "csf-subcategory");
-  assert.equal(record.atlasClass, "requirement");
+  // T4.1: an explicit metadata.atlas_class assertion wins over the node_type-based fallback.
+  assert.equal(record.atlasClass, "discovery-facet");
+  const fallbackRecord = detail.nodes.find((node) => node.id === "csf-2:GV.OC-02")!;
+  assert.equal(fallbackRecord.atlasClass, "requirement");
   assert.equal(record.objectLayer, "publisher_content");
   assert.deepEqual(detail.edges[0]!.connectionSourceIds, ["artifact-nist-olir", "nist-olir-csf-800-53"]);
   assert.equal(JSON.stringify(input), before);

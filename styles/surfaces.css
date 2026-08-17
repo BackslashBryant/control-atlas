@@ -1830,6 +1830,15 @@ li {
   background: transparent;
 }
 
+/* Read-only context for a mapping source that auto-resolved (Compare, T3.6):
+   same field rhythm as the select it replaces when only one choice exists. */
+.field-value {
+  padding: var(--ca-space-3) 0;
+  margin: 0;
+  color: inherit;
+  font-weight: 600;
+}
+
 .result-group {
   display: grid;
   gap: var(--ca-space-4);

@@ -1,7 +1,7 @@
 import {
-  defaultRelationshipClass,
-  RELATIONSHIP_CLASSES,
-} from "./structural-hierarchy.mjs";
+  isComparisonCapableEdge,
+  mappingSourceIdsForEdge,
+} from "../shared/compare-capability.mjs";
 
 function normalize(value) {
   return String(value || "")
@@ -405,13 +405,10 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     const sourceCatalog = nodeById.get(edge.source_node_id)?.metadata?.catalog_id;
     const targetCatalog = nodeById.get(edge.target_node_id)?.metadata?.catalog_id;
     if (
-      edge.publication_status === "published" &&
-      edge.relationship_type !== "issued_under" &&
       sourceCatalog &&
       targetCatalog &&
       sourceCatalog !== targetCatalog &&
-      (edge.relationship_class || defaultRelationshipClass(edge.relationship_type)) ===
-        RELATIONSHIP_CLASSES.correlation
+      isComparisonCapableEdge(edge)
     ) {
       crossCatalogConnectedNodeIds.add(edge.source_node_id);
       crossCatalogConnectedNodeIds.add(edge.target_node_id);
@@ -487,7 +484,8 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
   const catalogConnectionKey = (fromCatalog, toCatalog) =>
     `${fromCatalog}\u0000${toCatalog}`;
   for (const edge of dataset.edges) {
-    if (edge.publication_status !== "published") continue;
+    if (!isComparisonCapableEdge(edge)) continue;
+    if (!mappingSourceIdsForEdge(edge).length) continue;
     const fromCatalog = nodeById.get(edge.source_node_id)?.metadata?.catalog_id;
     const toCatalog = nodeById.get(edge.target_node_id)?.metadata?.catalog_id;
     if (!fromCatalog || !toCatalog || fromCatalog === toCatalog) continue;

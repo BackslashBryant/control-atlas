@@ -759,7 +759,7 @@ export function AtlasTree(props: AtlasTreeProps) {
                   value={technologyQuery}
                 />
               </label>
-              <p>{structuralChildren.length.toLocaleString()} immediate children</p>
+              <p>{structuralChildren.length.toLocaleString()} child items</p>
               <ul>
                 {sidebarChildren.map((node) => {
                   const identity = props.identityForNode(node.id);

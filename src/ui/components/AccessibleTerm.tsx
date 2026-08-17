@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from "react";
+import React, { Fragment, type ReactNode } from "react";
 
 const ACRONYM_EXPANSIONS: Record<string, string> = Object.freeze({
   "ATT&CK": "Adversarial Tactics, Techniques, and Common Knowledge",

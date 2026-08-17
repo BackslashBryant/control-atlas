@@ -12,6 +12,8 @@ import { fileURLToPath } from 'node:url';
 import { readGeneratedCollection } from './lib/generated-graph-artifacts.mjs';
 import { resolveExpectedLocator } from './lib/completeness.mjs';
 import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
+import { validateRelationshipEvidenceAttachment } from '../src/shared/data-trust-contracts.mjs';
+import { NORMALIZED_TO_LEAF_DELTA_REASONS } from './lib/delta-reasons.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY = join(ROOT, 'data/source-registry.json');
@@ -105,6 +107,16 @@ const catalogs = (registry.catalog_source_bundles || []).map((bundle) => {
     : null;
   const runtime = catalogRuntimeCounts(bundle.catalog_id, nodes) || {};
   const normalizedRecords = imported ?? primary.reduce((total, artifact) => total + artifact.record_count, 0);
+  const normalizedToLeafDelta = typeof runtime.runtime_leaf_record_count === 'number'
+    ? normalizedRecords - runtime.runtime_leaf_record_count
+    : null;
+
+  const incidentEdges = edges.filter((edge) => String(edge.source_node_id || '').startsWith(`${bundle.catalog_id}:`)
+    || String(edge.target_node_id || '').startsWith(`${bundle.catalog_id}:`));
+  const explainedEdgeCount = incidentEdges.filter(
+    (edge) => validateRelationshipEvidenceAttachment(edge).length === 0,
+  ).length;
+
   return {
     catalog_id: bundle.catalog_id,
     counts: {
@@ -113,12 +125,12 @@ const catalogs = (registry.catalog_source_bundles || []).map((bundle) => {
       parsed_primary_artifact_records: primary.reduce((total, artifact) => total + artifact.record_count, 0),
       published_source_relationships: all.reduce((total, artifact) => total + artifact.relationship_count, 0),
       graph_nodes: nodes.filter((node) => node.metadata?.catalog_id === bundle.catalog_id).length,
-      graph_edges_incident: edges.filter((edge) => String(edge.source_node_id || '').startsWith(`${bundle.catalog_id}:`)
-        || String(edge.target_node_id || '').startsWith(`${bundle.catalog_id}:`)).length,
+      graph_edges_incident: incidentEdges.length,
+      explained_graph_edge_count: explainedEdgeCount,
+      unexplained_graph_edge_delta: incidentEdges.length - explainedEdgeCount,
       ...runtime,
-      normalized_to_leaf_delta: typeof runtime.runtime_leaf_record_count === 'number'
-        ? normalizedRecords - runtime.runtime_leaf_record_count
-        : null,
+      normalized_to_leaf_delta: normalizedToLeafDelta,
+      normalized_to_leaf_delta_reason: normalizedToLeafDelta ? (NORMALIZED_TO_LEAF_DELTA_REASONS[bundle.catalog_id] || null) : null,
     },
   };
 });
@@ -142,6 +154,9 @@ const ledger = {
     explained_graph_node_count: 'Sum of canonical leaf records, publisher structural groups, and catalog anchors.',
     unexplained_graph_node_delta: 'Graph node count minus the explicit structural reconciliation; this must be zero.',
     normalized_to_leaf_delta: 'Normalized publisher records minus canonical publisher-native leaf records; zero means the record transformation is lossless.',
+    normalized_to_leaf_delta_reason: 'Machine-readable reason for a nonzero normalized_to_leaf_delta (see DELTA_REASONS in reconcile-artifact-counts.mjs); null when the delta is already zero.',
+    explained_graph_edge_count: 'Edges incident to the catalog that cite source material (source_artifact_id or source_refs) or are labeled publication_status "editorial".',
+    unexplained_graph_edge_delta: 'Graph edges incident to the catalog minus explained_graph_edge_count; this must be zero.',
   },
   artifacts,
   catalogs,

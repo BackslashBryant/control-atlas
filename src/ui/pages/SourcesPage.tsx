@@ -346,7 +346,6 @@ export function SourcesPage(props: {
     return (
       <Panel className="sources-page" data-visual-identity="provenance-ledger">
         <PageHeader
-          eyebrow="Source not found"
           primary
           summary="Control Atlas does not include this source ID in the current public register. Check the link or return to Sources."
           title={
@@ -368,7 +367,6 @@ export function SourcesPage(props: {
   return (
     <Panel className="sources-page" data-visual-identity="provenance-ledger" overflow="visible">
       <PageHeader
-        eyebrow="Sources"
         primary
         summary={SITE_COPY.routes.sources.purpose}
         title={SITE_COPY.routes.sources.title}
@@ -596,7 +594,7 @@ export function SourcesPage(props: {
                       <SourceFieldValue field={row.version} missingLabel="Version not recorded" notApplicableLabel="Not applicable" />
                     </SourceRegisterCell>
                     <SourceRegisterCell label="Source last checked">
-                      <SourceFieldValue field={row.verifiedAt} missingLabel="Source check date not recorded" notApplicableLabel="Not applicable" />
+                      <SourceFieldValue field={row.verifiedAt} missingLabel="Not checked" notApplicableLabel="Not applicable" />
                     </SourceRegisterCell>
                     <SourceRegisterCell label="Status">
                       <SourceFieldValue field={row.lifecycle} format={(value) => displayNameFor("lifecycle_status", value)} missingLabel="Status not recorded" notApplicableLabel="Not applicable" />

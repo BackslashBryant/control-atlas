@@ -4,6 +4,7 @@ import test from 'node:test';
 import { validateGraphArtifacts } from '../tools/validators/federal-graph.mjs';
 import {
   CATALOG_TIERS,
+  validateDataTrustContracts,
   validatePublisherNativeContainment,
 } from '../scripts/build-framework-data.mjs';
 import {
@@ -16,6 +17,12 @@ import {
   isValidatedStructuralEdge,
   isValidatedStructuralPointer,
 } from '../src/app/structural-hierarchy.mjs';
+import {
+  ATLAS_STRUCTURE_NODE_TYPES,
+  AUTHORITY_DOCUMENT_NODE_TYPES,
+  OBJECT_LAYERS,
+  resolveNativeType,
+} from '../src/shared/data-trust-contracts.mjs';
 
 const generated = (name) => readGeneratedCollection('.', name);
 // build-framework-data.mjs omits evidence_ids from an edge when it is
@@ -865,4 +872,125 @@ test('MITRE D3FEND countermeasures carry a real publisher definition', () => {
     [],
     'D3FEND countermeasures must carry a publisher definition, not an empty stub',
   );
+});
+
+// --- Phase 1: Canonical Domain Model and Layer Separation ------------------
+
+test('every canonical node has exactly one object layer and the generator round-trips with zero drift', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  assert.deepEqual(validateDataTrustContracts(nodes, edges), []);
+  for (const node of nodes) {
+    assert.ok(OBJECT_LAYERS.has(node.metadata?.object_layer), `${node.id} missing a valid object_layer`);
+  }
+});
+
+test('Atlas structure is never emitted as publisher content and never carries a fabricated publication', () => {
+  const nodes = generated('nodes').nodes;
+  for (const node of nodes) {
+    if (ATLAS_STRUCTURE_NODE_TYPES.has(node.node_type)) {
+      assert.equal(node.metadata.object_layer, 'atlas_structure', `${node.id} must be atlas_structure`);
+      assert.ok(['root', 'area'].includes(node.metadata.atlas_structure_role), `${node.id} needs a root/area role`);
+      assert.equal(node.metadata.native_type, '', `${node.id} must not claim a publisher-native type`);
+      assert.equal(node.metadata.publication_id, '', `${node.id} must not carry a fabricated publication id`);
+      assert.equal(node.metadata.catalog_id, undefined, `${node.id} must not carry a catalog_id`);
+    } else {
+      assert.notEqual(node.metadata?.object_layer, 'atlas_structure', `${node.id} is publisher/authority content, not Atlas structure`);
+    }
+  }
+});
+
+test('the Cybersecurity trunk and nine areas keep their stable IDs across the layer migration', () => {
+  const nodes = generated('nodes').nodes;
+  const trunk = nodes.filter((node) => node.node_type === 'trunk');
+  const limbs = nodes.filter((node) => node.node_type === 'limb');
+  assert.deepEqual(trunk.map((node) => node.id), ['atlas:TRUNK']);
+  assert.deepEqual(
+    limbs.map((node) => node.id).sort(),
+    [
+      'atlas:LIMB-ARCHITECTURE',
+      'atlas:LIMB-ASSESSMENT',
+      'atlas:LIMB-COMPLIANCE',
+      'atlas:LIMB-GOVERNANCE',
+      'atlas:LIMB-IMPLEMENTATION',
+      'atlas:LIMB-KNOWLEDGE',
+      'atlas:LIMB-OPERATIONS',
+      'atlas:LIMB-RISK',
+      'atlas:LIMB-THREAT',
+    ],
+  );
+});
+
+test('authority documents remain source-faithful and are never mislabeled as framework catalogs', () => {
+  const nodes = generated('nodes').nodes;
+  const authorityNodes = nodes.filter((node) => AUTHORITY_DOCUMENT_NODE_TYPES.has(node.node_type));
+  assert.ok(authorityNodes.length > 0, 'expected statute/regulation/policy_directive nodes');
+  for (const node of authorityNodes) {
+    assert.equal(node.metadata.object_layer, 'authority_document');
+    assert.equal(node.metadata.native_type, node.node_type, `${node.id} native_type must equal its source-faithful instrument kind`);
+    assert.equal(node.metadata.publication_id, '', `${node.id} is not a publication`);
+  }
+});
+
+test('nativeType stays source-faithful and is never collapsed to a generic requirement bucket', () => {
+  const nodes = generated('nodes').nodes;
+  // These catalogs previously shared node_type "requirement" as their only
+  // type signal; nativeType must now recover each publisher's own term(s).
+  const previouslyCollapsed = [
+    ['csf-2', ['csf-subcategory']],
+    ['disa-cci', ['cci']],
+    ['nist-ai-rmf', ['ai-rmf-outcome']],
+    ['nist-ssdf', ['ssdf-task']],
+    ['dod-rai', ['rai-toolkit-principle', 'rai-shield-activity']],
+    ['fips-200', ['fips-200-requirement']],
+  ];
+  for (const [catalogId, expectedNativeTypes] of previouslyCollapsed) {
+    const records = nodes.filter((node) => node.metadata?.catalog_id === catalogId && node.node_type === 'requirement');
+    assert.ok(records.length > 0, `expected ${catalogId} requirement records`);
+    for (const node of records) {
+      assert.ok(
+        expectedNativeTypes.includes(node.metadata.native_type),
+        `${node.id} lost its source-faithful native type (got ${node.metadata.native_type})`,
+      );
+      assert.notEqual(node.metadata.native_type, 'requirement', `${node.id} nativeType must not collapse to the generic Atlas bucket`);
+    }
+  }
+});
+
+test('every publisher-content and authority-document node stamps a nativeType that matches the resolver, with no drift', () => {
+  const nodes = generated('nodes').nodes;
+  const mismatches = nodes
+    .filter((node) => node.metadata?.object_layer !== 'atlas_structure')
+    .filter((node) => node.metadata?.native_type !== resolveNativeType(node))
+    .map((node) => node.id);
+  assert.deepEqual(mismatches, []);
+});
+
+test('every publisher-content node resolves a non-empty publicationId and structure/authority nodes stay unassigned', () => {
+  const nodes = generated('nodes').nodes;
+  for (const node of nodes) {
+    if (node.metadata.object_layer === 'publisher_content') {
+      assert.ok(node.metadata.publication_id, `${node.id} needs a publicationId`);
+      assert.equal(node.metadata.publication_id, node.metadata.catalog_id);
+    } else {
+      assert.equal(node.metadata.publication_id, '', `${node.id} must not carry a publicationId`);
+    }
+  }
+});
+
+test('every node resolves a sourceMaterialId and no connection evidence id collides with a canonical node or edge id', () => {
+  const nodes = generated('nodes').nodes;
+  const edges = generated('edges').edges;
+  const nodeIds = new Set(nodes.map((node) => node.id));
+  const edgeIds = new Set(edges.map((edge) => edge.id));
+  for (const node of nodes) {
+    assert.ok(node.source_material_id, `${node.id} needs a sourceMaterialId`);
+  }
+  for (const edge of edges) {
+    const evidenceIds = edge.evidence_ids !== undefined ? edge.evidence_ids : [`evidence:${edge.id.slice('edge:'.length)}`];
+    for (const evidenceId of evidenceIds) {
+      assert.ok(!nodeIds.has(evidenceId), `${edge.id}: connection evidence id ${evidenceId} collides with a node id`);
+      assert.ok(!edgeIds.has(evidenceId), `${edge.id}: connection evidence id ${evidenceId} collides with an edge id`);
+    }
+  }
 });

@@ -11,7 +11,8 @@ export type SourceFieldState =
   | "recorded"
   | "derived"
   | "not_applicable"
-  | "missing";
+  | "missing"
+  | "blocked";
 
 export type SourceField<T> = {
   value: T | null;
@@ -113,6 +114,12 @@ const INGESTION_ROLES = new Set([
   "reconciliation",
   "reference_only",
   "historical",
+  // Real publisher content that supports a canonical publication identity
+  // without being the landmark itself (Phase 2 T2.2/T2.3).
+  "supplemental",
+  // OSCAL-only ingestion sources that never resolve to a publication
+  // identity (see INGESTION_ONLY_SOURCE_IDS in catalog-publication-identity.mjs).
+  "ingestion",
 ]);
 
 function isRecordedString(value: unknown): value is string {
@@ -139,6 +146,10 @@ function missing<T>(reason: string): SourceField<T> {
 
 function notApplicable<T>(reason: string): SourceField<T> {
   return { value: null, state: "not_applicable", reason };
+}
+
+function blocked<T>(reason: string): SourceField<T> {
+  return { value: null, state: "blocked", reason };
 }
 
 function stringField(value: unknown, missingReason: string): SourceField<string> {
@@ -305,7 +316,11 @@ function countField(
   );
 }
 
-function buildRows(sources: any[], catalogs: CatalogSummary[]): SourceRegisterRow[] {
+function buildRows(
+  sources: any[],
+  catalogs: CatalogSummary[],
+  quarantine: Map<string, string> = new Map(),
+): SourceRegisterRow[] {
   const sourcesById = new Map(sources.map((source) => [source.id, source]));
   const catalogsBySource = new Map<string, CatalogSummary[]>();
   for (const catalog of catalogs) {
@@ -324,6 +339,7 @@ function buildRows(sources: any[], catalogs: CatalogSummary[]): SourceRegisterRo
     const layer = classifySourceLayer(source);
     const sourceCatalogs = catalogsBySource.get(source.id) || [];
     const isReference = source.metadata?.identity_kind === "reference";
+    const quarantineReason = quarantine.get(source.id);
 
     return {
       id: source.id,
@@ -335,8 +351,10 @@ function buildRows(sources: any[], catalogs: CatalogSummary[]): SourceRegisterRo
       format: formatField(source, layer),
       version: stringField(source.version, "Publisher version is not recorded."),
       retrievedAt: stringField(source.retrieved_at, "Retrieval date is not recorded."),
-      verifiedAt: stringField(source.last_checked, "Source check date is not recorded."),
-      lifecycle: stringField(source.lifecycle_status, "Lifecycle status is not recorded."),
+      verifiedAt: stringField(source.last_checked, "Not checked."),
+      lifecycle: quarantineReason
+        ? blocked(quarantineReason)
+        : stringField(source.lifecycle_status, "Lifecycle status is not recorded."),
       recordCount: isReference
         ? notApplicable("Reference pages do not import records.")
         : countField(source.record_count, layer, "record"),
@@ -379,6 +397,7 @@ export function buildSourceLayers(
   sources: any[],
   catalogs: CatalogSummary[],
   filters: SourceRegisterFilters = {},
+  quarantine: Array<{ id: string; reason?: string }> = [],
 ): Record<SourceLayerId, SourceRegisterRow[]> {
   const layers: Record<SourceLayerId, SourceRegisterRow[]> = {
     organization: [],
@@ -386,8 +405,11 @@ export function buildSourceLayers(
     connection: [],
     ingestion: [],
   };
+  const quarantineById = new Map(
+    quarantine.map((entry) => [entry.id, entry.reason || "This source is quarantined pending review."]),
+  );
 
-  for (const row of buildRows(sources, catalogs)) {
+  for (const row of buildRows(sources, catalogs, quarantineById)) {
     if (matchesFilters(row, filters)) layers[row.layer].push(row);
   }
 
@@ -431,6 +453,7 @@ export function sourceLayerCompleteness(
     derived: 0,
     not_applicable: 0,
     missing: 0,
+    blocked: 0,
   });
   const fields = Object.fromEntries(
     fieldNames.map((fieldName) => [fieldName, emptyCounts()]),

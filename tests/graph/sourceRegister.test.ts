@@ -45,8 +45,23 @@ test("source layers preserve truthful nullable fields and exact layer counts", (
   const layers = buildSourceLayers(sources.sources, catalogs);
   assert.deepEqual(
     Object.fromEntries(Object.entries(layers).map(([layer, rows]) => [layer, rows.length])),
-    { organization: 2, publication: 83, connection: 13, ingestion: 94 },
+    { organization: 2, publication: 47, connection: 26, ingestion: 117 },
   );
+
+  // Phase 2 (T2.1-T2.3): the publication layer must be exactly the set of
+  // canonical identities, never an unclassified row that fell through to
+  // the classifier's default. Every row in the publication layer must trace
+  // back to a source whose registry metadata.identity_kind is literally
+  // "publication" (source_role never applies to publications[] rows).
+  const sourcesById = new Map(sources.sources.map((source: any) => [source.id, source]));
+  for (const row of layers.publication) {
+    const source = sourcesById.get(row.id);
+    assert.equal(
+      source?.metadata?.identity_kind,
+      "publication",
+      `${row.id} appears in the publication layer without an explicit identity_kind: "publication"`,
+    );
+  }
 
   for (const row of Object.values(layers).flat()) {
     assert.ok(row.displayTitle, row.id);
@@ -132,6 +147,30 @@ test("artifact publishers resolve from their parent publications without fabrica
     "Inherited from the linked parent publication.",
   );
   assert.ok(!fallback.publisher.reason.includes("parent-publication-id"));
+});
+
+test("quarantined sources surface an explicit blocked field state with the registry's reason", () => {
+  const layers = buildSourceLayers(
+    [
+      {
+        id: "quarantined-source-id",
+        name: "Quarantined Source",
+        display_name: "Quarantined Source",
+        owner: "Example Publisher",
+        source_role: "primary_data",
+        lifecycle_status: "active",
+      },
+    ],
+    [],
+    {},
+    [{ id: "quarantined-source-id", reason: "Checksum could not be verified against the publisher release." }],
+  ).ingestion[0];
+  assert.equal(layers.lifecycle.state, "blocked");
+  assert.equal(
+    layers.lifecycle.reason,
+    "Checksum could not be verified against the publisher release.",
+  );
+  assert.equal(layers.lifecycle.value, null);
 });
 
 test("layer-specific fields distinguish missing values from non-applicable concepts", () => {

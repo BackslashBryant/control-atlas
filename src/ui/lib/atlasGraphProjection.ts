@@ -76,6 +76,10 @@ export type AtlasSemanticProjectionArtifact = {
 type Descriptor = Omit<AtlasProjectionNode, "canonicalRecordCount" | "internalRelationshipCount" | "importance" | "x" | "y">;
 type EdgeBucket = Omit<AtlasProjectionEdge, "id" | "relationshipCount"> & { types: Set<string>; classes: Set<string>; sources: Set<string> };
 
+/** Visible-node budgets per T4.3: exceeding one is a build-time failure, not a silent UX degradation. */
+const LANDSCAPE_NODE_BUDGET = { min: 10, max: 20 } as const;
+const AREA_NODE_BUDGET_MAX = 60;
+
 const AUTHORITY_GROUPS = [
   ["authority:statutes", "Statutes", "Laws that establish federal cybersecurity duties.", "statute"],
   ["authority:regulations", "Regulations & clauses", "Rules and clauses that turn authority into requirements.", "regulation"],
@@ -114,7 +118,12 @@ function nativeType(node: AtlasGraphSourceNode) {
   if (catalogId(node) === "disa-cci") return "cci";
   return asText(metadata(node).native_type) || asText(metadata(node).type) || asText(node.node_type);
 }
+function atlasClass(node: AtlasGraphSourceNode) {
+  return asText(metadata(node).atlas_class) || (node.node_type === "requirement" ? "requirement" : "");
+}
 function objectLayer(node: AtlasGraphSourceNode): AtlasProjectionNode["objectLayer"] {
+  const canonical = asText(metadata(node).object_layer);
+  if (canonical === "atlas_structure" || canonical === "authority_document" || canonical === "publisher_content") return canonical;
   if (node.node_type === "trunk" || node.node_type === "limb" || node.source_id === "control-atlas-structure") return "atlas_structure";
   if (["statute", "regulation", "policy_directive"].includes(String(node.node_type))) return "authority_document";
   return "publisher_content";
@@ -124,6 +133,14 @@ function sourceIds(edge: Record<string, unknown>) {
     ? edge.source_refs.map((ref) => asText(asRecord(ref).source_id))
     : [];
   return [...new Set([asText(edge.source_artifact_id), ...refs].filter(Boolean))].sort();
+}
+function enforceNodeBudget(projection: AtlasGraphProjection, bounds: { min?: number; max: number }) {
+  const count = projection.nodes.length;
+  if (count > bounds.max || (bounds.min !== undefined && count < bounds.min)) {
+    const expected = bounds.min !== undefined ? `${bounds.min}-${bounds.max}` : `<=${bounds.max}`;
+    throw new Error(`Atlas projection ${projection.id} has ${count} nodes, outside the T4.3 budget (${expected}).`);
+  }
+  return projection;
 }
 function projectionId(level: AtlasProjectionLevel, id: string) { return `${level}:${id}`; }
 function stable(value: number) { return Number(value.toFixed(4)); }
@@ -226,7 +243,7 @@ function detailFor(graph: AtlasGraph, parent: AtlasProjectionNode) {
     descriptors: parent.canonicalNodeIds.map((id) => {
       const source = graph.getNodeAttribute(id, "source"); const layer = objectLayer(source);
       return descriptor({ id, label: recordLabel(source), description: asText(metadata(source).description), nodeType: asText(source.node_type),
-        native: nativeType(source), atlasClass: source.node_type === "requirement" ? "requirement" : "", layer,
+        native: nativeType(source), atlasClass: atlasClass(source), layer,
         structureRole: source.node_type === "trunk" ? "root" : source.node_type === "limb" ? "area" : "", areaId: parent.areaId,
         publicationId: parent.publicationId, ids: [id], drill: { kind: "record", targetId: id } });
     }),
@@ -253,7 +270,7 @@ export function buildAtlasSemanticProjections(options: {
     else unclassified.push(id);
     if (area && catalog) locations[id] = { areaId: area, publicationId: catalog, label: nodeLabel(source), nodeType: asText(source.node_type) };
   }
-  const landscape = buildProjection({
+  const landscape = enforceNodeBudget(buildProjection({
     id: projectionId("landscape", "control-atlas"), level: "landscape", label: "Cybersecurity landscape",
     description: "Major published structures in Control Atlas. Select a landmark to move into its real records.", graph, edgeLimit: 32,
     descriptors: [
@@ -262,13 +279,13 @@ export function buildAtlasSemanticProjections(options: {
       ...model.areas.map((area) => descriptor({ id: area.id, label: area.label, description: area.blurb, nodeType: "limb", ids: idsForArea.get(area.id) || [], layer: "atlas_structure", structureRole: "area", areaId: area.id, drill: { kind: "area", targetId: area.id } })),
       ...(unclassified.length ? [descriptor({ id: "derived:unclassified", label: "Unclassified published records", description: "An explicit presentation exception, not an Atlas taxonomy.", nodeType: "derived_aggregate", ids: unclassified })] : []),
     ],
-  });
+  }), LANDSCAPE_NODE_BUDGET);
   const areas: Record<string, AtlasGraphProjection> = {};
   const publications: Record<string, AtlasGraphProjection> = {};
   const details: Record<string, AtlasGraphProjection> = {};
   for (const area of model.areas) {
     const publicationNodes = model.publications.filter((publication) => publication.parentId === area.id);
-    areas[area.id] = buildProjection({ id: projectionId("area", area.id), level: "area", label: area.label, description: area.blurb, graph, edgeLimit: 48,
+    areas[area.id] = enforceNodeBudget(buildProjection({ id: projectionId("area", area.id), level: "area", label: area.label, description: area.blurb, graph, edgeLimit: 48,
       descriptors: [
         descriptor({ id: `context:${area.id}`, label: area.label, description: area.blurb, nodeType: "limb", ids: graph.hasNode(area.id) ? [area.id] : [], layer: "atlas_structure", structureRole: "area", areaId: area.id }),
         ...publicationNodes.map((publication) => {
@@ -277,7 +294,7 @@ export function buildAtlasSemanticProjections(options: {
           return descriptor({ id: publication.id, label: publication.label, description: publication.blurb, nodeType: "catalog", native: "catalog", ids, areaId: area.id, publicationId, drill: { kind: "publication", targetId: publicationId } });
         }),
       ],
-    });
+    }), { max: AREA_NODE_BUDGET_MAX });
   }
   for (const publication of model.publications) {
     const publicationId = publicationCatalogId(publication);

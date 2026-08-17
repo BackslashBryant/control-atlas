@@ -2,12 +2,19 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { SITE_COPY } from "../src/shared/site-copy.mjs";
+import {
+  SITE_COPY,
+  FIRST_PAINT_ROUTE_COPY,
+  PROHIBITED_PRIMARY_SURFACE_PATTERNS,
+  UI_COPY_CONTRACT,
+  formatRecordCount,
+  formatConnectionCount,
+  formatRecordTypeLabel,
+} from "../src/shared/site-copy.mjs";
 import { provenanceDescriptionMap } from "../src/content/copy.mjs";
 
 const read = (path) => readFileSync(path, "utf8");
 const PUBLIC_COPY_FILES = [
-  "src/shared/site-copy.mjs",
   "src/shared/home-content.mjs",
   "src/shared/disclaimer.mjs",
   "src/app/help-data.mjs",
@@ -67,23 +74,9 @@ test("third-party federal-use provenance is described without changing its publi
 
 test("product-authored route copy excludes banned metaphor and generated guidance", () => {
   const copy = PUBLIC_COPY_FILES.map((path) => read(path)).join("\n");
-  const prohibited = [
-    /see the landscape/i,
-    /drill (?:in|down|into)/i,
-    /navigate the terrain/i,
-    /move the work forward/i,
-    /tell control atlas/i,
-    /what you need to do/i,
-    /how to satisfy it/i,
-    /assign an implementation owner/i,
-    /published structure/i,
-    /source-backed/i,
-    /already represented in (?:the )?Atlas/i,
-    /being reviewed before public launch/i,
-    /\b(?:proves?|ensures?|guarantees?|achieves?) compliance\b/i,
-    /[\u00c2\u00c3]|\u00e2\u20ac/,
-  ];
-  for (const pattern of prohibited) assert.doesNotMatch(copy, pattern);
+  for (const pattern of PROHIBITED_PRIMARY_SURFACE_PATTERNS) {
+    assert.doesNotMatch(copy, pattern);
+  }
 });
 
 test("product-authored Resource collection summaries stay short and task-focused", () => {
@@ -118,4 +111,42 @@ test("Home has one centralized React and first-paint copy source", () => {
   assert.match(read("vite.config.ts"), /HOME_CONTENT/);
   assert.doesNotMatch(read("src/ui/pages/HomePage.tsx"), /Make federal cybersecurity compliance make sense/);
   assert.doesNotMatch(read("vite.config.ts"), /Make federal cybersecurity compliance make sense/);
+});
+
+test("FIRST_PAINT_ROUTE_COPY omits duplicate eyebrows that match the title", () => {
+  for (const [routeKey, routeCopy] of Object.entries(FIRST_PAINT_ROUTE_COPY)) {
+    if (routeCopy.eyebrow) {
+      assert.notEqual(
+        routeCopy.eyebrow.trim().toLowerCase(),
+        routeCopy.title.trim().toLowerCase(),
+        `Route ${routeKey} has eyebrow "${routeCopy.eyebrow}" matching title "${routeCopy.title}"`,
+      );
+    }
+  }
+});
+
+test("UI copy contract formatters provide clean human-readable record types and formatted counts", () => {
+  assert.equal(formatRecordTypeLabel("control"), "Control");
+  assert.equal(formatRecordTypeLabel("disa-cci", "cci"), "CCI");
+  assert.equal(formatRecordTypeLabel("csf-2", "csf-subcategory"), "CSF Subcategory");
+  assert.equal(formatRecordTypeLabel("nist-ssdf", "ssdf-task"), "SSDF Task");
+  assert.equal(formatRecordTypeLabel("stig_rule"), "STIG Rule");
+  assert.equal(formatRecordTypeLabel("control_enhancement"), "Control Enhancement");
+
+  assert.equal(formatRecordCount(1), "1 record");
+  assert.equal(formatRecordCount(324), "324 records");
+
+  assert.equal(formatConnectionCount(1), "1 published connection");
+  assert.equal(formatConnectionCount(156, 8), "156 published connections across 8 groups");
+});
+
+test("UI copy contract state messages and action labels are non-empty and task-first", () => {
+  for (const [key, action] of Object.entries(UI_COPY_CONTRACT.actions)) {
+    assert.ok(typeof action === "string" && action.length > 0, `Action ${key} is empty`);
+    assert.doesNotMatch(action, /[\u00c2\u00c3]|\u00e2\u20ac/);
+  }
+  for (const [key, message] of Object.entries(UI_COPY_CONTRACT.stateMessages)) {
+    assert.ok(typeof message === "string" && message.length > 0, `State message ${key} is empty`);
+    assert.doesNotMatch(message, /[\u00c2\u00c3]|\u00e2\u20ac/);
+  }
 });

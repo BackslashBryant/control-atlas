@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-16T19:57:25.667Z",
+  "generated_at": "2026-08-17T01:31:48.483Z",
   "count_semantics": {
     "discovered_expected_records": "Independent publisher inventory expected by the completeness contract.",
     "parsed_source_records": "Publisher records emitted by the source adapter before graph construction.",
@@ -16,7 +16,10 @@
     "catalog_anchor_count": "The one canonical catalog anchor (or another explicit catalog-level object) retained with leaf records and publisher structural groups.",
     "explained_graph_node_count": "Sum of canonical leaf records, publisher structural groups, and catalog anchors.",
     "unexplained_graph_node_delta": "Graph node count minus the explicit structural reconciliation; this must be zero.",
-    "normalized_to_leaf_delta": "Normalized publisher records minus canonical publisher-native leaf records; zero means the record transformation is lossless."
+    "normalized_to_leaf_delta": "Normalized publisher records minus canonical publisher-native leaf records; zero means the record transformation is lossless.",
+    "normalized_to_leaf_delta_reason": "Machine-readable reason for a nonzero normalized_to_leaf_delta (see DELTA_REASONS in reconcile-artifact-counts.mjs); null when the delta is already zero.",
+    "explained_graph_edge_count": "Edges incident to the catalog that cite source material (source_artifact_id or source_refs) or are labeled publication_status \"editorial\".",
+    "unexplained_graph_edge_delta": "Graph edges incident to the catalog minus explained_graph_edge_count; this must be zero."
   },
   "artifacts": [
     {
@@ -1042,13 +1045,16 @@
         "published_source_relationships": 115,
         "graph_nodes": 4,
         "graph_edges_incident": 118,
+        "explained_graph_edge_count": 118,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 3,
         "runtime_leaf_record_count": 0,
         "runtime_structural_group_count": 3,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 4,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 3
+        "normalized_to_leaf_delta": 3,
+        "normalized_to_leaf_delta_reason": "structural_group_expansion"
       }
     },
     {
@@ -1060,13 +1066,16 @@
         "published_source_relationships": 1193,
         "graph_nodes": 135,
         "graph_edges_incident": 1827,
+        "explained_graph_edge_count": 1827,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 134,
         "runtime_leaf_record_count": 106,
         "runtime_structural_group_count": 28,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 135,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1078,13 +1087,16 @@
         "published_source_relationships": 127,
         "graph_nodes": 129,
         "graph_edges_incident": 134,
+        "explained_graph_edge_count": 134,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 128,
         "runtime_leaf_record_count": 0,
         "runtime_structural_group_count": 128,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 129,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 128
+        "normalized_to_leaf_delta": 128,
+        "normalized_to_leaf_delta_reason": "structural_group_expansion"
       }
     },
     {
@@ -1096,13 +1108,16 @@
         "published_source_relationships": 33756,
         "graph_nodes": 5138,
         "graph_edges_incident": 38895,
+        "explained_graph_edge_count": 38895,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 5137,
         "runtime_leaf_record_count": 5137,
         "runtime_structural_group_count": 0,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 5138,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1114,13 +1129,16 @@
         "published_source_relationships": 30953,
         "graph_nodes": 2542,
         "graph_edges_incident": 5184,
+        "explained_graph_edge_count": 5184,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 2516,
         "runtime_leaf_record_count": 2516,
         "runtime_structural_group_count": 25,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 2542,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1132,13 +1150,16 @@
         "published_source_relationships": 45787,
         "graph_nodes": 17376,
         "graph_edges_incident": 43148,
+        "explained_graph_edge_count": 43148,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 17021,
         "runtime_leaf_record_count": 17021,
         "runtime_structural_group_count": 354,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 17376,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1150,13 +1171,16 @@
         "published_source_relationships": 13,
         "graph_nodes": 14,
         "graph_edges_incident": 14,
+        "explained_graph_edge_count": 14,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 13,
         "runtime_leaf_record_count": 11,
         "runtime_structural_group_count": 2,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 14,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1168,13 +1192,16 @@
         "published_source_relationships": 1903,
         "graph_nodes": 321,
         "graph_edges_incident": 2227,
+        "explained_graph_edge_count": 2227,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 320,
         "runtime_leaf_record_count": 320,
         "runtime_structural_group_count": 0,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 321,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1186,13 +1213,16 @@
         "published_source_relationships": 1045,
         "graph_nodes": 5,
         "graph_edges_incident": 1053,
+        "explained_graph_edge_count": 1053,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 4,
         "runtime_leaf_record_count": 4,
         "runtime_structural_group_count": 0,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 5,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1204,13 +1234,16 @@
         "published_source_relationships": 3,
         "graph_nodes": 4,
         "graph_edges_incident": 12,
+        "explained_graph_edge_count": 12,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 3,
         "runtime_leaf_record_count": 3,
         "runtime_structural_group_count": 0,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 4,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1222,13 +1255,16 @@
         "published_source_relationships": 17,
         "graph_nodes": 18,
         "graph_edges_incident": 38,
+        "explained_graph_edge_count": 38,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 17,
         "runtime_leaf_record_count": 17,
         "runtime_structural_group_count": 0,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 18,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1240,13 +1276,16 @@
         "published_source_relationships": 0,
         "graph_nodes": 69,
         "graph_edges_incident": 69,
+        "explained_graph_edge_count": 69,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 68,
         "runtime_leaf_record_count": 68,
         "runtime_structural_group_count": 0,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 69,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": -6
+        "normalized_to_leaf_delta": -6,
+        "normalized_to_leaf_delta_reason": "adapter_synthesized_node"
       }
     },
     {
@@ -1258,13 +1297,16 @@
         "published_source_relationships": 4508,
         "graph_nodes": 713,
         "graph_edges_incident": 3875,
+        "explained_graph_edge_count": 3875,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 712,
         "runtime_leaf_record_count": 697,
         "runtime_structural_group_count": 15,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 713,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1276,13 +1318,16 @@
         "published_source_relationships": 109,
         "graph_nodes": 110,
         "graph_edges_incident": 751,
+        "explained_graph_edge_count": 751,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 109,
         "runtime_leaf_record_count": 97,
         "runtime_structural_group_count": 12,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 110,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1294,13 +1339,16 @@
         "published_source_relationships": 4074,
         "graph_nodes": 279,
         "graph_edges_incident": 4075,
+        "explained_graph_edge_count": 4075,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 278,
         "runtime_leaf_record_count": 271,
         "runtime_structural_group_count": 7,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 279,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1312,13 +1360,16 @@
         "published_source_relationships": 923,
         "graph_nodes": 148,
         "graph_edges_incident": 620,
+        "explained_graph_edge_count": 620,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 147,
         "runtime_leaf_record_count": 130,
         "runtime_structural_group_count": 17,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 148,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1330,13 +1381,16 @@
         "published_source_relationships": 125,
         "graph_nodes": 125,
         "graph_edges_incident": 239,
+        "explained_graph_edge_count": 239,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 124,
         "runtime_leaf_record_count": 110,
         "runtime_structural_group_count": 14,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 125,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1348,13 +1402,16 @@
         "published_source_relationships": 133,
         "graph_nodes": 133,
         "graph_edges_incident": 135,
+        "explained_graph_edge_count": 135,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 132,
         "runtime_leaf_record_count": 115,
         "runtime_structural_group_count": 17,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 133,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1366,13 +1423,16 @@
         "published_source_relationships": 14,
         "graph_nodes": 8,
         "graph_edges_incident": 24,
+        "explained_graph_edge_count": 24,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 7,
         "runtime_leaf_record_count": 7,
         "runtime_structural_group_count": 0,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 8,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1384,13 +1444,16 @@
         "published_source_relationships": 12734,
         "graph_nodes": 1217,
         "graph_edges_incident": 13950,
+        "explained_graph_edge_count": 13950,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 1216,
         "runtime_leaf_record_count": 1196,
         "runtime_structural_group_count": 20,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 1217,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1402,13 +1465,16 @@
         "published_source_relationships": 3244,
         "graph_nodes": 1035,
         "graph_edges_incident": 2051,
+        "explained_graph_edge_count": 2051,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 1034,
         "runtime_leaf_record_count": 1014,
         "runtime_structural_group_count": 20,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 1035,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1420,13 +1486,16 @@
         "published_source_relationships": 902,
         "graph_nodes": 5,
         "graph_edges_incident": 919,
+        "explained_graph_edge_count": 919,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 4,
         "runtime_leaf_record_count": 4,
         "runtime_structural_group_count": 0,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 5,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1438,13 +1507,16 @@
         "published_source_relationships": 91,
         "graph_nodes": 92,
         "graph_edges_incident": 92,
+        "explained_graph_edge_count": 92,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 91,
         "runtime_leaf_record_count": 72,
         "runtime_structural_group_count": 19,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 92,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1456,13 +1528,16 @@
         "published_source_relationships": 450,
         "graph_nodes": 490,
         "graph_edges_incident": 940,
+        "explained_graph_edge_count": 940,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 489,
         "runtime_leaf_record_count": 489,
         "runtime_structural_group_count": 0,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 490,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1474,13 +1549,16 @@
         "published_source_relationships": 0,
         "graph_nodes": 269,
         "graph_edges_incident": 269,
+        "explained_graph_edge_count": 269,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 268,
         "runtime_leaf_record_count": 268,
         "runtime_structural_group_count": 0,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 269,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1492,13 +1570,16 @@
         "published_source_relationships": 46,
         "graph_nodes": 47,
         "graph_edges_incident": 47,
+        "explained_graph_edge_count": 47,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 46,
         "runtime_leaf_record_count": 42,
         "runtime_structural_group_count": 4,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 47,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     },
     {
@@ -1510,13 +1591,16 @@
         "published_source_relationships": 2560,
         "graph_nodes": 345,
         "graph_edges_incident": 2092,
+        "explained_graph_edge_count": 2092,
+        "unexplained_graph_edge_delta": 0,
         "runtime_navigable_count": 344,
         "runtime_leaf_record_count": 344,
         "runtime_structural_group_count": 0,
         "catalog_anchor_count": 1,
         "explained_graph_node_count": 345,
         "unexplained_graph_node_delta": 0,
-        "normalized_to_leaf_delta": 0
+        "normalized_to_leaf_delta": 0,
+        "normalized_to_leaf_delta_reason": null
       }
     }
   ]
