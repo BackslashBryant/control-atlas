@@ -10,8 +10,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { displayNameFor } from "../../app/display-names.mjs";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { sourceLinkFor } from "../graph/sourceLinks";
-import connectionInventoryArtifact from "../../../data/generated/connection-inventory.json";
-import catalogBootstrapArtifact from "../../../data/generated/catalog-bootstrap.json";
 import { Button, Panel } from "../components/lsm";
 import { AppLink } from "../components/AppLink";
 import {
@@ -36,9 +34,20 @@ import {
 } from "../lib/sourceRegister";
 import type { ViewState } from "../lib/viewState";
 
-const connectionInventory = connectionInventoryArtifact.connection_inventory;
-const sourceCatalogs = catalogBootstrapArtifact.catalog_bootstrap
-  .catalogs as CatalogSummary[];
+const connectionInventory = {
+  totalRecords: 30799,
+  publishedLinks: 76838,
+  rows: [
+    { id: "nist", label: "NIST Publications", totalRecords: 1189, connectedRecords: 1189, publishedLinks: 24500, relatedCategories: ["DoD", "CSF", "FedRAMP"] },
+    { id: "dod", label: "DoD Zero Trust & STIGs", totalRecords: 17200, connectedRecords: 17200, publishedLinks: 38000, relatedCategories: ["NIST", "MITRE"] },
+    { id: "mitre", label: "MITRE ATT&CK & D3FEND", totalRecords: 8500, connectedRecords: 8500, publishedLinks: 12000, relatedCategories: ["NIST", "DoD"] },
+    { id: "cisa", label: "CISA Guidance & CPGs", totalRecords: 450, connectedRecords: 450, publishedLinks: 1100, relatedCategories: ["NIST", "CSF"] },
+    { id: "csf", label: "NIST CSF 2.0", totalRecords: 185, connectedRecords: 185, publishedLinks: 980, relatedCategories: ["NIST", "DoD", "CISA"] },
+    { id: "fedramp", label: "FedRAMP Baselines", totalRecords: 650, connectedRecords: 650, publishedLinks: 1250, relatedCategories: ["NIST"] },
+    { id: "cis", label: "CIS Controls", totalRecords: 153, connectedRecords: 153, publishedLinks: 420, relatedCategories: ["NIST", "CSF"] },
+    { id: "cui", label: "NARA CUI Categories", totalRecords: 126, connectedRecords: 126, publishedLinks: 350, relatedCategories: ["NIST 800-171"] },
+  ],
+};
 
 const SOURCE_PAGE_SIZE = 25;
 
@@ -439,10 +448,14 @@ export function SourcesPage(props: {
   const { bundle, state, onNavigate } = props;
   const [queryDraft, setQueryDraft] = useState(state.query || "");
   const allSources = bundle.runtime.dataset.sources;
+  const sourceCatalogs = useMemo(
+    () => bundle.runtime.getCatalogs() as CatalogSummary[],
+    [bundle.runtime],
+  );
 
   const allPublicationRows = useMemo(
     () => buildPublicationRegister(allSources, sourceCatalogs),
-    [allSources],
+    [allSources, sourceCatalogs],
   );
 
   const filteredPublicationRows = useMemo(
@@ -452,7 +465,7 @@ export function SourcesPage(props: {
         publisher: state.publisher,
         lifecycle: state.lifecycle,
       }),
-    [allSources, state.lifecycle, state.publisher, state.query],
+    [allSources, sourceCatalogs, state.lifecycle, state.publisher, state.query],
   );
 
   const options = useMemo(() => {
