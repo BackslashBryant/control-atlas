@@ -1,7 +1,6 @@
 import {
   IconArrowRight,
   IconFlag,
-  IconFolders,
   IconGitCompare,
   IconList,
   IconMap,
@@ -13,6 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import "../../../styles/resources.css";
 import { AppLink } from "../components/AppLink";
+import { CollectionIcon } from "../components/CollectionIcon";
 import { LibraryAtlasMap, type LibraryMapItem } from "../components/LibraryAtlasMap";
 import { ResourceTypeIcon } from "../components/ResourceTypeIcon";
 import {
@@ -240,7 +240,7 @@ export function CommonsPage(props: {
           <div className="workspace-browse-grid">
             {collections.map((collection) => (
               <button className="workspace-browse-card workspace-browse-card--collection" key={collection.id} onClick={() => update({ collection: collection.id, showAll: "true" })} type="button">
-                <IconFolders aria-hidden="true" size={22} />
+                <CollectionIcon collectionId={collection.id} />
                 <strong>{collection.title}</strong>
                 <span>{collection.summary}</span>
                 <small>{collection.resourceIds.length} resources</small>

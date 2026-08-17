@@ -1376,11 +1376,16 @@ Rebuild every remaining public surface from the correct Orbital composition rath
 
 ### Workstream C — Resources and outputs
 
-- [ ] **T8.6 Resources** — use `catalog.html`:
+- [x] **T8.6 Resources** — use `catalog.html`:
   - visually distinct cards;
   - recognizable publisher/tool/community marks;
   - filters secondary to browsing;
   - retain the product name “Resources,” not rejected legacy naming.
+  - **Audit finding — real defect:** `CommonsPage.tsx`'s "Browse by Collection" grid (the page's primary landing state) rendered all 8 collection cards with the exact same generic `IconFolders` icon — title and summary text were the only differentiator. That directly fails "visually distinct cards" and "recognizable... marks" against the `catalog.html` reference, where every card carries a distinct schematic identity. Confirmed the product-facing label is already correctly "Resources" everywhere (site-copy, nav, page title); only the internal file/component names (`CommonsPage.tsx`, `commonsDataset`, etc.) still say "Commons," which AGENTS.md's icon guidance rules out re-decorating with invented pictograms anyway (§7: "Do not invent niche aerospace pictograms merely to match the theme... use a vetted platform/library icon").
+  - **Wireframe (wide/narrow):** unchanged grid composition (2-col wide / 1-col narrow collection cards above a secondary filter rail that collapses to a "Filters" disclosure on narrow — already satisfies "filters secondary to browsing").
+  - **Fix:** added `src/ui/components/CollectionIcon.tsx`, a small id→icon map (mirroring the existing `ResourceTypeIcon` pattern already used for individual resource rows) assigning each of the 8 real collection IDs a semantically distinct Tabler icon — shield for DoD portals, repeat-arrows for reciprocity/reuse, wrench for implementation/assessment tools, storefront for product assurance, cloud for DevSecOps, factory for the defense industrial base, graduation cap for workforce/training, people for practitioner communities — falling back to the old `IconFolders` for any future unmapped collection. Wired into `CommonsPage.tsx` in place of the single hardcoded icon.
+  - **Verified:** `npx playwright test --config playwright.e2e.config.mjs tests/e2e/resource-discovery.spec.mjs tests/e2e/commons-filter-history.spec.mjs` — 5/5 passing. `node --test tests/commons-presentation.test.mjs` — 21/21 passing. `npm run typecheck` — 0 errors. `npx eslint` on both touched files — 0 errors/warnings. `npm run build:site` — successful.
+  - Wide and narrow screenshots captured for `/#/resources` before/after and reviewed by eye: all 8 collection cards now show distinct, topic-appropriate icons at both widths; filter rail remains compact/secondary; narrow view collapses filters into a disclosure with no overflow.
 - [ ] **T8.7 Documents/Templates** — use staged-flow plus settings:
   - lead with what the practitioner needs to produce;
   - preview before download;
