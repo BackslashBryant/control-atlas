@@ -1,5 +1,7 @@
 import { humanizeSlug } from "../../app/display-names.mjs";
 import { catalogDisplayNameFor } from "./catalogProfiles";
+import { sourceIdentityPresentationFor } from "./sourceIdentity";
+import publicationIdentityIndexArtifact from "../../../data/generated/publication-identity-index.json";
 
 export type SourceLayerId =
   | "publication"
@@ -60,6 +62,31 @@ export type SourcePublicationReview = {
   >["upstream_currentness_review"];
 };
 
+export type SourceMaterialItem = {
+  id: string;
+  displayTitle: string;
+  publisher: string;
+  format: string;
+  retrievedAt: string | null;
+  recordCount: number | null;
+  relationshipCount: number | null;
+  url: string;
+  role: "primary" | "enrichment" | "reference" | "supplemental";
+  provenance: string;
+  isCommunity: boolean;
+};
+
+export type ConnectionEvidenceItem = {
+  id: string;
+  displayTitle: string;
+  publisher: string;
+  format: string;
+  retrievedAt: string | null;
+  relationshipCount: number | null;
+  recordCount: number | null;
+  url: string;
+};
+
 export type SourceRegisterRow = {
   id: string;
   layer: SourceLayerId;
@@ -79,6 +106,22 @@ export type SourceRegisterRow = {
   provenance: string;
   eligibility: string;
   access: string;
+};
+
+export type PublicationRegisterRow = SourceRegisterRow & {
+  familyName: string;
+  catalogId: string | null;
+  catalogCounts: { discovered_records: number; normalized_records: number } | null;
+  coverageSummary: string;
+  sourceMaterials: {
+    primary: SourceMaterialItem[];
+    enrichment: SourceMaterialItem[];
+    reference: SourceMaterialItem[];
+    supplemental: SourceMaterialItem[];
+  };
+  connectionEvidence: ConnectionEvidenceItem[];
+  reviews: SourcePublicationReview[];
+  rawSource: any;
 };
 
 export type SourceLayerOptions = {
@@ -314,6 +357,277 @@ function countField(
     value,
     `${kind === "record" ? "Imported record" : "Published relationship"} count is not recorded for this source.`,
   );
+}
+
+function resolveSourceMaterialItems(
+  ids: string[],
+  sourcesById: Map<string, any>,
+  parent: any,
+  role: "primary" | "enrichment" | "reference" | "supplemental",
+): SourceMaterialItem[] {
+  return ids
+    .map((id) => {
+      const source = sourcesById.get(id);
+      if (!source) return null;
+      const displayTitle = sourceTitle(source, parent);
+      const isCommunity =
+        source.metadata?.identity_kind === "reference" ||
+        /community|open source|unofficial/i.test(source.owner || "");
+      return {
+        id: source.id,
+        displayTitle,
+        publisher: source.owner || parent?.owner || "Publisher not recorded",
+        format:
+          source.format ||
+          source.artifact_type ||
+          (source.metadata?.identity_kind === "reference"
+            ? "Reference page"
+            : "Not recorded"),
+        retrievedAt: source.retrieved_at || null,
+        recordCount:
+          typeof source.record_count === "number" ? source.record_count : null,
+        relationshipCount:
+          typeof source.relationship_count === "number"
+            ? source.relationship_count
+            : null,
+        url: source.artifact_url || source.catalog_browse_url || "",
+        role,
+        provenance: source.provenance_class || "",
+        isCommunity,
+      };
+    })
+    .filter((item): item is SourceMaterialItem => item !== null)
+    .sort((a, b) => a.displayTitle.localeCompare(b.displayTitle));
+}
+
+function resolveConnectionEvidenceItems(
+  ids: string[],
+  sourcesById: Map<string, any>,
+  parent: any,
+): ConnectionEvidenceItem[] {
+  return ids
+    .map((id) => {
+      const source = sourcesById.get(id);
+      if (!source) return null;
+      const displayTitle = sourceTitle(source, parent);
+      return {
+        id: source.id,
+        displayTitle,
+        publisher: source.owner || parent?.owner || "Publisher not recorded",
+        format: source.format || source.artifact_type || "Not recorded",
+        retrievedAt: source.retrieved_at || null,
+        relationshipCount:
+          typeof source.relationship_count === "number"
+            ? source.relationship_count
+            : null,
+        recordCount:
+          typeof source.record_count === "number" ? source.record_count : null,
+        url: source.artifact_url || source.catalog_browse_url || "",
+      };
+    })
+    .filter((item): item is ConnectionEvidenceItem => item !== null)
+    .sort((a, b) => a.displayTitle.localeCompare(b.displayTitle));
+}
+
+function matchesPublicationFilters(
+  row: PublicationRegisterRow,
+  filters: SourceRegisterFilters,
+): boolean {
+  if (filters.publisher && row.publisher.value !== filters.publisher) return false;
+  if (filters.lifecycle && row.lifecycle.value !== filters.lifecycle) return false;
+  if (filters.provenance && row.provenance !== filters.provenance) return false;
+  if (filters.eligibility && row.eligibility !== filters.eligibility) return false;
+  if (filters.access && row.access !== filters.access) return false;
+
+  const query = (filters.query || "").trim().toLocaleLowerCase();
+  if (!query) return true;
+
+  const candidateStrings: string[] = [
+    row.id,
+    row.displayTitle,
+    row.familyName,
+    row.publisher.value || "",
+    row.version.value || "",
+    row.coverageSummary,
+    row.catalogId || "",
+    ...(row.coverage.value || []),
+    ...row.sourceMaterials.primary.flatMap((m) => [m.id, m.displayTitle]),
+    ...row.sourceMaterials.enrichment.flatMap((m) => [m.id, m.displayTitle]),
+    ...row.sourceMaterials.supplemental.flatMap((m) => [m.id, m.displayTitle]),
+    ...row.sourceMaterials.reference.flatMap((m) => [m.id, m.displayTitle]),
+    ...row.connectionEvidence.flatMap((e) => [e.id, e.displayTitle]),
+  ];
+
+  return candidateStrings.some((value) =>
+    (value || "").toLocaleLowerCase().includes(query),
+  );
+}
+
+export function buildPublicationRegister(
+  sources: any[],
+  catalogs: CatalogSummary[],
+  filters: SourceRegisterFilters = {},
+  quarantine: Array<{ id: string; reason?: string }> = [],
+): PublicationRegisterRow[] {
+  const sourcesById = new Map(sources.map((source) => [source.id, source]));
+  const catalogsBySource = new Map<string, CatalogSummary[]>();
+  for (const catalog of catalogs) {
+    const current = catalogsBySource.get(catalog.source_id) || [];
+    current.push(catalog);
+    catalogsBySource.set(catalog.source_id, current);
+  }
+
+  const quarantineById = new Map(
+    quarantine.map((entry) => [
+      entry.id,
+      entry.reason || "This publication is quarantined pending review.",
+    ]),
+  );
+
+  const rawIdentities = publicationIdentityIndexArtifact.identities || [];
+
+  const rows: PublicationRegisterRow[] = rawIdentities.map((identity) => {
+    const source =
+      sourcesById.get(identity.id) || {
+        id: identity.id,
+        name: identity.name,
+        display_name: identity.name,
+        owner: identity.publisher,
+        lifecycle_status: "active",
+      };
+
+    const sourceCatalogs =
+      catalogsBySource.get(source.id) ||
+      (identity.catalog_id
+        ? catalogs.filter((c) => c.id === identity.catalog_id)
+        : []);
+
+    const isAuthority = identity.id.startsWith("authority-");
+    const quarantineReason = quarantineById.get(identity.id);
+    const identityPresentation = sourceIdentityPresentationFor(source);
+
+    const versionField = isRecordedString(source.version)
+      ? recorded(source.version.trim())
+      : isAuthority
+        ? notApplicable(
+            "Authority documents are identified by statutory citation, not release version.",
+          )
+        : missing("Publisher version is not recorded.");
+
+    const verifiedField = isRecordedString(source.last_checked)
+      ? recorded(source.last_checked.trim())
+      : missing("Not checked.");
+
+    const lifecycleField: SourceField<string> = quarantineReason
+      ? blocked<string>(quarantineReason)
+      : stringField(source.lifecycle_status, "Lifecycle status is not recorded.");
+
+    const publisher = publisherField(source, null);
+    const coverage = coverageField("publication", sourceCatalogs);
+    const format = formatField(source, "publication");
+    const recordCount = identity.catalog_counts
+      ? recorded(identity.catalog_counts.normalized_records)
+      : countField(source.record_count, "publication", "record");
+    const relationshipCount = countField(
+      source.relationship_count,
+      "publication",
+      "relationship",
+    );
+
+    const sourceMaterials = {
+      primary: resolveSourceMaterialItems(
+        identity.source_materials?.primary || [],
+        sourcesById,
+        source,
+        "primary",
+      ),
+      enrichment: resolveSourceMaterialItems(
+        identity.source_materials?.enrichment || [],
+        sourcesById,
+        source,
+        "enrichment",
+      ),
+      reference: resolveSourceMaterialItems(
+        identity.source_materials?.reference || [],
+        sourcesById,
+        source,
+        "reference",
+      ),
+      supplemental: resolveSourceMaterialItems(
+        identity.source_materials?.other || [],
+        sourcesById,
+        source,
+        "supplemental",
+      ),
+    };
+
+    const connectionEvidence = resolveConnectionEvidenceItems(
+      identity.connection_evidence || [],
+      sourcesById,
+      source,
+    );
+
+    const reviews = publicationReviewsForSource(identity.id, sources, catalogs);
+
+    const coverageSummary =
+      sourceCatalogs.length > 0
+        ? sourceCatalogs
+            .map(
+              (c) =>
+                `${catalogDisplayNameFor(c.id, c.name)}${
+                  c.leaf_record_count
+                    ? ` (${c.leaf_record_count.toLocaleString()} records)`
+                    : ""
+                }`,
+            )
+            .join(", ")
+        : isAuthority
+          ? "Statutory authority"
+          : "Reference publication";
+
+    return {
+      id: identity.id,
+      layer: "publication",
+      displayTitle: identity.name || sourceTitle(source, null),
+      familyName: identityPresentation.familyName,
+      publicationSourceId: null,
+      publisher,
+      coverage,
+      format,
+      version: versionField,
+      retrievedAt: stringField(
+        source.retrieved_at,
+        "Retrieval date is not recorded.",
+      ),
+      verifiedAt: verifiedField,
+      lifecycle: lifecycleField,
+      recordCount,
+      relationshipCount,
+      officialLink:
+        source.catalog_browse_url || source.artifact_url || "",
+      artifactLink: source.artifact_url || "",
+      provenance: source.provenance_class || "official",
+      eligibility: source.eligibility_status || "eligible",
+      access: source.access_status || "public",
+      catalogId: identity.catalog_id || null,
+      catalogCounts: identity.catalog_counts || null,
+      coverageSummary,
+      sourceMaterials,
+      connectionEvidence,
+      reviews,
+      rawSource: source,
+    };
+  });
+
+  const filtered = rows.filter((row) => matchesPublicationFilters(row, filters));
+
+  filtered.sort(
+    (left, right) =>
+      (left.publisher.value || "").localeCompare(right.publisher.value || "") ||
+      left.displayTitle.localeCompare(right.displayTitle),
+  );
+
+  return filtered;
 }
 
 function buildRows(

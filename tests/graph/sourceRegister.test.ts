@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import catalogBootstrap from "../../data/generated/catalog-bootstrap.json";
-import sources from "../../data/generated/sources.json";
 import {
+  buildPublicationRegister,
   buildSourceLayers,
   publicationReviewsForSource,
   sourceLayerCompleteness,
@@ -12,6 +12,12 @@ import {
 } from "../../src/ui/lib/sourceRegister";
 import { sourceIdentityPresentationFor } from "../../src/ui/lib/sourceIdentity";
 
+const catalogBootstrap = JSON.parse(
+  readFileSync("data/generated/catalog-bootstrap.json", "utf8"),
+);
+const sources = JSON.parse(
+  readFileSync("data/generated/sources.json", "utf8"),
+);
 const catalogs = catalogBootstrap.catalog_bootstrap.catalogs;
 
 test("source detail identity separates a specific name from shared family context", () => {
@@ -322,4 +328,106 @@ test("all governed publication reviews resolve without replacing source check da
     ).map((review) => review.catalogId),
     ["nist-800-53", "nist-800-53a"],
   );
+});
+
+test("canonical publication register builds exactly 47 publication rows with role-grouped source materials", () => {
+  const publications = buildPublicationRegister(sources.sources, catalogs);
+  assert.equal(publications.length, 47);
+
+  // Every publication row must have non-empty displayTitle, publisher, and valid field states
+  for (const pub of publications) {
+    assert.ok(pub.displayTitle, `${pub.id} has no displayTitle`);
+    assert.ok(pub.publisher.value, `${pub.id} has no publisher`);
+    assert.ok(["recorded", "derived"].includes(pub.publisher.state));
+    assert.ok(["recorded", "missing", "not_applicable"].includes(pub.version.state));
+    assert.ok(["recorded", "missing"].includes(pub.verifiedAt.state));
+    assert.ok(["recorded", "missing", "blocked"].includes(pub.lifecycle.state));
+    assert.ok(pub.sourceMaterials, `${pub.id} missing sourceMaterials object`);
+    assert.ok(Array.isArray(pub.sourceMaterials.primary));
+    assert.ok(Array.isArray(pub.sourceMaterials.enrichment));
+    assert.ok(Array.isArray(pub.sourceMaterials.reference));
+    assert.ok(Array.isArray(pub.sourceMaterials.supplemental));
+    assert.ok(Array.isArray(pub.connectionEvidence));
+  }
+
+  // DoD Zero Trust reference architecture has primary and supplemental materials + connection evidence
+  const dodZt = publications.find(
+    (pub) => pub.id === "dod-zt-reference-architecture-v2",
+  );
+  assert.ok(dodZt, "dod-zt-reference-architecture-v2 must exist in publication register");
+  assert.equal(dodZt.publisher.value, "Department of Defense Chief Information Officer");
+  assert.equal(dodZt.version.value, "2.0 (July 2022)");
+  assert.ok(dodZt.sourceMaterials.primary.length > 0, "DoD ZT must have primary source materials");
+  assert.ok(
+    dodZt.sourceMaterials.primary.some(
+      (m) => m.id === "artifact-dod-zt-reference-architecture-v2",
+    ),
+  );
+  assert.ok(
+    dodZt.sourceMaterials.supplemental.some(
+      (m) => m.id === "dod-zt-strategy-placemats" || m.id === "artifact-dod-zt-strategy-placemats",
+    ),
+  );
+  assert.ok(
+    dodZt.connectionEvidence.some(
+      (e) => e.id === "artifact-dod-zt-overlays-2024",
+    ),
+  );
+
+  // SP 800-53 Rev. 5 has primary catalog material and CSF supplemental crosswalk evidence
+  const sp80053 = publications.find((pub) => pub.id === "nist-800-53");
+  assert.ok(sp80053, "nist-800-53 must exist in publication register");
+  assert.equal(sp80053.publisher.value, "NIST");
+  assert.equal(sp80053.version.value, "Revision 5, Release 5.2.0");
+  assert.equal(sp80053.verifiedAt.value, "2026-07-28");
+  assert.ok(
+    sp80053.sourceMaterials.primary.some((m) => m.id === "artifact-nist-800-53"),
+  );
+  assert.ok(
+    sp80053.connectionEvidence.some(
+      (e) => e.id === "artifact-nist-csf-53-supplemental" || e.id === "nist-csf-53-supplemental",
+    ),
+  );
+});
+
+test("publication register exposes truthful absence states for version and last checked", () => {
+  const publications = buildPublicationRegister(sources.sources, catalogs);
+
+  // Publications without an explicit version report missing state
+  const dodRai = publications.find((pub) => pub.id === "dod-rai-toolkit");
+  assert.ok(dodRai);
+  assert.equal(dodRai.version.state, "missing");
+  assert.equal(dodRai.version.value, null);
+  assert.equal(dodRai.version.reason, "Publisher version is not recorded.");
+
+  // Publications with unrecorded check dates report missing state
+  const iot = publications.find(
+    (pub) => pub.id === "nist-iot-device-cybersecurity-requirement-catalogs",
+  );
+  assert.ok(iot);
+  assert.equal(iot.verifiedAt.state, "missing");
+  assert.equal(iot.verifiedAt.value, null);
+  assert.equal(iot.verifiedAt.reason, "Not checked.");
+
+  // Checked publications report recorded state with exact date
+  const sp80053 = publications.find((pub) => pub.id === "nist-800-53");
+  assert.ok(sp80053);
+  assert.equal(sp80053.verifiedAt.state, "recorded");
+  assert.equal(sp80053.verifiedAt.value, "2026-07-28");
+});
+
+test("publication register search matches attached supplemental materials and mapping evidence", () => {
+  // Querying for "placemats" matches DoD ZT because of the supplemental artifact
+  const placematsResults = buildPublicationRegister(sources.sources, catalogs, {
+    query: "placemats",
+  });
+  assert.equal(placematsResults.length, 1);
+  assert.equal(placematsResults[0].id, "dod-zt-reference-architecture-v2");
+
+  // Querying for "crosswalk" matches publications with crosswalk mapping evidence
+  const crosswalkResults = buildPublicationRegister(sources.sources, catalogs, {
+    query: "crosswalk",
+  });
+  assert.ok(crosswalkResults.length >= 2);
+  assert.ok(crosswalkResults.some((p) => p.id === "nist-csf-2"));
 });

@@ -1,71 +1,43 @@
-import { IconSearch } from "@tabler/icons-react";
+import {
+  IconExternalLink,
+  IconFileText,
+  IconSearch,
+  IconX,
+} from "@tabler/icons-react";
 import type { KeyboardEvent, ReactNode } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { sourceLinkFor } from "../graph/sourceLinks";
 import connectionInventoryArtifact from "../../../data/generated/connection-inventory.json";
 import catalogBootstrapArtifact from "../../../data/generated/catalog-bootstrap.json";
-import { Button, Panel } from "../components/lsm";
+import { Badge, Button, Panel } from "../components/lsm";
 import { AppLink } from "../components/AppLink";
 import {
+  EmptyState,
+  InspectorDrawer,
   PageHeader,
   SelectField,
-  SourceSummaryCard,
-  SummaryCard,
   WorkbenchControlSurface,
   copyText,
   sourceUsageSummary,
 } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import {
-  buildSourceLayers,
+  buildPublicationRegister,
   publicationReviewsForSource,
-  sourceLayerEntityLabel,
-  sourceLayerOptions,
   type CatalogSummary,
+  type ConnectionEvidenceItem,
+  type PublicationRegisterRow,
   type SourceField,
-  type SourceLayerId,
-  type SourceRegisterRow,
+  type SourceMaterialItem,
 } from "../lib/sourceRegister";
 import type { ViewState } from "../lib/viewState";
-import { sourceIdentityPresentationFor } from "../lib/sourceIdentity";
 
 const connectionInventory = connectionInventoryArtifact.connection_inventory;
 const sourceCatalogs = catalogBootstrapArtifact.catalog_bootstrap
   .catalogs as CatalogSummary[];
-
-const SOURCE_LAYER_TABS: Array<{
-  id: SourceLayerId;
-  label: string;
-  description: string;
-}> = [
-  {
-    id: "publication",
-    label: "Publication register",
-    description:
-      "One row per publication, with the publisher it traces back to.",
-  },
-  {
-    id: "connection",
-    label: "Connection sources",
-    description:
-      "Published crosswalks, mappings, and cross-references between publications.",
-  },
-  {
-    id: "ingestion",
-    label: "Source material",
-    description:
-      "Files, feeds, and reference pages used to retrieve or verify publisher material.",
-  },
-  {
-    id: "organization",
-    label: "Control Atlas structure",
-    description:
-      "How Control Atlas connects authority branches and groups publications into areas.",
-  },
-];
 
 const SOURCE_PAGE_SIZE = 25;
 
@@ -75,7 +47,10 @@ function SourceRegisterCell(props: {
   label: string;
 }) {
   return (
-    <div className={`ca-source-cell ${props.className || ""}`.trim()} role="cell">
+    <div
+      className={`ca-source-cell ${props.className || ""}`.trim()}
+      role="cell"
+    >
       <span className="ca-source-cell__label">{props.label}</span>
       <div className="ca-source-cell__value">{props.children}</div>
     </div>
@@ -93,10 +68,6 @@ function SourceFieldValue<T>(props: {
     return (
       <span className={`ca-source-field ca-source-field--${field.state}`}>
         <span>{props.format ? props.format(field.value) : String(field.value)}</span>
-        {field.state === "derived" ? (
-          <small className="ca-source-field__basis">From parent publication</small>
-        ) : null}
-        <span className="visually-hidden">. {field.reason}</span>
       </span>
     );
   }
@@ -119,7 +90,9 @@ function CopyStableSourceId(props: { id: string }) {
       <code>{props.id}</code>
       <button
         aria-label={`Copy source ID ${props.id}`}
-        className={`ca-copy-btn ca-source-id__copy${copied ? " ca-copy-btn--copied" : ""}`}
+        className={`ca-copy-btn ca-source-id__copy${
+          copied ? " ca-copy-btn--copied" : ""
+        }`}
         onClick={() => {
           void copyText(props.id).then(() => {
             setCopied(true);
@@ -137,76 +110,404 @@ function CopyStableSourceId(props: { id: string }) {
   );
 }
 
+function PublicationInspector(props: {
+  publication: PublicationRegisterRow;
+  onClose: () => void;
+}) {
+  const { publication, onClose } = props;
+  const isAuthority = publication.id.startsWith("authority-");
+  const supplementalCount =
+    publication.sourceMaterials.enrichment.length +
+    publication.sourceMaterials.supplemental.length;
+
+  return (
+    <InspectorDrawer
+      ariaLabel={`Details for ${publication.displayTitle}`}
+      eyebrow="Publication detail"
+      isOpen={true}
+      onClose={onClose}
+      title={publication.displayTitle}
+    >
+      <div className="source-inspector-content">
+        {publication.familyName ? (
+          <div className="source-inspector-family">
+            <span className="source-family-pill">
+              Part of {publication.familyName}
+            </span>
+          </div>
+        ) : null}
+
+        <div className="source-inspector-id-block">
+          <span className="source-inspector-label">Stable Source ID</span>
+          <CopyStableSourceId id={publication.id} />
+        </div>
+
+        <dl className="source-detail-grid">
+          <div>
+            <dt>Publisher</dt>
+            <dd>
+              <strong>{publication.publisher.value || "Publisher not recorded"}</strong>
+            </dd>
+          </div>
+
+          <div>
+            <dt>Official publication</dt>
+            <dd>
+              {publication.officialLink ? (
+                <a
+                  className="external-link-inline"
+                  href={publication.officialLink}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <span>Official landing / catalog page</span>
+                  <IconExternalLink aria-hidden="true" size={14} />
+                </a>
+              ) : (
+                <span className="ca-source-field--missing">Link not recorded</span>
+              )}
+            </dd>
+          </div>
+
+          <div>
+            <dt>Publisher version</dt>
+            <dd>
+              {publication.version.value || (
+                <span className={`ca-source-field--${publication.version.state}`}>
+                  {publication.version.state === "not_applicable"
+                    ? "Not applicable"
+                    : "Not published"}
+                </span>
+              )}
+            </dd>
+          </div>
+
+          <div>
+            <dt>Source last checked</dt>
+            <dd>
+              {publication.verifiedAt.value ? (
+                <time dateTime={publication.verifiedAt.value}>
+                  {publication.verifiedAt.value}
+                </time>
+              ) : (
+                <span className="ca-source-field--missing">Not checked</span>
+              )}
+            </dd>
+          </div>
+
+          <div>
+            <dt>Lifecycle status</dt>
+            <dd>
+              <Badge
+                tone={
+                  publication.lifecycle.value === "active"
+                    ? "success"
+                    : publication.lifecycle.state === "blocked"
+                      ? "error"
+                      : "warning"
+                }
+              >
+                {displayNameFor("lifecycle_status", publication.lifecycle.value || "")}
+              </Badge>
+            </dd>
+          </div>
+
+          {publication.reviews.map((review) => (
+            <div key={review.catalogId}>
+              <dt>
+                {publication.reviews.length > 1
+                  ? `${review.publicationName} review`
+                  : "Publication currentness review"}
+              </dt>
+              <dd>
+                {displayNameFor(
+                  "source_currentness_review",
+                  review.upstreamCurrentnessReview,
+                )} · Reviewed{" "}
+                <time dateTime={review.reviewedAt}>{review.reviewedAt}</time>
+              </dd>
+            </div>
+          ))}
+
+          {publication.catalogCounts ? (
+            <div>
+              <dt>Catalog profile coverage</dt>
+              <dd>
+                {publication.catalogCounts.normalized_records.toLocaleString()}{" "}
+                normalized records indexed in Search & Explore
+              </dd>
+            </div>
+          ) : isAuthority ? (
+            <div>
+              <dt>Authority citation</dt>
+              <dd>Statutory / regulatory reference document</dd>
+            </div>
+          ) : null}
+        </dl>
+
+        {publication.sourceMaterials.primary.length > 0 ? (
+          <section className="source-inspector-section">
+            <h3>
+              Primary source files ({publication.sourceMaterials.primary.length})
+            </h3>
+            <ul className="source-material-list">
+              {publication.sourceMaterials.primary.map((item) => (
+                <li className="source-material-item" key={item.id}>
+                  <div className="source-material-header">
+                    <IconFileText aria-hidden="true" size={16} />
+                    <strong className="source-material-title">
+                      {item.displayTitle}
+                    </strong>
+                    <span className="format-badge">
+                      {displayNameFor("format", item.format)}
+                    </span>
+                  </div>
+                  <div className="source-material-meta">
+                    {item.retrievedAt ? (
+                      <span>Retrieved {item.retrievedAt}</span>
+                    ) : null}
+                    {typeof item.recordCount === "number" && item.recordCount > 0 ? (
+                      <span>{item.recordCount.toLocaleString()} records</span>
+                    ) : null}
+                  </div>
+                  {item.url ? (
+                    <a
+                      className="source-material-link"
+                      href={item.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span>Open source file</span>
+                      <IconExternalLink aria-hidden="true" size={14} />
+                    </a>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        {supplementalCount > 0 ? (
+          <section className="source-inspector-section">
+            <h3>
+              Supplemental & enrichment documents ({supplementalCount})
+            </h3>
+            <ul className="source-material-list">
+              {[
+                ...publication.sourceMaterials.enrichment,
+                ...publication.sourceMaterials.supplemental,
+              ].map((item) => (
+                <li className="source-material-item" key={item.id}>
+                  <div className="source-material-header">
+                    <IconFileText aria-hidden="true" size={16} />
+                    <strong className="source-material-title">
+                      {item.displayTitle}
+                    </strong>
+                    <span className="format-badge">
+                      {displayNameFor("format", item.format)}
+                    </span>
+                  </div>
+                  <div className="source-material-meta">
+                    {item.retrievedAt ? (
+                      <span>Retrieved {item.retrievedAt}</span>
+                    ) : null}
+                  </div>
+                  {item.url ? (
+                    <a
+                      className="source-material-link"
+                      href={item.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span>Open document</span>
+                      <IconExternalLink aria-hidden="true" size={14} />
+                    </a>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        {publication.sourceMaterials.reference.length > 0 ? (
+          <section className="source-inspector-section">
+            <h3>
+              Reference pages & community tools (
+              {publication.sourceMaterials.reference.length})
+            </h3>
+            <ul className="source-material-list">
+              {publication.sourceMaterials.reference.map((item) => (
+                <li className="source-material-item" key={item.id}>
+                  <div className="source-material-header">
+                    <IconFileText aria-hidden="true" size={16} />
+                    <strong className="source-material-title">
+                      {item.displayTitle}
+                    </strong>
+                    <span className="support-badge">Reference only</span>
+                  </div>
+                  {item.url ? (
+                    <a
+                      className="source-material-link"
+                      href={item.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span>View reference page</span>
+                      <IconExternalLink aria-hidden="true" size={14} />
+                    </a>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        {publication.connectionEvidence.length > 0 ? (
+          <section className="source-inspector-section">
+            <h3>
+              Published crosswalks & mapping evidence (
+              {publication.connectionEvidence.length})
+            </h3>
+            <ul className="source-material-list">
+              {publication.connectionEvidence.map((item) => (
+                <li className="source-material-item" key={item.id}>
+                  <div className="source-material-header">
+                    <strong className="source-material-title">
+                      {item.displayTitle}
+                    </strong>
+                    <span className="format-badge">
+                      {displayNameFor("format", item.format)}
+                    </span>
+                  </div>
+                  <div className="source-material-meta">
+                    <span>Published by {item.publisher}</span>
+                    {typeof item.relationshipCount === "number" &&
+                    item.relationshipCount > 0 ? (
+                      <span>
+                        {item.relationshipCount.toLocaleString()} published links
+                      </span>
+                    ) : null}
+                  </div>
+                  {item.url ? (
+                    <a
+                      className="source-material-link"
+                      href={item.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span>Open crosswalk file</span>
+                      <IconExternalLink aria-hidden="true" size={14} />
+                    </a>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        <details className="source-inspector-provenance">
+          <summary>Field provenance & usage</summary>
+          <div className="source-inspector-provenance-body">
+            <p className="source-usage-text">
+              {sourceUsageSummary(publication.rawSource)}.
+            </p>
+            <ul className="source-provenance-list">
+              <li>
+                <strong>Publisher basis:</strong> {publication.publisher.reason}
+              </li>
+              <li>
+                <strong>Version basis:</strong> {publication.version.reason}
+              </li>
+              <li>
+                <strong>Verification basis:</strong> {publication.verifiedAt.reason}
+              </li>
+              <li>
+                <strong>Lifecycle basis:</strong> {publication.lifecycle.reason}
+              </li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </InspectorDrawer>
+  );
+}
+
 export function SourcesPage(props: {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: "sources" }>;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
   const { bundle, state, onNavigate } = props;
-  const [queryDraft, setQueryDraft] = useState(state.query);
+  const [queryDraft, setQueryDraft] = useState(state.query || "");
   const allSources = bundle.runtime.dataset.sources;
-  const selectedSource = state.source
-    ? bundle.runtime.getSource(state.source)
-    : null;
-  const selectedSourceIdentity = selectedSource
-    ? sourceIdentityPresentationFor(selectedSource)
-    : null;
-  const selectedPublicationReviews = useMemo(
-    () =>
-      selectedSource
-        ? publicationReviewsForSource(
-            selectedSource.id,
-            allSources,
-            sourceCatalogs,
-          )
-        : [],
-    [allSources, selectedSource],
-  );
-  const registerFilters = {
-    query: state.query,
-    publisher: state.publisher,
-    provenance: state.provenance,
-    eligibility: state.eligibility,
-    lifecycle: state.lifecycle,
-    access: state.access,
-  };
-  const unfilteredLayers = useMemo(
-    () => buildSourceLayers(allSources, sourceCatalogs),
+
+  const allPublicationRows = useMemo(
+    () => buildPublicationRegister(allSources, sourceCatalogs),
     [allSources],
   );
-  const layers = useMemo(
-    () => buildSourceLayers(allSources, sourceCatalogs, registerFilters),
-    [
-      allSources,
-      state.access,
-      state.eligibility,
-      state.lifecycle,
-      state.publisher,
-      state.provenance,
-      state.query,
-    ],
-  );
-  const activeLayer = state.layer as SourceLayerId;
-  const activeRows = layers[activeLayer];
-  const unfilteredActiveRows = unfilteredLayers[activeLayer];
-  const options = useMemo(
-    () => sourceLayerOptions(unfilteredActiveRows),
-    [unfilteredActiveRows],
-  );
-  const publisherOptions = options.publishers.map((value) => ({ value, label: value }));
-  const statusOptions = options.lifecycleStatuses
-    .map((value) => ({ value, label: displayNameFor("lifecycle_status", value) }))
-    .sort((left, right) => left.label.localeCompare(right.label, undefined, { sensitivity: "base" }));
-  const [visibleLimit, setVisibleLimit] = useState(SOURCE_PAGE_SIZE);
-  const firstNewRowRef = useRef<HTMLDivElement | null>(null);
-  const visibleRows = activeRows.slice(0, visibleLimit);
-  const entityLabel = sourceLayerEntityLabel(activeLayer, activeRows.length);
-  const totalEntityLabel = sourceLayerEntityLabel(
-    activeLayer,
-    unfilteredActiveRows.length,
+
+  const filteredPublicationRows = useMemo(
+    () =>
+      buildPublicationRegister(allSources, sourceCatalogs, {
+        query: state.query,
+        publisher: state.publisher,
+        lifecycle: state.lifecycle,
+      }),
+    [allSources, state.lifecycle, state.publisher, state.query],
   );
 
-  useEffect(() => setQueryDraft(state.query), [state.query]);
+  const options = useMemo(() => {
+    const sortedDistinct = (values: Array<string | null>) =>
+      [...new Set(values.filter((v): v is string => Boolean(v)))].sort((a, b) =>
+        a.localeCompare(b, undefined, { sensitivity: "base" }),
+      );
+    return {
+      publishers: sortedDistinct(allPublicationRows.map((r) => r.publisher.value)),
+      lifecycleStatuses: sortedDistinct(
+        allPublicationRows.map((r) => r.lifecycle.value),
+      ),
+    };
+  }, [allPublicationRows]);
+
+  const publisherOptions = options.publishers.map((value) => ({
+    value,
+    label: value,
+  }));
+  const statusOptions = options.lifecycleStatuses
+    .map((value) => ({
+      value,
+      label: displayNameFor("lifecycle_status", value),
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+
+  const [visibleLimit, setVisibleLimit] = useState(SOURCE_PAGE_SIZE);
+  const firstNewRowRef = useRef<HTMLDivElement | null>(null);
+  const activeTriggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const visibleRows = filteredPublicationRows.slice(0, visibleLimit);
+
+  const selectedPublicationRow = useMemo(() => {
+    if (!state.source) return null;
+    return (
+      allPublicationRows.find(
+        (pub) =>
+          pub.id === state.source ||
+          pub.sourceMaterials.primary.some((m) => m.id === state.source) ||
+          pub.sourceMaterials.enrichment.some((m) => m.id === state.source) ||
+          pub.sourceMaterials.supplemental.some((m) => m.id === state.source) ||
+          pub.connectionEvidence.some((e) => e.id === state.source),
+      ) || null
+    );
+  }, [allPublicationRows, state.source]);
+
+  const hasActiveFilters = Boolean(
+    state.query || state.publisher || state.lifecycle,
+  );
+
+  useEffect(() => {
+    setQueryDraft(state.query || "");
+  }, [state.query]);
+
   useEffect(() => {
     const publisherIsUnavailable =
       Boolean(state.publisher) && !options.publishers.includes(state.publisher);
@@ -220,185 +521,68 @@ export function SourcesPage(props: {
       lifecycle: lifecycleIsUnavailable ? "" : state.lifecycle,
     });
   }, [onNavigate, options, state]);
-  useEffect(() => setVisibleLimit(SOURCE_PAGE_SIZE), [
-    activeLayer,
-    state.access,
-    state.eligibility,
-    state.lifecycle,
-    state.publisher,
-    state.provenance,
-    state.query,
-  ]);
 
-  const selectLayer = (layer: SourceLayerId) => {
-    const targetOptions = sourceLayerOptions(unfilteredLayers[layer]);
+  useEffect(() => {
+    setVisibleLimit(SOURCE_PAGE_SIZE);
+  }, [state.lifecycle, state.publisher, state.query]);
+
+  // Handle Escape key to close drawer
+  useEffect(() => {
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape" && state.source) {
+        onNavigate("sources", { ...state, source: "" });
+        activeTriggerRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onNavigate, state]);
+
+  const handleSelectPublication = (
+    publicationId: string,
+    event?: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    if (event) {
+      activeTriggerRef.current = event.currentTarget;
+    }
     onNavigate("sources", {
       ...state,
-      layer,
-      publisher: targetOptions.publishers.includes(state.publisher)
-        ? state.publisher
-        : "",
-      lifecycle: targetOptions.lifecycleStatuses.includes(state.lifecycle)
-        ? state.lifecycle
-        : "",
-      source: "",
+      source: publicationId,
     });
   };
 
-  const moveLayerFocus = (
-    event: KeyboardEvent<HTMLButtonElement>,
-    currentIndex: number,
-  ) => {
-    const lastIndex = SOURCE_LAYER_TABS.length - 1;
-    const nextIndex =
-      event.key === "ArrowRight"
-        ? currentIndex === lastIndex ? 0 : currentIndex + 1
-        : event.key === "ArrowLeft"
-          ? currentIndex === 0 ? lastIndex : currentIndex - 1
-          : event.key === "Home"
-            ? 0
-            : event.key === "End"
-              ? lastIndex
-              : null;
-    if (nextIndex == null) return;
-    event.preventDefault();
-    const nextLayer = SOURCE_LAYER_TABS[nextIndex].id;
-    selectLayer(nextLayer);
-    document.getElementById(`source-layer-tab-${nextLayer}`)?.focus();
+  const handleCloseInspector = () => {
+    onNavigate("sources", {
+      ...state,
+      source: "",
+    });
+    activeTriggerRef.current?.focus();
   };
 
-  if (selectedSource) {
-    return (
-      <Panel className="sources-page" data-visual-identity="provenance-ledger">
-        <PageHeader
-          eyebrow="Source detail"
-          primary
-          summary="Details for this source."
-          title={selectedSourceIdentity!.primaryName}
-        />
-        <SourceSummaryCard detail source={selectedSource} />
-        <SummaryCard title="How Control Atlas uses it">
-          <p>{sourceUsageSummary(selectedSource)}.</p>
-        </SummaryCard>
-        <dl className="source-detail-grid">
-          <div>
-            <dt>Source ID</dt>
-            <dd><CopyStableSourceId id={selectedSourceIdentity!.stableId} /></dd>
-          </div>
-          <div><dt>Publisher</dt><dd>{selectedSource.owner || "Not recorded"}</dd></div>
-          <div><dt>Publisher version</dt><dd>{selectedSource.version || "Not recorded"}</dd></div>
-          <div><dt>Retrieved</dt><dd>{selectedSource.retrieved_at || "Not recorded"}</dd></div>
-          <div><dt>Source last checked</dt><dd>{selectedSource.last_checked || "Not recorded"}</dd></div>
-          {selectedPublicationReviews.map((review) => (
-            <div key={review.catalogId}>
-              <dt>
-                {selectedPublicationReviews.length > 1
-                  ? `${review.publicationName} currentness review`
-                  : "Publication currentness review"}
-              </dt>
-              <dd>
-                {displayNameFor(
-                  "source_currentness_review",
-                  review.upstreamCurrentnessReview,
-                )} · Reviewed{" "}
-                <time dateTime={review.reviewedAt}>{review.reviewedAt}</time>
-              </dd>
-            </div>
-          ))}
-          <div><dt>Lifecycle</dt><dd>{displayNameFor("lifecycle_status", selectedSource.lifecycle_status)}</dd></div>
-          {selectedSource.source_role && selectedSource.source_role !== "publication" ? (
-            <div><dt>Update method</dt><dd>{selectedSource.retrieval_method ? displayNameFor("retrieval_method", selectedSource.retrieval_method) : "Not recorded"}</dd></div>
-          ) : null}
-          {typeof selectedSource.record_count === "number" ? (
-            <div><dt>Records</dt><dd>{selectedSource.record_count.toLocaleString()}</dd></div>
-          ) : null}
-          {typeof selectedSource.relationship_count === "number" ? (
-            <div><dt>Relationships</dt><dd>{selectedSource.relationship_count.toLocaleString()}</dd></div>
-          ) : null}
-          {selectedSource.catalog_browse_url || selectedSource.artifact_url ? (
-            <div>
-              <dt>Official publication</dt>
-              <dd>
-                <a href={selectedSource.catalog_browse_url || selectedSource.artifact_url} rel="noopener noreferrer" target="_blank">
-                  {selectedSource.catalog_browse_url || selectedSource.artifact_url}
-                </a>
-              </dd>
-            </div>
-          ) : null}
-          {selectedSource.artifact_url &&
-          selectedSource.catalog_browse_url &&
-          selectedSource.artifact_url !== selectedSource.catalog_browse_url ? (
-            <div>
-              <dt>Retrieved artifact</dt>
-              <dd>
-                <a href={selectedSource.artifact_url} rel="noopener noreferrer" target="_blank">
-                  {selectedSource.artifact_url}
-                </a>
-              </dd>
-            </div>
-          ) : null}
-        </dl>
-      </Panel>
-    );
-  }
-
-  if (state.source) {
-    return (
-      <Panel className="sources-page" data-visual-identity="provenance-ledger">
-        <PageHeader
-          primary
-          summary="Control Atlas does not include this source ID in the current public register. Check the link or return to Sources."
-          title={
-            <>
-              Source not found
-              <span className="visually-hidden">
-                : Requested source ID {state.source}
-              </span>
-            </>
-          }
-        />
-        <p className="ca-source-not-found-id">
-          Requested source ID: <code>{state.source}</code>
-        </p>
-      </Panel>
-    );
-  }
+  const handleResetFilters = () => {
+    onNavigate("sources", {
+      ...state,
+      query: "",
+      publisher: "",
+      lifecycle: "",
+    });
+  };
 
   return (
-    <Panel className="sources-page" data-visual-identity="provenance-ledger" overflow="visible">
+    <Panel
+      className="sources-page"
+      data-visual-identity="provenance-ledger"
+      overflow="visible"
+    >
       <PageHeader
         primary
         summary={SITE_COPY.routes.sources.purpose}
         title={SITE_COPY.routes.sources.title}
       />
 
-      {/* Publication identity, mapping sources, retrieved source files, and
-          Control Atlas's organizing structure remain separate views. */}
-      <div aria-label="Source register layers" className="source-view-toggle" role="tablist">
-        {SOURCE_LAYER_TABS.map((tab, index) => (
-          <button
-            aria-controls="source-register-results"
-            aria-selected={activeLayer === tab.id}
-            className={activeLayer === tab.id ? "active" : ""}
-            id={`source-layer-tab-${tab.id}`}
-            key={tab.id}
-            onClick={() => selectLayer(tab.id)}
-            onKeyDown={(event) => moveLayerFocus(event, index)}
-            role="tab"
-            tabIndex={activeLayer === tab.id ? 0 : -1}
-            type="button"
-          >
-            {tab.label} <strong>{layers[tab.id].length}</strong>
-          </button>
-        ))}
-      </div>
-      <p className="support-meta" id="source-layer-description">
-        {SOURCE_LAYER_TABS.find((tab) => tab.id === activeLayer)?.description}
-      </p>
-
       <WorkbenchControlSurface
         className="source-register-control-surface"
-        label={`Find ${sourceLayerEntityLabel(activeLayer, 2)}`}
+        label="Find publications"
         targetId="source-register-results"
       >
         <div className="source-register-controls">
@@ -407,243 +591,273 @@ export function SourcesPage(props: {
             onSubmit={(event) => {
               event.preventDefault();
               const query = queryDraft.trim();
-              if (query !== state.query) onNavigate("sources", { ...state, query });
+              if (query !== (state.query || "")) {
+                onNavigate("sources", { ...state, query });
+              }
             }}
             role="search"
           >
             <label htmlFor="source-search">
-              <span>Search {sourceLayerEntityLabel(activeLayer, 2)}</span>
+              <span>Search publications</span>
               <div className="search-input">
                 <IconSearch aria-hidden="true" size={18} stroke={1.8} />
                 <input
                   id="source-search"
-                  onChange={(event) => setQueryDraft(event.target.value)}
-                  placeholder="Name, publisher, ID, or catalog"
+                  onChange={(event) => {
+                    const next = event.target.value;
+                    setQueryDraft(next);
+                    onNavigate("sources", { ...state, query: next });
+                  }}
+                  placeholder="Name, publisher, version, ID, or catalog"
                   type="search"
                   value={queryDraft}
                 />
               </div>
             </label>
-            <Button type="submit" variant="secondary">Search</Button>
           </form>
+
           <div className="source-register-filters">
             {publisherOptions.length >= 2 ? (
               <SelectField
                 emptyLabel="All publishers"
                 label="Publisher"
-                onChange={(publisher) => onNavigate("sources", { ...state, publisher })}
+                onChange={(publisher) =>
+                  onNavigate("sources", { ...state, publisher })
+                }
                 options={publisherOptions}
-                value={state.publisher}
+                value={state.publisher || ""}
               />
             ) : null}
+
             {statusOptions.length >= 2 ? (
               <SelectField
                 emptyLabel="All statuses"
                 label="Status"
-                onChange={(lifecycle) => onNavigate("sources", { ...state, lifecycle })}
+                onChange={(lifecycle) =>
+                  onNavigate("sources", { ...state, lifecycle })
+                }
                 options={statusOptions}
-                value={state.lifecycle}
+                value={state.lifecycle || ""}
               />
             ) : null}
           </div>
+
           <p aria-live="polite" className="source-register-total">
-            {activeRows.length} of {unfilteredActiveRows.length} {totalEntityLabel}
+            {filteredPublicationRows.length} of {allPublicationRows.length} publications
           </p>
+
+          {hasActiveFilters ? (
+            <Button
+              onClick={handleResetFilters}
+              type="button"
+              variant="subtle"
+            >
+              Reset filters
+            </Button>
+          ) : null}
         </div>
       </WorkbenchControlSurface>
 
+      {state.source && !selectedPublicationRow ? (
+        <div className="source-not-found-banner" role="alert">
+          <div>
+            <strong>Source not found</strong>
+            <p>
+              Requested source ID <code>{state.source}</code> is not in the
+              public publication register.
+            </p>
+          </div>
+          <Button
+            onClick={handleCloseInspector}
+            type="button"
+            variant="secondary"
+          >
+            Clear selection
+          </Button>
+        </div>
+      ) : null}
+
       <div
-        aria-labelledby={`source-layer-tab-${activeLayer}`}
         id="source-register-results"
-        role="tabpanel"
+        role="region"
       >
         <div className="source-results-orientation">
-          <strong>{SOURCE_LAYER_TABS.find((tab) => tab.id === activeLayer)?.label}</strong>
+          <strong>Publication register</strong>
           <span aria-live="polite">
-            Showing {Math.min(visibleRows.length, activeRows.length)} of {activeRows.length} {entityLabel}
+            Showing {Math.min(visibleRows.length, filteredPublicationRows.length)} of{" "}
+            {filteredPublicationRows.length} publications
           </span>
         </div>
-        {activeLayer === "organization" ? (
-          <div data-control-results>
-            {visibleRows.map((row) => (
-              <SummaryCard key={row.id} title={row.displayTitle}>
-                <p>
-                  Control Atlas's organizing spine connects federal authority,
-                  Cybersecurity, and its areas. See the Path rail on any record
-                  for how Control Atlas structure and publisher hierarchy are
-                  identified.
-                </p>
-                <p className="support-meta">Owner: {row.publisher.value || "Owner not recorded"}</p>
-              </SummaryCard>
-            ))}
-          </div>
-        ) : activeRows.length ? (
+
+        {filteredPublicationRows.length === 0 ? (
+          <EmptyState
+            actionLabel="Clear publication filters"
+            className="source-register-empty"
+            message="Clear the search, publisher, or status filters to return to the full publication register."
+            onAction={handleResetFilters}
+            title="No publications match these filters."
+          />
+        ) : (
           <div
-            aria-label="Control Atlas source register"
+            aria-label="Control Atlas publication register"
             className="source-register"
             data-control-results
             role="table"
           >
             <div className="source-register-heading" role="row">
-              {activeLayer === "ingestion" ? (
-                <>
-                  <span role="columnheader">Source material</span>
-                  <span role="columnheader">Publisher</span>
-                  <span role="columnheader">Format</span>
-                  <span role="columnheader">Retrieved</span>
-                  <span role="columnheader">Imported records</span>
-                  <span role="columnheader">Status</span>
-                </>
-              ) : activeLayer === "connection" ? (
-                <>
-                  <span role="columnheader">Mapping source</span>
-                  <span role="columnheader">Publisher</span>
-                  <span role="columnheader">Imported records</span>
-                  <span role="columnheader">Published links</span>
-                  <span role="columnheader">Retrieved</span>
-                  <span role="columnheader">Status</span>
-                </>
-              ) : (
-                <>
-                  <span role="columnheader">Publication</span>
-                  <span role="columnheader">Publisher</span>
-                  <span role="columnheader">Catalog coverage</span>
-                  <span role="columnheader">Publisher version</span>
-                  <span role="columnheader">Source last checked</span>
-                  <span role="columnheader">Status</span>
-                </>
-              )}
+              <span role="columnheader">Publication</span>
+              <span role="columnheader">Publisher</span>
+              <span role="columnheader">Publisher version</span>
+              <span role="columnheader">Source last checked</span>
+              <span role="columnheader">Status</span>
+              <span role="columnheader">Catalog profile</span>
             </div>
-            {visibleRows.map((row, index) => (
-              <div
-                className="source-register-row"
-                key={row.id}
-                ref={index === Math.max(0, visibleLimit - SOURCE_PAGE_SIZE) ? firstNewRowRef : undefined}
-                role="row"
-                tabIndex={-1}
-              >
-                {activeLayer === "ingestion" ? (
-                  <>
-                    <SourceRegisterCell className="ca-source-cell--identity" label="Source material">
-                      <strong>
-                        <AppLink onNavigate={onNavigate} patch={{ ...state, source: row.id }} view="sources">
-                          {row.displayTitle}
-                        </AppLink>
-                      </strong>
-                      <CopyStableSourceId id={row.id} />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Publisher">
-                      <SourceFieldValue field={row.publisher} missingLabel="Publisher not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Format">
-                      <SourceFieldValue field={row.format} format={(value) => displayNameFor("format", value)} missingLabel="Format not recorded" notApplicableLabel="Reference page" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Retrieved">
-                      <SourceFieldValue field={row.retrievedAt} missingLabel="Retrieval date not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Imported records">
-                      <SourceFieldValue field={row.recordCount} format={(value) => value.toLocaleString()} missingLabel="Record count not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Status">
-                      <SourceFieldValue field={row.lifecycle} format={(value) => displayNameFor("lifecycle_status", value)} missingLabel="Status not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                  </>
-                ) : activeLayer === "connection" ? (
-                  <>
-                    <SourceRegisterCell className="ca-source-cell--identity" label="Mapping source">
-                      <strong>
-                        <AppLink onNavigate={onNavigate} patch={{ ...state, source: row.id }} view="sources">
-                          {row.displayTitle}
-                        </AppLink>
-                      </strong>
-                      <CopyStableSourceId id={row.id} />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Publisher">
-                      <SourceFieldValue field={row.publisher} missingLabel="Publisher not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Imported records">
-                      <SourceFieldValue field={row.recordCount} format={(value) => value.toLocaleString()} missingLabel="Record count not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Published links">
-                      <SourceFieldValue field={row.relationshipCount} format={(value) => value.toLocaleString()} missingLabel="Link count not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Retrieved">
-                      <SourceFieldValue field={row.retrievedAt} missingLabel="Retrieval date not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Status">
-                      <SourceFieldValue field={row.lifecycle} format={(value) => displayNameFor("lifecycle_status", value)} missingLabel="Status not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                  </>
-                ) : (
-                  <>
-                    <SourceRegisterCell className="ca-source-cell--identity" label="Publication">
-                      <strong>
-                        <AppLink onNavigate={onNavigate} patch={{ ...state, source: row.id }} view="sources">
-                          {row.displayTitle}
-                        </AppLink>
-                      </strong>
-                      <CopyStableSourceId id={row.id} />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Publisher">
-                      <SourceFieldValue field={row.publisher} missingLabel="Publisher not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Catalog coverage">
-                      <SourceFieldValue field={row.coverage} format={(value) => value.join(", ")} missingLabel="Coverage not recorded" notApplicableLabel="No catalog profile" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Publisher version">
-                      <SourceFieldValue field={row.version} missingLabel="Version not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Source last checked">
-                      <SourceFieldValue field={row.verifiedAt} missingLabel="Not checked" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                    <SourceRegisterCell label="Status">
-                      <SourceFieldValue field={row.lifecycle} format={(value) => displayNameFor("lifecycle_status", value)} missingLabel="Status not recorded" notApplicableLabel="Not applicable" />
-                    </SourceRegisterCell>
-                  </>
-                )}
-              </div>
-            ))}
+
+            {visibleRows.map((row, index) => {
+              const isSelected =
+                state.source === row.id ||
+                selectedPublicationRow?.id === row.id;
+              const materialCount =
+                row.sourceMaterials.primary.length +
+                row.sourceMaterials.enrichment.length +
+                row.sourceMaterials.supplemental.length;
+              const mappingCount = row.connectionEvidence.length;
+
+              return (
+                <div
+                  className={`source-register-row${
+                    isSelected ? " source-register-row--selected" : ""
+                  }`}
+                  key={row.id}
+                  ref={
+                    index === Math.max(0, visibleLimit - SOURCE_PAGE_SIZE)
+                      ? firstNewRowRef
+                      : undefined
+                  }
+                  role="row"
+                  tabIndex={-1}
+                >
+                  <SourceRegisterCell
+                    className="ca-source-cell--identity"
+                    label="Publication"
+                  >
+                    <div className="source-title-row">
+                      <button
+                        aria-expanded={isSelected}
+                        className="source-title-link"
+                        onClick={(e) => handleSelectPublication(row.id, e)}
+                        type="button"
+                      >
+                        {row.displayTitle}
+                      </button>
+                      {materialCount > 0 || mappingCount > 0 ? (
+                        <span
+                          className="source-attached-pill"
+                          title={`${materialCount} source file${
+                            materialCount === 1 ? "" : "s"
+                          }, ${mappingCount} mapping${
+                            mappingCount === 1 ? "" : "s"
+                          }`}
+                        >
+                          {materialCount > 0
+                            ? `${materialCount} file${
+                                materialCount === 1 ? "" : "s"
+                              }`
+                            : ""}
+                          {materialCount > 0 && mappingCount > 0 ? " · " : ""}
+                          {mappingCount > 0
+                            ? `${mappingCount} mapping${
+                                mappingCount === 1 ? "" : "s"
+                              }`
+                            : ""}
+                        </span>
+                      ) : null}
+                    </div>
+                  </SourceRegisterCell>
+
+                  <SourceRegisterCell label="Publisher">
+                    <SourceFieldValue
+                      field={row.publisher}
+                      missingLabel="Publisher not recorded"
+                      notApplicableLabel="Not applicable"
+                    />
+                  </SourceRegisterCell>
+
+                  <SourceRegisterCell label="Publisher version">
+                    <SourceFieldValue
+                      field={row.version}
+                      missingLabel="Not published"
+                      notApplicableLabel="Not applicable"
+                    />
+                  </SourceRegisterCell>
+
+                  <SourceRegisterCell label="Source last checked">
+                    <SourceFieldValue
+                      field={row.verifiedAt}
+                      missingLabel="Not checked"
+                      notApplicableLabel="Not applicable"
+                    />
+                  </SourceRegisterCell>
+
+                  <SourceRegisterCell label="Status">
+                    <Badge
+                      tone={
+                        row.lifecycle.value === "active"
+                          ? "success"
+                          : row.lifecycle.state === "blocked"
+                            ? "error"
+                            : "warning"
+                      }
+                    >
+                      {displayNameFor(
+                        "lifecycle_status",
+                        row.lifecycle.value || "",
+                      )}
+                    </Badge>
+                  </SourceRegisterCell>
+
+                  <SourceRegisterCell label="Catalog profile">
+                    <span className="source-coverage-summary">
+                      {row.coverageSummary}
+                    </span>
+                  </SourceRegisterCell>
+                </div>
+              );
+            })}
           </div>
-        ) : (
-          <section className="empty-state" data-control-results>
-            <h2>No {sourceLayerEntityLabel(activeLayer, 2)} match these filters.</h2>
-            <p>
-              Clear the search, publisher, or status filters to return to the full {sourceLayerEntityLabel(activeLayer, 1)} register.
-            </p>
-            <Button
-              onClick={() =>
-                onNavigate("sources", {
-                  layer: activeLayer,
-                  query: "",
-                  publisher: "",
-                  provenance: "",
-                  eligibility: "",
-                  lifecycle: "",
-                  access: "",
-                })
-              }
-              type="button"
-              variant="primary"
-            >
-              Clear {sourceLayerEntityLabel(activeLayer, 1)} filters
-            </Button>
-          </section>
         )}
-        {activeRows.length > visibleRows.length ? (
+
+        {filteredPublicationRows.length > visibleRows.length ? (
           <div className="source-register-more">
             <Button
               onClick={() => {
-                setVisibleLimit((current) => Math.min(current + SOURCE_PAGE_SIZE, activeRows.length));
-                window.requestAnimationFrame(() => firstNewRowRef.current?.focus());
+                setVisibleLimit((current) =>
+                  Math.min(current + SOURCE_PAGE_SIZE, filteredPublicationRows.length),
+                );
+                window.requestAnimationFrame(() =>
+                  firstNewRowRef.current?.focus(),
+                );
               }}
               type="button"
               variant="secondary"
             >
-              Show {Math.min(SOURCE_PAGE_SIZE, activeRows.length - visibleRows.length)} more {entityLabel}
+              Show{" "}
+              {Math.min(
+                SOURCE_PAGE_SIZE,
+                filteredPublicationRows.length - visibleRows.length,
+              )}{" "}
+              more publications
             </Button>
           </div>
         ) : null}
       </div>
+
+      {selectedPublicationRow ? (
+        <PublicationInspector
+          onClose={handleCloseInspector}
+          publication={selectedPublicationRow}
+        />
+      ) : null}
 
       <p className="sources-resource-boundary">
         Looking for tools or training?{" "}
@@ -652,18 +866,31 @@ export function SourcesPage(props: {
         </AppLink>
       </p>
 
-      <section aria-labelledby="source-supporting-evidence" className="source-supporting-evidence">
+      <section
+        aria-labelledby="source-supporting-evidence"
+        className="source-supporting-evidence"
+      >
         <h2 id="source-supporting-evidence">Supporting source evidence</h2>
+
         <details className="canonical-source-links" id="official-source-links">
-          <summary>Official source links</summary>
+          <summary>Official primary source links</summary>
           <div className="disclosure-content">
-            <p>Direct links to selected primary publications.</p>
+            <p>Direct links to selected public primary authority publications.</p>
             <ul>
-              {["fisma-44-usc-3551", "nist-sp-800-53-r5", "mitre-attack-enterprise", "mitre-d3fend"].map((sourceId) => {
+              {[
+                "fisma-44-usc-3551",
+                "nist-sp-800-53-r5",
+                "mitre-attack-enterprise",
+                "mitre-d3fend",
+              ].map((sourceId) => {
                 const link = sourceLinkFor(sourceId);
                 return (
                   <li key={link.sourceId}>
-                    <a href={link.canonicalUrl} rel="noopener noreferrer" target="_blank">
+                    <a
+                      href={link.canonicalUrl}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
                       {link.displayName}
                     </a>
                   </li>
@@ -672,30 +899,68 @@ export function SourcesPage(props: {
             </ul>
           </div>
         </details>
+
         <details className="connection-inventory" id="connection-inventory">
           <summary>Connection inventory</summary>
           <div className="disclosure-content">
-            <p>What's loaded and connected right now — a count of what's built, not a score of how complete the picture is.</p>
+            <p>
+              What's loaded and connected right now — a count of what's built,
+              not a score of how complete the picture is.
+            </p>
             <p className="connection-inventory-summary">
-              <strong>{connectionInventory.totalRecords.toLocaleString()}</strong> records across {connectionInventory.rows.length} practical categories with <strong>{connectionInventory.publishedLinks.toLocaleString()}</strong> published links.
+              <strong>{connectionInventory.totalRecords.toLocaleString()}</strong>{" "}
+              records across {connectionInventory.rows.length} practical
+              categories with{" "}
+              <strong>
+                {connectionInventory.publishedLinks.toLocaleString()}
+              </strong>{" "}
+              published links.
             </p>
             <details className="connection-inventory-details">
-              <summary>Per-category counts ({connectionInventory.rows.length})</summary>
+              <summary>
+                Per-category counts ({connectionInventory.rows.length})
+              </summary>
               <ul className="connection-inventory-list">
                 {connectionInventory.rows.map((category) => (
                   <li className="connection-inventory-row" key={category.id}>
                     <strong>{category.label}</strong>
-                    <span>{category.totalRecords.toLocaleString()} records loaded</span>
-                    <span>{category.connectedRecords.toLocaleString()} records connected</span>
-                    <span>{category.publishedLinks.toLocaleString()} published links</span>
-                    <span className="connection-inventory-related">Connects to: {category.relatedCategories.join(", ") || "none yet"}</span>
+                    <span>
+                      {category.totalRecords.toLocaleString()} records loaded
+                    </span>
+                    <span>
+                      {category.connectedRecords.toLocaleString()} records connected
+                    </span>
+                    <span>
+                      {category.publishedLinks.toLocaleString()} published links
+                    </span>
+                    <span className="connection-inventory-related">
+                      Connects to:{" "}
+                      {category.relatedCategories.join(", ") || "none yet"}
+                    </span>
                   </li>
                 ))}
               </ul>
             </details>
           </div>
         </details>
+
+        <details className="structure-evidence" id="structure-evidence">
+          <summary>Control Atlas structure & organizing methodology</summary>
+          <div className="disclosure-content">
+            <p>
+              Control Atlas's organizing spine connects federal authority,
+              Cybersecurity, and its areas. See the Path rail on any record for
+              how Control Atlas structure and publisher hierarchy are identified.
+            </p>
+            <p className="support-meta">
+              The 9 primary cybersecurity functional areas organize 47 canonical
+              publications and their attached official source files without altering
+              official publisher titles or requirement citations.
+            </p>
+          </div>
+        </details>
       </section>
     </Panel>
   );
 }
+
