@@ -8,7 +8,7 @@ interface PanelProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>
 
 export function Panel({ title, children, className = '', overflow = 'hidden', ...props }: PanelProps) {
   return (
-    <div className={`relative isolate ${overflow === 'hidden' ? 'overflow-hidden' : ''} min-h-[92px] p-[12px] border border-[var(--ca-border-strong)] border-t-[color-mix(in_srgb,var(--ca-primary)_30%,transparent)] bg-[linear-gradient(145deg,var(--ca-surface),color-mix(in_srgb,var(--ca-surface),var(--ca-primary)_4%))] ${className}`} {...props}>
+    <div className={`relative isolate ${overflow === 'hidden' ? 'overflow-hidden' : ''} min-h-[92px] p-[20px] border border-[var(--ca-border-strong)] border-t-[color-mix(in_srgb,var(--ca-primary)_30%,transparent)] bg-[linear-gradient(145deg,var(--ca-surface),color-mix(in_srgb,var(--ca-surface),var(--ca-primary)_4%))] ${className}`} {...props}>
       {/* Texture background */}
       <div className="absolute inset-0 -z-10 pointer-events-none opacity-[0.14] mix-blend-soft-light" 
            aria-hidden="true"

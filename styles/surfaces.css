@@ -4206,13 +4206,19 @@ a:focus-visible {
     gap: var(--ca-space-8);
   }
 
+  .sources-page .source-register-control-surface {
+    gap: var(--ca-space-4);
+    margin-block: var(--ca-space-4);
+    padding: var(--ca-space-4);
+  }
+
   main,
   .app-shell {
     width: min(100% - 1rem, 1240px);
   }
 
   .site-header {
-    gap: var(--ca-space-2);
+    gap: var(--ca-space-4);
     padding-block: var(--ca-space-3);
     /* backdrop-filter creates a containing block for fixed descendants in
        Chromium. Disable it here so the mobile sheet is fixed to the viewport,
@@ -11314,3 +11320,4 @@ input[type="checkbox"] {
     grid-template-columns: 1fr;
   }
 }
+
