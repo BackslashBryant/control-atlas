@@ -122,6 +122,7 @@ export type PublicationRegisterRow = SourceRegisterRow & {
     supplemental: SourceMaterialItem[];
   };
   connectionEvidence: ConnectionEvidenceItem[];
+  associatedSourceIds: string[];
   reviews: SourcePublicationReview[];
   rawSource: any;
 };
@@ -624,6 +625,7 @@ export function buildPublicationRegister(
       coverageSummary,
       sourceMaterials,
       connectionEvidence,
+      associatedSourceIds: (identity.alias_source_ids || []) as string[],
       reviews,
       rawSource: source,
     };

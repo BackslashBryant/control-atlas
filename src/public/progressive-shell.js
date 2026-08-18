@@ -55,63 +55,63 @@
     var query = routeUrl.searchParams;
 
     if (route === "atlas") {
-      var atlasCopy = sharedCopy("atlas") || { eyebrow: "Atlas", summary: "Start with a topic and work toward the details.", title: "Atlas" };
+      var atlasCopy = sharedCopy("atlas") || { eyebrow: "", summary: "Start with a topic and work toward the details.", title: "Atlas" };
       var rawNode = query.get("node") || "";
       var nodeParts = decode(rawNode).split(":");
       var identifier = nodeParts[nodeParts.length - 1] || "";
       return identifier
         ? {
-            eyebrow: atlasCopy.eyebrow,
+            eyebrow: atlasCopy.eyebrow || "",
             kind: "atlas",
             summary: atlasCopy.summary,
             title: identifier
           }
         : {
-            eyebrow: atlasCopy.eyebrow,
+            eyebrow: atlasCopy.eyebrow || "",
             kind: "atlas",
             summary: atlasCopy.summary,
             title: atlasCopy.title
           };
     }
     if (route === "library") {
-      var libraryCopy = sharedCopy("library") || { eyebrow: "Library", summary: "Search by identifier, title, or topic.", title: "Library" };
+      var libraryCopy = sharedCopy("library") || { eyebrow: "", summary: "Search by identifier, title, or topic.", title: "Library" };
       var catalogId = segments[1] === "publication" ? decode(segments[2] || "") : "";
       return catalogId
         ? {
-            eyebrow: libraryCopy.eyebrow,
+            eyebrow: libraryCopy.eyebrow || "",
             kind: "catalog",
             summary: libraryCopy.summary,
             title: CATALOG_NAMES[catalogId] || catalogId
           }
         : {
-            eyebrow: libraryCopy.eyebrow,
+            eyebrow: libraryCopy.eyebrow || "",
             kind: "catalog",
             summary: libraryCopy.summary,
             title: libraryCopy.title
           };
     }
     if (route === "record") {
-      var recordCopy = sharedCopy("record") || { eyebrow: "Record", summary: "Read the published text and record details.", title: "Record" };
+      var recordCopy = sharedCopy("record") || { eyebrow: "", summary: "Read the published text and record details.", title: "Record" };
       return {
-        eyebrow: recordCopy.eyebrow,
+        eyebrow: recordCopy.eyebrow || "",
         kind: "record",
         summary: recordCopy.summary,
         title: decode(segments.slice(2).join("/")) || recordCopy.title
       };
     }
     if (route === "compare") {
-      var compareCopy = sharedCopy("compare") || { eyebrow: "Compare", summary: "Compare frameworks and related records.", title: "Compare" };
+      var compareCopy = sharedCopy("compare") || { eyebrow: "", summary: "Compare frameworks and related records.", title: "Compare" };
       return {
-        eyebrow: compareCopy.eyebrow,
+        eyebrow: compareCopy.eyebrow || "",
         kind: "compare",
         summary: compareCopy.summary,
         title: compareCopy.title
       };
     }
     if (route === "build") {
-      var documentsCopy = sharedCopy("documents") || { eyebrow: "Documents", summary: "Choose what you need to produce.", title: "Documents" };
+      var documentsCopy = sharedCopy("documents") || { eyebrow: "", summary: "Choose what you need to produce.", title: "Documents" };
       return {
-        eyebrow: documentsCopy.eyebrow,
+        eyebrow: documentsCopy.eyebrow || "",
         kind: "documents",
         summary: documentsCopy.summary,
         title: segments[1] === "tasks" ? "Tasks" : documentsCopy.title
@@ -119,18 +119,18 @@
     }
     if (route === "sources") {
       if (query.get("source")) return null;
-      var sourcesCopy = sharedCopy("sources") || { eyebrow: "Sources", summary: "Check publication ownership, version, and update status.", title: "Sources" };
+      var sourcesCopy = sharedCopy("sources") || { eyebrow: "", summary: "Check publication ownership, version, and update status.", title: "Sources" };
       return {
-        eyebrow: sourcesCopy.eyebrow,
+        eyebrow: sourcesCopy.eyebrow || "",
         kind: "sources",
         summary: sourcesCopy.summary,
         title: sourcesCopy.title
       };
     }
     if (route === "start") {
-      var startCopy = sharedCopy("start") || { eyebrow: "Start here", summary: "Not sure where to begin? Start here.", title: "Start here" };
+      var startCopy = sharedCopy("start") || { eyebrow: "", summary: "Not sure where to begin? Start here.", title: "Start here" };
       return {
-        eyebrow: startCopy.eyebrow,
+        eyebrow: startCopy.eyebrow || "",
         kind: "start",
         summary: startCopy.summary,
         title: startCopy.title
@@ -138,18 +138,18 @@
     }
     if (route === "guides") {
       if (query.get("pattern")) return null;
-      var guidesCopy = sharedCopy("guides") || { eyebrow: "Guides", summary: "Follow step-by-step guidance for common federal cybersecurity work.", title: "Guides" };
+      var guidesCopy = sharedCopy("guides") || { eyebrow: "", summary: "Follow step-by-step guidance for common federal cybersecurity work.", title: "Guides" };
       return {
-        eyebrow: guidesCopy.eyebrow,
+        eyebrow: guidesCopy.eyebrow || "",
         kind: "guides",
         summary: guidesCopy.summary,
         title: guidesCopy.title
       };
     }
     if (route === "about") {
-      var aboutCopy = sharedCopy("about") || { eyebrow: "About", summary: "About Control Atlas.", title: "About" };
+      var aboutCopy = sharedCopy("about") || { eyebrow: "", summary: "About Control Atlas.", title: "About" };
       return {
-        eyebrow: aboutCopy.eyebrow,
+        eyebrow: aboutCopy.eyebrow || "",
         kind: "about",
         summary: aboutCopy.summary,
         title: aboutCopy.title
@@ -201,7 +201,16 @@
       root.dataset.staticRoutePersistent = "true";
       root.dataset.staticRouteActive = "true";
       root.dataset.staticRouteKind = identity.kind;
-      shell.querySelector("[data-static-route-eyebrow]").textContent = identity.eyebrow;
+      var eyebrowNode = shell.querySelector("[data-static-route-eyebrow]");
+      if (eyebrowNode) {
+        var eyebrowText = (identity.eyebrow || "").trim();
+        eyebrowNode.textContent = eyebrowText;
+        if (!eyebrowText || eyebrowText.toLowerCase() === (identity.title || "").trim().toLowerCase()) {
+          eyebrowNode.hidden = true;
+        } else {
+          eyebrowNode.removeAttribute("hidden");
+        }
+      }
       shell.querySelector("[data-static-route-title]").textContent = identity.title;
       shell.querySelector("[data-static-route-summary]").textContent = identity.summary;
       shell.removeAttribute("hidden");

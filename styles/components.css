@@ -733,21 +733,60 @@
 
 /* ── Inspector Drawer / Detail Surface ── */
 .inspector-drawer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-4);
+  padding: var(--ca-space-5);
+  background: var(--ca-surface-raised);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.inspector-drawer--modal {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   width: min(100vw, 480px);
   z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: var(--ca-space-4);
-  padding: var(--ca-space-5);
   border-left: 1px solid var(--ca-border-strong);
-  background: var(--ca-surface-raised);
   box-shadow: -4px 0 24px color-mix(in srgb, var(--ca-shadow-color) 40%, transparent);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+}
+
+.inspector-drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: color-mix(in srgb, var(--ca-surface-canvas) 60%, transparent);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+}
+
+.inspector-drawer--inline {
+  position: sticky;
+  top: calc(var(--ca-header-height, 64px) + var(--ca-space-4));
+  width: 100%;
+  max-height: calc(100vh - var(--ca-header-height, 64px) - var(--ca-space-8));
+  z-index: 10;
+  box-shadow: none;
+  border: 1px solid var(--ca-border-strong);
+  border-radius: var(--ca-radius-md);
+}
+
+.sources-workspace {
+  display: block;
+  width: 100%;
+}
+
+@media (min-width: 1100px) {
+  .sources-workspace--with-inspector {
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) minmax(360px, 1.2fr);
+    gap: var(--ca-space-6);
+    align-items: start;
+  }
 }
 
 .inspector-drawer-header {

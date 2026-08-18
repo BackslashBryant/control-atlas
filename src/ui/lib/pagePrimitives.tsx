@@ -669,32 +669,95 @@ export function InspectorDrawer(props: {
   className?: string;
   id?: string;
 }) {
+  const drawerRef = React.useRef<HTMLElement | null>(null);
+  const closeButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const [isCompact, setIsCompact] = React.useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 1100 : false,
+  );
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsCompact(window.innerWidth < 1100);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  React.useEffect(() => {
+    if (!props.isOpen) return;
+
+    if (isCompact) {
+      closeButtonRef.current?.focus();
+    }
+
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") {
+        props.onClose();
+        return;
+      }
+      if (!isCompact || event.key !== "Tab" || !drawerRef.current) return;
+
+      const focusable = drawerRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        last.focus();
+        event.preventDefault();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        first.focus();
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isCompact, props.isOpen, props.onClose]);
+
   if (!props.isOpen) return null;
+
   return (
-    <aside
-      aria-label={props.ariaLabel || "Details inspector"}
-      className={`inspector-drawer ${props.className || ""}`.trim()}
-      id={props.id}
-      role="complementary"
-      tabIndex={-1}
-    >
-      <div className="inspector-drawer-header">
-        <div>
-          {props.eyebrow ? <p className="eyebrow">{props.eyebrow}</p> : null}
-          <h2 className="inspector-drawer-title">{props.title}</h2>
-        </div>
-        <button
-          aria-label="Close inspector"
-          className="inspector-drawer-close"
+    <>
+      {isCompact ? (
+        <div
+          aria-hidden="true"
+          className="inspector-drawer-backdrop"
           onClick={props.onClose}
-          type="button"
-        >
-          <IconX aria-hidden="true" size={18} stroke={1.8} />
-        </button>
-      </div>
-      <div className="inspector-drawer-body">{props.children}</div>
-      {props.actions ? <div className="inspector-drawer-actions">{props.actions}</div> : null}
-    </aside>
+        />
+      ) : null}
+      <aside
+        aria-label={props.ariaLabel || "Details inspector"}
+        aria-modal={isCompact ? "true" : undefined}
+        className={`inspector-drawer ${isCompact ? "inspector-drawer--modal" : "inspector-drawer--inline"} ${props.className || ""}`.trim()}
+        id={props.id}
+        ref={drawerRef}
+        role={isCompact ? "dialog" : "region"}
+        tabIndex={-1}
+      >
+        <div className="inspector-drawer-header">
+          <div>
+            {props.eyebrow ? <p className="eyebrow">{props.eyebrow}</p> : null}
+            <h2 className="inspector-drawer-title">{props.title}</h2>
+          </div>
+          <button
+            aria-label="Close inspector"
+            className="inspector-drawer-close"
+            onClick={props.onClose}
+            ref={closeButtonRef}
+            type="button"
+          >
+            <IconX aria-hidden="true" size={18} stroke={1.8} />
+          </button>
+        </div>
+        <div className="inspector-drawer-body">{props.children}</div>
+        {props.actions ? (
+          <div className="inspector-drawer-actions">{props.actions}</div>
+        ) : null}
+      </aside>
+    </>
   );
 }
 

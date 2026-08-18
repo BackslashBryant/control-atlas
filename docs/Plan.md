@@ -12,20 +12,28 @@ At most one temporary `docs/Plan.md` may exist while this push is active. It is 
 
 ---
 
-## Current handoff (2026-08-17)
+## Current handoff (2026-08-18)
 
-**Phases 0–9 are complete.** Phase 9 (Design-System Integration, CSS Architecture, and Visual Fidelity) along with the Sources page layout refactor has been completed, verified, and shipped to `main`.
+**Live QA/QC Remediations & Sources Trust Workflow (Complete & Verified)**
 
-### Phase 9 Work Summary
-1. **Sources Page Layout Spike**: Refactored `SourcesPage.tsx` so `PublicationInspector` mounts prominently at the top of the workspace immediately below `PageHeader`, eliminating the below-the-fold jump defect. Added smooth scrolling on row selection, elevated drawer styling, and accessible close flow.
-2. **LSM Primitive Discipline**: Audited and upgraded all UI primitives in `src/ui/components/lsm/` (`Button`, `Input`, `Panel`, `Select`, `StatusChip`, `Tabs`) with $\ge 44\text{px}$ touch targets, visible focus outlines (`--ca-primary`), disabled states, and `aria-hidden="true"` on decorative icons and background textures.
-3. **Token & Component Authority**: Verified against pinned `vendor/orbital-archive/tokens.palette.json` (`tests/orbital-token-drift.test.mjs` green); consolidated semantic tokens.
-4. **CSS Architecture**: Integrated `.inspector-drawer` styling into `styles/components.css`, preserving the final cascade rule where `styles/orbital.css` imports last and wins ties cleanly.
-5. **Verification Gates Passed**: All unit tests (359/359), browser contracts (27/27), accessibility smoke (5/5), practitioner workflows (18/18), and full e2e smoke tests (79/79) passed.
-
-**Next up: Phase 10 — Micro-Interaction, Responsive, Accessibility, and Performance Polish** (§10 in `docs/Plan.md`).
-- Read §10 in full first.
-- Phases 0–9 are shipped to `main`; Phase 10 starts from that baseline.
+1. **Sources Layout Architecture (C-02, H-01, H-04)**:
+   - Replaced fixed overlay inspector with responsive two-mode layout:
+     - Desktop master-detail grid ($\ge 1100\text{px}$) with `.sources-workspace--with-inspector` (`grid-template-columns: minmax(0, 1.8fr) minmax(360px, 1.2fr)`). Register table on the left, sticky inspector on the right below header. Results count and table columns remain fully visible.
+     - Mobile/tablet modal dialog drawer overlay ($< 1100\text{px}$) with backdrop (`.inspector-drawer-backdrop`), `role="dialog"`, `aria-modal="true"`, focus trap (Tab/Shift+Tab), Escape dismissal, and reliable focus return.
+2. **Sources Trust Workflow & Progressive Disclosure (C-01, M-01, M-02, L-01, L-02)**:
+   - Restored all 8 progressive disclosure sections in `PublicationInspector`: overview grid, publisher link with publisher-specific text, publisher version, source last checked with `<time>`, lifecycle badge, reviews, coverage summary, primary source files, supplemental & enrichment documents, historical material, reference pages & community tools, published crosswalks & mapping evidence, and technical details `<details>`.
+   - Removed `Catalog profile` column from default table register, providing a clean 5-column ledger.
+   - Fixed attachment pill counts to reconcile exactly to primary + enrichment + supplemental + reference files and connectionEvidence mappings.
+3. **Reference-Source & Alias Lookup (H-03)**:
+   - Updated `selectedPublicationRow` in `SourcesPage.tsx` and `buildPublicationRegister` in `sourceRegister.ts` with `associatedSourceIds` (`identity.alias_source_ids`) and `sourceMaterials.reference`.
+4. **Search Debounce (M-03)**:
+   - Added 200ms debounce to search input in `SourcesPage.tsx`.
+5. **Progressive Shell & Diagnostics Parity (C-04)**:
+   - Cleared duplicate fallback eyebrows in `src/public/progressive-shell.js` and `src/index.html`.
+   - Injected Git commit build SHA into `<meta name="control-atlas-build-sha">` and `<div id="control-atlas-diagnostics" hidden ...>`.
+6. **Verification Coverage (H-02, C-03)**:
+   - Added `tests/e2e/sources-inspector-state.spec.mjs` (6/6 tests passing).
+   - Full test suite verified: 89/89 E2E smoke tests, 359/359 unit/data tests, 5/5 a11y tests, `npm run precommit` passed with 0 errors.
 
 ---
 

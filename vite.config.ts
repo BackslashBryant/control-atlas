@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
+import { execSync } from 'node:child_process';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
@@ -109,6 +110,17 @@ function renderStaticHome() {
   </section>`;
 }
 
+function getBuildSha(): string {
+  if (globalThis.process.env.VITE_CONTROL_ATLAS_BUILD_SHA) {
+    return globalThis.process.env.VITE_CONTROL_ATLAS_BUILD_SHA;
+  }
+  try {
+    return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
+  } catch {
+    return 'development';
+  }
+}
+
 export default defineConfig({
   base: './',
   root: resolve(rootDir, 'src'),
@@ -116,6 +128,7 @@ export default defineConfig({
     {
       name: 'control-atlas-runtime-cache-version',
       transformIndexHtml(html) {
+        const buildSha = getBuildSha();
         return {
           html: html
             .replace('<!-- CONTROL_ATLAS_HOME -->', renderStaticHome())
@@ -125,16 +138,26 @@ export default defineConfig({
             )
             .replaceAll('CONTROL_ATLAS_PRODUCT_DESCRIPTION', escapeHtml(SITE_COPY.product.definition))
             .replaceAll('CONTROL_ATLAS_RELEASE_DATE', escapeHtml(formatBuildDate(globalThis.process.env.VITE_CONTROL_ATLAS_RELEASE_DATE)))
-            .replaceAll('CONTROL_ATLAS_SOURCE_DATA_DATE', escapeHtml(formatBuildDate(globalThis.process.env.VITE_CONTROL_ATLAS_SOURCE_DATA_DATE))),
+            .replaceAll('CONTROL_ATLAS_SOURCE_DATA_DATE', escapeHtml(formatBuildDate(globalThis.process.env.VITE_CONTROL_ATLAS_SOURCE_DATA_DATE)))
+            .replaceAll('CONTROL_ATLAS_BUILD_SHA', escapeHtml(buildSha))
+            .replaceAll('CONTROL_ATLAS_CACHE_VERSION', escapeHtml(RUNTIME_CACHE_VERSION)),
           tags: [
-          {
-            tag: 'meta',
-            attrs: {
-              name: 'control-atlas-runtime-cache-version',
-              content: RUNTIME_CACHE_VERSION,
+            {
+              tag: 'meta',
+              attrs: {
+                name: 'control-atlas-runtime-cache-version',
+                content: RUNTIME_CACHE_VERSION,
+              },
+              injectTo: 'head',
             },
-            injectTo: 'head',
-          },
+            {
+              tag: 'meta',
+              attrs: {
+                name: 'control-atlas-build-sha',
+                content: buildSha,
+              },
+              injectTo: 'head',
+            },
           ],
         };
       },
