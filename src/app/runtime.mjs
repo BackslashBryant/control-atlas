@@ -75,6 +75,21 @@ const SEARCH_INTENT_ALIASES = [
     ],
     query: "incident handling",
   },
+  {
+    terms: [/\b(mfa|2fa|two[- ]factor|multi[- ]factor)\b/i],
+    query: "IA-2.1",
+  },
+  {
+    terms: [/\bssp\b/i],
+    query: "PL-2",
+  },
+  {
+    terms: [
+      /\b(in[- ]transit|transmission|tls|ssl)\b/i,
+      /\b(encrypt|encryption|protect|security)\b/i,
+    ],
+    query: "transmission confidentiality and integrity",
+  },
 ];
 
 function expandLibrarySearchIntent(value) {
@@ -86,10 +101,14 @@ function expandLibrarySearchIntent(value) {
 }
 
 function normalizeLibrarySearchQuery(value) {
-  const normalized = expandLibrarySearchIntent(value)
+  const expanded = expandLibrarySearchIntent(value)
     .replace(/poa\s*&\s*m/gi, "poam")
-    .replace(/poa\s+and\s+m/gi, "poam");
-  const terms = normalized.match(/[a-zA-Z0-9][a-zA-Z0-9.()-]*/g) || [];
+    .replace(/poa\s+and\s+m/gi, "poam")
+    .replace(/\b([a-z]{2,4})[-\s]?0*(\d+)\s*\(\s*0*(\d+)\s*\)/gi, "$1-$2.$3")
+    .replace(/\b([a-z]{2,4})[-\s]?0*(\d+)\.0*(\d+)\b/gi, "$1-$2.$3")
+    .replace(/\b([a-z]{2,4})[-\s]0*(\d+)\b/gi, "$1-$2")
+    .replace(/\b([a-z]{2,4})0+(\d+)\b/gi, "$1-$2");
+  const terms = expanded.match(/[a-zA-Z0-9][a-zA-Z0-9.()-]*/g) || [];
   return terms
     .filter(
       (term) => term.length > 1 && !SEARCH_STOP_WORDS.has(term.toLowerCase()),
@@ -110,22 +129,95 @@ function librarySearchRankBoost(document, query) {
   return boost;
 }
 
-// Practitioner notation for control enhancements uses parentheses, e.g.
-// "AC-2(1)" or "AC-2 (1) (a)", but the underlying data (item_id) stores
-// enhancements with dot notation, e.g. "AC-2.1". This converts an already
-// normalize()'d query from paren notation to dot notation on a best-effort
-// basis (multi-level parens collapse to the first numeric level) so search
-// queries reach the right node without requiring the data or index to
-// change. Queries that are already in dot notation (or aren't control IDs
-// at all) pass through unchanged.
+// Resolves aliases for practitioner notations and variations:
+// - Leading zeros: "AC-02" -> "ac-2", "AC-02(01)" -> "ac-2.1"
+// - Parentheses to dot: "AC-2(1)" / "AC-2 (1)" -> "ac-2.1"
+// - Missing hyphens/spaces: "AC2", "AC 02" -> "ac-2"
+// - Padded DISA CCI: "CCI-225", "CCI 225" -> "cci-000225"
+// - ATT&CK slash to dot: "T1059/001" -> "t1059.001"
+// - Authority prefixes: "NIST AC-02" -> "ac-2", "DISA CCI 123" -> "cci-000123"
+export function resolveControlAliases(rawNeedle) {
+  if (!rawNeedle || typeof rawNeedle !== "string") return [];
+  const trimmed = rawNeedle.trim();
+  if (!trimmed) return [];
+
+  const aliases = new Set();
+  aliases.add(trimmed.toLowerCase());
+
+  const strippedPrefix = trimmed
+    .replace(/^(?:nist\s*800-53|sp\s*800-53|nist|rev\s*5|disa|dod)\s+/i, "")
+    .trim();
+  if (strippedPrefix && strippedPrefix.toLowerCase() !== trimmed.toLowerCase()) {
+    aliases.add(strippedPrefix.toLowerCase());
+  }
+
+  const candidateInputs = [trimmed, strippedPrefix].filter(Boolean);
+
+  for (const input of candidateInputs) {
+    // 1. DISA CCI normalization: "cci-123", "cci 123", "cci123", "cci-000123"
+    const cciMatch = input.match(/^(?:cci[-\s]*)0*(\d{1,6})$/i);
+    if (cciMatch) {
+      const num = Number.parseInt(cciMatch[1], 10);
+      if (!Number.isNaN(num) && num > 0) {
+        aliases.add(`cci-${String(num).padStart(6, "0")}`);
+      }
+      continue;
+    }
+
+    // 2. MITRE ATT&CK sub-technique: "t1059/001", "t1059-001", "t1059 001", "t1059.001"
+    const attackMatch = input.match(/^(t\d{4})[/\-\s](\d{3})$/i);
+    if (attackMatch) {
+      aliases.add(`${attackMatch[1].toLowerCase()}.${attackMatch[2]}`);
+      continue;
+    }
+
+    // 3. NIST / Federal Control enhancements (do NOT add base control):
+    // Parenthetical enhancements: "ac-02 (01)", "ac-2(1)", "ac-02(1)(a)"
+    const parenMatch = input.match(/^([a-z]{2,4})[-\s]?0*(\d+)\s*\(\s*0*(\d+)\s*\)/i);
+    if (parenMatch) {
+      const family = parenMatch[1].toLowerCase();
+      const controlNum = Number.parseInt(parenMatch[2], 10);
+      const enhNum = Number.parseInt(parenMatch[3], 10);
+      aliases.add(`${family}-${controlNum}.${enhNum}`);
+      continue;
+    }
+
+    // Dot enhancements: "ac-02.01", "ac-2.01", "ac-2.1"
+    const dotMatch = input.match(/^([a-z]{2,4})[-\s]?0*(\d+)\.0*(\d+)$/i);
+    if (dotMatch) {
+      const family = dotMatch[1].toLowerCase();
+      const controlNum = Number.parseInt(dotMatch[2], 10);
+      const enhNum = Number.parseInt(dotMatch[3], 10);
+      aliases.add(`${family}-${controlNum}.${enhNum}`);
+      continue;
+    }
+
+    // Base control IDs: "ac-02", "ac-2", "ac02", "ac2", "ac 02", "ac 2"
+    const baseMatch = input.match(/^([a-z]{2,4})[-\s]?0*(\d+)$/i);
+    if (baseMatch) {
+      const family = baseMatch[1].toLowerCase();
+      const controlNum = Number.parseInt(baseMatch[2], 10);
+      aliases.add(`${family}-${controlNum}`);
+      continue;
+    }
+
+    // 4. CSF style: e.g. "pr.ac-01", "pr.ac-1", "pr ac 1", "pr-ac-1"
+    const csfMatch = input.match(/^([a-z]{2})[.\-\s]([a-z]{2})[-\s]?0*(\d+)$/i);
+    if (csfMatch) {
+      const func = csfMatch[1].toLowerCase();
+      const cat = csfMatch[2].toLowerCase();
+      const num = Number.parseInt(csfMatch[3], 10);
+      aliases.add(`${func}.${cat}-${num}`);
+      continue;
+    }
+  }
+
+  return [...aliases];
+}
+
 function normalizeControlNotation(needle) {
-  if (!needle) return needle;
-  // Collapse "ac-2 (1)" -> "ac-2(1)" so the paren regex matches consistently
-  // regardless of stray whitespace before the parenthesis.
-  const tightened = needle.replace(/\s+\(/g, "(");
-  const match = tightened.match(/^([a-z]{2,3}-\d+)\s*\(\s*(\d+)\s*\)/i);
-  if (!match) return needle;
-  return `${match[1]}.${match[2]}`;
+  const aliases = resolveControlAliases(needle);
+  return aliases.length > 1 ? aliases[1] : (aliases[0] || needle);
 }
 
 function csvCell(value) {
@@ -1104,9 +1196,10 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
 
   function indexedLibraryMatches(query, filters = {}) {
     const needle = normalize(query);
-    const aliasNeedle = normalizeControlNotation(needle);
+    const aliases = resolveControlAliases(needle);
+    const primaryAlias = aliases.length > 1 ? aliases[1] : aliases[0];
     const searchNeedle = normalizeLibrarySearchQuery(
-      aliasNeedle !== needle ? aliasNeedle : query,
+      primaryAlias && primaryAlias !== needle ? primaryAlias : query,
     ).toLowerCase();
     const searchTerms = searchNeedle.split(/\s+/).filter(Boolean);
     const exactMatches = [];
@@ -1117,10 +1210,8 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       const normalizedId = normalize(indexedLibraryValue(index, "id"));
       if (
         needle && (
-          normalizedItemId === needle ||
-          normalizedId === needle ||
-          normalizedItemId === aliasNeedle ||
-          normalizedId === aliasNeedle
+          aliases.includes(normalizedItemId) ||
+          aliases.includes(normalizedId)
         )
       ) {
         exactMatches.push({ index, rankBoost: 0, score: 0 });
@@ -1144,7 +1235,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       matches.push({
         index,
         rankBoost: indexedLibraryRankBoost(index, searchNeedle),
-        score: normalizedItemId.startsWith(needle) || normalizedItemId.startsWith(aliasNeedle)
+        score: aliases.some((a) => normalizedItemId.startsWith(a))
           ? 1
           : title.includes(searchNeedle)
             ? 2
@@ -1156,7 +1247,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
 
   function documentLibraryMatches(query, filters = {}) {
     const needle = normalize(query);
-    const aliasNeedle = normalizeControlNotation(needle);
+    const aliases = resolveControlAliases(needle);
     const candidates = libraryDocuments.filter((document) => matchesLibraryFacet(document, filters));
     if (!needle) {
       return candidates.map((document) => ({ document, rankBoost: 0, score: 0 }));
@@ -1164,13 +1255,14 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     const exactMatches = candidates.filter((document) => {
       const itemId = document.search_item_id || normalize(document.item_id);
       const id = document.search_id || normalize(document.id);
-      return itemId === needle || id === needle || itemId === aliasNeedle || id === aliasNeedle;
+      return aliases.includes(itemId) || aliases.includes(id);
     });
     if (exactMatches.length) {
       return exactMatches.map((document) => ({ document, rankBoost: 0, score: 0 }));
     }
+    const primaryAlias = aliases.length > 1 ? aliases[1] : aliases[0];
     const searchNeedle = normalizeLibrarySearchQuery(
-      aliasNeedle !== needle ? aliasNeedle : query,
+      primaryAlias && primaryAlias !== needle ? primaryAlias : query,
     ).toLowerCase();
     const searchTerms = searchNeedle.split(/\s+/).filter(Boolean);
     if (!searchTerms.length) return [];
@@ -1190,7 +1282,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       matches.push({
         document,
         rankBoost: librarySearchRankBoost(document, searchNeedle),
-        score: itemId.startsWith(needle) || itemId.startsWith(aliasNeedle)
+        score: aliases.some((a) => itemId.startsWith(a))
           ? 1
           : title.includes(searchNeedle)
             ? 2
@@ -1217,7 +1309,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     searchNodes(query, filters = {}) {
       const needle = normalize(query);
       if (!needle) return [];
-      const aliasNeedle = normalizeControlNotation(needle);
+      const aliases = resolveControlAliases(needle);
       const nodeMatchesFilter = (node) =>
         (!filters.catalog_id ||
           node.metadata?.catalog_id === filters.catalog_id) &&
@@ -1227,12 +1319,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
         if (!nodeMatchesFilter(node)) return false;
         const itemId = normalize(node.metadata?.item_id);
         const id = normalize(node.id);
-        return (
-          itemId === needle ||
-          id === needle ||
-          itemId === aliasNeedle ||
-          id === aliasNeedle
-        );
+        return aliases.includes(itemId) || aliases.includes(id);
       });
       if (exactMatches.length > 0) {
         return exactMatches;
@@ -1245,9 +1332,9 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
           const label = normalize(node.label);
           const description = normalize(node.metadata?.description);
           const score =
-            itemId === needle || itemId === aliasNeedle
+            aliases.includes(itemId)
               ? 0
-              : itemId.startsWith(needle) || itemId.startsWith(aliasNeedle)
+              : aliases.some((a) => itemId.startsWith(a))
                 ? 1
                 : label.includes(needle)
                   ? 2

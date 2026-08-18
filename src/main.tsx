@@ -467,6 +467,7 @@ function connectStaticHeader() {
       ? 'Open navigation menu'
       : 'Open more pages',
   );
+  staticMenuToggle?.setAttribute('aria-expanded', 'false');
   staticMenuToggle?.addEventListener('click', () => {
       if (!beginRouteTransition('Opening navigation', 'static:menu')) return;
       void bootReactApp().then(async (booted) => {

@@ -26,6 +26,74 @@ export type AtlasSearchTransition =
       announcement: string;
     };
 
+function resolveControlAliases(rawNeedle: string): string[] {
+  if (!rawNeedle) return [];
+  const trimmed = rawNeedle.trim();
+  if (!trimmed) return [];
+
+  const aliases = new Set<string>();
+  aliases.add(trimmed.toUpperCase());
+
+  const strippedPrefix = trimmed
+    .replace(/^(?:nist\s*800-53|sp\s*800-53|nist|rev\s*5|disa|dod)\s+/i, "")
+    .trim();
+  if (strippedPrefix) {
+    aliases.add(strippedPrefix.toUpperCase());
+  }
+
+  const candidateInputs = [trimmed, strippedPrefix].filter(Boolean);
+
+  for (const input of candidateInputs) {
+    const cciMatch = input.match(/^(?:cci[-\s]*)0*(\d{1,6})$/i);
+    if (cciMatch) {
+      const num = Number.parseInt(cciMatch[1], 10);
+      if (!Number.isNaN(num) && num > 0) {
+        aliases.add(`CCI-${String(num).padStart(6, "0")}`);
+      }
+    }
+
+    const attackMatch = input.match(/^(t\d{4})[/\-\s](\d{3})$/i);
+    if (attackMatch) {
+      aliases.add(`${attackMatch[1].toUpperCase()}.${attackMatch[2]}`);
+    }
+
+    const parenMatch = input.match(/^([a-z]{2,4})[-\s]?0*(\d+)\s*\(\s*0*(\d+)\s*\)/i);
+    if (parenMatch) {
+      const family = parenMatch[1].toUpperCase();
+      const controlNum = Number.parseInt(parenMatch[2], 10);
+      const enhNum = Number.parseInt(parenMatch[3], 10);
+      aliases.add(`${family}-${controlNum}.${enhNum}`);
+      aliases.add(`${family}-${controlNum}`);
+    }
+
+    const dotMatch = input.match(/^([a-z]{2,4})[-\s]?0*(\d+)\.0*(\d+)/i);
+    if (dotMatch) {
+      const family = dotMatch[1].toUpperCase();
+      const controlNum = Number.parseInt(dotMatch[2], 10);
+      const enhNum = Number.parseInt(dotMatch[3], 10);
+      aliases.add(`${family}-${controlNum}.${enhNum}`);
+      aliases.add(`${family}-${controlNum}`);
+    }
+
+    const baseMatch = input.match(/^([a-z]{2,4})[-\s]?0*(\d+)$/i);
+    if (baseMatch) {
+      const family = baseMatch[1].toUpperCase();
+      const controlNum = Number.parseInt(baseMatch[2], 10);
+      aliases.add(`${family}-${controlNum}`);
+    }
+
+    const csfMatch = input.match(/^([a-z]{2})[.\-\s]([a-z]{2})[-\s]?0*(\d+)$/i);
+    if (csfMatch) {
+      const func = csfMatch[1].toUpperCase();
+      const cat = csfMatch[2].toUpperCase();
+      const num = Number.parseInt(csfMatch[3], 10);
+      aliases.add(`${func}.${cat}-${num}`);
+    }
+  }
+
+  return [...aliases];
+}
+
 function normalizedIdentifier(value: string) {
   return value.trim().toLocaleUpperCase();
 }
@@ -36,11 +104,11 @@ export function resolveAtlasSearchTransition(
 ): AtlasSearchTransition {
   const query = rawQuery.trim();
   const results = runtime.searchLibrary(query);
-  const normalizedQuery = normalizedIdentifier(query);
+  const aliases = resolveControlAliases(query);
   const exact = results.filter(
     (entry) =>
-      normalizedIdentifier(entry.id) === normalizedQuery ||
-      normalizedIdentifier(entry.item_id || "") === normalizedQuery,
+      aliases.includes(normalizedIdentifier(entry.id)) ||
+      aliases.includes(normalizedIdentifier(entry.item_id || "")),
   );
 
   if (exact.length === 1) {

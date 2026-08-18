@@ -61,11 +61,13 @@ export function TopNav(props: TopNavProps) {
     const root = document.documentElement;
     if (!header) return;
 
+    let lastHeight = 0;
     const publishHeaderHeight = () => {
-      root.style.setProperty(
-        "--ca-header-height",
-        `${Math.ceil(header.getBoundingClientRect().height)}px`,
-      );
+      const height = Math.ceil(header.getBoundingClientRect().height);
+      if (height !== lastHeight) {
+        lastHeight = height;
+        root.style.setProperty("--ca-header-height", `${height}px`);
+      }
     };
 
     publishHeaderHeight();

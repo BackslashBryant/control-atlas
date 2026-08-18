@@ -128,6 +128,69 @@
       "top_k": 5
     },
     {
+      "id": "expert-control-id-leading-zero",
+      "audience": "expert",
+      "query": "AC-02",
+      "expected_ids": ["nist-800-53:AC-2"],
+      "top_k": 1
+    },
+    {
+      "id": "expert-control-id-no-hyphen",
+      "audience": "expert",
+      "query": "AC02",
+      "expected_ids": ["nist-800-53:AC-2"],
+      "top_k": 1
+    },
+    {
+      "id": "expert-control-id-space",
+      "audience": "expert",
+      "query": "AC 02",
+      "expected_ids": ["nist-800-53:AC-2"],
+      "top_k": 1
+    },
+    {
+      "id": "expert-enhancement-leading-zero",
+      "audience": "expert",
+      "query": "AC-02(01)",
+      "expected_ids": ["nist-800-53:AC-2.1"],
+      "top_k": 1
+    },
+    {
+      "id": "expert-enhancement-dot-leading-zero",
+      "audience": "expert",
+      "query": "AC-2.01",
+      "expected_ids": ["nist-800-53:AC-2.1"],
+      "top_k": 1
+    },
+    {
+      "id": "expert-cci-unpadded",
+      "audience": "expert",
+      "query": "CCI-225",
+      "expected_ids": ["disa-cci:CCI-000225"],
+      "top_k": 1
+    },
+    {
+      "id": "expert-authority-prefix",
+      "audience": "expert",
+      "query": "NIST AC-02",
+      "expected_ids": ["nist-800-53:AC-2"],
+      "top_k": 1
+    },
+    {
+      "id": "novice-mfa",
+      "audience": "novice",
+      "query": "MFA",
+      "expected_ids": ["nist-800-53:IA-2.1", "nist-800-53:IA-5"],
+      "top_k": 5
+    },
+    {
+      "id": "novice-ssp",
+      "audience": "novice",
+      "query": "SSP",
+      "expected_ids": ["nist-800-53:PL-2"],
+      "top_k": 5
+    },
+    {
       "id": "known-no-result",
       "audience": "novice",
       "query": "banana bread recipe",

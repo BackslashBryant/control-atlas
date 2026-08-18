@@ -611,12 +611,26 @@ body {
 }
 
 .brand-kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
   color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono);
   font-size: var(--ca-text-micro);
   letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+.brand-plus {
+  padding: 0 1px;
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-micro);
 }
 
 .brand-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 2px 5px;
   border: 1px solid var(--ca-border-subtle);
   border-bottom-color: var(--ca-border);
@@ -625,12 +639,36 @@ body {
   color: inherit;
   font-size: inherit;
   font-weight: 500;
+  box-sizing: border-box;
 }
 
 .brand-key--active {
+  min-inline-size: 9.5ch;
+  width: 9.5ch;
+  text-align: center;
   border-color: color-mix(in srgb, var(--ca-priority) 68%, transparent);
   background: color-mix(in srgb, var(--ca-priority) 12%, transparent);
   color: var(--lsm-teal-text);
+  overflow: hidden;
+}
+
+.brand-key-word {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  animation: brand-word-swap 240ms ease forwards;
+}
+
+@keyframes brand-word-swap {
+  0% {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .primary-nav {
@@ -1124,7 +1162,7 @@ input[type="search"],
 input[type="text"],
 select,
 textarea {
-  min-height: var(--ca-control-md);
+  min-height: max(var(--ca-control-md), var(--ca-touch-target));
   border-color: var(--ca-border);
   border-radius: var(--ca-radius-md);
   background-color: var(--ca-surface-raised);

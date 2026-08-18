@@ -46,7 +46,7 @@ export function BrandFlourish() {
         <span className="brand-key">Alt</span>
         <span className="brand-plus">+</span>
         <span className="brand-key brand-key--active">
-          <span className="brand-key-word">{word}</span>
+          <span className="brand-key-word" key={word}>{word}</span>
         </span>
       </span>
       {/* Static, so a screen reader is not re-read every rotation tick. */}

@@ -30,6 +30,12 @@ function indexedRuntime() {
 test("columnar Library index preserves benchmark search answers without eager record expansion", () => {
   const runtime = indexedRuntime();
   assert.equal(runtime.searchLibrary("AC-2")[0].id, "nist-800-53:AC-2");
+  assert.equal(runtime.searchLibrary("AC-02")[0].id, "nist-800-53:AC-2");
+  assert.equal(runtime.searchLibrary("ac02")[0].id, "nist-800-53:AC-2");
+  assert.equal(runtime.searchLibrary("AC 02")[0].id, "nist-800-53:AC-2");
+  assert.equal(runtime.searchLibrary("AC-02(01)")[0].id, "nist-800-53:AC-2.1");
+  assert.equal(runtime.searchLibrary("CCI-225")[0].id, "disa-cci:CCI-000225");
+  assert.equal(runtime.searchLibrary("NIST AC-02")[0].id, "nist-800-53:AC-2");
   assert.equal(runtime.searchLibrary("account management")[0].id, "nist-800-53:AC-2");
   assert.ok(
     runtime.searchLibrary("zero trust").some((record) => record.catalog_id === "nist-zt"),

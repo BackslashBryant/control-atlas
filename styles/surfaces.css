@@ -179,18 +179,6 @@ a {
   backdrop-filter: blur(16px);
 }
 
-.brand-key--active {
-  border-color: color-mix(in srgb, var(--ca-priority) 68%, transparent);
-  background: color-mix(in srgb, var(--ca-priority) 12%, transparent);
-  color: var(--lsm-teal-text);
-}
-
-.brand-key-word {
-  display: inline-block;
-  min-width: 9.5ch;
-  text-align: center;
-}
-
 /* The explicit display:flex above otherwise beats the UA stylesheet's
    default [hidden] { display: none }, so the header stayed visually
    present (just occluded by the entrance overlay's opaque full-screen
@@ -1344,69 +1332,6 @@ a {
   background: var(--ca-surface-raised);
 }
 
-.brand-kbd {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-family: var(--ca-font-mono);
-  line-height: 1;
-}
-.brand-key {
-  background: var(--ca-surface-raised);
-  border: 1px solid var(--ca-border);
-  border-bottom: 2px solid var(--ca-border);
-  border-radius: 5px;
-  padding: 4px 8px;
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--ca-text);
-  min-width: 2ch;
-  text-align: center;
-}
-.brand-key--active {
-  background: var(--ca-primary);
-  border-color: color-mix(in srgb, var(--ca-primary) 70%, var(--ca-ink));
-  border-bottom-color: color-mix(in srgb, var(--ca-primary) 50%, var(--ca-ink));
-  color: var(--ca-paper);
-  min-inline-size: 9ch;
-  text-align: center;
-}
-.brand-key-word {
-  display: inline-block;
-}
-.brand-key-word.word-enter {
-  animation: word-in 0.3s ease forwards;
-}
-.brand-key-word.word-exit {
-  animation: word-out 0.3s ease forwards;
-}
-
-@keyframes word-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes word-out {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-}
-
-.brand-plus {
-  color: var(--ca-text-muted);
-  font-size: var(--font-size-sm);
-  padding: 0 1px;
-}
 .brand-icon-mark {
   display: inline-flex;
   flex-shrink: 0;

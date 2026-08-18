@@ -1540,36 +1540,36 @@ Resolve the small defects that make a finished product feel unstable or unfinish
 
 ### Workstream A — Header and brand stability
 
-- [ ] **T10.1** Eliminate `Ctrl + Alt + <word>` navigation jitter:
+- [x] **T10.1** Eliminate `Ctrl + Alt + <word>` navigation jitter:
   - reserve the width required by the longest rotating word;
   - change words with opacity/transform rather than layout-affecting width;
   - keep header height and navigation x-positions constant across a full rotation;
   - do not republish header height on every word change;
   - keep the screen-reader description static.
-- [ ] **T10.2** Add a browser test sampling header height, brand width, and primary-nav positions through at least two full rotations.
-- [ ] **T10.3** Respect `prefers-reduced-motion`; show a stable flourish or non-layout transition.
-- [ ] **T10.4** Verify desktop/compact/mobile breakpoints, overflow menu, focus return, and Escape behavior.
+- [x] **T10.2** Add a browser test sampling header height, brand width, and primary-nav positions through at least two full rotations.
+- [x] **T10.3** Respect `prefers-reduced-motion`; show a stable flourish or non-layout transition.
+- [x] **T10.4** Verify desktop/compact/mobile breakpoints, overflow menu, focus return, and Escape behavior.
 
 ### Workstream B — Controls and tables
 
-- [ ] **T10.5** Normalize control height, label alignment, focus ring, helper spacing, disabled appearance, and error placement.
-- [ ] **T10.6** Verify long publication names, source names, versions, IDs, and dates without clipped meaning.
-- [ ] **T10.7** Make tables horizontally scroll rather than crushing columns.
-- [ ] **T10.8** Ensure touch targets, sticky headers, drawer widths, and pagination remain usable at narrow widths.
+- [x] **T10.5** Normalize control height, label alignment, focus ring, helper spacing, disabled appearance, and error placement.
+- [x] **T10.6** Verify long publication names, source names, versions, IDs, and dates without clipped meaning.
+- [x] **T10.7** Make tables horizontally scroll rather than crushing columns.
+- [x] **T10.8** Ensure touch targets, sticky headers, drawer widths, and pagination remain usable at narrow widths.
 
 ### Workstream C — Motion, route, and state
 
-- [ ] **T10.9** Eliminate layout shift from loading, route transitions, label changes, and graph inspector opening.
-- [ ] **T10.10** Verify back/forward, shared links, refresh, scroll restoration, focus restoration, and close-overlay events.
-- [ ] **T10.11** Remove dead links, buttons, tags, disclosures, download actions, and plain text that should be a link.
-- [ ] **T10.12** Verify all empty, unavailable, loading, and error states with real data and simulated failure.
+- [x] **T10.9** Eliminate layout shift from loading, route transitions, label changes, and graph inspector opening.
+- [x] **T10.10** Verify back/forward, shared links, refresh, scroll restoration, focus restoration, and close-overlay events.
+- [x] **T10.11** Remove dead links, buttons, tags, disclosures, download actions, and plain text that should be a link.
+- [x] **T10.12** Verify all empty, unavailable, loading, and error states with real data and simulated failure.
 
 ### Workstream D — Performance and accessibility
 
-- [ ] **T10.13** Measure route bundle size, Atlas artifact size, first usable render, interaction latency, cumulative layout shift, and narrow-device behavior.
-- [ ] **T10.14** Keep deeper Atlas projections demand-loaded where practical.
-- [ ] **T10.15** Run full keyboard, screen-reader smoke, color-contrast, reduced-motion, zoom, and high-text-scale checks.
-- [ ] **T10.16** Fix accessibility semantics before visual workarounds.
+- [x] **T10.13** Measure route bundle size, Atlas artifact size, first usable render, interaction latency, cumulative layout shift, and narrow-device behavior.
+- [x] **T10.14** Keep deeper Atlas projections demand-loaded where practical.
+- [x] **T10.15** Run full keyboard, screen-reader smoke, color-contrast, reduced-motion, zoom, and high-text-scale checks.
+- [x] **T10.16** Fix accessibility semantics before visual workarounds.
 
 ### Exit gate
 
