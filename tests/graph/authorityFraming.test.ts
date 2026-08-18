@@ -6,6 +6,7 @@ const atlasTree = readFileSync("src/ui/components/AtlasTree.tsx", "utf8");
 const sourcesPage = readFileSync("src/ui/pages/SourcesPage.tsx", "utf8");
 const atlasPage = readFileSync("src/ui/pages/AtlasMapPage.tsx", "utf8");
 const explorePage = readFileSync("src/ui/pages/ExplorePage.tsx", "utf8");
+const aboutPage = readFileSync("src/ui/pages/AboutPage.tsx", "utf8");
 const objectDetailPage = readFileSync("src/ui/pages/ObjectDetailPage.tsx", "utf8");
 const routeIdentity = readFileSync("src/ui/lib/routeIdentity.ts", "utf8");
 
@@ -30,11 +31,9 @@ test("orientation names all four mandate kinds", () => {
 });
 
 test("curated organization is positively attributed to Control Atlas", () => {
-  assert.match(sourcesPage, /Control Atlas structure/);
-  assert.match(
-    sourcesPage,
-    /Control Atlas's organizing spine connects federal authority/,
-  );
+  assert.match(aboutPage, /Control Atlas structure/);
+  assert.match(aboutPage, /Control Atlas's organizing spine connects federal authority/);
+  assert.doesNotMatch(aboutPage, /Not a publisher source|never a publisher/i);
   assert.doesNotMatch(sourcesPage, /Not a publisher source|never a publisher/i);
 });
 
@@ -50,3 +49,6 @@ test("Atlas map copy does not imply progression or visitor applicability", () =>
   const atlasTree = readFileSync(new URL("../../src/ui/components/AtlasTree.tsx", import.meta.url), "utf8");
   assert.doesNotMatch(atlasTree, /\b(?:locks?|unlocks?|prerequisites?|completion|progression|applies to you|applicable to you)\b/i);
 });
+
+
+

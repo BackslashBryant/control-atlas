@@ -745,7 +745,7 @@
   padding: var(--ca-space-5);
   border-left: 1px solid var(--ca-border-strong);
   background: var(--ca-surface-raised);
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
+  box-shadow: -4px 0 24px color-mix(in srgb, var(--ca-shadow-color) 40%, transparent);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -1954,6 +1954,7 @@
   font-size: 0.8rem;
   color: var(--ca-text-muted);
 }
+
 
 
 

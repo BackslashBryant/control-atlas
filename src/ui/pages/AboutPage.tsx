@@ -57,6 +57,9 @@ export function AboutPage() {
           <div id="about-organizing-structure">
             <SummaryCard headingLevel={2} title="Organizing Structure">
               <p>
+                <strong>Control Atlas structure &amp; organizing methodology:</strong> Control Atlas's organizing spine connects federal authority, Cybersecurity, and its areas. See the Path rail on any record for how Control Atlas structure and publisher hierarchy are identified.
+              </p>
+              <p>
                 Nine areas — Governance, Risk, Compliance, Architecture,
                 Implementation, Assessment, Operations, Threats &amp; Defense, and
                 Knowledge — organize the cybersecurity landscape. Every publisher
