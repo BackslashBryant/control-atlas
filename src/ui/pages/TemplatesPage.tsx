@@ -25,7 +25,6 @@ import {
 
 import { STARTER_DOCUMENT_REVIEW_NOTICE } from "../../shared/disclaimer.mjs";
 import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
-import { ContextualTaxonomyLinks } from "../components/ContextualTaxonomyLinks";
 import { BuildLocalNav } from "../components/BuildLocalNav";
 import { CommonsResourceCard } from "../components/CommonsResourceCard";
 import { groupResourcesByKind } from "../lib/commonsPresentation.mjs";
@@ -44,13 +43,15 @@ import {
 import {
   Badge,
   DisclosurePanel,
+  MissionPage,
   PageHeader,
   SelectField,
+  StepIndicator,
   SummaryCard,
   downloadBlobFile,
   scrollElementBelowHeader,
 } from "../lib/pagePrimitives";
-import { Panel, Button, ButtonLink } from "../components/lsm";
+import { Button, ButtonLink } from "../components/lsm";
 import { AppLink } from "../components/AppLink";
 
 type TemplateRecord = {
@@ -538,15 +539,6 @@ const FORMAT_LABELS: Record<string, string> = {
   docx: "Word (.docx)",
 };
 
-const INPUT_LABELS: Record<string, string> = {
-  framework: "Catalog or program context",
-  baseline: "Baseline selection",
-  control_family: "Control family filter",
-  selected_controls: "Specific controls",
-  selected_stigs: "STIG references",
-  environment_archetype: "Environment type",
-};
-
 const FORMAT_HELP: Record<string, string> = {
   xlsx: "Excel workbook - an editable working register with print-ready sheets.",
   docx: "Word document - a branded starter narrative with headings and working tables.",
@@ -626,7 +618,7 @@ export function TemplatesPage(props: {
 }) {
   const { bundle, state, onNavigate } = props;
   const generationRef = useRef<HTMLElement | null>(null);
-  const generateButtonRef = useRef<HTMLButtonElement | null>(null);
+  const documentSelectionMountedRef = useRef(false);
   const workflowDetailRef = useRef<HTMLElement | null>(null);
   const categoryFilter = state.category;
   const queryFilter = state.query;
@@ -763,23 +755,6 @@ export function TemplatesPage(props: {
           selectedTemplateArtifactIds.length === 0 &&
           normalizedFamily(artifact.artifact_family) ===
             normalizedFamily(selectedTemplate.artifact_type)
-        );
-      })
-    : [];
-  const selectedTemplateTools = selectedTemplate
-    ? complianceTools.filter((tool) => {
-        if (
-          selectedTemplate.related_tool_ids?.includes(tool.tool_id) ||
-          selectedTemplateArtifactIds.includes(tool.tool_id)
-        ) {
-          return true;
-        }
-        const family = normalizedFamily(selectedTemplate.artifact_type);
-        return Boolean(
-          family &&
-            tool.artifact_families?.some(
-              (toolFamily) => normalizedFamily(toolFamily) === family,
-            ),
         );
       })
     : [];
@@ -921,8 +896,27 @@ export function TemplatesPage(props: {
   const generationState = generationSnapshot
     ? resolveTemplateGenerationState(generationSnapshot, generationResult)
     : null;
+  const documentFlowStep = !selectedTemplate
+    ? 1
+    : generationState?.downloadEnabled
+      ? 3
+      : 2;
+  const selectedSourceLabel = catalogSource
+    ? `${catalogSource.display_name || catalogSource.name}${catalogSource.version ? ` · ${catalogSource.version}` : ""}`
+    : selectedTemplateArtifacts.length
+      ? selectedTemplateArtifacts
+          .map((artifact) => artifact.publisher || artifact.title)
+          .filter(Boolean)
+          .join(", ")
+      : activeFramework
+        ? catalogOptions.find((option) => option.value === activeFramework)?.label || activeFramework
+        : "Select a catalog or program";
 
   useEffect(() => {
+    if (!documentSelectionMountedRef.current) {
+      documentSelectionMountedRef.current = true;
+      return;
+    }
     if (!selectedTemplate) {
       return;
     }
@@ -935,7 +929,7 @@ export function TemplatesPage(props: {
         reducedMotion ? "auto" : "smooth",
       );
     }
-    generateButtonRef.current?.focus();
+    generationRef.current?.focus();
   }, [selectedTemplate?.name]);
 
   async function createTemplate() {
@@ -991,7 +985,11 @@ export function TemplatesPage(props: {
   }
 
   return (
-    <Panel data-visual-identity="staged-production-workflow">
+    <MissionPage
+      className="flow-shell templates-page"
+      data-visual-identity="staged-production-workflow"
+      maxWidth="workspace"
+    >
       {!buildOverview ? (
         <BuildLocalNav
           active={documentBrowser || selectedTemplate ? "documents" : "tasks"}
@@ -1000,26 +998,38 @@ export function TemplatesPage(props: {
       ) : null}
       <PageHeader
         primary
+        eyebrow={selectedTemplate ? `CURRENT DOCUMENT / ${selectedTemplate.display_name}` : undefined}
         action={
           selectedTemplate ? (
             <AppLink onNavigate={onNavigate} patch={{ templateType: "" }} variant="secondary" view="templates">
-              Back to starter documents
+              Back to documents
             </AppLink>
           ) : undefined
         }
         summary={buildOverview
           ? SITE_COPY.routes.documents.purpose
           : documentBrowser || selectedTemplate
-          ? "Choose a starter document and adapt it to your work."
+          ? "Select, preview, and download a working document."
           : "Pick a task to see its public references and starter documents."}
         title={
           buildOverview
             ? "Documents"
             : documentBrowser || selectedTemplate
-              ? "Choose a starter document"
+              ? "Documents"
               : "Tasks"
         }
       />
+
+      {documentBrowser || selectedTemplate ? (
+        <StepIndicator
+          currentStep={documentFlowStep}
+          steps={[
+            { id: "document", label: "Document" },
+            { id: "inputs", label: "Inputs" },
+            { id: "preview", label: "Preview" },
+          ]}
+        />
+      ) : null}
 
       {buildOverview ? (
         <section aria-label="Build lanes" className="build-lane-grid">
@@ -1234,13 +1244,10 @@ export function TemplatesPage(props: {
           >
             <div className="section-header nexus-section-header">
               <div>
-                <p className="eyebrow">
-                  Starter document
-                </p>
                 <h2 id="companion-heading">
                   {selectedWorkflow && declaredCompanions.length === 1
                     ? `Create ${declaredCompanions[0].display_name}`
-                    : "Starter documents"}
+                    : "Choose a document"}
                 </h2>
                 <p className="page-summary">
                   Start with the basic structure and prompts already in place.
@@ -1254,7 +1261,7 @@ export function TemplatesPage(props: {
               <CatalogFilterBar
                 category={categoryFilter}
                 categoryOptions={Object.keys(TEMPLATE_CATEGORIES)}
-                countLabel={`${filteredTemplates.length} starter document${filteredTemplates.length === 1 ? "" : "s"}${selectedWorkflow ? " connected to this task" : ""} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
+                countLabel={`${filteredTemplates.length} document${filteredTemplates.length === 1 ? "" : "s"}${selectedWorkflow ? " connected to this task" : ""} in ${groupedTemplates.size} categor${groupedTemplates.size === 1 ? "y" : "ies"}`}
                 onCategoryChange={(category) =>
                   onNavigate("templates", { ...state, category })
                 }
@@ -1469,27 +1476,13 @@ export function TemplatesPage(props: {
       ) : null}
 
       {selectedTemplate ? (
-        <section className="stack header-offset-target" ref={generationRef}>
-          <div className="section-header">
-            <div>
-              <p className="eyebrow">Starter document</p>
-              <h2>{selectedTemplate.display_name}</h2>
-            </div>
-            <Badge
-              tone={compatibilityTone(
-                selectedTemplate.compatibility?.classification ||
-                  selectedTemplate.compatibility_level,
-              )}
-            >
-              {compatibilityLabel(
-                selectedTemplate.compatibility?.classification ||
-                  selectedTemplate.compatibility_level,
-              )}
-            </Badge>
-          </div>
-          <SummaryCard title="Configure this starter document" tone="trust">
-            <p>{selectedTemplate.description}</p>
-            <div className="filter-grid template-essential-options">
+        <section className="stack header-offset-target" ref={generationRef} tabIndex={-1}>
+          <section className="compare-flow-grid">
+            <section aria-labelledby="document-inputs-heading" className="compare-flow-task panel">
+              <span className="label">02 / Inputs</span>
+              <h2 id="document-inputs-heading">Configure inputs</h2>
+              <p>{selectedTemplate.description}</p>
+              <div className="compare-step-fields template-essential-options">
               {inputOptions.includes("framework") ? (
                 <SelectField
                   hint="Which control catalog the starter document should reference."
@@ -1548,44 +1541,113 @@ export function TemplatesPage(props: {
                 options={supportedFormats.map((format: string) => ({ value: format, label: FORMAT_LABELS[format] || format }))}
                 value={activeFormat}
               />
-            </div>
-            {documentPreview?.doc && generationState?.previewAvailable ? (
-              <TemplateDocumentPreview doc={documentPreview.doc} format={activeFormat} />
-            ) : (
-              <p className="generation-status tone-warning" role="status">
-                {generationState?.status ||
-                  "Select the required inputs before previewing or downloading."}
-              </p>
-            )}
-            <div className="card-actions">
-              <Button
-                variant="primary"
-                disabled={generating || !generationState?.downloadEnabled}
-                onClick={createTemplate}
+              </div>
+              <Accordion.Root className="accordion-root" collapsible type="single">
+                <DisclosurePanel title="More options" value="options">
+                  <div className="filter-grid">
+                    {inputOptions.includes("control_family") ? (
+                      <SelectField
+                        emptyLabel="All families"
+                        hint="Limit to one control family (e.g. Access Control)."
+                        label="Control family"
+                        onChange={(value) =>
+                          onNavigate("templates", {
+                            controlFamily: value,
+                          })
+                        }
+                        options={familyOptions}
+                        value={state.controlFamily || ""}
+                      />
+                    ) : null}
+                  </div>
+                  {supportedFormats.length > 1 ? (
+                    <ul className="format-help-list">
+                      {supportedFormats.map((format: string) => (
+                        <li key={format}>
+                          <strong>{FORMAT_LABELS[format] || format}:</strong>{" "}
+                          {FORMAT_HELP[format] || "Downloadable file format."}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </DisclosurePanel>
+              </Accordion.Root>
+            </section>
+
+            <aside aria-labelledby="document-context-heading" className="compare-flow-support panel">
+              <span className="label">Selected context</span>
+              <h2 id="document-context-heading">Current document</h2>
+              <dl className="compare-scope-list">
+                <div>
+                  <dt>Document</dt>
+                  <dd>{selectedTemplate.display_name}</dd>
+                </div>
+                <div>
+                  <dt>Source publication</dt>
+                  <dd>{selectedSourceLabel}</dd>
+                </div>
+                <div>
+                  <dt>Format</dt>
+                  <dd>{FORMAT_LABELS[activeFormat] || activeFormat}</dd>
+                </div>
+                {state.baseline ? (
+                  <div>
+                    <dt>Baseline</dt>
+                    <dd>{BASELINE_LABELS[state.baseline] || state.baseline}</dd>
+                  </div>
+                ) : null}
+                {state.environment ? (
+                  <div>
+                    <dt>Environment</dt>
+                    <dd>{state.environment}</dd>
+                  </div>
+                ) : null}
+              </dl>
+              <details className="template-supporting-details">
+                <summary>What this template is for</summary>
+                <div className="disclosure-content">
+                  <p>{selectedTemplate.description}</p>
+                  {selectedTemplate.compatibility?.claim ? (
+                    <p>{selectedTemplate.compatibility.claim}</p>
+                  ) : null}
+                  {selectedTemplate.limitations?.length ? (
+                    <ul className="nexus-list">
+                      {selectedTemplate.limitations.map((limitation) => (
+                        <li key={limitation}>{limitation}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+              </details>
+              <Badge
+                tone={compatibilityTone(
+                  selectedTemplate.compatibility?.classification ||
+                    selectedTemplate.compatibility_level,
+                )}
               >
-                {generating ? "Preparing download…" : `Download ${selectedTemplate.display_name} (${FORMAT_LABELS[activeFormat] || activeFormat})`}
-              </Button>
-            </div>
-            {generationStatus ? <p className={`generation-status tone-${generationTone}`} role="status">{generationStatus}</p> : null}
-          </SummaryCard>
+                {compatibilityLabel(
+                  selectedTemplate.compatibility?.classification ||
+                    selectedTemplate.compatibility_level,
+                )}
+              </Badge>
+            </aside>
+          </section>
+
           {selectedTemplateArtifacts.length > 0 ? (
             <details className="template-supporting-details">
-            <summary>Sources used by this document</summary>
-            <section aria-labelledby="template-official-heading" className="stack disclosure-content">
-              <div>
-                <p className="eyebrow">Published sources</p>
-                <h3 id="template-official-heading">Sources used by this document</h3>
-              </div>
-              <div className="nexus-grid">
-                {selectedTemplateArtifacts.map((artifact) => (
-                  <OfficialArtifactCard
-                    artifact={artifact}
-                    fedrampTransition={fedrampTransition}
-                    key={artifact.artifact_id}
-                  />
-                ))}
-              </div>
-            </section>
+              <summary>Sources used by this document</summary>
+              <section aria-labelledby="template-official-heading" className="stack disclosure-content">
+                <h3 id="template-official-heading">Published sources</h3>
+                <div className="nexus-grid">
+                  {selectedTemplateArtifacts.map((artifact) => (
+                    <OfficialArtifactCard
+                      artifact={artifact}
+                      fedrampTransition={fedrampTransition}
+                      key={artifact.artifact_id}
+                    />
+                  ))}
+                </div>
+              </section>
             </details>
           ) : selectedTemplate.official_alternative ? (
             <SummaryCard title="Official resource">
@@ -1608,108 +1670,36 @@ export function TemplatesPage(props: {
               </p>
             </SummaryCard>
           ) : null}
-          <SummaryCard title="What this template is for" tone="trust">
-            <p>{selectedTemplate.description}</p>
-            {selectedTemplate.compatibility?.claim ? (
-              <p>{selectedTemplate.compatibility.claim}</p>
-            ) : null}
-            {selectedTemplate.limitations?.length ? (
-              <ul className="nexus-list">
-                {selectedTemplate.limitations.map((limitation) => (
-                  <li key={limitation}>{limitation}</li>
-                ))}
-              </ul>
-            ) : selectedTemplate.compatibility?.limitations ? (
-              <p className="nexus-limitation">
-                <IconInfoCircle aria-hidden="true" size={16} stroke={1.8} />
-                {selectedTemplate.compatibility.limitations}
-              </p>
-            ) : null}
-          </SummaryCard>
-          {activeFramework ? (
-            <ContextualTaxonomyLinks
-              catalogIds={[activeFramework]}
-              contextLabel={selectedTemplate.display_name}
-              onNavigate={onNavigate}
-              runtime={bundle.runtime}
-              subjectLabel="starter document"
-            />
-          ) : null}
-          <SummaryCard title="What it includes">
-            <p>
-              Download formats:{" "}
-              {supportedFormats
-                .map((format: string) => FORMAT_LABELS[format] || format)
-                .join(", ")}
-              .
-            </p>
-            <p>Every download starts from the preview above and carries the same headings, prompts, and source context.</p>
-            {selectedTemplate.input_options.length > 0 ? (
-              <p>
-                Optional inputs:{" "}
-                {selectedTemplate.input_options
-                  .map((input: string) => INPUT_LABELS[input] || input)
-                  .join(", ")}
-                .
-              </p>
-            ) : null}
-          </SummaryCard>
-          {catalogSource ? (
-            <SummaryCard title="Catalog data used">
-              <p>
-                {catalogSource.display_name || catalogSource.name}
-                {catalogSource.version
-                  ? ` (version ${catalogSource.version})`
-                  : ""}
-                . You'll see the source cited in the document you download.
-              </p>
-            </SummaryCard>
-          ) : null}
-          {selectedTemplateTools.length > 0 ? (
-            <section aria-labelledby="template-tools-heading" className="stack">
+
+          <section aria-labelledby="document-preview-section-heading" className="stack">
+            <div className="section-header">
               <div>
-                <p className="eyebrow">Related tooling</p>
-                <h3 id="template-tools-heading">Tools that use this artifact family</h3>
+                <p className="eyebrow">03 / Review</p>
+                <h2 id="document-preview-section-heading">Preview</h2>
               </div>
-              <div className="nexus-grid">
-                {selectedTemplateTools.map((tool) => (
-                  <ToolCard key={tool.tool_id} tool={tool} />
-                ))}
-              </div>
-            </section>
-          ) : null}
-          <Accordion.Root className="accordion-root" collapsible type="single">
-            <DisclosurePanel title="More options" value="options">
-              <div className="filter-grid">
-                {inputOptions.includes("control_family") ? (
-                  <SelectField
-                    emptyLabel="All families"
-                    hint="Limit to one control family (e.g. Access Control)."
-                    label="Control family"
-                    onChange={(value) =>
-                      onNavigate("templates", {
-                        controlFamily: value,
-                      })
-                    }
-                    options={familyOptions}
-                    value={state.controlFamily || ""}
-                  />
-                ) : null}
-              </div>
-              {supportedFormats.length > 1 ? (
-                <ul className="format-help-list">
-                  {supportedFormats.map((format: string) => (
-                    <li key={format}>
-                      <strong>{FORMAT_LABELS[format] || format}:</strong>{" "}
-                      {FORMAT_HELP[format] || "Downloadable file format."}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </DisclosurePanel>
-          </Accordion.Root>
+            </div>
+            {documentPreview?.doc && generationState?.previewAvailable ? (
+              <TemplateDocumentPreview doc={documentPreview.doc} format={activeFormat} />
+            ) : (
+              <p className="generation-status tone-warning" role="status">
+                {generationState?.status ||
+                  "Select the required inputs before previewing or downloading."}
+              </p>
+            )}
+            <div className="card-actions">
+              <Button
+                id="document-download-action"
+                variant="primary"
+                disabled={generating || !generationState?.downloadEnabled}
+                onClick={createTemplate}
+              >
+                {generating ? "Preparing download…" : `Download ${selectedTemplate.display_name} (${FORMAT_LABELS[activeFormat] || activeFormat})`}
+              </Button>
+            </div>
+            {generationStatus ? <p className={`generation-status tone-${generationTone}`} role="status">{generationStatus}</p> : null}
+          </section>
         </section>
       ) : null}
-    </Panel>
+    </MissionPage>
   );
 }

@@ -91,7 +91,8 @@ test("Resource maintenance dates are semantic, consistent, and compact", async (
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
-    const maintenance = page.getByRole("heading", { name: "Maintenance", level: 2 }).locator("..");
+    const maintenance = page.locator("details.resource-detail-maintenance");
+    await maintenance.getByText("Source & maintenance details", { exact: true }).click();
     await expect(maintenance.locator('time[datetime="2026-08-12T14:29:40Z"]')).toHaveText("August 12, 2026");
     await expect(maintenance.locator('time[datetime="2026-08-12"]')).toHaveText("August 12, 2026");
     await expect(maintenance.locator('time[datetime="2026-08-03"]')).toHaveText("August 3, 2026");
@@ -107,7 +108,8 @@ test("Resource maintenance dates are semantic, consistent, and compact", async (
 
   await gotoApp(page, "/#/resources/training-cdse");
   await waitForAppReady(page);
-  const maintenance = page.getByRole("heading", { name: "Maintenance", level: 2 }).locator("..");
+  const maintenance = page.locator("details.resource-detail-maintenance");
+  await maintenance.getByText("Source & maintenance details", { exact: true }).click();
   const repositoryActivity = maintenance
     .locator("dt", { hasText: "Last repository activity" })
     .locator("xpath=following-sibling::dd[1]");

@@ -9,10 +9,10 @@ import {
   publicationNameFor,
   startingPlanFor,
 } from "../../app/start-here-guide.mjs";
-import { Panel, Button } from "../components/lsm";
+import { Button } from "../components/lsm";
 import { AppLink } from "../components/AppLink";
 import { catalogProfileFor } from "../lib/catalogProfiles";
-import { PageHeader } from "../lib/pagePrimitives";
+import { MissionPage, PageHeader, StepIndicator } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
@@ -52,66 +52,104 @@ export function StartHerePage(props: {
   const update = (patch: Partial<StartHereState>) => onNavigate("start-here", { ...state, ...patch });
 
   return (
-    <Panel className="max-w-[70rem] mx-auto start-here-panel" data-visual-identity="task-intake-compass">
+    <MissionPage
+      className="flow-shell start-here-page"
+      data-visual-identity="task-intake-compass"
+      maxWidth="workspace"
+    >
       <PageHeader primary summary={SITE_COPY.routes.start.purpose} title={SITE_COPY.routes.start.title} />
 
-      <ol aria-label="Start Here progress" className="start-here-progress">
-        {["Goal", "Context", "Starting plan"].map((label, index) => {
-          const number = index + 1;
-          return <li aria-current={step === number ? "step" : undefined} className={step >= number ? "is-active" : ""} key={label}><span>{number}</span>{label}</li>;
-        })}
-      </ol>
+      <StepIndicator
+        currentStep={step}
+        steps={[
+          { id: "goal", label: "Goal" },
+          { id: "context", label: "Context" },
+          { id: "plan", label: "Starting plan" },
+        ]}
+      />
 
-      {state.goal ? (
-        <div className="start-here-summary" aria-label="Your answers">
-          <button onClick={() => update({ goal: "", context: "" })} type="button"><small>Goal</small><strong>{labelForGoal(state.goal)}</strong><span>Change</span></button>
-          {state.context ? <button onClick={() => update({ context: "" })} type="button"><small>Context</small><strong>{labelForContext(state.context)}</strong><span>Change</span></button> : null}
-        </div>
-      ) : null}
+      <section className="compare-flow-grid">
+        <section className="compare-flow-task panel">
+          {step === 1 ? (
+            <div aria-labelledby="start-here-goal" className="stack">
+              <span className="label">01 / Goal</span>
+              <h2 id="start-here-goal">What are you trying to do?</h2>
+              <p>Choose the work in front of you.</p>
+              <div className="start-here-choice-grid">
+                {START_HERE_GOALS.map((goal: { id: string; label: string }) => <button key={goal.id} onClick={() => update({ goal: goal.id, context: "" })} type="button"><span>{goal.label}</span><IconArrowRight aria-hidden="true" size={17} /></button>)}
+              </div>
+            </div>
+          ) : null}
 
-      {step === 1 ? (
-        <section aria-labelledby="start-here-goal" className="start-here-step">
-          <h2 id="start-here-goal">What are you trying to do?</h2>
-          <p>Choose the work in front of you.</p>
-          <div className="start-here-choice-grid">
-            {START_HERE_GOALS.map((goal: { id: string; label: string }) => <button key={goal.id} onClick={() => update({ goal: goal.id, context: "" })} type="button"><span>{goal.label}</span><IconArrowRight aria-hidden="true" size={17} /></button>)}
-          </div>
+          {step === 2 ? (
+            <div aria-labelledby="start-here-context" className="stack">
+              <span className="label">02 / Context</span>
+              <h2 id="start-here-context">What kind of system are you working with?</h2>
+              <p>This opens the right publication first.</p>
+              <div className="start-here-choice-grid">
+                {START_HERE_CONTEXTS.map((context: { id: string; label: string }) => <button key={context.id} onClick={() => update({ context: context.id })} type="button"><span>{context.label}</span><IconArrowRight aria-hidden="true" size={17} /></button>)}
+              </div>
+              <div className="actions compare-step-actions">
+                <Button onClick={() => update({ goal: "", context: "" })} type="button" variant="secondary"><IconArrowLeft aria-hidden="true" size={17} />Back to goal</Button>
+              </div>
+            </div>
+          ) : null}
+
+          {step === 3 && plan ? (
+            <div aria-labelledby="start-here-plan" className="stack start-here-plan">
+              <span className="label">03 / Starting plan</span>
+              <h2 id="start-here-plan">Start with {publicationName(bundle, plan.startWith.catalogId)}</h2>
+              <p>Based on your answers, begin with this publication.</p>
+              <p className="notice-inline">{SITE_COPY.product.boundary}</p>
+              <div className="start-here-followups">
+                <PlanStep bundle={bundle} catalogId={plan.thenReview.catalogId} onNavigate={onNavigate} role="Then review" />
+                <AppLink className="start-here-publication" onNavigate={onNavigate} patch={plan.action.patch as Partial<ViewState> | undefined} view={plan.action.view as ViewState["view"]}><span><small>Then act</small><strong>{plan.action.label}</strong><span>Open the next step for this task.</span></span><IconArrowRight aria-hidden="true" size={18} /></AppLink>
+              </div>
+              <div className="actions compare-step-actions">
+                <Button onClick={() => update({ context: "" })} type="button" variant="secondary"><IconArrowLeft aria-hidden="true" size={17} />Back to context</Button>
+                <Button onClick={() => update({ goal: "", context: "" })} type="button" variant="secondary">Start over</Button>
+              </div>
+            </div>
+          ) : null}
         </section>
-      ) : null}
 
-      {step === 2 ? (
-        <section aria-labelledby="start-here-context" className="start-here-step">
-          <h2 id="start-here-context">What kind of system are you working with?</h2>
-          <p>This opens the right publication first.</p>
-          <div className="start-here-choice-grid">
-            {START_HERE_CONTEXTS.map((context: { id: string; label: string }) => <button key={context.id} onClick={() => update({ context: context.id })} type="button"><span>{context.label}</span><IconArrowRight aria-hidden="true" size={17} /></button>)}
-          </div>
-          <Button onClick={() => update({ goal: "", context: "" })} type="button" variant="secondary"><IconArrowLeft aria-hidden="true" size={17} />Back to goal</Button>
-        </section>
-      ) : null}
+        <aside aria-labelledby="start-here-summary-heading" className="compare-flow-support panel">
+          <span className="label">Preserved context</span>
+          <h2 id="start-here-summary-heading">Your answers</h2>
+          {state.goal ? (
+            <dl className="compare-scope-list">
+              <div>
+                <dt>Goal</dt>
+                <dd>{labelForGoal(state.goal)}</dd>
+              </div>
+              {state.context ? (
+                <div>
+                  <dt>Context</dt>
+                  <dd>{labelForContext(state.context)}</dd>
+                </div>
+              ) : null}
+            </dl>
+          ) : (
+            <p>Your choices stay visible as you move through the flow.</p>
+          )}
 
-      {step === 3 && plan ? (
-        <section aria-labelledby="start-here-plan" className="start-here-step start-here-plan">
-          <p className="eyebrow">Your starting plan</p>
-          <h2 id="start-here-plan">Start with {publicationName(bundle, plan.startWith.catalogId)}</h2>
-          <p>Based on your answers, begin with this publication.</p>
-          <p className="notice-inline">{SITE_COPY.product.boundary}</p>
-          <div className="start-here-primary-destination">
-            <span><small>Next destination</small><strong>{publicationName(bundle, plan.startWith.catalogId)}</strong><span>Open the publication and choose a record.</span></span>
-            <AppLink onNavigate={onNavigate} patch={{ catalog: plan.startWith.catalogId }} variant="primary" view="catalog-detail">Open {publicationName(bundle, plan.startWith.catalogId)}<IconArrowRight aria-hidden="true" size={17} /></AppLink>
-          </div>
-          <div className="start-here-followups">
-            <PlanStep bundle={bundle} catalogId={plan.thenReview.catalogId} onNavigate={onNavigate} role="Then review" />
-            <AppLink className="start-here-publication" onNavigate={onNavigate} patch={plan.action.patch as Partial<ViewState> | undefined} view={plan.action.view as ViewState["view"]}><span><small>Then act</small><strong>{plan.action.label}</strong><span>Open the next step for this task.</span></span><IconArrowRight aria-hidden="true" size={18} /></AppLink>
-          </div>
-          <div className="card-actions">
-            <Button onClick={() => update({ context: "" })} type="button" variant="secondary"><IconArrowLeft aria-hidden="true" size={17} />Back to context</Button>
-            <Button onClick={() => update({ goal: "", context: "" })} type="button" variant="secondary">Start over</Button>
-          </div>
-        </section>
-      ) : null}
+          {step === 1 ? <p><strong>Next:</strong> choose your goal.</p> : null}
+          {step === 2 ? (
+            <>
+              <p><strong>Next:</strong> choose the system context.</p>
+              <Button onClick={() => update({ goal: "", context: "" })} type="button" variant="secondary">Change goal</Button>
+            </>
+          ) : null}
+          {step === 3 && plan ? (
+            <div className="stack">
+              <p><strong>Next:</strong> open the first publication.</p>
+              <AppLink onNavigate={onNavigate} patch={{ catalog: plan.startWith.catalogId }} variant="primary" view="catalog-detail">Open {publicationName(bundle, plan.startWith.catalogId)}<IconArrowRight aria-hidden="true" size={17} /></AppLink>
+            </div>
+          ) : null}
+        </aside>
+      </section>
 
       <div className="start-here-search-link"><AppLink onNavigate={onNavigate} patch={{ query: "" }} variant="secondary" view="search"><IconSearch aria-hidden="true" size={18} />Search the Library instead</AppLink></div>
-    </Panel>
+    </MissionPage>
   );
 }

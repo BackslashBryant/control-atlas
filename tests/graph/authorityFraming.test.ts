@@ -30,9 +30,11 @@ test("orientation names all four mandate kinds", () => {
   assert.match(atlasTree, /issued_without_federal_mandate/);
 });
 
-test("curated organization is positively attributed to Control Atlas", () => {
-  assert.match(aboutPage, /Control Atlas structure/);
-  assert.match(aboutPage, /Control Atlas's organizing spine connects federal authority/);
+test("curated organization is plainly separated from publisher structure", () => {
+  assert.match(aboutPage, /How it is organized/);
+  assert.match(aboutPage, /This navigation layer never replaces a source's own structure/);
+  assert.match(aboutPage, /publisher keep their original publication order/);
+  assert.doesNotMatch(aboutPage, /organizing spine|Control Atlas overlay|publisher hierarchy|provenance|confidence|trust register/i);
   assert.doesNotMatch(aboutPage, /Not a publisher source|never a publisher/i);
   assert.doesNotMatch(sourcesPage, /Not a publisher source|never a publisher/i);
 });

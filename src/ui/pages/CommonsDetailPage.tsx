@@ -77,9 +77,9 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
         <header className="resource-detail-hero">
           <ResourceIdentityMark resource={resource} />
           <div>
-            <p className="eyebrow">{resourceTypeLabel(resource.resourceType)}</p>
+            <p className="eyebrow">Resource</p>
             <h1>{resource.name}</h1>
-            <p className="resource-detail-owner">Published by <strong>{resource.publisher}</strong>{resource.maintainer && resource.maintainer !== resource.publisher ? ` · Maintained by ${resource.maintainer}` : ""}</p>
+            <p className="resource-detail-owner">Publisher <strong>{resource.publisher}</strong></p>
             <p className="resource-detail-summary">{resource.cardPurpose || resource.summary}</p>
             <div className="resource-detail-actions">
               <a className="resource-primary-link" href={resource.canonicalUrl} rel="noopener noreferrer" target="_blank">Open resource <IconExternalLink aria-hidden="true" size={16} /></a>
@@ -91,22 +91,43 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
         {warning ? <aside className="resource-detail-warning"><IconAlertTriangle aria-hidden="true" size={20} /><p>{warning}</p></aside> : null}
 
         <div className="resource-detail-grid">
-          <div className="resource-detail-main">
-            <DetailSection title="What This Is">
+          <article className="resource-detail-main">
+            <DetailSection id="what-it-is" title="What it is">
               <p>{resource.overview?.text || resource.summary}</p>
+              <EvidenceCopy section={resource.presentationProfile?.whatItDoes} />
               {resource.overview?.sourceUrl ? <p className="resource-detail-evidence"><a href={resource.overview.sourceUrl} rel="noopener noreferrer" target="_blank">{resource.overview.sourceType === "repository_readme" ? "Repository README" : "Publisher source"} <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}
             </DetailSection>
-            <DetailSection title="What It Does"><EvidenceCopy section={resource.presentationProfile?.whatItDoes} /></DetailSection>
-            <DetailSection title="Who It Is For"><EvidenceCopy section={resource.presentationProfile?.whoItIsFor} /></DetailSection>
+            <DetailSection id="who-it-is-for" title="Who it's for">
+              <EvidenceCopy section={resource.presentationProfile?.whoItIsFor} />
+              {usefulFor.length ? <div aria-label="Useful for" className="resource-detail-tags">{usefulFor.map((item) => <span key={item}>{resourceFieldLabel(item)}</span>)}</div> : null}
+            </DetailSection>
+            <DetailSection id="access" title="How to use or access">
+              <dl className="resource-detail-facts"><div><dt>Access</dt><dd>{resourceAccessLabel(resource)}</dd></div><div><dt>Cost</dt><dd>{resourceFieldLabel(resource.costType)}</dd></div><div><dt>Status</dt><dd>{resourceFieldLabel(resource.officialStatus || resource.resourceLane)}</dd></div></dl>
+              {resource.publicAccessNotes ? <p>{resource.publicAccessNotes}</p> : null}
+              {resource.toolProfile ? (
+                <div className="resource-tool-profile">
+                  <section><h3>Install</h3><EvidenceCopy section={resource.toolProfile.installation} /></section>
+                  <section><h3>Use</h3><EvidenceCopy section={resource.toolProfile.usage} /></section>
+                  <section><h3>Inputs and outputs</h3><EvidenceCopy section={resource.toolProfile.inputs} /><EvidenceCopy section={resource.toolProfile.outputs} /></section>
+                  <section><h3>Formats and integrations</h3><EvidenceCopy section={resource.toolProfile.formats} /><EvidenceCopy section={resource.toolProfile.integrations} /></section>
+                </div>
+              ) : null}
+              <ul className="resource-link-list"><li><a href={resource.canonicalUrl} rel="noopener noreferrer" target="_blank">Official resource <IconExternalLink aria-hidden="true" size={14} /></a></li>{resource.repositoryUrl ? <li><a href={resource.repositoryUrl} rel="noopener noreferrer" target="_blank">Source repository <IconExternalLink aria-hidden="true" size={14} /></a></li> : null}{resource.toolProfile?.release?.url ? <li><a href={resource.toolProfile.release.url} rel="noopener noreferrer" target="_blank">Releases <IconExternalLink aria-hidden="true" size={14} /></a></li> : null}{resource.downloadLinks?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Publisher download <IconExternalLink aria-hidden="true" size={14} /></a></li>)}{resource.alternateUrls?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Alternate publisher link <IconExternalLink aria-hidden="true" size={14} /></a></li>)}</ul>
+            </DetailSection>
             {resource.media?.status === "available" ? (
-              <DetailSection title="Screenshots">
-                <div className="resource-detail-media">{resource.media.items.map((item) => <figure key={`${item.url}-${item.sha256}`}><img alt={item.alt} height={item.height} loading="lazy" src={item.url} width={item.width} /><figcaption>Publisher image from commit {item.commitSha.slice(0, 7)} / {item.width}x{item.height} / {item.license}. <a href={item.sourceUrl} rel="noopener noreferrer" target="_blank">Source</a></figcaption></figure>)}</div>
+              <DetailSection id="screenshots" title="Screenshots">
+                <div className="resource-detail-media">{resource.media.items.map((item) => <figure key={`${item.url}-${item.sha256}`}><img alt={item.alt} height={item.height} loading="lazy" src={item.url} width={item.width} /><figcaption>Publisher image. <a href={item.sourceUrl} rel="noopener noreferrer" target="_blank">View source</a></figcaption></figure>)}</div>
               </DetailSection>
-            ) : resource.resourceType === "tool" ? <DetailSection title="Screenshots"><p>{resource.media?.reason || "No publisher screenshot found."}</p></DetailSection> : null}
-            <DetailSection title="Useful For"><div className="resource-detail-tags">{usefulFor.map((item) => <span key={item}>{resourceFieldLabel(item)}</span>)}</div></DetailSection>
+            ) : null}
+            <DetailSection id="limitations" title="Limitations"><EvidenceCopy section={resource.presentationProfile?.limitations} /></DetailSection>
+            <DetailSection id="related-resources" title="Related resources">
+              {parent ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ ...viewState, id: parent.id }} view="commons-detail"><span>Part of</span><strong>{parent.name}</strong></AppLink> : null}
+              {children.map((child) => <AppLink className="resource-context-link" key={child.id} onNavigate={onNavigate} patch={{ ...viewState, id: child.id }} view="commons-detail"><span>Related service</span><strong>{child.name}</strong></AppLink>)}
+              {collections.map((collection) => <AppLink className="resource-context-link" key={collection.id} onNavigate={onNavigate} patch={{ collection: collection.id, showAll: "true" }} view="commons"><span>Collection</span><strong>{collection.title}</strong></AppLink>)}
+              <AppLink className="resource-library-search" onNavigate={onNavigate} patch={{ query: resource.frameworks[0] || resource.programs?.[0] || resource.shortName }} view="search"><IconBook2 aria-hidden="true" size={16} />Find related publications</AppLink>
+            </DetailSection>
             {taxonomyTags.length ? (
-              <DetailSection title="Governed discovery tags">
-                <p>These tags link to related Library records. They don't mean a framework applies to this resource.</p>
+              <DetailSection id="related-topics" title="Related topics">
                 <div className="resource-detail-tags">
                   {taxonomyTags.map((tag) => (
                     <AppLink key={tag.id} onNavigate={onNavigate} patch={{ tags: [tag.id] }} view="search">{tag.label}</AppLink>
@@ -114,56 +135,28 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
                 </div>
               </DetailSection>
             ) : null}
-            <DetailSection title="Compatibility">
-              {resource.compatibility?.status === "documented" ? <div className="resource-detail-tags">{[...resource.compatibility.operatingSystems, ...resource.compatibility.environments].map((item) => <span key={item}>{item}</span>)}</div> : null}
-              <p>{resource.compatibility?.note || "The publisher didn't state compatibility."}</p>
-              {resource.compatibility?.sourceUrl ? <p className="resource-detail-evidence"><a href={resource.compatibility.sourceUrl} rel="noopener noreferrer" target="_blank">Compatibility evidence <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}
-            </DetailSection>
-            {resource.toolProfile ? (
-              <>
-                <DetailSection title="Inputs, Outputs, and Integrations">
-                  <div className="resource-tool-profile-grid">
-                    <section><h3>Inputs</h3><EvidenceCopy section={resource.toolProfile.inputs} /></section>
-                    <section><h3>Outputs</h3><EvidenceCopy section={resource.toolProfile.outputs} /></section>
-                    <section><h3>Formats</h3><EvidenceCopy section={resource.toolProfile.formats} /></section>
-                    <section><h3>Integrations</h3><EvidenceCopy section={resource.toolProfile.integrations} /></section>
-                  </div>
-                </DetailSection>
-                <DetailSection title="Install and Run">
-                  <div className="resource-tool-profile-grid">
-                    <section><h3>Installation</h3><EvidenceCopy section={resource.toolProfile.installation} /></section>
-                    <section><h3>Usage</h3><EvidenceCopy section={resource.toolProfile.usage} /></section>
-                  </div>
-                </DetailSection>
-              </>
-            ) : null}
-            <DetailSection title="Access">
-              <dl className="resource-detail-facts"><div><dt>Access type</dt><dd>{resourceAccessLabel(resource)}</dd></div><div><dt>Cost</dt><dd>{resourceFieldLabel(resource.costType)}</dd></div><div><dt>Status</dt><dd>{resourceFieldLabel(resource.officialStatus || resource.resourceLane)}</dd></div></dl>
-              <p>{resource.publicAccessNotes}</p>
-            </DetailSection>
-            <DetailSection title="Links">
-              <ul className="resource-link-list"><li><a href={resource.canonicalUrl} rel="noopener noreferrer" target="_blank">Canonical resource <IconExternalLink aria-hidden="true" size={14} /></a></li>{resource.repositoryEvidence?.readmeUrl ? <li><a href={resource.repositoryEvidence.readmeUrl} rel="noopener noreferrer" target="_blank">Inspected README <IconExternalLink aria-hidden="true" size={14} /></a></li> : null}{resource.toolProfile?.release?.url ? <li><a href={resource.toolProfile.release.url} rel="noopener noreferrer" target="_blank">Releases <IconExternalLink aria-hidden="true" size={14} /></a></li> : null}{resource.downloadLinks?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Publisher download <IconExternalLink aria-hidden="true" size={14} /></a></li>)}{resource.alternateUrls?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Publisher alternate <IconExternalLink aria-hidden="true" size={14} /></a></li>)}</ul>
-            </DetailSection>
-            <DetailSection title="Why It Is Listed"><p>{resource.whyIncluded}</p></DetailSection>
-            <DetailSection title="Limitations"><EvidenceCopy section={resource.presentationProfile?.limitations} /></DetailSection>
-          </div>
+          </article>
 
           <aside className="resource-detail-side">
-            {parent || children.length > 0 || collections.length > 0 ? (
-              <DetailSection title="Related Resources">
-                {parent ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ ...viewState, id: parent.id }} view="commons-detail"><span>Part of</span><strong>{parent.name}</strong></AppLink> : null}
-                {children.map((child) => <AppLink className="resource-context-link" key={child.id} onNavigate={onNavigate} patch={{ ...viewState, id: child.id }} view="commons-detail"><span>Related service</span><strong>{child.name}</strong></AppLink>)}
-                {collections.map((collection) => <AppLink className="resource-context-link" key={collection.id} onNavigate={onNavigate} patch={{ collection: collection.id, showAll: "true" }} view="commons"><span>Collection</span><strong>{collection.title}</strong></AppLink>)}
-              </DetailSection>
-            ) : null}
-            <DetailSection title="Related Publications">
-              <p>Search the Library for publications related to this resource.</p>
-              <AppLink className="resource-library-search" onNavigate={onNavigate} patch={{ query: resource.frameworks[0] || resource.programs?.[0] || resource.shortName }} view="search"><IconBook2 aria-hidden="true" size={16} />Search the Library</AppLink>
-            </DetailSection>
-            <DetailSection title="Maintenance">
-              <dl className="resource-detail-facts stacked"><div><dt>Release</dt><dd>{resource.currentVersion || (resource.toolProfile?.release.status === "not_published" ? "No published GitHub release" : "Not documented")}</dd></div><div><dt>Maintenance</dt><dd>{resourceFieldLabel(resource.maintenanceStatus)}</dd></div><div><dt>License</dt><dd>{resource.license || "Not documented"}</dd></div><div><dt>Last repository activity</dt><dd><ResourceDate fallback="Not documented" value={resource.lastCommitAt} /></dd></div>{resource.publisherUpdatedAt ? <div><dt>Publisher updated</dt><dd><ResourceDate fallback="Not documented" value={resource.publisherUpdatedAt} /></dd></div> : null}<div><dt>Last checked</dt><dd><ResourceDate fallback="Not documented" value={resource.lastCheckedAt} /></dd></div><div><dt>Next review</dt><dd><ResourceDate fallback="Not scheduled" value={resource.nextCheckAt} /></dd></div><div><dt>Method</dt><dd>{resourceFieldLabel(resource.verificationMethod || "manual_review")}</dd></div></dl>
-              {resource.repositoryEvidence ? <p className="resource-detail-evidence"><a href={resource.repositoryEvidence.commitUrl} rel="noopener noreferrer" target="_blank">Evidence commit {resource.repositoryEvidence.commitSha.slice(0, 7)} <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}
-            </DetailSection>
+            <nav aria-label="On this page" className="resource-detail-toc">
+              <strong>On this page</strong>
+              <a href="#what-it-is">What it is</a>
+              <a href="#who-it-is-for">Who it's for</a>
+              <a href="#access">How to use or access</a>
+              {resource.media?.status === "available" ? <a href="#screenshots">Screenshots</a> : null}
+              <a href="#limitations">Limitations</a>
+              <a href="#related-resources">Related resources</a>
+              {taxonomyTags.length ? <a href="#related-topics">Related topics</a> : null}
+            </nav>
+            <dl className="resource-detail-brief"><div><dt>Type</dt><dd>{resourceTypeLabel(resource.resourceType)}</dd></div>{resource.maintainer && resource.maintainer !== resource.publisher ? <div><dt>Maintained by</dt><dd>{resource.maintainer}</dd></div> : null}<div><dt>Why it is listed</dt><dd>{resource.whyIncluded}</dd></div></dl>
+            <details className="resource-detail-maintenance">
+              <summary>Source &amp; maintenance details</summary>
+              <div>
+                <dl className="resource-detail-facts stacked"><div><dt>Release</dt><dd>{resource.currentVersion || (resource.toolProfile?.release.status === "not_published" ? "No published GitHub release" : "Not documented")}</dd></div><div><dt>Maintenance</dt><dd>{resourceFieldLabel(resource.maintenanceStatus)}</dd></div><div><dt>License</dt><dd>{resource.license || "Not documented"}</dd></div><div><dt>Last repository activity</dt><dd><ResourceDate fallback="Not documented" value={resource.lastCommitAt} /></dd></div>{resource.publisherUpdatedAt ? <div><dt>Publisher updated</dt><dd><ResourceDate fallback="Not documented" value={resource.publisherUpdatedAt} /></dd></div> : null}<div><dt>Last checked</dt><dd><ResourceDate fallback="Not documented" value={resource.lastCheckedAt} /></dd></div><div><dt>Next review</dt><dd><ResourceDate fallback="Not scheduled" value={resource.nextCheckAt} /></dd></div><div><dt>Verification method</dt><dd>{resourceFieldLabel(resource.verificationMethod || "manual_review")}</dd></div>{resource.repositoryEvidence ? <div><dt>Evidence commit</dt><dd><a href={resource.repositoryEvidence.commitUrl} rel="noopener noreferrer" target="_blank">{resource.repositoryEvidence.commitSha.slice(0, 7)} <IconExternalLink aria-hidden="true" size={13} /></a></dd></div> : null}</dl>
+                <section><h3>Compatibility evidence</h3>{resource.compatibility?.status === "documented" ? <div className="resource-detail-tags">{[...resource.compatibility.operatingSystems, ...resource.compatibility.environments].map((item) => <span key={item}>{item}</span>)}</div> : null}<p>{resource.compatibility?.note || "The publisher didn't state compatibility."}</p>{resource.compatibility?.sourceUrl ? <p className="resource-detail-evidence"><a href={resource.compatibility.sourceUrl} rel="noopener noreferrer" target="_blank">View evidence <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}</section>
+                {taxonomyTags.length ? <section><h3>Topic basis</h3><p>Related topics are derived from reviewed technology scope and compatibility fields.</p></section> : null}
+              </div>
+            </details>
           </aside>
         </div>
       </div>
@@ -171,6 +164,6 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
   );
 }
 
-function DetailSection({ title, children }: { title: string; children: ReactNode }) {
-  return <section className="resource-detail-section"><h2>{title}</h2>{children}</section>;
+function DetailSection({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+  return <section className="resource-detail-section" id={id}><h2>{title}</h2>{children}</section>;
 }
