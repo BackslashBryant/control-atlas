@@ -100,7 +100,7 @@
       };
     }
     if (route === "compare") {
-      var compareCopy = sharedCopy("compare") || { eyebrow: "", summary: "Compare frameworks and related records.", title: "Compare" };
+      var compareCopy = sharedCopy("compare") || { eyebrow: "", summary: "See how frameworks connect using published crosswalks.", title: "Compare" };
       return {
         eyebrow: compareCopy.eyebrow || "",
         kind: "compare",

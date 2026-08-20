@@ -1983,30 +1983,9 @@ li {
   margin-bottom: 0.75rem;
 }
 
-.compare-legend {
-  color: var(--ca-text-muted);
-  font-size: var(--font-size-sm);
-  margin: var(--ca-space-3) 0 var(--ca-space-4);
-  line-height: 1.55;
-}
-
-/* Three comparison tiles read as one row on desktop and stack cleanly when
-   narrow, instead of wrapping 4+2 and leaving a dead gap. */
-.compare-summary-grid {
-  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
-  margin-bottom: var(--ca-space-4);
-}
-
-.compare-provenance-note {
-  margin: 0 0 var(--ca-space-4);
-  color: var(--ca-text-muted);
-  font-size: var(--font-size-sm);
-}
-
 /* Section rhythm for the surfaces reworked in this pass: consistent vertical
    spacing between a heading block and the content it introduces, so pages do
    not mix 8px and 32px gaps between equivalent things. */
-.compare-results-panel > .stack,
 .workflow-method[open] {
   margin-top: var(--ca-space-4);
 }
@@ -2018,49 +1997,6 @@ li {
 .record-actions-popover button {
   width: 100%;
   justify-content: flex-start;
-}
-
-.compare-map-unavailable {
-  margin-top: var(--ca-space-4);
-}
-
-.compare-mappings {
-  margin-top: var(--ca-space-2);
-}
-
-.compare-mappings-title {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: var(--ca-space-2);
-  margin: 0 0 var(--ca-space-2);
-}
-
-.compare-mappings-count {
-  color: var(--ca-text-muted);
-  font-size: var(--font-size-sm);
-  font-weight: 400;
-}
-
-.compare-table-scroll {
-  max-height: 60vh;
-  overflow: auto;
-  border: 1px solid var(--ca-border);
-  border-radius: var(--radius-md);
-  box-shadow:
-    inset 10px 0 8px -10px color-mix(in srgb, var(--ca-shadow-color) 45%, transparent),
-    inset -10px 0 8px -10px color-mix(in srgb, var(--ca-shadow-color) 45%, transparent);
-}
-
-.compare-table-scroll .detail-table {
-  margin: 0;
-}
-
-.compare-table-scroll .detail-table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: var(--ca-surface);
 }
 
 .provenance-term {
@@ -3488,25 +3424,6 @@ button.atlas-path-crumb-authority:focus-visible {
   background: color-mix(in srgb, var(--ca-accent) 16%, transparent);
 }
 
-.compare-mode-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ca-space-4);
-  margin-bottom: var(--ca-space-6);
-  padding-bottom: var(--ca-space-4);
-  border-bottom: 1px solid var(--ca-border);
-}
-
-.compare-mode-header h2,
-.compare-mode-header p {
-  margin-bottom: 0;
-}
-
-.compare-intent-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
 .workflow-reference {
   border: 1px solid var(--ca-border);
   border-radius: var(--radius-lg);
@@ -3634,15 +3551,6 @@ button.atlas-path-crumb-authority:focus-visible {
 }
 
 @media (max-width: 720px) {
-  .compare-intent-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .compare-mode-header {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
   .start-here-answer {
     grid-template-columns: 1fr auto;
   }
@@ -6171,24 +6079,6 @@ button.atlas-leverage-row:hover {
   text-transform: uppercase;
 }
 
-.compare-table-scroll-hint {
-  display: none;
-  margin: 0 0 var(--ca-space-3);
-  color: var(--ca-text-muted);
-  font-size: var(--font-size-sm);
-}
-
-@media (max-width: 768px) {
-  .compare-table-scroll-hint {
-    display: block;
-  }
-}
-
-.compare-results-panel .relationship-table-wrap {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
 .landing-trust-row {
   display: grid;
   gap: var(--ca-space-3);
@@ -7774,63 +7664,268 @@ button.atlas-leverage-row:hover {
   font-size: 13px;
 }
 
-/* Five modes wrapped 4 + 1 as a flex row, leaving one tall orphan card. An
-   auto-fit grid keeps them equal width and equal height at every breakpoint. */
+/* Compare follows Orbital's staged-flow composition: compact mode tabs,
+   trajectory, active task, and one contextual support rail. */
+.compare-page.flow-shell {
+  max-width: 1180px;
+  padding-block: 50px 90px;
+}
+
 .compare-mode-tabs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: var(--ca-space-3);
-}
-
-/* Padding clears the 7px corner registration ticks (orbital.css
-   .intent-card::after) — at 9px 12px the ticks cut through the card titles. */
-.compare-mode-tabs > button {
-  display: grid;
-  gap: var(--ca-space-2);
-  width: auto;
-  min-height: 58px;
-  padding: var(--ca-space-4) var(--ca-space-6);
-  text-align: left;
-  color: var(--ca-text);
-  border: 1px solid var(--ca-border);
-  border-radius: 4px;
-  background: var(--ca-surface);
-}
-
-.compare-mode-tabs .intent-card-body {
-  max-width: 34ch;
-  color: var(--ca-text-muted);
-  font-size: var(--ca-text-sm);
-  line-height: 1.45;
-}
-
-.compare-mode-tabs .intent-card-action-hint {
-  display: none;
-}
-
-.compare-boundary {
-  margin: 10px 0;
-  padding: 9px 12px;
-  color: var(--ca-text-muted);
-  border-left: 3px solid var(--ca-trust);
-  background: var(--ca-surface-subtle);
-  font-size: 13px;
-}
-
-.compare-result-toolbar {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--ca-space-3);
-  padding-block: var(--ca-space-2);
-  border-block: 1px solid var(--ca-border-subtle);
+  gap: var(--ca-space-4);
+  margin-top: var(--ca-space-6);
+  border-bottom: 1px solid var(--ca-border-strong);
 }
 
-.compare-result-toolbar > .card-actions {
+.compare-mode-tab {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--ca-text-muted);
+  cursor: pointer;
+  font: 700 var(--ca-text-sm) / 1.2 var(--ca-font-sans);
+}
+
+.compare-mode-tab:hover {
+  border-bottom-color: var(--ca-border-strong);
+  color: var(--ca-text);
+}
+
+.compare-mode-tab[aria-selected="true"] {
+  border-bottom-color: var(--ca-primary);
+  color: var(--ca-primary);
+}
+
+.compare-mode-tab:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--ca-primary);
+  outline-offset: 2px;
+}
+
+.compare-flow-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+  gap: var(--ca-space-4);
+  align-items: start;
+}
+
+.compare-flow-task,
+.compare-flow-support {
+  min-width: 0;
+}
+
+.compare-flow-task {
+  min-height: 330px;
+  padding: clamp(20px, 3vw, 32px);
+}
+
+.compare-flow-task > h2,
+.compare-flow-support > h2,
+.compare-results-head h2 {
+  margin: 8px 0 20px;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.08;
+}
+
+.compare-step-fields {
+  display: grid;
+  gap: var(--ca-space-4);
+  max-width: 42rem;
+}
+
+.compare-step-fields input,
+.compare-flow-task select,
+.compare-refine select {
+  min-height: 44px;
+}
+
+.compare-preserved-context {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 var(--ca-space-5);
+  padding: 10px 12px;
+  border-left: 2px solid var(--ca-secondary);
+  background: var(--ca-surface-subtle);
+  color: var(--ca-text-muted);
+}
+
+.compare-preserved-context > span {
+  font: 700 var(--ca-text-xs) / 1.3 var(--ca-font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.compare-preserved-context strong {
+  color: var(--ca-text);
+}
+
+.compare-step-actions {
+  justify-content: space-between;
+  margin-top: var(--ca-space-6);
+}
+
+.compare-flow-support {
+  padding: 24px;
+}
+
+.compare-flow-support > p {
+  max-width: 32ch;
+  margin: 0;
+  color: var(--ca-text-muted);
+}
+
+.compare-scope-list {
+  display: grid;
+  gap: 0;
   margin: 0;
 }
 
+.compare-scope-list > div {
+  display: grid;
+  gap: 5px;
+  padding: 12px 0;
+  border-top: 1px solid var(--ca-border-subtle);
+}
+
+.compare-scope-list dt,
+.compare-crosswalk-source > span {
+  color: var(--ca-text-muted);
+  font: 700 var(--ca-text-xs) / 1.3 var(--ca-font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.compare-scope-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--ca-text);
+  font-weight: 650;
+}
+
+.compare-results-panel {
+  min-width: 0;
+}
+
+.compare-results-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ca-space-4);
+}
+
+.compare-results-head h2 {
+  margin-bottom: 4px;
+}
+
+.compare-mapping-total,
+.compare-range {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+}
+
+.compare-crosswalk-source {
+  display: grid;
+  gap: 4px;
+  margin: var(--ca-space-5) 0 var(--ca-space-3);
+  padding: 12px 0;
+  border-block: 1px solid var(--ca-border-subtle);
+}
+
+.compare-crosswalk-filter {
+  max-width: 34rem;
+  margin: var(--ca-space-5) 0 var(--ca-space-3);
+}
+
+.compare-range {
+  margin-bottom: 8px;
+}
+
+.compare-table-scroll {
+  max-height: 60vh;
+  overflow: auto;
+  border: 1px solid var(--ca-border-strong);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.compare-table-scroll .detail-table {
+  min-width: 0;
+  margin: 0;
+}
+
+.compare-table-scroll .detail-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--ca-surface);
+}
+
+.compare-table-scroll .detail-table th:first-child {
+  width: 38%;
+}
+
+.compare-record-title {
+  display: block;
+  margin-top: 4px;
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+}
+
+.compare-results-empty {
+  margin-top: var(--ca-space-5);
+}
+
+.compare-decision-boundary {
+  margin: var(--ca-space-5) 0 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--ca-primary);
+  background: var(--ca-surface-subtle);
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+}
+
+.compare-refine {
+  margin-top: var(--ca-space-4);
+}
+
+.compare-refine-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--ca-space-5);
+  align-items: end;
+}
+
+.compare-export-actions {
+  display: grid;
+  gap: 8px;
+}
+
+.compare-export-actions .actions {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .compare-flow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-flow-support {
+    order: 2;
+  }
+}
+
 @media (max-width: 767px) {
+  .compare-page .page-header-eyebrow {
+    display: block;
+    white-space: normal;
+  }
+
   .home-entry {
     gap: 24px;
     padding: 24px 16px 32px;
@@ -7956,9 +8051,24 @@ button.atlas-leverage-row:hover {
     text-align: center;
   }
 
-  .compare-result-toolbar {
+  .compare-results-head,
+  .compare-step-actions {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .compare-results-head > button,
+  .compare-step-actions > button {
+    width: 100%;
+  }
+
+  .compare-refine-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-export-actions .actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -9148,6 +9258,15 @@ input[type="checkbox"] {
     font-size: var(--ca-text-xs);
     font-weight: 700;
     text-transform: uppercase;
+  }
+
+  .compare-table-scroll .detail-table td {
+    display: block;
+  }
+
+  .compare-table-scroll .detail-table td::before {
+    display: block;
+    margin-bottom: 8px;
   }
 
   .landing-path-grid {

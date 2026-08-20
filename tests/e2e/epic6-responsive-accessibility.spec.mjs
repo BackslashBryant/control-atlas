@@ -9,7 +9,7 @@ import {
 } from "./support.mjs";
 
 const compareRoute =
-  "/#/compare?intent=frameworks&workbench=relationships&source=nist-800-53&target=csf-2&mappingSource=nist-olir-csf2-to-sp800-53";
+  "/#/compare/relationships?intent=frameworks&source=nist-800-53&target=csf-2";
 
 async function expectNoPageOverflow(page, label) {
   const overflow = await page.evaluate(() => ({
@@ -20,24 +20,52 @@ async function expectNoPageOverflow(page, label) {
 }
 
 for (const viewport of [
-  { label: "375px", width: 375, height: 812 },
-  // A 1440px desktop at 200% browser zoom exposes roughly 720 CSS pixels.
-  { label: "200% zoom equivalent", width: 720, height: 900 },
+  { label: "390px", width: 390, height: 844 },
+  { label: "1024px", width: 1024, height: 900 },
+  { label: "1440px", width: 1440, height: 1000 },
 ]) {
-  test(`Compare mapping cards retain all meaning at ${viewport.label}`, async ({ page }) => {
+  test(`Compare staged flow and mappings reflow without lost meaning at ${viewport.label}`, async ({ page }) => {
     test.setTimeout(90000);
     await page.setViewportSize(viewport);
     attachPageDiagnostics(page);
+
+    await gotoApp(page, "/#/compare");
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+
+    await expect(page.locator(".page-header-eyebrow")).toHaveText(
+      "PUBLISHED CROSSWALKS / 24 COMPARABLE PAIRS",
+    );
+    await expect(page.getByRole("tablist", { name: "Comparison mode" })).toBeInViewport();
+    await expect(page.getByRole("navigation", { name: "Step progress" })).toBeInViewport();
+    const task = page.locator(".compare-flow-task");
+    const support = page.locator(".compare-flow-support");
+    await expect(task).toBeInViewport();
+    await expect(support).toBeInViewport();
+    await expectNoPageOverflow(page, `Compare setup at ${viewport.label}`);
+
+    const taskBox = await task.boundingBox();
+    const supportBox = await support.boundingBox();
+    expect(taskBox).not.toBeNull();
+    expect(supportBox).not.toBeNull();
+    if (viewport.width <= 900) {
+      expect(supportBox.y).toBeGreaterThan(taskBox.y);
+    } else {
+      expect(supportBox.x).toBeGreaterThan(taskBox.x);
+      expect(taskBox.width).toBeGreaterThan(supportBox.width);
+    }
+
     await gotoApp(page, compareRoute);
     await waitForAppReady(page);
     await dismissOnboarding(page);
-    await page.getByRole("button", { name: "Show mappings" }).click();
+    await page.getByRole("button", { name: "Show published mappings" }).click();
 
-    const table = page.getByRole("table", { name: "Relationship mappings" });
+    const table = page.getByRole("table", { name: "Published crosswalk mappings" });
     await expect(table).toBeVisible({ timeout: 60000 });
     await expectNoPageOverflow(page, `Compare at ${viewport.label}`);
-    await expect(table.locator("tbody tr").first().locator("td")).toHaveCount(5);
-    await expect(table.locator("tbody tr").first().locator("td[data-label]")).toHaveCount(5);
+    await expect(table.locator("thead th")).toHaveText(["From", "Maps to"]);
+    await expect(table.locator("tbody tr").first().locator("td")).toHaveCount(2);
+    await expect(table.locator("tbody tr").first().locator("td[data-label]")).toHaveCount(2);
     expect(await table.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBeTruthy();
   });
 }

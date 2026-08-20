@@ -11,7 +11,7 @@ const CONCURRENCY = 6;
 
 async function fetchPage(url) {
   const response = await fetch(url, {
-    headers: { 'User-Agent': 'ControlAtlas-ingestion/1.0 (+https://github.com/BackslashBryant/control-atlas)' },
+    headers: { 'User-Agent': 'ControlAtlas-ingestion/1.0 (+https://github.com/rambulls/control-atlas)' },
     redirect: 'follow',
     signal: AbortSignal.timeout(20_000),
   });

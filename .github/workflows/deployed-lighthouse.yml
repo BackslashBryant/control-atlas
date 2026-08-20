@@ -12,7 +12,7 @@ on:
       url:
         description: Deployed URL to measure
         required: false
-        default: "https://backslashbryant.github.io/control-atlas/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map"
+        default: "https://rambulls.github.io/control-atlas/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map"
   push:
     branches:
       - "evidence/lighthouse*"
@@ -32,7 +32,7 @@ jobs:
       - run: npm ci
       - name: Run three deployed mobile Lighthouse passes
         env:
-          TARGET_URL: ${{ github.event.inputs.url || 'https://backslashbryant.github.io/control-atlas/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map' }}
+          TARGET_URL: ${{ github.event.inputs.url || 'https://rambulls.github.io/control-atlas/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map' }}
         run: |
           mkdir -p artifacts/deployed-lighthouse
           for i in 1 2 3; do

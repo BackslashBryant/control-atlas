@@ -542,7 +542,7 @@
       "id": "artifact-control-atlas-structure",
       "status": "OK",
       "http": "local",
-      "url": "https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json",
+      "url": "https://github.com/rambulls/control-atlas/blob/main/data/curated/tree-spine.json",
       "sha256": "sha256:7bf238858f8fa128d88e9313b55df9b57549f7bc2d46f31ba10fa58d52c4e7b1",
       "byte_length": 6259,
       "record_count": 10,

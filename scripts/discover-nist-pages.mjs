@@ -11,7 +11,7 @@ const SOURCE_URL = 'https://pages.nist.gov/pages-root/';
 
 async function main() {
   const response = await fetch(SOURCE_URL, {
-    headers: { 'User-Agent': 'ControlAtlas-ingestion/1.0 (+https://github.com/BackslashBryant/control-atlas)' },
+    headers: { 'User-Agent': 'ControlAtlas-ingestion/1.0 (+https://github.com/rambulls/control-atlas)' },
   });
   if (!response.ok) throw new Error(`NIST Pages discovery failed: HTTP ${response.status}`);
   const bytes = Buffer.from(await response.arrayBuffer());

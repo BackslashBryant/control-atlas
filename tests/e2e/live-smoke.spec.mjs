@@ -80,7 +80,7 @@ test("live smoke: compare hub loads", async ({ page }) => {
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page.getByRole("heading", { name: "Compare", level: 1 })).toBeVisible();
-  await expect(page.getByText("Compare frameworks and related records.", { exact: true })).toBeVisible();
+  await expect(page.getByText("See how frameworks connect using published crosswalks.", { exact: true })).toBeVisible();
 });
 
 test("live smoke: deployed runtime cache version matches source", async ({

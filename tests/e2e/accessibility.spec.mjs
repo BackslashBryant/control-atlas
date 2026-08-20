@@ -79,8 +79,8 @@ const ROUTES = [
   },
   { label: "compare hub", path: "/#/compare" },
   {
-    label: "compare threat chain",
-    path: "/#/compare?workbench=threat-chain&chainCatalog=mitre-attack&chainItem=mitre-attack%3AT1033",
+    label: "compare specific item",
+    path: "/#/compare/relationships?intent=item-mapping&source=nist-800-53&items=AC-2",
   },
   {
     label: "MITRE record detail",
@@ -113,7 +113,7 @@ for (const route of ROUTES) {
   test(`a11y: ${route.label} has no serious or critical violations`, async ({
     page,
   }) => {
-    if (route.label === "compare threat chain") {
+    if (route.label === "compare specific item") {
       test.setTimeout(60_000);
     }
     await gotoApp(page, route.path);
@@ -161,22 +161,22 @@ test("a11y: compare detailed mappings table has no serious or critical violation
   test.setTimeout(60_000);
   await gotoApp(
     page,
-    "/#/compare?crosswalk=relationships&source=nist-800-53&target=csf-2",
+    "/#/compare/relationships?intent=frameworks&source=nist-800-53&target=csf-2",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  // This pair has exactly one published mapping source, so Compare auto-resolves
-  // it and renders "Mapping publication" as static text rather than a selectable
-  // dropdown (T3 capability rule: never offer a choice with only one completion).
-  await expect(page.getByText("Mapping publication")).toBeVisible();
-  await page.getByRole("button", { name: "Show mappings" }).click();
+  await expect(page.getByText("Crosswalk source", { exact: true })).toHaveCount(0);
+  await page.getByRole("button", { name: "Show published mappings" }).click();
   await expect(
-    page.getByRole("table", { name: "Relationship mappings" }),
+    page.getByRole("table", { name: "Published crosswalk mappings" }),
   ).toBeVisible({ timeout: 30_000 });
+  await expect(page.locator(".compare-crosswalk-source")).toContainText(
+    "NIST CSF 2.0",
+  );
 
   const results = await new AxeBuilder({ page })
-    .include('table[aria-label="Relationship mappings"]')
+    .include('#compare-results')
     .withTags(["wcag2a", "wcag2aa"])
     .analyze();
 

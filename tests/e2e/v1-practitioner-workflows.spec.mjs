@@ -116,21 +116,39 @@ test("V1 workflow 07 — compare with a shareable explicit configuration", async
 }) => {
   await open(
     page,
-    "/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
+    "/#/compare/relationships?intent=frameworks&source=nist-800-53&target=csf-2",
   );
-  await expect(page).toHaveURL(/#\/compare\/relationships\?source=nist-800-53&target=csf-2$/);
+  await expect(page).toHaveURL(/#\/compare\/relationships\?/);
+  await expect(page).toHaveURL(/source=nist-800-53/);
+  await expect(page).toHaveURL(/target=csf-2/);
   await expect(
-    page.getByRole("heading", { name: "Catalog to catalog" }),
+    page.getByRole("tab", { name: "Frameworks" }),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(
+    page.getByRole("heading", {
+      level: 2,
+      name: "Choose a framework to compare with",
+    }),
   ).toBeVisible();
-  // This pair has exactly one published mapping source, so Compare
-  // auto-resolves it and renders "Mapping publication" as static text
-  // rather than a selectable dropdown (T3 capability rule: never offer a
-  // choice with only one completion).
-  await expect(page.getByText("Mapping publication")).toBeVisible();
-  await page.getByRole("button", { name: "Show mappings" }).click();
+  await expect(page.getByText("Crosswalk source", { exact: true })).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Show published mappings" }).click();
   await expect(page).toHaveURL(/compareRun=true/);
+  await expect(page.locator(".compare-crosswalk-source")).toContainText(
+    "NIST CSF 2.0",
+  );
   await expect(
-    page.getByRole("table", { name: "Relationship mappings" }),
+    page.getByRole("table", { name: "Published crosswalk mappings" }),
+  ).toBeVisible({ timeout: 30_000 });
+
+  await page.goBack();
+  await waitForAppReady(page);
+  await expect(page.locator("#compare-results")).toHaveCount(0);
+  await expect(page.getByLabel("Target publication")).toHaveValue("csf-2");
+  await page.goForward();
+  await waitForAppReady(page);
+  await expect(
+    page.getByRole("table", { name: "Published crosswalk mappings" }),
   ).toBeVisible({ timeout: 30_000 });
 });
 

@@ -129,8 +129,15 @@ const SEARCH_PARAMS = new Set(["q", "filter", "publisher", "kind", "connectedOnl
 const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "area", "publisher", "lifecycle", "page"]);
 const DETAIL_PARAMS = new Set<string>();
 const START_PARAMS = new Set(["goal", "context"]);
-const COMPARE_PARAMS = new Set(["crosswalk", "workbench", "source", "target", "items", "relationshipType", "provenance", "confidence", "includeCandidates", "chainCatalog", "chainBenchmark", "chainItem", "baselineA", "baselineB", "intent", "compareView", "mappingSource", "compareRun"]);
-const COMPARE_MODES = new Set(["intent", "relationships", "stig-chain", "baseline-compare", "threat-chain"]);
+const COMPARE_PARAMS = new Set([
+  "source", "target", "items", "relationshipType", "intent", "mappingSource", "compareRun",
+]);
+const COMPARE_MODES = new Set(["intent", "relationships"]);
+const RETIRED_COMPARE_MODES = new Set(["stig-chain", "baseline-compare", "threat-chain"]);
+const OBSOLETE_COMPARE_PARAMS = [
+  "includeCandidates", "chainCatalog", "chainBenchmark", "chainItem", "baselineA", "baselineB",
+  "compareView", "provenance", "confidence",
+] as const;
 const LEARN_PARAMS = new Set(["pattern"]);
 const BUILD_PARAMS = new Set(["templateType", "framework", "format", "environment", "baseline", "controlFamily", "category", "q"]);
 const SOURCE_PARAMS = new Set(["layer", "q", "source", "publisher", "provenance", "eligibility", "lifecycle", "access"]);
@@ -172,6 +179,10 @@ function permittedParams(params: URLSearchParams, permitted: Set<string>): { par
       ["browseAll", "showAll", "connectedOnly", "includeCandidates", "compareRun"].includes(key) &&
       value !== "true"
     ) {
+      discarded = true;
+      continue;
+    }
+    if (key === "intent" && !["frameworks", "item-mapping"].includes(value)) {
       discarded = true;
       continue;
     }
@@ -245,6 +256,7 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   let path = resolvePublicNameAlias(initialPath);
   let params = incoming;
   let discarded = false;
+  let recoveredRetiredCompare = false;
 
   if (path === "/catalog") {
     path = "/library";
@@ -291,10 +303,18 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   }
 
   if (path === "/compare") {
-    const compareMode = params.get("crosswalk") || params.get("workbench") || "";
+    const requestedCompareModes = [params.get("crosswalk"), params.get("workbench")]
+      .filter((value): value is string => Boolean(value));
+    const retiredModeRequested = requestedCompareModes.some((mode) =>
+      RETIRED_COMPARE_MODES.has(mode)
+    );
+    const compareMode = requestedCompareModes[0] || "";
     params.delete("crosswalk");
     params.delete("workbench");
-    if (compareMode && compareMode !== "intent") {
+    if (retiredModeRequested) {
+      recoveredRetiredCompare = true;
+      discarded = true;
+    } else if (compareMode && compareMode !== "intent") {
       if (COMPARE_MODES.has(compareMode)) {
         path = `/compare/${compareMode}`;
       } else {
@@ -308,11 +328,25 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   const comparePath = path.match(/^\/compare\/([^/]+)$/);
   if (comparePath) {
     const compareMode = decodeURIComponent(comparePath[1]);
-    if (compareMode === "intent") {
+    if (RETIRED_COMPARE_MODES.has(compareMode)) {
+      path = "/compare";
+      recoveredRetiredCompare = true;
+      discarded = true;
+    } else if (compareMode === "intent") {
       path = "/compare";
     } else if (!COMPARE_MODES.has(compareMode)) {
       path = "/compare";
       discarded = true;
+    }
+  }
+
+  if (path === "/compare" || /^\/compare\/[^/]+$/.test(path)) {
+    for (const key of OBSOLETE_COMPARE_PARAMS) {
+      if (params.has(key)) {
+        params.delete(key);
+        recoveredRetiredCompare = true;
+        discarded = true;
+      }
     }
   }
 
@@ -376,6 +410,10 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
   return {
     canonicalPath,
     requiresReplace: canonicalPath !== input.replace(/^#/, ""),
-    recoveryMessage: discarded ? "Some unsupported link settings were removed. You can continue from this page." : "",
+    recoveryMessage: recoveredRetiredCompare
+      ? "This Compare link used a retired workflow. Start a published crosswalk here."
+      : discarded
+        ? "Some unsupported link settings were removed. You can continue from this page."
+        : "",
   };
 }

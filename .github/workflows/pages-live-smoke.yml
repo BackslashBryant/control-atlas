@@ -56,5 +56,5 @@ jobs:
       - name: Run bounded live smoke and exact-SHA proof
         run: npm run test:e2e:live
         env:
-          PLAYWRIGHT_BASE_URL: https://backslashbryant.github.io/control-atlas/
+          PLAYWRIGHT_BASE_URL: https://rambulls.github.io/control-atlas/
           EXPECTED_DEPLOY_SHA: ${{ github.event.workflow_run.head_sha }}

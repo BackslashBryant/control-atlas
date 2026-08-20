@@ -200,10 +200,11 @@ test("StepIndicator renders staged-flow indicators with current, completed, and 
   );
 
   assert.match(markup, /class="staged-flow-steps"/);
-  assert.match(markup, /class="step-item step-complete"/, "Step 1 should be complete");
-  assert.match(markup, /class="step-item step-active"/, "Step 2 should have active class");
+  assert.match(markup, /class="step-list progress-trajectory"/);
+  assert.match(markup, /class="step-item step step-complete done"/, "Step 1 should be complete");
+  assert.match(markup, /class="step-item step step-active active"/, "Step 2 should have active class");
   assert.match(markup, /aria-current="step"/, "Step 2 should have aria-current");
-  assert.match(markup, /class="step-item step-pending"/, "Step 3 should be pending");
+  assert.match(markup, /class="step-item step step-pending"/, "Step 3 should be pending");
 });
 
 test("FilterBar renders controls container and clear action when filters are active", () => {

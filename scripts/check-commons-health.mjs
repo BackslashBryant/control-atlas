@@ -26,7 +26,7 @@ async function request(url, method) {
       redirect: "follow",
       signal: controller.signal,
       headers: {
-        "User-Agent": "ControlAtlasResourceHealth/3.0 (+https://github.com/BackslashBryant/control-atlas)",
+        "User-Agent": "ControlAtlasResourceHealth/3.0 (+https://github.com/rambulls/control-atlas)",
         ...(method === "GET" ? { Range: "bytes=0-2047" } : {}),
       },
     });
