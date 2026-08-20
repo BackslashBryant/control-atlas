@@ -54,7 +54,8 @@ test("Template D is graph-first and discloses map details without covering the c
 
   await expect(page.locator("main")).toHaveCount(1);
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  await expect(page.getByText("Start with a topic and work toward the details.", { exact: true })).toBeVisible();
+  await expect(page.getByText("CYBERSECURITY LANDSCAPE", { exact: true })).toBeVisible();
+  await expect(page.getByText("Explore areas, publications, and the published connections between them.", { exact: true })).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Jump to a record" })).toBeVisible();
   await expect(template.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
   await expect(detailsToggle).toHaveAttribute("aria-expanded", "false");
@@ -103,7 +104,8 @@ test("semantic Atlas drills from landmarks to publisher-native records without a
   await expect(network).toHaveAttribute("data-projection-level", "landscape");
   await expect(network).toHaveAttribute("data-projection-node-count", "13");
   expect(await network.locator("canvas").count()).toBeGreaterThan(0);
-  await page.getByLabel("Relationship class").selectOption("correlation");
+  await expect(network.getByRole("navigation", { name: "Atlas location" })).toHaveCount(0);
+  await page.getByLabel("Connections").selectOption("correlation");
   await network.getByRole("button", { name: /Compliance/ }).click();
   await expect(page).toHaveURL(/atlasLimb=.*LIMB-COMPLIANCE/);
   await expect(network).toHaveAttribute("data-projection-level", "area");
@@ -150,7 +152,7 @@ for (const width of [1024, 1199, 1200, 1440]) {
     await expect(network).toHaveAttribute("data-projection-level", "landscape");
     await expect(network).toHaveAttribute("data-projection-node-count", "13");
     expect(await network.locator("canvas").count()).toBeGreaterThan(0);
-    await expect(network.locator("summary")).toHaveText("Accessible landmarks (13)");
+    await expect(network.locator("summary")).toHaveText("Browse landmarks");
 
     const stageBox = await stage.boundingBox();
     expect(stageBox?.width, `${width}px semantic graph width`).toBeGreaterThan(Math.min(640, width * .8));

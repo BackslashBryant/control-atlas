@@ -114,11 +114,10 @@ test("publisher-native record headings remain identifier-led at every governed w
 test("WS2 related records exclude structural parents and public pages expose no developer fields", async ({ page }) => {
   await openRecord(page, "/#/record/nist-800-53/AC-2");
 
-  await page.locator(".record-connections-trigger").click();
   const connections = page.locator('[data-record-section="related-records"]');
   await expect(connections).toBeVisible();
   await expect(connections.getByRole("heading", { name: "Related records", exact: true })).toBeVisible();
-  await expect(connections).toContainText("Published links from this record to other requirements and controls.");
+  await expect(connections).toContainText("Formal published links to other publications.");
   await expect(connections).not.toContainText("Contains");
   await expect(connections).not.toContainText("FAMILY-ACCESS-CONTROL");
   const connectionRows = connections.locator("[data-record-connection-id]");
@@ -128,9 +127,15 @@ test("WS2 related records exclude structural parents and public pages expose no 
   );
   expect(new Set(connectionIds).size).toBe(connectionIds.length);
   for (const row of await connectionRows.all()) {
-    await expect(row.locator(".relationship-meta")).not.toBeEmpty();
-    await expect(row.locator(".relationship-citation")).not.toBeEmpty();
+    await expect(row.locator(".relationship-meta")).toContainText("Published connection");
+    await expect(row.locator(".relationship-citation")).toContainText("Source");
+    await expect(row.locator("details.relationship-source-evidence")).toHaveCount(1);
   }
+  const sourceEvidence = connectionRows.first().locator("details.relationship-source-evidence");
+  expect(await sourceEvidence.getAttribute("open")).toBeNull();
+  await expect(sourceEvidence.getByText("How the connection was established", { exact: true })).toBeHidden();
+  await sourceEvidence.locator("summary").click();
+  await expect(sourceEvidence.getByText("How the connection was established", { exact: true })).toBeVisible();
 
   const visibleText = await page.locator("main").innerText();
   expect(visibleText).not.toContain("nist-800-53:AC-2");
@@ -146,10 +151,8 @@ test("WS2 related-record links present generated identities as human records at 
   for (const width of [320, 375, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
     await openRecord(page, "/#/record/nist-800-53/SC-3");
-    const connectionsTrigger = page.locator(".record-connections-trigger");
-    await connectionsTrigger.scrollIntoViewIfNeeded();
-    await connectionsTrigger.click();
     const related = page.locator('[data-record-section="related-records"]');
+    await related.scrollIntoViewIfNeeded();
     const link = related.getByRole("link", { name: accessibleName });
     await expect(link).toBeVisible();
     await expect(link).toContainText("Appgate Headless Client");
@@ -161,9 +164,6 @@ test("WS2 related-record links present generated identities as human records at 
       ),
       `${width}px related-record overflow`,
     ).toBeLessThanOrEqual(1);
-    // Close the drawer so the next viewport's trigger is clickable.
-    await page.keyboard.press("Escape");
-    await expect(related).toHaveCount(0);
   }
 });
 
@@ -174,10 +174,15 @@ test("WS2 CCI records expose publisher references and a bounded first set of con
   await expect(source.getByRole("heading", { name: "Requirement", exact: true })).toBeVisible();
   await expect(source.getByRole("heading", { name: "Publisher References", exact: true })).toBeVisible();
   await expect(source.locator('[data-source-field="references"] li')).toHaveCount(4);
+  await expect(source.locator(":scope > section > h2")).toHaveText(["Requirement", "Publisher References"]);
 
   const connected = page.locator('[data-record-section="related-records"]');
-  await expect(connected.getByRole("heading", { name: "Evidence-backed connected records", exact: true })).toBeVisible();
+  await expect(connected.getByRole("heading", { name: "Related records", exact: true })).toBeVisible();
+  await expect(connected).toContainText("Formal published links to other publications.");
   await expect(connected.locator('[data-record-connection-id]')).toHaveCount(12);
+  await expect(connected.locator(".relationship-meta").first()).toContainText("Published connection");
+  await expect(connected.locator(".relationship-citation").first()).toContainText("Source");
+  await expect(connected.locator("details.relationship-source-evidence")).toHaveCount(12);
   await expect(connected.getByRole("link", { name: "Explore all connections in Atlas", exact: true })).toBeVisible();
 });
 

@@ -58,7 +58,7 @@ import {
 import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
 import { nodeIdFromItemId, type ViewState } from "../lib/viewState";
 
-import { Button, Panel } from "../components/lsm";
+import { Button } from "../components/lsm";
 import { AppLink, shouldInterceptAppLink } from "../components/AppLink";
 import { RecordLink } from "../components/RecordLink";
 
@@ -331,7 +331,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   }
 
   return (
-    <Panel
+    <section
       className="atlas-workspace"
       data-page-template="canvas"
       data-visual-identity="technical-cartography"
@@ -341,6 +341,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     >
       <header className="atlas-canvas-header">
         <div>
+          <p className="eyebrow">CYBERSECURITY LANDSCAPE</p>
           <h1 id="atlas-page-title">Atlas</h1>
           <p>{SITE_COPY.routes.atlas.purpose}</p>
         </div>
@@ -451,7 +452,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         </p>
       ) : null}
       </div>
-    </Panel>
+    </section>
   );
 }
 

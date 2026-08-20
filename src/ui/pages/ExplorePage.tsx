@@ -230,26 +230,44 @@ export function ExplorePage(props: {
       .filter(([rawType]) => libraryKindForRawType(rawType) === kind.id)
       .reduce((total, [, count]) => total + Number(count), 0),
   })).filter((kind) => kind.count > 0), [libraryBrowseCounts]);
-  const tagFacetOptions = useMemo(() => TAXONOMY_CONTRACT.dimensions.map((dimension) => {
-    const selectedOutsideDimension = state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension !== dimension.id);
-    const contextualCounts = searchStarted
-      ? ((bundle.runtime as any).getLibraryTagContext?.(state.query, {
-          ...baseLibraryFilters,
-          taxonomy_tag_groups: taxonomyTagGroups(selectedOutsideDimension),
-        })?.tags || {})
-      : libraryBrowseCounts.tags || {};
-    const options = TAXONOMY_CONTRACT.tags
-      .filter((tag) => tag.dimension === dimension.id)
-      .map((tag) => ({
-        aliases: tag.aliases,
-        count: Number(contextualCounts[tag.id] || 0),
-        label: tag.label,
-        value: tag.id,
-      }))
-      .filter((tag) => tag.count > 0)
-      .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label));
-    return { ...dimension, options };
-  }), [baseLibraryFilters, bundle.runtime, libraryBrowseCounts, searchStarted, state.query, state.tags]);
+  const tagFacetOptions = useMemo(
+    () =>
+      TAXONOMY_CONTRACT.dimensions
+        .map((dimension) => {
+          const selectedOutsideDimension = state.tags.filter(
+            (id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension !== dimension.id,
+          );
+          const contextualCounts = searchStarted
+            ? ((bundle.runtime as any).getLibraryTagContext?.(state.query, {
+                ...baseLibraryFilters,
+                taxonomy_tag_groups: taxonomyTagGroups(selectedOutsideDimension),
+              })?.tags || {})
+            : libraryBrowseCounts.tags || {};
+          const options = TAXONOMY_CONTRACT.tags
+            .filter((tag) => tag.dimension === dimension.id)
+            .map((tag) => ({
+              aliases: tag.aliases,
+              count: Number(contextualCounts[tag.id] || 0),
+              label: tag.label,
+              value: tag.id,
+            }))
+            .filter((tag) => tag.count > 0)
+            .sort(
+              (left, right) =>
+                right.count - left.count || left.label.localeCompare(right.label),
+            );
+          return { ...dimension, options };
+        })
+        .filter((dimension) => dimension.options.length > 0),
+    [
+      baseLibraryFilters,
+      bundle.runtime,
+      libraryBrowseCounts,
+      searchStarted,
+      state.query,
+      state.tags,
+    ],
+  );
 
   const mapItems: LibraryMapItem[] = useMemo(() => state.viewMode !== "map" ? [] : rows.slice(0, 75).map((row: any) => ({
     id: row.document.id,
@@ -268,7 +286,7 @@ export function ExplorePage(props: {
       const tag = TAXONOMY_TAG_BY_ID.get(id);
       return tag ? [{ key: "tags" as const, label: tag.label, tagId: id }] : [];
     }),
-    connectedOnly && { key: "connectedOnly", label: "Has connections" },
+    connectedOnly && { key: "connectedOnly", label: "Has published connections" },
   ].filter(Boolean) as Array<{ key: keyof SearchState; label: string; tagId?: string }>;
 
   const clearFilters = () => onNavigate("search", {
@@ -284,41 +302,23 @@ export function ExplorePage(props: {
     onNavigate("search", { viewMode: viewMode === "map" ? "map" : "list" });
     window.requestAnimationFrame(() => window.requestAnimationFrame(() => window.scrollTo({ top: scrollY, behavior: "auto" })));
   };
+  const advancedFiltersActive = Boolean(
+    state.publisher || state.tags.length || connectedOnly,
+  );
   const renderFacets = (scope: "desktop" | "mobile") => (
-    <div className="workspace-facet-controls" data-facet-set="publisher,kind,publication,area,tags,connections">
-      <TypeaheadFacet
-        id={`library-${scope}-publisher`}
-        label="Publisher"
-        onChange={(publisher) => onNavigate("search", { publisher })}
-        options={publishers.map((publisher) => ({ label: publisher, value: publisher }))}
-        value={state.publisher}
-      />
-      <CheckboxFacet
-        label="Content kind"
-        onChange={(kind) => onNavigate("search", { kind })}
-        options={kindCounts.map((kind) => ({ count: kind.count, label: kind.label, textLabel: kind.label, value: kind.id }))}
-        value={state.kind}
-      />
-      {tagFacetOptions.map((dimension) => (
-        <TagFacet
-          key={dimension.id}
-          label={dimension.label}
-          onChange={(tags) => onNavigate("search", {
-            tags: [
-              ...state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension !== dimension.id),
-              ...tags,
-            ].sort(),
-          })}
-          options={dimension.options}
-          selected={state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension === dimension.id)}
-        />
-      ))}
+    <div className="workspace-facet-controls" data-facet-set="publication,kind,area">
       <TypeaheadFacet
         id={`library-${scope}-publication`}
         label="Publication"
         onChange={(filter) => onNavigate("search", { filter })}
         options={runtimeCatalogs.map((catalog: any) => ({ label: catalog.name, value: catalog.id }))}
         value={state.filter}
+      />
+      <CheckboxFacet
+        label="Content kind"
+        onChange={(kind) => onNavigate("search", { kind })}
+        options={kindCounts.map((kind) => ({ count: kind.count, label: kind.label, textLabel: kind.label, value: kind.id }))}
+        value={state.kind}
       />
       <CheckboxFacet
         label="Area"
@@ -331,17 +331,47 @@ export function ExplorePage(props: {
         }))}
         value={state.area}
       />
-      <label className="workspace-boolean-facet">
-        <input
-          checked={connectedOnly}
-          onChange={(event) => {
-            onNavigate("search", { connectedOnly: event.target.checked ? "true" : "" });
-            if (event.target.checked && !graphReady) onRequestFullGraph();
-          }}
-          type="checkbox"
-        />
-        <span>Has published connections</span>
-      </label>
+      <details
+        className="workspace-advanced-facets"
+        data-advanced-facet-set="publisher,topics,connections"
+        open={advancedFiltersActive}
+      >
+        <summary>Advanced filters</summary>
+        <div className="workspace-advanced-facet-controls">
+          <TypeaheadFacet
+            id={`library-${scope}-publisher`}
+            label="Publisher"
+            onChange={(publisher) => onNavigate("search", { publisher })}
+            options={publishers.map((publisher) => ({ label: publisher, value: publisher }))}
+            value={state.publisher}
+          />
+          {tagFacetOptions.map((dimension) => (
+            <TagFacet
+              key={dimension.id}
+              label={dimension.label}
+              onChange={(tags) => onNavigate("search", {
+                tags: [
+                  ...state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension !== dimension.id),
+                  ...tags,
+                ].sort(),
+              })}
+              options={dimension.options}
+              selected={state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension === dimension.id)}
+            />
+          ))}
+          <label className="workspace-boolean-facet">
+            <input
+              checked={connectedOnly}
+              onChange={(event) => {
+                onNavigate("search", { connectedOnly: event.target.checked ? "true" : "" });
+                if (event.target.checked && !graphReady) onRequestFullGraph();
+              }}
+              type="checkbox"
+            />
+            <span>Has published connections</span>
+          </label>
+        </div>
+      </details>
       {activeFilters.length ? <button className="workspace-clear-filters" onClick={clearFilters} type="button">Clear all filters</button> : null}
     </div>
   );
