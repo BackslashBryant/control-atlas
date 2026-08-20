@@ -25,6 +25,40 @@ const publicationRecords = [
   ],
 ];
 
+const publicationRoutes = [
+  ["nist-800-53", "SP 800-53 Rev. 5", "NIST", "family", "families"],
+  ["csf-2", "Cybersecurity Framework 2.0", "NIST", "category", "categories"],
+];
+
+test("publication pages use official human identity and publisher-native tiers", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  attachPageDiagnostics(page);
+
+  for (const [catalog, title, publisher, tier, tiers] of publicationRoutes) {
+    await gotoApp(page, `/#/library/publication/${catalog}`);
+    await waitForAppReady(page, { allowPartial: true });
+    await dismissOnboarding(page);
+
+    const publication = page.locator(".catalog-detail-page");
+    await expect(publication).toBeVisible();
+    await expect(publication).not.toHaveClass(/\bpanel\b/);
+    await expect(publication.getByText("PUBLICATION", { exact: true })).toBeVisible();
+    await expect(publication.getByRole("heading", { name: title, level: 1 })).toBeVisible();
+    await expect(publication.locator(".catalog-publisher")).toHaveText(publisher);
+    await expect(
+      publication.getByRole("link", { name: "Open official publication", exact: true }),
+    ).toBeVisible();
+    await expect(publication.locator(`[data-published-tier="${tier}"]`).first()).toBeVisible();
+    await expect(
+      publication.getByRole("searchbox", { name: `Search ${title} ${tiers}` }),
+    ).toBeVisible();
+    await expect(publication).not.toContainText("Control Atlas note:");
+    await expect(publication).not.toContainText("Published group");
+  }
+});
+
 test("OSCAL-fed records display exact publication identity, not ingestion identity", async ({
   page,
 }) => {

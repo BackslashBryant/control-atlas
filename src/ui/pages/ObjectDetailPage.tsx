@@ -1,6 +1,4 @@
 import { Fragment, useEffect, useState, type ReactNode } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
-import { IconX } from "@tabler/icons-react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import {
@@ -274,11 +272,9 @@ export function ObjectDetailPage(props: {
   const node = bundle.runtime.getNode(state.node);
   const document = bundle.runtime.getLibraryDocument(state.node);
   const [visibleConnectionCount, setVisibleConnectionCount] = useState(50);
-  const [connectionsOpen, setConnectionsOpen] = useState(false);
 
   useEffect(() => {
     setVisibleConnectionCount(50);
-    setConnectionsOpen(false);
   }, [state.node]);
 
   if (!node) {
@@ -370,6 +366,13 @@ export function ObjectDetailPage(props: {
     immediateConnectionsRemaining -= items.length;
     return items.length ? [{ ...group, items }] : [];
   });
+  const relatedConnectionGroups = document.catalog_id === "disa-cci"
+    ? immediateConnectionGroups
+    : visibleConnectionGroups;
+  const relatedConnectionCount = relatedConnectionGroups.reduce(
+    (total, group) => total + group.items.length,
+    0,
+  );
   const displayPath = (node.display_path || []) as Array<{
     id: string;
     label: string;
@@ -551,50 +554,6 @@ export function ObjectDetailPage(props: {
               })}
             </div>
           )}
-          {document.catalog_id === "disa-cci" && immediateConnectionGroups.length ? (
-            <section className="record-connections record-connections--inline" data-record-section="related-records">
-              <div className="section-header">
-                <div>
-                  <h2>Evidence-backed connected records</h2>
-                  <p>Start with these {immediateConnectionGroups.reduce((total, group) => total + group.items.length, 0)} of {connectionCount} published links.</p>
-                </div>
-                <Badge tone="info">{connectionCount}</Badge>
-              </div>
-              <div className="record-connection-groups">
-                {immediateConnectionGroups.map((group) => (
-                  <section key={`${group.catalogId}:${group.relationshipType}`}>
-                    <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
-                    <ul>
-                      {group.items.map((item) => {
-                        const relatedIdentity = runtimeRecordIdentityFor(bundle, item.nodeId);
-                        return (
-                        <li data-record-connection-id={item.edgeId} key={item.edgeId}>
-                          <AppLink
-                            aria-label={relatedIdentity.stableIdIsGenerated ? `Open ${relatedIdentity.accessibleName}` : undefined}
-                            onNavigate={onNavigate}
-                            patch={{ node: item.nodeId }}
-                            view="library-detail"
-                          >
-                            <strong>{relatedIdentity.stableIdIsGenerated ? relatedIdentity.primary : item.itemId}</strong>
-                            {relatedIdentity.stableIdIsGenerated && relatedIdentity.context
-                              ? ` — ${relatedIdentity.context}`
-                              : item.title !== item.itemId
-                                ? ` — ${item.title}`
-                                : ""}
-                          </AppLink>
-                        </li>
-                        );
-                      })}
-                    </ul>
-                  </section>
-                ))}
-              </div>
-              <AppLink onNavigate={onNavigate} patch={{ node: node.id }} variant="secondary" view="atlas-map">
-                Explore all connections in Atlas
-              </AppLink>
-            </section>
-          ) : null}
-
         </article>
 
         <aside
@@ -660,12 +619,6 @@ export function ObjectDetailPage(props: {
                 </div>
               ) : null}
             </dl>
-            {document.catalog_id !== "disa-cci" && connectionGroups.length ? (
-              <button className="record-connections-trigger" onClick={() => setConnectionsOpen(true)} type="button">
-                <span>Related records</span>
-                <span className="record-connections-trigger__count">{connectionCount}</span>
-              </button>
-            ) : null}
             <AppLink
               onNavigate={onNavigate}
               patch={{ source: source?.id || "" }}
@@ -675,53 +628,46 @@ export function ObjectDetailPage(props: {
             </AppLink>
           </section>
         </aside>
+      </div>
 
-        {document.catalog_id !== "disa-cci" && connectionGroups.length ? (
-          <Dialog.Root onOpenChange={setConnectionsOpen} open={connectionsOpen}>
-            <Dialog.Portal>
-              <Dialog.Overlay className="drawer-overlay" />
-              <Dialog.Content className="drawer-content record-connections-dialog" data-record-section="related-records">
-                <div className="drawer-header">
-                  <div>
-                    <Dialog.Title>Related records</Dialog.Title>
-                    <Dialog.Description>Published links from this record to other requirements and controls.</Dialog.Description>
-                  </div>
-                  <Dialog.Close asChild>
-                    <button aria-label="Close related records" className="icon-button" type="button">
-                      <IconX aria-hidden="true" size={18} stroke={1.8} />
-                    </button>
-                  </Dialog.Close>
-                </div>
-                <div className="drawer-list">
-                  <div className="record-connection-groups">
-              {visibleConnectionGroups.map((group) => (
+      {connectionGroups.length ? (
+        <section className="record-connections record-connections--related" data-record-section="related-records">
+          <div className="section-header">
+            <div>
+              <h2>Related records</h2>
+              <p>Formal published links to other publications.</p>
+              {relatedConnectionCount < connectionCount ? (
+                <p className="support-meta">Showing {relatedConnectionCount} of {connectionCount} published connections.</p>
+              ) : null}
+            </div>
+            <Badge tone="info">{connectionCount}</Badge>
+          </div>
+          <div className="record-connection-groups">
+            {relatedConnectionGroups.map((group) => (
                 <section key={`${group.catalogId}:${group.relationshipType}`}>
                   <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
                   <ul>
                     {group.items.map((item) => {
                       const relatedIdentity = runtimeRecordIdentityFor(bundle, item.nodeId);
-                      const sourceLabels = [...new Set(
-                        item.sourceRefs
-                          .map((reference) => {
-                            const sourceRecord = reference.sourceId
-                              ? bundle.runtime.getSource(reference.sourceId)
-                              : null;
-                            const sourceLabel = (
-                              reference.sourceName ||
-                              sourceRecord?.display_name ||
-                              sourceRecord?.name ||
-                              ""
-                            );
-                            const safeLocator = humanReadableEvidenceLocator(reference.locator);
-                            return [
-                              sourceLabel,
-                              reference.sourceVersion,
-                              safeLocator,
-                              reference.evidenceQuality,
-                            ].filter(Boolean).join(" · ");
-                          })
-                          .filter(Boolean),
-                      )];
+                      const sourceEvidence = item.sourceRefs.map((reference) => {
+                        const sourceRecord = reference.sourceId
+                          ? bundle.runtime.getSource(reference.sourceId)
+                          : null;
+                        return {
+                          evidenceQuality: reference.evidenceQuality
+                            ? displayNameFor("evidence_quality", reference.evidenceQuality)
+                            : "",
+                          locator: humanReadableEvidenceLocator(reference.locator),
+                          source: (
+                            reference.sourceName ||
+                            sourceRecord?.display_name ||
+                            sourceRecord?.name ||
+                            ""
+                          ),
+                          version: reference.sourceVersion || sourceRecord?.version || "",
+                        };
+                      }).filter((reference) => reference.source);
+                      const sourceNames = [...new Set(sourceEvidence.map((reference) => reference.source))];
                       return (
                         <li data-record-connection-id={item.edgeId} key={item.edgeId}>
                           <AppLink
@@ -738,43 +684,73 @@ export function ObjectDetailPage(props: {
                                 : ""}
                           </AppLink>
                           <span className="relationship-meta">
-                            {[
-                              formatRelationshipLabel({ relationship_type: item.relationshipType }),
-                              displayNameFor("provenance_class", item.provenanceClass),
-                            ].filter(Boolean).join(" · ")}
+                            <strong>Published connection</strong>
+                            {` · ${formatRelationshipLabel({ relationship_type: item.relationshipType })}`}
                           </span>
-                          {sourceLabels.length ? (
-                            <span className="relationship-citation">{sourceLabels.join(" · ")}</span>
-                          ) : null}
+                          <span className="relationship-citation">
+                            <strong>Source</strong>
+                            {` · ${sourceNames.length ? sourceNames.join(" · ") : "Not recorded"}`}
+                          </span>
+                          <details className="mapping-row-details relationship-source-evidence">
+                            <summary aria-label={`Source evidence for ${relatedIdentity.primary}`}>Source evidence</summary>
+                            <dl className="relationship-source-facts">
+                              <div>
+                                <dt>How the connection was established</dt>
+                                <dd>{displayNameFor("provenance_class", item.provenanceClass)}</dd>
+                              </div>
+                              {sourceEvidence.map((reference, referenceIndex) => (
+                                <Fragment key={`${item.edgeId}:${reference.source}:${referenceIndex}`}>
+                                  <div>
+                                    <dt>Source record</dt>
+                                    <dd>{reference.source}</dd>
+                                  </div>
+                                  {reference.version ? (
+                                    <div>
+                                      <dt>Source version</dt>
+                                      <dd>{reference.version}</dd>
+                                    </div>
+                                  ) : null}
+                                  {reference.locator ? (
+                                    <div>
+                                      <dt>Locator</dt>
+                                      <dd>{reference.locator}</dd>
+                                    </div>
+                                  ) : null}
+                                  {reference.evidenceQuality ? (
+                                    <div>
+                                      <dt>Evidence quality</dt>
+                                      <dd>{reference.evidenceQuality}</dd>
+                                    </div>
+                                  ) : null}
+                                </Fragment>
+                              ))}
+                            </dl>
+                          </details>
                         </li>
                       );
                     })}
                   </ul>
                 </section>
-              ))}
-            </div>
-                  {visibleConnectionCount < connectionCount ? (
-                    <button
-                      className="atlas-spatial-more"
-                      onClick={() =>
-                        setVisibleConnectionCount((count) =>
-                          Math.min(count + 50, connectionCount),
-                        )
-                      }
-                      type="button"
-                    >
-                      Show 50 more · {connectionCount - visibleConnectionCount} remaining
-                    </button>
-                  ) : null}
-                  <AppLink className="record-connections-explore" onNavigate={onNavigate} patch={{ node: node.id }} view="atlas-map">
-                    Explore all connections in Atlas
-                  </AppLink>
-                </div>
-              </Dialog.Content>
-            </Dialog.Portal>
-          </Dialog.Root>
-        ) : null}
-      </div>
+            ))}
+          </div>
+          {document.catalog_id !== "disa-cci" && visibleConnectionCount < connectionCount ? (
+            <button
+              className="atlas-spatial-more"
+              onClick={() =>
+                setVisibleConnectionCount((count) =>
+                  Math.min(count + 50, connectionCount),
+                )
+              }
+              type="button"
+            >
+              Show 50 more · {connectionCount - visibleConnectionCount} remaining
+            </button>
+          ) : null}
+          <AppLink className="record-connections-explore" onNavigate={onNavigate} patch={{ node: node.id }} view="atlas-map">
+            Explore all connections in Atlas
+          </AppLink>
+        </section>
+      ) : null}
 
     </section>
   );

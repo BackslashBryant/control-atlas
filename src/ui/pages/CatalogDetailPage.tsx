@@ -62,8 +62,8 @@ export function CatalogDetailPage(props: {
   if (!catalog) {
     return (
       <section className="notice">
-        <h1>Catalog not found</h1>
-        <p>This catalog is not available in the current public data set.</p>
+        <h1>Publication not found</h1>
+        <p>This publication is not available in the current public data set.</p>
         <AppLink onNavigate={onNavigate} variant="primary" view="search">
           Back to Library
         </AppLink>
@@ -74,11 +74,19 @@ export function CatalogDetailPage(props: {
   const profile = catalogProfileFor(catalog.id, catalog.name);
   const source = publicationSourceForCatalog(bundle.runtime, catalog.id);
   const catalogName = catalogDisplayNameFor(catalog.id, catalog.name);
+  const publicationTitle = String(
+    source?.display_name || source?.name || catalogName,
+  ).trim();
   const publisherName = recordPublisherName(
     source?.owner,
     source?.publisher,
     catalog.display_group,
   );
+  const tierLabel = String(catalog.tier_label || "section").trim();
+  const tierLabelPlural = String(
+    catalog.tier_label_plural || `${tierLabel}s`,
+  ).trim();
+  const tierLabelHeading = `${tierLabel.charAt(0).toUpperCase()}${tierLabel.slice(1)}`;
   const records = bundle.runtime
     .getNodes({ catalog_id: catalog.id })
     .filter((record: any) => !NON_LEAF_NODE_TYPES.has(record.node_type));
@@ -136,24 +144,22 @@ export function CatalogDetailPage(props: {
     onNavigate("catalog-detail", { ...state, ...patch });
 
   return (
-    <section className="panel catalog-detail-page" data-visual-identity="publisher-research-library">
+    <section className="catalog-detail-page" data-visual-identity="publisher-research-library">
       <AppLink
         className="back-link"
         onNavigate={onNavigate}
         view="search"
       >
-        <IconArrowLeft aria-hidden="true" size={17} /> Back to Catalog
+        <IconArrowLeft aria-hidden="true" size={17} /> Back to Library
       </AppLink>
 
       <header className="catalog-detail-hero" data-route-primary-header="true">
-        <p className="eyebrow" data-route-primary-copy="true">Publication</p>
-        <h1 data-route-primary-copy="true">{catalog.name}</h1>
-        {profile.synopsis ? (
-          <p className="catalog-synopsis" data-route-primary-copy="true">
-            Control Atlas note: {profile.synopsis}
-          </p>
-        ) : null}
-        <div className="catalog-facts" aria-label="Catalog summary" data-route-primary-support="true">
+        <p className="eyebrow" data-route-primary-copy="true">PUBLICATION</p>
+        <h1 data-route-primary-copy="true">{publicationTitle}</h1>
+        <p className="catalog-publisher" data-route-primary-copy="true">
+          {publisherName}
+        </p>
+        <div className="catalog-facts" aria-label="Publication summary" data-route-primary-support="true">
           <span>
             <strong>
               {(catalog.leaf_record_count ?? catalog.node_count).toLocaleString()}
@@ -177,9 +183,9 @@ export function CatalogDetailPage(props: {
             href={source.artifact_url}
             rel="noreferrer"
             target="_blank"
-            variant="secondary"
+            variant="primary"
           >
-            View official source
+            Open official publication
             <IconExternalLink aria-hidden="true" size={16} />
           </ButtonLink>
         ) : null}
@@ -189,18 +195,18 @@ export function CatalogDetailPage(props: {
         <div className="catalog-records-heading">
           <div>
             <h2 id="catalog-records-title">
-              {catalog.name} {profile.recordLabel}
+              {publicationTitle} {profile.recordLabel}
             </h2>
             <p>
               {showTierBrowser
-                ? `${filteredTierGroups.length} ${catalog.tier_label_plural || "published groups"}`
+                ? `${filteredTierGroups.length} ${tierLabelPlural}`
                 : `${matchingRecords.length.toLocaleString()} matching records`}
             </p>
           </div>
         </div>
         <WorkbenchControlSurface
           className="catalog-detail-control-surface"
-          label={`Filter ${catalog.name} ${profile.recordLabel}`}
+          label={`Filter ${publicationTitle} ${profile.recordLabel}`}
           targetId="catalog-record-results"
         >
           <form
@@ -212,9 +218,9 @@ export function CatalogDetailPage(props: {
             <div className="catalog-record-filters">
               {families.length > 1 && !showTierBrowser ? (
                 <label className="catalog-record-filter">
-                  <span>Published group</span>
+                  <span>{tierLabelHeading}</span>
                   <select
-                    aria-label="Filter by published group"
+                    aria-label={`Filter by ${tierLabel}`}
                     onChange={(event) =>
                       update({
                         family: event.target.value,
@@ -224,7 +230,7 @@ export function CatalogDetailPage(props: {
                     }
                     value={state.family}
                   >
-                    <option value="">All published groups</option>
+                    <option value="">All {tierLabelPlural}</option>
                     {families.map((name) => (
                       <option key={name} value={name}>{name}</option>
                     ))}
@@ -232,22 +238,22 @@ export function CatalogDetailPage(props: {
                 </label>
               ) : null}
               <label className="catalog-record-filter catalog-record-search-filter">
-                <span>{showTierBrowser ? `Search ${catalog.tier_label_plural || "published groups"}` : "Search records"}</span>
+                <span>{showTierBrowser ? `Search ${tierLabelPlural}` : "Search records"}</span>
                 <span className="catalog-search">
                   <IconSearch aria-hidden="true" size={18} />
                   <input
-                    aria-label={showTierBrowser ? `Search ${catalog.name} ${catalog.tier_label_plural || "published groups"}` : "Search this catalog"}
+                    aria-label={showTierBrowser ? `Search ${publicationTitle} ${tierLabelPlural}` : `Search ${publicationTitle}`}
                     onChange={(event) => setQueryDraft(event.target.value)}
                     placeholder={showTierBrowser
-                      ? `Search ${catalog.tier_label_plural || "published groups"} in ${catalog.name}`
-                      : `Identifier or title in ${catalog.name}`}
+                      ? `Search ${tierLabelPlural} in ${publicationTitle}`
+                      : `Identifier or title in ${publicationTitle}`}
                     type="search"
                     value={queryDraft}
                   />
                 </span>
               </label>
             </div>
-            <Button type="submit" variant="secondary">{showTierBrowser ? `Search ${catalog.tier_label_plural || "published groups"}` : "Search records"}</Button>
+            <Button type="submit" variant="secondary">{showTierBrowser ? `Search ${tierLabelPlural}` : "Search records"}</Button>
           </form>
         </WorkbenchControlSurface>
 
@@ -262,7 +268,7 @@ export function CatalogDetailPage(props: {
                 {filteredTierGroups.map((group) => (
                   <button
                     className="catalog-index-row"
-                    data-published-tier={catalog.tier_label || "group"}
+                    data-published-tier={tierLabel}
                     key={group.name}
                     onClick={() =>
                       update({
@@ -274,7 +280,7 @@ export function CatalogDetailPage(props: {
                     type="button"
                   >
                     <span>
-                      <small>{catalog.tier_label || "Published group"}</small>
+                      <small>{tierLabelHeading}</small>
                       <strong>{group.name}</strong>
                     </span>
                     <span>
@@ -294,10 +300,10 @@ export function CatalogDetailPage(props: {
               )}
               {filteredTierGroups.length === 0 ? (
                 <div className="empty-state">
-                  <h3>No {catalog.tier_label_plural || "published groups"} match this search.</h3>
-                  <p>Try a product, platform, or benchmark name.</p>
+                  <h3>No {tierLabelPlural} match this search.</h3>
+                  <p>Try another {tierLabel} name.</p>
                   <Button onClick={() => update({ query: "", page: "" })} type="button" variant="secondary">
-                    Clear benchmark search
+                    Clear {tierLabel} search
                   </Button>
                 </div>
               ) : null}
@@ -365,7 +371,7 @@ export function CatalogDetailPage(props: {
           ) : (
             <div className="empty-state">
               <h3>No records match these filters.</h3>
-              <p>Try an identifier, official title, published group, or broader term.</p>
+              <p>Try an identifier, official title, {tierLabel}, or broader term.</p>
               <Button
                 onClick={() =>
                   update({

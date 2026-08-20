@@ -117,6 +117,8 @@ export function TagFacet(props: {
       .some((value) => value.toLocaleLowerCase().includes(needle));
   });
 
+  if (!props.options.length) return null;
+
   return (
     <fieldset className="workspace-checkbox-facet workspace-tag-facet">
       <legend>{props.label}</legend>
@@ -148,7 +150,7 @@ export function TagFacet(props: {
           </label>
         );
       })}
-      {!visible.length ? <p className="muted">No governed tags are available in this context.</p> : null}
+      {!visible.length ? <p className="muted">No tags match.</p> : null}
     </fieldset>
   );
 }

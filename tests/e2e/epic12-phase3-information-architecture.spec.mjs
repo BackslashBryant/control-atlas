@@ -104,7 +104,17 @@ test("Phase 3 filters stay stable, bounded, and free of hierarchy node types", a
     await waitForAppReady(page, { allowPartial: true });
     const rail = page.locator(".workspace-facet-rail");
     await expect(rail).toBeVisible();
-    renderedSets.push(await rail.locator("fieldset legend, .workspace-typeahead > span").allTextContents());
+    const facetControls = rail.locator('.workspace-facet-controls[data-facet-set="publication,kind,area"]');
+    const primaryFacets = facetControls.locator(
+      ":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > legend",
+    );
+    renderedSets.push(await primaryFacets.allTextContents());
+    await expect(primaryFacets).toHaveText(["Publication", "Content kind", "Area"]);
+    const advanced = facetControls.locator('details[data-advanced-facet-set="publisher,topics,connections"]');
+    await advanced.locator("summary").click();
+    await expect(advanced.getByText("Publisher", { exact: true })).toBeVisible();
+    await expect(advanced.getByText("Has published connections", { exact: true })).toBeVisible();
+    await expect(advanced).not.toContainText("No governed tags are available in this context.");
     const datalistSizes = await rail.locator("datalist").evaluateAll((lists) => lists.map((list) => list.querySelectorAll("option").length));
     expect(datalistSizes.every((size) => size >= 2), datalistSizes.join(",")).toBe(true);
     await expect(rail).not.toContainText(/\b(?:Limb|Trunk|Group)\b/);
@@ -197,12 +207,24 @@ test("DISA STIG publication entry points preserve the benchmark layer above V-ID
   await waitForAppReady(page, { allowPartial: true });
   await page.getByRole("button", { name: /DISA STIG/ }).click();
   await expect(page).toHaveURL(/#\/library\/publication\/disa-stig$/);
-  await expect(page.getByRole("heading", { name: "DISA STIG", level: 1 })).toBeVisible();
+  const publication = page.locator(".catalog-detail-page");
+  await expect(publication).toBeVisible();
+  await expect(publication).not.toHaveClass(/\bpanel\b/);
+  await expect(publication.getByText("PUBLICATION", { exact: true })).toBeVisible();
+  await expect(publication.getByRole("heading", { name: "DISA STIG", level: 1 })).toBeVisible();
+  await expect(publication.locator(".catalog-publisher")).toHaveText("DISA");
+  await expect(publication.getByRole("link", { name: "Open official publication", exact: true })).toBeVisible();
   const benchmarks = page.locator('[data-published-tier="benchmark"]');
   const benchmarkCount = await benchmarks.count();
   expect(benchmarkCount).toBeGreaterThan(0);
   await expect(page.getByText(`${benchmarkCount} benchmarks`, { exact: true })).toBeVisible();
   await expect(page.locator(".catalog-record-title")).toHaveCount(0);
+  const benchmarkSearch = publication.getByRole("searchbox", { name: "Search DISA STIG benchmarks" });
+  await expect(benchmarkSearch).toBeVisible();
+  await benchmarkSearch.fill("zzzz-no-benchmark");
+  await publication.getByRole("button", { name: "Search benchmarks", exact: true }).click();
+  await expect(publication.getByRole("button", { name: "Clear benchmark search", exact: true })).toBeVisible();
+  await publication.getByRole("button", { name: "Clear benchmark search", exact: true }).click();
 
   await gotoApp(page, "/#/library/publication/disa-stig?browseAll=true");
   await waitForAppReady(page, { allowPartial: true });
@@ -214,7 +236,8 @@ test("DISA STIG publication entry points preserve the benchmark layer above V-ID
   });
   await benchmark.click();
   await expect(page).toHaveURL(/family=VMware(?:%20|\+)vSphere(?:%20|\+)7\.0/);
-  await expect(page.getByText("Published group", { exact: true })).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "Filter by benchmark" })).toBeVisible();
+  await expect(page.getByText("Published group", { exact: true })).toHaveCount(0);
   const rules = page.locator(".catalog-record-title");
   await expect(rules.first()).toBeVisible({ timeout: 60_000 });
   expect(await rules.count()).toBeGreaterThan(0);

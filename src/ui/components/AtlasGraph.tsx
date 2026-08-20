@@ -48,9 +48,12 @@ function nodeColor(node: AtlasProjectionNode) {
 }
 
 function nodeSize(node: AtlasProjectionNode) {
+  if (node.atlasStructureRole === "root") return 24;
   if (node.nativeType === "catalog") return 10.5;
-  const layerWeight = node.objectLayer === "atlas_structure" ? 2.2 : 0;
-  return Math.min(18, Math.max(3.4, 2.7 + node.importance * 1.15 + layerWeight));
+  if (node.atlasStructureRole === "area") {
+    return Math.min(14, Math.max(7, 3.2 + node.importance * 1.05));
+  }
+  return Math.min(12, Math.max(3.4, 2.7 + node.importance * 1.15));
 }
 
 function relationshipColor(classes: string[]) {
@@ -146,12 +149,20 @@ function GraphController({
         };
       },
       edgeReducer: (edge, data) => {
-        const matchesClass = !relationshipClass
-          || (data.relationshipClasses as string[]).includes(relationshipClass);
+        const classes = data.relationshipClasses as string[];
+        const matchesClass = !relationshipClass || classes.includes(relationshipClass);
         const incident = focusedId && (data.sourceId === focusedId || data.targetId === focusedId);
+        const source = graph.getNodeAttributes(String(data.sourceId));
+        const target = graph.getNodeAttributes(String(data.targetId));
+        const crossAreaBridge = source.atlasStructureRole === "area"
+          && target.atlasStructureRole === "area";
+        const persistentLandscapeEdge = classes.includes("structural") || crossAreaBridge;
+        const hiddenByFocus = focusedId
+          ? !incident
+          : projectionLevel === "landscape" && !persistentLandscapeEdge;
         return {
           ...data,
-          hidden: !matchesClass || Boolean(focusedId && !incident),
+          hidden: !matchesClass || Boolean(hiddenByFocus),
           label: incident ? data.label : "",
           size: incident ? Math.max(2, Number(data.size || 1)) : data.size,
         };
@@ -170,10 +181,10 @@ function GraphController({
 
 function roleLabel(node: AtlasProjectionNode) {
   if (node.objectLayer === "atlas_structure") {
-    return node.atlasStructureRole === "root" ? "Atlas root" : "Atlas area";
+    return node.atlasStructureRole === "root" ? "Landscape" : "Area";
   }
-  if (node.objectLayer === "authority_document") return "Authority";
-  if (node.nodeType === "publisher_group") return "Publisher group";
+  if (node.objectLayer === "authority_document") return "Official authority";
+  if (node.nodeType === "publisher_group") return "Publication section";
   return (node.nativeType || node.atlasClass || "Publisher record")
     .replace(/[-_]/g, " ");
 }
@@ -223,11 +234,6 @@ export function AtlasGraph({
     setLocalSelectedId(nodeId);
   }
 
-  const publishedRelationships = projection.edges.reduce(
-    (total, edge) => total + edge.relationshipCount,
-    0,
-  );
-
   return (
     <section
       aria-labelledby="atlas-network-title"
@@ -241,19 +247,17 @@ export function AtlasGraph({
     >
       <div className="atlas-network-heading">
         <div>
-          <p className="eyebrow">Semantic Atlas · {projection.level}</p>
           <h2 id="atlas-network-title">{projection.label}</h2>
           <p>{projection.description}</p>
-          <p className="atlas-network-measure">
-            {projection.nodes.length.toLocaleString()} visible landmarks represent {projection.representedCanonicalNodeCount.toLocaleString()} published records and {publishedRelationships.toLocaleString()} relationships.
-          </p>
         </div>
         <div className="atlas-network-controls">
-          <nav aria-label="Atlas location" className="atlas-network-breadcrumb">
-            <button disabled={projection.level === "landscape"} onClick={onHome} type="button">Landscape</button>
-            <button disabled={!canGoUp} onClick={onUp} type="button">Up one level</button>
-          </nav>
-          <label className="atlas-network-filter">Relationship class
+          {canGoUp ? (
+            <nav aria-label="Atlas location" className="atlas-network-breadcrumb">
+              <button onClick={onHome} type="button">Landscape</button>
+              <button onClick={onUp} type="button">Up one level</button>
+            </nav>
+          ) : null}
+          <label className="atlas-network-filter">Connections
             <select onChange={(event) => setRelationshipClass(event.target.value)} value={relationshipClass}>
               <option value="">All displayed connections</option>
               {relationshipClasses.map((value) => <option key={value} value={value}>{value}</option>)}
@@ -293,21 +297,17 @@ export function AtlasGraph({
             <strong>{focusedNode.label}</strong>
             <span>{roleLabel(focusedNode)}</span>
             <span>{focusedNode.canonicalRecordCount.toLocaleString()} records</span>
-            {focusedNode.internalRelationshipCount ? <span>{focusedNode.internalRelationshipCount.toLocaleString()} internal published relationships</span> : null}
+            {focusedNode.internalRelationshipCount ? <span>{focusedNode.internalRelationshipCount.toLocaleString()} connections within this landmark</span> : null}
             {focusedNode.drill ? <span>Open to continue</span> : null}
           </aside>
         ) : null}
       </div>
-      {projection.suppressedRelationshipCount ? (
-        <p className="atlas-network-suppression">{projection.suppressedRelationshipCount.toLocaleString()} lower-priority aggregate relationships stay out of this view. Drill in or select a landmark to reveal relevant context.</p>
-      ) : null}
       <details
         className="atlas-network-list"
         open={listOpen}
         onToggle={(event) => setListOpen(event.currentTarget.open)}
       >
-        <summary>Accessible landmarks ({projection.nodes.length.toLocaleString()})</summary>
-        <p>Use this list to navigate the same bounded Atlas projection.</p>
+        <summary>Browse landmarks</summary>
         <ol>
           {projection.nodes.map((node) => (
             <li key={node.id}>

@@ -19,6 +19,18 @@ test("WS3 Library uses Template C browse, facets, and fully linked record rows",
 
   const rail = workspace.getByRole("complementary", { name: "Library filters" });
   await expect(rail).toBeVisible();
+  const facetControls = rail.locator('.workspace-facet-controls[data-facet-set="publication,kind,area"]');
+  await expect(facetControls).toBeVisible();
+  await expect(
+    facetControls.locator(":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > legend"),
+  ).toHaveText(["Publication", "Content kind", "Area"]);
+  const advanced = facetControls.locator('details[data-advanced-facet-set="publisher,topics,connections"]');
+  await expect(advanced).not.toHaveAttribute("open", "");
+  await expect(advanced.getByText("Publisher", { exact: true })).toBeHidden();
+  await advanced.locator("summary").click();
+  await expect(advanced.getByText("Publisher", { exact: true })).toBeVisible();
+  await expect(advanced.getByText("Has published connections", { exact: true })).toBeVisible();
+  await expect(advanced).not.toContainText("No governed tags are available in this context.");
   const railStyle = await rail.evaluate((element) => ({
     position: element.ownerDocument.defaultView.getComputedStyle(element).position,
     width: Math.round(element.getBoundingClientRect().width),
@@ -88,7 +100,15 @@ test("WS3 facets move to a modal sheet below the desktop breakpoint", async ({ p
     await waitForAppReady(page, { allowPartial: true });
     await expect(page.locator(".workspace-facet-rail")).toBeHidden();
     await page.getByRole("button", { name: "Filters" }).click();
-    await expect(page.getByRole("dialog")).toBeVisible();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    if (route === "/#/library") {
+      const facetControls = dialog.locator('.workspace-facet-controls[data-facet-set="publication,kind,area"]');
+      await expect(
+        facetControls.locator(":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > legend"),
+      ).toHaveText(["Publication", "Content kind", "Area"]);
+      await expect(facetControls.locator("summary", { hasText: "Advanced filters" })).toBeVisible();
+    }
     await page.getByRole("button", { name: "Close filters" }).click();
     await expect(page.getByRole("dialog")).toBeHidden();
   }
