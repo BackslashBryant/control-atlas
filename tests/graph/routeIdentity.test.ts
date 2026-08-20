@@ -132,7 +132,7 @@ test("invalid comparison and Library boolean state still fail closed", () => {
   assert.match(library.recoveryMessage, /removed/i);
 });
 
-test("WS7 promotes record identity and comparison mode into readable path segments", () => {
+test("WS7 promotes record identity and supported comparison mode into readable path segments", () => {
   const atlas = canonicalizeHashLocation("/atlas/nist-800-53%3AAC-2?relationshipView=map");
   assert.equal(atlas.canonicalPath, "/atlas/nist-800-53:AC-2?relationshipView=map");
 
@@ -141,9 +141,6 @@ test("WS7 promotes record identity and comparison mode into readable path segmen
   );
   assert.equal(legacyCompare.canonicalPath, "/compare/relationships?source=nist-800-53&target=csf-2");
   assert.equal(legacyCompare.requiresReplace, true);
-
-  const workbenchBookmark = canonicalizeHashLocation("/compare?workbench=threat-chain&chainItem=mitre-attack%3AT1033");
-  assert.equal(workbenchBookmark.canonicalPath, "/compare/threat-chain?chainItem=mitre-attack:T1033");
 
   const atlasState = normalizeViewState("atlas-map", {
     view: "atlas-map",
@@ -167,6 +164,52 @@ test("WS7 promotes record identity and comparison mode into readable path segmen
     target: "csf-2",
   });
   assert.equal(serializeHashLocation(compareState), "/compare/relationships?source=nist-800-53&target=csf-2");
+});
+
+test("retired Compare routes recover to published crosswalks without obsolete state", () => {
+  const cases = [
+    [
+      "/compare?workbench=threat-chain&chainCatalog=mitre-attack&chainItem=mitre-attack%3AT1033&source=nist-800-53&intent=item-mapping&compareView=list",
+      "/compare?source=nist-800-53&intent=item-mapping",
+    ],
+    [
+      "/compare?crosswalk=baseline-compare&baselineA=low&baselineB=moderate&source=nist-800-53&target=csf-2&intent=frameworks",
+      "/compare?source=nist-800-53&target=csf-2&intent=frameworks",
+    ],
+    [
+      "/compare/stig-chain?chainBenchmark=DISA-STIG&items=V-12345&mappingSource=official",
+      "/compare?items=V-12345&mappingSource=official",
+    ],
+    [
+      "/compare/threat-chain?includeCandidates=true&relationshipType=mapped_to&provenance=federal_published&confidence=high&compareRun=true",
+      "/compare?relationshipType=mapped_to&compareRun=true",
+    ],
+  ] as const;
+
+  for (const [input, canonicalPath] of cases) {
+    const recovered = canonicalizeHashLocation(input);
+    assert.equal(recovered.canonicalPath, canonicalPath, input);
+    assert.equal(recovered.requiresReplace, true, input);
+    assert.equal(
+      recovered.recoveryMessage,
+      "This Compare link used a retired workflow. Start a published crosswalk here.",
+      input,
+    );
+  }
+});
+
+test("Compare canonicalization rejects stale or unsafe mode state", () => {
+  const conflictingModes = canonicalizeHashLocation(
+    "/compare?crosswalk=relationships&workbench=threat-chain&source=nist-800-53",
+  );
+  assert.equal(conflictingModes.canonicalPath, "/compare?source=nist-800-53");
+  assert.match(conflictingModes.recoveryMessage, /retired workflow/i);
+
+  const invalidState = canonicalizeHashLocation(
+    "/compare/relationships?intent=baseline-compare&compareView=graph&source=nist-800-53",
+  );
+  assert.equal(invalidState.canonicalPath, "/compare/relationships?source=nist-800-53");
+  assert.match(invalidState.recoveryMessage, /retired workflow/i);
 });
 
 test("Build and former Build-resource bookmarks retain their durable content", () => {

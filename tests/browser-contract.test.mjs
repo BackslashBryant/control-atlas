@@ -479,10 +479,13 @@ test('result-affecting controls have one visible workbench owner', () => {
     /data-control-results id="catalog-record-results"/,
   );
 
-  assert.match(compare, /targetId="compare-workspace"/);
-  assert.match(compare, /data-control-results[^>]*id="compare-workspace"/);
-  assert.doesNotMatch(compare, /function (?:Field|SelectField)\(/);
-  assert.match(compareResults, /aria-label="Comparison result controls"/);
+  assert.match(compare, /id="compare-workspace"/);
+  assert.match(compare, /className="compare-mode-tabs" role="tablist"/);
+  assert.match(compare, /<StepIndicator currentStep=\{currentStep\}/);
+  assert.match(compareResults, /data-control-results/);
+  assert.match(compareResults, /id="compare-results"/);
+  assert.match(compareResults, /<th scope="col">From<\/th>/);
+  assert.match(compareResults, /<th scope="col">Maps to<\/th>/);
   assert.match(record, /buildRecordConnectionGroups/);
   assert.doesNotMatch(record, /RelationshipExplorer|SelectField/);
 });

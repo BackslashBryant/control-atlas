@@ -691,7 +691,7 @@ export function StepIndicator(props: {
 }) {
   return (
     <nav aria-label="Step progress" className="staged-flow-steps">
-      <ol className="step-list">
+      <ol className="step-list progress-trajectory">
         {props.steps.map((step, idx) => {
           const stepNum = idx + 1;
           const isActive = stepNum === props.currentStep;
@@ -699,16 +699,18 @@ export function StepIndicator(props: {
           return (
             <li
               aria-current={isActive ? "step" : undefined}
-              className={`step-item ${isActive ? "step-active" : isComplete ? "step-complete" : "step-pending"}`}
+              className={`step-item step ${isActive ? "step-active active" : isComplete ? "step-complete done" : "step-pending"}`}
               key={step.id}
             >
-              <span aria-hidden="true" className="step-number">
-                {stepNum}
-              </span>
-              <span className="step-info">
-                <strong className="step-label">{step.label}</strong>
-                {step.description ? <small className="step-description">{step.description}</small> : null}
-              </span>
+              <strong className="step-label">
+                <span aria-hidden="true" className="step-number">
+                  {String(stepNum).padStart(2, "0")} /
+                </span>{" "}
+                {step.label}
+              </strong>
+              {step.description ? (
+                <small className="visually-hidden">{step.description}</small>
+              ) : null}
             </li>
           );
         })}

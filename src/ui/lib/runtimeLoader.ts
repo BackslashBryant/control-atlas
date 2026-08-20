@@ -322,9 +322,9 @@ export function runtimeArtifactPlan(
       )) ||
     (state.view === "matrix" &&
       (state.compareRun === "true" ||
-        state.crosswalk === "stig-chain" ||
-        state.crosswalk === "baseline-compare" ||
-        state.crosswalk === "threat-chain")) ||
+        (state.intent === "item-mapping" &&
+          Boolean(state.source) &&
+          Boolean(state.items)))) ||
     (state.view === "templates" && Boolean(state.templateType));
   return {
     atlasNetwork: state.view === "atlas-map",

@@ -292,8 +292,8 @@ export function App() {
         ? `${viewState.view}:${viewState.atlasAxis || "landing"}:${viewState.atlasFramework || "none"}:${viewState.atlasBenchmark || "none"}`
       : viewState.view === "catalog-detail"
         ? `${viewState.view}:${viewState.catalog}:${viewState.family || "all"}`
-        : viewState.view === "matrix"
-          ? `${viewState.view}:${viewState.crosswalk}:${viewState.compareRun}`
+      : viewState.view === "matrix"
+          ? `${viewState.view}:${viewState.crosswalk}:${viewState.intent}:${viewState.source}:${viewState.items}:${viewState.target}:${viewState.compareRun}`
         : viewState.view === "templates"
             ? `${viewState.view}:${viewState.buildSection}:${viewState.task}:${viewState.templateType}`
             : viewState.view;

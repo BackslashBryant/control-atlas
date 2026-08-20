@@ -1,323 +1,241 @@
-import { useEffect, useMemo, useState } from "react";
-import type { ReactNode } from "react";
+import * as Accordion from "@radix-ui/react-accordion";
 
-import { AtlasConnectionMap } from "./AtlasConnectionMap";
-import { AppLink } from "./AppLink";
-import { Button } from "./lsm/Button";
-import { CompareExportDisclosure } from "./LoadStatusPanel";
-import { ProvenanceTerm } from "./ProvenanceTerm";
-import { RelationshipExplorer } from "./RelationshipExplorer";
-import {
-  compareGraphTableRows,
-  type CompareGraphResult,
-  type CompareRole,
-} from "../lib/buildCompareGraph";
-import type {
-  AtlasConnectionGroup,
-  AtlasRelationshipRow,
-} from "../lib/atlasModel";
-import type { CompareViewMode, ViewState } from "../lib/viewState";
-import type { RuntimeBundle } from "../lib/runtimeLoader";
-import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
+import { displayNameFor } from "../../app/display-names.mjs";
+import { SourceRefList } from "../lib/compareHelpers";
+import { SelectField } from "../lib/pagePrimitives";
+import { Button } from "./lsm";
+import { RecordLink } from "./RecordLink";
 
-function useCompactMapViewport() {
-  const [compact, setCompact] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(max-width: 767px)").matches,
-  );
-  useEffect(() => {
-    const media = window.matchMedia("(max-width: 767px)");
-    const onChange = (event: MediaQueryListEvent) => setCompact(event.matches);
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
-  }, []);
-  return compact;
-}
-
-const COMPARE_GROUP_ORDER: CompareRole[] = [
-  "shared",
-  "uniqueA",
-  "uniqueB",
-  "neutral",
-];
-
-function buildCompareMapGroups(
-  graph: CompareGraphResult,
-): AtlasConnectionGroup[] {
-  const edgeByNode = new Map(
-    graph.edges.flatMap((edge) => [
-      [edge.source_node_id, edge],
-      [edge.target_node_id, edge],
-    ]) as Array<[string, (typeof graph.edges)[number]]>,
-  );
-  const byRole = new Map<CompareRole, AtlasRelationshipRow[]>();
-  for (const node of graph.nodes) {
-    if (node.id === graph.centerNodeId) {
-      continue;
-    }
-    const role: CompareRole = node.compareRole || "neutral";
-    const edge = edgeByNode.get(node.id);
-    const row = {
-      edge: (edge ? { ...edge, id: edge.id } : { id: `compare-${node.id}` }) as
-        AtlasRelationshipRow["edge"],
-      counterpart: node as AtlasRelationshipRow["counterpart"],
-      itemId: node.metadata?.item_id || node.id,
-      title: node.metadata?.title || node.label || node.id,
-    };
-    const rows = byRole.get(role) || [];
-    rows.push(row);
-    byRole.set(role, rows);
-  }
-  const labelFor = (role: CompareRole) =>
-    role === "shared"
-      ? graph.labels.shared
-      : role === "uniqueA"
-        ? graph.labels.uniqueA
-        : role === "uniqueB"
-          ? graph.labels.uniqueB
-          : "Related records";
-  return COMPARE_GROUP_ORDER.filter((role) => byRole.get(role)?.length).map(
-    (role) => ({
-      id: role,
-      label: labelFor(role),
-      description: labelFor(role),
-      placement: "lateral" as const,
-      lens: "cross-framework" as const,
-      items: byRole.get(role) || [],
-    }),
-  );
-}
+type SelectOption = { value: string; label: string };
 
 type CompareResultsPanelProps = {
-  bundle: RuntimeBundle;
-  graph: CompareGraphResult;
-  compareView: CompareViewMode;
-  matrixCrosswalk: Extract<ViewState, { view: "matrix" }>["crosswalk"];
-  onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
-  onOpenNode: (nodeId: string) => void;
+  currentPage: number;
+  mappingCount: number;
+  mappingSourceOptions: SelectOption[];
+  onBack: () => void;
   onExport: (format: "csv" | "markdown" | "json") => void;
-  listContent?: ReactNode;
+  onMappingSourceChange: (value: string) => void;
+  onOpenNode: (nodeId: string) => void;
+  onPageChange: (page: number) => void;
+  onRelationshipTypeChange: (value: string) => void;
+  pageCount: number;
+  pageSize: number;
+  relationshipType: string;
+  relationshipTypeOptions: SelectOption[];
+  rows: any[];
+  selectedMappingSource: string;
+  sourceLabel: string;
+  targetLabel: string;
+  totalSourceRows: number;
 };
 
 export function CompareResultsPanel(props: CompareResultsPanelProps) {
-  const {
-    bundle,
-    graph,
-    compareView,
-    matrixCrosswalk,
-    onNavigate,
-    onOpenNode,
-    onExport,
-    listContent,
-  } = props;
-
-  const staticTableRows = useMemo(() => compareGraphTableRows(graph), [graph]);
-  const totalMappingRows = useMemo(
-    () => graph.edges.filter((edge) => edge.id !== "baseline-a").length,
-    [graph],
+  const rangeStart = props.totalSourceRows
+    ? (props.currentPage - 1) * props.pageSize + 1
+    : 0;
+  const rangeEnd = Math.min(
+    props.currentPage * props.pageSize,
+    props.totalSourceRows,
   );
-  const hiddenMappingRows = totalMappingRows - staticTableRows.length;
-  const compact = useCompactMapViewport();
-  const [expandedGroupId, setExpandedGroupId] = useState("");
-  const compareMapGroups = useMemo(
-    () => buildCompareMapGroups(graph),
-    [graph],
-  );
-  const centerNode = useMemo(
-    () =>
-      (graph.nodes.find((node) => node.id === graph.centerNodeId) || {
-        id: graph.centerNodeId,
-        metadata: { item_id: graph.atlasMapNode, title: "Comparison scope" },
-        label: graph.atlasMapNode || "Comparison scope",
-      }) as Parameters<typeof AtlasConnectionMap>[0]["center"],
-    [graph],
-  );
-
-  const setCompareView = (view: CompareViewMode) => {
-    onNavigate("matrix", { compareView: view, crosswalk: matrixCrosswalk });
-  };
+  const singleSource = props.mappingSourceOptions.length === 1
+    ? props.mappingSourceOptions[0]
+    : null;
 
   return (
-    <section className="compare-results-panel">
-      <div className="compare-summary-grid summary-grid">
-        <article className="summary-card">
-          <h3>{graph.labels.shared}</h3>
-          <p>{graph.summary.shared}</p>
-        </article>
-        <article className="summary-card">
-          <h3>{graph.labels.uniqueA}</h3>
-          <p>{graph.summary.uniqueA}</p>
-        </article>
-        <article className="summary-card">
-          <h3>{graph.labels.uniqueB}</h3>
-          <p>{graph.summary.uniqueB}</p>
-        </article>
-      </div>
-
-      {/* Provenance is a quality note about the mappings, not a fourth thing
-          being compared. It used to occupy three more full-size tiles, two of
-          which usually read 0 — equal visual weight for nothing. */}
-      <p className="compare-provenance-note">
-        {[
-          graph.summary.sourceBacked
-            ? `${graph.summary.sourceBacked} published`
-            : "",
-          graph.summary.inferred ? `${graph.summary.inferred} candidate` : "",
-          graph.summary.deprecated
-            ? `${graph.summary.deprecated} deprecated`
-            : "",
-        ]
-          .filter(Boolean)
-          .join(" · ") || "No mapping provenance recorded for this comparison."}
-        {graph.summary.sourceBacked ? " mappings." : ""}
-      </p>
-      <p className="compare-decision-boundary" role="note">
-        A missing mapping means these published results contain no cited link;
-        it does not prove that no relationship exists. Use the cited sources
-        when deciding what the result means for your work.
-      </p>
-
-      {/* This legend used to define each term as itself ("Published mapping =
-          published mapping"), which tells a newcomer nothing. */}
-      <p className="compare-legend">
-        <ProvenanceTerm
-          kind="publication"
-          label="Published mapping"
-          value="published"
-        />{" "}
-        the publisher states this relationship.{" "}
-        <ProvenanceTerm
-          kind="publication"
-          label="Candidate mapping"
-          value="candidate"
-        />{" "}
-        proposed but not published — confirm it against the source before you
-        rely on it.
-      </p>
-
-      <div
-        aria-label="Comparison result controls"
-        className="compare-result-toolbar"
-        role="group"
-      >
-        <div className="card-actions">
-          {graph.atlasMapNode ? (
-            <AppLink onNavigate={onNavigate} patch={{ node: graph.atlasMapNode }} variant="secondary" view="atlas-map">
-              Open Atlas map
-            </AppLink>
-          ) : null}
-          <Button
-            aria-pressed={compareView === "map"}
-            variant="secondary"
-            disabled={!graph.mapAvailable}
-            onClick={() => setCompareView("map")}
-            type="button"
-          >
-            Map
-          </Button>
-          <Button
-            aria-pressed={compareView === "list"}
-            variant="secondary"
-            onClick={() => setCompareView("list")}
-            type="button"
-          >
-            List
-          </Button>
-        </div>
-        <CompareExportDisclosure onExport={onExport} />
-      </div>
-
-      {compareView === "map" && !graph.mapAvailable ? (
-        <section className="empty-state compare-map-unavailable">
-          <h2>Map view is not available for this comparison yet.</h2>
-          <p>You can still review the detailed list.</p>
-          <div className="card-actions">
-            <Button
-              variant="primary"
-              onClick={() => setCompareView("list")}
-              type="button"
-            >
-              View list
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                onNavigate("matrix", {
-                  crosswalk: "relationships",
-                  compareView: "list",
-                })
-              }
-              type="button"
-            >
-              Change comparison
-            </Button>
-          </div>
-        </section>
-      ) : compareView === "map" ? (
-        <section aria-label="Compare map" className="stack" id="compare-detail">
-          <h3>Compare map</h3>
-          <p className="muted">
-            {graph.stats.nodeCount} items across {compareMapGroups.length}{" "}
-            groups. Open a group to see its records; the List holds every
-            connection.
+    <section
+      className="compare-results-panel"
+      data-control-results
+      id="compare-results"
+    >
+      <header className="compare-results-head">
+        <div>
+          <span className="label">03 / RESULTS</span>
+          <h2 id="compare-active-step">
+            {props.sourceLabel} <span aria-hidden="true">↔</span>{" "}
+            {props.targetLabel}
+          </h2>
+          <p className="compare-mapping-total">
+            {props.mappingCount.toLocaleString()} published mapping
+            {props.mappingCount === 1 ? "" : "s"}
           </p>
-          <AtlasConnectionMap
-            center={centerNode}
-            compact={compact}
-            expandedGroupId={expandedGroupId}
-            groups={compareMapGroups}
-            identityForNode={(nodeId, fallbackNode) =>
-              runtimeRecordIdentityFor(bundle, nodeId, fallbackNode)
-            }
-            onExpandedGroupChange={setExpandedGroupId}
-            onOpenList={() => setCompareView("list")}
-            onOpenRecord={onOpenNode}
-            selectedItemId=""
+        </div>
+        <Button onClick={props.onBack} type="button" variant="secondary">
+          Change target
+        </Button>
+      </header>
+
+      {singleSource ? (
+        <p className="compare-crosswalk-source">
+          <span>Crosswalk source</span>
+          <strong>{singleSource.label}</strong>
+        </p>
+      ) : props.mappingSourceOptions.length > 1 ? (
+        <div className="compare-crosswalk-filter">
+          <SelectField
+            emptyLabel="All published sources"
+            label="Crosswalk source"
+            onChange={props.onMappingSourceChange}
+            options={props.mappingSourceOptions}
+            value={props.selectedMappingSource}
           />
-        </section>
+        </div>
+      ) : null}
+
+      {props.rows.length ? (
+        <>
+          <p aria-live="polite" className="compare-range">
+            Showing {rangeStart.toLocaleString()}–{rangeEnd.toLocaleString()} of{" "}
+            {props.totalSourceRows.toLocaleString()} source records
+          </p>
+          <div className="compare-table-scroll">
+            <table aria-label="Published crosswalk mappings" className="detail-table">
+              <thead>
+                <tr>
+                  <th scope="col">From</th>
+                  <th scope="col">Maps to</th>
+                </tr>
+              </thead>
+              <tbody>
+                {props.rows.map((row) => (
+                  <tr key={row.from_id || row.from_item_id}>
+                    <td data-label="From">
+                      <RecordLink
+                        nodeId={row.from_id}
+                        onOpenNode={props.onOpenNode}
+                      >
+                        <strong>{row.from_item_id}</strong>
+                      </RecordLink>
+                      <span className="compare-record-title">{row.from_title}</span>
+                    </td>
+                    <td data-label="Maps to">
+                      <ul className="target-mapping-list">
+                        {row.targets.map((target: any) => (
+                          <li
+                            className="target-mapping-item"
+                            key={target.edge_id || `${row.from_id}-${target.to_id}`}
+                          >
+                            <div>
+                              <RecordLink
+                                nodeId={target.to_id}
+                                onOpenNode={props.onOpenNode}
+                              >
+                                <strong>{target.to_item_id}</strong>
+                              </RecordLink>
+                              <span className="target-item-title">{target.to_title}</span>
+                            </div>
+                            {target.relationship_type &&
+                            target.relationship_type !== "maps_to" ? (
+                              <span className="target-mapping-relationship">
+                                {displayNameFor(
+                                  "relationship_type",
+                                  target.relationship_type,
+                                )}
+                              </span>
+                            ) : null}
+                          </li>
+                        ))}
+                      </ul>
+                      <details className="mapping-row-details">
+                        <summary>
+                          Evidence for {row.targets.length.toLocaleString()} mapping
+                          {row.targets.length === 1 ? "" : "s"}
+                        </summary>
+                        <div className="mapping-evidence-list">
+                          {row.targets.map((target: any) => (
+                            <section
+                              aria-label={`Evidence for ${target.to_item_id}`}
+                              key={`evidence-${target.edge_id || target.to_id}`}
+                            >
+                              <strong>{target.to_item_id}</strong>
+                              <SourceRefList refs={target.source_refs} />
+                            </section>
+                          ))}
+                        </div>
+                      </details>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       ) : (
-        listContent || (
-          <>
-            <p className="compare-table-scroll-hint">
-              Swipe horizontally to review every comparison column.
-            </p>
-            {hiddenMappingRows > 0 ? (
-              <p className="notice-inline" role="note">
-                Showing the first {staticTableRows.length.toLocaleString()} of{" "}
-                {totalMappingRows.toLocaleString()} mappings. Export the results
-                to work with every row.
-              </p>
-            ) : null}
-            <RelationshipExplorer
-              centerItemId={graph.atlasMapNode}
-              centerNodeId={graph.centerNodeId}
-              filters={{
-                relationshipType: "",
-                provenance: "",
-                confidence: "",
-                nodeType: "",
-                includeCandidates: false,
-                search: "",
-              }}
-              heading="Compare list"
-              listLabel="List"
-              onFilterChange={() => {}}
-              onOpenNode={onOpenNode}
-              onViewChange={(view) => setCompareView(view)}
-              relationshipView="list"
-              runtime={bundle.runtime}
-              showFilters={false}
-              staticGraph={{
-                nodes: graph.nodes,
-                edges: graph.edges,
-                stats: graph.stats,
-              }}
-              staticTableRows={staticTableRows}
-            />
-          </>
-        )
+        <section className="empty-state compare-results-empty">
+          <h3>No published mappings match this results filter.</h3>
+          <p>Clear the results filter to return to every published mapping.</p>
+          <Button
+            onClick={() => props.onRelationshipTypeChange("")}
+            type="button"
+            variant="primary"
+          >
+            Clear results filter
+          </Button>
+        </section>
       )}
+
+      {props.pageCount > 1 ? (
+        <nav aria-label="Mapping result pages" className="pagination">
+          <Button
+            disabled={props.currentPage === 1}
+            onClick={() => props.onPageChange(Math.max(1, props.currentPage - 1))}
+            type="button"
+            variant="secondary"
+          >
+            Previous
+          </Button>
+          <span>Page {props.currentPage} of {props.pageCount}</span>
+          <Button
+            disabled={props.currentPage === props.pageCount}
+            onClick={() =>
+              props.onPageChange(Math.min(props.pageCount, props.currentPage + 1))
+            }
+            type="button"
+            variant="secondary"
+          >
+            Next
+          </Button>
+        </nav>
+      ) : null}
+
+      <p className="compare-decision-boundary" role="note">
+        A published crosswalk shows a cited relationship; it does not by itself establish equivalence or compliance.
+      </p>
+
+      <Accordion.Root className="accordion-root compare-refine" collapsible type="single">
+        <Accordion.Item className="disclosure-item" value="refine-results">
+          <Accordion.Header className="disclosure-header">
+            <Accordion.Trigger className="disclosure-trigger">
+              <span aria-hidden="true" className="disclosure-chevron">▾</span>
+              <span>Refine results</span>
+            </Accordion.Trigger>
+          </Accordion.Header>
+          <Accordion.Content className="disclosure-content">
+            <div className="compare-refine-fields">
+              <SelectField
+                emptyLabel="All connection types"
+                label="Connection type"
+                onChange={props.onRelationshipTypeChange}
+                options={props.relationshipTypeOptions}
+                value={props.relationshipType}
+              />
+              <div className="compare-export-actions">
+                <span className="field-label">Export</span>
+                <div className="actions">
+                  <Button onClick={() => props.onExport("csv")} type="button" variant="secondary">
+                    CSV
+                  </Button>
+                  <Button onClick={() => props.onExport("markdown")} type="button" variant="secondary">
+                    Markdown
+                  </Button>
+                  <Button onClick={() => props.onExport("json")} type="button" variant="secondary">
+                    JSON
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Accordion.Content>
+        </Accordion.Item>
+      </Accordion.Root>
     </section>
   );
 }

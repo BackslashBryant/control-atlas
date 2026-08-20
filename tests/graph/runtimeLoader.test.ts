@@ -204,6 +204,18 @@ test("expensive graph scope begins only after an explicit graph-dependent action
     runtimeArtifactPlan({ ...configuredCompare, compareRun: "true" }).fullGraph,
     true,
   );
+  const configuredItemCompare = normalizeViewState("matrix", {
+    crosswalk: "relationships",
+    intent: "item-mapping",
+    source: "nist-800-171",
+    items: "3.1.1",
+  });
+  assert.equal(
+    runtimeArtifactPlan(configuredItemCompare).fullGraph,
+    true,
+    "specific-item target choices require the published relationship graph",
+  );
+  assert.equal(requiresFullGraph(configuredItemCompare), true);
 
   const build = normalizeViewState("templates");
   assert.equal(runtimeArtifactPlan(build).fullGraph, false);

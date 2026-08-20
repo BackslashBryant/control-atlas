@@ -255,25 +255,30 @@ test("Template B Home exposes one search, governed destinations, and labelled go
 
 test("high-density task surfaces bound results and name download actions", () => {
   const comparePage = readFileSync("src/ui/pages/ComparePage.tsx", "utf8");
+  const compareResults = readFileSync(
+    "src/ui/components/CompareResultsPanel.tsx",
+    "utf8",
+  );
   const templatesPage = readFileSync("src/ui/pages/TemplatesPage.tsx", "utf8");
   const startHere = readFileSync("src/ui/pages/StartHerePage.tsx", "utf8");
   assert.match(comparePage, /relationshipPageSize = 25/);
-  assert.match(comparePage, /Showing \{/);
-  assert.match(comparePage, /View evidence/);
+  assert.match(compareResults, /Showing \{rangeStart\.toLocaleString\(\)\}/);
+  assert.match(compareResults, /Evidence for \{row\.targets\.length\.toLocaleString\(\)\} mapping/);
   assert.match(templatesPage, /Download \$\{selectedTemplate\.display_name\}/);
   assert.match(templatesPage, /template-essential-options/);
   assert.match(startHere, /What are you trying to do\?/);
   assert.match(startHere, /Search the Library/);
 });
 
-test("Compare choices are native buttons and About cards form named heading regions", () => {
+test("Compare modes are accessible tabs and About cards form named heading regions", () => {
   const comparePage = readFileSync("src/ui/pages/ComparePage.tsx", "utf8");
   const aboutPage = readFileSync("src/ui/pages/AboutPage.tsx", "utf8");
   const primitives = readFileSync("src/ui/lib/pagePrimitives.tsx", "utf8");
 
-  assert.doesNotMatch(comparePage, /aria-label="Comparison modes"[\s\S]*role="tablist"/);
-  assert.doesNotMatch(comparePage, /aria-selected=\{false\}/);
-  assert.match(comparePage, /className="intent-card intent-card-button"/);
+  assert.match(comparePage, /aria-label="Comparison mode" className="compare-mode-tabs" role="tablist"/);
+  assert.match(comparePage, /aria-selected=\{mode === entry\.id\}/);
+  assert.match(comparePage, /role="tab"/);
+  assert.doesNotMatch(comparePage, /className="intent-card intent-card-button"/);
   assert.match(aboutPage, /<SummaryCard headingLevel=\{2\} title="What It Is">/);
   assert.match(aboutPage, /<SummaryCard headingLevel=\{2\} title="About the Project">/);
   assert.match(primitives, /aria-labelledby=\{props\.headingLevel \? titleId : undefined\}/);

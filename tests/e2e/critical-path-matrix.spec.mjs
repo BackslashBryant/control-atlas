@@ -99,29 +99,29 @@ test("critical path: browser back returns from a record to the original search",
   );
 });
 
-test("critical path: compare detailed mappings expose text provenance labels", async ({
+test("critical path: Compare keeps evidence subordinate to the two-column crosswalk", async ({
   page,
 }) => {
   await gotoApp(
     page,
-    "/#/compare?workbench=relationships&source=nist-800-53&target=csf-2",
+    "/#/compare/relationships?intent=frameworks&source=nist-800-53&target=csf-2",
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page
-    .getByRole("combobox", { name: /^Mapping publication/ })
-    .selectOption({ label: "NIST CSF 2.0" });
-  await page.getByRole("button", { name: "Show mappings" }).click();
+  await page.getByRole("button", { name: "Show published mappings" }).click();
   await expect(page.locator("#compare-results")).toBeVisible({
     timeout: 15000,
   });
 
-  const table = page.getByRole("table", { name: "Relationship mappings" });
+  const table = page.getByRole("table", { name: "Published crosswalk mappings" });
   await expect(table).toBeVisible();
-  await expect(table).toContainText("Official rationale");
-  await expect(table).toContainText("Relationship explanation");
-  await expect(table.getByText("Published mapping").first()).toBeVisible();
+  await expect(table.locator("thead th")).toHaveText(["From", "Maps to"]);
+  const evidence = table.locator("details.mapping-row-details").first();
+  await expect(evidence).not.toHaveAttribute("open", "");
+  await evidence.locator("summary").click();
+  await expect(evidence).toHaveAttribute("open", "");
+  await expect(evidence.locator(".mapping-evidence-list")).not.toBeEmpty();
 });
 
 test("critical path: library detail connections show meaning and source trust text", async ({
@@ -162,21 +162,6 @@ test("critical path: record reading page uses a list and keeps the graph in Atla
   await expect(page.getByRole("link", { name: "See connections", exact: true })).toBeVisible();
 });
 
-test("critical path: STIG chain summary table is labeled for screen readers", async ({
-  page,
-}) => {
-  await gotoApp(page, "/?view=matrix&workbench=stig-chain");
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-
-  await expect(
-    page.getByRole("table", { name: "STIG chain summary" }),
-  ).toBeVisible({ timeout: 30000 });
-  await expect(
-    page.getByText("Published mappings come from named sources"),
-  ).toBeVisible();
-});
-
 test("critical path: MITRE library search returns technique with plain-language summary", async ({
   page,
 }) => {
@@ -201,44 +186,33 @@ test("critical path: MITRE library search returns technique with plain-language 
   await expect(page.getByRole("heading", { name: "Requirement", exact: true })).toBeVisible();
 });
 
-test("critical path: threat chain summary table is labeled for screen readers", async ({
+test("critical path: retired Compare workflows recover to the published crosswalk", async ({
   page,
 }) => {
-  await gotoApp(
-    page,
-    "/?view=matrix&workbench=threat-chain&chainCatalog=mitre-attack",
-  );
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
+  for (const mode of ["baseline-compare", "stig-chain", "threat-chain"]) {
+    await gotoApp(
+      page,
+      `/#/compare/${mode}?chainCatalog=mitre-attack&baselineA=nist-800-53b:LOW`,
+    );
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
 
-  await expect(
-    page.getByRole("table", { name: "Threat chain summary" }),
-  ).toBeVisible();
-  await expect(
-    page.getByText("Published mappings come from MITRE"),
-  ).toBeVisible();
-});
-
-test("critical path: baseline compare surfaces delta controls with export actions", async ({
-  page,
-}) => {
-  await gotoApp(page, "/?view=matrix&workbench=baseline-compare");
-  await waitForAppReady(page);
-  await dismissOnboarding(page);
-
-  await page.getByLabel("Baseline A").selectOption("nist-800-53b:LOW");
-  await page.getByLabel("Baseline B").selectOption("nist-800-53b:MODERATE");
-  await expect(
-    page.getByText("Only in B", { exact: true }).first(),
-  ).toBeVisible();
-  await expect(page.locator(".chain-grid")).toContainText("AC-");
-  // The `export-disclosure` class was removed in the Orbital Archive design
-  // refactor (786f10f); CompareExportDisclosure now renders a plain
-  // <details><summary>Export results</summary>.
-  await page.getByText("Export results", { exact: true }).click();
-  await expect(
-    page.getByRole("button", { name: "Export Markdown", exact: true }),
-  ).toBeVisible();
+    await expect(page).toHaveURL(/#\/compare$/);
+    await expect(
+      page.getByText(
+        "This Compare link used a retired workflow. Start a published crosswalk here.",
+        { exact: true },
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Compare" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("tab", { name: "Frameworks" }),
+    ).toHaveAttribute("aria-selected", "true");
+    await expect(page.locator(".chain-grid")).toHaveCount(0);
+    await expect(page.getByLabel("Baseline A")).toHaveCount(0);
+  }
 });
 
 test("critical path: keyboard focus reaches primary nav and search", async ({

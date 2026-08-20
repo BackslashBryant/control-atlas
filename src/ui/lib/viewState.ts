@@ -799,20 +799,9 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "target", state.target);
     setIfValue(params, "items", state.items);
     setIfValue(params, "relationshipType", state.relationshipType);
-    setIfValue(params, "provenance", state.provenance);
-    setIfValue(params, "confidence", state.confidence);
-    setIfValue(params, "includeCandidates", state.includeCandidates);
-    setIfValue(params, "chainCatalog", state.chainCatalog);
-    setIfValue(params, "chainBenchmark", state.chainBenchmark);
-    setIfValue(params, "chainItem", state.chainItem);
-    setIfValue(params, "baselineA", state.baselineA);
-    setIfValue(params, "baselineB", state.baselineB);
     setIfValue(params, "intent", state.intent);
     setIfValue(params, "mappingSource", state.mappingSource);
     setIfValue(params, "compareRun", state.compareRun);
-    if (state.compareView === "map") {
-      params.set("compareView", "map");
-    }
   } else if (state.view === "patterns") {
     params.set("view", "patterns");
     setIfValue(params, "pattern", state.pattern);
