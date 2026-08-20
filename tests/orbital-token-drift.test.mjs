@@ -2,25 +2,15 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-// Anti-drift guard for the Orbital Archive No. 01 design system.
-//
-// vendor/orbital-archive/tokens.palette.json is a pinned snapshot of the
-// upstream release's colour palette (see its _pinnedVersion/_pinnedCommit
-// fields). It is vendored rather than installed as a git dependency because a
-// git dep makes `npm ci` resolve the design system's own devDependencies, which
-// breaks the locked install in CI.
-//
-// When the style guide is updated: replace the snapshot with the new release's
-// palette, then run this test. It FAILS on any hue Control Atlas has not
-// reconciled — so re-alignment is a caught build error instead of a silent
-// visual drift, which is what replaces hand-chasing hex values by eye.
-
+const orbitalPackage = JSON.parse(
+  readFileSync("node_modules/orbital-archive-no-01/package.json", "utf8"),
+);
+const projectPackage = JSON.parse(readFileSync("package.json", "utf8"));
 const upstream = JSON.parse(
-  readFileSync("vendor/orbital-archive/tokens.palette.json", "utf8"),
+  readFileSync("node_modules/orbital-archive-no-01/tokens/tokens.json", "utf8"),
 );
 const tokens = readFileSync("styles/tokens.css", "utf8");
 
-// Upstream palette key -> Control Atlas --lsm-* token name.
 const PALETTE = {
   orbit: "--lsm-orbit",
   graphite: "--lsm-graphite",
@@ -37,39 +27,27 @@ const PALETTE = {
   fault: "--lsm-fault",
 };
 
-function caHex(name) {
-  const match = tokens.match(new RegExp(`${name}:\\s*(#[0-9a-fA-F]{6})`));
-  assert.ok(match, `Control Atlas token ${name} must define a hex value`);
-  return match[1].toLowerCase();
-}
+test("Control Atlas pins the official Orbital v1.8.0 release", () => {
+  assert.equal(orbitalPackage.name, "orbital-archive-no-01");
+  assert.equal(orbitalPackage.version, "1.8.0");
+  assert.match(
+    projectPackage.dependencies["orbital-archive-no-01"],
+    /\/v1\.8\.0\.tar\.gz$/,
+  );
+});
 
-test("Control Atlas --lsm-* palette matches the pinned Orbital Archive release", () => {
-  for (const [key, token] of Object.entries(PALETTE)) {
-    const upstreamHex = upstream.color.palette[key]?.$value;
-    assert.ok(
-      typeof upstreamHex === "string" && upstreamHex.startsWith("#"),
-      `upstream palette missing a literal hex for ${key}`,
-    );
-    assert.equal(
-      caHex(token),
-      upstreamHex.toLowerCase(),
-      `${token} drifted from Orbital Archive color.palette.${key}: ` +
-        `Control Atlas has ${caHex(token)}, upstream is ${upstreamHex.toLowerCase()}. ` +
-        `Reconcile styles/tokens.css to the pinned release, or bump the pin deliberately.`,
+test("Control Atlas palette aliases resolve to official Orbital variables", () => {
+  for (const [key, alias] of Object.entries(PALETTE)) {
+    assert.ok(upstream.color.palette[key], `Orbital palette missing ${key}`);
+    assert.match(
+      tokens,
+      new RegExp(`${alias}:\\s*var\\(--lsm-color-palette-${key}\\)`),
+      `${alias} must resolve to Orbital color.palette.${key}`,
     );
   }
 });
 
-test("relay stays a Control Atlas data hue, intentionally diverging from upstream", () => {
-  // Upstream deprecates color.palette.relay -> teal (to be removed in v2).
-  // Control Atlas keeps --lsm-relay as a distinct blue data/provenance hue
-  // (NIST/official provenance, graph accents), so it is deliberately NOT
-  // reconciled to teal. Pinning both sides documents that this divergence is a
-  // conscious decision, not accidental drift.
+test("relay stays a documented Control Atlas data-only extension", () => {
   assert.match(tokens, /--lsm-relay:\s*#54bcd9/i);
-  assert.equal(
-    upstream.color.palette.relay?.$value,
-    "{color.palette.teal}",
-    "upstream relay is expected to be the deprecated teal alias",
-  );
+  assert.equal(upstream.color.palette.relay?.$value, "{color.palette.teal}");
 });

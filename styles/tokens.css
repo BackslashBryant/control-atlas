@@ -2,33 +2,32 @@
   color-scheme: dark;
 
   /*
-   * Control Atlas adaptation of Orbital Archive No. 01 v1.7.0.
-   * This file is the single source of visual token values. Product styles
-   * consume semantic --ca-* aliases; route and component files do not define
-   * palette values.
+   * Control Atlas semantic adapter for the installed Orbital Archive No. 01
+   * v1.8.0 package. Official Orbital tokens load first; product styles consume
+   * semantic --ca-* aliases and keep only documented Control Atlas extensions.
    */
 
   /* Lunar Signal Modernism palette */
-  --lsm-orbit: #11181e;
-  --lsm-graphite: #253139;
-  --lsm-slate: #2d3a42;
-  --lsm-alloy: #37464f;
-  --lsm-grid-line: #56656e;
+  --lsm-orbit: var(--lsm-color-palette-orbit);
+  --lsm-graphite: var(--lsm-color-palette-graphite);
+  --lsm-slate: var(--lsm-color-palette-slate);
+  --lsm-alloy: var(--lsm-color-palette-alloy);
+  --lsm-grid-line: var(--lsm-color-palette-gridline);
   /* v1.7.0 raised Dust from #98A4AC to #B3BBC2 so muted/disabled text clears
      WCAG AA on every surface (orbit, graphite, slate, alloy). */
-  --lsm-dust: #b3bbc2;
-  --lsm-bone: #e7e1d5;
+  --lsm-dust: var(--lsm-color-palette-dust);
+  --lsm-bone: var(--lsm-color-palette-bone);
   --lsm-relay: #54bcd9;
   --lsm-relay-deep: #205f78;
   --lsm-relay-deep-hover: #25677f;
-  --lsm-gold: #cbae67;
+  --lsm-gold: var(--lsm-color-palette-gold);
   /* v1.8.0 muted Ignition Orange (was #e66a2c). Orange is now the single
      primary-action + editorial signal; teal narrows to state (see below). */
-  --lsm-orange: #cb7248;
+  --lsm-orange: var(--lsm-color-palette-orange);
   --lsm-orange-hover: #d5814d;
-  --lsm-signal: #7eb79e;
-  --lsm-rust: #c97a60;
-  --lsm-fault: #ea7468;
+  --lsm-signal: var(--lsm-color-palette-signal);
+  --lsm-rust: var(--lsm-color-palette-rust);
+  --lsm-fault: var(--lsm-color-palette-fault);
   /* 2026-08-03: the palette held one usable accent (relay cyan) plus gold, so
      publishers, relationship classes and secondary actions all resolved to the
      same blue-grey. These three extend the same muted, desaturated family so
@@ -37,7 +36,7 @@
   /* v1.8.0 Signal Teal (was #4fb3a5): the canonical active/focus/link/
      selected/info state hue. Broad decorative surfaces stay teal; only the
      primary action button and editorial emphasis use orange. */
-  --lsm-teal: #5ca3a6;
+  --lsm-teal: var(--lsm-color-palette-teal);
   --lsm-teal-deep: #236b64;
   --lsm-teal-deep-hover: #286e67;
   --lsm-amber: #e0a44a;
@@ -61,15 +60,11 @@
   --ca-document-border: #d6dee8;
   --ca-document-accent: var(--lsm-teal-deep);
 
-  /* Semantic surfaces.
-     Ground is Orbit, not Graphite: with bg=graphite (#253139), surface=slate
-     (#2d3a42) and raised=alloy (#37464f) the three tiers sat within ~10%
-     luminance of each other and every card read as part of the background.
-     Dropping the ground to Orbit restores a real ladder using the palette that
-     already existed — no new colours. */
-  --ca-bg: var(--lsm-orbit);
-  --ca-surface: var(--lsm-graphite);
-  --ca-surface-raised: var(--lsm-slate);
+  /* Semantic surfaces follow Orbital v1.8.0 exactly: Graphite ground, Slate
+     surfaces, Alloy elevation, and Orbit only for deep surfaces. */
+  --ca-bg: var(--lsm-color-semantic-background);
+  --ca-surface: var(--lsm-color-semantic-surface);
+  --ca-surface-raised: var(--lsm-color-semantic-surface-elevated);
   --ca-surface-lifted: var(--lsm-alloy);
   /* Both were consumed by styles/surfaces.css (trust boundary, compare
      boundary, quiet strips) but never defined anywhere, so those blocks
@@ -209,50 +204,54 @@
   --ca-lens-cross-framework: var(--lsm-orange);
   --ca-lens-threat: var(--lsm-rust);
 
-  /* Locked 4-point spacing scale: 4, 8, 12, 16, 24, 32, 48, 64. */
-  --ca-space-1: 0.25rem;
-  --ca-space-2: 0.5rem;
-  --ca-space-3: 0.75rem;
-  --ca-space-4: 1rem;
-  --ca-space-6: 1.5rem;
-  --ca-space-8: 2rem;
-  --ca-space-12: 3rem;
-  --ca-space-16: 4rem;
+  /* Official Orbital spacing scale. */
+  --ca-space-1: var(--lsm-space-1);
+  --ca-space-2: var(--lsm-space-2);
+  --ca-space-3: var(--lsm-space-3);
+  --ca-space-4: var(--lsm-space-4);
+  --ca-space-5: var(--lsm-space-5);
+  --ca-space-6: var(--lsm-space-6);
+  --ca-space-8: var(--lsm-space-8);
+  --ca-space-10: var(--lsm-space-10);
+  --ca-space-12: var(--lsm-space-12);
+  --ca-space-16: var(--lsm-space-16);
+  --ca-space-20: var(--lsm-space-20);
+  --ca-space-24: var(--lsm-space-24);
 
-  --ca-header-height: 0px;
+  --ca-header-height: 68px;
   --ca-header-safe-offset: calc(var(--ca-header-height) + var(--ca-space-4));
 
   /* Minimal tactile geometry */
-  --ca-radius-sm: 2px;
-  --ca-radius-md: 3px;
-  --ca-radius-lg: 4px;
-  --ca-radius-xl: 6px;
-  --ca-radius-round: 999px;
+  --ca-radius-sm: var(--lsm-radius-sm);
+  --ca-radius-md: var(--lsm-radius-md);
+  --ca-radius-lg: var(--lsm-radius-lg);
+  --ca-radius-xl: var(--lsm-radius-xl);
+  --ca-radius-round: var(--lsm-radius-round);
 
   /* Self-hosted via styles/fonts.css (Oswald/Inter/IBM Plex Mono/Silkscreen,
      all SIL OFL). v1.8 switched the display face from Barlow Condensed to
      Oswald. --ca-font-pixel drives the CRT/telemetry signal micro-labels. */
-  --ca-font-display: "Oswald", "Arial Narrow", "Roboto Condensed", sans-serif;
-  --ca-font-body: Inter, system-ui, sans-serif;
-  --ca-font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  --ca-font-display: var(--lsm-font-display);
+  --ca-font-body: var(--lsm-font-sans);
+  --ca-font-mono: var(--lsm-font-mono);
   --ca-font-pixel: "Silkscreen", "IBM Plex Mono", monospace;
 
-  --ca-text-micro: 0.75rem;
-  --ca-text-xs: 0.8125rem;
-  --ca-text-sm: 0.875rem;
-  --ca-text-base: 1rem;
-  --ca-text-lg: 1.125rem;
-  --ca-text-xl: 1.25rem;
-  --ca-text-2xl: 1.625rem;
-  --ca-text-3xl: 2.25rem;
-  --ca-text-4xl: 3.25rem;
-  --ca-text-display: clamp(4rem, 8vw, 6rem);
+  --ca-text-micro: var(--lsm-font-size-micro);
+  --ca-text-xs: var(--lsm-font-size-body-sm);
+  --ca-text-sm: var(--lsm-font-size-body-sm);
+  --ca-text-base: var(--lsm-font-size-body);
+  --ca-text-lg: var(--lsm-font-size-body-lg);
+  --ca-text-xl: var(--lsm-font-size-h3);
+  --ca-text-2xl: var(--lsm-font-size-h2);
+  --ca-text-3xl: var(--lsm-font-size-h1);
+  --ca-text-4xl: var(--lsm-font-size-display1);
+  --ca-text-display: var(--lsm-font-size-display2);
 
-  --line-height-tight: 0.92;
-  --line-height-heading: 1.08;
-  --line-height-compact: 1.25;
-  --line-height-normal: 1.55;
-  --line-height-relaxed: 1.7;
+  --line-height-tight: var(--lsm-line-height-tight);
+  --line-height-heading: var(--lsm-line-height-heading);
+  --line-height-compact: var(--lsm-line-height-compact);
+  --line-height-normal: var(--lsm-line-height-body);
+  --line-height-relaxed: var(--lsm-line-height-relaxed);
 
   /* Letter-spacing / tracking scale (Orbital Archive v1.8). Eyebrows and
      signal micro-type are tracked wide; body/heading stay tight-to-normal. */
@@ -274,6 +273,7 @@
   --ca-content-md: var(--ca-reading-measure);
   --ca-content-lg: 60rem;
   --ca-content-max: 75rem;
+  --ca-workspace-max: 88rem;
   --ca-content-xl: var(--ca-content-max);
   --ca-grid-gutter: var(--ca-space-6);
   --ca-section-gap: var(--ca-space-12);

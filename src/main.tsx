@@ -11,7 +11,11 @@ import {
   ROUTE_TRANSITION_END_EVENT,
   SEARCH_RESULTS_FOCUS_EVENT,
 } from './shared/navigation-events';
-import '../styles/fonts.css';
+// Orbital Archive No. 01 is the visual authority, not a copied palette. The
+// official release supplies the base recipes, DTCG tokens, and embedded fonts;
+// Control Atlas styles below are semantic/product adapters only.
+import 'orbital-archive-no-01/css';
+import 'orbital-archive-no-01/fonts.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
@@ -104,7 +108,6 @@ function syncStaticRouteShell() {
   if (!shell) return;
   const identity = progressiveRouteIdentity();
   if (identity) {
-    rootElement.dataset.staticRoutePersistent = 'true';
     rootElement.dataset.staticRouteKind = identity.kind;
     const eyebrow = shell.querySelector<HTMLElement>('[data-static-route-eyebrow]');
     const title = shell.querySelector<HTMLElement>('[data-static-route-title]');
@@ -119,13 +122,13 @@ function syncStaticRouteShell() {
       summary.textContent = identity.summary;
     }
   } else {
-    delete rootElement.dataset.staticRoutePersistent;
     delete rootElement.dataset.staticRouteKind;
   }
   const active =
     (Boolean(identity) || rootElement.dataset.routeHydrated !== 'true') &&
     !isHomeHash() &&
-    !isSearchHash();
+    !isSearchHash() &&
+    rootElement.dataset.routeHydrated !== 'true';
   shell.toggleAttribute('hidden', !active);
   if (!active) {
     delete rootElement.dataset.staticRouteActive;
@@ -138,7 +141,6 @@ function syncStaticRouteShell() {
 }
 
 function observeRouteHydration() {
-  let settleTimer = 0;
   const reactRouteOwnsSurface = (app: HTMLElement) =>
     ['true', 'partial', 'error'].includes(app.dataset.appReady || '');
   const markHydrated = () => {
@@ -152,35 +154,16 @@ function observeRouteHydration() {
     ) {
       return false;
     }
-    if (
-      rootElement.dataset.staticRoutePersistent === 'true' &&
-      reactRootElement.querySelector('[data-route-suspense-pending="true"]')
-    ) {
-      return false;
-    }
     rootElement.dataset.routeHydrated = 'true';
+    delete rootElement.dataset.staticRouteActive;
     const shell = rootElement.querySelector<HTMLElement>('[data-static-route]');
-    shell?.setAttribute('aria-hidden', 'true');
-    shell?.setAttribute('inert', '');
-    shell?.removeAttribute('role');
-    // It had only been made inert, not hidden. Its 620px reservation kept
-    // occupying layout after hydration, so at mobile widths the "Opening
-    // workspace" placeholder sat above the real page on every non-home route.
-    if (rootElement.dataset.staticRoutePersistent !== 'true') {
-      shell?.setAttribute('hidden', '');
-    } else {
-      shell?.removeAttribute('aria-hidden');
-      shell?.removeAttribute('inert');
-    }
+    shell?.remove();
     return true;
   };
   const scheduleHydration = () => {
     const app = reactRootElement.querySelector<HTMLElement>('#app');
     if (!app || !reactRouteOwnsSurface(app)) return;
-    window.clearTimeout(settleTimer);
-    settleTimer = window.setTimeout(() => {
-      if (markHydrated()) observer.disconnect();
-    }, 200);
+    if (markHydrated()) observer.disconnect();
   };
   const observer = new MutationObserver(() => {
     scheduleHydration();
@@ -193,7 +176,6 @@ function observeRouteHydration() {
   });
   scheduleHydration();
   window.setTimeout(() => {
-    window.clearTimeout(settleTimer);
     markHydrated();
     observer.disconnect();
   }, 15_000);

@@ -232,38 +232,84 @@ function extractNodeText(node: ReactNode): string {
   return "";
 }
 
-export function PageHeader(props: {
-  eyebrow?: string;
+export function MissionPage(props: React.HTMLAttributes<HTMLDivElement> & {
+  children: ReactNode;
+  maxWidth?: "workspace" | "content" | "reading" | "full";
+}) {
+  const { children, className, maxWidth, ...rest } = props;
+  const widthClass =
+    maxWidth === "content"
+      ? "mission-page--content"
+      : maxWidth === "reading"
+        ? "mission-page--reading"
+        : maxWidth === "full"
+          ? "mission-page--full"
+          : "mission-page--workspace";
+
+  return (
+    <div
+      {...rest}
+      className={`mission-page ${widthClass} ${className || ""}`.trim()}
+      tabIndex={-1}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function MissionPageHeader(props: {
+  eyebrow?: ReactNode;
   title: ReactNode;
-  summary?: string;
+  summary?: ReactNode;
   action?: ReactNode;
   primary?: boolean;
+  className?: string;
+  id?: string;
 }) {
-  // Orbital task header: eyebrow (only when providing distinct scope, T5.10),
-  // precise title, one sentence of decision context, and at most one primary action (T5.9).
+  // Orbital task header (§3.4):
+  // H1: Oswald display face, Bone.
+  // Eyebrow: IBM Plex Mono, uppercase, wide tracking, teal only when indicating scope/state.
+  // Summary: Inter, Dust, maximum 65ch.
+  // One action maximum in the pagehead.
+  // Thin datum rule beneath with registration/datum tick.
   const titleText = extractNodeText(props.title);
-  const eyebrowText = props.eyebrow?.trim() || "";
+  const eyebrowText = typeof props.eyebrow === "string" ? props.eyebrow.trim() : "";
   const isDuplicate =
     eyebrowText.length > 0 &&
     titleText.length > 0 &&
     eyebrowText.toLowerCase() === titleText.toLowerCase();
-  const showEyebrow = eyebrowText.length > 0 && !isDuplicate;
+  const showEyebrow = props.eyebrow != null && (!eyebrowText || !isDuplicate);
 
   return (
     <header
-      className="page-header"
+      className={`page-header mission-page-header ${props.className || ""}`.trim()}
       data-route-primary-header={props.primary ? "true" : undefined}
+      id={props.id}
     >
       <div className="page-header-title" data-route-primary-copy="true">
         {showEyebrow ? (
           <span className="eyebrow page-header-eyebrow">
-            <AcronymText>{eyebrowText}</AcronymText>
+            {typeof props.eyebrow === "string" ? (
+              <AcronymText>{props.eyebrow}</AcronymText>
+            ) : (
+              props.eyebrow
+            )}
           </span>
         ) : null}
-        <h1>{typeof props.title === "string" ? <AcronymText>{props.title}</AcronymText> : props.title}</h1>
+        <h1>
+          {typeof props.title === "string" ? (
+            <AcronymText>{props.title}</AcronymText>
+          ) : (
+            props.title
+          )}
+        </h1>
         {props.summary ? (
           <p className="page-summary" data-route-primary-copy="true">
-            <AcronymText>{props.summary}</AcronymText>
+            {typeof props.summary === "string" ? (
+              <AcronymText>{props.summary}</AcronymText>
+            ) : (
+              props.summary
+            )}
           </p>
         ) : null}
       </div>
@@ -273,6 +319,46 @@ export function PageHeader(props: {
         </div>
       ) : null}
     </header>
+  );
+}
+
+export const PageHeader = MissionPageHeader;
+
+export function MissionWorkspace(props: {
+  children: ReactNode;
+  className?: string;
+  singleColumn?: boolean;
+  id?: string;
+  role?: string;
+  "aria-label"?: string;
+}) {
+  return (
+    <section
+      aria-label={props["aria-label"]}
+      className={`mission-workspace ${props.singleColumn ? "mission-workspace--single" : ""} ${props.className || ""}`.trim()}
+      id={props.id}
+      role={props.role}
+    >
+      {props.children}
+    </section>
+  );
+}
+
+export function SupportRail(props: {
+  children: ReactNode;
+  className?: string;
+  sticky?: boolean;
+  ariaLabel?: string;
+  id?: string;
+}) {
+  return (
+    <aside
+      aria-label={props.ariaLabel || "Supporting context"}
+      className={`support-rail ${props.sticky ? "support-rail--sticky" : ""} ${props.className || ""}`.trim()}
+      id={props.id}
+    >
+      {props.children}
+    </aside>
   );
 }
 
@@ -672,12 +758,12 @@ export function InspectorDrawer(props: {
   const drawerRef = React.useRef<HTMLElement | null>(null);
   const closeButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const [isCompact, setIsCompact] = React.useState(() =>
-    typeof window !== "undefined" ? window.innerWidth < 1100 : false,
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false,
   );
 
   React.useEffect(() => {
     const handleResize = () => {
-      setIsCompact(window.innerWidth < 1100);
+      setIsCompact(window.innerWidth < 1024);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -685,6 +771,35 @@ export function InspectorDrawer(props: {
 
   React.useEffect(() => {
     if (!props.isOpen) return;
+
+    const inertedElements: Array<{
+      element: HTMLElement;
+      wasInert: boolean;
+    }> = [];
+
+    if (isCompact && drawerRef.current) {
+      const boundary = drawerRef.current.closest<HTMLElement>("#root");
+      let current: HTMLElement | null = drawerRef.current;
+
+      while (current?.parentElement && current !== boundary) {
+        const parent = current.parentElement;
+        for (const sibling of Array.from(parent.children)) {
+          if (
+            sibling === current ||
+            sibling.classList.contains("inspector-drawer-backdrop") ||
+            !(sibling instanceof HTMLElement)
+          ) {
+            continue;
+          }
+          inertedElements.push({
+            element: sibling,
+            wasInert: sibling.hasAttribute("inert"),
+          });
+          sibling.setAttribute("inert", "");
+        }
+        current = parent;
+      }
+    }
 
     if (isCompact) {
       closeButtonRef.current?.focus();
@@ -714,7 +829,12 @@ export function InspectorDrawer(props: {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      for (const { element, wasInert } of inertedElements) {
+        if (!wasInert) element.removeAttribute("inert");
+      }
+    };
   }, [isCompact, props.isOpen, props.onClose]);
 
   if (!props.isOpen) return null;

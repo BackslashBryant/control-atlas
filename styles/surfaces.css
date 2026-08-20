@@ -5493,7 +5493,7 @@ a:focus-visible {
 }
 
 .atlas-inspector-count strong {
-  color: var(--ca-secondary);
+  color: var(--ca-editorial-text);
 }
 
 @media (max-width: 1180px) {
@@ -6909,7 +6909,7 @@ button.atlas-leverage-row:hover {
 .home-tag-galaxy[data-tag-dimension="domain"] { --tag-galaxy-color: var(--ca-area-threats-defense); }
 
 .home-tag-galaxy h3 {
-  color: color-mix(in srgb, var(--tag-galaxy-color) 68%, var(--ca-text));
+  color: var(--ca-text-muted);
   font: 700 var(--ca-text-xs) / 1.3 var(--ca-font-mono);
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -6941,7 +6941,7 @@ button.atlas-leverage-row:hover {
   min-height: var(--ca-touch-target);
   padding: .38em .5em;
   border-radius: var(--ca-radius-sm);
-  color: color-mix(in srgb, var(--tag-galaxy-color) 74%, var(--ca-text));
+  color: var(--ca-text);
   font-family: var(--ca-font-mono);
   font-size: clamp(.84rem, calc(.84rem + var(--tag-scale) * .44rem), 1.28rem);
   font-weight: 700;
@@ -6978,7 +6978,7 @@ button.atlas-leverage-row:hover {
 
 .home-tag-link:hover,
 .home-tag-link:focus-visible {
-  color: var(--tag-galaxy-color);
+  color: var(--ca-editorial-text);
   transform: translateY(-1px);
 }
 
@@ -7393,13 +7393,6 @@ button.atlas-leverage-row:hover {
   gap: 8px;
 }
 
-.source-register-total {
-  margin: 0 0 10px;
-  white-space: nowrap;
-  color: var(--ca-text-muted);
-  font-size: 13px;
-}
-
 .source-register {
   display: grid;
   border: 1px solid var(--ca-border);
@@ -7455,10 +7448,6 @@ button.atlas-leverage-row:hover {
     gap: 6px;
   }
 
-  .source-register-total {
-    margin-bottom: 0;
-    white-space: normal;
-  }
 }
 
 @media (max-width: 899px) {
@@ -7905,10 +7894,6 @@ button.atlas-leverage-row:hover {
 
   .source-register-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .source-register-total {
-    margin-bottom: 0;
   }
 
   .source-register-heading {

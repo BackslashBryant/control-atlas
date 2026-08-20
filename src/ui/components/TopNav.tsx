@@ -9,7 +9,6 @@ import {
   MOBILE_NAV_SECTIONS,
   OVERFLOW_NAV_ITEMS,
   PRIMARY_NAV_ITEMS,
-  UTILITY_NAV_ITEMS,
 } from "../lib/navigation";
 
 import type { ViewState } from "../lib/viewState";
@@ -45,7 +44,7 @@ export function TopNav(props: TopNavProps) {
   // Kept in sync with styles/orbital.css's desktop/mobile contract. Primary
   // product navigation remains visible at ordinary desktop widths.
   // see that rule's comment for the width budget this threshold is based on.
-  // Six task destinations plus Search require more room than the former
+  // Five task destinations plus Search require more room than the former
   // three-link header. Switch before controls compete at tablet widths.
   const compactHeader = useMediaMatch("(max-width: 1199px)");
   const compactNavigation = compactHeader;
@@ -132,18 +131,6 @@ export function TopNav(props: TopNavProps) {
         <nav aria-label="Primary navigation" className="primary-nav ml-[16px] self-end mb-[-1px]">
           <div className="border-b-0 h-full gap-[2px]">
             {PRIMARY_NAV_ITEMS.map((item) => (
-              <AppLink
-                aria-current={activeView === item.view ? "page" : undefined}
-                className={activeView === item.view ? "nav-active" : undefined}
-                key={item.view}
-                onNavigate={onNavigate}
-                patch={item.patch}
-                view={item.view}
-              >
-                {item.label}
-              </AppLink>
-            ))}
-            {UTILITY_NAV_ITEMS.map((item) => (
               <AppLink
                 aria-current={activeView === item.view ? "page" : undefined}
                 className={activeView === item.view ? "nav-active" : undefined}

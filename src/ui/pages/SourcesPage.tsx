@@ -1,21 +1,19 @@
 import {
   IconExternalLink,
   IconFileText,
-  IconSearch,
 } from "@tabler/icons-react";
+import * as Dialog from "@radix-ui/react-dialog";
 import type { MouseEvent, ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
-import { Button, Panel } from "../components/lsm";
+import { Button, ButtonLink } from "../components/lsm";
 import {
   Badge,
   EmptyState,
-  InspectorDrawer,
+  MissionPage,
   PageHeader,
-  SelectField,
-  WorkbenchControlSurface,
   copyText,
   sourceUsageSummary,
 } from "../lib/pagePrimitives";
@@ -24,53 +22,10 @@ import {
   buildPublicationRegister,
   type CatalogSummary,
   type PublicationRegisterRow,
-  type SourceField,
 } from "../lib/sourceRegister";
 import type { ViewState } from "../lib/viewState";
 
 const SOURCE_PAGE_SIZE = 25;
-
-function SourceRegisterCell(props: {
-  children: ReactNode;
-  className?: string;
-  label: string;
-}) {
-  return (
-    <div
-      className={`ca-source-cell ${props.className || ""}`.trim()}
-      role="cell"
-    >
-      <span className="ca-source-cell__label">{props.label}</span>
-      <div className="ca-source-cell__value">{props.children}</div>
-    </div>
-  );
-}
-
-function SourceFieldValue<T>(props: {
-  field: SourceField<T>;
-  format?: (value: T) => ReactNode;
-  missingLabel: string;
-  notApplicableLabel: string;
-}) {
-  const { field } = props;
-  if (field.value != null) {
-    return (
-      <span className={`ca-source-field ca-source-field--${field.state}`}>
-        <span>{props.format ? props.format(field.value) : String(field.value)}</span>
-      </span>
-    );
-  }
-  const label =
-    field.state === "not_applicable"
-      ? props.notApplicableLabel
-      : props.missingLabel;
-  return (
-    <span className={`ca-source-field ca-source-field--${field.state}`}>
-      <span>{label}</span>
-      <span className="visually-hidden">. {field.reason}</span>
-    </span>
-  );
-}
 
 function CopyStableSourceId(props: { id: string }) {
   const [copied, setCopied] = useState(false);
@@ -99,11 +54,40 @@ function CopyStableSourceId(props: { id: string }) {
   );
 }
 
-function PublicationInspector(props: {
+function EmptyPublicationInspector() {
+  return (
+    <section className="source-inspector-card source-inspector-card--empty panel surface-blueprint">
+      <span className="label">SELECTED PUBLICATION</span>
+      <h2 className="source-inspector-title">
+        Select a publication
+      </h2>
+      <p className="source-inspector-empty-desc">
+        Publisher, version, source files, and published crosswalks will appear here.
+      </p>
+    </section>
+  );
+}
+
+function useCompactSourceInspector() {
+  const [isCompact, setIsCompact] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false,
+  );
+
+  useEffect(() => {
+    const update = () => setIsCompact(window.innerWidth < 1024);
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  return isCompact;
+}
+
+function PublicationInspectorContent(props: {
   publication: PublicationRegisterRow;
-  onClose: () => void;
+  heading: ReactNode;
+  close?: ReactNode;
 }) {
-  const { publication, onClose } = props;
+  const { publication, heading, close } = props;
   const isAuthority = publication.id.startsWith("authority-");
   const allSupplemental = [
     ...publication.sourceMaterials.enrichment,
@@ -111,147 +95,94 @@ function PublicationInspector(props: {
   ];
   const historicalItems = allSupplemental.filter((item) => item.isHistorical);
   const supplementalItems = allSupplemental.filter((item) => !item.isHistorical);
-  const supplementalCount = supplementalItems.length;
+  const primaryAndSupplemental = [
+    ...publication.sourceMaterials.primary,
+    ...supplementalItems,
+    ...historicalItems,
+  ];
+  const sourceFilesCount = primaryAndSupplemental.length;
+  const sourceRoles = [
+    ["Primary", publication.sourceMaterials.primary.length],
+    ["Enrichment", publication.sourceMaterials.enrichment.length],
+    ["Supplemental", publication.sourceMaterials.supplemental.length],
+    ["Reference", publication.sourceMaterials.reference.length],
+  ]
+    .filter(([, count]) => typeof count === "number" && count > 0)
+    .map(([role]) => String(role))
+    .join(", ");
+
+  const coverageText = publication.catalogCounts
+    ? `${publication.catalogCounts.normalized_records.toLocaleString()} normalized records indexed in Search & Explore`
+    : isAuthority
+      ? "Statutory / regulatory reference document"
+      : publication.coverageSummary || "—";
 
   return (
-    <InspectorDrawer
-      ariaLabel={`Details for ${publication.officialTitle}`}
-      eyebrow="Publication detail"
-      id="source-inspector-detail"
-      isOpen={true}
-      onClose={onClose}
-      title={publication.officialTitle}
-    >
+    <>
+      <header className="source-inspector-header">
+        <div>
+          <span className="label">SELECTED PUBLICATION</span>
+          {heading}
+          <p className="source-inspector-publisher">
+            {publication.publisher.value || "—"}
+          </p>
+        </div>
+        {close}
+      </header>
+
       <div className="source-inspector-content">
-        {publication.familyName ? (
-          <div className="source-inspector-family">
-            <span className="source-family-pill">
-              Part of {publication.familyName}
-            </span>
+        <section aria-label="Source status summary" className="source-status-overview">
+          <div className="system-stat">
+            <span>Version / current through</span>
+            <strong>{publication.version.value || "—"}</strong>
           </div>
+
+          <div className="system-stat">
+            <span>Status</span>
+            <div>
+              <Badge
+                tone={
+                  publication.lifecycle.value === "active"
+                    ? "success"
+                    : "warning"
+                }
+              >
+                {displayNameFor("lifecycle_status", publication.lifecycle.value || "")}
+              </Badge>
+            </div>
+          </div>
+
+          <div className="system-stat">
+            <span>Last checked</span>
+            <strong>{publication.verifiedAt.value || "—"}</strong>
+          </div>
+
+          <div className="system-stat">
+            <span>Control Atlas coverage</span>
+            <strong>{coverageText}</strong>
+          </div>
+
+        </section>
+
+        {publication.officialLink ? (
+          <ButtonLink
+            className="source-inspector-official-link"
+            href={publication.officialLink}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <span>Open official publication</span>
+            <IconExternalLink aria-hidden="true" size={14} />
+          </ButtonLink>
         ) : null}
 
-        <article aria-label="Source status summary">
-          <dl className="source-detail-grid">
-            <div>
-              <dt>Publisher</dt>
-              <dd>
-                <strong>{publication.publisher.value || "Publisher not recorded"}</strong>
-              </dd>
-            </div>
-
-            <div>
-              <dt>Stable Source ID</dt>
-              <dd>
-                <CopyStableSourceId id={publication.id} />
-              </dd>
-            </div>
-
-            <div>
-              <dt>Official publication</dt>
-              <dd>
-                {publication.officialLink ? (
-                  <a
-                    className="external-link-inline"
-                    href={publication.officialLink}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    <span>
-                      {publication.publisher.value
-                        ? `Open official ${publication.publisher.value} publication`
-                        : "Open official publication"}
-                    </span>
-                    <IconExternalLink aria-hidden="true" size={14} />
-                  </a>
-                ) : (
-                  <span className="ca-source-field--missing">Link not recorded</span>
-                )}
-              </dd>
-            </div>
-
-            <div>
-              <dt>Publisher version</dt>
-              <dd>
-                {publication.version.value || (
-                  <span className={`ca-source-field--${publication.version.state}`}>
-                    {publication.version.state === "not_applicable"
-                      ? "Not applicable"
-                      : "Not published"}
-                  </span>
-                )}
-              </dd>
-            </div>
-
-            <div>
-              <dt>Source last checked</dt>
-              <dd>
-                {publication.verifiedAt.value ? (
-                  <time dateTime={publication.verifiedAt.value}>
-                    {publication.verifiedAt.value}
-                  </time>
-                ) : (
-                  <span className="ca-source-field--missing">Not checked</span>
-                )}
-              </dd>
-            </div>
-
-            <div>
-              <dt>Lifecycle status</dt>
-              <dd>
-                <Badge
-                  tone={
-                    publication.lifecycle.value === "active"
-                      ? "success"
-                      : "warning"
-                  }
-                >
-                  {displayNameFor("lifecycle_status", publication.lifecycle.value || "")}
-                </Badge>
-              </dd>
-            </div>
-
-            {publication.reviews.map((review) => (
-              <div key={review.catalogId}>
-                <dt>
-                  {publication.reviews.length > 1
-                    ? `${review.publicationName} review`
-                    : "Publication currentness review"}
-                </dt>
-                <dd>
-                  {displayNameFor(
-                    "source_currentness_review",
-                    review.upstreamCurrentnessReview,
-                  )} · Reviewed{" "}
-                  <time dateTime={review.reviewedAt}>{review.reviewedAt}</time>
-                </dd>
-              </div>
-            ))}
-
-            {publication.catalogCounts ? (
-              <div>
-                <dt>Catalog profile</dt>
-                <dd>
-                  {publication.catalogCounts.normalized_records.toLocaleString()}{" "}
-                  normalized records indexed in Search & Explore
-                </dd>
-              </div>
-            ) : isAuthority ? (
-              <div>
-                <dt>Authority citation</dt>
-                <dd>Statutory / regulatory reference document</dd>
-              </div>
-            ) : null}
-          </dl>
-        </article>
-
-        {publication.sourceMaterials.primary.length > 0 ? (
-          <section className="source-inspector-section">
-            <h3>
-              Primary source files ({publication.sourceMaterials.primary.length})
-            </h3>
+        {sourceFilesCount > 0 ? (
+          <details className="source-inspector-section" open>
+            <summary>
+              <strong>Source files ({sourceFilesCount})</strong>
+            </summary>
             <ul className="source-material-list">
-              {publication.sourceMaterials.primary.map((item) => (
+              {primaryAndSupplemental.map((item) => (
                 <li className="source-material-item" key={item.id}>
                   <div className="source-material-header">
                     <IconFileText aria-hidden="true" size={16} />
@@ -261,6 +192,12 @@ function PublicationInspector(props: {
                     <span className="format-badge">
                       {displayNameFor("format", item.format)}
                     </span>
+                    {item.isCommunity ? (
+                      <span className="support-badge">Community source</span>
+                    ) : null}
+                    {item.isHistorical ? (
+                      <span className="support-badge">Historical, superseded</span>
+                    ) : null}
                   </div>
                   <div className="source-material-meta">
                     {item.retrievedAt ? (
@@ -287,140 +224,16 @@ function PublicationInspector(props: {
                 </li>
               ))}
             </ul>
-          </section>
-        ) : null}
-
-        {supplementalCount > 0 ? (
-          <section className="source-inspector-section">
-            <h3>
-              Supplemental & enrichment documents ({supplementalCount})
-            </h3>
-            <ul className="source-material-list">
-              {supplementalItems.map((item) => (
-                <li className="source-material-item" key={item.id}>
-                  <div className="source-material-header">
-                    <IconFileText aria-hidden="true" size={16} />
-                    <strong className="source-material-title">
-                      {item.displayTitle}
-                    </strong>
-                    <span className="format-badge">
-                      {displayNameFor("format", item.format)}
-                    </span>
-                    {item.isCommunity ? (
-                      <span className="support-badge">Community source</span>
-                    ) : null}
-                  </div>
-                  <div className="source-material-meta">
-                    {item.retrievedAt ? (
-                      <span>
-                        Retrieved{" "}
-                        <time dateTime={item.retrievedAt}>{item.retrievedAt}</time>
-                      </span>
-                    ) : null}
-                  </div>
-                  {item.url ? (
-                    <a
-                      className="source-material-link"
-                      href={item.url}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      <span>Open document</span>
-                      <IconExternalLink aria-hidden="true" size={14} />
-                    </a>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-
-        {historicalItems.length > 0 ? (
-          <section className="source-inspector-section">
-            <h3>Historical material ({historicalItems.length})</h3>
-            <ul className="source-material-list">
-              {historicalItems.map((item) => (
-                <li className="source-material-item" key={item.id}>
-                  <div className="source-material-header">
-                    <IconFileText aria-hidden="true" size={16} />
-                    <strong className="source-material-title">
-                      {item.displayTitle}
-                    </strong>
-                    <span className="format-badge">
-                      {displayNameFor("format", item.format)}
-                    </span>
-                    <span className="support-badge">Historical, superseded</span>
-                    {item.isCommunity ? (
-                      <span className="support-badge">Community source</span>
-                    ) : null}
-                  </div>
-                  <div className="source-material-meta">
-                    {item.retrievedAt ? (
-                      <span>
-                        Retrieved{" "}
-                        <time dateTime={item.retrievedAt}>{item.retrievedAt}</time>
-                      </span>
-                    ) : null}
-                  </div>
-                  {item.url ? (
-                    <a
-                      className="source-material-link"
-                      href={item.url}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      <span>Open document</span>
-                      <IconExternalLink aria-hidden="true" size={14} />
-                    </a>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-
-        {publication.sourceMaterials.reference.length > 0 ? (
-          <section className="source-inspector-section">
-            <h3>
-              Reference pages & community tools (
-              {publication.sourceMaterials.reference.length})
-            </h3>
-            <ul className="source-material-list">
-              {publication.sourceMaterials.reference.map((item) => (
-                <li className="source-material-item" key={item.id}>
-                  <div className="source-material-header">
-                    <IconFileText aria-hidden="true" size={16} />
-                    <strong className="source-material-title">
-                      {item.displayTitle}
-                    </strong>
-                    <span className="support-badge">Reference only</span>
-                    {item.isCommunity ? (
-                      <span className="support-badge">Community source</span>
-                    ) : null}
-                  </div>
-                  {item.url ? (
-                    <a
-                      className="source-material-link"
-                      href={item.url}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      <span>View reference page</span>
-                      <IconExternalLink aria-hidden="true" size={14} />
-                    </a>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </section>
+          </details>
         ) : null}
 
         {publication.connectionEvidence.length > 0 ? (
-          <section className="source-inspector-section">
-            <h3>
-              Published crosswalks & mapping evidence (
-              {publication.connectionEvidence.length})
-            </h3>
+          <details className="source-inspector-section" open>
+            <summary>
+              <strong>
+                Published crosswalks ({publication.connectionEvidence.length})
+              </strong>
+            </summary>
             <ul className="source-material-list">
               {publication.connectionEvidence.map((item) => (
                 <li className="source-material-item" key={item.id}>
@@ -455,11 +268,48 @@ function PublicationInspector(props: {
                 </li>
               ))}
             </ul>
-          </section>
+          </details>
+        ) : null}
+
+        {publication.sourceMaterials.reference.length > 0 ? (
+          <details className="source-inspector-section">
+            <summary>
+              <strong>
+                Reference material ({publication.sourceMaterials.reference.length})
+              </strong>
+            </summary>
+            <ul className="source-material-list">
+              {publication.sourceMaterials.reference.map((item) => (
+                <li className="source-material-item" key={item.id}>
+                  <div className="source-material-header">
+                    <IconFileText aria-hidden="true" size={16} />
+                    <strong className="source-material-title">
+                      {item.displayTitle}
+                    </strong>
+                    <span className="support-badge">Reference only</span>
+                    {item.isCommunity ? (
+                      <span className="support-badge">Community source</span>
+                    ) : null}
+                  </div>
+                  {item.url ? (
+                    <a
+                      className="source-material-link"
+                      href={item.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span>View reference page</span>
+                      <IconExternalLink aria-hidden="true" size={14} />
+                    </a>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </details>
         ) : null}
 
         <details className="source-inspector-provenance">
-          <summary>Technical details & field provenance</summary>
+          <summary>Technical details</summary>
           <div className="source-inspector-provenance-body">
             <div className="source-inspector-id-block">
               <span className="source-inspector-label">Stable Source ID</span>
@@ -469,6 +319,9 @@ function PublicationInspector(props: {
               {sourceUsageSummary(publication.rawSource || {})}
             </p>
             <ul className="source-provenance-list">
+              <li>
+                <strong>Source roles:</strong> <span>{sourceRoles || "Not recorded"}</span>
+              </li>
               <li>
                 <strong>Provenance class:</strong>{" "}
                 <span>{publication.provenance || "Official source"}</span>
@@ -485,7 +338,75 @@ function PublicationInspector(props: {
           </div>
         </details>
       </div>
-    </InspectorDrawer>
+    </>
+  );
+}
+
+function PublicationInspector(props: {
+  publication: PublicationRegisterRow;
+  onClose: () => void;
+}) {
+  const isCompact = useCompactSourceInspector();
+  const title = props.publication.officialTitle;
+
+  useEffect(() => {
+    if (!isCompact) return undefined;
+    const app = document.getElementById("app");
+    if (!app) return undefined;
+    const wasInert = app.hasAttribute("inert");
+    const previousAriaHidden = app.getAttribute("aria-hidden");
+    app.setAttribute("inert", "");
+    app.setAttribute("aria-hidden", "true");
+    return () => {
+      if (!wasInert) app.removeAttribute("inert");
+      if (previousAriaHidden === null) app.removeAttribute("aria-hidden");
+      else app.setAttribute("aria-hidden", previousAriaHidden);
+    };
+  }, [isCompact]);
+
+  if (isCompact) {
+    return (
+      <Dialog.Root
+        onOpenChange={(open) => {
+          if (!open) props.onClose();
+        }}
+        open
+      >
+        <Dialog.Portal>
+          <Dialog.Overlay className="source-inspector-dialog-backdrop" />
+          <Dialog.Content
+            aria-describedby={undefined}
+            aria-label={`Details for ${title}`}
+            aria-modal="true"
+            className="source-inspector source-inspector--modal panel surface-blueprint"
+            id="source-inspector-detail"
+          >
+            <PublicationInspectorContent
+              close={
+                <Dialog.Close aria-label="Close inspector" className="source-inspector-close" type="button">
+                  Close
+                </Dialog.Close>
+              }
+              heading={<Dialog.Title className="source-inspector-title">{title}</Dialog.Title>}
+              publication={props.publication}
+            />
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+    );
+  }
+
+  return (
+    <article
+      aria-label={`Details for ${title}`}
+      className="source-inspector source-inspector--inline panel surface-blueprint"
+      id="source-inspector-detail"
+    >
+      <PublicationInspectorContent
+        heading={<h2 className="source-inspector-title">{title}</h2>}
+        publication={props.publication}
+      />
+    </article>
   );
 }
 
@@ -544,7 +465,7 @@ export function SourcesPage(props: {
     .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
   const [visibleLimit, setVisibleLimit] = useState(SOURCE_PAGE_SIZE);
-  const firstNewRowRef = useRef<HTMLDivElement | null>(null);
+  const firstNewRowRef = useRef<HTMLTableRowElement | null>(null);
   const activeTriggerRef = useRef<HTMLButtonElement | null>(null);
   const activeTriggerIdRef = useRef<string | null>(null);
 
@@ -582,6 +503,14 @@ export function SourcesPage(props: {
     debounceTimerRef.current = window.setTimeout(() => {
       onNavigate("sources", { ...state, query: nextQuery });
     }, 200);
+  };
+
+  const handleQueryCommit = () => {
+    if (debounceTimerRef.current) {
+      window.clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+    onNavigate("sources", { ...state, query: queryDraft });
   };
 
   useEffect(() => {
@@ -631,16 +560,10 @@ export function SourcesPage(props: {
   };
 
   const handleCloseInspector = () => {
-    const triggerId = activeTriggerIdRef.current || state.source;
     onNavigate("sources", {
       ...state,
       source: "",
     });
-    window.setTimeout(() => {
-      if (triggerId) {
-        document.getElementById(`source-trigger-${triggerId}`)?.focus();
-      }
-    }, 50);
   };
 
   const handleResetFilters = () => {
@@ -652,41 +575,26 @@ export function SourcesPage(props: {
     });
   };
 
-  const pageHeaderTitle: ReactNode = selectedPublicationRow
-    ? selectedPublicationRow.officialTitle
-    : state.source
-      ? (
-          <>
-            Source not found:{" "}
-            <span className="ca-source-not-found-id">
-              <code>{state.source}</code>
-            </span>
-          </>
-        )
-      : SITE_COPY.routes.sources.title;
-  const pageHeaderEyebrow =
-    selectedPublicationRow || state.source ? SITE_COPY.routes.sources.title : undefined;
+  const publicationCount = allPublicationRows.length;
+  const eyebrow = `SOURCE REGISTER / ${publicationCount} PUBLICATIONS`;
 
   return (
-    <Panel
+    <MissionPage
       className="sources-page"
       data-visual-identity="provenance-ledger"
-      overflow="visible"
+      maxWidth="workspace"
     >
       <PageHeader
-        eyebrow={pageHeaderEyebrow}
+        eyebrow={eyebrow}
         primary
-        summary={SITE_COPY.routes.sources.purpose}
-        title={pageHeaderTitle}
+        summary="Verify publisher, version, and source material for publications used in Control Atlas."
+        title={SITE_COPY.routes.sources.title}
       />
 
       {state.source && !selectedPublicationRow ? (
         <div className="source-not-found-banner" role="alert">
           <div>
-            <p>
-              Requested source ID <code>{state.source}</code> is not in the
-              public publication register.
-            </p>
+            <p>That publication is not in the public publication register.</p>
           </div>
           <Button
             onClick={handleCloseInspector}
@@ -698,101 +606,78 @@ export function SourcesPage(props: {
         </div>
       ) : null}
 
-      <WorkbenchControlSurface
-        className="source-register-control-surface"
-        label="Find publications"
-        targetId="source-register-results"
-      >
-        <div className="source-register-controls">
-          <form
-            className="field source-register-search"
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (debounceTimerRef.current) {
-                window.clearTimeout(debounceTimerRef.current);
-              }
-              const query = queryDraft.trim();
-              if (query !== (state.query || "")) {
-                onNavigate("sources", { ...state, query });
-              }
-            }}
-            role="search"
-          >
-            <label htmlFor="source-search">
-              <span>Search publications</span>
-              <div className="search-input">
-                <IconSearch aria-hidden="true" size={18} stroke={1.8} />
-                <input
-                  id="source-search"
-                  onChange={(event) => handleQueryChange(event.target.value)}
-                  placeholder="Name, publisher, version, ID, or catalog"
-                  type="search"
-                  value={queryDraft}
-                />
-              </div>
-            </label>
-          </form>
+      <div className="sources-workspace grid queue-layout">
+        <section aria-label="Publication register" className="sources-table-panel panel surface-scanline">
+          {/* S2 Toolbar: compact admin toolbar */}
+          <div className="admin-tools source-admin-tools">
+            <input
+              aria-label="Search publications"
+              id="source-search"
+              onChange={(event) => handleQueryChange(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") handleQueryCommit();
+              }}
+              placeholder="Search title, publisher, version, or ID"
+              type="search"
+              value={queryDraft}
+            />
 
-          <div className="source-register-filters">
             {publisherOptions.length >= 2 ? (
-              <SelectField
-                emptyLabel="All publishers"
-                label="Publisher"
-                onChange={(publisher) =>
-                  onNavigate("sources", { ...state, publisher })
+              <select
+                aria-label="Publisher"
+                className="source-filter-select"
+                onChange={(event) =>
+                  onNavigate("sources", { ...state, publisher: event.target.value })
                 }
-                options={publisherOptions}
                 value={state.publisher || ""}
-              />
+              >
+                <option value="">All publishers</option>
+                {publisherOptions.map((option) => (
+                  <option key={`pub-${option.value}`} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             ) : null}
 
             {statusOptions.length >= 2 ? (
-              <SelectField
-                emptyLabel="All statuses"
-                label="Status"
-                onChange={(lifecycle) =>
-                  onNavigate("sources", { ...state, lifecycle })
+              <select
+                aria-label="Status"
+                className="source-filter-select"
+                onChange={(event) =>
+                  onNavigate("sources", { ...state, lifecycle: event.target.value })
                 }
-                options={statusOptions}
                 value={state.lifecycle || ""}
-              />
+              >
+                <option value="">All statuses</option>
+                {statusOptions.map((option) => (
+                  <option key={`status-${option.value}`} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             ) : null}
+
+            {hasActiveFilters ? (
+              <Button
+                onClick={handleResetFilters}
+                type="button"
+                variant="secondary-quiet"
+              >
+                Reset filters
+              </Button>
+            ) : null}
+
           </div>
 
-          <p aria-live="polite" className="source-register-total">
-            {filteredPublicationRows.length} of {allPublicationRows.length} publications
-          </p>
-
-          {hasActiveFilters ? (
-            <Button
-              onClick={handleResetFilters}
-              type="button"
-              variant="secondary-quiet"
-            >
-              Reset filters
-            </Button>
-          ) : null}
-        </div>
-      </WorkbenchControlSurface>
-
-      <div
-        className={`sources-workspace${
-          selectedPublicationRow ? " sources-workspace--with-inspector" : ""
-        }`}
-      >
-        <div
-          className="sources-register-pane"
-          id="source-register-results"
-          role="region"
-        >
-          <div className="source-results-orientation">
-            <strong>Publication register</strong>
-            <span aria-live="polite">
-              Showing {Math.min(visibleRows.length, filteredPublicationRows.length)} of{" "}
-              {filteredPublicationRows.length} publications
+          {/* S3 Measurement rail */}
+          <div aria-live="polite" className="calibration-rail">
+            <span>
+              SHOWING 1–{Math.min(visibleLimit, filteredPublicationRows.length)} / {filteredPublicationRows.length}
             </span>
           </div>
 
+          {/* S5 & S6 Table */}
           {filteredPublicationRows.length === 0 ? (
             <EmptyState
               actionLabel="Clear publication filters"
@@ -802,125 +687,130 @@ export function SourcesPage(props: {
               title="No publications match these filters."
             />
           ) : (
-            <div
-              aria-label="Control Atlas publication register"
-              className="source-register"
-              data-control-results
-              role="table"
-            >
-              <div className="source-register-heading" role="row">
-                <span role="columnheader">Publication</span>
-                <span role="columnheader">Publisher</span>
-                <span role="columnheader">Publisher version</span>
-                <span role="columnheader">Source last checked</span>
-                <span role="columnheader">Status</span>
-              </div>
+            <div className="table-scroll">
+              <table
+                aria-label="Control Atlas publication register"
+                className="table source-table"
+                id="source-register-table"
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Publication</th>
+                    <th scope="col">Publisher</th>
+                    <th scope="col">Version / current through</th>
+                    <th scope="col">Last checked</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visibleRows.map((row, index) => {
+                    const isSelected =
+                      state.source === row.id ||
+                      selectedPublicationRow?.id === row.id;
+                    const materialCount =
+                      row.sourceMaterials.primary.length +
+                      row.sourceMaterials.enrichment.length +
+                      row.sourceMaterials.supplemental.length;
+                    const mappingCount = row.connectionEvidence.length;
 
-              {visibleRows.map((row, index) => {
-                const isSelected =
-                  state.source === row.id ||
-                  selectedPublicationRow?.id === row.id;
-                const materialCount =
-                  row.sourceMaterials.primary.length +
-                  row.sourceMaterials.enrichment.length +
-                  row.sourceMaterials.supplemental.length +
-                  row.sourceMaterials.reference.length;
-                const mappingCount = row.connectionEvidence.length;
-
-                return (
-                  <div
-                    className={`source-register-row${
-                      isSelected ? " source-register-row--selected" : ""
-                    }`}
-                    key={row.id}
-                    ref={
-                      index === Math.max(0, visibleLimit - SOURCE_PAGE_SIZE)
-                        ? firstNewRowRef
-                        : undefined
-                    }
-                    role="row"
-                    tabIndex={-1}
-                  >
-                    <SourceRegisterCell
-                      className="ca-source-cell--identity"
-                      label="Publication"
-                    >
-                      <div className="source-title-row">
-                        <button
-                          aria-expanded={isSelected}
-                          className="source-title-link"
-                          id={`source-trigger-${row.id}`}
-                          onClick={(e) => handleSelectPublication(row.id, e)}
-                          type="button"
-                        >
-                          {row.displayTitle}
-                        </button>
-                        {materialCount > 0 || mappingCount > 0 ? (
-                          <span
-                            className="source-attached-pill"
-                            title={`${materialCount} source file${
-                              materialCount === 1 ? "" : "s"
-                            }, ${mappingCount} mapping${
-                              mappingCount === 1 ? "" : "s"
-                            }`}
-                          >
-                            {materialCount > 0
-                              ? `${materialCount} source file${
-                                  materialCount === 1 ? "" : "s"
-                                }`
-                              : ""}
-                            {materialCount > 0 && mappingCount > 0 ? " · " : ""}
-                            {mappingCount > 0
-                              ? `${mappingCount} mapping${
-                                  mappingCount === 1 ? "" : "s"
-                                }`
-                              : ""}
-                          </span>
-                        ) : null}
-                      </div>
-                    </SourceRegisterCell>
-
-                    <SourceRegisterCell label="Publisher">
-                      <SourceFieldValue
-                        field={row.publisher}
-                        missingLabel="Publisher not recorded"
-                        notApplicableLabel="Not applicable"
-                      />
-                    </SourceRegisterCell>
-
-                    <SourceRegisterCell label="Publisher version">
-                      <SourceFieldValue
-                        field={row.version}
-                        missingLabel="Not published"
-                        notApplicableLabel="Not applicable"
-                      />
-                    </SourceRegisterCell>
-
-                    <SourceRegisterCell label="Source last checked">
-                      <SourceFieldValue
-                        field={row.verifiedAt}
-                        missingLabel="Not checked"
-                        notApplicableLabel="Not applicable"
-                      />
-                    </SourceRegisterCell>
-
-                    <SourceRegisterCell label="Status">
-                      <Badge
-                        tone={
-                          row.lifecycle.value === "active"
-                            ? "success"
-                            : "warning"
+                    return (
+                      <tr
+                        aria-selected={isSelected ? "true" : undefined}
+                        className={`source-register-row${
+                          isSelected ? " source-register-row--selected" : ""
+                        }`}
+                        key={row.id}
+                        ref={
+                          index === Math.max(0, visibleLimit - SOURCE_PAGE_SIZE)
+                            ? firstNewRowRef
+                            : undefined
                         }
                       >
-                        {displayNameFor(
-                          "lifecycle_status",
-                          row.lifecycle.value || "",
-                        )}
-                      </Badge>
-                    </SourceRegisterCell>
-                  </div>
-                );
-              })}
+                        <td className="source-col-publication">
+                          <div className="source-title-cell">
+                            <button
+                              aria-expanded={isSelected}
+                              className="source-title-link"
+                              id={`source-trigger-${row.id}`}
+                              onClick={(e) => handleSelectPublication(row.id, e)}
+                              type="button"
+                            >
+                              {row.displayTitle}
+                            </button>
+                            <span className="source-mobile-publisher">
+                              {row.publisher.value || "—"}
+                            </span>
+                            <div className="source-mobile-meta">
+                              <span>{row.version.value || "—"}</span>
+                              <span> · </span>
+                              <span className="source-mobile-status">
+                                {displayNameFor(
+                                  "lifecycle_status",
+                                  row.lifecycle.value || "",
+                                )}
+                              </span>
+                            </div>
+                            {materialCount > 0 || mappingCount > 0 ? (
+                              <span
+                                className="source-attached-pill"
+                                title={`${materialCount} source file${
+                                  materialCount === 1 ? "" : "s"
+                                }, ${mappingCount} crosswalk${
+                                  mappingCount === 1 ? "" : "s"
+                                }`}
+                              >
+                                {materialCount > 0 ? (
+                                  <>
+                                    <span className="source-attachment-count--desktop">
+                                      {materialCount} source file{materialCount === 1 ? "" : "s"}
+                                    </span>
+                                    <span className="source-attachment-count--mobile">
+                                      {materialCount} file{materialCount === 1 ? "" : "s"}
+                                    </span>
+                                  </>
+                                ) : null}
+                                {materialCount > 0 && mappingCount > 0 ? " · " : ""}
+                                {mappingCount > 0
+                                  ? `${mappingCount} crosswalk${
+                                      mappingCount === 1 ? "" : "s"
+                                    }`
+                                  : ""}
+                              </span>
+                            ) : null}
+                          </div>
+                        </td>
+
+                        <td className="source-col-publisher">
+                          {row.publisher.value || "—"}
+                        </td>
+
+                        <td className="source-col-version">
+                          {row.version.value || "—"}
+                        </td>
+
+                        <td className="source-col-checked">
+                          {row.verifiedAt.value || "—"}
+                        </td>
+
+                        <td className="source-col-status">
+                          <Badge
+                            tone={
+                              row.lifecycle.value === "active"
+                                ? "success"
+                                : "warning"
+                            }
+                          >
+                            {displayNameFor(
+                              "lifecycle_status",
+                              row.lifecycle.value || "",
+                            )}
+                          </Badge>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
 
@@ -947,18 +837,22 @@ export function SourcesPage(props: {
               </Button>
             </div>
           ) : null}
-        </div>
+        </section>
 
-        {selectedPublicationRow ? (
-          <div className="sources-inspector-pane">
+        {/* S4, S7, S8 Scoped Publication Inspector */}
+        <aside className="work-stack sources-inspector-pane">
+          {selectedPublicationRow ? (
             <PublicationInspector
               onClose={handleCloseInspector}
               publication={selectedPublicationRow}
             />
-          </div>
-        ) : null}
+          ) : (
+            <div className="sources-inspector-empty-desktop">
+              <EmptyPublicationInspector />
+            </div>
+          )}
+        </aside>
       </div>
-    </Panel>
+    </MissionPage>
   );
 }
-
