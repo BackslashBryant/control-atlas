@@ -47,7 +47,7 @@ This application has no backend.
 ---
 
 ## Live Site
-Live site target: https://backslashbryant.github.io/control-atlas/
+Live site target: https://rambulls.github.io/control-atlas/
 
 ## Current Reusable Foundation
 

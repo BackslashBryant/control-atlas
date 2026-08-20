@@ -172,7 +172,7 @@ const RESOLUTIONS = [
   // the OSCAL rev5 baseline profiles), hashed from its committed copy.
   { id: 'artifact-nist-800-53b-baselines', local: 'data/800-53b-baselines.json', url: `${OSCAL}/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json`, format: 'oscal_json', parser: 'oscal-profile', parser_version: '1.5.0' },
   // Control Atlas's own editorial structure spine (hashed from the repo file).
-  { id: 'artifact-control-atlas-structure', local: 'data/curated/tree-spine.json', url: 'https://github.com/BackslashBryant/control-atlas/blob/main/data/curated/tree-spine.json', format: 'json', parser: 'control-atlas-spine', parser_version: '1.0.0', count: 'jsonld' },
+  { id: 'artifact-control-atlas-structure', local: 'data/curated/tree-spine.json', url: 'https://github.com/rambulls/control-atlas/blob/main/data/curated/tree-spine.json', format: 'json', parser: 'control-atlas-spine', parser_version: '1.0.0', count: 'jsonld' },
 ];
 
 const nistZeroTrustManifestPath = join(ROOT, 'data', 'curated', 'nist-zt', 'nist-source-manifest.json');
@@ -228,7 +228,7 @@ function sleep(ms) {
 async function fetchBytes(url, options = {}) {
   const headers = options.noBotUa
     ? {}
-    : { 'User-Agent': options.userAgent || 'ControlAtlas-ingestion/1.0 (+https://github.com/BackslashBryant/control-atlas)' };
+    : { 'User-Agent': options.userAgent || 'ControlAtlas-ingestion/1.0 (+https://github.com/rambulls/control-atlas)' };
   let lastError;
   for (let attempt = 0; attempt < 3; attempt += 1) {
     if (attempt > 0) await sleep(1500 * attempt);

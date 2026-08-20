@@ -196,8 +196,8 @@ export function CommonsPage(props: {
       facetLabel="Resource filters"
       headerAction={(
         <div className="workspace-header-actions">
-          <a href="https://github.com/BackslashBryant/control-atlas/issues/new?template=submit-resource.yml" rel="noopener noreferrer" target="_blank"><IconPlus aria-hidden="true" size={16} />Submit resource</a>
-          <a href="https://github.com/BackslashBryant/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank"><IconFlag aria-hidden="true" size={16} />Report a problem</a>
+          <a href="https://github.com/rambulls/control-atlas/issues/new?template=submit-resource.yml" rel="noopener noreferrer" target="_blank"><IconPlus aria-hidden="true" size={16} />Submit resource</a>
+          <a href="https://github.com/rambulls/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank"><IconFlag aria-hidden="true" size={16} />Report a problem</a>
         </div>
       )}
       onClearQuery={() => {
