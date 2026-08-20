@@ -107,7 +107,14 @@ test("reduced motion keeps the complete Atlas visible without animation", async 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/#/atlas");
   await waitForReady(page);
-  await expect(page.getByTestId("atlas-network").locator("canvas").first()).toHaveCSS("animation-name", "none");
+  const network = page.getByTestId("atlas-network");
+  await expect(network).toHaveAttribute("data-projection-node-count", "13");
+  const animatedDescendants = await network.locator("*").evaluateAll((elements) =>
+    elements
+      .filter((element) => globalThis.getComputedStyle(element).animationName !== "none")
+      .map((element) => `${element.tagName.toLowerCase()}.${element.className}`),
+  );
+  expect(animatedDescendants).toEqual([]);
 });
 
 test("Atlas first paint is a semantic landscape with drill-down and history", async ({ page }) => {

@@ -218,6 +218,7 @@ test("DISA STIG publication entry points preserve the benchmark layer above V-ID
   await expect(publication.getByText("PUBLICATION", { exact: true })).toBeVisible();
   await expect(publication.getByRole("heading", { name: "DISA STIG", level: 1 })).toBeVisible();
   await expect(publication.locator(".catalog-publisher")).toHaveText("DISA");
+  await expect(publication.getByRole("link", { name: "Open official publication", exact: true })).toBeVisible();
   const benchmarks = page.locator('[data-published-tier="benchmark"]');
   const benchmarkCount = await benchmarks.count();
   expect(benchmarkCount).toBeGreaterThan(0);
@@ -245,7 +246,7 @@ test("DISA STIG publication entry points preserve the benchmark layer above V-ID
   const rules = page.locator(".catalog-record-title");
   await expect(rules.first()).toBeVisible({ timeout: 60_000 });
   expect(await rules.count()).toBeGreaterThan(0);
-  await expect(rules.first()).toContainText(/V-\d+/);
+  await expect(rules.first().locator("strong")).toHaveText(/^V-\d+$/);
 });
 
 test("Phase 3 record actions and global footer expose the required hierarchy", async ({ page }) => {

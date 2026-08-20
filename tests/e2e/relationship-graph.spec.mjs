@@ -20,7 +20,7 @@ test("Atlas standalone route opens the focused canvas with Connections below", a
   await expect(focused).toBeVisible();
   await expect(focused).toContainText("AC-2");
   await expect(focused).toContainText("Account Management");
-  await page.getByRole("button", { name: "View all", exact: true }).click();
+  await page.getByRole("button", { name: /View all \d+ connections/ }).click();
   await expect(page.getByRole("table", { name: "Relationship table" })).toBeVisible();
 });
 

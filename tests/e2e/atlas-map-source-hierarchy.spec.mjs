@@ -58,7 +58,9 @@ for (const viewport of VIEWPORTS) {
     await expect(page.getByTestId("atlas-network")).toHaveAttribute("data-projection-level", "publication");
 
     await expectNoHorizontalOverflow(page);
-    await page.goto("/#/atlas/nist-800-53:AC-1?atlasLimb=atlas:LIMB-COMPLIANCE&atlasFramework=nist-800-53");
+    const jumpToRecord = page.getByRole("searchbox", { name: "Jump to a record" });
+    await jumpToRecord.fill("nist-800-53:AC-1");
+    await jumpToRecord.press("Enter");
     await waitForAppReady(page);
     await expect(page).toHaveURL(/\/#\/atlas\/nist-800-53:AC-1\?/);
     await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
