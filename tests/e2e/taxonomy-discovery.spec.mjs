@@ -151,7 +151,7 @@ test("Guide context hands governed tags to the Library", async ({ page }) => {
 test("starter-document context preserves the selected document and preview", async ({ page }) => {
   await open(page, "/#/build/documents/security_plan_starter?framework=nist-800-53&baseline=LOW");
   expect(await page.evaluate(() => globalThis.scrollY)).toBeLessThanOrEqual(1);
-  await expect(page.getByRole("heading", { name: "Documents", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Templates", level: 1 })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Configure inputs" })).toBeVisible();
   const context = page.getByRole("complementary", { name: "Current document" });
   await expect(context).toContainText("Security Plan Starter");

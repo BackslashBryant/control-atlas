@@ -12,6 +12,7 @@ import {
 import { EdgeArrowProgram, EdgeLineProgram } from "sigma/rendering";
 import "@react-sigma/core/lib/style.css";
 
+import { displayNameFor } from "../../app/display-names.mjs";
 import type {
   AtlasGraphProjection,
   AtlasProjectionDrill,
@@ -260,7 +261,7 @@ export function AtlasGraph({
           <label className="atlas-network-filter">Connections
             <select onChange={(event) => setRelationshipClass(event.target.value)} value={relationshipClass}>
               <option value="">All displayed connections</option>
-              {relationshipClasses.map((value) => <option key={value} value={value}>{value}</option>)}
+              {relationshipClasses.map((value) => <option key={value} value={value}>{displayNameFor("relationship_class", value)}</option>)}
             </select>
           </label>
         </div>

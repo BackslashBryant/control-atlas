@@ -20,7 +20,7 @@ test("Home is a calm, task-focused front door", async ({ page }) => {
   for (const entrance of ["Browse the Atlas", "Search the Library", "Browse Resources"]) {
     await expect(page.getByRole("link", { name: new RegExp(entrance) })).toBeVisible();
   }
-  await expect(page.locator(".home-tag-galaxies .home-tag-link")).toHaveCount(16);
+  await expect(page.locator(".home-library-kpis .home-library-kpi")).toHaveCount(6);
 });
 
 test("record leads with publisher text and contains no generated guidance", async ({ page }) => {
@@ -50,13 +50,13 @@ test("record template stays inside the mobile viewport", async ({ page }) => {
 test("record actions preserve durable context across features", async ({ page }) => {
   await open(page, "/#/record/nist-800-53/AC-2");
   await page.getByRole("link", { name: "See connections", exact: true }).click();
-  await expect(page).toHaveURL(/#\/atlas\?.*node=nist-800-53%3AAC-2/);
+  await expect(page).toHaveURL(/#\/atlas\/nist-800-53(?::|%3A)AC-2/);
 
   await open(page, "/#/record/nist-800-53/AC-2");
   await page.locator(".record-actions-menu summary").click();
   await expect(page.locator(".record-actions-menu")).toHaveAttribute("open", "");
   await page.locator(".record-actions-popover").getByRole("link", { name: "Compare frameworks", exact: true }).click();
-  await expect(page).toHaveURL(/#\/compare\?.*(source=nist-800-53.*items=AC-2|items=AC-2.*source=nist-800-53)/);
+  await expect(page).toHaveURL(/#\/compare(?:\/relationships)?\?.*(source=nist-800-53.*items=AC-2|items=AC-2.*source=nist-800-53)/);
 });
 
 test("record types show source-native publisher fields", async ({ page }) => {
@@ -69,7 +69,7 @@ test("record types show source-native publisher fields", async ({ page }) => {
   for (const [path, section] of cases) {
     await open(page, path);
     await expect(page.getByRole("heading", { name: section, exact: true })).toBeVisible();
-    await expect(page.locator('[data-source-field="description"] p')).not.toBeEmpty();
+    await expect(page.locator('[data-source-field="description"] p').first()).not.toBeEmpty();
   }
 });
 

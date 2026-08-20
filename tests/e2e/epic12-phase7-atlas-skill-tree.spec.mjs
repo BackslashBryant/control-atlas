@@ -20,64 +20,68 @@ async function openAtlas(page, path = "/#/atlas?relationshipView=path") {
   await expect(page.locator(".atlas-tree")).toBeVisible();
 }
 
-async function selectTreeNode(page, id) {
-  await page
-    .locator(`.react-flow__node:has([data-atlas-node-id="${id}"])`)
-    .dispatchEvent("click");
+async function openNetwork(page) {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await gotoApp(page, "/#/atlas");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+  await expect(page.getByTestId("atlas-network")).toBeVisible();
 }
 
-async function drillNode(page, id) {
-  await selectTreeNode(page, id);
+async function openLandmarkList(network) {
+  const list = network.locator("details.atlas-network-list");
+  if (!(await list.evaluate((element) => element instanceof globalThis.HTMLDetailsElement && element.open))) {
+    await list.locator("summary").click();
+  }
 }
 
-test("Atlas overview hands off to publisher-native navigation and preserves history", async ({ page }) => {
+test("semantic Atlas hands off to explicit publisher-native navigation and preserves history", async ({ page }) => {
   test.setTimeout(120_000);
-  await openAtlas(page);
+  await openNetwork(page);
 
-  const tree = page.locator(".atlas-tree");
-  await expect(tree).toHaveAttribute("data-tree-node-count", "13");
+  const network = page.getByTestId("atlas-network");
   await expect(page.getByText("Explore areas, publications, and the published connections between them.", { exact: true })).toBeVisible();
-  await expect(tree.locator('[data-atlas-node-id="atlas:TRUNK"]')).toBeVisible();
-  await expect(tree.locator('[data-atlas-node-id^="authority-aggregate:"]')).toHaveCount(3);
-  await expect(tree.locator('[data-atlas-node-id^="atlas:LIMB-"]')).toHaveCount(9);
-  const stage = tree.locator(".atlas-tree__stage");
-  await expect(stage).toHaveAttribute("data-semantic-level", "orientation");
-  await page.waitForTimeout(550);
-  for (let step = 0; step < 4; step += 1) await page.locator(".atlas-tree").getByTitle("Zoom in").click();
-  await expect(stage).toHaveAttribute("data-semantic-level", "justification");
-
-  await drillNode(page, "atlas:LIMB-IMPLEMENTATION");
-  await expect(stage).toHaveAttribute("data-semantic-level", "justification");
+  await expect(network).toHaveAttribute("data-projection-level", "landscape");
+  await expect(network).toHaveAttribute("data-projection-node-count", "13");
+  await expect(network.locator("canvas").first()).toBeVisible();
+  await openLandmarkList(network);
+  await network.getByRole("button", { name: /Implementation/ }).click();
   await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-IMPLEMENTATION/);
-  await drillNode(page, "disa-stig:CATALOG");
+  await expect(network).toHaveAttribute("data-projection-level", "area");
+  await openLandmarkList(network);
+  await network.getByRole("button", { name: /DISA STIG Catalog/ }).click();
   await expect(page).toHaveURL(/atlasFramework=disa-stig/);
-  const explorer = page.locator("[data-atlas-structural-explorer]");
+
+  await gotoApp(page, "/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-IMPLEMENTATION&atlasFramework=disa-stig&relationshipView=path");
+  await waitForAppReady(page);
+  const tree = page.locator(".atlas-tree");
+  const explorer = page.locator("[data-react-root] [data-atlas-structural-explorer]:visible");
   await expect(explorer.getByRole("heading", { name: "DISA STIG Catalog" })).toBeVisible();
   await expect(tree.locator(".react-flow")).toHaveCount(0);
   await expect(tree.locator("select")).toHaveCount(0);
-  await explorer.getByLabel("Search this publication").fill("Oracle Linux 9");
-  await explorer.getByRole("button", { name: /Oracle Linux 9/ }).click();
-  await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG\?/);
-  await expect(explorer.getByRole("heading", { name: /Oracle Linux 9/ })).toBeVisible();
+  await explorer.getByRole("button", { name: /BENCHMARK-ACTIVE-DIRECTORY-DOMAIN/ }).click();
+  await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ACTIVE-DIRECTORY-DOMAIN\?/);
+  await expect(page.locator(".atlas-workspace-heading")).toHaveText("Connections");
 
   await page.reload();
   await waitForAppReady(page);
-  await expect(page.locator("[data-atlas-structural-explorer]").getByRole("heading", { name: /Oracle Linux 9/ })).toBeVisible();
+  await expect(page.locator(".atlas-workspace-heading")).toHaveText("Connections");
 
   await page.goBack();
-  await expect(page).not.toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG/);
-  await expect(page.locator("[data-atlas-structural-explorer]").getByRole("heading", { name: "DISA STIG Catalog" })).toBeVisible();
+  await expect(page).not.toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ACTIVE-DIRECTORY-DOMAIN/);
+  await expect(page.locator("[data-react-root] [data-atlas-structural-explorer]:visible").getByRole("heading", { name: "DISA STIG Catalog" })).toBeVisible();
   await page.goForward();
-  await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG\?/);
-  await expect(page.locator("[data-atlas-structural-explorer]").getByRole("heading", { name: /Oracle Linux 9/ })).toBeVisible();
+  await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ACTIVE-DIRECTORY-DOMAIN\?/);
+  await expect(page.locator(".atlas-workspace-heading")).toHaveText("Connections");
 
-  await gotoApp(page, "/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-THREAT&atlasFramework=mitre-attack");
+  await gotoApp(page, "/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-THREAT&atlasFramework=mitre-attack&relationshipView=path");
   await waitForAppReady(page);
-  await page.locator("[data-atlas-structural-explorer]").getByRole("button", { name: /TA0001/ }).click();
+  await page.locator("[data-react-root] [data-atlas-structural-explorer]:visible").getByRole("button", { name: /TA0001/ }).click();
   await expect(page).toHaveURL(/\/#\/atlas\/mitre-attack:TACTIC-TA0001\?/);
   await page.reload();
   await waitForAppReady(page);
-  await expect(page.locator("[data-atlas-structural-explorer]").getByRole("heading", { name: /Initial Access/ })).toBeVisible();
+  await expect(page.locator(".atlas-workspace-heading")).toHaveText("Connections");
 });
 
 test("focused trace matches the record rail and local connections never replace containment", async ({ page }) => {
@@ -95,19 +99,17 @@ test("focused trace matches the record rail and local connections never replace 
     .getAttribute("data-displayed-trace");
   expect(recordTrace).toBeTruthy();
 
-  await openAtlas(page, "/#/atlas?node=disa-cci%3ACCI-000366&relationshipView=path");
-  const tree = page.locator(".atlas-tree");
-  const atlasTrace = await tree.locator("[data-authority-trace]").getAttribute("data-authority-trace");
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await gotoApp(page, "/#/atlas?node=disa-cci%3ACCI-000366&relationshipView=path");
+  await waitForAppReady(page);
+  const focused = page.getByRole("region", { name: "Focused Atlas record" });
+  const atlasTrace = await focused.locator("[data-displayed-trace]").getAttribute("data-displayed-trace");
   expect(atlasTrace).toBe(recordTrace);
 
-  await expect(tree.locator(".react-flow")).toHaveCount(0);
-  const pathBefore = await tree.locator("[data-authority-trace]").getAttribute("data-authority-trace");
-  await page.getByRole("button", { name: "Show local connections" }).click();
-  await expect(tree.locator(".atlas-tree__overlay-highlight")).toHaveCount(24);
-  await expect(tree.getByRole("button", { name: /3,467 more .* open Compare/ })).toBeVisible();
-  expect(await tree.locator("[data-authority-trace]").getAttribute("data-authority-trace")).toBe(pathBefore);
-  await page.getByRole("button", { name: "Show local connections" }).click();
-  await expect(tree.locator(".atlas-tree__overlay-highlight")).toHaveCount(0);
+  await expect(page.locator(".react-flow")).toHaveCount(0);
+  await focused.getByRole("button", { name: /^Implementation 3490/ }).click();
+  expect(await focused.locator("[data-displayed-trace]").getAttribute("data-displayed-trace")).toBe(recordTrace);
+  await expect(focused.getByRole("button", { name: /View all 3490 in List/ })).toBeVisible();
   expect(monolithic).toEqual([]);
 });
 
@@ -129,23 +131,22 @@ test("mobile Atlas keeps keyboard overview navigation and uses a structural Brow
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
 
-  await gotoApp(page, "/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-IMPLEMENTATION&atlasFramework=disa-stig");
+  await gotoApp(page, "/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-IMPLEMENTATION&atlasFramework=disa-stig&relationshipView=path");
   await waitForAppReady(page);
-  await page.getByRole("button", { name: "Browse structure" }).click();
-  const browse = page.getByRole("navigation", { name: "Current publication structure" });
-  await expect(browse).toBeVisible();
-  await browse.getByLabel("Search this publication").fill("Oracle Linux 9");
-  await browse.getByRole("button", { name: /BENCHMARK-ORACLE-LINUX-9-STIG/ }).click();
-  await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG\?/);
-  await expect(page.locator("[data-atlas-structural-explorer]").getByRole("heading", { name: /Oracle Linux 9/ })).toBeVisible();
-  const reopen = page.locator(".atlas-tree__mobile-bar").getByRole("button", { name: "Browse structure" });
-  await expect(reopen).toBeVisible();
-  const target = await reopen.evaluate((node) => {
+  const openBrowse = page.getByRole("button", { name: "Browse structure" });
+  const target = await openBrowse.evaluate((node) => {
     const box = node.getBoundingClientRect();
     return { width: box.width, height: box.height };
   });
   expect(target.width).toBeGreaterThanOrEqual(44);
   expect(target.height).toBeGreaterThanOrEqual(44);
+  await openBrowse.click();
+  const browse = page.getByRole("navigation", { name: "Current publication structure" });
+  await expect(browse).toBeVisible();
+  await browse.getByLabel("Search this publication").fill("Oracle Linux 9");
+  await browse.getByRole("button", { name: /BENCHMARK-ORACLE-LINUX-9-STIG/ }).click();
+  await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG\?/);
+  await expect(page.locator(".atlas-workspace-heading")).toHaveText("Connections");
   expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBe(0);
 });
 
@@ -155,9 +156,9 @@ test("two cold publication loads produce identical structural result order", asy
   for (let index = 0; index < 2; index += 1) {
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
     const page = await context.newPage();
-    await gotoApp(page, "/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-THREAT&atlasFramework=mitre-attack");
+    await gotoApp(page, "/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-THREAT&atlasFramework=mitre-attack&relationshipView=path");
     await waitForAppReady(page);
-    const explorer = page.locator("[data-atlas-structural-explorer]");
+    const explorer = page.locator("[data-react-root] [data-atlas-structural-explorer]:visible");
     await expect(explorer).toBeVisible();
     await expect(page.locator(".atlas-tree .react-flow")).toHaveCount(0);
     snapshots.push(await explorer.locator(".atlas-publisher-explorer__list > li").allTextContents());

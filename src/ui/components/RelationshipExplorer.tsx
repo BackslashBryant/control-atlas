@@ -316,7 +316,7 @@ export function RelationshipExplorer(props: RelationshipExplorerProps) {
         />
         <FilterSelect
           id="graph-filter-provenance"
-          label="Source basis"
+          label="Evidence"
           onChange={(value) => onFilterChange({ provenance: value })}
           options={filterOptions.provenanceClasses}
           value={filters.provenance}

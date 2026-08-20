@@ -44,6 +44,18 @@ for (const viewport of VIEWPORTS) {
         await gotoApp(page, route);
         await waitForAppReady(page, { allowPartial: true });
 
+        if (route === "/#/explore") {
+          const network = page.getByTestId("atlas-network");
+          await expect(network).toHaveAttribute("data-projection-level", "landscape");
+          await expect(network).toHaveAttribute("data-projection-node-count", "13");
+          await expect(network.locator(".atlas-network-list button")).toHaveCount(13);
+          if (viewport.width >= 768) {
+            await expect(network.locator("canvas").first()).toBeVisible();
+          } else {
+            await expect(network.locator(".atlas-network-list button").first()).toBeVisible();
+          }
+        }
+
         await expect(page.locator(".static-route-shell")).toHaveCount(0);
         await expect(page.locator("#workspace h1")).toHaveCount(1, {
           timeout: 15_000,
@@ -90,18 +102,12 @@ for (const viewport of VIEWPORTS) {
             : [];
           const overflows = [...globalThis.document.querySelectorAll("body *")]
             .filter((element) => {
-              // React Flow's transformed coordinate plane is intentionally
-              // wider than its clipped viewport. Phase 7 keeps page bounds
-              // protected by .atlas-tree__stage; the plane itself is not
-              // document overflow.
-              if (element.matches(".react-flow__viewport, .react-flow__nodes")) {
-                return false;
-              }
               const style = globalThis.getComputedStyle(element);
               return (
                 element.clientWidth > 100 &&
                 style.display !== "none" &&
                 style.visibility !== "hidden" &&
+                style.textOverflow !== "ellipsis" &&
                 element.scrollWidth > element.clientWidth + 2
               );
             })
@@ -144,8 +150,8 @@ for (const viewport of VIEWPORTS) {
         ).not.toBeNull();
         expect(layout.firstHeadingY).toBeLessThan(viewport.width === 375 ? 480 : 400);
         if (route !== "/#/") {
-          expect(pageHeaderHeight, `${route} compact title strip`).not.toBeNull();
-          expect(pageHeaderHeight).toBeLessThanOrEqual(64);
+          expect(pageHeaderHeight, `${route} primary pagehead`).not.toBeNull();
+          expect(pageHeaderHeight).toBeLessThanOrEqual(viewport.width === 375 ? 300 : 220);
         }
         expect(
           layout.overflows,
@@ -196,5 +202,5 @@ test("record template leads with publisher text and omits generated guidance", a
   await expect(firstMainSection).toHaveAttribute("data-source-field", "description");
   await expect(firstMainSection.getByRole("heading", { name: "Control Statement" })).toBeVisible();
   await expect(page.locator(".record-guidance, .record-developer-details")).toHaveCount(0);
-  await expect(page.locator('[data-record-section="crosswalks"]')).toBeVisible();
+  await expect(page.locator('[data-record-section="related-records"]')).toBeVisible();
 });

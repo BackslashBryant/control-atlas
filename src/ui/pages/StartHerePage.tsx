@@ -103,7 +103,7 @@ export function StartHerePage(props: {
               <p className="notice-inline">{SITE_COPY.product.boundary}</p>
               <div className="start-here-followups">
                 <PlanStep bundle={bundle} catalogId={plan.thenReview.catalogId} onNavigate={onNavigate} role="Then review" />
-                <AppLink className="start-here-publication" onNavigate={onNavigate} patch={plan.action.patch as Partial<ViewState> | undefined} view={plan.action.view as ViewState["view"]}><span><small>Then act</small><strong>{plan.action.label}</strong><span>Open the next step for this task.</span></span><IconArrowRight aria-hidden="true" size={18} /></AppLink>
+                <AppLink className="start-here-publication" onNavigate={onNavigate} patch={plan.action.patch as Partial<ViewState> | undefined} view={plan.action.view as ViewState["view"]}><span><small>Then act</small><strong>{plan.action.view === "templates" ? "Choose a template" : plan.action.label}</strong><span>Open the next step for this task.</span></span><IconArrowRight aria-hidden="true" size={18} /></AppLink>
               </div>
               <div className="actions compare-step-actions">
                 <Button onClick={() => update({ context: "" })} type="button" variant="secondary"><IconArrowLeft aria-hidden="true" size={17} />Back to context</Button>

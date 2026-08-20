@@ -32,7 +32,7 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   await expect(page.locator(".home-product-identity")).toHaveText(
     "Understand what applies, what it means, and what to do next.",
   );
-  await expect(page.locator(".home-tag-galaxies .home-tag-link")).toHaveCount(16);
+  await expect(page.locator(".home-library-kpis .home-library-kpi")).toHaveCount(6);
   await expect(page.locator(".home-trust-boundary")).toHaveCount(0);
 
   await gotoApp(page, "/#/library?q=AC-2");
@@ -68,10 +68,11 @@ test("live smoke: Resources and Atlas workbench are first-class routes", async (
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
   const network = page.getByTestId("atlas-network");
+  await expect(network).toHaveClass(/atlas-network--semantic/);
   await expect(network).toHaveAttribute("data-projection-level", "landscape");
   await expect(network).toHaveAttribute("data-projection-node-count", /^(?:[89]|1\d|2[0-5])$/);
-  expect(await network.locator("canvas").count()).toBeGreaterThan(0);
-  await network.getByRole("button", { name: /Compliance/ }).click();
+  await expect(network.getByRole("button", { name: /Area ·/ })).toHaveCount(9);
+  await network.getByRole("button", { name: /^Compliance\s+Area ·/ }).click();
   await expect(network).toHaveAttribute("data-projection-level", "area");
 });
 

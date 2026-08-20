@@ -85,6 +85,6 @@ test("CA-ATL-003: no-match search stays local with announced recovery", () => {
     kind: "no-match",
     query: "zzzzqqqq",
     announcement:
-      "No Atlas record matches zzzzqqqq. Try Search or browse the Catalog.",
+      "No Atlas record matches zzzzqqqq. Try Search or browse the Library.",
   });
 });

@@ -18,7 +18,10 @@ test("focused Atlas opens straight to Connections, not a structural page", async
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("heading", { name: "AC-2 — Account Management", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Page context" })).toContainText(
+    "AC-2 — Account Management",
+  );
   await expect(page.getByRole("heading", { name: "Connections", level: 2 })).toBeVisible();
   await expect(page.getByRole("region", { name: "Relationship map" })).toBeVisible();
   const hierarchyToggle = page.getByRole("button", { name: "Hierarchy" });
@@ -53,8 +56,10 @@ test("Hierarchy panel shows real structural substance, not just breadcrumb lines
   await expect(panel.getByRole("link", { name: "AC-2.1", exact: true })).toBeVisible();
   await expect(panel.getByRole("button", { name: "See connections" })).toBeVisible();
   await expect(panel.getByRole("button", { name: "Open full record" })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "AC-2 — Account Management", level: 1 })).toBeVisible();
-  await expect(panel.getByRole("link", { name: "Review official source" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Page context" })).toContainText(
+    "AC-2 — Account Management",
+  );
+  await expect(panel.getByRole("link", { name: "View official source" })).toBeVisible();
 });
 
 test("focused Hierarchy badges the organizing hops, not just the direct record page", async ({ page }) => {
@@ -103,16 +108,16 @@ test("focused Hierarchy opens its publisher-declared parent without inventing an
     .getByRole("navigation", { name: "Where this sits" })
     .getByRole("link", { name: "Access Control" })
     .click();
-  await expect(
-    page.getByRole("heading", { name: "Access Control (AC) family", level: 1 }),
-  ).toBeVisible();
+  await expect(page.getByRole("region", { name: "Page context" })).toContainText(
+    "Access Control",
+  );
   await expect(page.locator("#atlas-hierarchy-panel")).toContainText("FAMILY-AC");
   // Hierarchy re-opens on the newly focused record — relationshipView=path
   // survives the navigation, same as any other Atlas link.
   await expect(
     page.getByRole("navigation", { name: "Where this sits" }),
   ).toContainText("SP 800-53 Rev. 5");
-  await expect(page).toHaveURL(/node=nist-800-53%3AFAMILY-AC/);
+  await expect(page).toHaveURL(/#\/atlas\/nist-800-53:FAMILY-AC\?relationshipView=path/);
   await expect(page).not.toHaveURL(/atlasBaseline=/);
 });
 
@@ -182,7 +187,7 @@ test("List uses the same published set and exposes traceable source references",
   const table = page.getByRole("table", { name: "Relationship table" });
   await expect(table).toBeVisible();
   await expect(table.locator("tbody tr").first()).toBeVisible();
-  await expect(table.getByText(/source reference/i).first()).toBeVisible();
+  await expect(table.getByText("Evidence", { exact: true }).first()).toBeVisible();
   await expect(table).not.toContainText("Expanded item");
   await expect(table).not.toContainText("nist-olir-");
 });
@@ -192,7 +197,7 @@ test("zero-published-edge records render an honest empty state instead of Connec
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("heading", { name: "No published connections to show." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "No connections found." })).toBeVisible();
   await expect(
     page.getByRole("region", { name: "Relationship map" }),
   ).toHaveCount(0);
@@ -204,7 +209,9 @@ test("a sparse STIG keeps structural position separate from its published connec
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole("heading", { name: /V-222387/, level: 1 })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Page context" })).toContainText(
+    "V-222387",
+  );
   await page.getByRole("button", { name: "Hierarchy" }).click();
   await expect(page.locator("#atlas-hierarchy-panel")).toContainText(
     /Control Atlas structure|Publisher hierarchy/,
@@ -212,7 +219,7 @@ test("a sparse STIG keeps structural position separate from its published connec
   await page.getByRole("button", { name: "View all", exact: true }).click();
   const table = page.getByRole("table", { name: "Relationship table" });
   await expect(table).toBeVisible();
-  await expect(table).toContainText(/implementation/i);
+  await expect(table.getByText("Correlation", { exact: true })).toBeVisible();
 });
 
 test("compact Connections shows a readable vertical neighborhood without page overflow", async ({ page }) => {

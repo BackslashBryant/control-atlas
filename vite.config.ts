@@ -8,7 +8,7 @@ import { resolve } from 'node:path';
 import { RUNTIME_CACHE_VERSION } from './src/shared/runtime-cache-version.mjs';
 import { HOME_CONTENT, HOME_DESTINATIONS } from './src/shared/home-content.mjs';
 import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from './src/shared/site-copy.mjs';
-import { HOME_TAG_GROUPS } from './src/ui/lib/homeTagConstellation';
+import { HOME_LIBRARY_DISCOVERY } from './src/ui/lib/homeTagConstellation';
 
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
 
@@ -59,12 +59,12 @@ function escapeHtml(value: string) {
 }
 
 function renderStaticHome() {
-  const tagGroups = HOME_TAG_GROUPS.map((group) => {
-    const tags = group.tags.map((tag) => {
-      const href = `#/library?tag=${encodeURIComponent(tag.id)}`;
-      return `<li><a class="home-tag-link" data-route="${href}" href="${href}"><span class="home-tag-link__label">${escapeHtml(tag.label)}</span></a></li>`;
-    }).join('');
-    return `<section aria-labelledby="home-tag-group-${escapeHtml(group.id)}" class="home-tag-galaxy" data-tag-dimension="${escapeHtml(group.id)}"><h3 id="home-tag-group-${escapeHtml(group.id)}">${escapeHtml(group.label)}</h3><ul>${tags}</ul></section>`;
+  const libraryDiscovery = HOME_LIBRARY_DISCOVERY.map((item) => {
+    const params = new URLSearchParams();
+    if (item.patch.kind) params.set('kind', item.patch.kind);
+    for (const tag of item.patch.tags || []) params.append('tag', tag);
+    const href = `#/library?${params.toString()}`;
+    return `<li><a class="home-library-kpi" data-route="${href}" href="${href}"><strong>${item.count.toLocaleString('en-US')}</strong><span><b>${escapeHtml(item.label)}</b><small>${escapeHtml(item.description)}</small></span><span aria-hidden="true">→</span></a></li>`;
   }).join('');
   const destinations = HOME_DESTINATIONS.map((destination) => `
     <a class="home-secondary-action" data-route="${destination.href}" href="${destination.href}">
@@ -103,9 +103,9 @@ function renderStaticHome() {
       </div>
     </div>
     <nav aria-label="Choose a Control Atlas destination" class="home-secondary-grid">${destinations}</nav>
-    <nav aria-labelledby="home-tag-heading" class="home-tag-constellation">
-      <div class="home-tag-constellation__heading"><div><h2 id="home-tag-heading">Browse by tag</h2><p>A small sample from the Library.</p></div><a class="home-tag-constellation__all" data-route="#/library" href="#/library">See all tags <span aria-hidden="true">→</span></a></div>
-      <div class="home-tag-galaxies">${tagGroups}</div>
+    <nav aria-labelledby="home-library-heading" class="home-library-discovery">
+      <div class="home-library-discovery__heading"><div><p class="eyebrow">EXPLORE THE LIBRARY</p><h2 id="home-library-heading">See what's inside Control Atlas.</h2></div><a class="home-library-discovery__all" data-route="#/library" href="#/library">Browse all tags <span aria-hidden="true">→</span></a></div>
+      <ul class="home-library-kpis">${libraryDiscovery}</ul>
     </nav>
   </section>`;
 }

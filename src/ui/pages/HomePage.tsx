@@ -9,7 +9,7 @@ import {
 
 import { HOME_CONTENT, HOME_DESTINATIONS } from "../../shared/home-content.mjs";
 import { AppLink } from "../components/AppLink";
-import { HOME_TAG_GROUPS } from "../lib/homeTagConstellation";
+import { HOME_LIBRARY_DISCOVERY } from "../lib/homeTagConstellation";
 import type { ViewState } from "../lib/viewState";
 
 type HomePageProps = {
@@ -74,38 +74,36 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
         })}
       </nav>
 
-      <nav aria-labelledby="home-tag-heading" className="home-tag-constellation">
-        <div className="home-tag-constellation__heading">
+      <nav aria-labelledby="home-library-heading" className="home-library-discovery">
+        <div className="home-library-discovery__heading">
           <div>
-            <h2 id="home-tag-heading">Browse by tag</h2>
-            <p>A small sample from the Library.</p>
+            <p className="eyebrow">EXPLORE THE LIBRARY</p>
+            <h2 id="home-library-heading">See what's inside Control Atlas.</h2>
           </div>
-          <AppLink className="home-tag-constellation__all" onNavigate={onNavigate} view="search">
-            See all tags
+          <AppLink className="home-library-discovery__all" onNavigate={onNavigate} view="search">
+            Browse all tags
             <IconArrowRight aria-hidden="true" size={16} stroke={2} />
           </AppLink>
         </div>
-        <div className="home-tag-galaxies">
-          {HOME_TAG_GROUPS.map((group) => (
-            <section aria-labelledby={`home-tag-group-${group.id}`} className="home-tag-galaxy" data-tag-dimension={group.id} key={group.id}>
-              <h3 id={`home-tag-group-${group.id}`}>{group.label}</h3>
-              <ul>
-                {group.tags.map((tag) => (
-                  <li key={tag.id}>
-                    <AppLink
-                      className="home-tag-link"
-                      onNavigate={onNavigate}
-                      patch={{ tags: [tag.id] }}
-                      view="search"
-                    >
-                      <span className="home-tag-link__label">{tag.label}</span>
-                    </AppLink>
-                  </li>
-                ))}
-              </ul>
-            </section>
+        <ul className="home-library-kpis">
+          {HOME_LIBRARY_DISCOVERY.map((item) => (
+            <li key={item.id}>
+              <AppLink
+                className="home-library-kpi"
+                onNavigate={onNavigate}
+                patch={item.patch}
+                view="search"
+              >
+                <strong>{item.count.toLocaleString("en-US")}</strong>
+                <span>
+                  <b>{item.label}</b>
+                  <small>{item.description}</small>
+                </span>
+                <IconArrowRight aria-hidden="true" size={16} stroke={2} />
+              </AppLink>
+            </li>
           ))}
-        </div>
+        </ul>
       </nav>
 
     </section>

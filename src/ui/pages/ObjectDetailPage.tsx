@@ -472,7 +472,7 @@ export function ObjectDetailPage(props: {
                 variant="secondary"
                 view="templates"
               >
-                Choose a document
+                Choose a template
               </AppLink>
               <Button
                 onClick={() => {

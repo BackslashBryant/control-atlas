@@ -70,6 +70,7 @@ test("desktop header exposes task destinations, Search, and reference overflow",
     "Library",
     "Compare",
     "Resources",
+    "Templates",
   ]);
   await expect(page.getByRole("button", { name: "Open search" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Open navigation menu" })).toHaveCount(0);
@@ -80,7 +81,6 @@ test("desktop header exposes task destinations, Search, and reference overflow",
   const overflow = page.getByRole("navigation", { name: "More pages" });
   await expect(overflow).toBeVisible();
   await expect(overflow.getByRole("link")).toHaveText([
-    "Documents",
     "Guides",
     "Sources",
     "About",
@@ -177,7 +177,7 @@ test("WS0 tablet and mobile use one navigation control with every destination", 
         "Library",
         "Compare",
         "Resources",
-        "Documents",
+        "Templates",
         "Guides",
         "Sources",
         "About",

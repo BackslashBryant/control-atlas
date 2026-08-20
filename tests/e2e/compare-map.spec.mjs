@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+
 import { expect, test } from "@playwright/test";
 import {
   attachPageDiagnostics,
@@ -121,14 +123,18 @@ test("Frameworks reveals connected targets and a two-column published result", a
   await expect(page.locator("#compare-results h2")).toContainText(
     "SP 800-53 Rev. 5 ↔ NIST CSF 2.0",
   );
-  await expect(page.locator(".compare-mapping-total")).toHaveText(
-    "746 published mappings",
+  await expect(page.locator(".compare-mapping-total")).toContainText(
+    "746 published mappings across",
   );
 
   const table = page.getByRole("table", { name: "Published crosswalk mappings" });
   await expect(table).toBeVisible();
   await expect(table.locator("thead th")).toHaveText(["From", "Maps to"]);
   await expect(table.locator("tbody tr").first().locator("td")).toHaveCount(2);
+  const allSourceRows = await table.locator("tbody tr").count();
+  expect(allSourceRows).toBeGreaterThan(25);
+  await expect(page.getByRole("navigation", { name: "Mapping result pages" })).toHaveCount(0);
+  await expect(page.locator("[data-continuous-results] [data-continuous-scroll]")).toBeVisible();
 
   const sourceEvidence = page.locator(".compare-crosswalk-source");
   await expect(sourceEvidence).toContainText("Crosswalk source");
@@ -152,6 +158,35 @@ test("Frameworks reveals connected targets and a two-column published result", a
   await expect(page.getByRole("button", { name: "Map", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "List", exact: true })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Open Atlas map" })).toHaveCount(0);
+
+  const firstSourceId = await table.locator("tbody tr").first().locator("td").first().locator("strong").innerText();
+  const resultSearch = page.getByLabel("Search results by ID or title");
+  await resultSearch.fill(firstSourceId.trim());
+  await expect(page.locator(".compare-mapping-total")).toContainText("of 746 published mappings match");
+  const searchedSourceRows = await table.locator("tbody tr").count();
+  expect(searchedSourceRows).toBeGreaterThan(0);
+  expect(searchedSourceRows).toBeLessThan(allSourceRows);
+
+  const csvDownloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "CSV", exact: true }).click();
+  const csvDownload = await csvDownloadPromise;
+  expect(csvDownload.suggestedFilename()).toBe("control-atlas-crosswalk.csv");
+  const csvPath = await csvDownload.path();
+  expect(csvPath).toBeTruthy();
+  const csv = await readFile(csvPath, "utf8");
+  expect(csv).toContain('"Source Publication","Source Version","Source ID","Source Title"');
+  expect(csv).toContain(firstSourceId.trim());
+
+  const xlsxDownloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Excel workbook" }).click();
+  const xlsxDownload = await xlsxDownloadPromise;
+  expect(xlsxDownload.suggestedFilename()).toBe("control-atlas-crosswalk.xlsx");
+  const xlsxPath = await xlsxDownload.path();
+  expect(xlsxPath).toBeTruthy();
+  const xlsx = await readFile(xlsxPath);
+  expect(xlsx.subarray(0, 2).toString()).toBe("PK");
+
+  await expect(page.getByRole("button", { name: "Copy link" })).toHaveCount(0);
 });
 
 test("a pair with multiple published sources defaults to all and exposes one result filter", async ({
@@ -207,8 +242,8 @@ test("Specific item reveals only targets with a real mapping for the exact item"
 
   await target.selectOption("nist-800-53");
   await page.getByRole("button", { name: "Show published mappings" }).click();
-  await expect(page.locator(".compare-mapping-total")).toHaveText(
-    "4 published mappings",
+  await expect(page.locator(".compare-mapping-total")).toContainText(
+    "4 published mappings across",
   );
   const table = page.getByRole("table", { name: "Published crosswalk mappings" });
   await expect(table).toBeVisible();

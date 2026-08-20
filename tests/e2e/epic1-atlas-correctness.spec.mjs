@@ -22,10 +22,9 @@ test("exact Atlas identifier opens its bounded semantic publisher context", asyn
 
   await expect(page).toHaveURL(/#\/atlas\/nist-800-53:AC-2/);
   await expect(page.getByRole("heading", { level: 1, name: "Atlas" })).toBeVisible();
-  const semanticAtlas = page.getByTestId("atlas-network");
-  await expect(semanticAtlas).toHaveAttribute("data-projection-level", "detail");
-  await expect(semanticAtlas).toHaveAttribute("data-selected-canonical", "nist-800-53:AC-2");
-  await expect(semanticAtlas).toContainText("Access Control");
+  await expect(page.getByTestId("atlas-network")).toHaveCount(0);
+  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Connections", level: 2 })).toBeVisible();
 });
 
 test("ambiguous Atlas text hands off to canonical Search", async ({ page }) => {
@@ -49,13 +48,11 @@ test("no-match Atlas search stays local with announced recovery actions", async 
   await page.getByRole("searchbox", { name: "Jump to a record" }).press("Enter");
 
   await expect(page).toHaveURL(/\/atlas/);
-  await expect(
-    page.getByText(`No Atlas record matches ${query}.`, { exact: true }),
-  ).toBeVisible();
+  await expect(page.locator(".atlas-search-recovery")).toContainText(`No record matches ${query}`);
   await expect(page.getByRole("link", { name: "Search all records" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Browse the Catalog" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Browse the Library" })).toBeVisible();
   await expect(page.getByRole("status")).toContainText(
-    `No Atlas record matches ${query}. Try Search or browse the Catalog.`,
+    `No Atlas record matches ${query}. Try Search or browse the Library.`,
   );
 });
 

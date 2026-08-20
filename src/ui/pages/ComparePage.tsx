@@ -1,11 +1,20 @@
+import * as Accordion from "@radix-ui/react-accordion";
 import { useEffect, useId, useMemo, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { aggregateRelationshipRows } from "../../app/runtime.mjs";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
-import { CompareResultsPanel } from "../components/CompareResultsPanel";
 import { Button } from "../components/lsm";
-import { parseCatalogItemIds } from "../lib/compareHelpers";
+import { RecordLink } from "../components/RecordLink";
+import { parseCatalogItemIds, SourceRefList } from "../lib/compareHelpers";
+import {
+  buildCompareExportData,
+  COMPARE_EXPORT_MIME_TYPES,
+  compareExportToCsv,
+  compareExportToXlsx,
+  countCompareMappings,
+  filterCompareRows,
+} from "../lib/compareExport";
 import {
   activateCompareMode,
   getCompareCurrentStep,
@@ -28,6 +37,22 @@ type SelectOption = { value: string; label: string };
 
 function downloadTextFile(filename: string, content: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+function downloadBinaryFile(filename: string, content: Uint8Array, mimeType: string) {
+  const bytes = content.buffer.slice(
+    content.byteOffset,
+    content.byteOffset + content.byteLength,
+  ) as ArrayBuffer;
+  const blob = new Blob([bytes], { type: mimeType });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -184,7 +209,7 @@ export function ComparePage(props: {
   onOpenNode: (nodeId: string) => void;
 }) {
   const { bundle, state, onNavigate, onOpenNode } = props;
-  const [relationshipPage, setRelationshipPage] = useState(1);
+  const [resultQuery, setResultQuery] = useState("");
   const catalogs = bundle.runtime.getCatalogs();
   const mode: CompareModeId =
     state.intent === "item-mapping" ? "item-mapping" : "frameworks";
@@ -353,18 +378,15 @@ export function ComparePage(props: {
     () => aggregateRelationshipRows(relationshipRows?.rows || []),
     [relationshipRows],
   );
-  const relationshipPageSize = 25;
-  const relationshipPageCount = Math.max(
-    1,
-    Math.ceil(aggregatedRelationshipRows.length / relationshipPageSize),
+  const visibleAggregatedRows = useMemo(
+    () => filterCompareRows(aggregatedRelationshipRows, resultQuery),
+    [aggregatedRelationshipRows, resultQuery],
   );
-  const visibleAggregatedRows = aggregatedRelationshipRows.slice(
-    (relationshipPage - 1) * relationshipPageSize,
-    relationshipPage * relationshipPageSize,
-  );
+  const filteredMappingCount = countCompareMappings(aggregatedRelationshipRows);
+  const visibleMappingCount = countCompareMappings(visibleAggregatedRows);
 
   useEffect(() => {
-    setRelationshipPage(1);
+    setResultQuery("");
   }, [
     mode,
     state.items,
@@ -402,6 +424,8 @@ export function ComparePage(props: {
   const targetLabel = targetIsValid
     ? catalogName(catalogs, state.target)
     : "";
+  const sourceCatalog = catalogs.find((catalog: any) => catalog.id === state.source);
+  const targetCatalog = catalogs.find((catalog: any) => catalog.id === state.target);
 
   const patchCompare = (patch: Partial<CompareState>) =>
     onNavigate("matrix", {
@@ -437,21 +461,36 @@ export function ComparePage(props: {
     });
   };
 
-  const exportRows = (format: "csv" | "markdown" | "json") => {
-    if (!relationshipRows) return;
-    const content = bundle.runtime.exportRelationshipRows(
-      aggregatedRelationshipRows.length
-        ? aggregatedRelationshipRows
-        : relationshipRows.rows,
-      format,
-    );
-    const extension = format === "markdown" ? "md" : format;
-    downloadTextFile(
-      `control-atlas-compare.${extension}`,
-      content,
-      format === "json" ? "application/json" : "text/plain",
+  const exportRows = async (format: "csv" | "xlsx") => {
+    if (!sourceCatalog || !targetCatalog || !visibleAggregatedRows.length) return;
+    const exportData = buildCompareExportData({
+      buildLabel:
+        import.meta.env.VITE_CONTROL_ATLAS_RELEASE_DATE ||
+        "local development build",
+      generatedAt: new Date().toISOString(),
+      resolveSource: (sourceId) => bundle.runtime.getSource(sourceId),
+      rows: visibleAggregatedRows,
+      sourceCatalog,
+      targetCatalog,
+    });
+    if (format === "csv") {
+      downloadTextFile(
+        "control-atlas-crosswalk.csv",
+        compareExportToCsv(exportData),
+        COMPARE_EXPORT_MIME_TYPES.csv,
+      );
+      return;
+    }
+    downloadBinaryFile(
+      "control-atlas-crosswalk.xlsx",
+      await compareExportToXlsx(exportData),
+      COMPARE_EXPORT_MIME_TYPES.xlsx,
     );
   };
+
+  const singleMappingSource = mappingSourceOptions.length === 1
+    ? mappingSourceOptions[0]
+    : null;
 
   return (
     <MissionPage
@@ -578,41 +617,211 @@ export function ComparePage(props: {
           ) : null}
 
           {showResults ? (
-            <CompareResultsPanel
-              currentPage={relationshipPage}
-              mappingCount={relationshipRows?.rows.length || 0}
-              mappingSourceOptions={mappingSourceOptions}
-              onBack={() => patchCompare({ compareRun: "" })}
-              onExport={exportRows}
-              onMappingSourceChange={(mappingSource) =>
-                patchCompare({ mappingSource })
-              }
-              onOpenNode={onOpenNode}
-              onPageChange={setRelationshipPage}
-              onRelationshipTypeChange={(relationshipType) =>
-                patchCompare({ relationshipType })
-              }
-              pageCount={relationshipPageCount}
-              pageSize={relationshipPageSize}
-              relationshipType={state.relationshipType}
-              relationshipTypeOptions={relationshipTypeOptions}
-              rows={visibleAggregatedRows}
-              selectedMappingSource={
-                mappingResolution.status === "filtered"
-                  ? state.mappingSource
-                  : ""
-              }
-              sourceLabel={sourceLabel}
-              targetLabel={targetLabel}
-              totalSourceRows={aggregatedRelationshipRows.length}
-            />
+            <section
+              className="compare-results-panel"
+              data-control-results
+              data-continuous-results
+              id="compare-results"
+            >
+              <header className="compare-results-head">
+                <div>
+                  <span className="label">03 / RESULTS</span>
+                  <h2 id="compare-active-step">
+                    {sourceLabel} <span aria-hidden="true">↔</span>{" "}
+                    {targetLabel}
+                  </h2>
+                </div>
+                <Button
+                  onClick={() => patchCompare({ compareRun: "" })}
+                  type="button"
+                  variant="secondary"
+                >
+                  Change target
+                </Button>
+              </header>
+
+              {singleMappingSource ? (
+                <p className="compare-crosswalk-source">
+                  <span>Crosswalk source</span>
+                  <strong>{singleMappingSource.label}</strong>
+                </p>
+              ) : mappingSourceOptions.length > 1 ? (
+                <div className="compare-crosswalk-filter">
+                  <SelectField
+                    emptyLabel="All published sources"
+                    label="Crosswalk source"
+                    onChange={(mappingSource) => patchCompare({ mappingSource })}
+                    options={mappingSourceOptions}
+                    value={
+                      mappingResolution.status === "filtered"
+                        ? state.mappingSource
+                        : ""
+                    }
+                  />
+                </div>
+              ) : null}
+
+              <div className="compare-refine-fields compare-results-toolbar">
+                <Field label="Search results by ID or title">
+                  <input
+                    onChange={(event) => setResultQuery(event.target.value)}
+                    placeholder="Search source or target IDs and titles"
+                    type="search"
+                    value={resultQuery}
+                  />
+                </Field>
+                <div className="compare-export-actions">
+                  <span className="field-label">Export crosswalk</span>
+                  <div className="actions">
+                    <Button
+                      disabled={!visibleMappingCount}
+                      onClick={() => exportRows("csv")}
+                      type="button"
+                      variant="secondary"
+                    >
+                      CSV
+                    </Button>
+                    <Button
+                      disabled={!visibleMappingCount}
+                      onClick={() => exportRows("xlsx")}
+                      type="button"
+                      variant="primary"
+                    >
+                      Excel workbook
+                    </Button>
+                  </div>
+                  <small>Includes every row matching the current filters and search.</small>
+                </div>
+              </div>
+
+              <p aria-live="polite" className="compare-mapping-total" role="status">
+                {resultQuery.trim()
+                  ? `${visibleMappingCount.toLocaleString()} of ${filteredMappingCount.toLocaleString()} published mappings match`
+                  : `${visibleMappingCount.toLocaleString()} published mapping${visibleMappingCount === 1 ? "" : "s"} across ${visibleAggregatedRows.length.toLocaleString()} source record${visibleAggregatedRows.length === 1 ? "" : "s"}`}
+              </p>
+
+              {visibleAggregatedRows.length ? (
+                <div className="compare-table-scroll" data-continuous-scroll>
+                  <table
+                    aria-label="Published crosswalk mappings"
+                    className="detail-table compare-results-table"
+                  >
+                    <thead>
+                      <tr>
+                        <th scope="col">From</th>
+                        <th scope="col">Maps to</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {visibleAggregatedRows.map((row: any) => (
+                        <tr key={row.from_id || row.from_item_id}>
+                          <td data-label="From">
+                            <RecordLink nodeId={row.from_id} onOpenNode={onOpenNode}>
+                              <strong>{row.from_item_id}</strong>
+                            </RecordLink>
+                            <span className="compare-record-title">{row.from_title}</span>
+                          </td>
+                          <td data-label="Maps to">
+                            <ul className="target-mapping-list">
+                              {row.targets.map((target: any) => (
+                                <li
+                                  className="target-mapping-item"
+                                  key={target.edge_id || `${row.from_id}-${target.to_id}`}
+                                >
+                                  <div>
+                                    <RecordLink nodeId={target.to_id} onOpenNode={onOpenNode}>
+                                      <strong>{target.to_item_id}</strong>
+                                    </RecordLink>
+                                    <span className="target-item-title">{target.to_title}</span>
+                                  </div>
+                                  {target.relationship_type && target.relationship_type !== "maps_to" ? (
+                                    <span className="target-mapping-relationship">
+                                      {displayNameFor("relationship_type", target.relationship_type)}
+                                    </span>
+                                  ) : null}
+                                </li>
+                              ))}
+                            </ul>
+                            <details className="mapping-row-details">
+                              <summary>
+                                Evidence for {row.targets.length.toLocaleString()} mapping
+                                {row.targets.length === 1 ? "" : "s"}
+                              </summary>
+                              <div className="mapping-evidence-list">
+                                {row.targets.map((target: any) => (
+                                  <section
+                                    aria-label={`Evidence for ${target.to_item_id}`}
+                                    key={`evidence-${target.edge_id || target.to_id}`}
+                                  >
+                                    <strong>{target.to_item_id}</strong>
+                                    <SourceRefList refs={target.source_refs} />
+                                  </section>
+                                ))}
+                              </div>
+                            </details>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <section className="empty-state compare-results-empty">
+                  <h3>
+                    {resultQuery.trim()
+                      ? "No published mappings match this search."
+                      : "No published mappings match this results filter."}
+                  </h3>
+                  <p>
+                    {resultQuery.trim()
+                      ? "Search another identifier or title to return to the current published crosswalk."
+                      : "Clear the connection filter to return to every published mapping."}
+                  </p>
+                  <Button
+                    onClick={() =>
+                      resultQuery.trim()
+                        ? setResultQuery("")
+                        : patchCompare({ relationshipType: "" })
+                    }
+                    type="button"
+                    variant="secondary"
+                  >
+                    {resultQuery.trim() ? "Clear search" : "Clear connection filter"}
+                  </Button>
+                </section>
+              )}
+
+              <p className="compare-decision-boundary" role="note">
+                A published crosswalk shows a cited relationship; it does not by itself establish equivalence or compliance.
+              </p>
+
+              <Accordion.Root className="accordion-root compare-refine" collapsible type="single">
+                <Accordion.Item className="disclosure-item" value="refine-results">
+                  <Accordion.Header className="disclosure-header">
+                    <Accordion.Trigger className="disclosure-trigger">
+                      <span aria-hidden="true" className="disclosure-chevron">▾</span>
+                      <span>Refine results</span>
+                    </Accordion.Trigger>
+                  </Accordion.Header>
+                  <Accordion.Content className="disclosure-content">
+                    <SelectField
+                      emptyLabel="All connection types"
+                      label="Connection type"
+                      onChange={(relationshipType) => patchCompare({ relationshipType })}
+                      options={relationshipTypeOptions}
+                      value={state.relationshipType}
+                    />
+                  </Accordion.Content>
+                </Accordion.Item>
+              </Accordion.Root>
+            </section>
           ) : null}
         </section>
 
         <CompareScopeRail
           connectedCount={targetOptions.length}
-          mappingCount={showResults ? relationshipRows?.rows.length || 0 : 0}
-          mappingSourceCount={showResults ? mappingSourceOptions.length : 0}
+          mappingCount={0}
+          mappingSourceCount={0}
           mode={mode}
           sourceLabel={sourceLabel}
           targetLabel={targetLabel}

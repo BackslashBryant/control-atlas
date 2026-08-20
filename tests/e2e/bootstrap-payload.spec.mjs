@@ -38,7 +38,7 @@ test("home bootstrap avoids graph JSON artifacts", async ({ page }) => {
   // route or graph payload until the user leaves the static front door.
   expect(scripts).toHaveLength(2);
 
-  await page.getByRole("link", { name: "Browse official publications" }).click();
+  await page.getByRole("link", { name: "Search the Library" }).click();
   await waitForAppReady(page);
   await expect(page).toHaveURL(/#\/library/);
   expect(scripts.length).toBeGreaterThan(1);
@@ -79,7 +79,7 @@ test("explore bootstrap avoids graph JSON until record open", async ({
   expect(graphArtifactUrls(requested)).toEqual([]);
 });
 
-test("expanding an Atlas area uses the spine without monolithic graph JSON", async ({
+test("expanding an Atlas area uses the semantic network without monolithic graph JSON", async ({
   page,
 }) => {
   const requested = [];
@@ -88,18 +88,19 @@ test("expanding an Atlas area uses the spine without monolithic graph JSON", asy
     if (url.includes("/data/generated/")) requested.push(url);
   });
 
-  await page.goto("/#/explore");
+  await page.goto("/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(page.locator(".atlas-tree")).toBeVisible();
+  const network = page.getByTestId("atlas-network");
+  await expect(network).toBeVisible();
   expect(
-    requested.some((url) => url.includes("atlas-spine.json")),
+    requested.some((url) => url.includes("atlas-network.json")),
   ).toBeTruthy();
   expect(graphArtifactUrls(requested)).toEqual([]);
 
-  await page.locator('.react-flow__node:has([data-atlas-node-id="atlas:LIMB-COMPLIANCE"])').dispatchEvent("click");
-  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
-  await expect(page.locator(".atlas-tree")).toHaveAttribute("data-tree-node-count", "21");
+  await network.getByRole("button", { name: /Compliance Area/ }).click();
+  await expect(page).toHaveURL(/atlasLimb=atlas(?::|%3A)LIMB-COMPLIANCE/);
+  await expect(page.getByTestId("atlas-network")).toHaveAttribute("data-projection-level", "area");
   expect(graphArtifactUrls(requested)).toEqual([]);
 });
 
@@ -117,7 +118,8 @@ test("focused Atlas loads one neighborhood without monolithic graph JSON", async
   );
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(page.locator(".atlas-tree")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Relationship map" })).toBeVisible();
 
   expect(graphArtifactUrls(requested)).toEqual([]);
   expect(
@@ -160,7 +162,7 @@ test("focused Atlas loading state avoids a content-agnostic mobile minimum heigh
   );
 
   releaseNeighborhood();
-  await expect(page.locator(".atlas-tree")).toBeVisible({
+  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toBeVisible({
     timeout: 30000,
   });
   const loadedHeight = await page.locator("#app").evaluate(

@@ -58,7 +58,7 @@ test('B5: the hero has no reserved-but-empty second column', async ({ page }) =>
   expect(await hero.evaluate((el) => el.children.length)).toBe(1);
 });
 
-test('B6: the Template B destination grid has three uniform cards', async ({ page }) => {
+test('B6: the Template B destination grid has four uniform cards', async ({ page }) => {
   await page.goto('/#/');
   const grid = page.locator('.home-secondary-grid');
   await expect(grid).toBeVisible();
@@ -74,8 +74,8 @@ test('B6: the Template B destination grid has three uniform cards', async ({ pag
     };
   });
   expect(info.display).toBe('grid');
-  expect(info.columns).toBe(3);
-  expect(info.count).toBe(3);
+  expect(info.columns).toBe(4);
+  expect(info.count).toBe(4);
   expect(Math.abs(info.last - info.first)).toBeLessThanOrEqual(2);
 });
 
@@ -141,16 +141,14 @@ test('B14: every Library select exposes a non-empty accessible name', async ({ p
   expect(unnamed).toBe(0);
 });
 
-test('B16: the Compare intent screen offers a real link', async ({ page }) => {
+test('B16: Compare exposes only the two supported modes', async ({ page }) => {
   await page.goto('/#/compare');
-  await expect(page.locator('.compare-mode-tabs').first()).toBeVisible({ timeout: 15000 });
-  await expect(page.getByRole('tablist', { name: 'Comparison modes' })).toHaveCount(0);
-  const choices = page.locator('.compare-mode-tabs').getByRole('button');
-  await expect(choices).toHaveCount(5);
-  for (const choice of await choices.all()) {
-    await expect(choice).not.toHaveAttribute('aria-selected');
-  }
-  expect(await page.locator('main a[href]').count()).toBeGreaterThan(0);
+  const modes = page.getByRole('tablist', { name: 'Comparison mode' });
+  await expect(modes).toBeVisible({ timeout: 15000 });
+  const choices = modes.getByRole('tab');
+  await expect(choices).toHaveCount(2);
+  await expect(choices).toHaveText(['Frameworks', 'Specific item']);
+  await expect(choices.first()).toHaveAttribute('aria-selected', 'true');
 });
 
 test('route semantic polish holds at all required viewport widths', async ({ page }) => {
@@ -166,15 +164,14 @@ test('route semantic polish holds at all required viewport widths', async ({ pag
     await page.setViewportSize(viewport);
 
     await page.goto('/#/compare');
-    const choices = page.locator('.compare-mode-tabs').getByRole('button');
-    await expect(choices).toHaveCount(5);
-    await expect(page.getByRole('tablist', { name: 'Comparison modes' })).toHaveCount(0);
+    const choices = page.getByRole('tablist', { name: 'Comparison mode' }).getByRole('tab');
+    await expect(choices).toHaveCount(2);
     expect(await choices.first().evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
 
     await page.goto('/#/about');
-    await expect(page.locator('main article[aria-labelledby]')).toHaveCount(7);
-    await expect(page.locator('main h2')).toHaveCount(7);
+    await expect(page.locator('main article.learn-article')).toHaveCount(1);
+    await expect(page.locator('main article.learn-article h2')).toHaveCount(5);
     await expect(page.locator('footer')).toContainText('Product release');
     await expect(page.locator('footer')).toContainText('Source data built');
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
@@ -193,7 +190,7 @@ test('route semantic polish holds at all required viewport widths', async ({ pag
       }
     }
     if (width >= 1024) {
-      const paragraph = page.locator('.about-card-grid .summary-card p').first();
+      const paragraph = page.locator('.about-layout .learn-article p').first();
       expect(await paragraph.evaluate((element) => element.getBoundingClientRect().width)).toBeLessThan(650);
     }
   }

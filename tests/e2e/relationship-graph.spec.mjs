@@ -15,21 +15,26 @@ test("Atlas standalone route opens the focused canvas with Connections below", a
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("Access Control");
   await expect(page.getByRole("heading", { name: "Connections", level: 2 })).toBeVisible();
-  await page.getByRole("button", { name: /View all \d+ connections/ }).click();
+  const focused = page.getByRole("region", { name: "Focused Atlas record" });
+  await expect(focused).toBeVisible();
+  await expect(focused).toContainText("AC-2");
+  await expect(focused).toContainText("Account Management");
+  await page.getByRole("button", { name: "View all", exact: true }).click();
   await expect(page.getByRole("table", { name: "Relationship table" })).toBeVisible();
 });
 
-test("Atlas default route is the semantic authority hierarchy, not an empty relationship graph", async ({ page }) => {
+test("Atlas default route is the semantic Atlas network, not an empty focused-record graph", async ({ page }) => {
   await page.goto("/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  await expect(page.getByRole("application", { name: "Interactive Atlas map hierarchy" })).toBeVisible();
-  await expect(page.locator(".atlas-tree__areas [data-area-id]")).toHaveCount(9);
-  await expect(page.locator(".react-flow")).toHaveCount(1);
+  const network = page.getByTestId("atlas-network");
+  await expect(network).toBeVisible();
+  await expect(network).toHaveAttribute("data-projection-level", "landscape");
+  await expect(network).toHaveAttribute("data-projection-node-count", "13");
+  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toHaveCount(0);
   await expect(page.locator(".ca-flow-wrap")).toHaveCount(0);
 });
 
@@ -41,7 +46,7 @@ test("record detail keeps published connections in an accessible list", async ({
   await dismissOnboarding(page);
 
   await expect(page.locator('[data-template="E"]')).toBeVisible();
-  await expect(page.locator('[data-record-section="crosswalks"] ul').first()).toBeVisible();
+  await expect(page.locator('[data-record-section="related-records"] ul').first()).toBeVisible();
 });
 
 test("record detail leaves the shared relationship graph in Atlas", async ({ page }) => {
@@ -62,5 +67,5 @@ test("record detail opens the same record in the new Atlas", async ({ page }) =>
   await page.getByRole("link", { name: "See connections", exact: true }).click();
   await expect(page).toHaveURL(/#\/atlas/);
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Atlas breadcrumb" })).toContainText("Access Control");
+  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toContainText("Account Management");
 });

@@ -73,7 +73,7 @@ export function RelationshipGraphTable(props: {
             <th scope="col">Connected item</th>
             <th scope="col">Connection</th>
             <th scope="col">Class and direction</th>
-            <th scope="col">Source basis</th>
+            <th scope="col">Evidence</th>
             <th scope="col">Trust level</th>
             <th scope="col">Relationship explanation</th>
           </tr>
@@ -114,7 +114,7 @@ export function RelationshipGraphTable(props: {
                     ? "To selected record"
                     : "Connected records"}
               </td>
-              <td data-label="Source basis">
+              <td data-label="Evidence">
                 {conciseTrust ? (
                   <span
                     className={`badge tone-${edge.publication_status === "candidate" ? "warning" : "success"}`}

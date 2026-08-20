@@ -76,7 +76,7 @@ test("Resources dataset failure is isolated from the rest of the product", async
 
   await gotoApp(page, "/#/resources");
   await expect(page.getByRole("heading", { name: "Resources", level: 1 })).toBeVisible({ timeout: 15000 });
-  await expect(page.getByRole("heading", { name: "The resource directory did not load." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Resources did not load." })).toBeVisible();
   await page.getByRole("navigation", { name: "Primary navigation" })
     .getByRole("link", { name: "Library", exact: true })
     .click();
@@ -163,7 +163,7 @@ test("heavy routes retain destination identity after scoped loading", async ({ p
   ).toBeVisible({ timeout: 15000 });
   await expect(
     page.getByText(
-      "Pick a task to see its public references and starter documents.",
+      "Pick a task to see its public references and templates.",
       { exact: false },
     ),
   ).toBeVisible();

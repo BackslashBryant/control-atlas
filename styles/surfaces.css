@@ -2417,7 +2417,7 @@ li {
   padding: 0;
   border: 0;
   background: none;
-  color: var(--ca-secondary);
+  color: var(--ca-editorial-text);
   font: inherit;
   cursor: pointer;
 }
@@ -5479,7 +5479,7 @@ a:focus-visible {
   border-color: transparent;
   border-bottom: 2px solid var(--ca-secondary);
   border-radius: 0;
-  background: color-mix(in srgb, var(--ca-accent) 22%, transparent);
+  background: transparent;
   font-weight: 700;
 }
 
@@ -6729,42 +6729,36 @@ button.atlas-leverage-row:hover {
   box-sizing: border-box;
 }
 
-.home-tag-constellation {
+.home-library-discovery {
   display: grid;
   gap: var(--ca-space-4);
   padding-block: var(--ca-space-3);
 }
 
-.home-tag-constellation__heading {
+.home-library-discovery__heading {
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: var(--ca-space-4);
 }
 
-.home-tag-constellation__heading > div {
+.home-library-discovery__heading > div {
   display: grid;
   gap: 2px;
 }
 
-.home-tag-constellation h2,
-.home-tag-constellation p,
-.home-tag-constellation h3 {
+.home-library-discovery h2,
+.home-library-discovery p {
   margin: 0;
 }
 
-.home-tag-constellation h2 {
+.home-library-discovery h2 {
   color: var(--ca-text);
   font-family: var(--ca-font-display);
   font-size: var(--ca-text-lg);
 }
 
-.home-tag-constellation p {
-  color: var(--ca-text-muted);
-  font-size: var(--ca-text-xs);
-}
-
-.home-tag-constellation__all {
+.home-library-discovery__all {
   display: inline-flex;
   align-items: center;
   gap: var(--ca-space-2);
@@ -6775,129 +6769,100 @@ button.atlas-leverage-row:hover {
   text-decoration: none;
 }
 
-.home-tag-constellation__all:hover,
-.home-tag-constellation__all:focus-visible {
+.home-library-discovery__all:hover,
+.home-library-discovery__all:focus-visible {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-.home-tag-galaxies {
+.home-library-kpis {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--ca-space-3);
-}
-
-.home-tag-galaxy {
-  --tag-galaxy-color: var(--ca-primary);
-  position: relative;
-  isolation: isolate;
-  display: grid;
-  align-content: start;
-  gap: var(--ca-space-3);
-  min-width: 0;
-  min-height: 10rem;
-  padding: var(--ca-space-4);
-  overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--tag-galaxy-color) 42%, var(--ca-border));
-  border-radius: var(--ca-radius-md);
-  background: color-mix(in srgb, var(--tag-galaxy-color) 5%, var(--ca-surface-raised));
-}
-
-.home-tag-galaxy::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: auto -2.5rem -3.5rem auto;
-  width: 9rem;
-  height: 9rem;
-  border: 1px solid color-mix(in srgb, var(--tag-galaxy-color) 22%, transparent);
-  border-radius: 999px;
-  box-shadow: 0 0 3rem color-mix(in srgb, var(--tag-galaxy-color) 10%, transparent);
-}
-
-.home-tag-galaxy[data-tag-dimension="asset_class"] { --tag-galaxy-color: var(--ca-area-implementation); }
-.home-tag-galaxy[data-tag-dimension="environment"] { --tag-galaxy-color: var(--ca-area-architecture); }
-.home-tag-galaxy[data-tag-dimension="technology"] { --tag-galaxy-color: var(--ca-area-assessment); }
-.home-tag-galaxy[data-tag-dimension="vendor_brand"] { --tag-galaxy-color: var(--ca-area-governance); }
-.home-tag-galaxy[data-tag-dimension="product"] { --tag-galaxy-color: var(--ca-area-compliance); }
-.home-tag-galaxy[data-tag-dimension="domain"] { --tag-galaxy-color: var(--ca-area-threats-defense); }
-
-.home-tag-galaxy h3 {
-  color: var(--ca-text-muted);
-  font: 700 var(--ca-text-xs) / 1.3 var(--ca-font-mono);
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-
-.home-tag-galaxy ul {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  align-content: center;
-  gap: var(--ca-space-1) var(--ca-space-2);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.home-tag-galaxy li {
+.home-library-kpis li {
   min-width: 0;
-  max-width: 100%;
 }
 
-.home-tag-link {
+.home-entry .home-library-kpis .home-library-kpi {
   position: relative;
   isolation: isolate;
-  display: inline-flex;
-  min-width: var(--ca-touch-target);
-  max-width: 100%;
-  align-items: baseline;
-  justify-content: center;
-  gap: .45em;
-  min-height: var(--ca-touch-target);
-  padding: .38em .5em;
-  border-radius: var(--ca-radius-sm);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  gap: var(--ca-space-2) var(--ca-space-3);
+  min-width: 0;
+  height: 100%;
+  min-height: 12rem;
+  padding: var(--ca-space-5);
+  overflow: hidden;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--ca-radius-md);
+  background: var(--ca-surface-raised);
   color: var(--ca-text);
-  font-family: var(--ca-font-mono);
-  font-size: var(--ca-text-sm);
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -.018em;
   text-decoration: none;
-  transition: color 120ms ease, transform 120ms ease;
+  transition: border-color 140ms ease, color 140ms ease, transform 140ms ease;
 }
 
-.home-tag-link::before {
+.home-library-kpi::after {
   content: "";
   position: absolute;
-  inset: 4px;
   z-index: -1;
-  border-radius: var(--ca-radius-sm);
-  background: color-mix(in srgb, var(--tag-galaxy-color) 12%, transparent);
-  opacity: 0;
-  transform: scale(.94);
-  transition: opacity 120ms ease, transform 120ms ease;
+  inset: auto var(--ca-space-3) var(--ca-space-3) auto;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 1px solid color-mix(in srgb, var(--ca-border-strong) 24%, transparent);
+  border-radius: 999px;
+  box-shadow:
+    0 0 0 .75rem color-mix(in srgb, var(--ca-border-strong) 7%, transparent),
+    0 0 0 1.5rem color-mix(in srgb, var(--ca-border-strong) 4%, transparent);
 }
 
-.home-tag-link__label {
-  overflow-wrap: anywhere;
+.home-library-kpi > strong {
+  grid-column: 1 / -1;
+  color: var(--ca-text);
+  font: 700 clamp(2.5rem, 4vw, 4.25rem) / .95 var(--ca-font-display);
+  font-variant-numeric: tabular-nums;
 }
 
-.home-tag-link:hover,
-.home-tag-link:focus-visible {
+.home-library-kpi > span {
+  display: grid;
+  gap: var(--ca-space-1);
+  align-self: end;
+}
+
+.home-library-kpi b {
+  color: var(--ca-text);
+  font: 700 var(--ca-text-xs) / 1.3 var(--ca-font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.home-library-kpi small {
+  max-width: 34ch;
+  color: var(--ca-text-muted);
+  font: 400 var(--ca-text-sm) / 1.45 var(--ca-font-sans);
+}
+
+.home-library-kpi > svg {
+  align-self: end;
+  color: var(--ca-link);
+}
+
+.home-entry .home-library-kpis .home-library-kpi:hover,
+.home-entry .home-library-kpis .home-library-kpi:focus-visible {
+  border-color: var(--ca-secondary);
   color: var(--ca-editorial-text);
-  transform: translateY(-1px);
-}
-
-.home-tag-link:hover::before,
-.home-tag-link:focus-visible::before {
-  opacity: 1;
-  transform: scale(1);
+  transform: translateY(-2px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-tag-link,
-  .home-tag-link::before {
+  .home-entry .home-library-kpis .home-library-kpi {
     transition: none;
   }
 }
@@ -6907,26 +6872,25 @@ button.atlas-leverage-row:hover {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 
-  .home-tag-galaxies {
+  .home-library-kpis {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 639px) {
-  .home-tag-constellation__heading {
+  .home-library-discovery__heading {
     display: grid;
     align-items: start;
     gap: var(--ca-space-2);
   }
 
-  .home-tag-galaxies {
+  .home-library-kpis {
     grid-template-columns: 1fr;
   }
 
-  .home-tag-galaxy {
-    min-height: 0;
+  .home-entry .home-library-kpis .home-library-kpi {
+    min-height: 10.5rem;
   }
-
 }
 
 .home-secondary-action small {
@@ -7957,6 +7921,17 @@ button.atlas-leverage-row:hover {
   align-items: end;
 }
 
+.compare-results-toolbar {
+  margin: var(--ca-space-5) 0 var(--ca-space-3);
+  padding-block: var(--ca-space-3);
+  border-block: 1px solid var(--ca-border-subtle);
+}
+
+.compare-results-toolbar input {
+  width: 100%;
+  min-height: 44px;
+}
+
 .compare-export-actions {
   display: grid;
   gap: 8px;
@@ -7964,6 +7939,28 @@ button.atlas-leverage-row:hover {
 
 .compare-export-actions .actions {
   margin: 0;
+}
+
+.compare-export-actions small {
+  max-width: 36ch;
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-xs);
+}
+
+@media (max-width: 767px) {
+  .compare-results-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .compare-results-toolbar .compare-export-actions .actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .compare-results-toolbar .compare-export-actions button {
+    width: 100%;
+  }
 }
 
 @media (max-width: 900px) {

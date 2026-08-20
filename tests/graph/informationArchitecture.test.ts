@@ -14,7 +14,7 @@ import {
   UTILITY_NAV_ITEMS,
 } from "../../src/ui/lib/navigation";
 
-test("primary navigation exposes the task destinations while Guides remains in overflow", () => {
+test("primary navigation exposes Templates while reference pages remain in overflow", () => {
   assert.deepEqual(
     PRIMARY_NAV_ITEMS.map(({ label, path }) => [label, path]),
     [
@@ -23,12 +23,12 @@ test("primary navigation exposes the task destinations while Guides remains in o
       ["Library", "/library"],
       ["Compare", "/compare"],
       ["Resources", "/resources"],
+      ["Templates", "/build"],
     ],
   );
   assert.deepEqual(
     OVERFLOW_NAV_ITEMS.map(({ label, path }) => [label, path]),
     [
-      ["Documents", "/build"],
       ["Guides", "/guides"],
       ["Sources", "/sources"],
       ["About", "/about"],

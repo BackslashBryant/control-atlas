@@ -195,7 +195,9 @@ export function PlaybooksPage(props: {
               variant="primary"
               view={selected.nextAction.view as ViewState["view"]}
             >
-              {selected.nextAction.label}
+              {selected.nextAction.view === "templates"
+                ? "Choose a template"
+                : selected.nextAction.label}
             </AppLink>
           </div>
         </article>

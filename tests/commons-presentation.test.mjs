@@ -456,11 +456,14 @@ test("Resource routes follow the Orbital catalog and knowledge-base compositions
   const detail = readFileSync(resolve("src/ui/pages/CommonsDetailPage.tsx"), "utf8");
   const styles = readFileSync(resolve("styles/resources.css"), "utf8");
 
-  assert.doesNotMatch(directory, /headerAction=/);
+  assert.match(directory, /headerAction=\{\(/);
   assert.match(directory, /<h2 id="resource-collections-heading">Browse by Collection<\/h2>/);
   assert.doesNotMatch(directory, /<p className="eyebrow">Resources<\/p>/);
   assert.ok(directory.indexOf("resource-contribute-heading") > directory.indexOf("resource-catalog-grid"));
   assert.match(directory, /resource-compare-toggle/);
+  assert.match(directory, /aria-label="Resource companions"/);
+  assert.match(directory, /view="templates">[\s\S]*Browse Templates →[\s\S]*<\/AppLink>/);
+  assert.match(directory, /view="patterns">[\s\S]*Browse Guides →[\s\S]*<\/AppLink>/);
 
   for (const heading of [
     "What it is",

@@ -73,7 +73,7 @@ const GOAL_STEPS = {
   },
   assess: {
     thenReview: "nist-800-53a",
-    action: { label: "Create a starter document", view: "templates" },
+    action: { label: "Choose a template", view: "templates" },
   },
   operate: {
     thenReview: "nist-800-37",
@@ -85,7 +85,7 @@ const GOAL_STEPS = {
   },
   document: {
     thenReview: "nist-800-53a",
-    action: { label: "Create a starter document", view: "templates", patch: { buildSection: "documents" } },
+    action: { label: "Choose a template", view: "templates", patch: { buildSection: "documents" } },
   },
   tools: {
     thenReview: "nist-800-37",

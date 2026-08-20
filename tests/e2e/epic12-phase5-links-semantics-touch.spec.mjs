@@ -77,7 +77,7 @@ test("Phase 5 renders canonical destinations as native links with working modifi
   for (const link of await officialSourceLinks.all()) {
     await expect(link).toHaveAttribute("href", /^https:\/\//);
   }
-  await expect(page.getByRole("link", { name: "See connections", exact: true })).toHaveAttribute("href", /^#\/atlas\?/);
+  await expect(page.getByRole("link", { name: "See connections", exact: true })).toHaveAttribute("href", /^#\/atlas(?:\/|\?)/);
 
   const destinationButtons = page.locator([
     "button.brand",
@@ -191,10 +191,10 @@ test("Phase 5 closes overlays on route changes and never stacks them", async ({ 
   await openReady(page, "/#/library?q=access+control", { settleResults: true });
 
   await page.getByRole("button", { name: /^Filters/ }).click();
-  await expect(page.getByRole("dialog", { name: "Filter search results" })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Library filters" })).toBeVisible();
   await page.keyboard.press("Control+k");
   await expect(page.getByRole("dialog", { name: "Search Control Atlas" })).toBeVisible();
-  await expect(page.getByRole("dialog", { name: "Filter search results" })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "Library filters" })).toHaveCount(0);
   await expect(page.getByRole("dialog")).toHaveCount(1);
 
   await page.evaluate(() => { globalThis.location.hash = "#/about"; });
@@ -215,13 +215,19 @@ test("Phase 5 applies aria-current only to the canonical active destination", as
     ["/#/start", "Start here"],
     ["/#/library", "Library"],
     ["/#/library/publication/nist-800-53", "Library"],
-    ["/#/guides", "Guides"],
-    ["/#/sources", "Sources"],
-    ["/#/about", "About"],
+    ["/#/build", "Templates"],
   ];
   for (const [route, label] of cases) {
     await openReady(page, route);
     const current = page.locator('header.site-header nav a[aria-current="page"]');
+    await expect(current).toHaveCount(1);
+    await expect(current).toHaveText(label);
+  }
+
+  for (const [route, label] of [["/#/guides", "Guides"], ["/#/sources", "Sources"], ["/#/about", "About"]]) {
+    await openReady(page, route);
+    await page.getByRole("button", { name: "Open more pages" }).click();
+    const current = page.getByRole("navigation", { name: "More pages" }).locator('a[aria-current="page"]');
     await expect(current).toHaveCount(1);
     await expect(current).toHaveText(label);
   }

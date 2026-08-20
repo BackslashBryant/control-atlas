@@ -9,7 +9,7 @@ Every route uses one of six shared jobs. A route renders one `<main>` and must n
 
 ## Shared shell
 
-The desktop header provides Atlas, Library, Compare, Resources, Sources, About, and Search. Compact navigation preserves every destination, with Compare before editorial links. Body content uses the shared spacing and width tokens. Interactive targets are at least 44 pixels, focus is visible, color is never the only signal, and layouts must reflow without page-level horizontal overflow.
+The desktop header provides Start Here, Atlas, Library, Compare, Resources, Templates, and Search. Guides, Sources, and About remain available in the overflow menu. Compact navigation preserves every destination, with Compare before editorial links. Body content uses the shared spacing and width tokens. Interactive targets are at least 44 pixels, focus is visible, color is never the only signal, and layouts must reflow without page-level horizontal overflow.
 
 ## A. Landing
 

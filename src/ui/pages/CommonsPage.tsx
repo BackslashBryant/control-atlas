@@ -194,6 +194,16 @@ export function CommonsPage(props: {
         </button>
       )}
       facetLabel="Resource filters"
+      headerAction={(
+        <nav aria-label="Resource companions" className="resource-context-links">
+          <AppLink onNavigate={onNavigate} view="templates">
+            Looking for a starter document? Browse Templates →
+          </AppLink>
+          <AppLink onNavigate={onNavigate} view="patterns">
+            Need step-by-step guidance? Browse Guides →
+          </AppLink>
+        </nav>
+      )}
       onClearQuery={() => {
         setQueryDraft("");
         update({ query: "", showAll: activeFilters.length ? state.showAll : "" });

@@ -28,7 +28,7 @@ const ROUTE_IDENTITIES: Record<AppView, RouteIdentity> = {
   "library-detail": { path: "/record", label: "Record", title: "Record", contextLabel: "Record", analyticsName: "record_detail" },
   matrix: { path: "/compare", label: "Compare", title: "Compare", contextLabel: "Compare", analyticsName: "compare" },
   patterns: { path: "/guides", label: "Guides", title: "Guides", contextLabel: "Guides", analyticsName: "guides" },
-  templates: { path: "/build", label: "Documents", title: "Documents", contextLabel: "Documents", analyticsName: "build" },
+  templates: { path: "/build", label: "Templates", title: "Templates", contextLabel: "Templates", analyticsName: "build" },
   sources: { path: "/sources", label: "Sources", title: "Sources", contextLabel: "Sources", analyticsName: "sources" },
   commons: { path: "/resources", label: "Resources", title: "Resources", contextLabel: "Resources", analyticsName: "resources" },
   "commons-detail": { path: "/resources/resource", label: "Resources", title: "Resource", contextLabel: "Resources", analyticsName: "resource_detail" },

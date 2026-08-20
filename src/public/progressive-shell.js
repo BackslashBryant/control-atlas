@@ -109,7 +109,7 @@
       };
     }
     if (route === "build") {
-      var documentsCopy = sharedCopy("documents") || { eyebrow: "", summary: "Choose what you need to produce.", title: "Documents" };
+      var documentsCopy = sharedCopy("documents") || { eyebrow: "", summary: "Create starter cybersecurity documents from published sources.", title: "Templates" };
       return {
         eyebrow: documentsCopy.eyebrow || "",
         kind: "documents",

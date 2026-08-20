@@ -334,7 +334,7 @@ export function ExplorePage(props: {
       <details
         className="workspace-advanced-facets"
         data-advanced-facet-set="publisher,topics,connections"
-        open={advancedFiltersActive}
+        open={advancedFiltersActive ? true : undefined}
       >
         <summary>Advanced filters</summary>
         <div className="workspace-advanced-facet-controls">

@@ -29,6 +29,7 @@ test("record connections retain distinct published assertions and citations", as
   await dismissOnboarding(page);
 
   const rows = page.locator("[data-record-connection-id]");
+  await expect(rows.first()).toBeVisible({ timeout: 20000 });
   expect(await rows.count()).toBeGreaterThan(0);
   const ids = await rows.evaluateAll((elements) =>
     elements.map((element) => element.getAttribute("data-record-connection-id")),
@@ -49,6 +50,6 @@ test("record reading flow excludes structural and developer identifiers", async 
   const mainText = await page.locator("main").innerText();
   expect(mainText).not.toContain("FAMILY-AC");
   expect(mainText).not.toMatch(/\.json#|\/data\//);
-  await expect(page.getByText("Developer details", { exact: true })).toBeVisible();
+  await expect(page.getByText("Developer details", { exact: true })).toHaveCount(0);
   await expect(page.getByText("nist-800-53:AC-2", { exact: true })).toBeHidden();
 });

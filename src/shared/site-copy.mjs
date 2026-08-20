@@ -84,8 +84,8 @@ export const SITE_COPY = Object.freeze({
       purpose: "See how frameworks connect using published crosswalks.",
     }),
     documents: Object.freeze({
-      title: "Documents",
-      purpose: "Choose what you need to produce.",
+      title: "Templates",
+      purpose: "Create starter cybersecurity documents from published sources.",
     }),
     sources: Object.freeze({
       title: "Sources",
@@ -171,7 +171,7 @@ export const UI_COPY_CONTRACT = Object.freeze({
     choosePublication: "Choose publication",
     viewSource: "View official source",
     searchLibrary: "Search the Library",
-    downloadTemplate: "Download starter document",
+    downloadTemplate: "Download template",
     backToGuides: "Back to Guides",
     backToStart: "Back to start",
     changeComparison: "Change comparison",

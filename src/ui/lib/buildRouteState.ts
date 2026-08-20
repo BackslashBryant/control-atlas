@@ -32,8 +32,8 @@ export const BUILD_LANES = Object.freeze([
   },
   {
     id: "documents",
-    label: "Starter documents",
-    description: "Choose a starter file directly, then provide only its required inputs.",
+    label: "Templates",
+    description: "Choose a template directly, then provide only its required inputs.",
   },
   {
     id: "resources",

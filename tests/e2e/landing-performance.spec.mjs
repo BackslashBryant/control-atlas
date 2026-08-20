@@ -31,7 +31,7 @@ test("landing presents Template B search, four destinations, and governed tag br
   // has been trimmed before. src/shared/brand-rotation.ts owns the order.
   await expect(page.locator("[data-brand-word]")).toHaveText(/^[A-Z][a-z]+$/);
   await expect(page.locator(".home-secondary-action")).toHaveCount(4);
-  await expect(page.locator(".home-tag-galaxies .home-tag-link")).toHaveCount(16);
+  await expect(page.locator(".home-library-kpis .home-library-kpi")).toHaveCount(6);
   await expect(page.locator(".home-ecosystem, .home-capability-preview")).toHaveCount(0);
 
   const urlBeforeSkip = page.url();
@@ -100,7 +100,7 @@ test("landing search and brand-home flow work without legacy onboarding surfaces
   });
 
   await page
-    .locator('[data-react-root] header.site-header button.brand')
+    .locator('[data-react-root] header.site-header a.brand')
     .click();
   await expect(
     page.getByRole("heading", {

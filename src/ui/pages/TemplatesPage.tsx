@@ -209,12 +209,12 @@ function compatibilityTone(value?: string) {
 
 function compatibilityLabel(value?: string) {
   if (value?.toLowerCase() === "control atlas companion") {
-    return "Starter document";
+    return "Template";
   }
   if (value && /[A-Z ]/.test(value)) return value;
   return value
     ? COMPATIBILITY_LABELS[value] || value.replaceAll("_", " ")
-    : "Starter document";
+    : "Template";
 }
 
 function normalizedFamily(value?: string) {
@@ -557,7 +557,7 @@ function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) 
       <div className="template-document-preview-body">
         <p className="template-document-preview-description">{doc.description}</p>
         <p className="template-document-preview-disclaimer">
-          Starter document. The selected inputs and cited sources appear in the file.
+          Template. The selected inputs and cited sources appear in the file.
         </p>
         <p className="template-document-preview-disclaimer">
           {STARTER_DOCUMENT_REVIEW_NOTICE}
@@ -1002,20 +1002,29 @@ export function TemplatesPage(props: {
         action={
           selectedTemplate ? (
             <AppLink onNavigate={onNavigate} patch={{ templateType: "" }} variant="secondary" view="templates">
-              Back to documents
+              Back to Templates
+            </AppLink>
+          ) : buildOverview ? (
+            <AppLink
+              onNavigate={onNavigate}
+              patch={{ buildSection: "documents", task: "", templateType: "" }}
+              variant="primary"
+              view="templates"
+            >
+              Choose a template
             </AppLink>
           ) : undefined
         }
         summary={buildOverview
           ? SITE_COPY.routes.documents.purpose
           : documentBrowser || selectedTemplate
-          ? "Select, preview, and download a working document."
-          : "Pick a task to see its public references and starter documents."}
+          ? SITE_COPY.routes.documents.purpose
+          : "Pick a task to see its public references and templates."}
         title={
           buildOverview
-            ? "Documents"
+            ? SITE_COPY.routes.documents.title
             : documentBrowser || selectedTemplate
-              ? "Documents"
+              ? SITE_COPY.routes.documents.title
               : "Tasks"
         }
       />
@@ -1032,7 +1041,7 @@ export function TemplatesPage(props: {
       ) : null}
 
       {buildOverview ? (
-        <section aria-label="Build lanes" className="build-lane-grid">
+        <section aria-label="Template paths" className="build-lane-grid">
           {BUILD_LANES.map((lane) => {
             const Icon =
               lane.id === "tasks"
@@ -1066,7 +1075,7 @@ export function TemplatesPage(props: {
                 <p className="eyebrow">Task workflows</p>
                 <h2 id="workflow-heading">Tasks by outcome</h2>
                 <p className="page-summary">
-                  Each task groups related public sources, starter documents,
+                  Each task groups related public sources, templates,
                   and external tools.
                 </p>
               </div>
@@ -1128,7 +1137,7 @@ export function TemplatesPage(props: {
               <div className="notice" role="status">
                 <p>
                   Workflow guidance is temporarily unavailable. Official
-                  resources and starter documents remain available below.
+                  resources and templates remain available below.
                 </p>
               </div>
             ) : null}
@@ -1247,7 +1256,7 @@ export function TemplatesPage(props: {
                 <h2 id="companion-heading">
                   {selectedWorkflow && declaredCompanions.length === 1
                     ? `Create ${declaredCompanions[0].display_name}`
-                    : "Choose a document"}
+                    : "Choose a template"}
                 </h2>
                 <p className="page-summary">
                   Start with the basic structure and prompts already in place.
@@ -1269,7 +1278,7 @@ export function TemplatesPage(props: {
                   onNavigate("templates", { ...state, query })
                 }
                 query={queryFilter}
-                queryPlaceholder="Search starter documents by name or purpose"
+                queryPlaceholder="Search templates by name or purpose"
               />
             ) : null}
 
@@ -1298,7 +1307,7 @@ export function TemplatesPage(props: {
             {otherTemplates.length ? (
               <details className="other-templates">
                 <summary>
-                  Other starter documents ({otherTemplates.length})
+                  Other templates ({otherTemplates.length})
                 </summary>
                 <div className="intent-grid">
                   {otherTemplates.map((template: TemplateRecord) => (
@@ -1361,7 +1370,7 @@ export function TemplatesPage(props: {
               <div className="notice" role="status">
                 <p>
                   No source is linked to this task yet. You can still browse the
-                  full source list and starter documents.
+                  full source list and templates.
                 </p>
               </div>
             ) : null}
@@ -1402,7 +1411,7 @@ export function TemplatesPage(props: {
               <div className="notice" role="status">
                 <p>
                   No tool is linked to this step yet. You can still use the
-                  official resources and starter documents.
+                  official resources and templates.
                 </p>
               </div>
             ) : null}
@@ -1485,7 +1494,7 @@ export function TemplatesPage(props: {
               <div className="compare-step-fields template-essential-options">
               {inputOptions.includes("framework") ? (
                 <SelectField
-                  hint="Which control catalog the starter document should reference."
+                  hint="Which control catalog the template should reference."
                   label="Catalog or program"
                   emptyLabel="Select a catalog or program"
                   onChange={(value) =>
