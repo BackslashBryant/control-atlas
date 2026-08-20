@@ -32,8 +32,8 @@ export type NavSection = {
   items: NavItem[];
 };
 
-export const PRIMARY_SECTION_LABEL = "Explore Control Atlas";
-export const UTILITY_SECTION_LABEL = "Guides and information";
+export const PRIMARY_SECTION_LABEL = "Explore";
+export const UTILITY_SECTION_LABEL = "Reference";
 
 export const PRIMARY_NAV_ITEMS: NavItem[] = [
   {

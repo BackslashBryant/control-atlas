@@ -144,20 +144,20 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
     page,
     "/#/sources?source=nist-iot-device-cybersecurity-requirement-catalogs",
   );
-  const iotDetail = page.locator(".sources-page");
-  await expect(iotDetail).toContainText("Publisher version");
+  const iotDetail = page.getByRole("region", { name: "Source status summary" });
+  await expect(iotDetail).toContainText("Version / current through");
   await expect(iotDetail).toContainText("Spring 2021");
-  await expect(iotDetail).toContainText("Source last checked");
-  await expect(iotDetail).toContainText("Not checked");
+  await expect(iotDetail).toContainText("Last checked");
+  await expect(iotDetail).toContainText("—");
   await expect(iotDetail).not.toContainText("undefined");
 
   await open(page, "/#/sources?source=nist-800-53");
-  const checkedDetail = page.locator(".source-detail-grid");
-  await expect(checkedDetail).toContainText("Source last checked");
+  const checkedDetail = page.getByRole("region", { name: "Source status summary" });
+  await expect(checkedDetail).toContainText("Last checked");
   await expect(checkedDetail).toContainText("2026-07-28");
 
   await open(page, "/#/sources?source=nist-800-53a-assessment-procedures");
-  const assessmentDetail = page.locator(".source-detail-grid");
+  const assessmentDetail = page.getByRole("region", { name: "Source status summary" });
   await expect(assessmentDetail).toContainText("Revision 5, Release 5.2.0");
   await expect(assessmentDetail).toContainText("2026-08-13");
   await expect(assessmentDetail).toContainText("1,014 normalized records");
@@ -180,9 +180,15 @@ test("source detail routes use specific identity at every governed width", async
       await gotoApp(page, `/#/sources?source=${source.id}`);
       await waitForAppReady(page);
       await dismissOnboarding(page);
-      await expect(page.getByRole("heading", { name: source.name, level: 1 })).toBeVisible();
+      const inspector = page.locator(".source-inspector");
+      await expect(inspector.getByRole("heading", { name: source.name, level: 2 })).toBeVisible();
       await expect(page).toHaveTitle(`${source.name} — Control Atlas`);
-      const copy = page.getByRole("button", { name: `Copy source ID ${source.id}` });
+      const technicalDetails = inspector.locator("details.source-inspector-provenance");
+      if ((await technicalDetails.getAttribute("open")) === null) {
+        await technicalDetails.locator("summary").click();
+      }
+      await expect(technicalDetails).toHaveAttribute("open", "");
+      const copy = technicalDetails.getByRole("button", { name: /^Copy source ID / });
       await expect(copy).toBeVisible();
       expect(await page.evaluate(() =>
         globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
@@ -196,14 +202,19 @@ test("source detail routes use specific identity at every governed width", async
   await waitForAppReady(page);
   await page.goBack();
   await waitForAppReady(page);
-  await expect(page.getByRole("heading", { name: sources[0].name, level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: sources[0].name, level: 2 })).toBeVisible();
   await expect(page).toHaveTitle(`${sources[0].name} — Control Atlas`);
   await page.goForward();
   await waitForAppReady(page);
-  await expect(page.getByRole("heading", { name: sources[1].name, level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: sources[1].name, level: 2 })).toBeVisible();
   await expect(page).toHaveTitle(`${sources[1].name} — Control Atlas`);
 
-  const copy = page.getByRole("button", { name: `Copy source ID ${sources[1].id}` });
+  const inspector = page.locator(".source-inspector");
+  const technicalDetails = inspector.locator("details.source-inspector-provenance");
+  if ((await technicalDetails.getAttribute("open")) === null) {
+    await technicalDetails.locator("summary").click();
+  }
+  const copy = technicalDetails.getByRole("button", { name: `Copy source ID ${sources[1].id}` });
   await copy.click();
   await expect(copy).toHaveText("Copied");
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(sources[1].id);
@@ -221,11 +232,14 @@ test("a supplemental source material resolves to its parent publication's identi
   for (const materialId of ["cyber-mil-stig-downloads", "cyber-mil-stig-compilations"]) {
     await open(page, `/#/sources?source=${materialId}`);
     await expect(
-      page.getByRole("heading", { name: "DISA Public STIG Library", level: 1 }),
+      page.getByRole("heading", { name: "DISA Public STIG Library", level: 2 }),
     ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "Copy source ID disa-stig-library" }),
-    ).toBeVisible();
+    const inspector = page.locator(".source-inspector");
+    const technicalDetails = inspector.locator("details.source-inspector-provenance");
+    if ((await technicalDetails.getAttribute("open")) === null) {
+      await technicalDetails.locator("summary").click();
+    }
+    await expect(technicalDetails.getByRole("button", { name: "Copy source ID disa-stig-library" })).toBeVisible();
   }
 });
 
@@ -239,15 +253,7 @@ test("source detail has one return action and preserves the Sources workspace", 
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
-    const returnLink = page.getByRole("link", { name: "Back to sources", exact: true });
-    await expect(returnLink).toHaveCount(1);
     await expect(page.locator(".sources-page .page-header")).toBeVisible();
-    const target = await returnLink.boundingBox();
-    expect(target).not.toBeNull();
-    if (width <= 390) {
-      expect(target.height).toBeGreaterThanOrEqual(44);
-      expect(target.width).toBeGreaterThanOrEqual(44);
-    }
     expect(
       await page.evaluate(() =>
         globalThis.document.documentElement.scrollWidth -
@@ -255,7 +261,15 @@ test("source detail has one return action and preserves the Sources workspace", 
       ),
     ).toBeLessThanOrEqual(1);
 
-    await returnLink.click();
+    if (width < 1024) {
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toBeVisible();
+      await dialog.getByRole("button", { name: "Close inspector" }).click();
+    } else {
+      const returnLink = page.getByRole("link", { name: "Back to sources", exact: true });
+      await expect(returnLink).toBeVisible();
+      await returnLink.click();
+    }
     await waitForAppReady(page);
     await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
     await expect(page.locator("#source-search")).toHaveValue("DISA");
@@ -269,9 +283,8 @@ test("source detail has one return action and preserves the Sources workspace", 
     await page.goBack();
     await waitForAppReady(page);
     await expect(
-      page.getByRole("heading", { name: "DISA Public STIG Library", level: 1 }),
+      page.getByRole("heading", { name: "DISA Public STIG Library", level: 2 }),
     ).toBeVisible();
-    await expect(returnLink).toHaveCount(1);
 
     await page.goForward();
     await waitForAppReady(page);
@@ -294,19 +307,15 @@ test("unknown Source detail links fail closed and preserve recovery state", asyn
     await page.reload();
     await waitForAppReady(page);
 
-    await expect(page.getByRole("heading", { name: "Source not found", level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
     await expect(page).toHaveTitle("Source not found — Control Atlas");
     await expect(
       page.getByText(
-        `Requested source ID ${sourceId} is not in the public publication register.`,
+        "That publication is not in the public publication register.",
       ),
     ).toBeVisible();
-    await expect(page.locator("h1")).toContainText(sourceId);
-    const requestedSourceId = page.locator(".ca-source-not-found-id code");
-    await expect(requestedSourceId).toHaveText(sourceId);
-    const requestedSourceIdBox = await requestedSourceId.boundingBox();
-    expect(requestedSourceIdBox).not.toBeNull();
-    if (width <= 390) expect(requestedSourceIdBox.height).toBeGreaterThan(30);
+    await expect(page.locator(".source-not-found-banner")).not.toContainText(sourceId);
+    await expect(page.locator(".source-not-found-banner code")).toHaveCount(0);
     // The register stays visible so the user can search/browse while seeing
     // the not-found message — it does not empty out or disappear.
     await expect(page.getByRole("table", { name: "Control Atlas publication register" })).toBeVisible();
@@ -332,9 +341,11 @@ test("unknown Source detail links fail closed and preserve recovery state", asyn
 
     await page.goBack();
     await waitForAppReady(page);
-    await expect(page.getByRole("heading", { name: "Source not found", level: 1 })).toBeVisible();
-    await expect(page.locator("h1")).toContainText(sourceId);
-    await expect(page.locator(".ca-source-not-found-id code")).toHaveText(sourceId);
+    await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
+    await expect(page.locator(".source-not-found-banner")).toContainText(
+      "That publication is not in the public publication register.",
+    );
+    await expect(page.locator(".source-not-found-banner")).not.toContainText(sourceId);
     await page.goForward();
     await waitForAppReady(page);
     await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
@@ -351,9 +362,9 @@ test("source and record provenance stay distinct at every governed width", async
       page,
       "/#/sources?source=nist-iot-device-cybersecurity-requirement-catalogs",
     );
-    const facts = page.locator(".source-detail-grid");
-    await expect(facts).toContainText("Publisher versionSpring 2021");
-    await expect(facts).toContainText("Source last checkedNot checked");
+    const facts = page.getByRole("region", { name: "Source status summary" });
+    await expect(facts).toContainText("Version / current throughSpring 2021");
+    await expect(facts).toContainText("Last checked—");
     expect(
       await page.evaluate(
         () =>
@@ -386,11 +397,11 @@ test("source review presents lifecycle and version disposition honestly", async 
   page,
 }) => {
   await open(page, "/#/sources?source=nist-800-171-rev2");
-  await expect(page.locator(".source-detail-grid")).toContainText(
-    "Publisher version2021-01",
+  await expect(page.getByRole("region", { name: "Source status summary" })).toContainText(
+    "Version / current through2021-01",
   );
-  await expect(page.locator(".source-detail-grid")).toContainText(
-    "Source last checked2026-08-13",
+  await expect(page.getByRole("region", { name: "Source status summary" })).toContainText(
+    "Last checked2026-08-13",
   );
 
   await open(page, "/#/record/nist-800-171-rev2/3.1.1");
@@ -402,7 +413,7 @@ test("source review presents lifecycle and version disposition honestly", async 
       page,
       "/#/sources?source=nist-800-53a-assessment-procedures",
     );
-    const facts = page.locator(".source-detail-grid");
+    const facts = page.getByRole("region", { name: "Source status summary" });
     await expect(facts).toContainText("Revision 5, Release 5.2.0");
     await expect(facts).toContainText("2026-08-13");
     expect(

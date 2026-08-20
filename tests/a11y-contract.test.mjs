@@ -3,7 +3,10 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const compareHelpers = readFileSync("src/ui/lib/compareHelpers.tsx", "utf8");
-const tokens = readFileSync("styles/tokens.css", "utf8");
+const tokens = [
+  readFileSync("node_modules/orbital-archive-no-01/tokens/dist/tokens.css", "utf8"),
+  readFileSync("styles/tokens.css", "utf8"),
+].join("\n");
 const baseCss = readFileSync("styles/base.css", "utf8");
 const componentsCss = readFileSync("styles/components.css", "utf8");
 const surfacesCss = readFileSync("styles/surfaces.css", "utf8");
@@ -301,7 +304,7 @@ test("compact icon and chip controls retain 44 pixel touch targets", () => {
 
 test("sticky surfaces and in-page jumps share one header-safe offset", () => {
   const topNav = readFileSync("src/ui/components/TopNav.tsx", "utf8");
-  assert.match(tokens, /--ca-header-height:\s*0px;/);
+  assert.match(tokens, /--ca-header-height:\s*68px;/);
   assert.match(
     tokens,
     /--ca-header-safe-offset:\s*calc\(var\(--ca-header-height\) \+ var\(--ca-space-4\)\);/,
@@ -344,10 +347,12 @@ test("connection transparency distinguishes inventory from completeness", () => 
   // SourcesPage is a factual trust register and never presents a traffic-light
   // completeness judgment.
   assert.match(sourcesPage, /buildPublicationRegister/);
-  assert.match(sourcesPage, /Catalog profile/);
-  assert.match(sourcesPage, /Publisher version/);
-  assert.match(sourcesPage, /Source last checked/);
-  assert.match(sourcesPage, /Publication currentness review/);
+  assert.match(sourcesPage, /Publisher/);
+  assert.match(sourcesPage, /Version \/ current through/);
+  assert.match(sourcesPage, /Last checked/);
+  assert.match(sourcesPage, /Control Atlas coverage/);
+  assert.doesNotMatch(sourcesPage, /Catalog profile/);
+  assert.doesNotMatch(sourcesPage, /Publication currentness review/);
   assert.doesNotMatch(sourcesPage, /Preview \/ low coverage/);
   assert.doesNotMatch(sourcesPage, /data-level=/);
   assert.doesNotMatch(sourcesPage, /catalog\.pct/);

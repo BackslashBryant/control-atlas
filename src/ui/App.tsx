@@ -140,14 +140,21 @@ const PROGRESSIVE_SHELL_SELECTORS = [
 ];
 
 function releaseProgressiveShell(root: HTMLElement) {
+  const routeShell = root.querySelector<HTMLElement>("[data-static-route]");
+  const preserveRouteShell =
+    root.dataset.routeHydrated !== "true" &&
+    Boolean(routeShell && !routeShell.hidden);
+
   for (const selector of PROGRESSIVE_SHELL_SELECTORS) {
+    if (selector === "[data-static-route]" && preserveRouteShell) continue;
     root.querySelector(selector)?.remove();
   }
   root.dataset.progressiveShellReleased = "true";
   delete root.dataset.routeHydrated;
-  delete root.dataset.staticRouteActive;
-  delete root.dataset.staticRouteKind;
-  delete root.dataset.staticRoutePersistent;
+  if (!preserveRouteShell) {
+    delete root.dataset.staticRouteActive;
+    delete root.dataset.staticRouteKind;
+  }
   delete root.dataset.staticSearchActive;
 }
 

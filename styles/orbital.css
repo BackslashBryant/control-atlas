@@ -8,22 +8,20 @@
 
 body {
   background:
-    linear-gradient(
-      color-mix(in srgb, var(--lsm-grid-line) 15%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--lsm-grid-line) 15%, transparent) 1px,
-      transparent 1px
+    radial-gradient(
+      circle at 78% 2%,
+      color-mix(in srgb, var(--lsm-teal), transparent 88%),
+      transparent 34rem
     ),
     radial-gradient(
-      circle at 12% 0%,
-      color-mix(in srgb, var(--ca-primary) 4%, transparent),
-      transparent 26rem
+      circle at 12% 92%,
+      color-mix(in srgb, var(--lsm-gold), transparent 94%),
+      transparent 28rem
     ),
+    linear-gradient(color-mix(in srgb, var(--lsm-teal), transparent 96%) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--lsm-teal), transparent 96%) 1px, transparent 1px),
     var(--ca-bg);
-  background-size: 24px 24px, 24px 24px, auto, auto, auto;
+  background-size: auto, auto, 32px 32px, 32px 32px, auto;
 }
 
 /* Phase 1 global Atlas network. Sigma owns the WebGL layer; the companion list
@@ -823,8 +821,8 @@ body {
   width: 100%;
   max-width: var(--ca-workspace-max, 88rem);
   margin-inline: auto;
-  padding: var(--ca-space-4) var(--ca-space-6) var(--ca-space-12);
-  min-height: calc(100vh - var(--ca-header-height, 62px));
+  padding: clamp(34px, 5vw, 72px) var(--ca-space-6) var(--ca-space-12);
+  min-height: calc(100vh - var(--ca-header-height, 68px));
   box-sizing: border-box;
 }
 
@@ -886,8 +884,8 @@ body {
   justify-content: space-between;
   gap: var(--ca-space-6);
   width: 100%;
-  margin-bottom: var(--ca-space-6);
-  padding: var(--ca-space-2) 0 var(--ca-space-5);
+  margin-bottom: 26px;
+  padding: 0 0 22px;
   border-bottom: 1px solid color-mix(in srgb, var(--ca-border-strong) 65%, transparent);
   background: transparent;
 }
@@ -905,9 +903,9 @@ body {
 
 .page-header h1 {
   font-family: var(--ca-font-display);
-  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-size: clamp(38px, 5vw, 72px);
   font-weight: 700;
-  line-height: var(--line-height-heading, 1.08);
+  line-height: 0.9;
   letter-spacing: -0.015em;
   text-transform: uppercase;
   color: var(--lsm-bone);
@@ -917,7 +915,7 @@ body {
 /* Title block stacks: eyebrow over title over the one context sentence. */
 .page-header-title {
   display: grid;
-  gap: var(--ca-space-2);
+  gap: 10px;
   min-width: 0;
 }
 
@@ -987,7 +985,7 @@ body {
 .summary-card-title,
 .result-meta,
 .mobile-nav-sheet-group-label {
-  color: var(--ca-accent);
+  color: var(--ca-editorial-text);
   font-family: var(--ca-font-mono);
   font-size: var(--ca-text-micro);
   font-weight: 500;
@@ -1227,7 +1225,7 @@ textarea:disabled {
 .badge.tone-success {
   border-color: color-mix(in srgb, var(--ca-success) 54%, transparent);
   background: color-mix(in srgb, var(--ca-success) 10%, transparent);
-  color: var(--ca-success);
+  color: var(--ca-badge-success-text);
 }
 
 /* Applicability class (selections/overlays) — must never look like

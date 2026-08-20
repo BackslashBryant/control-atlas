@@ -56,7 +56,7 @@ test("WS0 direct routes own exactly one main landmark without Home stacked above
   }
 });
 
-test("desktop header exposes task destinations, Search, and Guides overflow", async ({
+test("desktop header exposes task destinations, Search, and reference overflow", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -70,8 +70,6 @@ test("desktop header exposes task destinations, Search, and Guides overflow", as
     "Library",
     "Compare",
     "Resources",
-    "Sources",
-    "About",
   ]);
   await expect(page.getByRole("button", { name: "Open search" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Open navigation menu" })).toHaveCount(0);
@@ -82,8 +80,10 @@ test("desktop header exposes task destinations, Search, and Guides overflow", as
   const overflow = page.getByRole("navigation", { name: "More pages" });
   await expect(overflow).toBeVisible();
   await expect(overflow.getByRole("link")).toHaveText([
-    "Guides",
     "Documents",
+    "Guides",
+    "Sources",
+    "About",
   ]);
 });
 
@@ -127,6 +127,31 @@ test("WS0 restores an interactive Home landmark when React boot fails", async ({
   await expect(page.locator("main")).toHaveCount(1);
 });
 
+test("WS0 keeps the Sources identity visible until React owns the route", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+
+  let releaseAppBundle = () => {};
+  const appBundleReleased = new Promise((resolve) => {
+    releaseAppBundle = () => resolve(undefined);
+  });
+  await page.route(/\/assets\/App-[^/]+\.js$/, async (route) => {
+    await appBundleReleased;
+    await route.continue();
+  });
+
+  await gotoApp(page, "/#/sources");
+  const staticRoute = page.locator("[data-static-route]");
+  await expect(staticRoute).toBeVisible();
+  await expect(staticRoute.getByRole("heading", { level: 1 })).toHaveText("Sources");
+
+  releaseAppBundle();
+  await waitForAppReady(page, { allowPartial: true });
+  await expect(staticRoute).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toHaveCount(1);
+});
+
 test("WS0 tablet and mobile use one navigation control with every destination", async ({
   page,
 }) => {
@@ -152,10 +177,10 @@ test("WS0 tablet and mobile use one navigation control with every destination", 
         "Library",
         "Compare",
         "Resources",
+        "Documents",
+        "Guides",
         "Sources",
         "About",
-        "Guides",
-        "Documents",
       ]);
     await page.keyboard.press("Escape");
     await expect(sheet).toHaveCount(0);

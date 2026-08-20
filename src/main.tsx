@@ -11,7 +11,11 @@ import {
   ROUTE_TRANSITION_END_EVENT,
   SEARCH_RESULTS_FOCUS_EVENT,
 } from './shared/navigation-events';
-import '../styles/fonts.css';
+// Orbital Archive No. 01 is the visual authority, not a copied palette. The
+// official release supplies the base recipes, DTCG tokens, and embedded fonts;
+// Control Atlas styles below are semantic/product adapters only.
+import 'orbital-archive-no-01/css';
+import 'orbital-archive-no-01/fonts.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
@@ -137,7 +141,6 @@ function syncStaticRouteShell() {
 }
 
 function observeRouteHydration() {
-  let settleTimer = 0;
   const reactRouteOwnsSurface = (app: HTMLElement) =>
     ['true', 'partial', 'error'].includes(app.dataset.appReady || '');
   const markHydrated = () => {
@@ -154,19 +157,13 @@ function observeRouteHydration() {
     rootElement.dataset.routeHydrated = 'true';
     delete rootElement.dataset.staticRouteActive;
     const shell = rootElement.querySelector<HTMLElement>('[data-static-route]');
-    shell?.setAttribute('aria-hidden', 'true');
-    shell?.setAttribute('inert', '');
-    shell?.removeAttribute('role');
-    shell?.setAttribute('hidden', '');
+    shell?.remove();
     return true;
   };
   const scheduleHydration = () => {
     const app = reactRootElement.querySelector<HTMLElement>('#app');
     if (!app || !reactRouteOwnsSurface(app)) return;
-    window.clearTimeout(settleTimer);
-    settleTimer = window.setTimeout(() => {
-      if (markHydrated()) observer.disconnect();
-    }, 200);
+    if (markHydrated()) observer.disconnect();
   };
   const observer = new MutationObserver(() => {
     scheduleHydration();
@@ -179,7 +176,6 @@ function observeRouteHydration() {
   });
   scheduleHydration();
   window.setTimeout(() => {
-    window.clearTimeout(settleTimer);
     markHydrated();
     observer.disconnect();
   }, 15_000);

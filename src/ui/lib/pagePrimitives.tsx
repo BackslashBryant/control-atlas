@@ -232,37 +232,28 @@ function extractNodeText(node: ReactNode): string {
   return "";
 }
 
-export function MissionPage(props: {
+export function MissionPage(props: React.HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
-  className?: string;
-  id?: string;
   maxWidth?: "workspace" | "content" | "reading" | "full";
-  style?: React.CSSProperties;
-  role?: string;
-  "aria-labelledby"?: string;
-  "aria-label"?: string;
 }) {
+  const { children, className, maxWidth, ...rest } = props;
   const widthClass =
-    props.maxWidth === "content"
+    maxWidth === "content"
       ? "mission-page--content"
-      : props.maxWidth === "reading"
+      : maxWidth === "reading"
         ? "mission-page--reading"
-        : props.maxWidth === "full"
+        : maxWidth === "full"
           ? "mission-page--full"
           : "mission-page--workspace";
 
   return (
-    <main
-      aria-label={props["aria-label"]}
-      aria-labelledby={props["aria-labelledby"]}
-      className={`mission-page ${widthClass} ${props.className || ""}`.trim()}
-      id={props.id || "workspace"}
-      role={props.role}
-      style={props.style}
+    <div
+      {...rest}
+      className={`mission-page ${widthClass} ${className || ""}`.trim()}
       tabIndex={-1}
     >
-      {props.children}
-    </main>
+      {children}
+    </div>
   );
 }
 
@@ -767,12 +758,12 @@ export function InspectorDrawer(props: {
   const drawerRef = React.useRef<HTMLElement | null>(null);
   const closeButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const [isCompact, setIsCompact] = React.useState(() =>
-    typeof window !== "undefined" ? window.innerWidth < 1100 : false,
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false,
   );
 
   React.useEffect(() => {
     const handleResize = () => {
-      setIsCompact(window.innerWidth < 1100);
+      setIsCompact(window.innerWidth < 1024);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -780,6 +771,35 @@ export function InspectorDrawer(props: {
 
   React.useEffect(() => {
     if (!props.isOpen) return;
+
+    const inertedElements: Array<{
+      element: HTMLElement;
+      wasInert: boolean;
+    }> = [];
+
+    if (isCompact && drawerRef.current) {
+      const boundary = drawerRef.current.closest<HTMLElement>("#root");
+      let current: HTMLElement | null = drawerRef.current;
+
+      while (current?.parentElement && current !== boundary) {
+        const parent = current.parentElement;
+        for (const sibling of Array.from(parent.children)) {
+          if (
+            sibling === current ||
+            sibling.classList.contains("inspector-drawer-backdrop") ||
+            !(sibling instanceof HTMLElement)
+          ) {
+            continue;
+          }
+          inertedElements.push({
+            element: sibling,
+            wasInert: sibling.hasAttribute("inert"),
+          });
+          sibling.setAttribute("inert", "");
+        }
+        current = parent;
+      }
+    }
 
     if (isCompact) {
       closeButtonRef.current?.focus();
@@ -809,7 +829,12 @@ export function InspectorDrawer(props: {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      for (const { element, wasInert } of inertedElements) {
+        if (!wasInert) element.removeAttribute("inert");
+      }
+    };
   }, [isCompact, props.isOpen, props.onClose]);
 
   if (!props.isOpen) return null;

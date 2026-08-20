@@ -2,16 +2,17 @@ import {
   IconExternalLink,
   IconFileText,
 } from "@tabler/icons-react";
-import type { MouseEvent } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import type { MouseEvent, ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
-import { Button } from "../components/lsm";
+import { Button, ButtonLink } from "../components/lsm";
 import {
   Badge,
   EmptyState,
-  InspectorDrawer,
+  MissionPage,
   PageHeader,
   copyText,
   sourceUsageSummary,
@@ -55,23 +56,38 @@ function CopyStableSourceId(props: { id: string }) {
 
 function EmptyPublicationInspector() {
   return (
-    <article className="panel surface-blueprint source-inspector-card source-inspector-card--empty">
+    <section className="source-inspector-card source-inspector-card--empty panel surface-blueprint">
       <span className="label">SELECTED PUBLICATION</span>
-      <h3 className="source-inspector-title" style={{ marginTop: 12 }}>
+      <h2 className="source-inspector-title">
         Select a publication
-      </h3>
-      <p className="source-inspector-empty-desc" style={{ marginTop: 8 }}>
+      </h2>
+      <p className="source-inspector-empty-desc">
         Publisher, version, source files, and published crosswalks will appear here.
       </p>
-    </article>
+    </section>
   );
 }
 
-function PublicationInspector(props: {
+function useCompactSourceInspector() {
+  const [isCompact, setIsCompact] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false,
+  );
+
+  useEffect(() => {
+    const update = () => setIsCompact(window.innerWidth < 1024);
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  return isCompact;
+}
+
+function PublicationInspectorContent(props: {
   publication: PublicationRegisterRow;
-  onClose: () => void;
+  heading: ReactNode;
+  close?: ReactNode;
 }) {
-  const { publication, onClose } = props;
+  const { publication, heading, close } = props;
   const isAuthority = publication.id.startsWith("authority-");
   const allSupplemental = [
     ...publication.sourceMaterials.enrichment,
@@ -85,6 +101,15 @@ function PublicationInspector(props: {
     ...historicalItems,
   ];
   const sourceFilesCount = primaryAndSupplemental.length;
+  const sourceRoles = [
+    ["Primary", publication.sourceMaterials.primary.length],
+    ["Enrichment", publication.sourceMaterials.enrichment.length],
+    ["Supplemental", publication.sourceMaterials.supplemental.length],
+    ["Reference", publication.sourceMaterials.reference.length],
+  ]
+    .filter(([, count]) => typeof count === "number" && count > 0)
+    .map(([role]) => String(role))
+    .join(", ");
 
   const coverageText = publication.catalogCounts
     ? `${publication.catalogCounts.normalized_records.toLocaleString()} normalized records indexed in Search & Explore`
@@ -93,29 +118,20 @@ function PublicationInspector(props: {
       : publication.coverageSummary || "—";
 
   return (
-    <InspectorDrawer
-      ariaLabel={`Details for ${publication.officialTitle}`}
-      eyebrow="SELECTED PUBLICATION"
-      id="source-inspector-detail"
-      isOpen={true}
-      onClose={onClose}
-      title={publication.officialTitle}
-    >
+    <>
+      <header className="source-inspector-header">
+        <div>
+          <span className="label">SELECTED PUBLICATION</span>
+          {heading}
+          <p className="source-inspector-publisher">
+            {publication.publisher.value || "—"}
+          </p>
+        </div>
+        {close}
+      </header>
+
       <div className="source-inspector-content">
-        {publication.familyName ? (
-          <div className="source-inspector-family">
-            <span className="source-family-pill">
-              Part of {publication.familyName}
-            </span>
-          </div>
-        ) : null}
-
-        <article aria-label="Source status summary" className="source-status-overview">
-          <div className="system-stat">
-            <span>Publisher</span>
-            <strong>{publication.publisher.value || "—"}</strong>
-          </div>
-
+        <section aria-label="Source status summary" className="source-status-overview">
           <div className="system-stat">
             <span>Version / current through</span>
             <strong>{publication.version.value || "—"}</strong>
@@ -146,38 +162,18 @@ function PublicationInspector(props: {
             <strong>{coverageText}</strong>
           </div>
 
-          {publication.reviews.map((review) => (
-            <div className="system-stat" key={review.catalogId}>
-              <span>
-                {publication.reviews.length > 1
-                  ? `${review.publicationName} review`
-                  : "Currentness review"}
-              </span>
-              <strong>
-                {displayNameFor(
-                  "source_currentness_review",
-                  review.upstreamCurrentnessReview,
-                )} · <time dateTime={review.reviewedAt}>{review.reviewedAt}</time>
-              </strong>
-            </div>
-          ))}
-        </article>
+        </section>
 
         {publication.officialLink ? (
-          <a
-            className="button"
+          <ButtonLink
+            className="source-inspector-official-link"
             href={publication.officialLink}
             rel="noopener noreferrer"
-            style={{ marginTop: 8, width: "100%" }}
             target="_blank"
           >
-            <span>
-              {publication.publisher.value
-                ? `Open official ${publication.publisher.value} publication`
-                : "Open official publication"}
-            </span>
+            <span>Open official publication</span>
             <IconExternalLink aria-hidden="true" size={14} />
-          </a>
+          </ButtonLink>
         ) : null}
 
         {sourceFilesCount > 0 ? (
@@ -313,7 +309,7 @@ function PublicationInspector(props: {
         ) : null}
 
         <details className="source-inspector-provenance">
-          <summary>Technical details & field provenance</summary>
+          <summary>Technical details</summary>
           <div className="source-inspector-provenance-body">
             <div className="source-inspector-id-block">
               <span className="source-inspector-label">Stable Source ID</span>
@@ -323,6 +319,9 @@ function PublicationInspector(props: {
               {sourceUsageSummary(publication.rawSource || {})}
             </p>
             <ul className="source-provenance-list">
+              <li>
+                <strong>Source roles:</strong> <span>{sourceRoles || "Not recorded"}</span>
+              </li>
               <li>
                 <strong>Provenance class:</strong>{" "}
                 <span>{publication.provenance || "Official source"}</span>
@@ -339,7 +338,75 @@ function PublicationInspector(props: {
           </div>
         </details>
       </div>
-    </InspectorDrawer>
+    </>
+  );
+}
+
+function PublicationInspector(props: {
+  publication: PublicationRegisterRow;
+  onClose: () => void;
+}) {
+  const isCompact = useCompactSourceInspector();
+  const title = props.publication.officialTitle;
+
+  useEffect(() => {
+    if (!isCompact) return undefined;
+    const app = document.getElementById("app");
+    if (!app) return undefined;
+    const wasInert = app.hasAttribute("inert");
+    const previousAriaHidden = app.getAttribute("aria-hidden");
+    app.setAttribute("inert", "");
+    app.setAttribute("aria-hidden", "true");
+    return () => {
+      if (!wasInert) app.removeAttribute("inert");
+      if (previousAriaHidden === null) app.removeAttribute("aria-hidden");
+      else app.setAttribute("aria-hidden", previousAriaHidden);
+    };
+  }, [isCompact]);
+
+  if (isCompact) {
+    return (
+      <Dialog.Root
+        onOpenChange={(open) => {
+          if (!open) props.onClose();
+        }}
+        open
+      >
+        <Dialog.Portal>
+          <Dialog.Overlay className="source-inspector-dialog-backdrop" />
+          <Dialog.Content
+            aria-describedby={undefined}
+            aria-label={`Details for ${title}`}
+            aria-modal="true"
+            className="source-inspector source-inspector--modal panel surface-blueprint"
+            id="source-inspector-detail"
+          >
+            <PublicationInspectorContent
+              close={
+                <Dialog.Close aria-label="Close inspector" className="source-inspector-close" type="button">
+                  Close
+                </Dialog.Close>
+              }
+              heading={<Dialog.Title className="source-inspector-title">{title}</Dialog.Title>}
+              publication={props.publication}
+            />
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+    );
+  }
+
+  return (
+    <article
+      aria-label={`Details for ${title}`}
+      className="source-inspector source-inspector--inline panel surface-blueprint"
+      id="source-inspector-detail"
+    >
+      <PublicationInspectorContent
+        heading={<h2 className="source-inspector-title">{title}</h2>}
+        publication={props.publication}
+      />
+    </article>
   );
 }
 
@@ -438,6 +505,14 @@ export function SourcesPage(props: {
     }, 200);
   };
 
+  const handleQueryCommit = () => {
+    if (debounceTimerRef.current) {
+      window.clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+    onNavigate("sources", { ...state, query: queryDraft });
+  };
+
   useEffect(() => {
     const publisherIsUnavailable =
       Boolean(state.publisher) && !options.publishers.includes(state.publisher);
@@ -485,16 +560,10 @@ export function SourcesPage(props: {
   };
 
   const handleCloseInspector = () => {
-    const triggerId = activeTriggerIdRef.current || state.source;
     onNavigate("sources", {
       ...state,
       source: "",
     });
-    window.setTimeout(() => {
-      if (triggerId) {
-        document.getElementById(`source-trigger-${triggerId}`)?.focus();
-      }
-    }, 50);
   };
 
   const handleResetFilters = () => {
@@ -510,24 +579,22 @@ export function SourcesPage(props: {
   const eyebrow = `SOURCE REGISTER / ${publicationCount} PUBLICATIONS`;
 
   return (
-    <div
-      className="sources-page ca-mission-page"
+    <MissionPage
+      className="sources-page"
       data-visual-identity="provenance-ledger"
+      maxWidth="workspace"
     >
       <PageHeader
         eyebrow={eyebrow}
         primary
-        summary={SITE_COPY.routes.sources.purpose}
+        summary="Verify publisher, version, and source material for publications used in Control Atlas."
         title={SITE_COPY.routes.sources.title}
       />
 
       {state.source && !selectedPublicationRow ? (
         <div className="source-not-found-banner" role="alert">
           <div>
-            <p>
-              Requested source ID <code>{state.source}</code> is not in the
-              public publication register.
-            </p>
+            <p>That publication is not in the public publication register.</p>
           </div>
           <Button
             onClick={handleCloseInspector}
@@ -540,13 +607,16 @@ export function SourcesPage(props: {
       ) : null}
 
       <div className="sources-workspace grid queue-layout">
-        <article className="panel surface-scanline sources-table-panel">
+        <section aria-label="Publication register" className="sources-table-panel panel surface-scanline">
           {/* S2 Toolbar: compact admin toolbar */}
           <div className="admin-tools source-admin-tools">
             <input
               aria-label="Search publications"
               id="source-search"
               onChange={(event) => handleQueryChange(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") handleQueryCommit();
+              }}
               placeholder="Search title, publisher, version, or ID"
               type="search"
               value={queryDraft}
@@ -598,13 +668,10 @@ export function SourcesPage(props: {
               </Button>
             ) : null}
 
-            <p aria-live="polite" className="source-register-total">
-              {filteredPublicationRows.length} publications
-            </p>
           </div>
 
           {/* S3 Measurement rail */}
-          <div className="calibration-rail">
+          <div aria-live="polite" className="calibration-rail">
             <span>
               SHOWING 1–{Math.min(visibleLimit, filteredPublicationRows.length)} / {filteredPublicationRows.length}
             </span>
@@ -643,8 +710,7 @@ export function SourcesPage(props: {
                     const materialCount =
                       row.sourceMaterials.primary.length +
                       row.sourceMaterials.enrichment.length +
-                      row.sourceMaterials.supplemental.length +
-                      row.sourceMaterials.reference.length;
+                      row.sourceMaterials.supplemental.length;
                     const mappingCount = row.connectionEvidence.length;
 
                     return (
@@ -671,6 +737,19 @@ export function SourcesPage(props: {
                             >
                               {row.displayTitle}
                             </button>
+                            <span className="source-mobile-publisher">
+                              {row.publisher.value || "—"}
+                            </span>
+                            <div className="source-mobile-meta">
+                              <span>{row.version.value || "—"}</span>
+                              <span> · </span>
+                              <span className="source-mobile-status">
+                                {displayNameFor(
+                                  "lifecycle_status",
+                                  row.lifecycle.value || "",
+                                )}
+                              </span>
+                            </div>
                             {materialCount > 0 || mappingCount > 0 ? (
                               <span
                                 className="source-attached-pill"
@@ -680,11 +759,16 @@ export function SourcesPage(props: {
                                   mappingCount === 1 ? "" : "s"
                                 }`}
                               >
-                                {materialCount > 0
-                                  ? `${materialCount} source file${
-                                      materialCount === 1 ? "" : "s"
-                                    }`
-                                  : ""}
+                                {materialCount > 0 ? (
+                                  <>
+                                    <span className="source-attachment-count--desktop">
+                                      {materialCount} source file{materialCount === 1 ? "" : "s"}
+                                    </span>
+                                    <span className="source-attachment-count--mobile">
+                                      {materialCount} file{materialCount === 1 ? "" : "s"}
+                                    </span>
+                                  </>
+                                ) : null}
                                 {materialCount > 0 && mappingCount > 0 ? " · " : ""}
                                 {mappingCount > 0
                                   ? `${mappingCount} crosswalk${
@@ -693,19 +777,6 @@ export function SourcesPage(props: {
                                   : ""}
                               </span>
                             ) : null}
-                          </div>
-                          {/* Mobile-only summary line for compact scan (S9) */}
-                          <div className="source-mobile-meta">
-                            <span>{row.publisher.value || "—"}</span>
-                            <span> · </span>
-                            <span>{row.version.value || "—"}</span>
-                            <span> · </span>
-                            <span className="source-mobile-status">
-                              {displayNameFor(
-                                "lifecycle_status",
-                                row.lifecycle.value || "",
-                              )}
-                            </span>
                           </div>
                         </td>
 
@@ -766,7 +837,7 @@ export function SourcesPage(props: {
               </Button>
             </div>
           ) : null}
-        </article>
+        </section>
 
         {/* S4, S7, S8 Scoped Publication Inspector */}
         <aside className="work-stack sources-inspector-pane">
@@ -782,7 +853,6 @@ export function SourcesPage(props: {
           )}
         </aside>
       </div>
-    </div>
+    </MissionPage>
   );
 }
-

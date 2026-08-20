@@ -122,11 +122,17 @@ for (const route of ROUTES) {
     if (route.label === "source detail") {
       await expect(
         page.getByRole("heading", {
-          name: "NIST IoT Device Cybersecurity Requirement Catalogs",
+          name: "Sources",
           level: 1,
         }),
       ).toBeVisible();
-      await expect(page.getByRole("article", { name: "Source status summary" })).toBeVisible();
+      await expect(
+        page.getByRole("heading", {
+          name: "NIST IoT Device Cybersecurity Requirement Catalogs",
+          level: 2,
+        }),
+      ).toBeVisible();
+      await expect(page.getByRole("region", { name: "Source status summary" })).toBeVisible();
     }
     if (route.label === "resource detail") {
       await expect(
@@ -135,12 +141,15 @@ for (const route of ROUTES) {
     }
     if (route.label === "source not found") {
       await expect(
-        page.getByRole("heading", { name: "Source not found", level: 1 }),
+        page.getByRole("heading", { name: "Sources", level: 1 }),
       ).toBeVisible();
-      await expect(page.locator("h1")).toContainText("not-a-real-source");
-      await expect(page.locator(".ca-source-not-found-id code")).toHaveText(
+      await expect(page.locator(".source-not-found-banner")).toContainText(
+        "That publication is not in the public publication register.",
+      );
+      await expect(page.locator(".source-not-found-banner")).not.toContainText(
         "not-a-real-source",
       );
+      await expect(page.locator(".source-not-found-banner code")).toHaveCount(0);
     }
     await assertNoBlockingViolations(page, route.path);
   });

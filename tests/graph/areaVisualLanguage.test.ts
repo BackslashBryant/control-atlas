@@ -13,7 +13,10 @@ import {
   areaPresentationForCatalog,
 } from "../../src/ui/lib/areaVisualLanguage";
 
-const tokens = readFileSync("styles/tokens.css", "utf8");
+const tokens = [
+  readFileSync("node_modules/orbital-archive-no-01/tokens/dist/tokens.css", "utf8"),
+  readFileSync("styles/tokens.css", "utf8"),
+].join("\n");
 const components = readFileSync("styles/components.css", "utf8");
 const surfaces = readFileSync("styles/surfaces.css", "utf8");
 const tagComponent = readFileSync("src/ui/components/TaxonomyTag.tsx", "utf8");
@@ -106,7 +109,10 @@ test("locked area hue pairs and global layout tokens are exact", () => {
   assert.match(tokens, /--ca-facet-rail-width:\s*17\.5rem/);
   assert.match(tokens, /--ca-record-rail-width:\s*20rem/);
   assert.match(tokens, /--ca-atlas-rail-width:\s*20rem/);
-  assert.doesNotMatch(tokens, /--ca-space-(?:5|10|20|24|32):/);
+  for (const step of [5, 10, 20, 24]) {
+    assert.match(tokens, new RegExp(`--ca-space-${step}:\\s*var\\(--lsm-space-${step}\\)`));
+  }
+  assert.doesNotMatch(tokens, /--ca-space-32:/);
 });
 
 test("decorative color resolves to one teal accent, and the primary action is orange", () => {

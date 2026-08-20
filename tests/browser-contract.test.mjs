@@ -84,7 +84,8 @@ test('shell exposes direct task navigation and keeps Guides in overflow', () => 
   assert.match(routeIdentity, /About/);
   const staticPrimaryNav = html.match(/<nav aria-label="Primary navigation"[\s\S]*?<\/nav>/)?.[0] || "";
   assert.match(staticPrimaryNav, /#\/start[\s\S]*#\/atlas[\s\S]*#\/library[\s\S]*#\/compare[\s\S]*#\/resources/);
-  assert.match(navigation, /PRIMARY_SECTION_LABEL = "Explore Control Atlas"/);
+  assert.match(navigation, /PRIMARY_SECTION_LABEL = "Explore"/);
+  assert.match(navigation, /UTILITY_SECTION_LABEL = "Reference"/);
   assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "start-here"[\s\S]*view: "atlas-map"[\s\S]*view: "search"[\s\S]*view: "matrix"[\s\S]*view: "commons"/);
   assert.doesNotMatch(
     navigation.match(/PRIMARY_NAV_ITEMS:[\s\S]*?\n\];/)?.[0] || "",
@@ -282,15 +283,21 @@ test('Orbital Archive visual system remains active in the shared stylesheet', ()
   assert.match(html, /Content-Security-Policy/);
   assert.doesNotMatch(html, /fonts\.googleapis\.com/);
   assert.doesNotMatch(html, /fonts\.gstatic\.com/);
-  assert.match(css, /--lsm-orbit:\s*#11181e/i);
-  assert.match(css, /--lsm-graphite:\s*#253139/i);
-  assert.match(css, /--lsm-slate:\s*#2d3a42/i);
+  assert.equal(
+    packageJson.dependencies['orbital-archive-no-01'],
+    'https://github.com/BackslashBryant/orbital-archive-no-01/archive/refs/tags/v1.8.0.tar.gz',
+  );
+  assert.match(mainEntrypoint, /orbital-archive-no-01\/css/);
+  assert.match(mainEntrypoint, /orbital-archive-no-01\/fonts\.css/);
+  assert.match(css, /--lsm-orbit:\s*var\(--lsm-color-palette-orbit\)/i);
+  assert.match(css, /--lsm-graphite:\s*var\(--lsm-color-palette-graphite\)/i);
+  assert.match(css, /--lsm-slate:\s*var\(--lsm-color-palette-slate\)/i);
   assert.match(css, /--lsm-relay:\s*#54bcd9/i);
-  assert.match(css, /--lsm-gold:\s*#cbae67/i);
-  assert.match(css, /--lsm-orange:\s*#cb7248/i);
-  assert.match(css, /--lsm-signal:\s*#7eb79e/i);
-  assert.match(css, /--lsm-rust:\s*#c97a60/i);
-  assert.match(css, /--lsm-fault:\s*#ea7468/i);
+  assert.match(css, /--lsm-gold:\s*var\(--lsm-color-palette-gold\)/i);
+  assert.match(css, /--lsm-orange:\s*var\(--lsm-color-palette-orange\)/i);
+  assert.match(css, /--lsm-signal:\s*var\(--lsm-color-palette-signal\)/i);
+  assert.match(css, /--lsm-rust:\s*var\(--lsm-color-palette-rust\)/i);
+  assert.match(css, /--lsm-fault:\s*var\(--lsm-color-palette-fault\)/i);
   assert.match(css, /Oswald/);
   assert.match(css, /Inter/);
   assert.match(css, /IBM Plex Mono/);

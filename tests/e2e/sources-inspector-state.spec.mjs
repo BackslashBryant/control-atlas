@@ -21,8 +21,20 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     // Initial state: 47 publications listed with empty inspector on desktop (S7)
     const table = page.getByRole("table", { name: "Control Atlas publication register" });
     await expect(table).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Sources");
+    await expect(page.locator(".sources-page .page-header")).toContainText(
+      "Verify publisher, version, and source material for publications used in Control Atlas.",
+    );
+    await expect(table.getByRole("columnheader")).toHaveText([
+      "Publication",
+      "Publisher",
+      "Version / current through",
+      "Last checked",
+      "Status",
+    ]);
+    await expect(page.locator(".sources-page")).not.toContainText("Catalog profile");
     await expect(page.locator(".sources-inspector-pane .source-inspector-card--empty")).toBeVisible();
-    await expect(page.locator(".sources-inspector-pane .inspector-drawer")).toHaveCount(0);
+    await expect(page.locator(".sources-inspector-pane .source-inspector")).toHaveCount(0);
 
     // Select DoD AI Assurance
     const rowButton = page.getByRole("button", { name: "DoD AI Assurance" });
@@ -32,49 +44,94 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
 
     // Both register and inspector are visible side-by-side in master-detail layout
     await expect(table).toBeVisible();
-    const inspector = page.locator(".sources-inspector-pane .inspector-drawer");
+    const inspector = page.locator(".sources-inspector-pane .source-inspector--inline");
     await expect(inspector).toBeVisible();
 
-    // Verify inspector header and close button are fully visible
-    const closeBtn = page.getByRole("button", { name: "Close inspector" });
-    await expect(closeBtn).toBeVisible();
-
-    // Verify register results count is still visible and not covered
-    await expect(page.locator(".source-register-total")).toBeVisible();
-
-    // Verify closing inspector returns to empty inspector state (S7)
-    await closeBtn.click();
-    await waitForAppReady(page);
-    await expect(page.locator(".sources-inspector-pane .inspector-drawer")).toHaveCount(0);
-    await expect(page.locator(".sources-inspector-pane .source-inspector-card--empty")).toBeVisible();
-    await expect(rowButton).toBeVisible();
-    await expect(rowButton).toHaveAttribute("aria-expanded", "false");
+    // The register measurement stays visible and is not covered.
+    await expect(page.locator(".calibration-rail")).toBeVisible();
+    await expect(inspector).not.toHaveAttribute("role", "dialog");
   });
 
-  test("mobile and tablet viewports use an accessible modal drawer with Escape closing", async ({ page }) => {
-    for (const width of [390, 768]) {
-      await page.setViewportSize({ width, height: 844 });
-      await gotoApp(page, "/#/sources");
-      await waitForAppReady(page);
+  test("1024px keeps the register and inspector in a two-column non-modal workspace", async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await gotoApp(page, "/#/sources");
+    await waitForAppReady(page);
 
-      const rowButton = page.getByRole("button", { name: "DoD AI Assurance" });
-      await expect(rowButton).toBeVisible();
-      await rowButton.click();
-      await waitForAppReady(page);
+    await page.getByRole("button", { name: "DoD AI Assurance" }).click();
+    await waitForAppReady(page);
 
-      const drawer = page.locator(".inspector-drawer--modal");
-      await expect(drawer).toBeVisible();
-      await expect(drawer).toHaveAttribute("role", "dialog");
-      await expect(drawer).toHaveAttribute("aria-modal", "true");
+    const workspace = page.locator(".sources-workspace");
+    const table = page.getByRole("table", { name: "Control Atlas publication register" });
+    const inspector = page.locator(".sources-inspector-pane .source-inspector--inline");
+    await expect(workspace).toHaveCSS("display", "grid");
+    await expect(table).toBeVisible();
+    await expect(inspector).toBeVisible();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
 
-      const backdrop = page.locator(".inspector-drawer-backdrop");
-      await expect(backdrop).toBeVisible();
+    const [tableBox, inspectorBox] = await Promise.all([table.boundingBox(), inspector.boundingBox()]);
+    expect(tableBox).not.toBeNull();
+    expect(inspectorBox).not.toBeNull();
+    expect(tableBox.width).toBeGreaterThan(inspectorBox.width);
+    expect(inspectorBox.x).toBeGreaterThan(tableBox.x + tableBox.width - 1);
+  });
 
-      // Press Escape to dismiss
-      await page.keyboard.press("Escape");
-      await waitForAppReady(page);
-      await expect(page.locator(".inspector-drawer")).toHaveCount(0);
-    }
+  test("390px uses a focus-trapped modal inspector and returns focus to the row", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await gotoApp(page, "/#/sources");
+    await waitForAppReady(page);
+
+    const rowButton = page.getByRole("button", { name: "DoD AI Assurance" });
+    await expect(rowButton).toBeVisible();
+    await rowButton.click();
+    await waitForAppReady(page);
+
+    const drawer = page.getByRole("dialog");
+    await expect(drawer).toBeVisible();
+    await expect(drawer).toHaveClass(/source-inspector--modal/);
+    await expect(drawer).toHaveAttribute("aria-modal", "true");
+    await expect(page.locator(".source-inspector-dialog-backdrop")).toBeVisible();
+    await expect(page.locator("#app")).toHaveAttribute("aria-hidden", "true");
+    await expect(page.locator("#app")).toHaveAttribute("inert", "");
+
+    const closeButton = drawer.getByRole("button", { name: "Close inspector" });
+    await expect(closeButton).toBeFocused();
+    await page.keyboard.press("Shift+Tab");
+    expect(await page.locator(".source-inspector--modal :focus").count()).toBe(1);
+
+    await page.keyboard.press("Escape");
+    await waitForAppReady(page);
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(rowButton).toBeFocused();
+
+    await expect(page.locator(".source-register-row").nth(0).locator(".source-mobile-meta")).toBeVisible();
+    expect(await page.locator("html").evaluate((element) => element.scrollWidth)).toBeLessThanOrEqual(390);
+  });
+
+  test("search commits immediately on Enter without duplicating result counts", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await gotoApp(page, "/#/sources");
+    await waitForAppReady(page);
+
+    const search = page.getByRole("searchbox", { name: "Search publications" });
+    await search.fill("DoD AI Assurance");
+    await search.press("Enter");
+
+    await expect(page).toHaveURL(/q=DoD(?:%20|\+)AI(?:%20|\+)Assurance/);
+    await expect(page.locator(".calibration-rail")).toHaveCount(1);
+    await expect(page.locator(".calibration-rail")).toContainText("SHOWING 1–1 / 1");
+    await expect(page.getByRole("button", { name: "DoD AI Assurance" })).toBeVisible();
+  });
+
+  test("768px keeps publication details in the modal inspector", async ({ page }) => {
+    await page.setViewportSize({ width: 768, height: 900 });
+    await gotoApp(page, "/#/sources");
+    await waitForAppReady(page);
+
+    await page.getByRole("button", { name: "DoD AI Assurance" }).click();
+    await waitForAppReady(page);
+
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.locator(".sources-inspector-pane .source-inspector--inline")).toHaveCount(0);
   });
 
   test("row attachment count reconciles exactly to rendered inspector items", async ({ page }) => {
@@ -88,7 +145,7 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await expect(pill).toContainText("2 source files");
 
     // Inspector visibly exposes both source files
-    const inspector = page.locator(".sources-inspector-pane");
+    const inspector = page.locator(".sources-inspector-pane .source-inspector--inline");
     await expect(inspector).toBeVisible();
 
     const fileItems = inspector.locator(".source-material-item");
@@ -106,7 +163,7 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await gotoApp(page, "/#/sources?source=disa-cci-nist-references");
     await waitForAppReady(page);
 
-    const inspector = page.locator(".sources-inspector-pane .inspector-drawer");
+    const inspector = page.locator(".sources-inspector-pane .source-inspector--inline");
     await expect(inspector).toBeVisible();
     await expect(page.locator(".sources-page")).toContainText("DISA CCI");
   });
