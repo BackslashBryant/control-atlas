@@ -33,7 +33,16 @@ export type NavSection = {
 };
 
 export const PRIMARY_SECTION_LABEL = "Explore";
+export const TOOLKIT_SECTION_LABEL = "Toolkit";
 export const UTILITY_SECTION_LABEL = "Reference";
+
+export const TEMPLATES_NAV_ITEM: NavItem = {
+  label: routeIdentityFor("templates").label,
+  view: "templates",
+  path: routeIdentityFor("templates").path,
+  icon: IconFileText,
+  section: "toolkit",
+};
 
 export const PRIMARY_NAV_ITEMS: NavItem[] = [
   {
@@ -71,15 +80,8 @@ export const PRIMARY_NAV_ITEMS: NavItem[] = [
     icon: IconUsersGroup,
     section: "discovery",
   },
+  TEMPLATES_NAV_ITEM,
 ];
-
-export const DOCUMENTS_NAV_ITEM: NavItem = {
-  label: routeIdentityFor("templates").label,
-  view: "templates",
-  path: routeIdentityFor("templates").path,
-  icon: IconFileText,
-  section: "toolkit",
-};
 
 export const GUIDES_NAV_ITEM: NavItem = {
   label: routeIdentityFor("patterns").label,
@@ -107,7 +109,6 @@ export const UTILITY_NAV_ITEMS: NavItem[] = [
 ];
 
 export const OVERFLOW_NAV_ITEMS: NavItem[] = [
-  DOCUMENTS_NAV_ITEM,
   GUIDES_NAV_ITEM,
   ...UTILITY_NAV_ITEMS,
 ];
@@ -115,9 +116,10 @@ export const OVERFLOW_NAV_ITEMS: NavItem[] = [
 export const MOBILE_NAV_SECTIONS: NavSection[] = [
   {
     label: PRIMARY_SECTION_LABEL,
-    items: PRIMARY_NAV_ITEMS,
+    items: PRIMARY_NAV_ITEMS.filter((item) => item.section === "discovery"),
   },
-  { label: UTILITY_SECTION_LABEL, items: OVERFLOW_NAV_ITEMS },
+  { label: TOOLKIT_SECTION_LABEL, items: [TEMPLATES_NAV_ITEM, GUIDES_NAV_ITEM] },
+  { label: UTILITY_SECTION_LABEL, items: UTILITY_NAV_ITEMS },
 ];
 
 export const ALL_NAV_ITEMS = [

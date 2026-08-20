@@ -27,7 +27,7 @@ test("critical path: Template B landing hero and four entry cards are visible", 
   await expect(page.locator(".home-search").getByRole("button", { name: "Search" })).toBeVisible();
   await expect(page.locator('[data-template="B"]')).toBeVisible();
   await expect(page.locator(".home-secondary-action")).toHaveCount(4);
-  await expect(page.locator(".home-tag-galaxies .home-tag-link")).toHaveCount(16);
+  await expect(page.locator(".home-library-kpis .home-library-kpi")).toHaveCount(6);
 });
 
 test("critical path: the Atlas Path walks to a published connected record", async ({
@@ -41,14 +41,13 @@ test("critical path: the Atlas Path walks to a published connected record", asyn
   await dismissOnboarding(page);
 
   const connected = page
-    .getByRole("table", { name: "Relationship table" })
-    .locator("tbody")
-    .getByRole("button")
+    .getByRole("region", { name: "Relationship map" })
+    .getByRole("button", { name: "Preview" })
     .first();
   await connected.click();
   const previousUrl = page.url();
   await page
-    .getByRole("button", { name: "Explore from this record" })
+    .getByRole("link", { name: "See this record's connections" })
     .click();
   await expect(page).not.toHaveURL(previousUrl);
   await expect(page).not.toHaveURL(/node=nist-800-53%3AAC-2(?:&|$)/);
@@ -66,20 +65,17 @@ test("critical path: Atlas selected title leaves the map for record detail", asy
   await dismissOnboarding(page);
 
   await page
-    .getByRole("table", { name: "Relationship table" })
-    .locator("tbody")
-    .getByRole("button")
+    .getByRole("region", { name: "Relationship map" })
+    .getByRole("button", { name: "Preview" })
     .first()
     .click();
   const brief = page.getByLabel(/record brief/);
   await expect(brief.getByRole("button", { name: "Open full record" })).toHaveCount(0);
-  await brief.locator("h2 button").click();
+  await brief.locator("h2 a").click();
 
   await expect(page).toHaveURL(/#\/record\//);
   await expect(page.locator(".detail-page")).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Back to Explore" }),
-  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "See connections", exact: true })).toBeVisible();
 });
 
 test("critical path: browser back returns from a record to the original search", async ({
@@ -154,7 +150,7 @@ test("critical path: record reading page uses a list and keeps the graph in Atla
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const connections = page.locator('[data-record-section="crosswalks"]');
+  const connections = page.locator('[data-record-section="related-records"]');
   await expect(connections).toBeVisible();
   expect(await connections.locator("ul").count()).toBeGreaterThan(0);
   await expect(connections.locator("ul").first()).toBeVisible();
@@ -183,7 +179,7 @@ test("critical path: MITRE library search returns technique with plain-language 
   await expect(
     page.getByRole("heading", { name: /T1033/, level: 1 }),
   ).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Requirement", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Technique Description", exact: true })).toBeVisible();
 });
 
 test("critical path: retired Compare workflows recover to the published crosswalk", async ({
@@ -232,7 +228,7 @@ test("critical path: keyboard focus reaches primary nav and search", async ({
   const primaryNav = page.getByRole("navigation", {
     name: "Primary navigation",
   });
-  const library = primaryNav.getByRole("button", {
+  const library = primaryNav.getByRole("link", {
     name: "Library",
     exact: true,
   });
@@ -240,7 +236,7 @@ test("critical path: keyboard focus reaches primary nav and search", async ({
   await expect(library).toBeFocused();
   // Scoped to the banner: the static search shell's own "Start here" button
   // can also be present in the DOM while its route is loading.
-  const startHere = page.getByRole("banner").getByRole("button", {
+  const startHere = page.getByRole("banner").getByRole("link", {
     name: "Start here",
     exact: true,
   });

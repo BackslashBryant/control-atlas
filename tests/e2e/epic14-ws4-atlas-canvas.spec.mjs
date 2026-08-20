@@ -43,59 +43,40 @@ async function clickFlowNode(page, id) {
   await node.dispatchEvent("click");
 }
 
-test("Template D is graph-first and discloses map details without covering the canvas", async ({ page }) => {
-  await openAtlas(page);
+async function openLandmarkList(network) {
+  const list = network.locator("details.atlas-network-list");
+  if (!(await list.evaluate((element) => element.open))) {
+    await list.locator("summary").click();
+  }
+}
+
+test("Template D opens with the semantic Atlas and an accessible landmark fallback", async ({ page }) => {
+  await openNetwork(page);
 
   const template = page.locator('[data-page-template="canvas"]');
-  const workbench = template.locator(".atlas-tree__workbench");
-  const leftDock = workbench.locator(".atlas-tree__dock--left");
-  const canvas = workbench.locator(".atlas-tree__canvas");
-  const detailsToggle = template.locator('button[aria-controls="atlas-map-inspector"]');
+  const network = template.getByTestId("atlas-network");
+  const stage = network.locator(".atlas-network-stage");
 
   await expect(page.locator("main")).toHaveCount(1);
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
   await expect(page.getByText("CYBERSECURITY LANDSCAPE", { exact: true })).toBeVisible();
   await expect(page.getByText("Explore areas, publications, and the published connections between them.", { exact: true })).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Jump to a record" })).toBeVisible();
-  await expect(template.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
-  await expect(detailsToggle).toHaveAttribute("aria-expanded", "false");
-  await expect(workbench.locator(".atlas-tree__inspector")).toHaveCount(0);
+  await expect(network).toHaveAttribute("data-projection-level", "landscape");
+  await expect(network).toHaveAttribute("data-projection-node-count", "13");
+  await expect(network.locator("canvas").first()).toBeVisible();
+  await expect(network.locator("summary")).toHaveText("Browse landmarks");
+  await expect(network.locator(".atlas-network-list button")).toHaveCount(13);
+  await expect(page.locator(".atlas-tree")).toHaveCount(0);
   await expect(template).not.toContainText(/\b(?:trunks?|limbs?|twigs?|acorns?)\b/i);
   await expect(template.locator(".atlas-ancestry > .atlas-choice-trail")).toHaveCount(0);
-  await expect(workbench).toBeVisible();
-  await expect(canvas.getByRole("application", { name: "Interactive Atlas map hierarchy" })).toBeVisible();
 
-  const geometry = await Promise.all([leftDock, canvas].map((locator) => locator.evaluate((node) => {
-    const box = node.getBoundingClientRect();
-    return { left: box.left, right: box.right, top: box.top, width: box.width };
-  })));
-  expect(geometry[0].width).toBeCloseTo(280, 0);
-  expect(geometry[0].right).toBeLessThanOrEqual(geometry[1].left);
-  expect(geometry[1].top).toBeLessThan(1_000);
-  expect(geometry[1].width).toBeGreaterThan(900);
+  const stageBox = await stage.boundingBox();
+  expect(stageBox?.y).toBeLessThan(1_000);
+  expect(stageBox?.width).toBeGreaterThan(900);
 
-  await detailsToggle.click();
-  const inspector = workbench.locator(".atlas-tree__inspector");
-  await expect(detailsToggle).toHaveAttribute("aria-expanded", "true");
-  await expect(inspector.getByText("Atlas overview", { exact: true })).toBeVisible();
-  await expect(inspector).toContainText("Browse cybersecurity areas and the publications under them.");
-  const openGeometry = await Promise.all([canvas, inspector].map((locator) => locator.evaluate((node) => {
-    const box = node.getBoundingClientRect();
-    return { left: box.left, right: box.right, width: box.width };
-  })));
-  expect(openGeometry[1].width).toBeCloseTo(320, 0);
-  expect(openGeometry[1].left).toBeGreaterThanOrEqual(openGeometry[0].right);
-  await page.keyboard.press("Escape");
-  await expect(inspector).toHaveCount(0);
-  await expect(detailsToggle).toBeFocused();
-
-  const areaControls = leftDock.locator("[data-area-id]");
-  await expect(areaControls).toHaveCount(9);
-  await expect(leftDock.locator('[data-area-id][data-empty="true"]')).toHaveCount(2);
-  await expect(leftDock.getByRole("button", { name: /Operations/ })).toBeDisabled();
-  await expect(leftDock.getByRole("button", { name: /Knowledge/ })).toBeDisabled();
-  await expect(leftDock.getByText("No records yet.", { exact: true })).toHaveCount(2);
-  await expect(page.getByRole("button", { name: /Open this (?:area|publication|branch)/ })).toHaveCount(0);
+  await openLandmarkList(network);
+  await expect(network.getByRole("button", { name: /Compliance/ })).toBeVisible();
 });
 
 test("semantic Atlas drills from landmarks to publisher-native records without a global graph", async ({ page }) => {
@@ -109,17 +90,19 @@ test("semantic Atlas drills from landmarks to publisher-native records without a
   await network.getByRole("button", { name: /Compliance/ }).click();
   await expect(page).toHaveURL(/atlasLimb=.*LIMB-COMPLIANCE/);
   await expect(network).toHaveAttribute("data-projection-level", "area");
-  await network.locator("summary").click();
+  await openLandmarkList(network);
   await network.getByRole("button", { name: /SP 800-53 Rev\. 5 Catalog/ }).click();
   await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
   await expect(network).toHaveAttribute("data-projection-level", "publication");
-  await network.locator("summary").click();
+  await openLandmarkList(network);
   await network.getByRole("button", { name: /Access Control/ }).click();
   await expect(network).toHaveAttribute("data-projection-level", "detail");
-  await network.locator("summary").click();
+  await openLandmarkList(network);
   await network.getByRole("button", { name: /^AC-2 \u2014 Account Management/ }).click();
   await expect(page).toHaveURL(/#\/atlas\/nist-800-53:AC-2/);
-  await expect(network).toHaveAttribute("data-selected-canonical", "nist-800-53:AC-2");
+  await expect(network).toHaveCount(0);
+  await expect(page.locator(".atlas-workspace-heading")).toHaveText("Connections");
+  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toBeVisible();
 });
 
 test("every populated area drills directly and the live breadcrumb reverses the path", async ({ page }) => {
@@ -301,7 +284,7 @@ test("Atlas hierarchy and local record controls keep generated IDs out of primar
     await dismissOnboarding(page);
 
     await expect(page.getByRole("region", { name: "Page context" })).toContainText("Appgate");
-    await expect(page.getByRole("region", { name: "Appgate" })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Focused Atlas record" })).toBeVisible();
     const hierarchy = page.locator("#atlas-hierarchy-panel");
     await expect(hierarchy.getByRole("heading", { name: "Decomposes into", level: 3 })).toBeVisible();
     const child = hierarchy.getByRole("link", {

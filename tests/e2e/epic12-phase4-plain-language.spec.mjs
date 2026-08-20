@@ -112,9 +112,11 @@ test("Phase 4 keeps rendered filters useful, sorted, and consistently cased", as
         const firstLetter = value.match(/[A-Za-z]/)?.[0] || "";
         expect(firstLetter, `${route}: ${label}: ${value}`).toBe(firstLetter.toUpperCase());
       }
-      expect(values, `${route}: ${label}`).toEqual(
-        [...values].sort((left, right) => left.localeCompare(right, undefined, { sensitivity: "base" })),
-      );
+      if (label !== "Sort") {
+        expect(values, `${route}: ${label}`).toEqual(
+          [...values].sort((left, right) => left.localeCompare(right, undefined, { sensitivity: "base" })),
+        );
+      }
     }
   }
 });
@@ -124,12 +126,10 @@ test("Phase 4 places comparison limits with results and removes menu methodology
   await gotoApp(page, "/#/compare");
   await waitForRenderedRoute(page, "/#/compare");
 
-  const cards = page.locator(".intent-card");
-  await expect(cards).toHaveCount(5);
-  expect((await cards.allTextContents()).join("\n")).not.toMatch(/Evidence:/i);
+  const modes = page.getByRole("tablist", { name: "Comparison mode" }).getByRole("tab");
+  await expect(modes).toHaveCount(2);
+  await expect(modes).toHaveText(["Frameworks", "Specific item"]);
   await expect(page.locator(".compare-decision-boundary")).toHaveCount(0);
-  const cardCopy = await cards.allTextContents();
-  expect(new Set(cardCopy).size).toBe(cardCopy.length);
 
   await gotoApp(
     page,
@@ -138,7 +138,7 @@ test("Phase 4 places comparison limits with results and removes menu methodology
   await waitForRenderedRoute(page, "/#/compare");
   await expect(page.locator("#compare-results")).toBeVisible({ timeout: 30_000 });
   await expect(page.locator("#compare-results .compare-decision-boundary")).toContainText(
-    "A missing mapping means these published results contain no cited link",
+    "does not by itself establish equivalence or compliance",
   );
 });
 
@@ -168,7 +168,7 @@ test("Phase 4 keeps the product boundary contextual and reports freshness from v
   await page.setViewportSize({ width: 1440, height: 900 });
   await gotoApp(page, "/#/start");
   await waitForRenderedRoute(page, "/#/start");
-  await expect(page.locator(".start-here-step")).not.toContainText(
+  await expect(page.locator("main")).not.toContainText(
     "Control Atlas does not decide what applies to your system",
   );
 

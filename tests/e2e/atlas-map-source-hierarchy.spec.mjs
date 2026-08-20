@@ -23,16 +23,20 @@ async function expectNoHorizontalOverflow(page) {
   expect(width.scroll).toBeLessThanOrEqual(width.client + 1);
 }
 
-async function clickAtlasNode(page, viewport, id) {
-  if (viewport.width < 1024) {
-    const node = page.locator(`.atlas-tree-compact [data-atlas-node-id="${id}"]`);
-    await expect(node).toBeVisible();
-    await node.click();
-    return;
+async function clickAtlasLandmark(page, name) {
+  await page.evaluate(() => new Promise((resolve) => {
+    globalThis.requestAnimationFrame(() => globalThis.requestAnimationFrame(resolve));
+  }));
+  const network = page.getByTestId("atlas-network");
+  const list = network.locator(".atlas-network-list");
+  const node = network.getByRole("button", { name });
+  if (!(await node.isVisible())) {
+    const summary = list.getByText("Browse landmarks", { exact: true });
+    await expect(summary).toBeVisible();
+    await summary.click();
   }
-  const node = page.locator(`.react-flow__node:has([data-atlas-node-id="${id}"])`);
   await expect(node).toBeVisible();
-  await node.dispatchEvent("click");
+  await node.click();
 }
 
 for (const viewport of VIEWPORTS) {
@@ -43,30 +47,25 @@ for (const viewport of VIEWPORTS) {
     await page.goto("/#/atlas");
     await waitForAppReady(page);
     await dismissOnboarding(page);
+    await expect(page.getByTestId("atlas-network")).toHaveAttribute("data-projection-level", "landscape");
 
-    await clickAtlasNode(page, viewport, "atlas:LIMB-COMPLIANCE");
+    await clickAtlasLandmark(page, /Compliance/);
     await expect(page).toHaveURL(/atlasLimb=atlas(?::|%3A)LIMB-COMPLIANCE/);
-    await clickAtlasNode(page, viewport, "nist-800-53:CATALOG");
+    await expect(page.getByTestId("atlas-network")).toHaveAttribute("data-projection-level", "area");
+    await clickAtlasLandmark(page, /SP\s+800-53 Rev\. 5 Catalog/);
     await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
     await expect(page).not.toHaveURL(/atlasBaseline=/);
+    await expect(page.getByTestId("atlas-network")).toHaveAttribute("data-projection-level", "publication");
 
-    const explorer = page.locator("[data-atlas-structural-explorer]");
-    await explorer.getByRole("button", { name: /FAMILY-AC Access Control/ }).click();
-    await expect(explorer.getByLabel("Search this publication")).toBeVisible();
-    await expect(explorer.getByRole("heading", { name: "Access Control" })).toBeVisible();
-    await expect(page.locator(".atlas-tree__mobile-bar")).toContainText("Access Control");
     await expectNoHorizontalOverflow(page);
-    await explorer.getByLabel("Search this publication").fill("AC-1");
-    await explorer.getByRole("button", { name: /^AC-1\b/ }).click();
+    const jumpToRecord = page.getByRole("searchbox", { name: "Jump to a record" });
+    await jumpToRecord.fill("nist-800-53:AC-1");
+    await jumpToRecord.press("Enter");
+    await waitForAppReady(page);
     await expect(page).toHaveURL(/\/#\/atlas\/nist-800-53:AC-1\?/);
     await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-    // The guided path lands with Hierarchy already open (it sets
-    // relationshipView: "path" when a record is chosen) — the visitor just
-    // navigated structure to get here, so showing it is the point.
-    await expect(page.getByRole("button", { name: "Hierarchy" })).toHaveAttribute(
-      "aria-expanded",
-      "true",
-    );
+    await expect(page.getByRole("region", { name: "Focused Atlas record" })).toBeVisible();
+    await page.getByRole("button", { name: "Hierarchy" }).click();
     await expect(page.getByRole("heading", { name: "Where this sits" })).toBeVisible();
     await expect(
       page.getByRole("navigation", { name: "Where this sits" }).first(),
@@ -116,9 +115,11 @@ test("Atlas root presents an authority-rooted interactive hierarchy", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.locator(".atlas-tree")).toBeVisible();
-  await expect(page.locator('[data-atlas-node-id^="atlas:LIMB-"]')).toHaveCount(9);
-  await expect(page.locator(".react-flow")).toHaveCount(1);
+  const network = page.getByTestId("atlas-network");
+  await expect(network).toBeVisible();
+  await expect(network).toHaveAttribute("data-projection-level", "landscape");
+  await expect(network.getByRole("button", { name: /Area ·/ })).toHaveCount(9);
+  await expect(network.locator("canvas").first()).toBeVisible();
   await expect(
     page.getByText("Explore areas, publications, and the published connections between them.", { exact: true }),
   ).toBeVisible();

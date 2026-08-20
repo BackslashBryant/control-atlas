@@ -64,8 +64,9 @@ test("Resource detail has one return action and preserves the Resources workspac
 
     await returnLink.click();
     await waitForAppReady(page);
-    await expect(page.getByRole("heading", { name: "Resources", level: 1 })).toBeVisible();
-    await expect(page.getByRole("searchbox", { name: "Find resources" })).toHaveValue("ScubaGear");
+    const resourceSearch = page.getByRole("searchbox", { name: "Find resources" });
+    await expect(resourceSearch).toBeVisible();
+    await expect(resourceSearch).toHaveValue("ScubaGear");
     await expect(page.getByRole("button", { name: "Map" })).toHaveAttribute("aria-pressed", "true");
     await expect(page).toHaveURL(/collection=cloud-devsecops-software-factories/);
     await expect(page).toHaveURL(/resourceType=tool/);
@@ -77,7 +78,7 @@ test("Resource detail has one return action and preserves the Resources workspac
     await expect(page.getByRole("heading", { name: "CISA ScubaGear", level: 1 })).toBeVisible();
     await page.goForward();
     await waitForAppReady(page);
-    await expect(page.getByRole("heading", { name: "Resources", level: 1 })).toBeVisible();
+    await expect(page.getByRole("searchbox", { name: "Find resources" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Map" })).toHaveAttribute("aria-pressed", "true");
   }
 });

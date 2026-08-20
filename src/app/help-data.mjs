@@ -34,12 +34,12 @@ export const helpSurfaces = [
     actionLabel: "Open Guides",
   },
   {
-    // Internal view key stays "templates"; nav label renamed to Build
-    // (Commons folded in — see W4).
+    // Internal view key stays "templates" and the legacy /build path remains
+    // accepted while the public destination is named Templates.
     view: "templates",
-    title: "Documents",
+    title: "Templates",
     body: SITE_COPY.routes.documents.purpose,
-    actionLabel: "Open Documents",
+    actionLabel: "Open Templates",
   },
   {
     view: "sources",

@@ -16,7 +16,7 @@ test('canonical routes set human-readable document titles', async ({ page }) => 
     ['/#/', /Control Atlas/],
     ['/#/atlas', /^Atlas.*Control Atlas$/],
     ['/#/library?q=AC-2', /^AC-2.*Library.*Control Atlas$/],
-    ['/#/build', /^Documents.*Control Atlas$/],
+    ['/#/build', /^Templates.*Control Atlas$/],
     ['/#/resources', /^Resources.*Control Atlas$/],
     ['/#/compare', /^Compare.*Control Atlas$/],
     ['/#/about', /^About.*Control Atlas$/],
@@ -78,8 +78,9 @@ test('legacy public aliases canonicalize while retired structural aliases remain
   await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
 
   await gotoApp(page, '/#/library?q=AC-2&kind=controls-requirements');
-  await expect(page).toHaveURL(/#\/atlas$/);
-  await expect(page.getByRole('application', { name: 'Interactive Atlas map hierarchy' })).toBeVisible();
+  await expect(page).toHaveURL(/#\/library\?q=AC-2&kind=controls-requirements/);
+  await expect(page.getByRole('heading', { name: 'Library', level: 1 })).toBeVisible();
+  await expect(page.locator('#library-results')).toContainText('AC-2');
 
   await gotoApp(page, '/#/commons-detail?id=official-nist-oscal');
   await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
@@ -138,20 +139,20 @@ test('full-page search fields wait for explicit submission', async ({ page }) =>
   const resourceSearch = page.getByRole('searchbox', { name: 'Find resources' });
   await resourceSearch.fill('Iron Bank');
   await expect(page).toHaveURL(/#\/resources\?q=OSCAL/);
-  await page.getByRole('button', { name: 'Search resources' }).click();
+  await page.getByRole('button', { name: 'Search', exact: true }).click();
   await expect(page).toHaveURL(/#\/resources\?q=Iron\+Bank/);
 
   await gotoApp(page, '/#/sources?q=NIST');
   await waitForAppReady(page);
-  const sourceSearch = page.getByRole('searchbox', { name: 'Search sources' });
+  const sourceSearch = page.getByRole('searchbox', { name: 'Search publications' });
   await sourceSearch.fill('FedRAMP');
   await expect(page).toHaveURL(/#\/sources\?q=NIST/);
-  await page.getByRole('button', { name: 'Search sources' }).click();
+  await sourceSearch.press('Enter');
   await expect(page).toHaveURL(/#\/sources\?q=FedRAMP/);
 
   await gotoApp(page, '/#/library/publication/nist-800-53?q=AC-2');
   await waitForAppReady(page);
-  const catalogSearch = page.getByRole('searchbox', { name: 'Search this catalog' });
+  const catalogSearch = page.getByRole('searchbox', { name: 'Search SP 800-53 Rev. 5' });
   await catalogSearch.fill('AC-3');
   await expect(page).toHaveURL(/q=AC-2/);
   await page.getByRole('button', { name: 'Search records' }).click();
@@ -180,8 +181,11 @@ test('Atlas landing renders the lightweight semantic hierarchy, not the relation
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await expect(page.getByRole('application', { name: 'Interactive Atlas map hierarchy' })).toBeVisible();
-  await expect(page.locator('[data-atlas-node-id^="atlas:LIMB-"]')).toHaveCount(9);
-  await expect(page.locator('.react-flow')).toHaveCount(1);
+  const network = page.getByTestId('atlas-network');
+  await expect(network).toBeVisible();
+  await expect(network).toHaveAttribute('data-projection-level', 'landscape');
+  await expect(network).toHaveAttribute('data-projection-node-count', '13');
+  await expect(network.locator('canvas').first()).toBeVisible();
+  await expect(page.locator('.react-flow')).toHaveCount(0);
   expect(requests.some((url) => /RelationshipGraph-/.test(url))).toBe(false);
 });

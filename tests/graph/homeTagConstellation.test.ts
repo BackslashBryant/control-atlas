@@ -1,39 +1,53 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { TAXONOMY_CONTRACT } from "../../src/shared/taxonomy-contract.mjs";
-import {
-  HOME_TAG_COUNT,
-  HOME_TAG_GROUPS,
-} from "../../src/ui/lib/homeTagConstellation";
+import librarySearchArtifact from "../../data/generated/library-search.json";
 
-test("Home tag constellation is governed, bounded, and fixed in taxonomy order", () => {
-  assert.equal(HOME_TAG_GROUPS.length, TAXONOMY_CONTRACT.dimensions.length);
-  assert.equal(HOME_TAG_COUNT, 16);
+import { HOME_LIBRARY_DISCOVERY } from "../../src/ui/lib/homeTagConstellation";
+import { rawTypesForKind } from "../../src/ui/lib/informationArchitecture";
+
+const browseCounts = librarySearchArtifact.library_search.browse_counts;
+
+test("Home Library discovery exposes six populated, canonical filter states", () => {
+  assert.equal(HOME_LIBRARY_DISCOVERY.length, 6);
   assert.deepEqual(
-    HOME_TAG_GROUPS.map((group) => group.id),
-    TAXONOMY_CONTRACT.dimensions.map((dimension) => dimension.id),
+    HOME_LIBRARY_DISCOVERY.map((item) => item.id),
+    [
+      "technical-rules",
+      "requirements",
+      "process-methods",
+      "threats-defenses",
+      "asset.mobile",
+      "technology.operating-system",
+    ],
   );
 
-  const contractIds = new Set(TAXONOMY_CONTRACT.tags.map((tag) => tag.id));
-  for (const group of HOME_TAG_GROUPS) {
-    assert.ok(group.tags.length >= 1 && group.tags.length <= 3, `${group.id} has a bounded selection`);
-    assert.ok(group.tags.every((tag) => contractIds.has(tag.id)), `${group.id} uses governed stable IDs`);
-    assert.ok(group.tags.every((tag) => tag.dimension === group.id), `${group.id} keeps dimension ownership`);
-    assert.ok(group.tags.every((tag) => !("count" in tag)), `${group.id} does not expose popularity`);
+  for (const item of HOME_LIBRARY_DISCOVERY) {
+    assert.ok(item.count > 0, `${item.id} resolves to records`);
+    assert.ok(Boolean(item.patch.kind) !== Boolean(item.patch.tags?.length), `${item.id} owns one filter route`);
   }
 });
 
-test("Home tag constellation preserves the first populated governed tags per dimension", () => {
+test("Home Library discovery counts come directly from the Library browse artifact", () => {
   assert.deepEqual(
-    HOME_TAG_GROUPS.map((group) => [group.id, group.tags.map((tag) => tag.id)]),
+    HOME_LIBRARY_DISCOVERY.map((item) => [item.id, item.count]),
     [
-      ["asset_class", ["asset.application", "asset.container", "asset.database"]],
-      ["environment", ["environment.cloud"]],
-      ["technology", ["technology.operating-system", "technology.active-directory", "technology.ios"]],
-      ["vendor_brand", ["vendor.amazon", "vendor.apple", "vendor.cisco"]],
-      ["product", ["product.microsoft-windows", "product.red-hat-enterprise-linux", "product.vmware-vsphere"]],
-      ["domain", ["domain.access-control", "domain.assessment-authorization-monitoring", "domain.audit-accountability"]],
+      ["technical-rules", 17_021],
+      ["requirements", 9_766],
+      ["process-methods", 1_152],
+      ["threats-defenses", 1_065],
+      ["asset.mobile", 1_690],
+      ["technology.operating-system", 5_694],
     ],
   );
+
+  for (const item of HOME_LIBRARY_DISCOVERY) {
+    const expected = item.patch.kind
+      ? rawTypesForKind(item.patch.kind).reduce(
+        (total, rawType) => total + Number(browseCounts.object_types[rawType as keyof typeof browseCounts.object_types] || 0),
+        0,
+      )
+      : Number(browseCounts.tags[item.patch.tags?.[0] as keyof typeof browseCounts.tags] || 0);
+    assert.equal(item.count, expected, item.id);
+  }
 });

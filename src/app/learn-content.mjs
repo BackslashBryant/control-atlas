@@ -263,13 +263,13 @@ export const learnArticles = Object.freeze([
   },
   {
     id: "starter-documents-and-judgment",
-    title: "Starter documents preserve user judgment",
+    title: "Templates preserve user judgment",
     summary: "Check required inputs, source citations, previews, downloads, and explicit unselected values.",
     explanation:
-      "Starter documents use only the inputs selected in Build. Required inputs fail closed; optional values remain unselected. Preview and Download use the same validated snapshot and include cited source context and limitations.",
+      "Templates use only the inputs selected in Control Atlas. Required inputs fail closed; optional values remain unselected. Preview and Download use the same validated snapshot and include cited source context and limitations.",
     limitations:
       "A generated starter document is not evidence, an authorization package, a compliance result, or an authorizing-authority decision.",
-    nextAction: { label: "Open Starter documents", view: "templates", patch: { buildSection: "documents" } },
+    nextAction: { label: "Choose a template", view: "templates", patch: { buildSection: "documents" } },
     citations: [
       { sourceId: "nist-ssdf", role: "official-subject-source", label: "NIST SP 800-218 SSDF Version 1.1", url: "https://csrc.nist.gov/pubs/sp/800/218/final", supports: "Subject matter that a starter document may cite; preview and download snapshot behavior is authored by Control Atlas." },
     ],

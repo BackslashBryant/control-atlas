@@ -44,7 +44,7 @@ export function TopNav(props: TopNavProps) {
   // Kept in sync with styles/orbital.css's desktop/mobile contract. Primary
   // product navigation remains visible at ordinary desktop widths.
   // see that rule's comment for the width budget this threshold is based on.
-  // Five task destinations plus Search require more room than the former
+  // Six task destinations plus Search require more room than the former
   // three-link header. Switch before controls compete at tablet widths.
   const compactHeader = useMediaMatch("(max-width: 1199px)");
   const compactNavigation = compactHeader;

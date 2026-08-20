@@ -72,7 +72,9 @@ export function CatalogDetailPage(props: {
   }
 
   const profile = catalogProfileFor(catalog.id, catalog.name);
-  const source = publicationSourceForCatalog(bundle.runtime, catalog.id);
+  const source = publicationSourceForCatalog(bundle.runtime, catalog.id)
+    || (catalog.source_id ? bundle.runtime.getSource(catalog.source_id) : null);
+  const officialPublicationUrl = source?.artifact_url || source?.catalog_browse_url;
   const catalogName = catalogDisplayNameFor(catalog.id, catalog.name);
   const publicationTitle = String(
     source?.display_name || source?.name || catalogName,
@@ -176,11 +178,11 @@ export function CatalogDetailPage(props: {
             </span>
           ) : null}
         </div>
-        {source?.artifact_url ? (
+        {officialPublicationUrl ? (
           <ButtonLink
             className="catalog-source-link"
             data-route-primary-support="true"
-            href={source.artifact_url}
+            href={officialPublicationUrl}
             rel="noreferrer"
             target="_blank"
             variant="primary"
@@ -334,9 +336,14 @@ export function CatalogDetailPage(props: {
                     objectType: record.node_type || "",
                     metadata: record.metadata,
                   });
+                  const primaryText = identity.stableIdIsGenerated
+                    ? identity.primary
+                    : itemId;
                   const supportingText = identity.stableIdIsGenerated
                     ? identity.context
-                    : identity.secondary;
+                    : title !== itemId
+                      ? title
+                      : identity.secondary;
                   return (
                     <li key={record.id}><article className="catalog-record-row">
                       <h3><AppLink
@@ -346,7 +353,7 @@ export function CatalogDetailPage(props: {
                         patch={{ node: record.id }}
                         view="library-detail"
                       >
-                        <strong>{identity.primary}</strong>
+                        <strong>{primaryText}</strong>
                         {supportingText ? <span>{supportingText}</span> : null}
                       </AppLink></h3>
                       {record.description ? <p>{record.description}</p> : null}

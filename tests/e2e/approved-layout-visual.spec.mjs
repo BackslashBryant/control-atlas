@@ -9,7 +9,7 @@ import {
 
 const ATLAS_STATES = {
   overview: '/#/atlas',
-  branch: '/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-COMPLIANCE&atlasFramework=nist-800-53',
+  branch: '/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-COMPLIANCE&atlasFramework=nist-800-53&relationshipView=path',
 };
 const VIEWPORTS = {
   desktop: { width: 1440, height: 1000 },
@@ -61,19 +61,22 @@ async function openApprovedAtlas(page, viewport, state) {
 
   const template = page.locator('[data-page-template="canvas"]');
   await expect(template).toBeVisible();
-  await expect(template.locator('.atlas-tree')).toHaveAttribute('data-layout-status', 'ready');
   if (state === 'branch') {
+    await expect(template.locator('.atlas-tree')).toHaveAttribute('data-layout-status', 'ready');
     await expect(
       template.getByRole('heading', { name: 'SP 800-53 Rev. 5 Catalog' }),
     ).toBeVisible();
-  } else if (viewport.width >= 1024) {
-    await expect(
-      template.getByRole('application', { name: 'Interactive Atlas map hierarchy' }),
-    ).toBeVisible();
   } else {
-    await expect(
-      template.getByRole('tree', { name: 'Atlas map hierarchy' }),
-    ).toBeVisible();
+    const network = template.getByTestId('atlas-network');
+    await expect(network).toHaveAttribute('data-projection-level', 'landscape');
+    await expect(network).toHaveAttribute('data-projection-node-count', '13');
+    await expect(network.locator('.atlas-network-list button')).toHaveCount(13);
+    if (viewport.width >= 768) {
+      await expect(network.locator('canvas').first()).toBeVisible();
+      await expect(network.locator('summary')).toHaveText('Browse landmarks');
+    } else {
+      await expect(network.locator('.atlas-network-list button').first()).toBeVisible();
+    }
   }
   if (state === 'branch' && viewport.width >= 1024) {
     await expect(

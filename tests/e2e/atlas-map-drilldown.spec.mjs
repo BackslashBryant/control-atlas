@@ -10,8 +10,17 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-async function clickFlowNode(page, id) {
-  const node = page.locator(`.react-flow__node:has([data-atlas-node-id="${id}"])`);
+async function openLandmarkList(page) {
+  const list = page.locator(".atlas-network-list");
+  if (!(await list.evaluate((element) => element.open))) {
+    await list.locator("summary").click();
+  }
+  return list;
+}
+
+async function clickLandmark(page, name) {
+  const list = await openLandmarkList(page);
+  const node = list.getByRole("button", { name });
   await expect(node).toBeVisible();
   await node.dispatchEvent("click");
 }
@@ -19,66 +28,82 @@ async function clickFlowNode(page, id) {
 test("the Atlas landing shows nine honest areas and a populated area drills to its publications", async ({
   page,
 }) => {
-  test.setTimeout(120_000);
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
 
-  await expect(page.getByRole("application", { name: "Interactive Atlas map hierarchy" })).toBeVisible();
-  await expect(page.locator(".atlas-tree__areas [data-area-id]")).toHaveCount(9);
-  await expect(page.locator(".atlas-tree__areas [data-area-id]:disabled")).toHaveCount(2);
-  await expect(page.locator(".atlas-tree__areas").getByText("Nothing mapped yet.", { exact: true })).toHaveCount(2);
-
-  await page.locator('.atlas-tree__areas [data-area-id="atlas:LIMB-COMPLIANCE"]').click();
-  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+  await dismissOnboarding(page);
+  const landscape = page.getByTestId("atlas-network");
+  await expect(landscape).toBeVisible();
+  await expect(landscape).toHaveAttribute("data-projection-level", "landscape");
   await expect(
-    page.locator('[data-atlas-node-id="nist-800-53:CATALOG"]'),
+    landscape.locator(".atlas-network-list button", { hasText: /Area ·/ }),
+  ).toHaveCount(9);
+
+  await clickLandmark(page, /Compliance Area/);
+  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
+  const publications = await openLandmarkList(page);
+  await expect(
+    publications.getByRole("button", {
+      name: /SP 800-53 Rev\. 5 Catalog/,
+    }),
   ).toBeVisible();
 });
 
 test("a canvas branch survives refresh and its breadcrumb steps back one generation", async ({
   page,
 }) => {
-  test.setTimeout(120_000);
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await clickFlowNode(page, "atlas:LIMB-COMPLIANCE");
-  await clickFlowNode(page, "nist-800-53:CATALOG");
+  await clickLandmark(page, /Compliance Area/);
+  await clickLandmark(page, /SP 800-53 Rev\. 5 Catalog/);
   await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
-  const breadcrumb = page.getByRole("navigation", { name: "Atlas breadcrumb" });
-  await expect(breadcrumb).toContainText("Compliance");
-  await expect(breadcrumb).toContainText("SP 800-53 Rev. 5 Catalog");
+  const location = page.getByRole("navigation", { name: "Atlas location" });
+  await expect(location).toBeVisible();
+  await expect(page.getByTestId("atlas-network")).toHaveAttribute(
+    "data-projection-level",
+    "publication",
+  );
 
   await page.reload();
   await waitForAppReady(page);
-  await expect(page.locator(".atlas-tree")).toHaveAttribute("data-layout-status", "ready");
-  await expect(breadcrumb).toContainText("SP 800-53 Rev. 5 Catalog");
+  await expect(page.getByTestId("atlas-network")).toHaveAttribute(
+    "data-projection-level",
+    "publication",
+  );
 
-  await breadcrumb.getByRole("button", { name: "Compliance", exact: true }).click();
-  await expect(page).toHaveURL(/atlasLimb=atlas%3ALIMB-COMPLIANCE/);
+  await location.getByRole("button", { name: "Up one level" }).click();
+  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
   await expect(page).not.toHaveURL(/atlasFramework=/);
 
   await page.goBack();
-  await expect(breadcrumb).toContainText("SP 800-53 Rev. 5 Catalog");
+  await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
+  await expect(page.getByTestId("atlas-network")).toHaveAttribute(
+    "data-projection-level",
+    "publication",
+  );
 });
 
-test("family filtering is local and an empty result explains itself", async ({
+test("family drill stays scoped to the publication's real child records", async ({
   page,
 }) => {
-  test.setTimeout(120_000);
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await clickFlowNode(page, "atlas:LIMB-COMPLIANCE");
-  await clickFlowNode(page, "nist-800-53:CATALOG");
-  await clickFlowNode(page, "nist-800-53:FAMILY-AC");
-  const filter = page.getByLabel("Filter this family");
-  await filter.fill("AC-2");
-  await expect(page.locator(".atlas-path-record")).not.toHaveCount(0);
-  await filter.fill("definitely-not-a-control");
+  await clickLandmark(page, /Compliance Area/);
+  await clickLandmark(page, /SP 800-53 Rev\. 5 Catalog/);
+  await clickLandmark(page, /Access Control/);
+  await expect(page).toHaveURL(/atlasFamily=group:nist-800-53:0/);
+  await expect(page.getByTestId("atlas-network")).toHaveAttribute(
+    "data-projection-level",
+    "detail",
+  );
+  const records = await openLandmarkList(page);
   await expect(
-    page.getByText("No structural children match that filter."),
+    records.getByRole("button", {
+      name: /^AC-2 — Account Management /,
+    }),
   ).toBeVisible();
 });

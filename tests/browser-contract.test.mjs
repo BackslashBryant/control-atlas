@@ -68,7 +68,7 @@ test('shell identifies Control Atlas and progressively boots the React workspace
   assert.equal(packageJson.dependencies['react-router'], undefined);
 });
 
-test('shell exposes direct task navigation and keeps Guides in overflow', () => {
+test('shell exposes Templates directly and keeps reference pages in overflow', () => {
   assert.doesNotMatch(html, /btn-toggle-mode/);
   assert.doesNotMatch(html, /Plain labels/);
   assert.doesNotMatch(html, /Technical labels/);
@@ -80,18 +80,21 @@ test('shell exposes direct task navigation and keeps Guides in overflow', () => 
   assert.match(routeIdentity, /label: "Library"/);
   assert.match(routeIdentity, /label: "Resources"/);
   assert.match(routeIdentity, /label: "Guides"/);
+  assert.match(routeIdentity, /templates: \{[^}]*label: "Templates"/);
   assert.match(routeIdentity, /Sources/);
   assert.match(routeIdentity, /About/);
   const staticPrimaryNav = html.match(/<nav aria-label="Primary navigation"[\s\S]*?<\/nav>/)?.[0] || "";
-  assert.match(staticPrimaryNav, /#\/start[\s\S]*#\/atlas[\s\S]*#\/library[\s\S]*#\/compare[\s\S]*#\/resources/);
+  assert.match(staticPrimaryNav, /#\/start[\s\S]*#\/atlas[\s\S]*#\/library[\s\S]*#\/compare[\s\S]*#\/resources[\s\S]*#\/build/);
   assert.match(navigation, /PRIMARY_SECTION_LABEL = "Explore"/);
   assert.match(navigation, /UTILITY_SECTION_LABEL = "Reference"/);
-  assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "start-here"[\s\S]*view: "atlas-map"[\s\S]*view: "search"[\s\S]*view: "matrix"[\s\S]*view: "commons"/);
+  assert.match(navigation, /PRIMARY_NAV_ITEMS[\s\S]*view: "start-here"[\s\S]*view: "atlas-map"[\s\S]*view: "search"[\s\S]*view: "matrix"[\s\S]*view: "commons"[\s\S]*TEMPLATES_NAV_ITEM/);
   assert.doesNotMatch(
     navigation.match(/PRIMARY_NAV_ITEMS:[\s\S]*?\n\];/)?.[0] || "",
     /view: "patterns"/,
   );
-  assert.match(navigation, /OVERFLOW_NAV_ITEMS[\s\S]*DOCUMENTS_NAV_ITEM[\s\S]*GUIDES_NAV_ITEM/);
+  assert.match(navigation, /OVERFLOW_NAV_ITEMS[\s\S]*GUIDES_NAV_ITEM[\s\S]*UTILITY_NAV_ITEMS/);
+  assert.doesNotMatch(navigation.match(/OVERFLOW_NAV_ITEMS:[\s\S]*?\n\];/)?.[0] || "", /TEMPLATES_NAV_ITEM/);
+  assert.match(navigation, /MOBILE_NAV_SECTIONS[\s\S]*TOOLKIT_SECTION_LABEL[\s\S]*TEMPLATES_NAV_ITEM, GUIDES_NAV_ITEM[\s\S]*UTILITY_SECTION_LABEL/);
   assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
   assert.doesNotMatch(navigation, /The framework/);
   assert.doesNotMatch(navigation, /NAV_GROUPS/);
@@ -349,16 +352,25 @@ test('all route contexts and user-facing styles stay inside the Orbital system',
 
 test('shared shell exposes visible search access and valid intent-card markup', () => {
   const topNav = readFileSync('src/ui/components/TopNav.tsx', 'utf8');
+  const surfaces = readFileSync('styles/surfaces.css', 'utf8');
   const templatesPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
   const intentCard = readFileSync('src/ui/components/QuickIntentCard.tsx', 'utf8');
   assert.match(topNav, /onClick=\{onOpenSearch\}/);
   assert.match(topNav, /aria-label="Open search"/);
   assert.match(topNav, /<nav aria-label="Primary navigation"/);
   assert.match(topNav, /PRIMARY_NAV_ITEMS\.map/);
+  assert.match(topNav, /className=\{activeView === item\.view \? "nav-active"/);
+  assert.match(surfaces, /\.primary-nav a\.nav-active\s*\{[^}]*background:\s*transparent;/s);
   assert.match(topNav, /<AppLink/);
   assert.doesNotMatch(topNav, /<Tabs/);
   assert.match(templatesPage, /className="build-start-layout"/);
   assert.match(templatesPage, /className="build-resource-rail"/);
+  assert.equal(SITE_COPY.routes.documents.title, "Templates");
+  assert.equal(
+    SITE_COPY.routes.documents.purpose,
+    "Create starter cybersecurity documents from published sources.",
+  );
+  assert.match(templatesPage, />\s*Choose a template\s*<\/AppLink>/);
   assert.doesNotMatch(intentCard, /<h[1-6]>/);
 });
 
@@ -380,10 +392,10 @@ test('landing page states what the product is before asking for action', () => {
     'Start guided setup', 'Browse the Atlas', 'Search the Library', 'Browse Resources',
   ]);
   assert.doesNotMatch(homePage, /home-ecosystem-authorities/);
-  assert.match(homePage, /HOME_TAG_GROUPS\.map/);
-  assert.match(homePage, /home-tag-galaxies/);
-  assert.match(homePage, /A small sample from the Library\./);
-  assert.doesNotMatch(homePage, /data-record-count|tag-count-scale|tag\.count/);
+  assert.match(homePage, /HOME_LIBRARY_DISCOVERY\.map/);
+  assert.match(homePage, /home-library-kpis/);
+  assert.match(homePage, /See what's inside Control Atlas\./);
+  assert.doesNotMatch(homePage, /data-record-count|tag-count-scale|More records, bigger tag/);
 });
 
 test('Guides implement the numbered Template F directory contract', () => {
@@ -448,10 +460,6 @@ test('result-affecting controls have one visible workbench owner', () => {
   const primitives = readFileSync('src/ui/lib/pagePrimitives.tsx', 'utf8');
   const catalog = readFileSync('src/ui/pages/CatalogDetailPage.tsx', 'utf8');
   const compare = readFileSync('src/ui/pages/ComparePage.tsx', 'utf8');
-  const compareResults = readFileSync(
-    'src/ui/components/CompareResultsPanel.tsx',
-    'utf8',
-  );
   const resources = readFileSync('src/ui/pages/CommonsPage.tsx', 'utf8');
   const workspaceTemplate = readFileSync('src/ui/components/WorkspaceTemplate.tsx', 'utf8');
   const sources = readFileSync('src/ui/pages/SourcesPage.tsx', 'utf8');
@@ -484,25 +492,26 @@ test('result-affecting controls have one visible workbench owner', () => {
   assert.match(compare, /id="compare-workspace"/);
   assert.match(compare, /className="compare-mode-tabs" role="tablist"/);
   assert.match(compare, /<StepIndicator currentStep=\{currentStep\}/);
-  assert.match(compareResults, /data-control-results/);
-  assert.match(compareResults, /id="compare-results"/);
-  assert.match(compareResults, /<th scope="col">From<\/th>/);
-  assert.match(compareResults, /<th scope="col">Maps to<\/th>/);
+  assert.match(compare, /data-control-results/);
+  assert.match(compare, /data-continuous-results/);
+  assert.match(compare, /id="compare-results"/);
+  assert.match(compare, /<th scope="col">From<\/th>/);
+  assert.match(compare, /<th scope="col">Maps to<\/th>/);
   assert.match(record, /buildRecordConnectionGroups/);
   assert.doesNotMatch(record, /RelationshipExplorer|SelectField/);
 });
 
-test('Build stays locally coherent while Resources owns resource discovery', () => {
+test('Templates stays locally coherent while Resources owns resource discovery', () => {
   const localNav = readFileSync('src/ui/components/BuildLocalNav.tsx', 'utf8');
   const buildRouteState = readFileSync('src/ui/lib/buildRouteState.ts', 'utf8');
   const buildPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
   const resourcesPage = readFileSync('src/ui/pages/CommonsPage.tsx', 'utf8');
   const resourceDetail = readFileSync('src/ui/pages/CommonsDetailPage.tsx', 'utf8');
-  assert.match(localNav, /aria-label="Build sections"/);
+  assert.match(localNav, /aria-label="Template sections"/);
   assert.match(localNav, /aria-current/);
   assert.match(localNav, /BUILD_LANES/);
   assert.match(buildRouteState, /label: "Tasks"/);
-  assert.match(buildRouteState, /label: "Starter documents"/);
+  assert.match(buildRouteState, /label: "Templates"/);
   assert.match(buildRouteState, /label: "Resources"/);
   assert.match(buildPage, /<BuildLocalNav/);
   assert.doesNotMatch(resourcesPage, /BuildLocalNav/);
@@ -569,7 +578,7 @@ test('template options use collapsed progressive disclosure and associated hints
   // "Markdown, CSV, or JSON" string.
   assert.match(templatesPage, /FORMAT_HELP\[activeFormat\]/);
   assert.doesNotMatch(templatesPage, /Markdown, CSV, or JSON/);
-  assert.match(templatesPage, /return "Starter document"/);
+  assert.match(templatesPage, /return "Template"/);
   assert.doesNotMatch(templatesPage, /Search companions by name or purpose/);
 });
 

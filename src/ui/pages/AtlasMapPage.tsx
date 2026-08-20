@@ -22,6 +22,7 @@ import {
 } from "../../shared/record-presentation.mjs";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
+import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
 import { AtlasGraph } from "../components/AtlasGraph";
 import type { AtlasProjectionDrill } from "../lib/atlasGraphProjection";
 import {
@@ -93,6 +94,21 @@ function atlasView(value: string, focused: boolean): AtlasView {
   return focused ? "map" : "path";
 }
 
+function useCompactAtlas() {
+  const [compact, setCompact] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 767px)").matches,
+  );
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const onChange = (event: MediaQueryListEvent) => setCompact(event.matches);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+  return compact;
+}
+
 function requestedNodeId(bundle: RuntimeBundle, rawNode: string) {
   const node = rawNode.trim();
   if (!node || node === "foundation" || node === "landscape") return "";
@@ -117,6 +133,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     onNavigate,
     onOpenNode,
   } = props;
+  const compact = useCompactAtlas();
   const nodeId = useMemo(
     () => requestedNodeId(bundle, state.node),
     [bundle, state.node],
@@ -125,7 +142,13 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   // The publisher hierarchy is a deliberate alternate projection. Area and
   // publication route state now drives the semantic Sigma projection instead
   // of suppressing it and falling back to a tree by default.
-  const hierarchyRequested = Boolean(state.relationshipView || state.atlasAxis === "framework");
+  const hierarchyRequested = Boolean(
+    state.relationshipView
+      || state.atlasAxis === "framework"
+      || state.atlasAxis === "process"
+      || state.sourceView === "rmf"
+      || state.sourceView === "rmf-lifecycle",
+  );
   const atlasProjection = useMemo(() => {
     const artifact = bundle.atlasNetwork;
     if (!artifact) return null;
@@ -339,8 +362,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         recordStatus === "loading" ? "false" : "true"
       }
     >
-      <header className="atlas-canvas-header">
-        <div>
+      <header className="atlas-canvas-header" data-route-primary-header="true">
+        <div data-route-primary-copy="true">
           <p className="eyebrow">CYBERSECURITY LANDSCAPE</p>
           <h1 id="atlas-page-title">Atlas</h1>
           <p>{SITE_COPY.routes.atlas.purpose}</p>
@@ -387,7 +410,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         </div>
       ) : null}
 
-      {bundle.atlasNetwork && atlasProjection && !hierarchyRequested ? (
+      {bundle.atlasNetwork && atlasProjection && !hierarchyRequested && !nodeId ? (
         <AtlasGraph
           canGoUp={Boolean(state.atlasFamily || state.atlasFramework || state.atlasLimb)}
           onDrill={drillAtlas}
@@ -424,6 +447,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       {record ? (
         <FocusedAtlas
           bundle={bundle}
+          compact={compact}
           onNavigate={onNavigate}
           onOpenNode={onOpenNode}
           patchAtlas={patchAtlas}
@@ -458,6 +482,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
 
 function FocusedAtlas(props: {
   bundle: RuntimeBundle;
+  compact: boolean;
   record: AtlasNeighborhoodRecord;
   state: AtlasMapPageProps["state"];
   view: AtlasView;
@@ -465,7 +490,7 @@ function FocusedAtlas(props: {
   onNavigate: AtlasMapPageProps["onNavigate"];
   onOpenNode: AtlasMapPageProps["onOpenNode"];
 }) {
-  const { bundle, record, state, view, patchAtlas, onNavigate, onOpenNode } = props;
+  const { bundle, compact, record, state, view, patchAtlas, onNavigate, onOpenNode } = props;
   const filters: AtlasFilterState = {
     relationshipType: state.relationshipType,
     provenance: state.provenance,
@@ -474,8 +499,24 @@ function FocusedAtlas(props: {
     includeCandidates: state.includeCandidates === "true",
     search: state.relationshipSearch,
   };
-  const groups = useMemo(() => buildAtlasGroups(record, filters), [record, state]);
-  const rows = useMemo(() => buildAtlasRows(record, filters), [record, state]);
+  const groups = useMemo(
+    () => buildAtlasGroups(record, filters).filter((group) => group.lens !== "structure"),
+    [record, state],
+  );
+  const connectionKeys = useMemo(
+    () => new Set(
+      groups.flatMap((group) =>
+        group.items.map((item) => `${item.edge.id}\u0000${item.counterpart.id}`),
+      ),
+    ),
+    [groups],
+  );
+  const rows = useMemo(
+    () => buildAtlasRows(record, filters).filter((row) =>
+      connectionKeys.has(`${row.edge.id}\u0000${row.counterpart.id}`),
+    ),
+    [record, state, connectionKeys],
+  );
   // List must never disagree with Map about what class a record belongs to
   // (a CCI reads "Correlation" in both, never "Implementation" in one and
   // "Correlation" in the other) — derive the label from the same groups.
@@ -679,6 +720,34 @@ function FocusedAtlas(props: {
     </section>
   );
 
+  const noConnections = (
+    <AtlasNoConnections
+      candidateCount={record.candidate_connection_count}
+      filtersActive={Boolean(
+        filters.relationshipType ||
+          filters.provenance ||
+          filters.confidence ||
+          filters.nodeType ||
+          filters.search,
+      )}
+      includeCandidates={filters.includeCandidates}
+      onClear={() =>
+        updateFilters({
+          relationshipType: "",
+          provenance: "",
+          confidence: "",
+          nodeType: "",
+          search: "",
+        })
+      }
+      onIncludeCandidates={() =>
+        updateFilters({ includeCandidates: true })
+      }
+      onNavigate={onNavigate}
+      query={centerLabel}
+    />
+  );
+
   return (
     <div className="atlas-focused-shell">
       {/* One record workspace, not three competing modes. Connections is the
@@ -686,73 +755,6 @@ function FocusedAtlas(props: {
           relationshipView still round-trips through the URL so every existing
           ?relationshipView=path|list deep link keeps working — it now decides
           which panel opens, not which product you get. */}
-      {bundle.atlasSpine ? (
-        <AtlasTree
-          areaId={state.atlasLimb}
-          benchmarkChildren={structuralChildrenFromNeighborhood(record)}
-          benchmarkId={state.atlasBenchmark}
-          catalogSummaries={bundle.catalogSummaries || []}
-          focusedRecord={record}
-          focusPath={record.structural_path}
-          identityForNode={identityForNode}
-          onOpenArea={(atlasLimb) =>
-            patchAtlas({
-              atlasAxis: "landscape",
-              atlasLimb,
-              atlasFramework: "",
-              atlasFamily: "",
-              atlasBenchmark: "",
-              node: "",
-              atlasParent: "",
-            })
-          }
-          onOpenCompare={() =>
-            onNavigate("matrix", {
-              crosswalk: "relationships",
-              intent: "frameworks",
-              source: centerCatalogId,
-              target: "",
-              mappingSource: "",
-              compareRun: "",
-            })
-          }
-          onOpenPublication={(atlasLimb, atlasFramework) =>
-            patchAtlas({
-              atlasAxis: "framework",
-              atlasLimb,
-              atlasFramework,
-              atlasFamily: "",
-              atlasBenchmark: "",
-              node: "",
-              atlasParent: "",
-            })
-          }
-          onOpenSummary={(node, parentId) =>
-            patchAtlas({ atlasFamily: "", atlasBenchmark: "", node, atlasParent: state.atlasParent || parentId, relationshipView: "path" })
-          }
-          onOpenRecord={(node, parentId) => patchAtlas({ node, atlasParent: state.atlasParent || parentId, relationshipView: "path" })}
-          onReset={() =>
-            patchAtlas({
-              atlasAxis: "",
-              atlasLimb: "",
-              atlasFramework: "",
-              atlasFamily: "",
-              atlasBenchmark: "",
-              node: "",
-              atlasParent: "",
-            })
-          }
-          onSelectBenchmark={(atlasBenchmark) =>
-            patchAtlas({ atlasBenchmark, atlasFamily: "", node: "", atlasParent: "" })
-          }
-          publicationId={state.atlasFramework}
-          spine={bundle.atlasSpine}
-          summaryId={state.atlasFamily}
-        />
-      ) : (
-        <p role="alert">The Atlas view is unavailable. Reload the page to try again.</p>
-      )}
-
       <div className="atlas-focused-toolbar" id="atlas-connections-workspace">
         <div>
           <h2
@@ -796,33 +798,9 @@ function FocusedAtlas(props: {
         </div>
       </div>
 
-      {rows.length === 0 ? (
+      {rows.length === 0 && !hierarchyOpen ? (
         <div id="atlas-focused-view">
-          <AtlasNoConnections
-            candidateCount={record.candidate_connection_count}
-            filtersActive={Boolean(
-              filters.relationshipType ||
-                filters.provenance ||
-                filters.confidence ||
-                filters.nodeType ||
-                filters.search,
-            )}
-            includeCandidates={filters.includeCandidates}
-            onClear={() =>
-              updateFilters({
-                relationshipType: "",
-                provenance: "",
-                confidence: "",
-                nodeType: "",
-                search: "",
-              })
-            }
-            onIncludeCandidates={() =>
-              updateFilters({ includeCandidates: true })
-            }
-            onNavigate={onNavigate}
-            query={centerLabel}
-          />
+          {noConnections}
         </div>
       ) : (
         <div className="atlas-focused-layout" id="atlas-focused-view">
@@ -917,9 +895,32 @@ function FocusedAtlas(props: {
               </section>
             ) : null}
 
+            {rows.length ? <AtlasConnectionMap
+              center={record.center_node}
+              compact={compact}
+              expandedGroupId={state.relationshipGroup}
+              groups={groups}
+              identityForNode={identityForNode}
+              onExpandedGroupChange={(relationshipGroup) =>
+                patchAtlas({ relationshipGroup })
+              }
+              onOpenList={() => patchAtlas({ relationshipView: "list" })}
+              onOpenRecord={(node) =>
+                patchAtlas({
+                  node,
+                  atlasParent: "",
+                  atlasStage: "",
+                  relationshipGroup: "",
+                  relationshipSearch: "",
+                })
+              }
+              onSelectItem={setSelectedRow}
+              selectedItemId={selectedRow?.counterpart.id || ""}
+            /> : noConnections}
+
             {/* The complete relationship set supports the canvas instead of
                 competing with it: same rows, classes, counts, and filters. */}
-            <section
+            {rows.length ? <section
               className="atlas-all-connections"
               id="atlas-all-connections"
             >
@@ -939,7 +940,7 @@ function FocusedAtlas(props: {
                   View all {rows.length} connections
                 </button>
               )}
-            </section>
+            </section> : null}
 
             {/* Published children stay on the workspace: they are the record's
                 own decomposition, not a connection. */}
@@ -1027,7 +1028,7 @@ function FocusedAtlas(props: {
                     <p>{relationshipExplanation(selectedRow.edge).text}</p>
                   </section>
                   <section className="atlas-inspector-source">
-                    <h3>Source basis</h3>
+                    <h3>Evidence</h3>
                     <p>
                       {displayNameFor("relationship_type", selectedRow.edge.relationship_type)} in {selectedGroup?.label || "this connection group"}.
                     </p>
@@ -1351,7 +1352,7 @@ function AtlasFilterBar(props: {
           vocabulary="relationship_type"
         />
         <AtlasSelect
-          label="Source basis"
+          label="Evidence"
           onChange={(provenance) => props.onChange({ provenance })}
           options={props.options.provenanceClasses}
           value={props.filters.provenance}

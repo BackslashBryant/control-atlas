@@ -8,10 +8,10 @@ const NAV = [
   { label: "Library", path: "/library", placement: "primary" },
   { label: "Compare", path: "/compare", placement: "primary" },
   { label: "Resources", path: "/resources", placement: "primary" },
+  { label: "Templates", path: "/build", placement: "primary" },
   { label: "Guides", path: "/guides", placement: "overflow" },
-  { label: "Documents", path: "/build", placement: "overflow" },
-  { label: "Sources", path: "/sources", placement: "primary" },
-  { label: "About", path: "/about", placement: "primary" },
+  { label: "Sources", path: "/sources", placement: "overflow" },
+  { label: "About", path: "/about", placement: "overflow" },
 ];
 
 test.beforeEach(async ({ page }) => {
@@ -27,13 +27,14 @@ test("header exposes task destinations directly from 1200px", async ({ page }) =
     await waitForAppReady(page, { allowPartial: true });
 
     const primary = page.locator('header.site-header nav[aria-label="Primary navigation"]');
-    await expect(primary.locator("a[href]")).toHaveCount(7);
-    await expect(primary.locator("a[href]")).toHaveText(["Start here", "Atlas", "Library", "Compare", "Resources", "Sources", "About"]);
+    await expect(primary.locator("a[href]")).toHaveCount(6);
+    await expect(primary.locator("a[href]")).toHaveText(["Start here", "Atlas", "Library", "Compare", "Resources", "Templates"]);
     await expect(page.locator('header.site-header nav[aria-label="Utility navigation"]')).toHaveCount(0);
     await page.getByRole("button", { name: "Open more pages" }).click();
     await expect(page.getByRole("navigation", { name: "More pages" }).getByRole("link")).toHaveText([
       "Guides",
-      "Documents",
+      "Sources",
+      "About",
     ]);
     await page.keyboard.press("Escape");
     const geometry = await page.locator("header.site-header").evaluate((header) => ({
@@ -101,8 +102,8 @@ test("Phase 3 filters stay stable, bounded, and free of hierarchy node types", a
   const renderedSets = [];
   for (const query of ["access control", "Platform One"]) {
     await gotoApp(page, `/#/library?q=${encodeURIComponent(query)}`);
-    await waitForAppReady(page, { allowPartial: true });
-    const rail = page.locator(".workspace-facet-rail");
+    await waitForAppReady(page);
+    const rail = page.locator('[data-react-root] .workspace-facet-rail');
     await expect(rail).toBeVisible();
     const facetControls = rail.locator('.workspace-facet-controls[data-facet-set="publication,kind,area"]');
     const primaryFacets = facetControls.locator(
@@ -111,7 +112,9 @@ test("Phase 3 filters stay stable, bounded, and free of hierarchy node types", a
     renderedSets.push(await primaryFacets.allTextContents());
     await expect(primaryFacets).toHaveText(["Publication", "Content kind", "Area"]);
     const advanced = facetControls.locator('details[data-advanced-facet-set="publisher,topics,connections"]');
-    await advanced.locator("summary").click();
+    if (!(await advanced.evaluate((element) => element instanceof globalThis.HTMLDetailsElement && element.open))) {
+      await advanced.locator("summary").click();
+    }
     await expect(advanced.getByText("Publisher", { exact: true })).toBeVisible();
     await expect(advanced.getByText("Has published connections", { exact: true })).toBeVisible();
     await expect(advanced).not.toContainText("No governed tags are available in this context.");
@@ -149,9 +152,10 @@ test("Phase 3 record identity is canonical across Library, Atlas, and direct pat
   await expect(page.locator('header.site-header nav a[aria-current="page"]')).toHaveCount(0);
   await expect(page.getByRole("link", { name: "See connections", exact: true })).toBeVisible();
 
-  await gotoApp(page, "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=map");
+  await gotoApp(page, "/#/atlas?node=nist-800-53%3AAC-2");
   await waitForAppReady(page, { allowPartial: true });
   await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", canonicalBreadcrumb);
+  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toBeVisible();
   await expect(page.locator('header.site-header nav[aria-label="Primary navigation"] a[aria-current="page"]')).toHaveText("Atlas");
 
   await gotoApp(page, "/#/record/nist-800-53/AC-2?from=search&returnTo=%2Flibrary");
@@ -173,7 +177,7 @@ test("Phase 3 List and Map preserve Library state and never drop non-empty resul
   const before = await page.evaluate(() => globalThis.scrollY);
   await mapButton.dispatchEvent("click");
   await expect(page).toHaveURL(/#\/library\?q=access%20control&kind=requirements&sort=identifier&view=map|#\/library\?q=access\+control&kind=requirements&sort=identifier&view=map/);
-  await expect(page.locator(".library-atlas-map")).toHaveAttribute("data-map-node-count", String(resultCount));
+  await expect(page.locator(".library-atlas-map")).toHaveAttribute("data-map-node-count", String(Math.min(resultCount, 75)));
   expect(await page.locator(".library-map-node").count()).toBeGreaterThan(0);
   await expect.poll(() => page.evaluate(() => globalThis.scrollY)).toBeGreaterThanOrEqual(Math.max(0, before - 2));
   await page.getByRole("button", { name: "List", exact: true }).dispatchEvent("click");
@@ -181,7 +185,7 @@ test("Phase 3 List and Map preserve Library state and never drop non-empty resul
   await expect(page.getByRole("article").first()).toBeVisible();
   await expect.poll(() => page.evaluate(() => globalThis.scrollY)).toBeGreaterThanOrEqual(Math.max(0, before - 2));
   await page.getByRole("button", { name: "Map", exact: true }).dispatchEvent("click");
-  await expect(page.locator(".library-atlas-map")).toHaveAttribute("data-map-node-count", String(resultCount));
+  await expect(page.locator(".library-atlas-map")).toHaveAttribute("data-map-node-count", String(Math.min(resultCount, 75)));
   await page.getByRole("link", { name: /Open Atlas map overview/ }).click();
   await expect(page).toHaveURL(/#\/atlas$/);
   await waitForAppReady(page);
@@ -207,6 +211,7 @@ test("DISA STIG publication entry points preserve the benchmark layer above V-ID
   await waitForAppReady(page, { allowPartial: true });
   await page.getByRole("button", { name: /DISA STIG/ }).click();
   await expect(page).toHaveURL(/#\/library\/publication\/disa-stig$/);
+  await waitForAppReady(page);
   const publication = page.locator(".catalog-detail-page");
   await expect(publication).toBeVisible();
   await expect(publication).not.toHaveClass(/\bpanel\b/);
@@ -241,7 +246,7 @@ test("DISA STIG publication entry points preserve the benchmark layer above V-ID
   const rules = page.locator(".catalog-record-title");
   await expect(rules.first()).toBeVisible({ timeout: 60_000 });
   expect(await rules.count()).toBeGreaterThan(0);
-  await expect(rules.first()).toContainText(/^V-\d+/);
+  await expect(rules.first().locator("strong")).toHaveText(/^V-\d+$/);
 });
 
 test("Phase 3 record actions and global footer expose the required hierarchy", async ({ page }) => {
@@ -293,12 +298,23 @@ test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface lab
   await page.setViewportSize({ width: 1440, height: 900 });
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
-  await expect(page.locator(".atlas-tree")).toBeVisible();
+  const network = page.getByTestId("atlas-network");
+  await expect(network).toBeVisible();
+  await expect(network).toHaveAttribute("data-projection-level", "landscape");
+  await expect(network).toHaveAttribute("data-projection-node-count", "13");
   await expect(page.locator("body")).not.toContainText("Connected work surface");
-  const areas = page.locator('[data-atlas-node-id^="atlas:LIMB-"]');
-  await expect(areas).toHaveCount(9);
-  for (const area of await areas.all()) {
-    await expect(area).toContainText(/(?:\d[\d,]* records|No records yet\.)/);
+  const landmarkList = network.locator(".atlas-network-list");
+  if (!(await landmarkList.evaluate((element) => element.hasAttribute("open")))) {
+    await landmarkList.locator("summary", { hasText: "Browse landmarks" }).click();
   }
-  await expect(page.locator(".atlas-tree__totals").getByRole("definition").nth(1)).toHaveText(/\d+/);
+  await expect(landmarkList).toHaveAttribute("open", "");
+  const landmarks = landmarkList.locator("li");
+  await expect(landmarks).toHaveCount(13);
+  for (const landmark of await landmarks.all()) {
+    await expect(landmark).toContainText(/\d[\d,]* records/);
+  }
+  for (const area of ["Architecture", "Assessment", "Compliance", "Governance", "Implementation", "Knowledge", "Operations", "Risk", "Threats & Defense"]) {
+    await expect(landmarkList.locator("button").filter({ hasText: area })).toBeVisible();
+  }
+  await expect(network).toHaveAttribute("data-projection-edge-count", /\d+/);
 });

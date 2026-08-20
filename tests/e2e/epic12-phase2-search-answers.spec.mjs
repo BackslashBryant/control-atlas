@@ -8,7 +8,7 @@ import {
 
 const QUERY_ROUTE = "/#/library?q=access+control";
 const GLOBAL_PLACEHOLDER =
-  "Search controls, clauses, STIGs, ATT&CK, guides, tools, or communities…";
+  "Search by topic, title, or identifier.";
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
@@ -38,7 +38,7 @@ test("Phase 2 search results answer access-control questions before the click", 
   expect(new Set(rendered.map(({ recordId }) => recordId)).size)
     .toBe(rendered.length);
   for (const result of rendered) {
-    expect(result.identifier, JSON.stringify(result)).not.toBe("");
+    expect(result.identifier || result.title, JSON.stringify(result)).not.toBe("");
     expect(result.recordId, JSON.stringify(result)).not.toBe("");
     expect(result.publisher, JSON.stringify(result)).not.toBe("");
     expect(result.publisher, JSON.stringify(result)).not.toMatch(/unavailable/i);
@@ -57,6 +57,10 @@ test("Phase 2 search results answer access-control questions before the click", 
   expect(railBox).not.toBeNull();
   expect(railBox.y).toBeGreaterThanOrEqual(0);
   expect(railBox.y).toBeLessThan(900);
+  const advanced = rail.locator('details[data-advanced-facet-set="publisher,topics,connections"]');
+  if (!(await advanced.evaluate((element) => element instanceof globalThis.HTMLDetailsElement && element.open))) {
+    await advanced.locator("summary").click();
+  }
   await expect(rail.getByText("Publisher", { exact: true })).toBeVisible();
   await expect(rail.getByText("Content kind", { exact: true })).toBeVisible();
   await expect(rail.getByText("Publication", { exact: true })).toBeVisible();
@@ -145,7 +149,7 @@ for (const viewport of [
     for (const route of [QUERY_ROUTE, "/#/library", "/#/library/publication/nist-800-53"]) {
       await gotoApp(page, route);
       await waitForAppReady(page, { allowPartial: true });
-      const searches = page.locator(".catalog-search:visible");
+      const searches = page.locator(".workspace-search > label:visible, .catalog-search:visible");
       await expect(searches.first()).toBeVisible({ timeout: 60_000 });
       const measurements = await searches.evaluateAll((elements) =>
         elements.map((element) => {
@@ -162,7 +166,7 @@ for (const viewport of [
       );
       expect(measurements.length, `${route} at ${viewport.width}px`).toBeGreaterThan(0);
       for (const measurement of measurements) {
-        expect(measurement.height, `${route} at ${viewport.width}px`).toBeLessThanOrEqual(46);
+        expect(measurement.height, `${route} at ${viewport.width}px`).toBeLessThanOrEqual(52);
         expect(measurement.centerDifference, `${route} at ${viewport.width}px`).toBeLessThanOrEqual(6);
       }
     }

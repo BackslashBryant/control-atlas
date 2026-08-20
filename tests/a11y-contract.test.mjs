@@ -243,28 +243,25 @@ test("Template B Home exposes one search, governed destinations, and labelled go
   assert.match(homePage, /Search Control Atlas/);
   assert.match(homePage, /HOME_DESTINATIONS\.map/);
   assert.match(homePage, /aria-label="Choose a Control Atlas destination"/);
-  assert.match(homePage, /aria-labelledby="home-tag-heading"/);
-  assert.match(homePage, /HOME_TAG_GROUPS\.map/);
-  assert.match(homePage, /home-tag-galaxies/);
-  assert.match(homePage, /home-tag-link__label">\{tag\.label\}<\/span>/);
-  assert.doesNotMatch(homePage, /data-record-count|tag\.count|records`/);
+  assert.match(homePage, /aria-labelledby="home-library-heading"/);
+  assert.match(homePage, /HOME_LIBRARY_DISCOVERY\.map/);
+  assert.match(homePage, /home-library-kpis/);
+  assert.match(homePage, /className="home-library-kpi"/);
+  assert.doesNotMatch(homePage, /data-record-count|tag-count-scale|More records, bigger tag/);
   assert.equal((homePage.match(/onOpenSearch/g) || []).length >= 2, true);
   assert.doesNotMatch(homePage, /home-ecosystem-authorities|home-start-here/);
   assert.doesNotMatch(homePage, /RMF|Risk Management Framework/);
   assert.doesNotMatch(homePage, /Choose a starting point/);
 });
 
-test("high-density task surfaces bound results and name download actions", () => {
+test("high-density task surfaces expose continuous results and name download actions", () => {
   const comparePage = readFileSync("src/ui/pages/ComparePage.tsx", "utf8");
-  const compareResults = readFileSync(
-    "src/ui/components/CompareResultsPanel.tsx",
-    "utf8",
-  );
   const templatesPage = readFileSync("src/ui/pages/TemplatesPage.tsx", "utf8");
   const startHere = readFileSync("src/ui/pages/StartHerePage.tsx", "utf8");
-  assert.match(comparePage, /relationshipPageSize = 25/);
-  assert.match(compareResults, /Showing \{rangeStart\.toLocaleString\(\)\}/);
-  assert.match(compareResults, /Evidence for \{row\.targets\.length\.toLocaleString\(\)\} mapping/);
+  assert.match(comparePage, /data-continuous-results/);
+  assert.match(comparePage, /Search results by ID or title/);
+  assert.match(comparePage, /Evidence for \{row\.targets\.length\.toLocaleString\(\)\} mapping/);
+  assert.doesNotMatch(comparePage, /relationshipPageSize|Mapping result pages/);
   assert.match(templatesPage, /Download \$\{selectedTemplate\.display_name\}/);
   assert.match(templatesPage, /template-essential-options/);
   assert.match(startHere, /What are you trying to do\?/);
@@ -289,13 +286,13 @@ test("Compare modes are accessible tabs and About is a navigable article", () =>
   assert.match(primitives, /aria-label=\{props\.headingLevel \? undefined : props\.title\}/);
 });
 
-test("Build overview exposes Tasks, Starter documents, and Resources as equal lanes", () => {
+test("Templates overview exposes Tasks, Templates, and Resources as equal lanes", () => {
   const buildPage = readFileSync("src/ui/pages/TemplatesPage.tsx", "utf8");
   const buildState = readFileSync("src/ui/lib/buildRouteState.ts", "utf8");
   assert.match(buildPage, /className="build-lane-grid"/);
   assert.match(buildPage, /BUILD_LANES\.map/);
   assert.match(buildState, /label: "Tasks"/);
-  assert.match(buildState, /label: "Starter documents"/);
+  assert.match(buildState, /label: "Templates"/);
   assert.match(buildState, /label: "Resources"/);
   assert.doesNotMatch(buildPage, /Choose a task first/);
 });
@@ -306,9 +303,9 @@ test("compact icon and chip controls retain 44 pixel touch targets", () => {
   assert.match(block[1], /min-height:\s*44px;/);
   assert.match(block[1], /min-width:\s*44px;/);
 
-  const homeTagLink = surfacesCss.match(/\.home-tag-link\s*\{([^}]*)\}/);
-  assert.ok(homeTagLink, "Missing Home governed tag link rule");
-  assert.match(homeTagLink[1], /min-height:\s*var\(--ca-touch-target\);/);
+  const homeLibraryKpi = surfacesCss.match(/\.home-entry \.home-library-kpis \.home-library-kpi\s*\{([^}]*)\}/);
+  assert.ok(homeLibraryKpi, "Missing Home Library discovery link rule");
+  assert.match(homeLibraryKpi[1], /min-height:\s*12rem;/);
 });
 
 test("sticky surfaces and in-page jumps share one header-safe offset", () => {

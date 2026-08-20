@@ -130,6 +130,6 @@ export function resolveAtlasSearchTransition(
   return {
     kind: "no-match",
     query,
-    announcement: `No Atlas record matches ${query}. Try Search or browse the Catalog.`,
+    announcement: `No Atlas record matches ${query}. Try Search or browse the Library.`,
   };
 }

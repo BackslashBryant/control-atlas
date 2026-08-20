@@ -8,26 +8,24 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
 });
 
-test("WS1 Home uses a fixed governed sample without popularity styling", async ({ page }) => {
+test("WS1 Home uses six canonical Library discovery metrics", async ({ page }) => {
   await gotoApp(page, "/#/");
   await waitForAppReady(page, { allowPartial: true });
 
-  const tagLinks = page.locator(".home-tag-galaxies .home-tag-link");
-  await expect(page.locator(".home-tag-galaxy")).toHaveCount(6);
-  await expect(tagLinks).toHaveCount(16);
+  const discoveryLinks = page.locator(".home-library-kpis .home-library-kpi");
+  await expect(discoveryLinks).toHaveCount(6);
   await expect(page.locator(".home-ecosystem-authorities, .home-ecosystem")).toHaveCount(0);
 
-  const styles = await tagLinks.evaluateAll((tags) => tags.map((tag) => {
+  const metrics = await discoveryLinks.evaluateAll((links) => links.map((link) => {
     return {
-      hasCount: tag.hasAttribute("data-record-count"),
-      fontSize: Number.parseFloat(globalThis.getComputedStyle(tag).fontSize),
-      label: tag.textContent?.trim() || "",
+      href: link.getAttribute("href") || "",
+      count: link.querySelector("strong")?.textContent?.trim() || "",
+      label: link.querySelector("span > b")?.textContent?.trim() || "",
     };
   }));
 
-  expect(styles.every((entry) => !entry.hasCount)).toBe(true);
-  expect(new Set(styles.map((entry) => entry.fontSize)).size).toBe(1);
-  expect(styles.every((entry) => entry.label.length > 0)).toBe(true);
+  expect(metrics.every((entry) => /^\d[\d,]*$/.test(entry.count))).toBe(true);
+  expect(metrics.every((entry) => entry.href.startsWith("#/library?") && entry.label.length > 0)).toBe(true);
 });
 
 test("WS1 decorative surfaces resolve to one teal accent", async ({ page }) => {
@@ -55,41 +53,31 @@ test("WS1 decorative surfaces resolve to one teal accent", async ({ page }) => {
   expect(new Set(cardAccentColors).size).toBe(1);
 });
 
-test("WS1 Atlas spends the full area palette on its nine branch nodes", async ({ page }) => {
+test("WS1 Atlas exposes nine governed areas through the semantic landscape", async ({ page }) => {
   test.setTimeout(120_000);
-  await gotoApp(page, "/#/atlas?relationshipView=path");
+  await gotoApp(page, "/#/atlas");
   await waitForAppReady(page, { allowPartial: true });
 
-  const tree = page.locator('.atlas-tree[data-layout-status="ready"]');
-  await expect(tree).toBeVisible({ timeout: 60_000 });
-  const areaNodes = tree.locator(".atlas-tree-node--area");
-  await expect.poll(async () => {
-    const styles = await areaNodes.evaluateAll((nodes) => nodes.map((node) => ({
-      area: node.getAttribute("data-area-id"),
-      background: globalThis.getComputedStyle(node).backgroundColor,
-      border: globalThis.getComputedStyle(node).borderColor,
-      borderStyle: globalThis.getComputedStyle(node).borderStyle,
-      empty: node.classList.contains("is-empty"),
-      hue: globalThis.getComputedStyle(node).getPropertyValue("--ca-area-color").trim(),
-    })));
-    const populatedStyles = styles.filter((entry) => !entry.empty);
-    const emptyStyles = styles.filter((entry) => entry.empty);
-    return {
-      areas: new Set(styles.map((entry) => entry.area).filter(Boolean)).size,
-      backgrounds: new Set(styles.map((entry) => entry.background)).size,
-      hues: new Set(styles.map((entry) => entry.hue)).size,
-      distinctPopulatedBorders: new Set(populatedStyles.map((entry) => entry.border)).size,
-      populatedCount: populatedStyles.length,
-      emptyCount: emptyStyles.length,
-      emptyBordersDashed: emptyStyles.every((entry) => entry.borderStyle === "dashed"),
-    };
-  }).toEqual({
-    areas: 9,
-    backgrounds: 9,
-    hues: 9,
-    distinctPopulatedBorders: 7,
-    populatedCount: 7,
-    emptyCount: 2,
-    emptyBordersDashed: true,
+  const network = page.getByTestId("atlas-network");
+  await expect(network).toBeVisible({ timeout: 60_000 });
+  await expect(network).toHaveClass(/atlas-network--semantic/);
+  await expect(network).toHaveAttribute("data-projection-level", "landscape");
+  await expect(network.getByRole("button", { name: /Area ·/ })).toHaveCount(9);
+
+  const areaTokens = await page.evaluate(() => {
+    const style = globalThis.getComputedStyle(globalThis.document.documentElement);
+    return [
+      "--ca-area-governance",
+      "--ca-area-risk",
+      "--ca-area-compliance",
+      "--ca-area-architecture",
+      "--ca-area-implementation",
+      "--ca-area-assessment",
+      "--ca-area-operations",
+      "--ca-area-threats-defense",
+      "--ca-area-knowledge",
+    ].map((token) => style.getPropertyValue(token).trim());
   });
+  expect(areaTokens.every(Boolean)).toBe(true);
+  expect(new Set(areaTokens).size).toBe(9);
 });

@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
-test("WS5 Home implements Template B with one search, four cards, and governed tag galaxies", async ({ page }) => {
+test("WS5 Home implements Template B with one search, four destinations, and Library discovery", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await gotoApp(page, "/");
   await waitForAppReady(page, { allowPartial: true });
@@ -33,22 +33,38 @@ test("WS5 Home implements Template B with one search, four cards, and governed t
   await expect(template.locator(".home-ecosystem, .home-primary-actions")).toHaveCount(0);
   await expect(template.getByText("Start with your work", { exact: true })).toHaveCount(0);
 
-  const tagNavigation = template.getByRole("navigation", { name: "Browse by tag" });
-  const tagLinks = tagNavigation.locator(".home-tag-link");
-  await expect(tagNavigation.locator(".home-tag-galaxy")).toHaveCount(6);
-  await expect(tagLinks).toHaveCount(16);
-  await expect(template.getByText("A small sample from the Library.", { exact: true })).toBeVisible();
+  const libraryDiscovery = template.getByRole("navigation", { name: "See what's inside Control Atlas" });
+  const discoveryLinks = libraryDiscovery.locator(".home-library-kpi");
+  await expect(template.getByText("EXPLORE THE LIBRARY", { exact: true })).toBeVisible();
+  await expect(discoveryLinks).toHaveCount(6);
+  await expect(discoveryLinks.locator(":scope > strong")).toHaveText([
+    "17,021",
+    "9,766",
+    "1,152",
+    "1,065",
+    "1,690",
+    "5,694",
+  ]);
+  await expect(discoveryLinks.locator("b")).toHaveText([
+    "Technical rules",
+    "Requirements",
+    "Process & methods",
+    "Threats & defenses",
+    "Mobile",
+    "Operating system",
+  ]);
+  await expect(libraryDiscovery.getByRole("link", { name: "Browse all tags" })).toBeVisible();
   await expect(template.getByText(/more records|bigger tag/i)).toHaveCount(0);
   await expect(template.locator("[data-tag-count-scale]")).toHaveCount(0);
-  await expect(tagLinks.first()).not.toHaveAttribute("data-record-count", /.+/);
-  await expect(tagLinks.first()).toHaveAccessibleName("Application");
   await expect(template.locator(".home-area-browse, .home-ecosystem-areas, .home-area-link")).toHaveCount(0);
-  const hrefs = await tagLinks.evaluateAll((links) => links.map((link) => link.getAttribute("href")));
-  expect(hrefs.every((href) => href?.startsWith("#/library?tag="))).toBe(true);
-  const tagFontSizes = await tagLinks.evaluateAll((links) => (
-    links.map((link) => globalThis.getComputedStyle(link).fontSize)
-  ));
-  expect(new Set(tagFontSizes).size).toBe(1);
+  expect(await discoveryLinks.evaluateAll((links) => links.map((link) => link.getAttribute("href")))).toEqual([
+    "#/library?kind=technical-rules",
+    "#/library?kind=requirements",
+    "#/library?kind=process-methods",
+    "#/library?kind=threats-defenses",
+    "#/library?tag=asset.mobile",
+    "#/library?tag=technology.operating-system",
+  ]);
 
   const accentColors = await template.locator(".home-secondary-action").evaluateAll((cards) => (
     cards.map((card) => globalThis.getComputedStyle(card, "::before").backgroundColor)
@@ -56,47 +72,46 @@ test("WS5 Home implements Template B with one search, four cards, and governed t
   expect(new Set(accentColors).size).toBe(1);
 });
 
-test("WS5 representative tag galaxies open stable, populated Library filters", async ({ page }) => {
-  const tags = [
-    "Application",
-    "Cloud",
-    "Operating system",
-    "Amazon",
-    "Microsoft Windows",
-    "Access Control",
+test("WS5 Library discovery cards open the counted canonical filter states", async ({ page }) => {
+  const discoveries = [
+    ["Technical rules", "17,021 results"],
+    ["Requirements", "9,766 results"],
+    ["Process & methods", "1,152 results"],
+    ["Threats & defenses", "1,065 results"],
+    ["Mobile", "1,690 results"],
+    ["Operating system", "5,694 results"],
   ];
 
-  for (const label of tags) {
+  for (const [label, count] of discoveries) {
     await gotoApp(page, "/");
     await waitForAppReady(page, { allowPartial: true });
-    await page.getByRole("link", { name: label, exact: true }).click();
+    await page.locator(".home-library-kpi").filter({ hasText: label }).click();
 
-    await expect(page).toHaveURL(/#\/library\?tag=/);
+    await expect(page).toHaveURL(/#\/library\?(?:kind|tag)=/);
     await expect(page.getByLabel("Active filters").getByRole("button", { name: label })).toBeVisible();
-    await expect(page.getByRole("status")).not.toHaveText("0 results");
+    await expect(page.getByRole("status")).toContainText(count.replace(" results", ""));
     await expect(page.getByRole("list", { name: "Search results" }).getByRole("listitem").first()).toBeVisible();
   }
 });
 
-test("WS5 governed tags remain bounded and usable at all supported widths", async ({ page }) => {
+test("WS5 Library discovery remains bounded and usable at all supported widths", async ({ page }) => {
   test.setTimeout(90_000);
   for (const width of [320, 375, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: width < 768 ? 844 : 900 });
     await gotoApp(page, "/");
     await waitForAppReady(page, { allowPartial: true });
 
-    const navigation = page.getByRole("navigation", { name: "Browse by tag" });
-    await expect(navigation.locator(".home-tag-galaxy")).toHaveCount(6);
-    await expect(navigation.locator(".home-tag-link")).toHaveCount(16);
+    const navigation = page.getByRole("navigation", { name: "See what's inside Control Atlas" });
+    await expect(navigation.locator(".home-library-kpi")).toHaveCount(6);
     expect(
       await page.locator("html").evaluate((element) => element.scrollWidth - element.clientWidth),
       `${width}px Home overflow`,
     ).toBeLessThanOrEqual(1);
-    const targets = await navigation.locator(".home-tag-link").evaluateAll((links) => links.map((link) => {
+    const targets = await navigation.locator(".home-library-kpi").evaluateAll((links) => links.map((link) => {
       const box = link.getBoundingClientRect();
       return { height: box.height, width: box.width };
     }));
-    expect(targets.every((target) => target.height >= 44 && target.width >= 44), `${width}px tag targets`).toBe(true);
+    expect(targets.every((target) => target.height >= 44 && target.width >= 44), `${width}px discovery targets`).toBe(true);
   }
 });
 

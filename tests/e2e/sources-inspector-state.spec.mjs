@@ -174,7 +174,7 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     // Check before hydration if static eyebrow is present
     const eyebrow = page.locator("[data-static-route-eyebrow]");
     if ((await eyebrow.count()) > 0) {
-      const isHidden = await eyebrow.first().getAttribute("hidden").catch(() => null);
+      const isHidden = await eyebrow.first().getAttribute("hidden", { timeout: 1000 }).catch(() => null);
       const text = await eyebrow.first().textContent({ timeout: 1000 }).catch(() => null);
       if (!isHidden && text) {
         expect(text.trim().toLowerCase()).not.toBe("sources");

@@ -177,11 +177,12 @@ test('Start here plans are traceable to real publications and routes', async () 
   assert.equal(guide.startingPlanFor('not-a-goal', 'federal'), null);
 });
 
-test('navigation exposes task destinations directly and keeps Guides in overflow', () => {
+test('navigation exposes Templates directly and keeps Guides in overflow', () => {
   const routeIdentity = readFileSync('src/ui/lib/routeIdentity.ts', 'utf8');
   for (const [view, label] of [
     ['start-here', 'Start here'],
     ['search', 'Library'],
+    ['templates', 'Templates'],
     ['patterns', 'Guides'],
     ['sources', 'Sources'],
     ['about', 'About'],
@@ -203,14 +204,16 @@ test('navigation exposes task destinations directly and keeps Guides in overflow
     (match) => match[1],
   );
   assert.deepEqual(primaryViews, ['start-here', 'atlas-map', 'search', 'matrix', 'commons']);
+  assert.match(primaryItems[1], /view: "commons"[\s\S]*TEMPLATES_NAV_ITEM/);
 
   const overflowItems = navigation.match(
     /export const OVERFLOW_NAV_ITEMS: NavItem\[\] = \[(.*?)\n\];/s,
   );
   assert.ok(overflowItems, 'overflow navigation items must remain explicitly declared');
   assert.match(overflowItems[1], /GUIDES_NAV_ITEM/);
-  assert.match(overflowItems[1], /DOCUMENTS_NAV_ITEM/);
+  assert.doesNotMatch(overflowItems[1], /TEMPLATES_NAV_ITEM/);
   assert.match(navigation, /UTILITY_NAV_ITEMS[\s\S]*view: "sources"[\s\S]*view: "about"/);
+  assert.match(navigation, /MOBILE_NAV_SECTIONS[\s\S]*TOOLKIT_SECTION_LABEL[\s\S]*TEMPLATES_NAV_ITEM, GUIDES_NAV_ITEM[\s\S]*UTILITY_SECTION_LABEL/);
 });
 
 test('old public paths redirect into the Phase 3 canonical hierarchy', () => {
@@ -238,7 +241,8 @@ test('Home is an entry surface, not a lesson about the data model', () => {
   const viteConfig = readFileSync('vite.config.ts', 'utf8');
   assert.match(homeContent, /SITE_COPY\.home/);
   assert.match(homePage, /HOME_CONTENT\.headline/);
-  assert.match(homePage, /home-tag-constellation/);
+  assert.match(homePage, /home-library-discovery/);
+  assert.match(homePage, /EXPLORE THE LIBRARY/);
   assert.doesNotMatch(homePage, /More records, bigger tag|data-tag-count-scale|--tag-scale/);
   assert.doesNotMatch(
     readFileSync('src/ui/lib/homeTagConstellation.ts', 'utf8'),
@@ -281,6 +285,27 @@ test('site-wide UI copy rule rejects canned metaphors and compliance-only prompt
   const siteCopy = [readFileSync('src/index.html', 'utf8'), ...uiFiles].join('\n');
   for (const phrase of BANNED_SITE_COPY) {
     assert.doesNotMatch(siteCopy, phrase, `Banned canned or compliance-only copy: ${phrase}`);
+  }
+});
+
+test('Mission-level UI keeps implementation vocabulary behind technical details', () => {
+  const visibleCopyFiles = [
+    'src/ui/components/ContextualTaxonomyLinks.tsx',
+    'src/ui/components/LoadStatusPanel.tsx',
+    'src/ui/components/RelationshipExplorer.tsx',
+    'src/ui/components/RelationshipGraphTable.tsx',
+    'src/ui/pages/AtlasMapPage.tsx',
+  ];
+  const visibleCopy = visibleCopyFiles
+    .map((path) => readFileSync(path, 'utf8'))
+    .join('\n');
+
+  for (const phrase of [
+    /governed record tags/i,
+    /source registry/i,
+    /source basis/i,
+  ]) {
+    assert.doesNotMatch(visibleCopy, phrase, `Mission copy exposes implementation vocabulary: ${phrase}`);
   }
 });
 

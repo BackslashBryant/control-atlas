@@ -81,18 +81,17 @@ test("V1 workflow 05 — follow a record and return without losing search state"
 test("V1 workflow 06 — explore one record through Connections, Hierarchy, and the full list", async ({
   page,
 }) => {
-  await open(page, "/#/explore?node=nist-800-53%3AAC-2");
+  await open(page, "/#/atlas?node=nist-800-53%3AAC-2&relationshipView=path");
 
-  // The Atlas map skill tree is the workspace: it is present without
-  // choosing a supporting panel.
-  await expect(page.locator(".atlas-tree")).toBeVisible();
+  // The focused record remains the workspace while the hierarchy panel is open.
+  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Connections", level: 2 })).toBeVisible();
   // Orientation stays on screen without opening anything.
-  await expect(page.locator(".atlas-tree__breadcrumb")).toContainText(
+  await expect(page.getByRole("navigation", { name: "Where this sits" })).toContainText(
     "SP 800-53 Rev. 5",
   );
 
-  // Hierarchy is a supporting panel with real structural substance.
-  await page.getByRole("button", { name: "Hierarchy" }).click();
+  // The explicit Path deep link opens publisher hierarchy with real structural substance.
   await expect(page).toHaveURL(/relationshipView=path/);
   const hierarchy = page.locator("#atlas-hierarchy-panel");
   await expect(hierarchy).toContainText("Control Atlas structure");
@@ -108,7 +107,7 @@ test("V1 workflow 06 — explore one record through Connections, Hierarchy, and 
   await expect(
     page.getByRole("table", { name: "Relationship table" }),
   ).toBeVisible();
-  await expect(page.locator(".atlas-tree")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toBeVisible();
 });
 
 test("V1 workflow 07 — compare with a shareable explicit configuration", async ({

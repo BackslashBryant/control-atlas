@@ -101,7 +101,9 @@ test("release evidence: the Path offers every stage as one choice on desktop", a
   await expect(
     page.getByRole("navigation", { name: "Where this sits" }),
   ).toBeVisible();
-  await expect(page.getByRole("button", { name: "Cybersecurity" })).toBeVisible();
+  await expect(
+    page.getByRole("navigation", { name: "Where this sits" }).getByRole("link", { name: /Cybersecurity/ }),
+  ).toBeVisible();
   await expect(page.locator(".atlas-path-record")).toHaveCount(0);
   await assertNoPageOverflow(page);
   await page.screenshot({

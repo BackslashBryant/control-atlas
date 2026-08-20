@@ -15,7 +15,7 @@ export function LoadingStatusPanel(props: {
     >
       <div aria-hidden="true" className="load-progress mb-[16px]" />
       <p className="mb-[16px]">
-        Loading the public records, source registry, and comparison views.
+        Loading public records, source information, and comparison tools.
       </p>
       {props.slow ? (
         <p className="text-[var(--ca-warning)] mb-[16px]">
@@ -65,15 +65,15 @@ export function OfflineFallbackActions(props: {
         view="patterns"
       >
         <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Read explanations</strong>
-        <span className="text-[var(--ca-text-muted)] text-[13px]">Cited explanations of source identity, structure, search, mappings, records, and starter documents.</span>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Cited explanations of source identity, structure, search, mappings, records, and templates.</span>
       </AppLink>
       <AppLink
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
         onNavigate={props.onNavigate}
         view="templates"
       >
-        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Open starter documents</strong>
-        <span className="text-[var(--ca-text-muted)] text-[13px]">Create a blank starter file from explicit inputs.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Open Templates</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Choose a starter file built from explicit inputs.</span>
       </AppLink>
       <AppLink
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
