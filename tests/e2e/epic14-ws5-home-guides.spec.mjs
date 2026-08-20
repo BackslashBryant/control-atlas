@@ -37,12 +37,18 @@ test("WS5 Home implements Template B with one search, four cards, and governed t
   const tagLinks = tagNavigation.locator(".home-tag-link");
   await expect(tagNavigation.locator(".home-tag-galaxy")).toHaveCount(6);
   await expect(tagLinks).toHaveCount(16);
-  await expect(template.getByText("More records, bigger tag.", { exact: true })).toBeVisible();
-  await expect(tagLinks.first()).toHaveAttribute("data-record-count", "2584");
-  await expect(tagLinks.first()).toHaveAccessibleName("Server, 2,584 records");
+  await expect(template.getByText("A small sample from the Library.", { exact: true })).toBeVisible();
+  await expect(template.getByText(/more records|bigger tag/i)).toHaveCount(0);
+  await expect(template.locator("[data-tag-count-scale]")).toHaveCount(0);
+  await expect(tagLinks.first()).not.toHaveAttribute("data-record-count", /.+/);
+  await expect(tagLinks.first()).toHaveAccessibleName("Application");
   await expect(template.locator(".home-area-browse, .home-ecosystem-areas, .home-area-link")).toHaveCount(0);
   const hrefs = await tagLinks.evaluateAll((links) => links.map((link) => link.getAttribute("href")));
   expect(hrefs.every((href) => href?.startsWith("#/library?tag="))).toBe(true);
+  const tagFontSizes = await tagLinks.evaluateAll((links) => (
+    links.map((link) => globalThis.getComputedStyle(link).fontSize)
+  ));
+  expect(new Set(tagFontSizes).size).toBe(1);
 
   const accentColors = await template.locator(".home-secondary-action").evaluateAll((cards) => (
     cards.map((card) => globalThis.getComputedStyle(card, "::before").backgroundColor)
@@ -52,18 +58,18 @@ test("WS5 Home implements Template B with one search, four cards, and governed t
 
 test("WS5 representative tag galaxies open stable, populated Library filters", async ({ page }) => {
   const tags = [
-    ["Server", "2,584"],
-    ["Cloud", "666"],
-    ["Operating system", "5,694"],
-    ["Microsoft", "1,870"],
-    ["Red Hat Enterprise Linux", "1,248"],
-    ["Access Control", "1,008"],
+    "Application",
+    "Cloud",
+    "Operating system",
+    "Amazon",
+    "Microsoft Windows",
+    "Access Control",
   ];
 
-  for (const [label, count] of tags) {
+  for (const label of tags) {
     await gotoApp(page, "/");
     await waitForAppReady(page, { allowPartial: true });
-    await page.getByRole("link", { name: `${label}, ${count} records` }).click();
+    await page.getByRole("link", { name: label, exact: true }).click();
 
     await expect(page).toHaveURL(/#\/library\?tag=/);
     await expect(page.getByLabel("Active filters").getByRole("button", { name: label })).toBeVisible();
@@ -94,9 +100,12 @@ test("WS5 governed tags remain bounded and usable at all supported widths", asyn
   }
 });
 
-test("WS6 About states the research boundary exactly", async ({ page }) => {
+test("WS6 About is a five-section knowledge-base article with the exact research boundary", async ({ page }) => {
   await gotoApp(page, "/#/about");
   await waitForAppReady(page);
+  const article = page.getByRole("article");
+  await expect(page.locator('[data-page-template="knowledge-base"]')).toBeVisible();
+  await expect(page.locator(".about-card-grid, .summary-card")).toHaveCount(0);
   await expect(page.locator("main").getByText(
     "Control Atlas is a public research tool for federal cybersecurity requirements, controls, techniques, and guidance.",
     { exact: true },
@@ -106,23 +115,17 @@ test("WS6 About states the research boundary exactly", async ({ page }) => {
     { exact: true },
   )).toBeVisible();
   for (const title of [
-    "What It Is",
-    "Why It Exists",
-    "How It Works",
-    "Built for Shared Work",
-    "Private by Default",
-    "Limits",
-    "About the Project",
+    "What Control Atlas is",
+    "How it is organized",
+    "How sources and crosswalks work",
+    "What Control Atlas does not decide",
+    "About the project",
   ]) {
-    const heading = page.getByRole("heading", { level: 2, name: title });
+    const heading = article.getByRole("heading", { level: 2, name: title });
     await expect(heading).toBeVisible();
-    const headingId = await heading.getAttribute("id");
-    expect(headingId).toBeTruthy();
-    await expect(heading.locator("xpath=ancestor::article")).toHaveAttribute(
-      "aria-labelledby",
-      headingId,
-    );
   }
+  await expect(article.locator(":scope > section")).toHaveCount(5);
+  await expect(page.getByRole("complementary", { name: "On this page" })).toBeVisible();
 });
 
 test("WS5 Guides implements a numbered, icon-bearing, whole-card Template F directory", async ({ page }) => {
@@ -152,6 +155,14 @@ test("WS5 Guides implements a numbered, icon-bearing, whole-card Template F dire
   await firstCard.click();
   await expect(page).toHaveURL(/#\/guides\?pattern=starting-an-authorization/);
   await expect(page.getByRole("heading", { name: firstTitle, level: 1 })).toBeVisible();
+  await expect(page.locator('[data-page-template="knowledge-base"]')).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Guide context" })).toContainText("Guide 01 of 12");
+  const article = page.getByRole("article");
+  for (const title of ["When it matters", "What this means", "Limitations", "Official references"]) {
+    await expect(article.getByRole("heading", { name: title, level: 2 })).toBeVisible();
+  }
+  await expect(article.locator(".summary-card")).toHaveCount(1);
+  await expect(page.getByRole("complementary", { name: "Guide contents and source" })).toBeVisible();
 });
 
 test("WS5 Home and Guides stack without horizontal overflow below 640 pixels", async ({ page }) => {

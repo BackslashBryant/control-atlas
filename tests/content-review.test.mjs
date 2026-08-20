@@ -239,6 +239,11 @@ test('Home is an entry surface, not a lesson about the data model', () => {
   assert.match(homeContent, /SITE_COPY\.home/);
   assert.match(homePage, /HOME_CONTENT\.headline/);
   assert.match(homePage, /home-tag-constellation/);
+  assert.doesNotMatch(homePage, /More records, bigger tag|data-tag-count-scale|--tag-scale/);
+  assert.doesNotMatch(
+    readFileSync('src/ui/lib/homeTagConstellation.ts', 'utf8'),
+    /scale:|logRange|minimumLogCount|maximumLogCount|Math\.log10/,
+  );
   assert.doesNotMatch(homePage, /home-ecosystem-authorities|Federal cybersecurity ecosystem preview/);
   assert.match(viteConfig, /renderStaticHome/);
   for (const path of ['src/ui/pages/HomePage.tsx', 'src/index.html']) {
@@ -379,6 +384,17 @@ test('about page states the exact product definition and decision boundary witho
   assert.match(appShell, /AboutPage/);
   assert.match(aboutPage, /PRODUCT_DEFINITION/);
   assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
+  for (const heading of [
+    'What Control Atlas is',
+    'How it is organized',
+    'How sources and crosswalks work',
+    'What Control Atlas does not decide',
+    'About the project',
+  ]) {
+    assert.match(aboutPage, new RegExp(`<h2>${heading}</h2>`));
+  }
+  assert.doesNotMatch(aboutPage, /SummaryCard|about-card-grid/);
+  assert.doesNotMatch(aboutPage, /organizing spine|Control Atlas overlay|publisher hierarchy|provenance|confidence|trust register/i);
   assert.doesNotMatch(aboutPage, /Path shows|Map and List show|graph parenting|not as parents|focus semantics/i);
   assert.doesNotMatch(aboutPage, /\b(?:Roots|Trunk|Twigs|Leaves|Fruit|Acorns)\b/);
   assert.doesNotMatch(aboutPage, /plain English|right starting point/i);
@@ -390,6 +406,16 @@ test('about page states the exact product definition and decision boundary witho
     (aboutPage.match(/AC-2/g) || []).length <= 2,
     'About should carry at most one AC-2 example',
   );
+});
+
+test('selected Guides use a knowledge-base article instead of a card stack', () => {
+  const guidesPage = readFileSync('src/ui/pages/PlaybooksPage.tsx', 'utf8');
+  assert.match(guidesPage, /data-page-template="knowledge-base"/);
+  assert.match(guidesPage, /Guide contents and source/);
+  assert.match(guidesPage, />When it matters</);
+  assert.match(guidesPage, />What this means</);
+  assert.match(guidesPage, />Official references</);
+  assert.doesNotMatch(guidesPage, /<Panel|<SummaryCard/);
 });
 
 test('architecture narration and teaching examples stay out of product UI copy', () => {

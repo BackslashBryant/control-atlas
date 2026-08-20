@@ -22,6 +22,15 @@ test("Start here asks two questions without making a determination", async ({
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "Start here", exact: true })).toBeVisible();
+  await expect(page.locator('[data-visual-identity="task-intake-compass"].mission-page')).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Step progress" })).toBeVisible();
+  const activeWork = page.locator(".compare-flow-grid > .compare-flow-task");
+  const supportRail = page.locator(".compare-flow-grid > .compare-flow-support");
+  await expect(activeWork).toBeVisible();
+  await expect(supportRail).toBeVisible();
+  const activeBox = await activeWork.boundingBox();
+  const supportBox = await supportRail.boundingBox();
+  expect(activeBox?.width || 0).toBeGreaterThan(supportBox?.width || 0);
   await expect(
     page.getByRole("heading", { name: "What are you trying to do?" }),
   ).toBeVisible();
@@ -41,22 +50,22 @@ test("Start here produces a plan traceable to real publications", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole("button", { name: "Prepare for assessment" }).click();
+  await page.getByRole("button", { name: "Assess or authorize" }).click();
   await expect(
     page.getByRole("heading", { name: "What kind of system are you working with?" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "FedRAMP cloud service" }).click();
 
   await expect(page.getByRole("heading", { name: /^Start with/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /^Open FedRAMP/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /^Then review/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Open FedRAMP/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Then review/ })).toBeVisible();
   // Control Atlas does not decide applicability; the plan only routes.
   await expect(
-    page.getByText(/Control Atlas does not decide\s+what applies to your system/),
+    page.getByText("Use Control Atlas for research, not compliance or authorization decisions.", { exact: true }),
   ).toBeVisible();
 
-  await page.getByRole("button", { name: /^Open FedRAMP/ }).click();
-  await expect(page).toHaveURL(/#\/catalog\/fedramp-rev5/);
+  await page.getByRole("link", { name: /^Open FedRAMP/ }).click();
+  await expect(page).toHaveURL(/#\/library\/publication\/fedramp-rev5/);
 });
 
 test("retired questionnaire parameters are removed with visible recovery", async ({
@@ -85,7 +94,7 @@ test("Start here's chosen goal and context survive reload and back navigation", 
   await expect(page.getByRole("heading", { name: /^Start with/ })).toContainText(
     "FedRAMP Rev. 5",
   );
-  await expect(page.getByRole("button", { name: /^Then review/ })).toContainText(
+  await expect(page.getByRole("link", { name: /^Then review/ })).toContainText(
     "SP 800-53A Rev. 5",
   );
 });
@@ -101,13 +110,15 @@ test("catalog detail keeps source context and opens a specific record", async ({
     page.getByRole("heading", { name: "SP 800-171 Rev. 2", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: /View official source/ }),
+    page.getByRole("link", { name: /Open official publication/ }),
   ).toBeVisible();
-  await page.getByRole("searchbox", { name: "Search this catalog" }).fill("3.1.1");
+  await page.getByRole("button", { name: /Family Access Control/ }).click();
+  await page.getByRole("searchbox", { name: "Search SP 800-171 Rev. 2" }).fill("3.1.1");
+  await page.getByRole("button", { name: "Search records" }).click();
   const row = page
     .locator(".catalog-record-row")
     .filter({ hasText: "3.1.1" })
     .first();
-  await row.getByRole("button").click();
+  await row.getByRole("link", { name: /Open NIST AC 3\.1\.1$/ }).click();
   await expect(page).toHaveURL(/#\/record\/nist-800-171-rev2\/3.1.1/);
 });

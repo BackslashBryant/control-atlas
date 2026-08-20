@@ -20,6 +20,7 @@ test("governed tags keep stable URL, OR/AND, alias, count, and unavailable-value
   await open(page, "/#/library");
 
   const facets = page.locator(".workspace-facet-rail");
+  await facets.locator("details.workspace-advanced-facets > summary").click();
   const assetFacet = facets.getByRole("group", { name: "Asset and system" });
   await assetFacet.getByPlaceholder("Find asset and system").fill("dbms");
   await expect(assetFacet.getByRole("checkbox", { name: /Database/ })).toBeVisible();
@@ -37,18 +38,16 @@ test("governed tags keep stable URL, OR/AND, alias, count, and unavailable-value
   const vendorFacet = facets.getByRole("group", { name: "Vendor" });
   await vendorFacet.getByRole("checkbox", { name: /Microsoft/ }).click();
   await expect(page).toHaveURL(/tag=asset\.server.*tag=asset\.workstation.*tag=vendor\.microsoft/);
-  const acrossDimensionCount = await resultTotal(page);
-  expect(acrossDimensionCount).toBeLessThanOrEqual(withinDimensionCount);
+  await expect.poll(() => resultTotal(page)).toBeLessThanOrEqual(withinDimensionCount);
 
   await open(page, "/#/library?tag=asset.iot");
   const contextualVendorFacet = page.locator(".workspace-facet-rail").getByRole("group", { name: "Vendor" });
-  await expect(contextualVendorFacet.getByText("No governed tags are available in this context.")).toBeVisible();
-  await expect(contextualVendorFacet.getByRole("checkbox")).toHaveCount(0);
+  await expect(contextualVendorFacet).toHaveCount(0);
 });
 
 test("record and Resource governed tags hand off to the filtered Library", async ({ page }) => {
   await open(page, "/#/record/nist-mobile-threats/CEL-1");
-  await page.getByRole("link", { name: "Filter the Library by Mobile" }).click();
+  await page.getByRole("link", { name: "Filter the Library by Mobile", exact: true }).click();
   await expect(page).toHaveURL(/#\/library\?tag=asset\.mobile/);
   await expect(page.getByRole("button", { name: /Mobile/ })).toBeVisible();
 
@@ -58,8 +57,8 @@ test("record and Resource governed tags hand off to the filtered Library", async
   await expect(page.getByRole("button", { name: /Configuration Management/ })).toBeVisible();
 
   await open(page, "/#/resources/tool-cisa-cset");
-  const governedTags = page.getByRole("heading", { name: "Governed discovery tags" }).locator("..");
-  await governedTags.getByRole("link", { name: "Microsoft Windows" }).click();
+  const relatedTopics = page.getByRole("heading", { name: "Related topics" }).locator("..");
+  await relatedTopics.getByRole("link", { name: "Microsoft Windows" }).click();
   await expect(page).toHaveURL(/#\/library\?tag=product\.microsoft-windows/);
   await expect(page.getByRole("button", { name: /Microsoft Windows/ })).toBeVisible();
 });
@@ -132,10 +131,12 @@ test("Home exposes compact release, source, and contribution trust links", async
 test("Resources presents governed labels instead of raw enums", async ({ page }) => {
   await open(page, "/#/resources/official-cisa-kev-catalog");
   await expect(page.getByText("General IT", { exact: true })).toBeVisible();
+  const maintenance = page.locator("details.resource-detail-maintenance");
+  await maintenance.locator("summary").click();
   await expect(page.getByText("Public URL", { exact: true })).toBeVisible();
   await expect(page.getByText("Active", { exact: true })).toBeVisible();
-  const access = page.getByRole("heading", { name: "Access", exact: true }).locator("..");
-  await expect(access.getByText("Access type", { exact: true })).toBeVisible();
+  const access = page.getByRole("heading", { name: "How to use or access", exact: true }).locator("..");
+  await expect(access.getByText("Access", { exact: true })).toBeVisible();
 });
 
 test("Guide context hands governed tags to the Library", async ({ page }) => {
@@ -147,19 +148,21 @@ test("Guide context hands governed tags to the Library", async ({ page }) => {
   await expect(page).toHaveURL(/#\/library\?tag=/);
 });
 
-test("starter-document context exposes governed Library tags", async ({ page }) => {
+test("starter-document context preserves the selected document and preview", async ({ page }) => {
   await open(page, "/#/build/documents/security_plan_starter?framework=nist-800-53&baseline=LOW");
-  const templateTags = page.getByRole("region", { name: /Governed record tags for Security Plan Starter/ });
-  await expect(templateTags.getByRole("link").first()).toBeVisible();
+  expect(await page.evaluate(() => globalThis.scrollY)).toBeLessThanOrEqual(1);
+  await expect(page.getByRole("heading", { name: "Documents", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Configure inputs" })).toBeVisible();
+  const context = page.getByRole("complementary", { name: "Current document" });
+  await expect(context).toContainText("Security Plan Starter");
+  await expect(page.getByRole("heading", { name: "Preview" })).toBeVisible();
 });
 
-test("Compare STIG context hands governed tags to the Library", async ({ page }) => {
-  test.setTimeout(75_000);
-  await page.goto("/#/compare/stig-chain?chainCatalog=disa-stig", { waitUntil: "domcontentloaded" });
-  await expect(page.locator(".compare-control-surface")).toBeVisible({ timeout: 60_000 });
-  const compareTags = page.getByRole("region", { name: /Governed record tags for the current STIG or SRG comparison/ });
-  const compareTag = compareTags.getByRole("link").first();
-  await expect(compareTag).toBeVisible();
-  await compareTag.click();
-  await expect(page).toHaveURL(/#\/library\?tag=/);
+test("retired STIG Compare links recover to the published crosswalk", async ({ page }) => {
+  await open(page, "/#/compare/stig-chain?chainCatalog=disa-stig");
+  await expect(page).toHaveURL(/#\/compare$/);
+  await expect(page.getByText(
+    "This Compare link used a retired workflow. Start a published crosswalk here.",
+    { exact: true },
+  )).toBeVisible();
 });

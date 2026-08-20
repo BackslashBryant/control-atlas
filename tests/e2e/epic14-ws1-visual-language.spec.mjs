@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
 });
 
-test("WS1 Home uses governed dimension galaxies weighted by source-backed record count", async ({ page }) => {
+test("WS1 Home uses a fixed governed sample without popularity styling", async ({ page }) => {
   await gotoApp(page, "/#/");
   await waitForAppReady(page, { allowPartial: true });
 
@@ -19,17 +19,14 @@ test("WS1 Home uses governed dimension galaxies weighted by source-backed record
 
   const styles = await tagLinks.evaluateAll((tags) => tags.map((tag) => {
     return {
-      count: Number(tag.getAttribute("data-record-count")),
+      hasCount: tag.hasAttribute("data-record-count"),
       fontSize: Number.parseFloat(globalThis.getComputedStyle(tag).fontSize),
       label: tag.textContent?.trim() || "",
     };
   }));
 
-  const highest = [...styles].sort((left, right) => right.count - left.count)[0];
-  const lowest = [...styles].sort((left, right) => left.count - right.count)[0];
-  expect(highest.count).toBe(5694);
-  expect(lowest.count).toBe(520);
-  expect(highest.fontSize).toBeGreaterThan(lowest.fontSize);
+  expect(styles.every((entry) => !entry.hasCount)).toBe(true);
+  expect(new Set(styles.map((entry) => entry.fontSize)).size).toBe(1);
   expect(styles.every((entry) => entry.label.length > 0)).toBe(true);
 });
 

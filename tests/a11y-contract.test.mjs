@@ -246,7 +246,8 @@ test("Template B Home exposes one search, governed destinations, and labelled go
   assert.match(homePage, /aria-labelledby="home-tag-heading"/);
   assert.match(homePage, /HOME_TAG_GROUPS\.map/);
   assert.match(homePage, /home-tag-galaxies/);
-  assert.match(homePage, /aria-label=\{`\$\{tag\.label\}, \$\{tag\.count\.toLocaleString\(\)\} records`\}/);
+  assert.match(homePage, /home-tag-link__label">\{tag\.label\}<\/span>/);
+  assert.doesNotMatch(homePage, /data-record-count|tag\.count|records`/);
   assert.equal((homePage.match(/onOpenSearch/g) || []).length >= 2, true);
   assert.doesNotMatch(homePage, /home-ecosystem-authorities|home-start-here/);
   assert.doesNotMatch(homePage, /RMF|Risk Management Framework/);
@@ -270,7 +271,7 @@ test("high-density task surfaces bound results and name download actions", () =>
   assert.match(startHere, /Search the Library/);
 });
 
-test("Compare modes are accessible tabs and About cards form named heading regions", () => {
+test("Compare modes are accessible tabs and About is a navigable article", () => {
   const comparePage = readFileSync("src/ui/pages/ComparePage.tsx", "utf8");
   const aboutPage = readFileSync("src/ui/pages/AboutPage.tsx", "utf8");
   const primitives = readFileSync("src/ui/lib/pagePrimitives.tsx", "utf8");
@@ -279,8 +280,11 @@ test("Compare modes are accessible tabs and About cards form named heading regio
   assert.match(comparePage, /aria-selected=\{mode === entry\.id\}/);
   assert.match(comparePage, /role="tab"/);
   assert.doesNotMatch(comparePage, /className="intent-card intent-card-button"/);
-  assert.match(aboutPage, /<SummaryCard headingLevel=\{2\} title="What It Is">/);
-  assert.match(aboutPage, /<SummaryCard headingLevel=\{2\} title="About the Project">/);
+  assert.match(aboutPage, /<article className="learn-article">/);
+  assert.match(aboutPage, /<h2>What Control Atlas is<\/h2>/);
+  assert.match(aboutPage, /<h2>About the project<\/h2>/);
+  assert.match(aboutPage, /aria-label="On this page"/);
+  assert.match(aboutPage, /PageJumpNav ariaLabel="Jump to About section"/);
   assert.match(primitives, /aria-labelledby=\{props\.headingLevel \? titleId : undefined\}/);
   assert.match(primitives, /aria-label=\{props\.headingLevel \? undefined : props\.title\}/);
 });

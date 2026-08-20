@@ -6,16 +6,11 @@ import {
   IconTopologyStar3,
   IconUsersGroup,
 } from "@tabler/icons-react";
-import type { CSSProperties } from "react";
 
 import { HOME_CONTENT, HOME_DESTINATIONS } from "../../shared/home-content.mjs";
 import { AppLink } from "../components/AppLink";
 import { HOME_TAG_GROUPS } from "../lib/homeTagConstellation";
 import type { ViewState } from "../lib/viewState";
-
-type HomeTagStyle = CSSProperties & {
-  "--tag-scale": number;
-};
 
 type HomePageProps = {
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
@@ -83,14 +78,14 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
         <div className="home-tag-constellation__heading">
           <div>
             <h2 id="home-tag-heading">Browse by tag</h2>
-            <p>More records, bigger tag.</p>
+            <p>A small sample from the Library.</p>
           </div>
           <AppLink className="home-tag-constellation__all" onNavigate={onNavigate} view="search">
             See all tags
             <IconArrowRight aria-hidden="true" size={16} stroke={2} />
           </AppLink>
         </div>
-        <div className="home-tag-galaxies" data-tag-count-scale="logarithmic">
+        <div className="home-tag-galaxies">
           {HOME_TAG_GROUPS.map((group) => (
             <section aria-labelledby={`home-tag-group-${group.id}`} className="home-tag-galaxy" data-tag-dimension={group.id} key={group.id}>
               <h3 id={`home-tag-group-${group.id}`}>{group.label}</h3>
@@ -98,16 +93,12 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
                 {group.tags.map((tag) => (
                   <li key={tag.id}>
                     <AppLink
-                      aria-label={`${tag.label}, ${tag.count.toLocaleString()} records`}
                       className="home-tag-link"
-                      data-record-count={tag.count}
                       onNavigate={onNavigate}
                       patch={{ tags: [tag.id] }}
-                      style={{ "--tag-scale": tag.scale } as HomeTagStyle}
                       view="search"
                     >
                       <span className="home-tag-link__label">{tag.label}</span>
-                      <span aria-hidden="true" className="home-tag-link__count">{tag.count.toLocaleString()}</span>
                     </AppLink>
                   </li>
                 ))}

@@ -20,11 +20,10 @@ import {
   practitionerGuides,
 } from "../../app/learn-content.mjs";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
-import { Panel } from "../components/lsm";
 import { AppLink } from "../components/AppLink";
 import { BucketTag } from "../components/TaxonomyTag";
 import { TaxonomyTagLinks } from "../components/ContextualTaxonomyLinks";
-import { PageHeader, SummaryCard } from "../lib/pagePrimitives";
+import { PageHeader, PageJumpNav } from "../lib/pagePrimitives";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
@@ -56,6 +55,9 @@ export function PlaybooksPage(props: {
   const { state, onNavigate } = props;
   const selected = learnArticleById(state.pattern);
   const selectedPresentation = selected ? GUIDE_PRESENTATION[selected.id] : null;
+  const selectedIndex = selected
+    ? practitionerGuides.findIndex((article) => article.id === selected.id)
+    : -1;
 
   if (!selected) {
     return (
@@ -114,69 +116,103 @@ export function PlaybooksPage(props: {
     );
   }
 
+  const guideSections = [
+    ...(selected.whenItMatters
+      ? [{ id: "guide-when-it-matters", label: "When it matters" }]
+      : []),
+    { id: "guide-what-this-means", label: "What this means" },
+    { id: "guide-limitations", label: "Limitations" },
+    { id: "guide-references", label: "Official references" },
+  ];
+
   return (
-    <Panel data-visual-identity="practitioner-field-manual">
+    <section
+      className="ca-page guide-article"
+      data-page-template="knowledge-base"
+      data-visual-identity="practitioner-field-manual"
+    >
+      <nav aria-label="Guide context" className="card-actions">
+        <AppLink onNavigate={onNavigate} patch={{ pattern: "" }} variant="secondary" view="patterns">
+          Back to Guides
+        </AppLink>
+        {selectedIndex >= 0 ? (
+          <span className="support-meta">
+            Guide {String(selectedIndex + 1).padStart(2, "0")} of {practitionerGuides.length}
+            {selectedPresentation ? ` / ${selectedPresentation.area}` : ""}
+          </span>
+        ) : null}
+      </nav>
       <PageHeader
-        action={
-          <AppLink onNavigate={onNavigate} patch={{ pattern: "" }} variant="secondary" view="patterns">
-            Back to Guides
-          </AppLink>
-        }
         eyebrow={selected.kind === "practitioner" ? "Practitioner guide" : "Control Atlas explanation"}
         summary={selected.summary}
         title={selected.title}
       />
-      <div className="learn-article">
-        {selected.whereItSits ? (
-          <SummaryCard title="Where it sits">
-            <p>{selected.whereItSits}</p>
-          </SummaryCard>
-        ) : null}
-        {selected.whenItMatters ? (
-          <SummaryCard title="When it matters">
-            <p>{selected.whenItMatters}</p>
-          </SummaryCard>
-        ) : null}
-        <SummaryCard title="What this means">
-          <p>{selected.explanation}</p>
-        </SummaryCard>
-        <SummaryCard title="Limitations" tone="warning">
-          <p>{selected.limitations}</p>
-        </SummaryCard>
-        <section aria-labelledby="learn-citations">
-          <h2 id="learn-citations">Official references</h2>
-          <ul>
-            {selected.citations.map((citation) => (
-              <li key={citation.url}>
-                <a href={citation.url} rel="noopener noreferrer" target="_blank">
-                  {citation.label}
-                  <IconExternalLink aria-hidden="true" size={14} />
-                </a>
-                <p>
-                  <strong>Supports:</strong> {citation.supports}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </section>
-        {selectedPresentation?.tagIds?.length ? (
-          <section className="ca-contextual-taxonomy" aria-label={`Related Library tags for ${selected.title}`}>
-            <h3>Explore related Library records</h3>
-            <p>
-              These tags link to related records for this topic. They don't mean every one applies to your system.
-            </p>
-            <TaxonomyTagLinks onNavigate={onNavigate} tagIds={selectedPresentation.tagIds} />
+      <div className="about-layout">
+        <article className="learn-article">
+          {selected.whenItMatters ? (
+            <section id="guide-when-it-matters">
+              <h2>When it matters</h2>
+              <p>{selected.whenItMatters}</p>
+            </section>
+          ) : null}
+          <section id="guide-what-this-means">
+            <h2>What this means</h2>
+            <p>{selected.explanation}</p>
           </section>
-        ) : null}
-        <AppLink
-          onNavigate={onNavigate}
-          patch={selected.nextAction.patch as Partial<ViewState> | undefined}
-          variant="primary"
-          view={selected.nextAction.view as ViewState["view"]}
-        >
-          {selected.nextAction.label}
-        </AppLink>
+          <aside aria-labelledby="guide-limitations" className="summary-card tone-warning">
+            <h2 className="summary-card-title" id="guide-limitations">Limitations</h2>
+            <div><p>{selected.limitations}</p></div>
+          </aside>
+          <section id="guide-references">
+            <h2>Official references</h2>
+            <ul>
+              {selected.citations.map((citation) => (
+                <li key={citation.url}>
+                  <a href={citation.url} rel="noopener noreferrer" target="_blank">
+                    {citation.label}
+                    <IconExternalLink aria-hidden="true" size={14} />
+                  </a>
+                  <p>
+                    <strong>Supports:</strong> {citation.supports}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </section>
+          {selectedPresentation?.tagIds?.length ? (
+            <section className="ca-contextual-taxonomy" aria-label={`Related Library tags for ${selected.title}`}>
+              <h2>Explore related Library records</h2>
+              <p>
+                These tags link to related records for this topic. They don't mean every one applies to your system.
+              </p>
+              <TaxonomyTagLinks onNavigate={onNavigate} tagIds={selectedPresentation.tagIds} />
+            </section>
+          ) : null}
+          <div className="actions">
+            <AppLink
+              onNavigate={onNavigate}
+              patch={selected.nextAction.patch as Partial<ViewState> | undefined}
+              variant="primary"
+              view={selected.nextAction.view as ViewState["view"]}
+            >
+              {selected.nextAction.label}
+            </AppLink>
+          </div>
+        </article>
+
+        <aside aria-label="Guide contents and source" className="about-toc">
+          <p className="label">On this page</p>
+          <PageJumpNav ariaLabel="Jump to guide section" sections={guideSections} />
+          {selected.whereItSits ? (
+            <>
+              <p className="label">Context</p>
+              <p>{selected.whereItSits}</p>
+            </>
+          ) : null}
+          <p className="label">Source</p>
+          <p>{selected.citations.map((citation) => citation.label).join("; ")}</p>
+        </aside>
       </div>
-    </Panel>
+    </section>
   );
 }

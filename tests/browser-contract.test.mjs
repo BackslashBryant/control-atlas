@@ -382,8 +382,8 @@ test('landing page states what the product is before asking for action', () => {
   assert.doesNotMatch(homePage, /home-ecosystem-authorities/);
   assert.match(homePage, /HOME_TAG_GROUPS\.map/);
   assert.match(homePage, /home-tag-galaxies/);
-  assert.match(homePage, /data-record-count/);
-  assert.match(homePage, /More records, bigger tag\./);
+  assert.match(homePage, /A small sample from the Library\./);
+  assert.doesNotMatch(homePage, /data-record-count|tag-count-scale|tag\.count/);
 });
 
 test('Guides implement the numbered Template F directory contract', () => {
@@ -556,7 +556,13 @@ test('route interactions keep canonical context and synchronize visible state', 
 test('template options use collapsed progressive disclosure and associated hints', () => {
   const templatesPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
   assert.doesNotMatch(templatesPage, /defaultValue="options"/);
-  assert.match(templatesPage, /<h2>\{selectedTemplate\.display_name\}<\/h2>/);
+  assert.match(templatesPage, /CURRENT DOCUMENT \/ \$\{selectedTemplate\.display_name\}/);
+  assert.match(templatesPage, /Configure inputs/);
+  assert.match(templatesPage, /Selected context/);
+  assert.match(templatesPage, />Preview<\/h2>/);
+  assert.match(templatesPage, /Download \$\{selectedTemplate\.display_name\}/);
+  assert.match(templatesPage, /documentSelectionMountedRef/);
+  assert.doesNotMatch(templatesPage, /<Panel[^>]*>/);
   assert.match(templatesPage, /hint="Which control catalog/);
   assert.match(templatesPage, /hint="Where the system runs/);
   // CATL-09: Format help is per-template/per-format, not a single generic

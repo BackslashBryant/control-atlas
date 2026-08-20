@@ -450,3 +450,33 @@ test("resource card uses the central identity seam and restrained anatomy", () =
   assert.match(styles, /\.resource-brand-mark[\s\S]*width:\s*44px/);
   assert.match(styles, /@media \(max-width:\s*30rem\)[\s\S]*height:\s*40px/);
 });
+
+test("Resource routes follow the Orbital catalog and knowledge-base compositions", () => {
+  const directory = readFileSync(resolve("src/ui/pages/CommonsPage.tsx"), "utf8");
+  const detail = readFileSync(resolve("src/ui/pages/CommonsDetailPage.tsx"), "utf8");
+  const styles = readFileSync(resolve("styles/resources.css"), "utf8");
+
+  assert.doesNotMatch(directory, /headerAction=/);
+  assert.match(directory, /<h2 id="resource-collections-heading">Browse by Collection<\/h2>/);
+  assert.doesNotMatch(directory, /<p className="eyebrow">Resources<\/p>/);
+  assert.ok(directory.indexOf("resource-contribute-heading") > directory.indexOf("resource-catalog-grid"));
+  assert.match(directory, /resource-compare-toggle/);
+
+  for (const heading of [
+    "What it is",
+    "Who it's for",
+    "How to use or access",
+    "Limitations",
+    "Related resources",
+    "Related topics",
+  ]) {
+    assert.ok(detail.includes(`title="${heading}"`), heading);
+  }
+  assert.match(detail, /<details className="resource-detail-maintenance">/);
+  assert.match(detail, /Source &amp; maintenance details/);
+  assert.doesNotMatch(detail, /Governed discovery tags/);
+  assert.doesNotMatch(detail, /Publisher image from commit/);
+  assert.match(styles, /\.resource-catalog-grid\s*\{[\s\S]*repeat\(4,/);
+  assert.match(styles, /@media \(max-width:\s*64rem\)[\s\S]*\.resource-catalog-grid[\s\S]*repeat\(2,/);
+  assert.match(styles, /@media \(max-width:\s*48rem\)[\s\S]*\.resource-catalog-grid[\s\S]*grid-template-columns:\s*1fr/);
+});

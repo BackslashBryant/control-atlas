@@ -6849,15 +6849,17 @@ button.atlas-leverage-row:hover {
   position: relative;
   isolation: isolate;
   display: inline-flex;
+  min-width: var(--ca-touch-target);
   max-width: 100%;
   align-items: baseline;
+  justify-content: center;
   gap: .45em;
   min-height: var(--ca-touch-target);
   padding: .38em .5em;
   border-radius: var(--ca-radius-sm);
   color: var(--ca-text);
   font-family: var(--ca-font-mono);
-  font-size: clamp(.84rem, calc(.84rem + var(--tag-scale) * .44rem), 1.28rem);
+  font-size: var(--ca-text-sm);
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -.018em;
@@ -6879,15 +6881,6 @@ button.atlas-leverage-row:hover {
 
 .home-tag-link__label {
   overflow-wrap: anywhere;
-}
-
-.home-tag-link__count {
-  flex: 0 0 auto;
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono);
-  font-size: .68rem;
-  font-weight: 600;
-  letter-spacing: 0;
 }
 
 .home-tag-link:hover,
@@ -6934,9 +6927,6 @@ button.atlas-leverage-row:hover {
     min-height: 0;
   }
 
-  .home-tag-link {
-    font-size: clamp(.82rem, calc(.82rem + var(--tag-scale) * .28rem), 1.1rem);
-  }
 }
 
 .home-secondary-action small {
@@ -7635,6 +7625,48 @@ button.atlas-leverage-row:hover {
   display: grid;
   gap: 14px;
   max-width: 860px;
+}
+
+.about-page .learn-article,
+.guide-article .learn-article {
+  gap: 0;
+}
+
+.about-page .learn-article > section,
+.guide-article .learn-article > section {
+  padding-block: var(--ca-space-7);
+  border-bottom: 1px solid var(--ca-border);
+  scroll-margin-top: var(--ca-header-safe-offset);
+}
+
+.about-page .learn-article > section:first-child,
+.guide-article .learn-article > section:first-child {
+  padding-top: var(--ca-space-2);
+}
+
+.about-page .learn-article h2,
+.guide-article .learn-article h2 {
+  margin: 0 0 var(--ca-space-3);
+  color: var(--ca-text);
+  font-family: var(--ca-font-display);
+  font-size: var(--ca-text-2xl);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.about-page .learn-article p,
+.guide-article .learn-article p,
+.guide-article .learn-article li {
+  max-width: 72ch;
+  color: var(--ca-text-muted);
+  line-height: 1.65;
+}
+
+.guide-article > nav.card-actions {
+  justify-content: space-between;
+  margin: 0;
+  padding-bottom: var(--ca-space-3);
+  border-bottom: 1px solid var(--ca-border);
 }
 
 .learn-article a {

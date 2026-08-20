@@ -72,6 +72,10 @@ test("WS3 Resources shares Template C with real list, map, and comparison modes"
   await expect(rail).toBeVisible();
   await expect(rail.locator('[data-facet-set="collection,type,owner"]')).toBeVisible();
   await expect(workspace.getByRole("button", { name: "Filters" })).toBeHidden();
+  await expect(workspace.locator('[data-browse-state="resources"] .eyebrow')).toHaveCount(0);
+  await expect(workspace.getByRole("heading", { name: "Contribute", level: 2 })).toBeVisible();
+  await expect(workspace.locator(".page-header").getByRole("link", { name: "Submit resource" })).toHaveCount(0);
+  await expect(workspace.locator('[data-browse-state="resources"] .workspace-browse-grid')).toHaveCSS("grid-template-columns", /.+ .+ .+ .+/);
 
   await workspace.getByRole("button", { name: /Browse all \d+ resources/ }).click();
   await expect(page.locator('[data-result-bar-order="count,sort,view,compare"]')).toBeVisible();
@@ -85,12 +89,40 @@ test("WS3 Resources shares Template C with real list, map, and comparison modes"
   await workspace.getByRole("button", { name: "Map", exact: true }).click();
   await expect(page.getByRole("region", { name: "Map of Resource results" })).toBeVisible();
   await workspace.getByRole("button", { name: "List", exact: true }).click();
-  await workspace.getByRole("button", { name: "Compare", exact: true }).click();
+  const compare = workspace.getByRole("button", { name: "Compare", exact: true });
+  await expect(compare).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await compare.click();
+  await expect(compare).toHaveAttribute("aria-pressed", "true");
   const selectors = page.getByRole("checkbox", { name: /^Select .* for comparison$/ });
   await selectors.nth(0).check();
   await selectors.nth(1).check();
   await expect(page.getByRole("heading", { name: "Selected resources", level: 2 })).toBeVisible();
   await expect(page.getByRole("table")).toBeVisible();
+});
+
+test("WS3 Resource detail uses a knowledge-base reading sequence", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await gotoApp(page, "/#/resources/tool-grype-vulnerability-scanner");
+  await waitForAppReady(page, { allowPartial: true });
+
+  const article = page.locator("article.resource-detail-main");
+  await expect(page.getByText("Resource", { exact: true })).toBeVisible();
+  await expect(page.getByText("Publisher Anchore", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Open resource" })).toBeVisible();
+  await expect(article.getByRole("heading", { level: 2 })).toHaveText([
+    "What it is",
+    "Who it's for",
+    "How to use or access",
+    "Screenshots",
+    "Limitations",
+    "Related resources",
+  ]);
+  await expect(page.getByRole("heading", { name: "Governed discovery tags" })).toHaveCount(0);
+  const details = page.locator("details.resource-detail-maintenance");
+  await expect(details).not.toHaveAttribute("open", "");
+  await details.locator("summary").click();
+  await expect(details.getByText("Verification method", { exact: true })).toBeVisible();
+  await expect(page.locator(".resource-detail-media figcaption")).not.toContainText(/commit\s+[0-9a-f]/i);
 });
 
 test("WS3 facets move to a modal sheet below the desktop breakpoint", async ({ page }) => {

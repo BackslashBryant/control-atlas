@@ -3,11 +3,9 @@ import librarySearchArtifact from "../../../data/generated/library-search.json";
 import { TAXONOMY_CONTRACT } from "../../shared/taxonomy-contract.mjs";
 
 export type HomeTagPresentation = {
-  count: number;
   dimension: string;
   id: string;
   label: string;
-  scale: number;
 };
 
 export type HomeTagGroup = {
@@ -23,19 +21,12 @@ const selectedTags = TAXONOMY_CONTRACT.dimensions.flatMap((dimension) =>
   TAXONOMY_CONTRACT.tags
     .filter((tag) => tag.dimension === dimension.id && Number(tagCounts[tag.id] || 0) > 0)
     .map((tag) => ({
-      count: Number(tagCounts[tag.id]),
       dimension: dimension.id,
       id: tag.id,
       label: tag.label,
     }))
-    .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label))
     .slice(0, TAGS_PER_DIMENSION),
 );
-
-const logCounts = selectedTags.map((tag) => Math.log10(tag.count + 1));
-const minimumLogCount = Math.min(...logCounts);
-const maximumLogCount = Math.max(...logCounts);
-const logRange = maximumLogCount - minimumLogCount || 1;
 
 export const HOME_TAG_GROUPS = Object.freeze(
   TAXONOMY_CONTRACT.dimensions.map((dimension) => Object.freeze({
@@ -44,10 +35,7 @@ export const HOME_TAG_GROUPS = Object.freeze(
     tags: Object.freeze(
       selectedTags
         .filter((tag) => tag.dimension === dimension.id)
-        .map((tag) => Object.freeze({
-          ...tag,
-          scale: Number(((Math.log10(tag.count + 1) - minimumLogCount) / logRange).toFixed(4)),
-        })),
+        .map((tag) => Object.freeze(tag)),
     ),
   })),
 ) as readonly HomeTagGroup[];
