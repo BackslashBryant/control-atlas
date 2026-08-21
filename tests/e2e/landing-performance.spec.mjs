@@ -31,7 +31,9 @@ test("landing presents Template B search, four destinations, and governed tag br
   // has been trimmed before. src/shared/brand-rotation.ts owns the order.
   await expect(page.locator("[data-brand-word]")).toHaveText(/^[A-Z][a-z]+$/);
   await expect(page.locator(".home-secondary-action")).toHaveCount(4);
-  await expect(page.locator(".home-library-kpis .home-library-kpi")).toHaveCount(6);
+  // Five practitioner questions, ordered the way the work runs. The sixth
+  // card was a record-volume statistic, not a place to start.
+  await expect(page.locator(".home-library-kpis .home-library-kpi")).toHaveCount(5);
   await expect(page.locator(".home-ecosystem, .home-capability-preview")).toHaveCount(0);
 
   const urlBeforeSkip = page.url();

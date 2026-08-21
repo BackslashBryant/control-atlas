@@ -67,6 +67,9 @@ function matchReasonFor(document: any, query: string): string {
   return "Text match";
 }
 
+/** Below this many results the list is scannable and the kind band is noise. */
+const GROUPING_THRESHOLD = 20;
+
 const RELEVANCE_ORDER: Record<string, number> = {
   "Exact identifier": 0,
   "Exact title": 1,
@@ -155,6 +158,23 @@ export function ExplorePage(props: {
     }) || { result_count: documents.length, tags: {} };
   }, [baseLibraryFilters, bundle.runtime, documents.length, searchStarted, state.query, state.tags]);
 
+  /**
+   * The kinds this query actually found, largest first. Corpus-wide counts
+   * beside a search claimed thousands of requirements while the query had
+   * returned a few hundred configuration rules.
+   */
+  const kindContext = useMemo(() => {
+    if (!searchStarted) return null;
+    // Counted without the kind filter, so choosing one narrows the results
+    // without collapsing the band that offers the alternatives. Every other
+    // active filter still applies.
+    return (bundle.runtime as any).getLibraryKindContext?.(state.query, {
+      ...baseLibraryFilters,
+      object_types: [],
+      taxonomy_tag_groups: taxonomyTagGroups(state.tags),
+    }) || null;
+  }, [baseLibraryFilters, bundle.runtime, searchStarted, state.query, state.tags]);
+
   const rows = useMemo(() => {
     const prepared = documents.map((document: any) => {
       const relationshipCount = Number(document.published_connection_count || 0);
@@ -224,12 +244,36 @@ export function ExplorePage(props: {
       .filter((catalog: any) => areaPresentationForCatalog(catalog.id)?.id === area.id)
       .reduce((total: number, catalog: any) => total + Number(catalog.leaf_record_count || 0), 0),
   })).filter((area) => area.count > 0), [runtimeCatalogs]);
-  const kindCounts = useMemo(() => LIBRARY_KINDS.map((kind) => ({
-    ...kind,
-    count: Object.entries(libraryBrowseCounts.object_types || {})
-      .filter(([rawType]) => libraryKindForRawType(rawType) === kind.id)
-      .reduce((total, [, count]) => total + Number(count), 0),
-  })).filter((kind) => kind.count > 0), [libraryBrowseCounts]);
+  const kindCounts = useMemo(() => {
+    const scoped = kindContext?.object_types as Record<string, number> | undefined;
+    const corpus = (libraryBrowseCounts.object_types || {}) as Record<string, number>;
+    const totalFor = (counts: Record<string, number>, kindId: string) =>
+      Object.entries(counts)
+        .filter(([rawType]) => libraryKindForRawType(rawType) === kindId)
+        .reduce((total, [, count]) => total + Number(count), 0);
+    // The set of kinds is fixed by the corpus so a filter never vanishes while
+    // someone is typing; only the counts follow the query. Corpus-wide counts
+    // beside a search were the misleading part — a kind reading zero for this
+    // query is useful information, a kind that disappears is not.
+    return LIBRARY_KINDS.filter((kind) => totalFor(corpus, kind.id) > 0).map((kind) => ({
+      ...kind,
+      count: scoped ? totalFor(scoped, kind.id) : totalFor(corpus, kind.id),
+    }));
+  }, [kindContext, libraryBrowseCounts]);
+  /**
+   * Shown above the results when a query spans more than one kind. Ordered by
+   * how many of each the query found, so the dominant kind is named rather than
+   * left to be inferred from scrolling.
+   */
+  const kindGroups = useMemo(() => {
+    if (!kindContext || kindContext.result_count < GROUPING_THRESHOLD) return [];
+    // A band chip reading zero is a dead end, so the band shows only kinds this
+    // query actually found. The facet rail keeps the full, stable list.
+    return kindCounts
+      .filter((kind) => kind.count > 0)
+      .sort((left, right) => right.count - left.count);
+  }, [kindContext, kindCounts]);
+
   const tagFacetOptions = useMemo(
     () =>
       TAXONOMY_CONTRACT.dimensions
@@ -498,6 +542,30 @@ export function ExplorePage(props: {
       ) : state.viewMode === "map" ? (
         <LibraryAtlasMap items={mapItems} onNavigate={onNavigate} />
       ) : (
+        <>
+        {kindGroups.length > 1 ? (
+          <nav aria-label="Result kinds" className="workspace-result-groups" data-group-count={kindGroups.length}>
+            <button
+              aria-pressed={!state.kind}
+              className="workspace-result-group"
+              onClick={() => onNavigate("search", { kind: "" })}
+              type="button"
+            >
+              All<small>{(kindContext?.result_count ?? resultContext.result_count).toLocaleString()}</small>
+            </button>
+            {kindGroups.map((kind) => (
+              <button
+                aria-pressed={state.kind === kind.id}
+                className="workspace-result-group"
+                key={kind.id}
+                onClick={() => onNavigate("search", { kind: state.kind === kind.id ? "" : kind.id })}
+                type="button"
+              >
+                {kind.label}<small>{kind.count.toLocaleString()}</small>
+              </button>
+            ))}
+          </nav>
+        ) : null}
         <ul aria-busy={visibleCount > 0 && !detailsReady} aria-label="Search results" className="workspace-result-list" ref={resultsRef} tabIndex={-1}>
           {connectedOnly && !graphReady ? <li className="notice-inline" role="status">Loading connection data for this filter…</li> : null}
           {rows.slice(0, visibleCount).map((row: any) => {
@@ -549,6 +617,7 @@ export function ExplorePage(props: {
             <li><section className="empty-state"><h2>{hasFilters ? "Nothing matches these filters." : "No records found."}</h2><p>{hasFilters ? "Clear one and try again." : "Try another identifier or keyword."}</p><Button onClick={() => onNavigate("search", { area: "", connectedOnly: "", filter: "", kind: "", publisher: "", query: "", sort: "relevance", viewMode: "list" })} type="button" variant="primary">{hasFilters ? "Clear filters" : "Clear search"}</Button></section></li>
           ) : null}
         </ul>
+        </>
       )}
     </WorkspaceTemplate>
   );

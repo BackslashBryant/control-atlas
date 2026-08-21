@@ -76,31 +76,53 @@ export function TypeaheadFacet(props: {
   );
 }
 
+/**
+ * Collapsed by default, like any faceted catalogue. Every group standing open
+ * pushed the first result far down the rail and made the page look like a
+ * settings screen. A group with an active choice opens itself and names that
+ * choice in the summary, so a collapsed filter never hides state.
+ */
 export function CheckboxFacet(props: {
   label: string;
   options: Array<{ count?: number; label: ReactNode; textLabel: string; value: string }>;
   value: string;
   onChange: (value: string) => void;
+  defaultOpen?: boolean;
 }) {
+  const selected = props.options.find((option) => option.value === props.value);
+
   return (
-    <fieldset className="workspace-checkbox-facet">
-      <legend>{props.label}</legend>
-      {props.options.map((option) => (
-        <label key={option.value}>
-          <input
-            checked={props.value === option.value}
-            onChange={(event) => props.onChange(event.target.checked ? option.value : "")}
-            type="checkbox"
-          />
-          <span>{option.label}</span>
-          {typeof option.count === "number" ? (
-            <small aria-hidden="true">
-              {option.count.toLocaleString()}
-            </small>
-          ) : null}
-        </label>
-      ))}
-    </fieldset>
+    <details
+      className="workspace-checkbox-facet workspace-facet-group"
+      open={Boolean(props.value) || props.defaultOpen}
+    >
+      <summary>
+        <span className="workspace-facet-group__label">{props.label}</span>
+        {selected ? (
+          <span className="workspace-facet-group__selection">{selected.textLabel}</span>
+        ) : null}
+      </summary>
+      {/* Labelled by attribute rather than a hidden <legend>: a legend
+          repeating the summary put the same text in the accessibility tree
+          twice and made "Content kind" an ambiguous target. */}
+      <fieldset aria-label={props.label}>
+        {props.options.map((option) => (
+          <label key={option.value}>
+            <input
+              checked={props.value === option.value}
+              onChange={(event) => props.onChange(event.target.checked ? option.value : "")}
+              type="checkbox"
+            />
+            <span>{option.label}</span>
+            {typeof option.count === "number" ? (
+              <small aria-hidden="true">
+                {option.count.toLocaleString()}
+              </small>
+            ) : null}
+          </label>
+        ))}
+      </fieldset>
+    </details>
   );
 }
 

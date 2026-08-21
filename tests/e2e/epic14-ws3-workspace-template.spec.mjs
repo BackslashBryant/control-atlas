@@ -22,7 +22,7 @@ test("WS3 Library uses Template C browse, facets, and fully linked record rows",
   const facetControls = rail.locator('.workspace-facet-controls[data-facet-set="publication,kind,area"]');
   await expect(facetControls).toBeVisible();
   await expect(
-    facetControls.locator(":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > legend"),
+    facetControls.locator(":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > summary > .workspace-facet-group__label"),
   ).toHaveText(["Publication", "Content kind", "Area"]);
   const advanced = facetControls.locator('details[data-advanced-facet-set="publisher,topics,connections"]');
   await expect(advanced).not.toHaveAttribute("open", "");
@@ -145,7 +145,7 @@ test("WS3 facets move to a modal sheet below the desktop breakpoint", async ({ p
     if (route === "/#/library") {
       const facetControls = dialog.locator('.workspace-facet-controls[data-facet-set="publication,kind,area"]');
       await expect(
-        facetControls.locator(":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > legend"),
+        facetControls.locator(":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > summary > .workspace-facet-group__label"),
       ).toHaveText(["Publication", "Content kind", "Area"]);
       await expect(facetControls.locator("summary", { hasText: "Advanced filters" })).toBeVisible();
     }

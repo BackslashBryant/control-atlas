@@ -1,4 +1,5 @@
 import {
+  type ComponentType,
   lazy,
   startTransition,
   Suspense,
@@ -30,6 +31,11 @@ import { userFacingLoadError } from "../app/display-names.mjs";
 import type { RuntimeBundle } from "./lib/runtimeLoader";
 import { HomePage } from "./pages/HomePage";
 import {
+  browserReloadClock,
+  claimChunkReload,
+  isChunkLoadFailure,
+} from "./lib/chunkRecovery";
+import {
   isStaticViewWithoutBundle,
   requiresFullGraph,
 } from "./lib/navigationState";
@@ -56,72 +62,89 @@ import {
   BRAND_SURFACE_VIEWS,
 } from "../shared/brand-rotation";
 
-const AboutPage = lazy(() =>
+/**
+ * Wraps a lazy route so a chunk 404 left behind by a deploy reloads the page
+ * instead of reporting that the workspace stopped. See chunkRecovery.
+ */
+function lazyRoute<T extends ComponentType<any>>(load: () => Promise<{ default: T }>) {
+  return lazy(() =>
+    load().catch((error: unknown) => {
+      if (isChunkLoadFailure(error) && claimChunkReload(browserReloadClock())) {
+        window.location.reload();
+        // The reload replaces this document, so this promise never settles.
+        return new Promise<{ default: T }>(() => {});
+      }
+      throw error;
+    }),
+  );
+}
+
+const AboutPage = lazyRoute(() =>
   import("./pages/AboutPage").then((module) => ({
     default: module.AboutPage,
   })),
 );
-const AtlasMapPage = lazy(() =>
+const AtlasMapPage = lazyRoute(() =>
   import("./pages/AtlasMapPage").then((module) => ({
     default: module.AtlasMapPage,
   })),
 );
-const ComparePage = lazy(() =>
+const ComparePage = lazyRoute(() =>
   import("./pages/ComparePage").then((module) => ({
     default: module.ComparePage,
   })),
 );
-const CatalogDetailPage = lazy(() =>
+const CatalogDetailPage = lazyRoute(() =>
   import("./pages/CatalogDetailPage").then((module) => ({
     default: module.CatalogDetailPage,
   })),
 );
-const ExplorePage = lazy(() =>
+const ExplorePage = lazyRoute(() =>
   import("./pages/ExplorePage").then((module) => ({
     default: module.ExplorePage,
   })),
 );
-const ObjectDetailPage = lazy(() =>
+const ObjectDetailPage = lazyRoute(() =>
   import("./pages/ObjectDetailPage").then((module) => ({
     default: module.ObjectDetailPage,
   })),
 );
-const PlaybooksPage = lazy(() =>
+const PlaybooksPage = lazyRoute(() =>
   import("./pages/PlaybooksPage").then((module) => ({
     default: module.PlaybooksPage,
   })),
 );
-const SourcesPage = lazy(() =>
+const SourcesPage = lazyRoute(() =>
   import("./pages/SourcesPage").then((module) => ({
     default: module.SourcesPage,
   })),
 );
-const StartHerePage = lazy(() =>
+const StartHerePage = lazyRoute(() =>
   import("./pages/StartHerePage").then((module) => ({
     default: module.StartHerePage,
   })),
 );
-const TemplatesPage = lazy(() =>
+const TemplatesPage = lazyRoute(() =>
   import("./pages/TemplatesPage").then((module) => ({
     default: module.TemplatesPage,
   })),
 );
-const CommonsPage = lazy(() =>
+const CommonsPage = lazyRoute(() =>
   import("./pages/CommonsPage").then((module) => ({
     default: module.CommonsPage,
   })),
 );
-const CommonsDetailPage = lazy(() =>
+const CommonsDetailPage = lazyRoute(() =>
   import("./pages/CommonsDetailPage").then((module) => ({
     default: module.CommonsDetailPage,
   })),
 );
-const SearchOverlay = lazy(() =>
+const SearchOverlay = lazyRoute(() =>
   import("./components/SearchOverlay").then((module) => ({
     default: module.SearchOverlay,
   })),
 );
-const GlossaryDrawer = lazy(() =>
+const GlossaryDrawer = lazyRoute(() =>
   import("./components/GlossaryDrawer").then((module) => ({
     default: module.GlossaryDrawer,
   })),

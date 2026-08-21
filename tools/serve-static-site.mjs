@@ -21,13 +21,20 @@ const compressibleTypes = new Set(['.css', '.html', '.js', '.json', '.mjs']);
 const gzipCache = new Map();
 
 function compressedFile(filePath) {
-  const cached = gzipCache.get(filePath);
+  // Keyed by content identity, not just path. A rebuild replaces index.html in
+  // place, and a path-only cache kept serving the pre-rebuild bytes to every
+  // gzip-capable client — so browsers and Playwright loaded an index.html
+  // naming chunk hashes that no longer existed, while a plain curl of the same
+  // URL looked correct. Every test failed on an app that never booted.
+  const stats = statSync(filePath);
+  const key = `${filePath}:${stats.mtimeMs}:${stats.size}`;
+  const cached = gzipCache.get(key);
   if (cached) return cached;
   // GitHub Pages/CDN keeps encoded asset variants warm. Cache the local
   // release server's equivalent after its first request so Lighthouse measures
   // transfer/render behavior instead of repeatedly benchmarking zlib.
   const compressed = gzipSync(readFileSync(filePath));
-  gzipCache.set(filePath, compressed);
+  gzipCache.set(key, compressed);
   return compressed;
 }
 

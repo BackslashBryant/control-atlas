@@ -340,7 +340,7 @@ test("canonical publication register builds exactly 47 publication rows with rol
     assert.ok(pub.publisher.value, `${pub.id} has no publisher`);
     assert.ok(["recorded", "derived"].includes(pub.publisher.state));
     assert.ok(["recorded", "missing", "not_applicable"].includes(pub.version.state));
-    assert.ok(["recorded", "missing"].includes(pub.verifiedAt.state));
+    assert.ok(["recorded", "derived", "missing"].includes(pub.verifiedAt.state));
     assert.ok(["recorded", "missing", "blocked"].includes(pub.lifecycle.state));
     assert.ok(pub.sourceMaterials, `${pub.id} missing sourceMaterials object`);
     assert.ok(Array.isArray(pub.sourceMaterials.primary));
@@ -400,14 +400,39 @@ test("publication register exposes truthful absence states for version and last 
   assert.equal(dodRai.version.value, null);
   assert.equal(dodRai.version.reason, "Publisher version is not recorded.");
 
-  // Publications with unrecorded check dates report missing state
+  // A publication with no recorded check date reports the retrieval date in the
+  // "derived" state. Blank cells hid information the register actually holds,
+  // and printing a retrieval date as a check date would overstate the evidence;
+  // the distinct state is what lets the surface label which claim it is.
   const iot = publications.find(
     (pub) => pub.id === "nist-iot-device-cybersecurity-requirement-catalogs",
   );
   assert.ok(iot);
-  assert.equal(iot.verifiedAt.state, "missing");
-  assert.equal(iot.verifiedAt.value, null);
-  assert.equal(iot.verifiedAt.reason, "Not checked.");
+  const iotSourceRecord = sources.sources.find(
+    (source: { id: string }) =>
+      source.id === "nist-iot-device-cybersecurity-requirement-catalogs",
+  ) as { last_checked?: string; retrieved_at?: string };
+  assert.equal(iotSourceRecord.last_checked, undefined, "fixture has no check date");
+  assert.equal(iot.verifiedAt.state, "derived");
+  assert.equal(iot.verifiedAt.value, iotSourceRecord.retrieved_at);
+  assert.match(iot.verifiedAt.reason, /No verification check is recorded/);
+
+  // With neither date the register still reports honest absence.
+  const withoutDates = buildPublicationRegister(
+    sources.sources.map((source: { id: string }) =>
+      source.id === "nist-iot-device-cybersecurity-requirement-catalogs"
+        ? { ...source, last_checked: undefined, retrieved_at: undefined }
+        : source,
+    ),
+    catalogs,
+  );
+  const iotBare = withoutDates.find(
+    (pub) => pub.id === "nist-iot-device-cybersecurity-requirement-catalogs",
+  );
+  assert.ok(iotBare);
+  assert.equal(iotBare.verifiedAt.state, "missing");
+  assert.equal(iotBare.verifiedAt.value, null);
+  assert.equal(iotBare.verifiedAt.reason, "Not checked.");
 
   // Checked publications report recorded state with exact date
   const sp80053 = publications.find((pub) => pub.id === "nist-800-53");

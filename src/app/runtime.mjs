@@ -1380,6 +1380,23 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
       }
       return { result_count: matches.length, tags };
     },
+    /**
+     * Per-object-type counts for the CURRENT query, so the Library can lead
+     * with the kinds a search actually found. The browse artifact's counts are
+     * corpus-wide: showing them beside a query's results claimed thousands of
+     * requirements while the search had returned a few hundred rules.
+     */
+    getLibraryKindContext(query, filters = {}) {
+      const matches = libraryMatches(query, filters);
+      const objectTypes = {};
+      for (const match of matches) {
+        const rawType = match.index === undefined
+          ? match.document.object_type
+          : indexedLibraryValue(match.index, "object_type");
+        if (rawType) objectTypes[rawType] = (objectTypes[rawType] || 0) + 1;
+      }
+      return { result_count: matches.length, object_types: objectTypes };
+    },
     getNode(id) {
       return nodeById.get(id) || null;
     },

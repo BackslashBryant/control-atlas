@@ -250,9 +250,14 @@ test('static artifact loading caches requests and scopes initial data by route',
 });
 
 test('secondary route pages are lazy loaded behind a suspense fallback', () => {
-  assert.match(reactApp, /lazy\(\(\) =>\s*import\("\.\/pages\/AtlasMapPage"\)/);
-  assert.match(reactApp, /lazy\(\(\) =>\s*import\("\.\/pages\/ComparePage"\)/);
-  assert.match(reactApp, /lazy\(\(\) =>\s*import\("\.\/pages\/ObjectDetailPage"\)/);
+  // Routes load through lazyRoute, which wraps React.lazy so a chunk 404 left
+  // by a deploy reloads instead of reporting that the workspace stopped. The
+  // guarantee under test is code splitting, so assert the wrapper delegates to
+  // lazy() rather than pinning how each call site is spelled.
+  assert.match(reactApp, /function lazyRoute[\s\S]{0,200}?return lazy\(/);
+  assert.match(reactApp, /lazyRoute\(\(\) =>\s*import\("\.\/pages\/AtlasMapPage"\)/);
+  assert.match(reactApp, /lazyRoute\(\(\) =>\s*import\("\.\/pages\/ComparePage"\)/);
+  assert.match(reactApp, /lazyRoute\(\(\) =>\s*import\("\.\/pages\/ObjectDetailPage"\)/);
   assert.match(reactApp, /<Suspense/);
   assert.match(reactApp, /fallback=\{<LoadingStatusPanel/);
 });

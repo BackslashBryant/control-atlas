@@ -20,7 +20,9 @@ test("Home is a calm, task-focused front door", async ({ page }) => {
   for (const entrance of ["Browse the Atlas", "Search the Library", "Browse Resources"]) {
     await expect(page.getByRole("link", { name: new RegExp(entrance) })).toBeVisible();
   }
-  await expect(page.locator(".home-library-kpis .home-library-kpi")).toHaveCount(6);
+  // Five practitioner questions, ordered the way the work runs. The sixth
+  // card was a record-volume statistic, not a place to start.
+  await expect(page.locator(".home-library-kpis .home-library-kpi")).toHaveCount(5);
 });
 
 test("record leads with publisher text and contains no generated guidance", async ({ page }) => {

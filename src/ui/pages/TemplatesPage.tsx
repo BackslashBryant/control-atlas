@@ -556,9 +556,10 @@ function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) 
       </header>
       <div className="template-document-preview-body">
         <p className="template-document-preview-description">{doc.description}</p>
-        <p className="template-document-preview-disclaimer">
-          Template. The selected inputs and cited sources appear in the file.
-        </p>
+        {/* The header already labels this a template and the preview shows
+            the inputs and sources, so the sentence saying both was pure
+            restatement. The review notice is a dated evidence boundary and
+            stays until that review completes. */}
         <p className="template-document-preview-disclaimer">
           {STARTER_DOCUMENT_REVIEW_NOTICE}
         </p>
@@ -1212,19 +1213,26 @@ export function TemplatesPage(props: {
             className="nexus-section"
             id="companion-templates"
           >
+            {/* The page title, its summary, and the "01 / Document" step all
+                already say this is where a template is chosen. A second
+                heading, a restatement, and the review notice repeated from the
+                preview stacked five lines of preamble above the first
+                template. Only a specific companion name adds anything, so the
+                generic heading stays for the landmark and is not shown. */}
             <div className="section-header nexus-section-header">
               <div>
-                <h2 id="companion-heading">
+                <h2
+                  className={
+                    selectedWorkflow && declaredCompanions.length === 1
+                      ? undefined
+                      : "visually-hidden"
+                  }
+                  id="companion-heading"
+                >
                   {selectedWorkflow && declaredCompanions.length === 1
                     ? `Create ${declaredCompanions[0].display_name}`
                     : "Choose a template"}
                 </h2>
-                <p className="page-summary">
-                  Start with the basic structure and prompts already in place.
-                </p>
-                <p className="template-document-preview-disclaimer">
-                  {STARTER_DOCUMENT_REVIEW_NOTICE}
-                </p>
               </div>
             </div>
             {showCompanionFilters ? (

@@ -267,6 +267,24 @@ export function classifySourceLayer(source: any): SourceLayerId {
   return "publication";
 }
 
+/**
+ * "Last checked" is a verification claim; "retrieved" is an acquisition claim.
+ * Most register entries record only the second. Leaving the column blank hid
+ * information the register actually holds, and printing the retrieval date
+ * under a "checked" heading would assert a check that never happened — so the
+ * date is reported as derived and the UI labels which claim it is.
+ */
+function verificationField(source: any): SourceField<string> {
+  if (isRecordedString(source?.last_checked)) return recorded(source.last_checked.trim());
+  if (isRecordedString(source?.retrieved_at)) {
+    return derived(
+      source.retrieved_at.trim(),
+      "No verification check is recorded. This is the date the material was retrieved.",
+    );
+  }
+  return missing("Not checked.");
+}
+
 function recordedSourceDisplayName(source: any): string | null {
   const candidate = [source?.display_name, source?.name].find(
     (value) => isRecordedString(value) && value.trim() !== source?.id,
@@ -521,9 +539,7 @@ export function buildPublicationRegister(
           )
         : missing("Publisher version is not recorded.");
 
-    const verifiedField = isRecordedString(source.last_checked)
-      ? recorded(source.last_checked.trim())
-      : missing("Not checked.");
+    const verifiedField = verificationField(source);
 
     const lifecycleField: SourceField<string> = quarantineReason
       ? blocked<string>(quarantineReason)
@@ -677,7 +693,7 @@ function buildRows(
       format: formatField(source, layer),
       version: stringField(source.version, "Publisher version is not recorded."),
       retrievedAt: stringField(source.retrieved_at, "Retrieval date is not recorded."),
-      verifiedAt: stringField(source.last_checked, "Not checked."),
+      verifiedAt: verificationField(source),
       lifecycle: quarantineReason
         ? blocked(quarantineReason)
         : stringField(source.lifecycle_status, "Lifecycle status is not recorded."),

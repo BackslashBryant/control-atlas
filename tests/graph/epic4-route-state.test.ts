@@ -5,10 +5,13 @@ import { parseHashLocation, serializeHashLocation } from "../../src/ui/lib/hashR
 import { canonicalizeHashLocation } from "../../src/ui/lib/routeIdentity";
 
 test("Build task and starter-document paths round trip with query configuration", () => {
-  const overview = parseHashLocation("/build", "");
-  assert.equal(overview.view, "templates");
-  assert.equal(overview.buildSection, "overview");
-  assert.equal(serializeHashLocation(overview), "/build");
+  // /build lands directly on the document list. The former "overview" section
+  // was an interstitial that only restated the page title before making the
+  // reader click again to reach the templates.
+  const landing = parseHashLocation("/build", "");
+  assert.equal(landing.view, "templates");
+  assert.equal(landing.buildSection, "documents");
+  assert.equal(serializeHashLocation(landing), "/build");
 
   const tasks = parseHashLocation("/build/tasks", "");
   assert.equal(tasks.view, "templates");

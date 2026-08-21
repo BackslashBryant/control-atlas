@@ -107,7 +107,7 @@ test("Phase 3 filters stay stable, bounded, and free of hierarchy node types", a
     await expect(rail).toBeVisible();
     const facetControls = rail.locator('.workspace-facet-controls[data-facet-set="publication,kind,area"]');
     const primaryFacets = facetControls.locator(
-      ":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > legend",
+      ":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > summary > .workspace-facet-group__label",
     );
     renderedSets.push(await primaryFacets.allTextContents());
     await expect(primaryFacets).toHaveText(["Publication", "Content kind", "Area"]);
@@ -123,6 +123,16 @@ test("Phase 3 filters stay stable, bounded, and free of hierarchy node types", a
     await expect(rail).not.toContainText(/\b(?:Limb|Trunk|Group)\b/);
   }
   expect(renderedSets[1]).toEqual(renderedSets[0]);
+  // Facet groups are collapsed until asked for, so the options are out of the
+  // accessibility tree until the group is opened. Opening it here also proves
+  // the disclosure works.
+  const kindGroup = page
+    .locator(".workspace-facet-rail .workspace-checkbox-facet")
+    .filter({ has: page.locator("summary", { hasText: "Content kind" }) })
+    .first();
+  await expect(kindGroup).toHaveJSProperty("open", false);
+  await kindGroup.locator("summary").click();
+  await expect(kindGroup).toHaveJSProperty("open", true);
   const kindLabels = await page.getByRole("group", { name: "Content kind" }).locator("label > span").allTextContents();
   expect(kindLabels.sort()).toEqual([
     "Baselines & profiles",

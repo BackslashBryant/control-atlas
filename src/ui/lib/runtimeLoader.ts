@@ -12,8 +12,14 @@ import { expandLibrarySearchTransport } from "./librarySearchTransport";
 
 const CACHE_VERSION = RUNTIME_CACHE_VERSION;
 const artifactCache = new Map<string, Promise<unknown>>();
-const COMPRESSED_ARTIFACT_TIMEOUT_MS = 4_000;
-const FALLBACK_ARTIFACT_TIMEOUT_MS = 8_000;
+// A cold CDN fetch of a multi-megabyte artifact regularly needs more than four
+// seconds, and the uncompressed fallback is strictly larger than the
+// compressed file it replaces. The old budgets turned ordinary slow responses
+// into "did not load" errors that a manual reload then fixed, because the
+// second attempt hit a warm cache. Failing slowly is better than reporting a
+// failure that is not real; the surface shows a loading state meanwhile.
+const COMPRESSED_ARTIFACT_TIMEOUT_MS = 12_000;
+const FALLBACK_ARTIFACT_TIMEOUT_MS = 25_000;
 const JSON_WORKER_TIMEOUT_MS = 10_000;
 
 export type RuntimeLoadErrorCode =
@@ -61,6 +67,7 @@ async function withDeadline<T>(
 ) {
   const controller = new AbortController();
   let timer: ReturnType<typeof setTimeout> | undefined;
+  let settled = false;
   const timeout = new Promise<never>((_, reject) => {
     timer = globalThis.setTimeout(() => {
       controller.abort();
@@ -68,12 +75,19 @@ async function withDeadline<T>(
     }, timeoutMs);
   });
   try {
-    return await Promise.race([task(controller.signal), timeout]);
+    const value = await Promise.race([task(controller.signal), timeout]);
+    settled = true;
+    return value;
   } finally {
     if (timer !== undefined) {
       globalThis.clearTimeout(timer);
     }
-    controller.abort();
+    // Cancel only when the request did not finish. Aborting unconditionally
+    // also fired on the success path, cancelling a body that had already been
+    // handed to the JSON worker and logging a spurious ERR_ABORTED.
+    if (!settled) {
+      controller.abort();
+    }
   }
 }
 

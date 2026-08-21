@@ -927,9 +927,14 @@ body {
    sentence into a column a few characters wide. */
 .page-header-title {
   display: grid;
-  flex: 1 1 22rem;
+  /* min-width, not flex-basis. A basis of 22rem is a width only while the
+     header lays out as a row; where it stacks, the same value became a 352px
+     block size that stretched the title grid and wrapped the heading down the
+     screen. min-width gives the title its floor in a row and does nothing in a
+     column. */
+  flex: 1 1 auto;
   gap: 10px;
-  min-width: 0;
+  min-width: min(22rem, 100%);
 }
 
 .page-header-title .page-summary {

@@ -27,7 +27,7 @@ test("Compare opens as the Orbital three-stage Frameworks flow", async ({
     page.getByRole("heading", { level: 1, name: "Compare" }),
   ).toBeVisible();
   await expect(page.locator(".page-header-eyebrow")).toHaveText(
-    "PUBLISHED CROSSWALKS / 24 COMPARABLE PAIRS",
+    "PUBLISHED CROSSWALKS / 21 CONNECTED PUBLICATIONS",
   );
   await expect(page.locator(".page-summary")).toHaveText(
     "See how frameworks connect using published crosswalks.",

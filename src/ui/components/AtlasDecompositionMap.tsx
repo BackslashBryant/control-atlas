@@ -65,10 +65,12 @@ function TreeRow(props: {
 
   return (
     <>
+      {/* The group heading is a real list item, never role="presentation":
+          stripping the listitem role left the parent <ul> holding a child
+          that is not a list item, a serious axe violation. The heading
+          belongs to the list it labels, so it stays an item. */}
       {groupHeading ? (
-        <li className="atlas-decomp__group" role="presentation">
-          {groupHeading}
-        </li>
+        <li className="atlas-decomp__group">{groupHeading}</li>
       ) : null}
       <li className="atlas-decomp__row" style={style}>
         {/* A row is only a control when it can actually open something. The

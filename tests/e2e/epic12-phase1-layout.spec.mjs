@@ -102,11 +102,14 @@ for (const viewport of VIEWPORTS) {
           const overflows = [...globalThis.document.querySelectorAll("body *")]
             .filter((element) => {
               const style = globalThis.getComputedStyle(element);
+              const overflowX = style.overflowX;
               return (
                 element.clientWidth > 100 &&
                 style.display !== "none" &&
                 style.visibility !== "hidden" &&
                 style.textOverflow !== "ellipsis" &&
+                overflowX !== "auto" &&
+                overflowX !== "scroll" &&
                 element.scrollWidth > element.clientWidth + 2
               );
             })

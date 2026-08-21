@@ -165,7 +165,10 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
   await expect(iotDetail).toContainText("Version / current through");
   await expect(iotDetail).toContainText("Spring 2021");
   await expect(iotDetail).toContainText("Last checked");
-  await expect(iotDetail).toContainText("—");
+  // No verification check is recorded for this source. The register reports the
+  // retrieval date and labels it as retrieval, so the cell is neither blank nor
+  // a check date the evidence does not support.
+  await expect(iotDetail).toContainText("Retrieved");
   await expect(iotDetail).not.toContainText("undefined");
 
   await open(page, "/#/sources?source=nist-800-53");
@@ -381,7 +384,7 @@ test("source and record provenance stay distinct at every governed width", async
     );
     const facts = page.getByRole("region", { name: "Source status summary" });
     await expect(facts).toContainText("Version / current throughSpring 2021");
-    await expect(facts).toContainText("Last checked—");
+    await expect(facts).toContainText("Last checkedRetrieved");
     expect(
       await page.evaluate(
         () =>

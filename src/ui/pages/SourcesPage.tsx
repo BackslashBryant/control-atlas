@@ -27,6 +27,29 @@ import type { ViewState } from "../lib/viewState";
 
 const SOURCE_PAGE_SIZE = 25;
 
+/**
+ * A recorded check date prints plainly. A date derived from retrieval is
+ * labelled as retrieval, so the register never implies a verification that did
+ * not happen. The field's reason carries the full sentence in the tooltip.
+ */
+function VerificationDate(props: { field: { value: string | null; state: string; reason: string } }) {
+  const { field } = props;
+  if (!field.value) return <>—</>;
+  if (field.state === "derived") {
+    return (
+      <span className="source-checked-derived" title={field.reason}>
+        <span className="source-checked-qualifier">Retrieved</span> {field.value}
+      </span>
+    );
+  }
+  return <>{field.value}</>;
+}
+
+/** Enough to show the register's shape without becoming a second filter list. */
+const PUBLISHER_BAND_LIMIT = 8;
+/** A chip for two rows is not navigation; the dropdown already covers the tail. */
+const PUBLISHER_BAND_MINIMUM = 3;
+
 function CopyStableSourceId(props: { id: string }) {
   const [copied, setCopied] = useState(false);
   return (
@@ -154,7 +177,7 @@ function PublicationInspectorContent(props: {
 
           <div className="system-stat">
             <span>Last checked</span>
-            <strong>{publication.verifiedAt.value || "—"}</strong>
+            <strong><VerificationDate field={publication.verifiedAt} /></strong>
           </div>
 
           <div className="system-stat">
@@ -457,6 +480,25 @@ export function SourcesPage(props: {
     value,
     label: value,
   }));
+
+  /**
+   * The register is one flat list of 192 entries behind a publisher dropdown,
+   * so the shape of it — who publishes what, and how much — was invisible
+   * until you opened the select. These bands put the largest publishers up
+   * front as one-click filters and keep the dropdown for the long tail.
+   */
+  const publisherBands = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const row of allPublicationRows) {
+      const name = row.publisher.value;
+      if (name) counts.set(name, (counts.get(name) || 0) + 1);
+    }
+    return [...counts.entries()]
+      .map(([value, count]) => ({ count, value }))
+      .filter((band) => band.count >= PUBLISHER_BAND_MINIMUM)
+      .sort((left, right) => right.count - left.count || left.value.localeCompare(right.value))
+      .slice(0, PUBLISHER_BAND_LIMIT);
+  }, [allPublicationRows]);
   const statusOptions = options.lifecycleStatuses
     .map((value) => ({
       value,
@@ -670,6 +712,33 @@ export function SourcesPage(props: {
 
           </div>
 
+          {publisherBands.length > 1 ? (
+            <nav aria-label="Publishers" className="workspace-result-groups" data-group-count={publisherBands.length}>
+              <button
+                aria-pressed={!state.publisher}
+                className="workspace-result-group"
+                onClick={() => onNavigate("sources", { ...state, publisher: "" })}
+                type="button"
+              >
+                All publishers<small>{allPublicationRows.length.toLocaleString()}</small>
+              </button>
+              {publisherBands.map((band) => (
+                <button
+                  aria-pressed={state.publisher === band.value}
+                  className="workspace-result-group"
+                  key={band.value}
+                  onClick={() => onNavigate("sources", {
+                    ...state,
+                    publisher: state.publisher === band.value ? "" : band.value,
+                  })}
+                  type="button"
+                >
+                  {band.value}<small>{band.count.toLocaleString()}</small>
+                </button>
+              ))}
+            </nav>
+          ) : null}
+
           {/* S3 Measurement rail */}
           <div aria-live="polite" className="calibration-rail">
             <span>
@@ -789,7 +858,7 @@ export function SourcesPage(props: {
                         </td>
 
                         <td className="source-col-checked">
-                          {row.verifiedAt.value || "—"}
+                          <VerificationDate field={row.verifiedAt} />
                         </td>
 
                         <td className="source-col-status">

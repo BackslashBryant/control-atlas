@@ -34,13 +34,16 @@ for (const viewport of [
     await dismissOnboarding(page);
 
     await expect(page.locator(".page-header-eyebrow")).toHaveText(
-      "PUBLISHED CROSSWALKS / 24 COMPARABLE PAIRS",
+      "PUBLISHED CROSSWALKS / 21 CONNECTED PUBLICATIONS",
     );
     await expect(page.getByRole("tablist", { name: "Comparison mode" })).toBeInViewport();
     await expect(page.getByRole("navigation", { name: "Step progress" })).toBeInViewport();
     const task = page.locator(".compare-flow-task");
     const support = page.locator(".compare-flow-support");
     await expect(task).toBeInViewport();
+    if (viewport.width <= 900) {
+      await support.scrollIntoViewIfNeeded();
+    }
     await expect(support).toBeInViewport();
     await expectNoPageOverflow(page, `Compare setup at ${viewport.label}`);
 
@@ -91,8 +94,18 @@ for (const viewport of [
     await expect(filters).toHaveAttribute("aria-expanded", "true");
     const panel = page.getByRole("dialog");
     await expect(panel).toBeVisible();
-    await expect(panel.getByRole("group", { name: "Collection" })).toBeVisible();
-    await expect(panel.getByRole("group", { name: "Type" })).toBeVisible();
+    // Facet groups are collapsed until asked for, so their options are out of
+    // the accessibility tree until opened. Opening each here proves the sheet
+    // still exposes both, and that the disclosure works inside the dialog.
+    for (const label of ["Collection", "Type"]) {
+      const group = panel
+        .locator(".workspace-checkbox-facet")
+        .filter({ has: page.locator("summary", { hasText: label }) })
+        .first();
+      await expect(group).toBeVisible();
+      await group.locator("summary").click();
+      await expect(panel.getByRole("group", { name: label })).toBeVisible();
+    }
 
     const owner = panel.getByRole("combobox", { name: "Owner" });
     await owner.fill("National Institute of Standards and Technology");
