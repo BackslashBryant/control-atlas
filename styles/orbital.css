@@ -888,6 +888,7 @@ body {
 .page-header {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
   gap: var(--ca-space-6);
@@ -920,9 +921,13 @@ body {
   margin: 0;
 }
 
-/* Title block stacks: eyebrow over title over the one context sentence. */
+/* Title block stacks: eyebrow over title over the one context sentence.
+   It claims the row's free space: a wide action block that could not shrink
+   was squeezing the summary to its min-content width and wrapping a single
+   sentence into a column a few characters wide. */
 .page-header-title {
   display: grid;
+  flex: 1 1 22rem;
   gap: 10px;
   min-width: 0;
 }
@@ -953,9 +958,12 @@ body {
   white-space: nowrap;
 }
 
+/* A single button keeps its width; a wide support block wraps to its own row
+   rather than starving the title. */
 .page-header-action {
-  flex: none;
+  flex: 0 1 auto;
   align-self: flex-end;
+  max-width: 100%;
 }
 
 @media (max-width: 40rem) {

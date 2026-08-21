@@ -7599,6 +7599,15 @@ button.atlas-leverage-row:hover {
   color: var(--ca-text-muted);
 }
 
+/* Reserve two lines for the title so the summaries below it share a baseline
+   across a row. Without it a one-line title lifted its summary while a
+   two-line neighbour pushed its own down. min-height only reserves, so a
+   longer title still grows rather than clipping. */
+.guide-card__body > strong {
+  line-height: 1.25;
+  min-height: 2.5em;
+}
+
 .learn-article-grid small {
   color: var(--ca-text-muted);
   line-height: 1.45;
@@ -7643,6 +7652,15 @@ button.atlas-leverage-row:hover {
   max-width: 72ch;
   color: var(--ca-text-muted);
   line-height: 1.65;
+}
+
+/* Separation between consecutive paragraphs only. The reset zeroes paragraph
+   margins, so every section read as one run-on block. Spacing between rather
+   than after keeps the section's own padding from doubling. */
+.about-page .learn-article p + p,
+.guide-article .learn-article p + p,
+.guide-article .learn-article li + li {
+  margin-top: var(--ca-space-3);
 }
 
 .guide-article > nav.card-actions {
@@ -10634,10 +10652,16 @@ input[type="checkbox"] {
 .atlas-canvas-header h1,
 .atlas-canvas-header p { margin: 0; }
 
+/* Matches .page-header h1 exactly. Atlas was the only route rendering its
+   title in title case at 60px while every other route used the Orbital
+   contract: uppercase display type at clamp(38px, 5vw, 72px). */
 .atlas-canvas-header h1 {
   font-family: var(--ca-font-display);
-  font-size: clamp(2.75rem, 6vw, 5.25rem);
-  line-height: .94;
+  font-size: clamp(38px, 5vw, 72px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
 }
 
 .atlas-canvas-header p {
@@ -10646,9 +10670,13 @@ input[type="checkbox"] {
   color: var(--ca-text-muted);
 }
 
+/* Restated because `.atlas-canvas-header p` outranks the shared `.eyebrow`
+   rule and would otherwise mute this to body colour. The token is the teal
+   text tint every other route's eyebrow uses; the fill value it previously
+   carried does not clear AA. */
 .atlas-canvas-header .eyebrow {
   margin-bottom: var(--ca-space-2);
-  color: var(--ca-primary);
+  color: var(--ca-editorial-text);
 }
 
 .atlas-canvas-header .atlas-map-command { margin: 0; }

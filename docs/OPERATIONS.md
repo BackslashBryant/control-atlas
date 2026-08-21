@@ -35,6 +35,8 @@ Use the cheapest faithful contract test during development. Run corpus rebuilds 
 
 Automated browser emulation is not physical-device evidence. Automated axe is not hands-on NVDA, VoiceOver, or TalkBack evidence. Report those external checks as unverified until they actually occur. A release may proceed only when the owner has explicitly accepted any remaining non-blocking external evidence gap.
 
+An obsolete public hostname for an earlier release still exists in the wild and returns a GitHub Pages 404. The account that publishes Control Atlas does not own that repository, so no redirect can be published from here; the 404 is an external ownership limitation, not a defect this repository can close. `tests/browser-contract.test.mjs` fails the build if any tracked product or documentation file reintroduces that hostname. Publish a canonical redirect only if the legacy Pages property ever becomes available.
+
 ## Runtime boundary
 
 The deployed site is static and public-data-only. It has no backend, authentication, telemetry, user uploads, organizational data, compliance scoring, operational integrations, or stored generated templates.

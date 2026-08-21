@@ -29,7 +29,7 @@
 | **ELK.js repository**       | [https://github.com/kieler/elkjs](https://github.com/kieler/elkjs)                   | Automatic layout for directed node-link diagrams                              |
 | **ELK reference examples**  | [https://github.com/kieler/elkjs/tree/master/test](https://github.com/kieler/elkjs/tree/master/test) | Layout graph shape and option examples                                        |
 
-Control Atlas uses React Flow for bounded, curated relationship diagrams and ELK for automatic layout in focused hierarchy/provenance views. The global Atlas map is a separate, fixed multiresolution Sigma.js/Graphology projection (landscape/area/publication/detail) with pre-computed, non-physics coordinates — never a single force-directed hairball. Tables, search, filters, and detail pages remain the primary way to browse large crosswalks. Do not rebuild the product around one giant graph canvas.
+Control Atlas uses React Flow for bounded, curated relationship diagrams and ELK for automatic layout in focused hierarchy/provenance views. The global Atlas map is not a node-link diagram at all: the canonical data is a complete containment tree, so it renders as a decomposition map of labelled rows (`src/ui/components/AtlasDecompositionMap.tsx`), one column per level, with counts and proportional magnitude. Tables, search, filters, and detail pages remain the primary way to browse large crosswalks. Do not rebuild the product around one giant graph canvas.
 
 ## Useful graph/data visualization references
 
@@ -51,7 +51,8 @@ Control Atlas uses React Flow for bounded, curated relationship diagrams and ELK
 | **yFiles Layout Algorithms for Cytoscape desktop** | Reference only    | Useful layout inspiration, but it is for desktop Cytoscape, not the browser app    |
 | **yFiles for HTML**                                | Rejected          | Good fit technically, but not free                                                 |
 | **Cytoscape.js**                                   | Replaced          | Better for open-ended graph/network analysis than guided relationship diagrams     |
-| **Sigma.js / Graphology**                          | In use            | Ships as the global Atlas map renderer (`src/ui/components/AtlasGraph.tsx`), rendering fixed, pre-computed multiresolution projections — not a force-directed relationship diagram |
+| **Graphology**                                     | In use            | Builds the in-memory projection model (`src/ui/lib/atlasGraphModel.ts`). The Atlas map renders from that model as labelled DOM rows                     |
+| **Sigma.js**                                       | Removed           | Rendered the previous canvas Atlas. Every node was an unlabelled mark whose only affordance was hover, so the surface was rebuilt as a decomposition map |
 | **D3-force**                                       | Do not use now    | Too custom for the current product and agent-maintained implementation             |
 | **Mermaid / Graphviz**                             | Docs only         | Useful for static generated diagrams, not the interactive workbench                |
 

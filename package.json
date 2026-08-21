@@ -153,7 +153,6 @@
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.14",
     "@radix-ui/react-dialog": "^1.1.17",
-    "@react-sigma/core": "^5.0.6",
     "@tabler/icons-react": "^3.44.0",
     "@xyflow/react": "^12.11.1",
     "class-variance-authority": "^0.7.1",
@@ -162,14 +161,11 @@
     "exceljs": "^4.4.0",
     "fflate": "^0.8.3",
     "graphology": "^0.26.0",
-    "graphology-layout": "^0.6.1",
-    "graphology-operators": "^1.6.1",
     "minisearch": "^7.2.0",
     "node-html-parser": "^9.0.1",
     "orbital-archive-no-01": "https://github.com/rambulls/orbital-archive-no-01/archive/refs/tags/v1.8.0.tar.gz",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "sigma": "^3.0.3",
     "tailwind-merge": "^3.6.0",
     "yauzl": "3.4.0"
   }
