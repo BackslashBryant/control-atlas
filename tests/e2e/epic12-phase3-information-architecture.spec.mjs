@@ -298,23 +298,21 @@ test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface lab
   await page.setViewportSize({ width: 1440, height: 900 });
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
-  const network = page.getByTestId("atlas-network");
-  await expect(network).toBeVisible();
-  await expect(network).toHaveAttribute("data-projection-level", "landscape");
-  await expect(network).toHaveAttribute("data-projection-node-count", "13");
+  const atlas = page.getByTestId("atlas-map");
+  await expect(atlas).toBeVisible();
+  await expect(atlas).toHaveAttribute("data-scope-level", "root");
   await expect(page.locator("body")).not.toContainText("Connected work surface");
-  const landmarkList = network.locator(".atlas-network-list");
-  if (!(await landmarkList.evaluate((element) => element.hasAttribute("open")))) {
-    await landmarkList.locator("summary", { hasText: "Browse landmarks" }).click();
-  }
-  await expect(landmarkList).toHaveAttribute("open", "");
-  const landmarks = landmarkList.locator("li");
-  await expect(landmarks).toHaveCount(13);
-  for (const landmark of await landmarks.all()) {
-    await expect(landmark).toContainText(/\d[\d,]* records/);
+
+  // The landmarks are rows in the map itself, not a disclosure beside it, and
+  // each one states what it holds without being hovered.
+  const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
+  await expect(areas).toHaveAttribute("data-row-count", "12");
+  const rows = areas.locator(".atlas-decomp__node");
+  await expect(rows).toHaveCount(12);
+  for (const row of await rows.all()) {
+    await expect(row).toContainText(/\d[\d,]* records|Nothing yet/);
   }
   for (const area of ["Architecture", "Assessment", "Compliance", "Governance", "Implementation", "Knowledge", "Operations", "Risk", "Threats & Defense"]) {
-    await expect(landmarkList.locator("button").filter({ hasText: area })).toBeVisible();
+    await expect(rows.filter({ hasText: area }).first()).toBeVisible();
   }
-  await expect(network).toHaveAttribute("data-projection-edge-count", /\d+/);
 });

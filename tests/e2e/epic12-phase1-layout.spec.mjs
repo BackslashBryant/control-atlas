@@ -45,15 +45,14 @@ for (const viewport of VIEWPORTS) {
         await waitForAppReady(page, { allowPartial: true });
 
         if (route === "/#/explore") {
-          const network = page.getByTestId("atlas-network");
-          await expect(network).toHaveAttribute("data-projection-level", "landscape");
-          await expect(network).toHaveAttribute("data-projection-node-count", "13");
-          await expect(network.locator(".atlas-network-list button")).toHaveCount(13);
-          if (viewport.width >= 768) {
-            await expect(network.locator("canvas").first()).toBeVisible();
-          } else {
-            await expect(network.locator(".atlas-network-list button").first()).toBeVisible();
-          }
+          const atlas = page.getByTestId("atlas-map");
+          await expect(atlas).toHaveAttribute("data-scope-level", "root");
+          const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
+          await expect(areas).toHaveAttribute("data-row-count", "12");
+          // Labelled rows at every width; there is no canvas and no
+          // disclosure standing between the visitor and the map.
+          await expect(atlas.locator("canvas")).toHaveCount(0);
+          await expect(areas.locator(".atlas-decomp__label").first()).toBeVisible();
         }
 
         await expect(page.locator(".static-route-shell")).toHaveCount(0);

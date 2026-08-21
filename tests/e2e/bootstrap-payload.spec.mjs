@@ -91,16 +91,16 @@ test("expanding an Atlas area uses the semantic network without monolithic graph
   await page.goto("/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  const network = page.getByTestId("atlas-network");
-  await expect(network).toBeVisible();
+  const atlas = page.getByTestId("atlas-map");
+  await expect(atlas).toBeVisible();
   expect(
     requested.some((url) => url.includes("atlas-network.json")),
   ).toBeTruthy();
   expect(graphArtifactUrls(requested)).toEqual([]);
 
-  await network.getByRole("button", { name: /Compliance Area/ }).click();
+  await atlas.locator('.atlas-decomp__column[data-column="area"]').getByRole("button", { name: /Compliance/ }).click();
   await expect(page).toHaveURL(/atlasLimb=atlas(?::|%3A)LIMB-COMPLIANCE/);
-  await expect(page.getByTestId("atlas-network")).toHaveAttribute("data-projection-level", "area");
+  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "area");
   expect(graphArtifactUrls(requested)).toEqual([]);
 });
 
