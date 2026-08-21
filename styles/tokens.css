@@ -32,10 +32,10 @@
      publishers, relationship classes and secondary actions all resolved to the
      same blue-grey. These extend the same muted, desaturated family so colour
      can carry meaning instead of decorating.
-     2026-08-21: the former value here was a violet (#9d92d6). Orbital AGENTS.md
-     §4 forbids purple, pink, and magenta outright, so this is now a cool
-     slate-blue that stays inside Orbital's desaturated base field. Every use is
-     paired with a text label, so nothing depends on the hue alone. */
+     2026-08-21: the former value here (#9d92d6) sat in the 255-330deg hue
+     range Orbital AGENTS.md §4 rules out. This is now a cool slate-blue inside
+     Orbital's desaturated base field. Every use is paired with a text label, so
+     nothing depends on the hue alone. */
   --lsm-steel: #7f96a6;
   /* v1.8.0 Signal Teal (was #4fb3a5): the canonical active/focus/link/
      selected/info state hue. Broad decorative surfaces stay teal; only the

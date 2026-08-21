@@ -370,7 +370,10 @@ test('shared shell exposes visible search access and valid intent-card markup', 
     SITE_COPY.routes.documents.purpose,
     "Create starter cybersecurity documents from published sources.",
   );
-  assert.match(templatesPage, />\s*Choose a template\s*<\/AppLink>/);
+  // Templates lands on the document browser, so the page no longer carries a
+  // button whose only job was to reach the page the visitor is already on.
+  assert.match(templatesPage, /<BuildLocalNav/);
+  assert.doesNotMatch(templatesPage, />\s*Choose a template\s*<\/AppLink>/);
   assert.doesNotMatch(intentCard, /<h[1-6]>/);
 });
 
@@ -394,7 +397,7 @@ test('landing page states what the product is before asking for action', () => {
   assert.doesNotMatch(homePage, /home-ecosystem-authorities/);
   assert.match(homePage, /HOME_LIBRARY_DISCOVERY\.map/);
   assert.match(homePage, /home-library-kpis/);
-  assert.match(homePage, /See what's inside Control Atlas\./);
+  assert.match(homePage, /Start with what you came to find\./);
   assert.doesNotMatch(homePage, /data-record-count|tag-count-scale|More records, bigger tag/);
 });
 
