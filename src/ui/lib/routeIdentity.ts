@@ -280,6 +280,12 @@ export function canonicalizeHashLocation(input: string): CanonicalRoute {
     }
   }
 
+  // The document browser is the default Templates state and canonicalises to
+  // the bare path; the longer form remains accepted.
+  if (path === "/build/documents") {
+    path = "/build";
+  }
+
   if (path === "/build/resources") {
     path = "/resources";
   } else if (/^\/build\/resources\/[^/]+$/.test(path)) {

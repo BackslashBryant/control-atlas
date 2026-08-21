@@ -23,18 +23,13 @@ async function expectNoHorizontalOverflow(page) {
   expect(width.scroll).toBeLessThanOrEqual(width.client + 1);
 }
 
+/** Every node of the decomposition map is a labelled button, at every width. */
 async function clickAtlasLandmark(page, name) {
-  await page.evaluate(() => new Promise((resolve) => {
-    globalThis.requestAnimationFrame(() => globalThis.requestAnimationFrame(resolve));
-  }));
-  const network = page.getByTestId("atlas-network");
-  const list = network.locator(".atlas-network-list");
-  const node = network.getByRole("button", { name });
-  if (!(await node.isVisible())) {
-    const summary = list.getByText("Browse landmarks", { exact: true });
-    await expect(summary).toBeVisible();
-    await summary.click();
-  }
+  const node = page
+    .getByTestId("atlas-map")
+    .locator(".atlas-decomp__column")
+    .getByRole("button", { name })
+    .first();
   await expect(node).toBeVisible();
   await node.click();
 }
@@ -47,17 +42,24 @@ for (const viewport of VIEWPORTS) {
     await page.goto("/#/atlas");
     await waitForAppReady(page);
     await dismissOnboarding(page);
-    await expect(page.getByTestId("atlas-network")).toHaveAttribute("data-projection-level", "landscape");
+    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "root");
 
     await clickAtlasLandmark(page, /Compliance/);
     await expect(page).toHaveURL(/atlasLimb=atlas(?::|%3A)LIMB-COMPLIANCE/);
-    await expect(page.getByTestId("atlas-network")).toHaveAttribute("data-projection-level", "area");
+    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "area");
     await clickAtlasLandmark(page, /SP\s+800-53 Rev\. 5 Catalog/);
     await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
     await expect(page).not.toHaveURL(/atlasBaseline=/);
-    await expect(page.getByTestId("atlas-network")).toHaveAttribute("data-projection-level", "publication");
+    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "publication");
 
     await expectNoHorizontalOverflow(page);
+    // Wait for the drilled level to finish rendering before typing. The search
+    // box is a controlled input, so a keystroke delivered inside the route
+    // transition's commit window is overwritten by the in-flight render. A
+    // person cannot reach the field that fast; an automated fill can.
+    await expect(
+      page.locator('.atlas-decomp__column[data-column="detail"] .atlas-decomp__node').first(),
+    ).toBeVisible();
     const jumpToRecord = page.getByRole("searchbox", { name: "Jump to a record" });
     await jumpToRecord.fill("nist-800-53:AC-1");
     await jumpToRecord.press("Enter");
@@ -115,13 +117,16 @@ test("Atlas root presents an authority-rooted interactive hierarchy", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const network = page.getByTestId("atlas-network");
-  await expect(network).toBeVisible();
-  await expect(network).toHaveAttribute("data-projection-level", "landscape");
-  await expect(network.getByRole("button", { name: /Area ·/ })).toHaveCount(9);
-  await expect(network.locator("canvas").first()).toBeVisible();
+  const map = page.getByTestId("atlas-map");
+  await expect(map).toBeVisible();
+  await expect(map).toHaveAttribute("data-scope-level", "root");
   await expect(
-    page.getByText("Explore areas, publications, and the published connections between them.", { exact: true }),
+    map.locator('.atlas-decomp__column[data-column="area"]'),
+  ).toHaveAttribute("data-row-count", "12");
+  // The map is DOM, not a canvas, so every node keeps a readable label.
+  await expect(map.locator("canvas")).toHaveCount(0);
+  await expect(
+    page.getByText("Open any part of the landscape to see what is published inside it, and how much.", { exact: true }),
   ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveCount(
     0,

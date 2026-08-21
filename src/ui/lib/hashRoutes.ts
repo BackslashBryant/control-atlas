@@ -269,8 +269,10 @@ export function serializeHashLocation(state: ViewState): string {
     if (state.templateType) {
       return `/build/documents/${encodeURIComponent(state.templateType)}${qs ? `?${qs}` : ""}`;
     }
+    // The document browser is the default Templates state, so it owns the bare
+    // /build path. /build/documents stays a supported inbound alias.
     if (state.buildSection === "documents") {
-      return `/build/documents${qs ? `?${qs}` : ""}`;
+      return `/build${qs ? `?${qs}` : ""}`;
     }
     if (state.task) {
       params.delete("framework");

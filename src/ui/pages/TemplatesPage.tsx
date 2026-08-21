@@ -646,7 +646,6 @@ export function TemplatesPage(props: {
       (workflow) => workflow.workflow_id === state.task,
     ) || null;
   const documentBrowser = state.buildSection === "documents";
-  const buildOverview = state.buildSection === "overview";
   const workflowArtifacts = selectedWorkflow
     ? officialArtifacts.filter((artifact) =>
         selectedWorkflow.artifact_ids?.includes(artifact.artifact_id),
@@ -990,12 +989,10 @@ export function TemplatesPage(props: {
       data-visual-identity="staged-production-workflow"
       maxWidth="workspace"
     >
-      {!buildOverview ? (
-        <BuildLocalNav
-          active={documentBrowser || selectedTemplate ? "documents" : "tasks"}
-          onNavigate={onNavigate}
-        />
-      ) : null}
+      <BuildLocalNav
+        active={documentBrowser || selectedTemplate ? "documents" : "tasks"}
+        onNavigate={onNavigate}
+      />
       <PageHeader
         primary
         eyebrow={selectedTemplate ? `CURRENT DOCUMENT / ${selectedTemplate.display_name}` : undefined}
@@ -1004,28 +1001,17 @@ export function TemplatesPage(props: {
             <AppLink onNavigate={onNavigate} patch={{ templateType: "" }} variant="secondary" view="templates">
               Back to Templates
             </AppLink>
-          ) : buildOverview ? (
-            <AppLink
-              onNavigate={onNavigate}
-              patch={{ buildSection: "documents", task: "", templateType: "" }}
-              variant="primary"
-              view="templates"
-            >
-              Choose a template
-            </AppLink>
           ) : undefined
         }
-        summary={buildOverview
-          ? SITE_COPY.routes.documents.purpose
-          : documentBrowser || selectedTemplate
-          ? SITE_COPY.routes.documents.purpose
-          : "Pick a task to see its public references and templates."}
+        summary={
+          documentBrowser || selectedTemplate
+            ? SITE_COPY.routes.documents.purpose
+            : "Pick a task to see its public references and templates."
+        }
         title={
-          buildOverview
+          documentBrowser || selectedTemplate
             ? SITE_COPY.routes.documents.title
-            : documentBrowser || selectedTemplate
-              ? SITE_COPY.routes.documents.title
-              : "Tasks"
+            : "Tasks"
         }
       />
 
@@ -1040,32 +1026,7 @@ export function TemplatesPage(props: {
         />
       ) : null}
 
-      {buildOverview ? (
-        <section aria-label="Template paths" className="build-lane-grid">
-          {BUILD_LANES.map((lane) => {
-            const Icon =
-              lane.id === "tasks"
-                ? IconCompass
-                : lane.id === "documents"
-                  ? IconFileDescription
-                  : IconExternalLink;
-            return (
-              <QuickIntentCard
-                actionLabel={`Open ${lane.label}`}
-                body={lane.description}
-                icon={<Icon aria-hidden="true" size={22} stroke={1.8} />}
-                key={lane.id}
-                onNavigate={onNavigate}
-                patch={lane.id === "resources" ? undefined : { buildSection: lane.id, task: "", templateType: "" }}
-                title={lane.label}
-                view={lane.id === "resources" ? "commons" : "templates"}
-              />
-            );
-          })}
-        </section>
-      ) : null}
-
-      {!selectedTemplate && !buildOverview ? (
+      {!selectedTemplate ? (
         <div className="stack">
           {!selectedWorkflow && !documentBrowser ? (
           <div className="build-start-layout">

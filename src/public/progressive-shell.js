@@ -55,7 +55,7 @@
     var query = routeUrl.searchParams;
 
     if (route === "atlas") {
-      var atlasCopy = sharedCopy("atlas") || { eyebrow: "CYBERSECURITY LANDSCAPE", summary: "Explore areas, publications, and the published connections between them.", title: "Atlas" };
+      var atlasCopy = sharedCopy("atlas") || { eyebrow: "THE WHOLE LANDSCAPE", summary: "Open any part of the landscape to see what is published inside it, and how much.", title: "Atlas" };
       var rawNode = query.get("node") || "";
       var nodeParts = decode(rawNode).split(":");
       var identifier = nodeParts[nodeParts.length - 1] || "";

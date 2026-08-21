@@ -26,31 +26,26 @@ async function openNetwork(page) {
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  await expect(page.getByTestId("atlas-network")).toBeVisible();
-}
-
-async function openLandmarkList(network) {
-  const list = network.locator("details.atlas-network-list");
-  if (!(await list.evaluate((element) => element instanceof globalThis.HTMLDetailsElement && element.open))) {
-    await list.locator("summary").click();
-  }
+  await expect(page.getByTestId("atlas-map")).toBeVisible();
 }
 
 test("semantic Atlas hands off to explicit publisher-native navigation and preserves history", async ({ page }) => {
   test.setTimeout(120_000);
   await openNetwork(page);
 
-  const network = page.getByTestId("atlas-network");
-  await expect(page.getByText("Explore areas, publications, and the published connections between them.", { exact: true })).toBeVisible();
-  await expect(network).toHaveAttribute("data-projection-level", "landscape");
-  await expect(network).toHaveAttribute("data-projection-node-count", "13");
-  await expect(network.locator("canvas").first()).toBeVisible();
-  await openLandmarkList(network);
-  await network.getByRole("button", { name: /Implementation/ }).click();
+  const atlas = page.getByTestId("atlas-map");
+  await expect(page.getByText("Open any part of the landscape to see what is published inside it, and how much.", { exact: true })).toBeVisible();
+  await expect(atlas).toHaveAttribute("data-scope-level", "root");
+  await atlas
+    .locator('.atlas-decomp__column[data-column="area"]')
+    .getByRole("button", { name: /Implementation/ })
+    .click();
   await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-IMPLEMENTATION/);
-  await expect(network).toHaveAttribute("data-projection-level", "area");
-  await openLandmarkList(network);
-  await network.getByRole("button", { name: /DISA STIG Catalog/ }).click();
+  await expect(atlas).toHaveAttribute("data-scope-level", "area");
+  await atlas
+    .locator('.atlas-decomp__column[data-column="publication"]')
+    .getByRole("button", { name: /DISA STIG Catalog/ })
+    .click();
   await expect(page).toHaveURL(/atlasFramework=disa-stig/);
 
   await gotoApp(page, "/#/atlas?atlasAxis=framework&atlasLimb=atlas%3ALIMB-IMPLEMENTATION&atlasFramework=disa-stig&relationshipView=path");

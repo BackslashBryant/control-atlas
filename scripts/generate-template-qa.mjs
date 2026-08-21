@@ -10,13 +10,33 @@ function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'));
 }
 
+/**
+ * Nodes and edges are written as sharded collections, so the top-level array in
+ * the manifest is empty by design. Reading only the manifest handed the
+ * template engine an empty dataset and every document failed to generate.
+ */
+function readCollection(path, key) {
+  const manifest = readJson(path);
+  const inline = manifest[key];
+  if (Array.isArray(inline) && inline.length > 0) return inline;
+  const shards = manifest.sharded_collection?.shards || [];
+  const records = [];
+  for (const shard of shards) {
+    const shardPath = resolve('data/generated', shard.path);
+    const payload = readJson(shardPath);
+    const rows = Array.isArray(payload) ? payload : payload[key] || payload.records || [];
+    records.push(...rows);
+  }
+  return records;
+}
+
 const outArg = process.argv.find((arg) => arg.startsWith('--out='));
 const outputDirectory = resolve(outArg ? outArg.slice('--out='.length) : 'artifacts/template-qa');
 
 const registry = readJson('data/template-registry.json');
 const dataset = {
-  nodes: readJson('data/generated/nodes.json').nodes || [],
-  edges: readJson('data/generated/edges.json').edges || [],
+  nodes: readCollection('data/generated/nodes.json', 'nodes'),
+  edges: readCollection('data/generated/edges.json', 'edges'),
   sources: readJson('data/generated/sources.json').sources || [],
 };
 

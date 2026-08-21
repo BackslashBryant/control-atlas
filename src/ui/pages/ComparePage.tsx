@@ -63,12 +63,17 @@ function downloadBinaryFile(filename: string, content: Uint8Array, mimeType: str
   URL.revokeObjectURL(url);
 }
 
+/** Enough to show every connected publication without becoming a wall. */
+const OPTION_LIST_LIMIT = 24;
+
 function SearchablePublicationField(props: {
   label: string;
   onChange: (value: string) => void;
   options: SelectOption[];
   placeholder: string;
   value: string;
+  /** Overrides the default count line so the page can relate its own totals. */
+  hint?: string;
 }) {
   const inputId = useId();
   const listId = `${inputId}-options`;
@@ -94,7 +99,17 @@ function SearchablePublicationField(props: {
     return Boolean(match);
   };
 
+  // While a choice is committed the query equals its label, so filtering on it
+  // would collapse the list to the one already-chosen row.
+  const needle = props.value && query === selectedLabel ? "" : query.trim().toLowerCase();
+  const matches = needle
+    ? props.options.filter((option) => option.label.toLowerCase().includes(needle))
+    : props.options;
+  const visibleOptions = matches.slice(0, OPTION_LIST_LIMIT);
+  const hiddenCount = matches.length - visibleOptions.length;
+
   return (
+    <>
     <Field label={props.label}>
       <input
         aria-autocomplete="list"
@@ -131,9 +146,44 @@ function SearchablePublicationField(props: {
         ))}
       </datalist>
       <p className="field-hint">
-        Search {props.options.length.toLocaleString()} publications with published crosswalks.
+        {props.hint ||
+          `Search ${props.options.length.toLocaleString()} publications with published crosswalks.`}
       </p>
     </Field>
+      {/* A native datalist keeps every choice invisible until the user guesses
+          a prefix. The first decision in the flow cannot be a guess, so the
+          same options are also listed as real, clickable controls.
+          These live outside <Field> on purpose: a <label> forwards any click
+          inside it to its own control, which swallowed every option click. */}
+      <ul className="compare-option-list">
+        {visibleOptions.map((option) => (
+          <li key={option.value}>
+            <button
+              aria-pressed={option.value === props.value}
+              className="compare-option"
+              onClick={() => props.onChange(option.value)}
+              type="button"
+            >
+              {option.label}
+            </button>
+          </li>
+        ))}
+        {hiddenCount > 0 ? (
+          <li>
+            <span className="compare-option-list__note">
+              {hiddenCount.toLocaleString()} more match your search
+            </span>
+          </li>
+        ) : null}
+      </ul>
+      {visibleOptions.length === 0 ? (
+        <p className="compare-option-list__note" role="status">
+          No publication matches “{query.trim()}”. Clear the box to see all
+          {" "}
+          {props.options.length.toLocaleString()}.
+        </p>
+      ) : null}
+    </>
   );
 }
 
@@ -500,7 +550,7 @@ export function ComparePage(props: {
       maxWidth="workspace"
     >
       <PageHeader
-        eyebrow={`PUBLISHED CROSSWALKS / ${pairCount.toLocaleString()} COMPARABLE PAIRS`}
+        eyebrow={`PUBLISHED CROSSWALKS / ${sourceCatalogOptions.length.toLocaleString()} CONNECTED PUBLICATIONS`}
         primary
         summary={SITE_COPY.routes.compare.purpose}
         title={SITE_COPY.routes.compare.title}
@@ -545,6 +595,7 @@ export function ComparePage(props: {
                 <SearchablePublicationField
                   label="Publication"
                   onChange={selectSource}
+                  hint={`${sourceCatalogOptions.length.toLocaleString()} publications are connected by ${pairCount.toLocaleString()} published crosswalks.`}
                   options={sourceCatalogOptions}
                   placeholder="Search published frameworks"
                   value={sourceIsValid ? state.source : ""}

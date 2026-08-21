@@ -21,18 +21,24 @@ const components = readFileSync("styles/components.css", "utf8");
 const surfaces = readFileSync("styles/surfaces.css", "utf8");
 const tagComponent = readFileSync("src/ui/components/TaxonomyTag.tsx", "utf8");
 
+// Governance and architecture were violet (#5a63d6/#8791f0, #8a57cc/#b085ec)
+// and implementation a saturated blue; Orbital AGENTS.md §4 forbids purple
+// outright and keeps the base field desaturated, so all three moved onto the
+// system's own muted blue-green family.
 const LOCKED_HUES = {
-  governance: ["#5a63d6", "#8791f0"],
+  governance: ["#3f6f86", "#77a8be"],
   assessment: ["#1c8fb2", "#45b6d6"],
   risk: ["#c87a24", "#e0a24a"],
   operations: ["#61748a", "#8496a8"],
   compliance: ["#2e9b6e", "#4fc38e"],
   "threats-defense": ["#ce463f", "#f0736b"],
-  architecture: ["#8a57cc", "#b085ec"],
+  architecture: ["#4a7d74", "#7fb9ad"],
   knowledge: ["#3e9b78", "#5fc79c"],
-  implementation: ["#2e6fe0", "#5b96f5"],
+  implementation: ["#3a6f92", "#7aa8c6"],
   authority: ["#b07a1e", "#e0b15a"],
 } as const;
+
+const FORBIDDEN_HUE_RANGE = { min: 255, max: 330 };
 
 function tokenValue(name: string, seen = new Set<string>()): string {
   assert.ok(!seen.has(name), `Circular token reference at ${name}`);
@@ -114,6 +120,35 @@ test("locked area hue pairs and global layout tokens are exact", () => {
   }
   assert.doesNotMatch(tokens, /--ca-space-32:/);
 });
+
+test("no area hue lands in the purple range Orbital forbids", () => {
+  for (const [slug, pair] of Object.entries(LOCKED_HUES)) {
+    for (const hex of pair) {
+      const hue = hueOf(hex);
+      assert.ok(
+        hue < FORBIDDEN_HUE_RANGE.min || hue > FORBIDDEN_HUE_RANGE.max,
+        `${slug} (${hex}) sits at ${Math.round(hue)}deg, inside the purple/magenta range Orbital AGENTS.md forbids`,
+      );
+    }
+  }
+});
+
+function hueOf(hex: string): number {
+  const value = hex.replace("#", "");
+  const red = Number.parseInt(value.slice(0, 2), 16) / 255;
+  const green = Number.parseInt(value.slice(2, 4), 16) / 255;
+  const blue = Number.parseInt(value.slice(4, 6), 16) / 255;
+  const max = Math.max(red, green, blue);
+  const min = Math.min(red, green, blue);
+  const delta = max - min;
+  if (delta === 0) return 0;
+  let hue: number;
+  if (max === red) hue = ((green - blue) / delta) % 6;
+  else if (max === green) hue = (blue - red) / delta + 2;
+  else hue = (red - green) / delta + 4;
+  hue *= 60;
+  return hue < 0 ? hue + 360 : hue;
+}
 
 test("decorative color resolves to one teal accent, and the primary action is orange", () => {
   // v1.8: teal (#5ca3a6) is the single broad decorative/state hue; the primary

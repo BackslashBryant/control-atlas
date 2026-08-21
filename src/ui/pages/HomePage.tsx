@@ -77,11 +77,11 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
       <nav aria-labelledby="home-library-heading" className="home-library-discovery">
         <div className="home-library-discovery__heading">
           <div>
-            <p className="eyebrow">EXPLORE THE LIBRARY</p>
-            <h2 id="home-library-heading">See what's inside Control Atlas.</h2>
+            <p className="eyebrow">BROWSE THE LIBRARY</p>
+            <h2 id="home-library-heading">Start with what you came to find.</h2>
           </div>
           <AppLink className="home-library-discovery__all" onNavigate={onNavigate} view="search">
-            Browse all tags
+            Browse everything
             <IconArrowRight aria-hidden="true" size={16} stroke={2} />
           </AppLink>
         </div>
@@ -94,12 +94,15 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
                 patch={item.patch}
                 view="search"
               >
-                <strong>{item.count.toLocaleString("en-US")}</strong>
-                <span>
-                  <b>{item.label}</b>
-                  <small>{item.description}</small>
+                <span className="home-library-kpi__question">{item.question}</span>
+                <strong className="home-library-kpi__label">{item.label}</strong>
+                <small className="home-library-kpi__description">{item.description}</small>
+                <span className="home-library-kpi__footer">
+                  <span className="home-library-kpi__count">
+                    {item.count.toLocaleString("en-US")} records
+                  </span>
+                  <IconArrowRight aria-hidden="true" size={16} stroke={2} />
                 </span>
-                <IconArrowRight aria-hidden="true" size={16} stroke={2} />
               </AppLink>
             </li>
           ))}

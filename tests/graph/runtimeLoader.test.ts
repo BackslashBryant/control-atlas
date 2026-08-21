@@ -218,8 +218,11 @@ test("expensive graph scope begins only after an explicit graph-dependent action
   assert.equal(requiresFullGraph(configuredItemCompare), true);
 
   const build = normalizeViewState("templates");
+  // Templates lands on the document browser rather than an interstitial, so
+  // the small template registries are needed on arrival. The expensive graph
+  // still waits for a chosen document.
   assert.equal(runtimeArtifactPlan(build).fullGraph, false);
-  assert.equal(runtimeArtifactPlan(build).registries, false);
+  assert.equal(runtimeArtifactPlan(build).registries, true);
   assert.equal(runtimeArtifactPlan(build).commons, false);
   assert.equal(
     runtimeArtifactPlan({

@@ -67,16 +67,14 @@ async function openApprovedAtlas(page, viewport, state) {
       template.getByRole('heading', { name: 'SP 800-53 Rev. 5 Catalog' }),
     ).toBeVisible();
   } else {
-    const network = template.getByTestId('atlas-network');
-    await expect(network).toHaveAttribute('data-projection-level', 'landscape');
-    await expect(network).toHaveAttribute('data-projection-node-count', '13');
-    await expect(network.locator('.atlas-network-list button')).toHaveCount(13);
-    if (viewport.width >= 768) {
-      await expect(network.locator('canvas').first()).toBeVisible();
-      await expect(network.locator('summary')).toHaveText('Browse landmarks');
-    } else {
-      await expect(network.locator('.atlas-network-list button').first()).toBeVisible();
-    }
+    const map = template.getByTestId('atlas-map');
+    await expect(map).toHaveAttribute('data-scope-level', 'root');
+    const areas = map.locator('.atlas-decomp__column[data-column="area"]');
+    await expect(areas).toHaveAttribute('data-row-count', '12');
+    // Every node is a labelled row at every width; there is no canvas and no
+    // disclosure standing between the visitor and the map.
+    await expect(map.locator('canvas')).toHaveCount(0);
+    await expect(areas.locator('.atlas-decomp__label').first()).toBeVisible();
   }
   if (state === 'branch' && viewport.width >= 1024) {
     await expect(

@@ -138,7 +138,7 @@ export type ViewState =
     }
   | {
       view: "templates";
-      buildSection: "overview" | "tasks" | "documents";
+      buildSection: "tasks" | "documents";
       task: string;
       templateType: string;
       framework: string;
@@ -408,11 +408,7 @@ export function parseViewState(search: string): ViewState {
     return {
       view,
       buildSection:
-        params.get("buildSection") === "documents"
-          ? "documents"
-          : params.get("buildSection") === "tasks"
-            ? "tasks"
-            : "overview",
+        params.get("buildSection") === "tasks" ? "tasks" : "documents",
       task: params.get("task") || "",
       templateType: params.get("templateType") || "",
       framework: params.get("framework") || "",
@@ -595,11 +591,7 @@ export function normalizeViewState(
     return {
       view,
       buildSection:
-        incoming.buildSection === "documents"
-          ? "documents"
-          : incoming.buildSection === "tasks"
-            ? "tasks"
-            : "overview",
+        incoming.buildSection === "tasks" ? "tasks" : "documents",
       task: incoming.task || "",
       templateType: incoming.templateType || "",
       framework: incoming.framework || "",
@@ -810,7 +802,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(
       params,
       "buildSection",
-      state.buildSection === "overview" ? "" : state.buildSection,
+      state.buildSection === "documents" ? "" : state.buildSection,
     );
     setIfValue(params, "task", state.task);
     setIfValue(params, "templateType", state.templateType);

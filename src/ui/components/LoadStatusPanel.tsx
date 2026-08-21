@@ -24,8 +24,8 @@ export function LoadingStatusPanel(props: {
         </p>
       ) : null}
       <p className="text-[var(--ca-text-muted)] mb-[24px]">
-        You can browse Playbooks, Templates, or About while records finish
-        loading.
+        Guides, Templates, and About are ready now if you would rather start
+        there.
       </p>
       {props.children}
     </Panel>
@@ -41,8 +41,8 @@ export function LoadErrorPanel(props: {
     <Panel className="max-w-[800px] mx-auto mt-[40px] border-[var(--ca-danger)]" title="Record data unavailable">
       <p className="mb-[16px] font-bold text-[var(--ca-danger)]">{props.message}</p>
       <p className="mb-[24px]">
-        Check your connection, then retry. You can still browse Playbooks and
-        About without the full map data.
+        Check your connection, then retry. Guides and About still work without
+        the record data.
       </p>
       <div className="flex gap-[8px] mb-[24px]">
         <Button variant="destructive" onClick={props.onRetry}>
@@ -64,8 +64,8 @@ export function OfflineFallbackActions(props: {
         onNavigate={props.onNavigate}
         view="patterns"
       >
-        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Read explanations</strong>
-        <span className="text-[var(--ca-text-muted)] text-[13px]">Cited explanations of source identity, structure, search, mappings, records, and templates.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Read the guides</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Short, cited explanations of how federal requirements fit together.</span>
       </AppLink>
       <AppLink
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
@@ -80,16 +80,16 @@ export function OfflineFallbackActions(props: {
         onNavigate={props.onNavigate}
         view="start-here"
       >
-        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Browse publications</strong>
-        <span className="text-[var(--ca-text-muted)] text-[13px]">Open a catalog or program source directly.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Start here</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Answer two questions to find where to begin.</span>
       </AppLink>
       <AppLink
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
         onNavigate={props.onNavigate}
         view="about"
       >
-        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Read the product boundary</strong>
-        <span className="text-[var(--ca-text-muted)] text-[13px]">How sources are attributed and which decisions remain with practitioners and responsible authorities.</span>
+        <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">About Control Atlas</strong>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">What this tool is for, and where its answers come from.</span>
       </AppLink>
     </div>
   );
@@ -112,47 +112,5 @@ export function DataPendingNotice(props: {
         </Button>
       ) : null}
     </Panel>
-  );
-}
-
-export function CompareExportDisclosure(props: {
-  disabled?: boolean;
-  onExport: (format: "csv" | "markdown" | "json") => void;
-}) {
-  return (
-    <details className="mt-[24px] border border-[var(--ca-border-strong)] rounded-[3px] overflow-hidden group">
-      <summary className="p-[12px] bg-[var(--ca-surface-raised)] cursor-pointer hover:bg-[color-mix(in_srgb,var(--ca-surface-raised),white_5%)] list-none font-mono uppercase tracking-wider text-[11px] font-bold">
-        Export results
-      </summary>
-      <div className="p-[16px] bg-[var(--ca-surface)] border-t border-[var(--ca-border-strong)]">
-        <div className="flex gap-[8px] mb-[16px] flex-wrap">
-          <Button
-            variant="secondary"
-            disabled={props.disabled}
-            onClick={() => props.onExport("csv")}
-          >
-            Export CSV
-          </Button>
-          <Button
-            variant="secondary"
-            disabled={props.disabled}
-            onClick={() => props.onExport("markdown")}
-          >
-            Export Markdown
-          </Button>
-          <Button
-            variant="secondary"
-            disabled={props.disabled}
-            onClick={() => props.onExport("json")}
-          >
-            Export JSON
-          </Button>
-        </div>
-        <p className="text-[var(--ca-text-subtle)] text-[11px]">
-          Exports preserve source references and the Control Atlas boundary
-          included in generated files.
-        </p>
-      </div>
-    </details>
   );
 }

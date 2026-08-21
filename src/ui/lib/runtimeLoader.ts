@@ -300,9 +300,14 @@ export function runtimeArtifactPlan(
     searchOverlayOpen?: boolean;
   } = {},
 ): RuntimeArtifactPlan {
-  const buildDetailRequested =
+  // Templates now lands directly on the document browser, so every visit needs
+  // the small template registries to render the list at all.
+  const buildDetailRequested = state.view === "templates";
+  // The contextual resource module is secondary material beside a chosen task
+  // or document, so its index stays off the arrival path.
+  const buildContextRequested =
     state.view === "templates" &&
-    (state.buildSection !== "overview" ||
+    (state.buildSection === "tasks" ||
       Boolean(state.task) ||
       Boolean(state.templateType));
   const fullGraph =
@@ -349,7 +354,7 @@ export function runtimeArtifactPlan(
       state.view === "commons-detail" ||
       state.view === "library-detail" ||
       state.view === "search" ||
-      buildDetailRequested ||
+      buildContextRequested ||
       Boolean(options.searchOverlayOpen),
     fullGraph,
     librarySearch:

@@ -63,7 +63,7 @@ export const SITE_COPY = Object.freeze({
   routes: Object.freeze({
     atlas: Object.freeze({
       title: "Atlas",
-      purpose: "Explore areas, publications, and the published connections between them.",
+      purpose: "Open any part of the landscape to see what is published inside it, and how much.",
     }),
     library: Object.freeze({
       title: "Library",
@@ -107,7 +107,7 @@ export const SITE_COPY = Object.freeze({
  * Eyebrows that merely repeat the route title are omitted.
  */
 export const FIRST_PAINT_ROUTE_COPY = Object.freeze({
-  atlas: Object.freeze({ eyebrow: "CYBERSECURITY LANDSCAPE", summary: SITE_COPY.routes.atlas.purpose, title: SITE_COPY.routes.atlas.title }),
+  atlas: Object.freeze({ eyebrow: "THE WHOLE LANDSCAPE", summary: SITE_COPY.routes.atlas.purpose, title: SITE_COPY.routes.atlas.title }),
   library: Object.freeze({ eyebrow: "", summary: SITE_COPY.routes.library.purpose, title: SITE_COPY.routes.library.title }),
   record: Object.freeze({ eyebrow: "", summary: "Read the published text and record details.", title: "Record" }),
   compare: Object.freeze({ eyebrow: "", summary: SITE_COPY.routes.compare.purpose, title: SITE_COPY.routes.compare.title }),

@@ -272,7 +272,7 @@ export function buildAtlasSemanticProjections(options: {
   }
   const landscape = enforceNodeBudget(buildProjection({
     id: projectionId("landscape", "control-atlas"), level: "landscape", label: "Cybersecurity landscape",
-    description: "Major published structures in Control Atlas. Select a landmark to move into its real records.", graph, edgeLimit: 32,
+    description: "Everything Control Atlas holds, grouped by the kind of work it supports. Open one to see what is published inside it.", graph, edgeLimit: 32,
     descriptors: [
       ...AUTHORITY_GROUPS.map(([id, label, description]) => descriptor({ id, label, description, nodeType: "authority_aggregate", ids: authorityIds.get(id) || [], layer: "authority_document" })).filter((item) => item.canonicalNodeIds.length),
       descriptor({ id: ATLAS_TRUNK_ID, label: model.trunk.label, description: model.trunk.blurb, nodeType: "trunk", ids: trunkIds, layer: "atlas_structure", structureRole: "root" }),

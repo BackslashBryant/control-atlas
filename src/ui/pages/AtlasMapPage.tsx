@@ -1,5 +1,6 @@
 import {
   startTransition,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -20,10 +21,10 @@ import {
   recordPresentationProfile,
   SUPPORTED_RECORD_TYPES,
 } from "../../shared/record-presentation.mjs";
-import { SITE_COPY } from "../../shared/site-copy.mjs";
+import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from "../../shared/site-copy.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
-import { AtlasGraph } from "../components/AtlasGraph";
+import { AtlasDecompositionMap } from "../components/AtlasDecompositionMap";
 import type { AtlasProjectionDrill } from "../lib/atlasGraphProjection";
 import {
   AtlasTree,
@@ -163,6 +164,14 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     }
     return artifact.landscape;
   }, [bundle.atlasNetwork, state.atlasFamily, state.atlasFramework, state.atlasLimb]);
+  const atlasScope = useMemo(
+    () => ({
+      areaId: state.atlasLimb || "",
+      publicationId: state.atlasFramework || "",
+      detailId: state.atlasFamily || "",
+    }),
+    [state.atlasLimb, state.atlasFramework, state.atlasFamily],
+  );
   const [record, setRecord] = useState<AtlasNeighborhoodRecord | null>(null);
   const [recordStatus, setRecordStatus] = useState<
     "idle" | "loading" | "ready" | "missing" | "error"
@@ -248,7 +257,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     onNavigate("atlas-map", patch);
   }
 
-  function drillAtlas(drill: AtlasProjectionDrill) {
+  const drillAtlas = useCallback((drill: AtlasProjectionDrill) => {
     if (drill.kind === "area") {
       patchAtlas({
         node: "",
@@ -276,7 +285,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       return;
     }
     patchAtlas({ node: drill.targetId, atlasParent: "", relationshipSearch: "", relationshipView: "" });
-  }
+  }, [bundle.atlasNetwork, onNavigate, state.atlasLimb]);
 
   function atlasHome() {
     patchAtlas({
@@ -288,6 +297,22 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       relationshipView: "",
     });
   }
+
+  const trailAtlas = useCallback((level: "root" | "area" | "publication" | "detail", id: string) => {
+    if (level === "root") {
+      atlasHome();
+      return;
+    }
+    if (level === "area") {
+      patchAtlas({ node: "", atlasFramework: "", atlasFamily: "", atlasLimb: id, relationshipView: "" });
+      return;
+    }
+    if (level === "publication") {
+      patchAtlas({ node: "", atlasFamily: "", atlasFramework: id, relationshipView: "" });
+      return;
+    }
+    patchAtlas({ node: "", atlasFamily: id, relationshipView: "" });
+  }, [onNavigate]);
 
   function atlasUp() {
     if (state.atlasFamily) {
@@ -364,7 +389,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     >
       <header className="atlas-canvas-header" data-route-primary-header="true">
         <div data-route-primary-copy="true">
-          <p className="eyebrow">CYBERSECURITY LANDSCAPE</p>
+          <p className="eyebrow">{FIRST_PAINT_ROUTE_COPY.atlas.eyebrow}</p>
           <h1 id="atlas-page-title">Atlas</h1>
           <p>{SITE_COPY.routes.atlas.purpose}</p>
         </div>
@@ -411,13 +436,11 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       ) : null}
 
       {bundle.atlasNetwork && atlasProjection && !hierarchyRequested && !nodeId ? (
-        <AtlasGraph
-          canGoUp={Boolean(state.atlasFamily || state.atlasFramework || state.atlasLimb)}
+        <AtlasDecompositionMap
+          artifact={bundle.atlasNetwork}
           onDrill={drillAtlas}
-          onHome={atlasHome}
-          onUp={atlasUp}
-          projection={atlasProjection}
-          selectedCanonicalId={nodeId || undefined}
+          onTrail={trailAtlas}
+          scope={atlasScope}
         />
       ) : !bundle.atlasNetwork ? (
         <p className="atlas-load-inline-error" role="alert">The global Atlas network is unavailable. Reload the page to try again.</p>

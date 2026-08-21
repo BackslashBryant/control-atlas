@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import { displayNameFor, humanizeSlug } from '../src/app/display-names.mjs';
+import { CATALOG_STRUCTURE_PROFILES } from '../src/shared/catalog-structure.mjs';
 import { readGeneratedCollection } from '../scripts/lib/generated-graph-artifacts.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -127,4 +128,34 @@ test('template types use registry-aligned display names', () => {
     displayNameFor('template_type', 'poam_starter'),
     'POA&M Working Register',
   );
+});
+
+test('every catalog reaches the UI with a published name, never its raw id', () => {
+  // The Compare pickers and generated documents read catalog names from this
+  // artifact, not from the runtime table. Four catalogs were missing from the
+  // runtime's name map, so the artifact carried "nist-zt" and
+  // "nist-iot-cybersecurity" straight into user-facing copy.
+  const bootstrap = JSON.parse(
+    readFileSync(join(ROOT, 'data/generated/catalog-bootstrap.json'), 'utf8'),
+  ).catalog_bootstrap;
+
+  for (const catalog of bootstrap.catalogs || []) {
+    assert.notEqual(
+      catalog.name,
+      catalog.id,
+      `${catalog.id} reaches the UI as its own id instead of a published name`,
+    );
+    // The runtime name and the structure-profile label are two deliberate
+    // registers: pickers show "SP 800-53 Rev. 5" beside a NIST publisher
+    // column, while a record's context line spells out "NIST SP 800-53
+    // Rev. 5". Both must be real names, so only the id leak is an error.
+    assert.ok(
+      CATALOG_STRUCTURE_PROFILES[catalog.id],
+      `${catalog.id} has no canonical structure profile`,
+    );
+    assert.ok(
+      /[A-Z]/.test(catalog.name) && catalog.name.trim().length > 1,
+      `${catalog.id} name "${catalog.name}" does not read as a published title`,
+    );
+  }
 });

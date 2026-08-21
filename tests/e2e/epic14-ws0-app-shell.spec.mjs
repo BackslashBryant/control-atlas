@@ -19,7 +19,7 @@ test("WS0 direct routes own exactly one main landmark without Home stacked above
 
   const routes = [
     { path: "/#/", view: "home", marker: page.locator(".home-entry") },
-    { path: "/#/atlas", view: "atlas-map", marker: page.getByTestId("atlas-network") },
+    { path: "/#/atlas", view: "atlas-map", marker: page.getByTestId("atlas-map") },
     { path: "/#/library", view: "search", marker: page.getByRole("heading", { name: "Library", exact: true }) },
     { path: "/#/resources", view: "commons", marker: page.getByRole("heading", { name: "Resources", exact: true, level: 1 }) },
     { path: "/#/guides", view: "patterns", marker: page.getByRole("heading", { name: "Guides", exact: true }) },
@@ -74,7 +74,11 @@ test("desktop header exposes task destinations, Search, and reference overflow",
   ]);
   await expect(page.getByRole("button", { name: "Open search" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Open navigation menu" })).toHaveCount(0);
-  await expect(page.locator(".brand-key-sizer")).toHaveCount(0);
+  // One hidden sizer reserves the width of the longest rotating word so the
+  // masthead cannot shift and no word is clipped. It must never be visible,
+  // and only one word may ever be readable at a time.
+  await expect(page.locator("header.site-header .brand-key-sizer")).toHaveCount(1);
+  await expect(page.locator("header.site-header .brand-key-sizer:visible")).toHaveCount(0);
   await expect(page.locator("header.site-header .brand-key-word:visible")).toHaveCount(1);
 
   await page.getByRole("button", { name: "Open more pages" }).click();

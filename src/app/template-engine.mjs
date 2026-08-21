@@ -218,13 +218,30 @@ function resolveSourceLines(sourceRefs, sources) {
 }
 
 /**
+ * Resolves a catalog/program id to its published name.
+ * @param {string} framework
+ * @param {any[]} sources
+ * @returns {string}
+ */
+function resolveFrameworkName(framework, sources) {
+  const match = (sources || []).find((source) => source.id === framework);
+  const fallback = SOURCE_FALLBACK[framework];
+  return match?.display_name || match?.name || fallback?.display_name || framework;
+}
+
+/**
  * @param {any} options
  * @returns {string}
  */
 export function buildSourceMetadata(options) {
   const lines = [];
   if (options.framework) {
-    lines.push(`Catalog or program context: ${options.framework}`);
+    // A generated document is a user-facing artifact, so it names the
+    // publication the way the publisher does. The raw catalog id is only a
+    // last resort, and it is at least accurate rather than invented.
+    lines.push(
+      `Catalog or program context: ${resolveFrameworkName(options.framework, options.sources)}`,
+    );
   }
   lines.push(`Environment archetype: ${options.environment || "Not selected"}`);
   const refLines = resolveSourceLines(options.sourceRefs, options.sources);

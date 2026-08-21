@@ -181,11 +181,16 @@ test('Atlas landing renders the lightweight semantic hierarchy, not the relation
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const network = page.getByTestId('atlas-network');
-  await expect(network).toBeVisible();
-  await expect(network).toHaveAttribute('data-projection-level', 'landscape');
-  await expect(network).toHaveAttribute('data-projection-node-count', '13');
-  await expect(network.locator('canvas').first()).toBeVisible();
+  const map = page.getByTestId('atlas-map');
+  await expect(map).toBeVisible();
+  await expect(map).toHaveAttribute('data-scope-level', 'root');
+  await expect(map.locator('.atlas-decomp__column[data-column="area"]')).toHaveAttribute(
+    'data-row-count',
+    '12',
+  );
+  // Orientation is DOM only: no canvas renderer and no flow graph is loaded
+  // before the visitor asks for one.
+  await expect(map.locator('canvas')).toHaveCount(0);
   await expect(page.locator('.react-flow')).toHaveCount(0);
   expect(requests.some((url) => /RelationshipGraph-/.test(url))).toBe(false);
 });

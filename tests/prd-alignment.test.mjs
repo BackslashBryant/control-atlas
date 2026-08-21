@@ -103,7 +103,7 @@ test('template factory implements all conditional include flags and bug fixes', 
   assert.match(resultWithFootnotes.content, /Source Metadata/);
   assert.match(
     resultWithFootnotes.content,
-    /Catalog or program context: nist-800-53/,
+    /Catalog or program context: SP 800-53 Rev\. 5/,
   );
   assert.match(resultWithFootnotes.content, /Environment archetype: Cloud SaaS/);
 });

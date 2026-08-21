@@ -33,37 +33,44 @@ test("WS5 Home implements Template B with one search, four destinations, and Lib
   await expect(template.locator(".home-ecosystem, .home-primary-actions")).toHaveCount(0);
   await expect(template.getByText("Start with your work", { exact: true })).toHaveCount(0);
 
-  const libraryDiscovery = template.getByRole("navigation", { name: "See what's inside Control Atlas" });
+  const libraryDiscovery = template.getByRole("navigation", { name: "Start with what you came to find." });
   const discoveryLinks = libraryDiscovery.locator(".home-library-kpi");
-  await expect(template.getByText("EXPLORE THE LIBRARY", { exact: true })).toBeVisible();
-  await expect(discoveryLinks).toHaveCount(6);
-  await expect(discoveryLinks.locator(":scope > strong")).toHaveText([
-    "17,021",
-    "9,766",
-    "1,152",
-    "1,065",
-    "1,690",
-    "5,694",
+  await expect(template.getByText("BROWSE THE LIBRARY", { exact: true })).toBeVisible();
+  await expect(discoveryLinks).toHaveCount(5);
+  // The practitioner question leads and the collection name is the headline;
+  // the record count is footer metadata, never the reason to look.
+  await expect(discoveryLinks.locator(".home-library-kpi__question")).toHaveText([
+    "What you have to do",
+    "What applies to your system",
+    "How it gets checked",
+    "How systems get hardened",
+    "What it defends against",
   ]);
-  await expect(discoveryLinks.locator("b")).toHaveText([
-    "Technical rules",
-    "Requirements",
-    "Process & methods",
+  await expect(discoveryLinks.locator(".home-library-kpi__label")).toHaveText([
+    "Controls & requirements",
+    "Baselines & profiles",
+    "Assessment & process",
+    "Configuration rules",
     "Threats & defenses",
-    "Mobile",
-    "Operating system",
   ]);
-  await expect(libraryDiscovery.getByRole("link", { name: "Browse all tags" })).toBeVisible();
+  await expect(discoveryLinks.locator(".home-library-kpi__count")).toHaveText([
+    "9,766 records",
+    "30 records",
+    "1,152 records",
+    "17,021 records",
+    "1,065 records",
+  ]);
+  await expect(libraryDiscovery.getByRole("link", { name: "Browse everything" })).toBeVisible();
   await expect(template.getByText(/more records|bigger tag/i)).toHaveCount(0);
   await expect(template.locator("[data-tag-count-scale]")).toHaveCount(0);
   await expect(template.locator(".home-area-browse, .home-ecosystem-areas, .home-area-link")).toHaveCount(0);
+  // One taxonomy only: every card filters by record kind, never by tag.
   expect(await discoveryLinks.evaluateAll((links) => links.map((link) => link.getAttribute("href")))).toEqual([
-    "#/library?kind=technical-rules",
     "#/library?kind=requirements",
+    "#/library?kind=baselines-profiles",
     "#/library?kind=process-methods",
+    "#/library?kind=technical-rules",
     "#/library?kind=threats-defenses",
-    "#/library?tag=asset.mobile",
-    "#/library?tag=technology.operating-system",
   ]);
 
   const accentColors = await template.locator(".home-secondary-action").evaluateAll((cards) => (
@@ -74,21 +81,20 @@ test("WS5 Home implements Template B with one search, four destinations, and Lib
 
 test("WS5 Library discovery cards open the counted canonical filter states", async ({ page }) => {
   const discoveries = [
-    ["Technical rules", "17,021 results"],
-    ["Requirements", "9,766 results"],
-    ["Process & methods", "1,152 results"],
-    ["Threats & defenses", "1,065 results"],
-    ["Mobile", "1,690 results"],
-    ["Operating system", "5,694 results"],
+    ["Controls & requirements", "9,766 results", "Requirements"],
+    ["Baselines & profiles", "30 results", "Baselines & profiles"],
+    ["Assessment & process", "1,152 results", "Process & methods"],
+    ["Configuration rules", "17,021 results", "Technical rules"],
+    ["Threats & defenses", "1,065 results", "Threats & defenses"],
   ];
 
-  for (const [label, count] of discoveries) {
+  for (const [label, count, filterLabel] of discoveries) {
     await gotoApp(page, "/");
     await waitForAppReady(page, { allowPartial: true });
     await page.locator(".home-library-kpi").filter({ hasText: label }).click();
 
-    await expect(page).toHaveURL(/#\/library\?(?:kind|tag)=/);
-    await expect(page.getByLabel("Active filters").getByRole("button", { name: label })).toBeVisible();
+    await expect(page).toHaveURL(/#\/library\?kind=/);
+    await expect(page.getByLabel("Active filters").getByRole("button", { name: filterLabel })).toBeVisible();
     await expect(page.getByRole("status")).toContainText(count.replace(" results", ""));
     await expect(page.getByRole("list", { name: "Search results" }).getByRole("listitem").first()).toBeVisible();
   }
@@ -101,8 +107,8 @@ test("WS5 Library discovery remains bounded and usable at all supported widths",
     await gotoApp(page, "/");
     await waitForAppReady(page, { allowPartial: true });
 
-    const navigation = page.getByRole("navigation", { name: "See what's inside Control Atlas" });
-    await expect(navigation.locator(".home-library-kpi")).toHaveCount(6);
+    const navigation = page.getByRole("navigation", { name: "Start with what you came to find." });
+    await expect(navigation.locator(".home-library-kpi")).toHaveCount(5);
     expect(
       await page.locator("html").evaluate((element) => element.scrollWidth - element.clientWidth),
       `${width}px Home overflow`,

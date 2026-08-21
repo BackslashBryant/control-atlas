@@ -10,6 +10,39 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
+test('every rotating brand word renders without clipping', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await gotoApp(page, '/#/library');
+  await waitForAppReady(page, { allowPartial: true });
+
+  const word = page.locator('header.site-header .brand-key-word');
+  await expect(word).toHaveCount(1);
+
+  // "Crosswalk" used to overflow a fixed 9.5ch keycap and rendered as
+  // "Crosswal". Sample the rotation and require every word to fit its box.
+  const seen = new Set();
+  for (let tick = 0; tick < 24 && seen.size < 4; tick += 1) {
+    const measured = await word.evaluate((element) => ({
+      text: element.textContent || '',
+      scrollWidth: element.scrollWidth,
+      clientWidth: element.clientWidth,
+      parentScroll: element.parentElement?.scrollWidth ?? 0,
+      parentClient: element.parentElement?.clientWidth ?? 0,
+    }));
+    seen.add(measured.text);
+    expect(
+      measured.scrollWidth,
+      `brand word "${measured.text}" is clipped inside its own box`,
+    ).toBeLessThanOrEqual(measured.clientWidth + 1);
+    expect(
+      measured.parentScroll,
+      `brand word "${measured.text}" overflows the keycap`,
+    ).toBeLessThanOrEqual(measured.parentClient + 1);
+    await page.waitForTimeout(400);
+  }
+  expect(seen.size, 'brand rotation should surface several words').toBeGreaterThan(1);
+});
+
 test('header height, brand width, and primary navigation positions remain stable across brand rotations', async ({
   page,
 }) => {

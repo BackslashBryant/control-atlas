@@ -286,14 +286,19 @@ test("Compare modes are accessible tabs and About is a navigable article", () =>
   assert.match(primitives, /aria-label=\{props\.headingLevel \? undefined : props\.title\}/);
 });
 
-test("Templates overview exposes Tasks, Templates, and Resources as equal lanes", () => {
+test("Templates exposes Tasks, Templates, and Resources without an interstitial", () => {
   const buildPage = readFileSync("src/ui/pages/TemplatesPage.tsx", "utf8");
   const buildState = readFileSync("src/ui/lib/buildRouteState.ts", "utf8");
-  assert.match(buildPage, /className="build-lane-grid"/);
-  assert.match(buildPage, /BUILD_LANES\.map/);
+  const viewState = readFileSync("src/ui/lib/viewState.ts", "utf8");
+  // The three lanes stay reachable from every Templates state, but as a local
+  // nav rather than a landing page whose cards led back to this same page.
+  assert.match(buildPage, /<BuildLocalNav/);
+  assert.doesNotMatch(buildPage, /className="build-lane-grid"/);
   assert.match(buildState, /label: "Tasks"/);
   assert.match(buildState, /label: "Templates"/);
   assert.match(buildState, /label: "Resources"/);
+  // /build lands on the document browser, so no "overview" state remains.
+  assert.doesNotMatch(viewState, /"overview"/);
   assert.doesNotMatch(buildPage, /Choose a task first/);
 });
 

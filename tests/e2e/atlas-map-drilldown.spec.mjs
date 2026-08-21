@@ -10,19 +10,19 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-async function openLandmarkList(page) {
-  const list = page.locator(".atlas-network-list");
-  if (!(await list.evaluate((element) => element.open))) {
-    await list.locator("summary").click();
-  }
-  return list;
+function atlas(page) {
+  return page.getByTestId("atlas-map");
 }
 
-async function clickLandmark(page, name) {
-  const list = await openLandmarkList(page);
-  const node = list.getByRole("button", { name });
-  await expect(node).toBeVisible();
-  await node.dispatchEvent("click");
+function level(page, key) {
+  return atlas(page).locator(`.atlas-decomp__column[data-column="${key}"]`);
+}
+
+/** Opens a row in the named level. Every row is a real, labelled button. */
+async function open(page, key, name) {
+  const row = level(page, key).getByRole("button", { name });
+  await expect(row).toBeVisible();
+  await row.click();
 }
 
 test("the Atlas landing shows nine honest areas and a populated area drills to its publications", async ({
@@ -30,80 +30,78 @@ test("the Atlas landing shows nine honest areas and a populated area drills to i
 }) => {
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
-
   await dismissOnboarding(page);
-  const landscape = page.getByTestId("atlas-network");
-  await expect(landscape).toBeVisible();
-  await expect(landscape).toHaveAttribute("data-projection-level", "landscape");
-  await expect(
-    landscape.locator(".atlas-network-list button", { hasText: /Area ·/ }),
-  ).toHaveCount(9);
 
-  await clickLandmark(page, /Compliance Area/);
+  const map = atlas(page);
+  await expect(map).toBeVisible();
+  await expect(map).toHaveAttribute("data-scope-level", "root");
+
+  // Nine areas plus three authority landmarks, each a named row with a count.
+  await expect(level(page, "area")).toHaveAttribute("data-row-count", "12");
+  const labels = await level(page, "area")
+    .locator(".atlas-decomp__label")
+    .allTextContents();
+  for (const area of [
+    "Governance",
+    "Risk",
+    "Compliance",
+    "Architecture",
+    "Implementation",
+    "Assessment",
+    "Operations",
+    "Threats & Defense",
+    "Knowledge",
+  ]) {
+    expect(labels, `${area} row`).toContain(area);
+  }
+
+  await open(page, "area", /Compliance/);
   await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
-  const publications = await openLandmarkList(page);
   await expect(
-    publications.getByRole("button", {
-      name: /SP 800-53 Rev\. 5 Catalog/,
-    }),
+    level(page, "publication").getByRole("button", { name: /SP 800-53 Rev\. 5 Catalog/ }),
   ).toBeVisible();
 });
 
-test("a canvas branch survives refresh and its breadcrumb steps back one generation", async ({
+test("a drilled branch survives refresh and the breadcrumb steps back one generation", async ({
   page,
 }) => {
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await clickLandmark(page, /Compliance Area/);
-  await clickLandmark(page, /SP 800-53 Rev\. 5 Catalog/);
+  await open(page, "area", /Compliance/);
+  await open(page, "publication", /SP 800-53 Rev\. 5 Catalog/);
   await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
-  const location = page.getByRole("navigation", { name: "Atlas location" });
-  await expect(location).toBeVisible();
-  await expect(page.getByTestId("atlas-network")).toHaveAttribute(
-    "data-projection-level",
-    "publication",
-  );
+  await expect(atlas(page)).toHaveAttribute("data-scope-level", "publication");
 
   await page.reload();
   await waitForAppReady(page);
-  await expect(page.getByTestId("atlas-network")).toHaveAttribute(
-    "data-projection-level",
-    "publication",
-  );
+  await expect(atlas(page)).toHaveAttribute("data-scope-level", "publication");
 
-  await location.getByRole("button", { name: "Up one level" }).click();
+  const trail = page.getByRole("navigation", { name: "Atlas scope" });
+  await trail.getByRole("button", { name: "Compliance", exact: true }).click();
   await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
   await expect(page).not.toHaveURL(/atlasFramework=/);
 
   await page.goBack();
   await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
-  await expect(page.getByTestId("atlas-network")).toHaveAttribute(
-    "data-projection-level",
-    "publication",
-  );
+  await expect(atlas(page)).toHaveAttribute("data-scope-level", "publication");
 });
 
-test("family drill stays scoped to the publication's real child records", async ({
+test("section drill stays scoped to the publication's real child records", async ({
   page,
 }) => {
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await clickLandmark(page, /Compliance Area/);
-  await clickLandmark(page, /SP 800-53 Rev\. 5 Catalog/);
-  await clickLandmark(page, /Access Control/);
+  await open(page, "area", /Compliance/);
+  await open(page, "publication", /SP 800-53 Rev\. 5 Catalog/);
+  await open(page, "detail", /Access Control/);
   await expect(page).toHaveURL(/atlasFamily=group:nist-800-53:0/);
-  await expect(page.getByTestId("atlas-network")).toHaveAttribute(
-    "data-projection-level",
-    "detail",
-  );
-  const records = await openLandmarkList(page);
+  await expect(atlas(page)).toHaveAttribute("data-scope-level", "detail");
+
   await expect(
-    records.getByRole("button", {
-      name: /^AC-2 — Account Management /,
-    }),
+    level(page, "record").getByRole("button", { name: /^AC-2 — Account Management/ }),
   ).toBeVisible();
 });

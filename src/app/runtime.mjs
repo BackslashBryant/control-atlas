@@ -482,6 +482,20 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     "mitre-attack": { name: "MITRE ATT&CK", group: "MITRE" },
     "mitre-attack-ics": { name: "MITRE ATT&CK for ICS", group: "MITRE" },
     "mitre-d3fend": { name: "MITRE D3FEND", group: "MITRE" },
+    // These four were missing, so pickers and labels fell back to the raw
+    // catalog id ("nist-zt", "nist-iot-cybersecurity"). The names match
+    // CATALOG_STRUCTURE_PROFILES exactly; tests/display-names.test.mjs fails
+    // the build if the two tables drift apart again.
+    "microsoft-zt-maturity": {
+      name: "Microsoft Zero Trust Maturity Questionnaire",
+      group: "Microsoft",
+    },
+    "nist-iot-cybersecurity": {
+      name: "NIST IoT Device Cybersecurity",
+      group: "NIST",
+    },
+    "nist-mobile-threats": { name: "NIST Mobile Threat Catalogue", group: "NIST" },
+    "nist-zt": { name: "NIST Zero Trust", group: "NIST" },
   };
 
   // Nodes that participate in at least one published edge — used to report

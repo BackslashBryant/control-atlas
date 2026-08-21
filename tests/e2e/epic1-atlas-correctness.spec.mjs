@@ -22,7 +22,7 @@ test("exact Atlas identifier opens its bounded semantic publisher context", asyn
 
   await expect(page).toHaveURL(/#\/atlas\/nist-800-53:AC-2/);
   await expect(page.getByRole("heading", { level: 1, name: "Atlas" })).toBeVisible();
-  await expect(page.getByTestId("atlas-network")).toHaveCount(0);
+  await expect(page.getByTestId("atlas-map")).toHaveCount(0);
   await expect(page.getByRole("region", { name: "Focused Atlas record" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Connections", level: 2 })).toBeVisible();
 });

@@ -64,7 +64,9 @@ function renderStaticHome() {
     if (item.patch.kind) params.set('kind', item.patch.kind);
     for (const tag of item.patch.tags || []) params.append('tag', tag);
     const href = `#/library?${params.toString()}`;
-    return `<li><a class="home-library-kpi" data-route="${href}" href="${href}"><strong>${item.count.toLocaleString('en-US')}</strong><span><b>${escapeHtml(item.label)}</b><small>${escapeHtml(item.description)}</small></span><span aria-hidden="true">→</span></a></li>`;
+    // Must match HomePage.tsx exactly: any difference here is a visible swap
+    // when React takes over the pre-rendered shell.
+    return `<li><a class="home-library-kpi" data-route="${href}" href="${href}"><span class="home-library-kpi__question">${escapeHtml(item.question)}</span><strong class="home-library-kpi__label">${escapeHtml(item.label)}</strong><small class="home-library-kpi__description">${escapeHtml(item.description)}</small><span class="home-library-kpi__footer"><span class="home-library-kpi__count">${item.count.toLocaleString('en-US')} records</span><span aria-hidden="true">→</span></span></a></li>`;
   }).join('');
   const destinations = HOME_DESTINATIONS.map((destination) => `
     <a class="home-secondary-action" data-route="${destination.href}" href="${destination.href}">
@@ -104,7 +106,7 @@ function renderStaticHome() {
     </div>
     <nav aria-label="Choose a Control Atlas destination" class="home-secondary-grid">${destinations}</nav>
     <nav aria-labelledby="home-library-heading" class="home-library-discovery">
-      <div class="home-library-discovery__heading"><div><p class="eyebrow">EXPLORE THE LIBRARY</p><h2 id="home-library-heading">See what's inside Control Atlas.</h2></div><a class="home-library-discovery__all" data-route="#/library" href="#/library">Browse all tags <span aria-hidden="true">→</span></a></div>
+      <div class="home-library-discovery__heading"><div><p class="eyebrow">BROWSE THE LIBRARY</p><h2 id="home-library-heading">Start with what you came to find.</h2></div><a class="home-library-discovery__all" data-route="#/library" href="#/library">Browse everything <span aria-hidden="true">→</span></a></div>
       <ul class="home-library-kpis">${libraryDiscovery}</ul>
     </nav>
   </section>`;
