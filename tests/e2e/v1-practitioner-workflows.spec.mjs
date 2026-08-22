@@ -474,6 +474,7 @@ test("V1 workflow 11 — refresh and browser history preserve valid URL state", 
   await expect(kindFilter).toBeChecked();
   await expect(sort).toHaveValue("identifier");
   await page.reload();
+  await waitForAppReady(page);
   await expect(kindFilter).toBeChecked();
   await expect(sort).toHaveValue("identifier");
   await sort.selectOption("title");

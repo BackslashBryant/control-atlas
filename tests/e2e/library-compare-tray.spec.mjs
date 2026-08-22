@@ -111,7 +111,9 @@ test("a single-publication selection stops at the target step instead of a broke
   expect(hash).toContain("source=nist-800-53");
   expect(hash).toContain("items=nist-800-53:AC-2%2Cnist-800-53:AC-2.1");
   expect(hash).not.toContain("compareRun=true");
-  await expect(page.getByLabel("Target publication")).toHaveValue("");
+  // sources.json is not cached from the Library page, so the Compare partial
+  // load takes several seconds. Wait up to 30s for the target form to render.
+  await expect(page.getByLabel("Target publication")).toHaveValue("", { timeout: 30_000 });
 });
 
 test("the tray fits the small-screen contract without page overflow", async ({ page }) => {
