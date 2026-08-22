@@ -260,7 +260,7 @@ test("high-density task surfaces expose continuous results and name download act
   const startHere = readFileSync("src/ui/pages/StartHerePage.tsx", "utf8");
   assert.match(comparePage, /data-continuous-results/);
   assert.match(comparePage, /Search results by ID or title/);
-  assert.match(comparePage, /Evidence for \{row\.targets\.length\.toLocaleString\(\)\} mapping/);
+  assert.match(comparePage, /Evidence for \{targets\.length\.toLocaleString\(\)\} mapping/);
   assert.doesNotMatch(comparePage, /relationshipPageSize|Mapping result pages/);
   assert.match(templatesPage, /Download \$\{selectedTemplate\.display_name\}/);
   assert.match(templatesPage, /template-essential-options/);
