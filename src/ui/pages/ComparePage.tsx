@@ -252,6 +252,38 @@ function CompareScopeRail(props: {
   );
 }
 
+// Evidence content can be large (many source refs per mapping). Defer mounting
+// the inner DOM until the user opens the disclosure so the initial render of
+// a full crosswalk stays bounded — the summary label is always present, only
+// the body is lazy.
+function LazyEvidenceDetails({ targets }: { targets: any[] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <details
+      className="mapping-row-details"
+      onToggle={(e) => setOpen((e.currentTarget as HTMLDetailsElement).open)}
+    >
+      <summary>
+        Evidence for {targets.length.toLocaleString()} mapping
+        {targets.length === 1 ? "" : "s"}
+      </summary>
+      {open ? (
+        <div className="mapping-evidence-list">
+          {targets.map((target: any) => (
+            <section
+              aria-label={`Evidence for ${target.to_item_id}`}
+              key={`evidence-${target.edge_id || target.to_id}`}
+            >
+              <strong>{target.to_item_id}</strong>
+              <SourceRefList refs={target.source_refs} />
+            </section>
+          ))}
+        </div>
+      ) : null}
+    </details>
+  );
+}
+
 export function ComparePage(props: {
   bundle: RuntimeBundle;
   state: CompareState;
@@ -434,6 +466,7 @@ export function ComparePage(props: {
   );
   const filteredMappingCount = countCompareMappings(aggregatedRelationshipRows);
   const visibleMappingCount = countCompareMappings(visibleAggregatedRows);
+
 
   useEffect(() => {
     setResultQuery("");
@@ -793,23 +826,7 @@ export function ComparePage(props: {
                                 </li>
                               ))}
                             </ul>
-                            <details className="mapping-row-details">
-                              <summary>
-                                Evidence for {row.targets.length.toLocaleString()} mapping
-                                {row.targets.length === 1 ? "" : "s"}
-                              </summary>
-                              <div className="mapping-evidence-list">
-                                {row.targets.map((target: any) => (
-                                  <section
-                                    aria-label={`Evidence for ${target.to_item_id}`}
-                                    key={`evidence-${target.edge_id || target.to_id}`}
-                                  >
-                                    <strong>{target.to_item_id}</strong>
-                                    <SourceRefList refs={target.source_refs} />
-                                  </section>
-                                ))}
-                              </div>
-                            </details>
+                            <LazyEvidenceDetails targets={row.targets} />
                           </td>
                         </tr>
                       ))}

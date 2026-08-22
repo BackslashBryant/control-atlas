@@ -248,6 +248,10 @@ export function App() {
   // below reads this ref instead of viewState so it always sees the most
   // recent navigation even if its own dependencies haven't re-run yet.
   const latestNavStateRef = useRef<ViewState>(viewState);
+  // Tracks which runtimeScopeKey was active when the current bundle was last
+  // committed, so onSearchReady can decide whether retaining a graphReady
+  // bundle from a prior route is safe or would silently deliver stale data.
+  const bundleScopeKeyRef = useRef<string>("");
   const [bundle, setBundle] = useState<RuntimeBundle | null>(null);
   const [loadError, setLoadError] = useState<string>("");
   const [loadSlow, setLoadSlow] = useState(false);
@@ -327,6 +331,7 @@ export function App() {
     setLoadSlow(false);
     setLoadError("");
     const runtimeState = latestNavStateRef.current;
+    const scopeKey = runtimeScopeKey;
 
     const needsRuntime =
       runtimeState.view === "search" ||
@@ -368,11 +373,18 @@ export function App() {
               setLoadSlow(false);
               startTransition(() => {
                 setBundle((current) => {
+                  // Only retain a graphReady bundle from the same scope. A
+                  // graphReady bundle from a prior route (e.g. Compare) may be
+                  // missing data this route needs (e.g. templateRegistry), so
+                  // crossing scopes must always commit the fresh result.
+                  const sameScopeGraphReady =
+                    current?.graphReady && bundleScopeKeyRef.current === scopeKey;
                   const next = runtimeState.view === "catalog-detail"
                     ? result
-                    : current?.graphReady
+                    : sameScopeGraphReady
                       ? current
                       : result;
+                  bundleScopeKeyRef.current = scopeKey;
                   return current?.atlasSpine && !next.atlasSpine
                     ? { ...next, atlasSpine: current.atlasSpine }
                     : next;
@@ -387,11 +399,12 @@ export function App() {
               window.clearTimeout(timeoutTimer);
               setLoadSlow(false);
               startTransition(() => {
-                setBundle((current) =>
-                  current?.atlasSpine && !result.atlasSpine
+                setBundle((current) => {
+                  bundleScopeKeyRef.current = scopeKey;
+                  return current?.atlasSpine && !result.atlasSpine
                     ? { ...result, atlasSpine: current.atlasSpine }
-                    : result,
-                );
+                    : result;
+                });
               });
               setLoadError("");
             }
