@@ -1427,12 +1427,25 @@
     display: none;
   }
 
+  /* With all non-publication columns hidden, the desktop min-width would still
+     force a 620 px scroll container. Reset it so the single column fills the
+     viewport instead. */
+  .sources-page .source-table {
+    min-width: 0;
+  }
+
   .sources-page .source-admin-tools {
     align-items: stretch;
   }
 
   .sources-page .source-admin-tools input[type="search"] {
     flex-basis: 100%;
+  }
+
+  /* Publisher and status selects share a row on desktop but must each go
+     full-width on mobile to prevent toolbar overflow. */
+  .sources-page .source-admin-tools select.source-filter-select {
+    flex: 1 1 100%;
   }
 
   .sources-page .source-table td.source-col-publication {
