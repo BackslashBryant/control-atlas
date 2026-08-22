@@ -1009,7 +1009,7 @@ export function TemplatesPage(props: {
               ([category, categoryTemplates]) => (
                 <section className="catalog-group" key={category}>
                   <h3 className="catalog-group-title">{category}</h3>
-                  <div className="intent-grid">
+                  <div className={`intent-grid${categoryTemplates.length === 1 ? " intent-grid--solo" : ""}`}>
                     {categoryTemplates.map((template: TemplateRecord) => (
                       <QuickIntentCard
                         actionLabel="Open document"

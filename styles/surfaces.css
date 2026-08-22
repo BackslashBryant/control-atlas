@@ -1723,6 +1723,10 @@ li {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
+.intent-grid--solo {
+  grid-template-columns: minmax(240px, 480px);
+}
+
 .field {
   display: grid;
   gap: var(--ca-space-2);
