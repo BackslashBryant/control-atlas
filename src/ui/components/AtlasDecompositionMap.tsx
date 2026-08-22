@@ -48,7 +48,7 @@ function formatCount(count: number): string {
 
 function rowMeta(row: AtlasTreeRow): string {
   if (row.leaf) return row.kind;
-  if (row.count === 0) return "Nothing yet";
+  if (row.count === 0) return "Not yet modeled";
   return `${formatCount(row.count)} ${row.count === 1 ? "record" : "records"}`;
 }
 

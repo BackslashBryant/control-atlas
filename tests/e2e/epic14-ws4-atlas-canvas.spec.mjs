@@ -82,7 +82,7 @@ test("empty areas report nothing rather than counting themselves", async ({ page
   for (const label of EMPTY_AREAS) {
     const row = areas.locator(".atlas-decomp__node", { hasText: label });
     await expect(row).toHaveAttribute("data-state", "empty");
-    await expect(row).toContainText("Nothing yet");
+    await expect(row).toContainText("Not yet modeled");
   }
 
   // The projection counts a container as one of its own records, so an empty
