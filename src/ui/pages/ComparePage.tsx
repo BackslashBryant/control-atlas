@@ -284,6 +284,8 @@ function LazyEvidenceDetails({ targets }: { targets: any[] }) {
   );
 }
 
+const COMPARE_PAGE_SIZE = 200;
+
 export function ComparePage(props: {
   bundle: RuntimeBundle;
   state: CompareState;
@@ -292,6 +294,7 @@ export function ComparePage(props: {
 }) {
   const { bundle, state, onNavigate, onOpenNode } = props;
   const [resultQuery, setResultQuery] = useState("");
+  const [visibleLimit, setVisibleLimit] = useState(COMPARE_PAGE_SIZE);
   const catalogs = bundle.runtime.getCatalogs();
   const mode: CompareModeId =
     state.intent === "item-mapping" ? "item-mapping" : "frameworks";
@@ -466,10 +469,13 @@ export function ComparePage(props: {
   );
   const filteredMappingCount = countCompareMappings(aggregatedRelationshipRows);
   const visibleMappingCount = countCompareMappings(visibleAggregatedRows);
+  const pageRows = visibleAggregatedRows.slice(0, visibleLimit);
+  const hasMoreRows = visibleAggregatedRows.length > visibleLimit;
 
 
   useEffect(() => {
     setResultQuery("");
+    setVisibleLimit(COMPARE_PAGE_SIZE);
   }, [
     mode,
     state.items,
@@ -785,54 +791,75 @@ export function ComparePage(props: {
               </p>
 
               {visibleAggregatedRows.length ? (
-                <div className="compare-table-scroll" data-continuous-scroll>
-                  <table
-                    aria-label="Published crosswalk mappings"
-                    className="detail-table compare-results-table"
-                  >
-                    <thead>
-                      <tr>
-                        <th scope="col">From</th>
-                        <th scope="col">Maps to</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {visibleAggregatedRows.map((row: any) => (
-                        <tr key={row.from_id || row.from_item_id}>
-                          <td data-label="From">
-                            <RecordLink nodeId={row.from_id} onOpenNode={onOpenNode}>
-                              <strong>{row.from_item_id}</strong>
-                            </RecordLink>
-                            <span className="compare-record-title">{row.from_title}</span>
-                          </td>
-                          <td data-label="Maps to">
-                            <ul className="target-mapping-list">
-                              {row.targets.map((target: any) => (
-                                <li
-                                  className="target-mapping-item"
-                                  key={target.edge_id || `${row.from_id}-${target.to_id}`}
-                                >
-                                  <div>
-                                    <RecordLink nodeId={target.to_id} onOpenNode={onOpenNode}>
-                                      <strong>{target.to_item_id}</strong>
-                                    </RecordLink>
-                                    <span className="target-item-title">{target.to_title}</span>
-                                  </div>
-                                  {target.relationship_type && target.relationship_type !== "maps_to" ? (
-                                    <span className="target-mapping-relationship">
-                                      {displayNameFor("relationship_type", target.relationship_type)}
-                                    </span>
-                                  ) : null}
-                                </li>
-                              ))}
-                            </ul>
-                            <LazyEvidenceDetails targets={row.targets} />
-                          </td>
+                <>
+                  <div className="compare-table-scroll" data-continuous-scroll>
+                    <table
+                      aria-label="Published crosswalk mappings"
+                      className="detail-table compare-results-table"
+                    >
+                      <thead>
+                        <tr>
+                          <th scope="col">From</th>
+                          <th scope="col">Maps to</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody>
+                        {pageRows.map((row: any) => (
+                          <tr key={row.from_id || row.from_item_id}>
+                            <td data-label="From">
+                              <RecordLink nodeId={row.from_id} onOpenNode={onOpenNode}>
+                                <strong>{row.from_item_id}</strong>
+                              </RecordLink>
+                              <span className="compare-record-title">{row.from_title}</span>
+                            </td>
+                            <td data-label="Maps to">
+                              <ul className="target-mapping-list">
+                                {row.targets.map((target: any) => (
+                                  <li
+                                    className="target-mapping-item"
+                                    key={target.edge_id || `${row.from_id}-${target.to_id}`}
+                                  >
+                                    <div>
+                                      <RecordLink nodeId={target.to_id} onOpenNode={onOpenNode}>
+                                        <strong>{target.to_item_id}</strong>
+                                      </RecordLink>
+                                      <span className="target-item-title">{target.to_title}</span>
+                                    </div>
+                                    {target.relationship_type && target.relationship_type !== "maps_to" ? (
+                                      <span className="target-mapping-relationship">
+                                        {displayNameFor("relationship_type", target.relationship_type)}
+                                      </span>
+                                    ) : null}
+                                  </li>
+                                ))}
+                              </ul>
+                              <LazyEvidenceDetails targets={row.targets} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {hasMoreRows ? (
+                    <div className="compare-show-more">
+                      <p className="compare-show-more-caption">
+                        Showing {visibleLimit.toLocaleString()} of {visibleAggregatedRows.length.toLocaleString()} source records.
+                        Use the export options above for the complete set.
+                      </p>
+                      <Button
+                        onClick={() =>
+                          setVisibleLimit((n) =>
+                            Math.min(n + COMPARE_PAGE_SIZE, visibleAggregatedRows.length),
+                          )
+                        }
+                        type="button"
+                        variant="secondary"
+                      >
+                        Show {Math.min(COMPARE_PAGE_SIZE, visibleAggregatedRows.length - visibleLimit).toLocaleString()} more source records
+                      </Button>
+                    </div>
+                  ) : null}
+                </>
               ) : (
                 <section className="empty-state compare-results-empty">
                   <h3>
