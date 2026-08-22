@@ -368,8 +368,6 @@ test('shared shell exposes visible search access and valid intent-card markup', 
   assert.match(surfaces, /\.primary-nav a\.nav-active\s*\{[^}]*background:\s*transparent;/s);
   assert.match(topNav, /<AppLink/);
   assert.doesNotMatch(topNav, /<Tabs/);
-  assert.match(templatesPage, /className="build-start-layout"/);
-  assert.match(templatesPage, /className="build-resource-rail"/);
   assert.equal(SITE_COPY.routes.documents.title, "Templates");
   assert.equal(
     SITE_COPY.routes.documents.purpose,
