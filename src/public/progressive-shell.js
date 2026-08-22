@@ -138,7 +138,7 @@
     }
     if (route === "guides") {
       if (query.get("pattern")) return null;
-      var guidesCopy = sharedCopy("guides") || { eyebrow: "", summary: "Follow step-by-step guidance for common federal cybersecurity work.", title: "Guides" };
+      var guidesCopy = sharedCopy("guides") || { eyebrow: "", summary: "Read practitioner context for each stage of the federal cybersecurity lifecycle.", title: "Guides" };
       return {
         eyebrow: guidesCopy.eyebrow || "",
         kind: "guides",

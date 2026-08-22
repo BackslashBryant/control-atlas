@@ -200,7 +200,7 @@ export function CommonsPage(props: {
             Looking for a starter document? Browse Templates →
           </AppLink>
           <AppLink onNavigate={onNavigate} view="patterns">
-            Need step-by-step guidance? Browse Guides →
+            Want framework context? Browse Guides →
           </AppLink>
         </nav>
       )}

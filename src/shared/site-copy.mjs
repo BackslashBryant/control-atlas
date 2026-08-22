@@ -77,7 +77,7 @@ export const SITE_COPY = Object.freeze({
     guides: Object.freeze({
       title: "Guides",
       purpose:
-        "Follow step-by-step guidance for common federal cybersecurity work.",
+        "Read practitioner context for each stage of the federal cybersecurity lifecycle.",
     }),
     compare: Object.freeze({
       title: "Compare",
