@@ -570,7 +570,15 @@ function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) 
               <p>{section.content}</p>
             ) : (
               <>
-                <div className="template-document-preview-table-wrap">
+                {/* A horizontally scrolling region must be reachable and
+                    announced: without a tabindex a keyboard user cannot scroll
+                    it at all, and without a name it is an anonymous scroll box. */}
+                <div
+                  aria-label={`${section.heading} table, scrolls horizontally`}
+                  className="template-document-preview-table-wrap"
+                  role="region"
+                  tabIndex={0}
+                >
                   <table>
                     <thead>
                       <tr>

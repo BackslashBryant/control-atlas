@@ -2140,7 +2140,15 @@ li {
   gap: var(--ca-space-4);
   padding: var(--ca-space-6);
   color: var(--ca-paper);
-  background: linear-gradient(120deg, var(--ca-document-accent), var(--ca-accent));
+  /* Previously ran to --ca-accent (#5ca3a6), where white text measured 2.90:1
+     -- and the right-aligned format badge sits exactly at that light end. The
+     ramp now only darkens, so contrast improves monotonically from the 6.25:1
+     at the deep end instead of degrading across the header. */
+  background: linear-gradient(
+    120deg,
+    var(--ca-document-accent),
+    color-mix(in srgb, var(--ca-document-accent) 72%, var(--lsm-orbit))
+  );
 }
 
 .template-document-preview-header p,
@@ -2208,10 +2216,20 @@ li {
   border: 1px solid var(--ca-document-border);
 }
 
+.template-document-preview-table-wrap:focus-visible {
+  outline: 2px solid var(--ca-nixie-filament);
+  outline-offset: 2px;
+}
+
 .template-document-preview table {
   width: 100%;
   min-width: 42rem;
   border-collapse: collapse;
+  /* The global `table` rule paints --ca-surface (dark app chrome). This preview
+     is a paper-document facsimile, so that dark ground leaked behind cells that
+     set no background of their own and put #20242c document ink on #2d3a42 --
+     1.33:1. Paper is restored here and asserted on the cells below. */
+  background: var(--ca-paper);
   font-size: var(--font-size-sm);
 }
 
@@ -2223,6 +2241,12 @@ li {
   text-align: left;
   vertical-align: top;
   overflow-wrap: anywhere;
+}
+
+/* Every cell states its own ground so no ancestor's background can show
+   through behind document ink. */
+.template-document-preview td {
+  background: var(--ca-paper);
 }
 
 .template-document-preview th {
