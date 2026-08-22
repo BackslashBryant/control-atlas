@@ -24,10 +24,7 @@ import {
 } from "../lib/catalogGroups.mjs";
 
 import { STARTER_DOCUMENT_REVIEW_NOTICE } from "../../shared/disclaimer.mjs";
-import { ContextualCommonsModule } from "../components/ContextualCommonsModule";
 import { BuildLocalNav } from "../components/BuildLocalNav";
-import { CommonsResourceCard } from "../components/CommonsResourceCard";
-import { groupResourcesByKind } from "../lib/commonsPresentation.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 import {
@@ -162,23 +159,6 @@ type ComplianceWorkflow = {
   companion_template_ids?: string[];
 };
 
-type ComplianceTool = {
-  tool_id: string;
-  name: string;
-  maintainer?: string;
-  classification?: string;
-  status?: string;
-  version_or_release?: string;
-  repository_url?: string;
-  project_url?: string;
-  license?: string;
-  purpose?: string;
-  supported_inputs?: string[];
-  supported_outputs?: string[];
-  artifact_families?: string[];
-  access_requirements?: string[];
-  limitations?: string[];
-};
 
 const COMPATIBILITY_LABELS: Record<string, string> = {
   official_current: "Official current",
@@ -364,175 +344,6 @@ function OfficialArtifactCard(props: {
   );
 }
 
-function FedrampCurrentTruthPanel(props: {
-  transition?: FedrampTransitionIndex;
-}) {
-  const { transition } = props;
-  if (!transition?.source) return null;
-  const stableProcesses = (transition.process_statuses || []).filter(
-    (process) => process.status === "stable",
-  );
-  const placeholders = (transition.process_statuses || []).filter(
-    (process) => process.status === "placeholder",
-  );
-  const links = transition.official_links || {};
-  const upcomingMilestones = (transition.milestones || []).filter(
-    (milestone) => milestone.date >= "2026-07-16",
-  );
-  return (
-    <aside aria-labelledby="fedramp-current-heading" className="fedramp-truth-panel">
-      <div className="fedramp-truth-heading">
-        <div>
-          <p className="eyebrow">FedRAMP current rules</p>
-          <h3 id="fedramp-current-heading">
-            Consolidated Rules {transition.source.version}
-          </h3>
-          <p>
-            Updated {transition.source.last_updated}. These current rules are
-            authoritative. Older files are kept only for comparison.
-          </p>
-        </div>
-        <Badge tone="success">Official current</Badge>
-      </div>
-      <div className="fedramp-truth-grid">
-        <div>
-          <strong>{stableProcesses.length} stable process documents</strong>
-          <span>
-            Only {placeholders.length || "no"} process is marked placeholder
-            {placeholders.length
-              ? `: ${placeholders.map((process) => `${process.process_id} — ${process.name}`).join(", ")}.`
-              : "."}
-          </span>
-        </div>
-        <div>
-          <strong>20x and Rev5 are both mapped</strong>
-          <span>
-            Current paths depend on the applicable rules and effective dates.
-            The linked legacy workbook is kept for migration and comparison.
-          </span>
-        </div>
-      </div>
-      {upcomingMilestones.length ? (
-        <details className="nexus-details">
-          <summary>Transition dates</summary>
-          <ol className="fedramp-milestones">
-            {upcomingMilestones.map((milestone) => (
-              <li key={milestone.date}>
-                <time dateTime={milestone.date}>{milestone.date}</time>
-                <span>
-                  <strong>{milestone.label}</strong> — {milestone.meaning}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </details>
-      ) : null}
-      <div className="card-actions fedramp-source-links">
-        {[
-          ["Current rules", links.current_rules],
-          ["Machine-readable source", links.machine_readable_source],
-          ["Schema index", links.schema_index],
-          ["Changelog", links.changelog],
-          ["Timeline", links.timeline],
-          ["Legacy library", links.legacy_reference],
-        ].map(([label, url]) =>
-          url ? (
-            <a className="text-link" href={url} key={label} rel="noopener noreferrer" target="_blank">
-              {label}
-              <IconExternalLink aria-hidden="true" size={14} stroke={1.8} />
-            </a>
-          ) : null,
-        )}
-      </div>
-      {transition.interpretation_notice ? (
-        <p className="support-meta">{transition.interpretation_notice}</p>
-      ) : null}
-    </aside>
-  );
-}
-
-function ToolCard(props: { tool: ComplianceTool }) {
-  const { tool } = props;
-  const primaryUrl = tool.project_url || tool.repository_url;
-  return (
-    <article className="nexus-card">
-      <div className="nexus-card-heading">
-        <div>
-          <p className="result-meta">{tool.maintainer || "Tool"}</p>
-          <h3>{tool.name}</h3>
-        </div>
-        {tool.classification ? (
-          <Badge tone={compatibilityTone(tool.classification)}>
-            {compatibilityLabel(tool.classification)}
-          </Badge>
-        ) : null}
-      </div>
-      {tool.purpose ? <p>{tool.purpose}</p> : null}
-      <p className="support-meta">
-        {[tool.status, tool.version_or_release, tool.license]
-          .filter(Boolean)
-          .join(" · ")}
-      </p>
-      {tool.supported_inputs?.length || tool.supported_outputs?.length ? (
-        <dl className="nexus-facts">
-          {tool.supported_inputs?.length ? (
-            <div>
-              <dt>Accepts</dt>
-              <dd>{tool.supported_inputs.join(", ")}</dd>
-            </div>
-          ) : null}
-          {tool.supported_outputs?.length ? (
-            <div>
-              <dt>Produces</dt>
-              <dd>{tool.supported_outputs.join(", ")}</dd>
-            </div>
-          ) : null}
-        </dl>
-      ) : null}
-      {tool.access_requirements?.length ? (
-        <p className="nexus-limitation">
-          <IconInfoCircle aria-hidden="true" size={16} stroke={1.8} />
-          {tool.access_requirements[0]}
-        </p>
-      ) : null}
-      {tool.limitations?.length ? (
-        <details className="nexus-details">
-          <summary>Compatibility limits</summary>
-          <ul className="nexus-list">
-            {tool.limitations.map((limitation) => (
-              <li key={limitation}>{limitation}</li>
-            ))}
-          </ul>
-        </details>
-      ) : null}
-      {primaryUrl ? (
-        <div className="card-actions">
-          <ButtonLink
-            variant="secondary"
-            href={primaryUrl}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Open tool page
-            <IconExternalLink aria-hidden="true" size={15} stroke={1.8} />
-          </ButtonLink>
-          {tool.project_url &&
-          tool.repository_url &&
-          tool.project_url !== tool.repository_url ? (
-            <a
-              className="text-link"
-              href={tool.repository_url}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Source repository
-            </a>
-          ) : null}
-        </div>
-      ) : null}
-    </article>
-  );
-}
 
 const FORMAT_LABELS: Record<string, string> = {
   xlsx: "Excel (.xlsx)",
@@ -631,11 +442,6 @@ export function TemplatesPage(props: {
   const workflowDetailRef = useRef<HTMLElement | null>(null);
   const categoryFilter = state.category;
   const queryFilter = state.query;
-  const [showAllOfficialResources, setShowAllOfficialResources] =
-    useState(false);
-  const [showCompleteOfficialCatalog, setShowCompleteOfficialCatalog] =
-    useState(false);
-  const [showAllTools, setShowAllTools] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [generationStatus, setGenerationStatus] = useState("");
   const [generationTone, setGenerationTone] = useState<"trust" | "warning">(
@@ -646,8 +452,6 @@ export function TemplatesPage(props: {
     []) as OfficialArtifact[];
   const workflows = (bundle.complianceWorkflowRegistry?.workflows ||
     []) as ComplianceWorkflow[];
-  const complianceTools = (bundle.complianceToolRegistry?.tools ||
-    []) as ComplianceTool[];
   const fedrampTransition =
     bundle.fedrampTransitionIndex as FedrampTransitionIndex | undefined;
   const selectedWorkflow =
@@ -655,36 +459,6 @@ export function TemplatesPage(props: {
       (workflow) => workflow.workflow_id === state.task,
     ) || null;
   const documentBrowser = state.buildSection === "documents";
-  const workflowArtifacts = selectedWorkflow
-    ? officialArtifacts.filter((artifact) =>
-        selectedWorkflow.artifact_ids?.includes(artifact.artifact_id),
-      )
-    : officialArtifacts;
-  const workflowTools = selectedWorkflow
-    ? complianceTools.filter((tool) =>
-        selectedWorkflow.tool_ids?.includes(tool.tool_id),
-      )
-    : complianceTools;
-  const officialArtifactPool = showCompleteOfficialCatalog
-    ? officialArtifacts
-    : workflowArtifacts;
-  const visibleOfficialArtifacts = showAllOfficialResources
-    ? officialArtifactPool
-    : officialArtifactPool.slice(0, 8);
-  const visibleTools = showAllTools ? workflowTools : workflowTools.slice(0, 8);
-  // Commons folded in (W4): every non-tool Commons resource, grouped by kind,
-  // as the third peer section alongside official resources and tools above.
-  // Tool-type Commons resources are excluded — they already surface in the
-  // Tools section so the same resource does not appear twice.
-  const communityResources = (bundle.commonsDataset?.resources || []).filter(
-    (resource) => resource.resourceType !== "tool",
-  );
-  const communityResourceGroups = groupResourcesByKind(communityResources).map(
-    (group: { id: string; label: string; blurb: string; resources: typeof communityResources }) => ({
-      ...group,
-      resources: group.resources.slice(0, 3),
-    }),
-  );
   const workflowReferenceIds = new Set([
     ...(selectedWorkflow?.artifact_ids || []),
     ...(selectedWorkflow?.tool_ids || []),
@@ -1038,7 +812,6 @@ export function TemplatesPage(props: {
       {!selectedTemplate ? (
         <div className="stack">
           {!selectedWorkflow && !documentBrowser ? (
-          <div className="build-start-layout">
           <section aria-labelledby="workflow-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
@@ -1061,9 +834,6 @@ export function TemplatesPage(props: {
                   selected={state.task === workflow.workflow_id}
                   onNavigate={onNavigate}
                   onBeforeNavigate={() => {
-                    setShowAllOfficialResources(false);
-                    setShowCompleteOfficialCatalog(false);
-                    setShowAllTools(false);
                     window.setTimeout(
                       () => workflowDetailRef.current?.focus(),
                       0,
@@ -1083,24 +853,6 @@ export function TemplatesPage(props: {
               </div>
             ) : null}
           </section>
-            <aside aria-labelledby="optional-resources-heading" className="build-resource-rail">
-              <div className="section-header nexus-section-header">
-                <div>
-                  <p className="eyebrow">Optional reference</p>
-                  <h2 id="optional-resources-heading">Related resources</h2>
-                  <p className="page-summary">
-                    These external references remain available independently of any task.
-                  </p>
-                </div>
-              </div>
-              <ContextualCommonsModule
-                bundle={bundle}
-                contextType="template"
-                onNavigate={onNavigate}
-                title="Optional reference material"
-              />
-            </aside>
-          </div>
           ) : null}
 
           {selectedWorkflow ? (
@@ -1270,150 +1022,6 @@ export function TemplatesPage(props: {
               </div>
             ) : null}
           </section>
-          {!selectedWorkflow ? (
-          <section aria-labelledby="official-heading" className="nexus-section">
-            <div className="section-header nexus-section-header">
-              <div>
-                <p className="eyebrow">Published sources</p>
-                <h2 id="official-heading">Official federal resources</h2>
-                <p className="page-summary">
-                  Publisher material and lifecycle labels are shown together.
-                  Current, legacy, and guidance-only items remain distinct.
-                </p>
-              </div>
-            </div>
-            <FedrampCurrentTruthPanel transition={fedrampTransition} />
-            <Button
-              variant="secondary"
-              className="nexus-show-more"
-              onClick={() => {
-                setShowCompleteOfficialCatalog((value) => !value);
-                setShowAllOfficialResources(false);
-              }}
-            >
-              {showCompleteOfficialCatalog
-                ? "Show resources for this task"
-                : "Browse complete official catalog"}
-            </Button>
-            <div className="nexus-grid">
-              {visibleOfficialArtifacts.map((artifact) => (
-                <OfficialArtifactCard
-                  artifact={artifact}
-                  fedrampTransition={fedrampTransition}
-                  key={artifact.artifact_id}
-                />
-              ))}
-            </div>
-            {workflowArtifacts.length === 0 ? (
-              <div className="notice" role="status">
-                <p>
-                  No source is linked to this task yet. You can still browse the
-                  full source list and templates.
-                </p>
-              </div>
-            ) : null}
-            {officialArtifactPool.length > 8 ? (
-              <Button
-                variant="secondary"
-                className="nexus-show-more"
-                onClick={() => setShowAllOfficialResources((value) => !value)}
-              >
-                {showAllOfficialResources
-                  ? "Show fewer official resources"
-                  : `Show all ${officialArtifactPool.length} official resources`}
-              </Button>
-            ) : null}
-          </section>
-          ) : null}
-
-          {!selectedWorkflow ? (
-          <section aria-labelledby="tools-heading" className="nexus-section">
-            <div className="section-header nexus-section-header">
-              <div>
-                <p className="eyebrow">Working tools</p>
-                <h2 id="tools-heading">Federal and open-source tools</h2>
-                <p className="page-summary">
-                  See each tool's owner, inputs, outputs, and access
-                  requirements.
-                </p>
-              </div>
-            </div>
-            <div className="nexus-grid">
-              {visibleTools.map((tool) => (
-                <ToolCard key={tool.tool_id} tool={tool} />
-              ))}
-            </div>
-            {workflowTools.length === 0 ? (
-              <div className="notice" role="status">
-                <p>
-                  No tool is linked to this step yet. You can still use the
-                  official resources and templates.
-                </p>
-              </div>
-            ) : null}
-            {workflowTools.length > 8 ? (
-              <Button
-                variant="secondary"
-                className="nexus-show-more"
-                onClick={() => setShowAllTools((value) => !value)}
-              >
-                {showAllTools
-                  ? "Show fewer tools"
-                  : `Show all ${workflowTools.length} tools`}
-              </Button>
-            ) : null}
-          </section>
-          ) : null}
-
-          <section aria-labelledby="community-heading" className="nexus-section">
-            <div className="section-header nexus-section-header">
-              <div>
-                <p className="eyebrow">External resources</p>
-                <h2 id="community-heading">Training and communities</h2>
-                <p className="page-summary">
-                  Training, communities, and other external material, grouped
-                  by type and linked to its owner.
-                </p>
-              </div>
-            </div>
-            {communityResourceGroups.length === 0 ? (
-              <div className="notice" role="status">
-                <p>No resources are loaded yet.</p>
-              </div>
-            ) : (
-              <>
-                {communityResourceGroups.map((group) => (
-                  <div className="commons-group" key={group.id}>
-                    <div className="commons-group-header">
-                      <h3 className="commons-group-title">{group.label}</h3>
-                      <span className="commons-group-count">
-                        {group.resources.length}
-                      </span>
-                    </div>
-                    <p className="commons-group-blurb">{group.blurb}</p>
-                    <div className="nexus-grid">
-                      {group.resources.map((resource) => (
-                        <CommonsResourceCard
-                          key={resource.id}
-                          onNavigate={onNavigate}
-                          resource={resource}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-                <AppLink
-                  className="nexus-show-more"
-                  onNavigate={onNavigate}
-                  variant="secondary"
-                  view="commons"
-                >
-                  Browse all {communityResources.length} resources
-                </AppLink>
-              </>
-            )}
-          </section>
-
             </>
           ) : null}
         </div>
