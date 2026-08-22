@@ -579,6 +579,8 @@ export function App() {
     };
   }, [openSearchOverlay]);
 
+  const pushNavigationRef = useRef(false);
+
   function navigate(
     nextView: ViewState["view"],
     patch: Partial<ViewState> = {},
@@ -599,6 +601,7 @@ export function App() {
       changesWorkspace &&
       !beginRouteTransition("Opening the selected workspace", nextLocation)
     ) return;
+    if (changesWorkspace) pushNavigationRef.current = true;
     latestNavStateRef.current = nextState;
     routerNavigate(nextLocation);
     if (changesWorkspace) window.scrollTo({ top: 0, behavior: "auto" });
@@ -665,6 +668,21 @@ export function App() {
       window.cancelAnimationFrame(frame);
       window.cancelAnimationFrame(completionFrame);
     };
+  }, [viewState]);
+
+  useEffect(() => {
+    if (!pushNavigationRef.current) return;
+    pushNavigationRef.current = false;
+    const frame = window.requestAnimationFrame(() => {
+      const heading = document.querySelector<HTMLElement>("#workspace h1");
+      if (heading) {
+        if (!heading.hasAttribute("tabindex")) heading.tabIndex = -1;
+        heading.focus({ preventScroll: true });
+      } else {
+        document.getElementById("workspace")?.focus({ preventScroll: true });
+      }
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, [viewState]);
 
   return (

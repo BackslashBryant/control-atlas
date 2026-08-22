@@ -10,16 +10,16 @@ body {
   background:
     radial-gradient(
       circle at 78% 2%,
-      color-mix(in srgb, var(--lsm-teal), transparent 88%),
+      color-mix(in srgb, var(--lsm-gold), transparent 92%),
       transparent 34rem
     ),
     radial-gradient(
       circle at 12% 92%,
-      color-mix(in srgb, var(--lsm-gold), transparent 94%),
+      color-mix(in srgb, var(--lsm-gold), transparent 95%),
       transparent 28rem
     ),
-    linear-gradient(color-mix(in srgb, var(--lsm-teal), transparent 96%) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--lsm-teal), transparent 96%) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--lsm-grid-line), transparent 94%) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--lsm-grid-line), transparent 94%) 1px, transparent 1px),
     var(--ca-bg);
   background-size: auto, auto, 32px 32px, 32px 32px, auto;
 }
@@ -518,9 +518,9 @@ body {
   bottom: -4px;
   width: 32px;
   height: 7px;
-  border-inline: 1px solid var(--ca-priority);
+  border-inline: 1px solid var(--ca-nixie-filament);
   content: "";
-  opacity: 0.72;
+  opacity: 0.52;
   pointer-events: none;
 }
 
@@ -585,12 +585,23 @@ body {
   box-sizing: border-box;
 }
 
+/* Nixie tube: dark glass capsule with warm cathode filament glow. */
 .brand-key--active {
   display: inline-grid;
   text-align: center;
-  border-color: color-mix(in srgb, var(--ca-priority) 68%, transparent);
-  background: color-mix(in srgb, var(--ca-priority) 12%, transparent);
-  color: var(--lsm-teal-text);
+  border-color: var(--ca-nixie-glass-edge);
+  border-radius: var(--ca-radius-md);
+  background:
+    radial-gradient(ellipse at 50% 30%, color-mix(in srgb, var(--ca-nixie-filament) 6%, transparent), transparent 70%),
+    var(--ca-nixie-glass);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--lsm-bone) 8%, transparent),
+    0 0 8px var(--ca-nixie-aura),
+    0 0 2px color-mix(in srgb, var(--ca-nixie-glow) 18%, transparent);
+  color: var(--ca-nixie-filament);
+  text-shadow:
+    0 0 6px color-mix(in srgb, var(--ca-nixie-glow) 72%, transparent),
+    0 0 14px color-mix(in srgb, var(--ca-nixie-glow) 28%, transparent);
 }
 
 /* Both children share one grid cell: the hidden sizer sets the width to the
@@ -608,16 +619,27 @@ body {
 
 .brand-key-word {
   justify-self: center;
-  animation: brand-word-swap 240ms ease forwards;
+  animation: nixie-swap 320ms ease forwards;
 }
 
-@keyframes brand-word-swap {
+@keyframes nixie-swap {
   0% {
     opacity: 0;
-    transform: translateY(2px);
+    filter: brightness(2.4);
+    transform: translateY(3px);
+  }
+  30% {
+    opacity: 0.6;
+    filter: brightness(1.6);
+  }
+  60% {
+    opacity: 0.92;
+    filter: brightness(1.1);
+    transform: translateY(-1px);
   }
   100% {
     opacity: 1;
+    filter: brightness(1);
     transform: translateY(0);
   }
 }

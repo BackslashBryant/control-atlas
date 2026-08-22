@@ -100,6 +100,20 @@ export function TopNav(props: TopNavProps) {
         event.preventDefault();
         setNavigationMenuOpen(false);
         window.requestAnimationFrame(() => mobileMenuToggleRef.current?.focus());
+        return;
+      }
+      if (compactNavigation && event.key === "Tab" && sheet) {
+        const focusable = sheet.querySelectorAll<HTMLElement>("a[href], button:not([disabled])");
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     };
 

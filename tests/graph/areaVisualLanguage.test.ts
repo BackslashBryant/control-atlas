@@ -159,21 +159,20 @@ test("decorative color resolves to one teal accent, and the primary action is or
     "--ca-secondary",
     "--ca-link",
     "--ca-priority",
-    "--ca-editorial",
     "--ca-info",
   ]) {
     assert.equal(tokenValue(alias), "#5ca3a6", `${alias} must resolve to the one accent`);
   }
+  assert.equal(tokenValue("--ca-editorial"), "#cbae67", "editorial accent uses gold, not teal");
   assert.equal(tokenValue("--ca-action-primary"), "#cb7248", "primary action button must be Ignition Orange");
   assert.equal(tokenValue("--ca-on-primary"), "#11181e", "primary action ink must be dark (orbit)");
   assert.equal(tokenValue("--ca-accent-gold"), "#cbae67", "sparing gold accent must be defined");
 });
 
 test("bucket tags stay neutral and area fills remain inside Atlas", () => {
-  assert.match(tagComponent, /aria-hidden="true" className="bucket-tag__dot"/);
   assert.match(tagComponent, /presentation\?\.label/);
   assert.match(components, /\.bucket-tag,[\s\S]*background:\s*var\(--ca-surface\)/);
-  assert.match(components, /\.bucket-tag__dot\s*\{[\s\S]*background:\s*var\(--ca-area-color\)/);
+  assert.match(components, /\.bucket-tag:not\(\.bucket-tag--neutral\)\s*\{[\s\S]*border-left:[^}]*--ca-area-color/);
   assert.doesNotMatch(components, /\.bucket-tag\s*\{[^}]*background:[^;}]*--ca-area-color/s);
   assert.match(surfaces, /\.atlas-tree-node--area\s*\{[^}]*background:[^;}]*--ca-area-color/s);
   assert.match(surfaces, /\.atlas-tree-node--authority\s*\{[^}]*background:[^;}]*--ca-area-color/s);

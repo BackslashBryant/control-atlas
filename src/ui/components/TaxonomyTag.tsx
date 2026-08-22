@@ -29,7 +29,6 @@ export function BucketTag(props: {
       tabIndex={props.explanation ? 0 : undefined}
       title={props.explanation}
     >
-      {presentation ? <span aria-hidden="true" className="bucket-tag__dot" /> : null}
       <span>{props.children ?? presentation?.label ?? props.area}</span>
       {props.explanation ? <span className="visually-hidden" id={descriptionId}>{props.explanation}</span> : null}
     </span>
@@ -50,7 +49,6 @@ export function LineTag(props: {
       tabIndex={props.explanation ? 0 : undefined}
       title={props.explanation}
     >
-      <span aria-hidden="true" className="line-tag__line" />
       <span>{props.children}</span>
       {props.explanation ? <span className="visually-hidden" id={descriptionId}>{props.explanation}</span> : null}
     </span>

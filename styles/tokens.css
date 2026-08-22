@@ -20,6 +20,14 @@
   --lsm-relay: #54bcd9;
   --lsm-relay-deep: #205f78;
   --lsm-relay-deep-hover: #25677f;
+
+  /* Nixie tube aesthetic — warm amber cathode glow for signature elements.
+     Derived from the Orbital Archive's warm palette end (orange → gold). */
+  --ca-nixie-filament: #e8a44a;
+  --ca-nixie-glow: #d4863a;
+  --ca-nixie-glass: color-mix(in srgb, var(--lsm-orbit) 82%, #1a120a);
+  --ca-nixie-glass-edge: color-mix(in srgb, var(--ca-nixie-filament) 18%, var(--lsm-orbit));
+  --ca-nixie-aura: color-mix(in srgb, var(--ca-nixie-filament) 22%, transparent);
   --lsm-gold: var(--lsm-color-palette-gold);
   /* v1.8.0 muted Ignition Orange (was #e66a2c). Orange is now the single
      primary-action + editorial signal; teal narrows to state (see below). */
@@ -107,8 +115,8 @@
   --ca-secondary-hover: var(--ca-accent-hover);
   --ca-link: var(--ca-accent);
   --ca-priority: var(--ca-accent);
-  --ca-editorial: var(--ca-accent);
-  --ca-editorial-text: var(--lsm-teal-text);
+  --ca-editorial: var(--lsm-gold);
+  --ca-editorial-text: var(--lsm-gold);
 
   /* Canonical cybersecurity-area palette. The first value in the locked
      spec is for light surfaces and the second is for dark surfaces. The app

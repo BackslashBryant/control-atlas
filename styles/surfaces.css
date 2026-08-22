@@ -21,16 +21,16 @@ body {
   overflow-x: hidden;
   color: var(--ca-text);
   background:
-    linear-gradient(color-mix(in srgb, var(--ca-accent) 6%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ca-accent) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--lsm-grid-line) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--lsm-grid-line) 6%, transparent) 1px, transparent 1px),
     radial-gradient(
       circle at 18% 15%,
-      color-mix(in srgb, var(--ca-accent) 14%, transparent),
+      color-mix(in srgb, var(--lsm-gold) 8%, transparent),
       transparent 22%
     ),
     radial-gradient(
       circle at 82% 10%,
-      color-mix(in srgb, var(--ca-accent) 12%, transparent),
+      color-mix(in srgb, var(--lsm-gold) 7%, transparent),
       transparent 22%
     ),
     var(--ca-bg);
@@ -85,7 +85,7 @@ a {
   border: 0;
   color: var(--ca-text);
   background:
-    radial-gradient(circle at center, color-mix(in srgb, var(--ca-accent) 28%, transparent), transparent 42%),
+    radial-gradient(circle at center, color-mix(in srgb, var(--lsm-gold) 18%, transparent), transparent 42%),
     var(--ca-bg);
   cursor: pointer;
   animation: brand-entrance-exit 1s var(--motion-ease) both;
@@ -132,7 +132,7 @@ a {
   position: absolute;
   width: min(24rem, 78vw);
   aspect-ratio: 1;
-  border: 1px solid color-mix(in srgb, var(--ca-accent) 38%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lsm-gold) 28%, transparent);
   border-radius: 50%;
   animation: brand-orbit 1s linear infinite;
 }
@@ -145,8 +145,8 @@ a {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--ca-secondary);
-  box-shadow: 0 0 18px var(--ca-secondary);
+  background: var(--ca-nixie-filament);
+  box-shadow: 0 0 18px var(--ca-nixie-glow);
 }
 
 @keyframes brand-orbit {
@@ -1182,9 +1182,9 @@ a {
 
 .search-result-row mark,
 .search-overlay-result mark {
-  border-radius: 2px;
-  background: color-mix(in srgb, var(--ca-primary) 26%, transparent);
-  color: inherit;
+  background: transparent;
+  color: var(--ca-text);
+  font-weight: 700;
 }
 
 .search-result-row__actions :is(button, a) {
@@ -6689,14 +6689,15 @@ button.atlas-leverage-row:hover {
   inset-block: 0;
   inset-inline-start: 0;
   width: 3px;
-  background: var(--ca-accent);
+  background: var(--lsm-gold);
+  opacity: 0.52;
 }
 
 .home-secondary-action > svg {
   padding: 7px;
   border-radius: 4px;
-  background: color-mix(in srgb, var(--ca-accent) 16%, transparent);
-  color: var(--ca-accent);
+  background: color-mix(in srgb, var(--lsm-gold) 12%, transparent);
+  color: var(--lsm-gold);
   box-sizing: content-box;
 }
 
@@ -9808,8 +9809,8 @@ input[type="checkbox"] {
 }
 
 .search-overlay-input:focus-within {
-  border-color: var(--ca-primary);
-  outline: 2px solid var(--ca-primary);
+  border-color: var(--ca-nixie-glass-edge);
+  outline: 2px solid var(--ca-nixie-glass-edge);
   outline-offset: 2px;
   box-shadow: none;
 }
@@ -9840,14 +9841,14 @@ input[type="checkbox"] {
   padding-inline: var(--ca-space-2);
   border: 0;
   background: transparent;
-  color: var(--lsm-teal-text);
+  color: var(--lsm-dust);
   font: 650 0.66rem/1 var(--ca-font-mono);
   transform: translateY(-50%);
 }
 
 .search-overlay-result.is-highlighted {
-  border-color: var(--ca-primary);
-  background: color-mix(in srgb, var(--ca-primary) 10%, var(--ca-surface));
+  background: color-mix(in srgb, var(--ca-nixie-filament) 10%, transparent);
+  outline: none;
 }
 /* Epic 14 Template C: shared Library / Resources workspace. */
 .workspace-template {
@@ -11278,8 +11279,8 @@ input[type="checkbox"] {
 .record-taxonomy-link:focus-visible .bucket-tag,
 .record-taxonomy-link:hover .line-tag,
 .record-taxonomy-link:hover .bucket-tag {
-  border-color: var(--ca-secondary);
-  outline: 2px solid color-mix(in srgb, var(--ca-secondary) 26%, transparent);
+  border-color: var(--ca-nixie-glass-edge);
+  background: color-mix(in srgb, var(--ca-nixie-filament) 8%, var(--ca-surface));
 }
 
 .workspace-tag-facet__search {

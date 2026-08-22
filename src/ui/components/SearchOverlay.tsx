@@ -158,10 +158,15 @@ export function SearchOverlay(props: SearchOverlayProps) {
           aria-label="Search Control Atlas"
           className="search-overlay"
           onCloseAutoFocus={(event) => {
-            if (!focusSearchResultsOnCloseRef.current) return;
-            focusSearchResultsOnCloseRef.current = false;
+            if (focusSearchResultsOnCloseRef.current) {
+              focusSearchResultsOnCloseRef.current = false;
+              event.preventDefault();
+              requestSearchResultsFocus();
+              return;
+            }
             event.preventDefault();
-            requestSearchResultsFocus();
+            const trigger = document.querySelector<HTMLElement>(".header-search-trigger");
+            trigger?.focus();
           }}
         >
           <form
@@ -197,6 +202,12 @@ export function SearchOverlay(props: SearchOverlayProps) {
                 onCompositionEnd={() => { composingRef.current = false; }}
                 onCompositionStart={() => { composingRef.current = true; }}
                 onKeyDown={(event) => {
+                  if (event.key === "Enter" && !composingRef.current) {
+                    event.preventDefault();
+                    const form = event.currentTarget.closest("form");
+                    if (form) form.requestSubmit();
+                    return;
+                  }
                   if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
                   event.preventDefault();
                   if (suggestions.length === 0) return;
@@ -362,7 +373,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
 
               {results.resourceResults.length > 0 ? (
                 <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-primary)] mb-2 px-3">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-text-muted)] mb-2 px-3">
                     Tools and resources ({results.resourceResults.length})
                   </div>
                   <ul className="search-overlay-results">
@@ -379,11 +390,8 @@ export function SearchOverlay(props: SearchOverlayProps) {
                           patch={{ id: doc.id }}
                           view="commons-detail"
                         >
-                          <h3 className="search-overlay-result-title flex items-center justify-between">
-                            <span><MarkedSearchText query={query} text={doc.name} /></span>
-                            <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[color-mix(in_srgb,var(--ca-primary)_20%,transparent)] text-[var(--ca-primary)] border border-[color-mix(in_srgb,var(--ca-primary)_50%,transparent)]">
-                              {resourceTypeLabel(doc.resourceType)}
-                            </span>
+                          <h3 className="search-overlay-result-title">
+                            <MarkedSearchText query={query} text={doc.name} />
                           </h3>
                           <span className="search-overlay-result-meta">
                             {resourceTypeLabel(doc.resourceType)} · {resourceAccessLabel(doc)}
@@ -400,7 +408,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
 
               {results.communityResults.length > 0 ? (
                 <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-primary)] mb-2 px-3">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-text-muted)] mb-2 px-3">
                     Communities ({results.communityResults.length})
                   </div>
                   <ul className="search-overlay-results">
