@@ -1051,7 +1051,7 @@ export function TemplatesPage(props: {
               </div>
             </div>
             <div className="intent-grid template-featured-tasks">
-              {workflows.slice(0, 4).map((workflow) => (
+              {workflows.map((workflow) => (
                 <QuickIntentCard
                   key={workflow.workflow_id}
                   title={workflow.title}
@@ -1074,35 +1074,6 @@ export function TemplatesPage(props: {
                 />
               ))}
             </div>
-            {workflows.length > 4 ? (
-              <details className="other-templates template-more-tasks">
-                <summary>More document tasks ({workflows.length - 4})</summary>
-            <div className="intent-grid">
-                  {workflows.slice(4).map((workflow) => (
-                    <QuickIntentCard
-                      key={workflow.workflow_id}
-                      title={workflow.title}
-                      body={workflow.summary}
-                      icon={<IconCompass aria-hidden="true" size={20} stroke={1.8} />}
-                      actionLabel="Open task"
-                      selected={state.task === workflow.workflow_id}
-                      onNavigate={onNavigate}
-                      onBeforeNavigate={() => {
-                        setShowAllOfficialResources(false);
-                        setShowCompleteOfficialCatalog(false);
-                        setShowAllTools(false);
-                        window.setTimeout(
-                          () => workflowDetailRef.current?.focus(),
-                          0,
-                        );
-                      }}
-                      patch={{ buildSection: "tasks", task: workflow.workflow_id, templateType: "" }}
-                      view="templates"
-                    />
-                  ))}
-                </div>
-              </details>
-            ) : null}
             {workflows.length === 0 ? (
               <div className="notice" role="status">
                 <p>
@@ -1155,8 +1126,7 @@ export function TemplatesPage(props: {
                   gate. It used to sit between the user's stated intent and the
                   artifact they asked for, so choosing "Create a POA&M" meant
                   reading an essay before reaching anything buildable. */}
-              <details className="workflow-method">
-                <summary>Reference steps and handoff checks</summary>
+              <div className="workflow-method">
               {selectedWorkflow.outcomes?.length ? (
                 <SummaryCard title="Intended output">
                   <ul className="nexus-list">
@@ -1200,7 +1170,7 @@ export function TemplatesPage(props: {
                   </ul>
                 </SummaryCard>
               ) : null}
-              </details>
+              </div>
               {selectedWorkflow.boundary_note ? (
                 <p className="nexus-limitation">
                   <IconShieldCheck
@@ -1282,10 +1252,7 @@ export function TemplatesPage(props: {
             )}
 
             {otherTemplates.length ? (
-              <details className="other-templates">
-                <summary>
-                  Other templates ({otherTemplates.length})
-                </summary>
+              <div className="other-templates">
                 <div className="intent-grid">
                   {otherTemplates.map((template: TemplateRecord) => (
                     <QuickIntentCard
@@ -1300,7 +1267,7 @@ export function TemplatesPage(props: {
                     />
                   ))}
                 </div>
-              </details>
+              </div>
             ) : null}
           </section>
           <section aria-labelledby="official-heading" className="nexus-section">
