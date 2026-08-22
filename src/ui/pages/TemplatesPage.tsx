@@ -1450,8 +1450,6 @@ export function TemplatesPage(props: {
               </>
             )}
           </section>
-            </div>
-          </details>
 
             </>
           ) : null}
