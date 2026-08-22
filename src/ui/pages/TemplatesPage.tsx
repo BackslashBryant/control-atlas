@@ -6,7 +6,7 @@ import {
   IconInfoCircle,
   IconShieldCheck,
 } from "@tabler/icons-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
 
 import {
@@ -350,10 +350,34 @@ const FORMAT_LABELS: Record<string, string> = {
   docx: "Word (.docx)",
 };
 
+const FORMAT_SHORT: Record<string, string> = {
+  xlsx: "Excel",
+  docx: "Word",
+};
+
 const FORMAT_HELP: Record<string, string> = {
   xlsx: "Excel workbook - an editable working register with print-ready sheets.",
   docx: "Word document - a branded starter narrative with headings and working tables.",
 };
+
+function TemplateMetaChip({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex items-center px-[6px] py-[2px] rounded text-[10px] font-mono uppercase tracking-wider bg-[var(--ca-surface-raised)] border border-[var(--ca-border-strong)] text-[var(--ca-text-muted)]">
+      {children}
+    </span>
+  );
+}
+
+function templateMeta(template: TemplateRecord) {
+  const formats = template.supported_formats || ["docx"];
+  const basis = compatibilityLabel(template.compatibility?.classification || template.compatibility_level);
+  return (
+    <>
+      {formats.map((f) => <TemplateMetaChip key={f}>{FORMAT_SHORT[f] || f.toUpperCase()}</TemplateMetaChip>)}
+      {basis && basis !== "Template" ? <TemplateMetaChip>{basis}</TemplateMetaChip> : null}
+    </>
+  );
+}
 
 function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) {
   return (
@@ -992,6 +1016,7 @@ export function TemplatesPage(props: {
                         body={template.description}
                         icon={<IconFileDescription size={20} stroke={1.8} />}
                         key={template.name}
+                        meta={templateMeta(template)}
                         onNavigate={onNavigate}
                         patch={{ buildSection: "documents", task: "", templateType: template.name, framework: state.framework || "", format: template.supported_formats?.[0] || "docx", environment: state.environment || "", baseline: "", controlFamily: "" }}
                         title={template.display_name}
@@ -1012,6 +1037,7 @@ export function TemplatesPage(props: {
                       body={template.description}
                       icon={<IconFileDescription size={20} stroke={1.8} />}
                       key={template.name}
+                      meta={templateMeta(template)}
                       onNavigate={onNavigate}
                       patch={{ buildSection: "documents", task: "", templateType: template.name, framework: state.framework || "", format: template.supported_formats?.[0] || "docx", environment: state.environment || "", baseline: "", controlFamily: "" }}
                       title={template.display_name}

@@ -7,6 +7,7 @@ export function QuickIntentCard(props: {
   title: string;
   body: string;
   icon: ReactNode;
+  meta?: ReactNode;
   actionLabel?: string;
   onNavigate: AppNavigate;
   onBeforeNavigate?: () => void;
@@ -34,6 +35,9 @@ export function QuickIntentCard(props: {
       </div>
       <span className="block font-mono uppercase tracking-wider text-[11px] font-bold text-[var(--ca-text)] mb-[8px]">{props.title}</span>
       <span className="block text-[var(--ca-text-muted)] text-[13px] leading-relaxed mb-[16px]">{props.body}</span>
+      {props.meta ? (
+        <div className="flex flex-wrap gap-[6px] mb-[12px]">{props.meta}</div>
+      ) : null}
       {props.actionLabel ? (
         <span className="mt-auto text-[var(--ca-secondary)] text-[12px] font-medium flex items-center gap-[4px] group-hover:translate-x-1 transition-transform">
           {props.actionLabel}
