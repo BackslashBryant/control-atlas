@@ -84,7 +84,7 @@ export function CommonsResourceCard({
 
   return (
     <article
-      className={`commons-card resource-card resource-brand-accent--${identity.accent} group relative flex flex-col justify-between p-5 transition-all duration-200 hover:bg-[var(--ca-surface-raised)]`}
+      className={`commons-card resource-card resource-brand-accent--${identity.accent} group relative flex flex-col justify-between p-5 transition-colors duration-[120ms] hover:bg-[var(--ca-surface-raised)]`}
     >
       <div>
         <div className="resource-card-header">

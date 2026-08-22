@@ -17,7 +17,7 @@ export function QuickIntentCard(props: {
 }) {
   return (
     <AppLink
-      className={`flex flex-col items-start text-left p-[24px] border rounded-[3px] transition-all group w-full cursor-pointer h-full ${
+      className={`flex flex-col items-start text-left p-[24px] border rounded-[3px] transition-[border-color,background-color,box-shadow] duration-[120ms] group w-full cursor-pointer h-full ${
         props.selected
           ? "border-[var(--ca-secondary)] bg-[color-mix(in_srgb,var(--ca-secondary)_10%,transparent)] shadow-[0_0_0_1px_var(--ca-secondary)]"
           : "border-[var(--ca-border-strong)] bg-[var(--ca-surface)] hover:bg-[var(--ca-surface-raised)]"
