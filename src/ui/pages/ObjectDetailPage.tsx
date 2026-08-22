@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState, type ReactNode } from "react";
+import { Fragment, useState, type ReactNode } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import {
@@ -271,11 +271,9 @@ export function ObjectDetailPage(props: {
   const { bundle, state, onNavigate } = props;
   const node = bundle.runtime.getNode(state.node);
   const document = bundle.runtime.getLibraryDocument(state.node);
-  const [visibleConnectionCount, setVisibleConnectionCount] = useState(50);
-
-  useEffect(() => {
-    setVisibleConnectionCount(50);
-  }, [state.node]);
+  // Show at most this many representative items per connection group.
+  // Complete exploration is available via the Atlas link below.
+  const RECORD_GROUP_SAMPLE = 5;
 
   if (!node) {
     return (
@@ -352,13 +350,6 @@ export function ObjectDetailPage(props: {
     (total, group) => total + group.items.length,
     0,
   );
-  let remainingConnections = visibleConnectionCount;
-  const visibleConnectionGroups = connectionGroups.flatMap((group) => {
-    if (remainingConnections <= 0) return [];
-    const items = group.items.slice(0, remainingConnections);
-    remainingConnections -= items.length;
-    return items.length ? [{ ...group, items }] : [];
-  });
   let immediateConnectionsRemaining = 12;
   const immediateConnectionGroups = connectionGroups.flatMap((group) => {
     if (immediateConnectionsRemaining <= 0) return [];
@@ -366,13 +357,10 @@ export function ObjectDetailPage(props: {
     immediateConnectionsRemaining -= items.length;
     return items.length ? [{ ...group, items }] : [];
   });
+  // Non-CCI records: use all groups but sample items in render via RECORD_GROUP_SAMPLE.
   const relatedConnectionGroups = document.catalog_id === "disa-cci"
     ? immediateConnectionGroups
-    : visibleConnectionGroups;
-  const relatedConnectionCount = relatedConnectionGroups.reduce(
-    (total, group) => total + group.items.length,
-    0,
-  );
+    : connectionGroups;
   const displayPath = (node.display_path || []) as Array<{
     id: string;
     label: string;
@@ -636,18 +624,20 @@ export function ObjectDetailPage(props: {
             <div>
               <h2>Related records</h2>
               <p>Formal published links to other publications.</p>
-              {relatedConnectionCount < connectionCount ? (
-                <p className="support-meta">Showing {relatedConnectionCount} of {connectionCount} published connections.</p>
-              ) : null}
             </div>
             <Badge tone="info">{connectionCount}</Badge>
           </div>
           <div className="record-connection-groups">
-            {relatedConnectionGroups.map((group) => (
+            {relatedConnectionGroups.map((group) => {
+              const sample = document.catalog_id !== "disa-cci"
+                ? group.items.slice(0, RECORD_GROUP_SAMPLE)
+                : group.items;
+              const overflow = group.items.length - sample.length;
+              return (
                 <section key={`${group.catalogId}:${group.relationshipType}`}>
                   <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
                   <ul>
-                    {group.items.map((item) => {
+                    {sample.map((item) => {
                       const relatedIdentity = runtimeRecordIdentityFor(bundle, item.nodeId);
                       const sourceEvidence = item.sourceRefs.map((reference) => {
                         const sourceRecord = reference.sourceId
@@ -730,22 +720,20 @@ export function ObjectDetailPage(props: {
                       );
                     })}
                   </ul>
+                  {overflow > 0 ? (
+                    <AppLink
+                      className="record-connections-overflow"
+                      onNavigate={onNavigate}
+                      patch={{ node: node.id }}
+                      view="atlas-map"
+                    >
+                      +{overflow} more — Explore in Atlas
+                    </AppLink>
+                  ) : null}
                 </section>
-            ))}
+              );
+            })}
           </div>
-          {document.catalog_id !== "disa-cci" && visibleConnectionCount < connectionCount ? (
-            <button
-              className="atlas-spatial-more"
-              onClick={() =>
-                setVisibleConnectionCount((count) =>
-                  Math.min(count + 50, connectionCount),
-                )
-              }
-              type="button"
-            >
-              Show 50 more · {connectionCount - visibleConnectionCount} remaining
-            </button>
-          ) : null}
           <AppLink className="record-connections-explore" onNavigate={onNavigate} patch={{ node: node.id }} view="atlas-map">
             Explore all connections in Atlas
           </AppLink>

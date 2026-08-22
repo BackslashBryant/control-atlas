@@ -8826,6 +8826,13 @@ button.atlas-leverage-row:hover {
   max-width: min(46rem, 92vw);
 }
 
+.record-connections-overflow {
+  display: inline-flex;
+  margin-top: var(--ca-space-2);
+  font-size: var(--ca-text-sm);
+  color: var(--ca-text-muted);
+}
+
 .record-connections-explore {
   display: inline-flex;
   margin-top: var(--ca-space-4);
