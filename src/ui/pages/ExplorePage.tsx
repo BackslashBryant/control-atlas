@@ -43,6 +43,47 @@ import type { ViewState } from "../lib/viewState";
 
 type SearchState = Extract<ViewState, { view: "search" }>;
 
+// The tray keeps its own label copy so a selected record stays legible after
+// the user changes the query or filters and its row leaves the result list.
+type SelectedRecord = {
+  id: string;
+  identity: string;
+  publication: string;
+};
+
+// Compare's "item-mapping" mode needs intent + source + items + target; a link
+// carrying only `items` lands in Frameworks mode with empty selectors, which is
+// what made Library Compare a dead end. Derive the whole handoff from the
+// selection: the first catalog is the source, the second is the target, and the
+// items are the selected records belonging to the source catalog.
+function compareHandoffFor(selected: SelectedRecord[]) {
+  const catalogs: string[] = [];
+  for (const entry of selected) {
+    const catalog = entry.id.split(":")[0];
+    if (catalog && !catalogs.includes(catalog)) catalogs.push(catalog);
+  }
+  const source = catalogs[0] || "";
+  const target = catalogs[1] || "";
+  const items = selected
+    .filter((entry) => entry.id.startsWith(`${source}:`))
+    .map((entry) => entry.id)
+    .join(",");
+  return {
+    catalogs,
+    patch: {
+      crosswalk: "relationships",
+      intent: "item-mapping",
+      source,
+      target,
+      items,
+      // Only auto-run when the pair is fully determined. With one catalog there
+      // is no target yet, so the user lands on the target step instead of on an
+      // unrunnable "results" state.
+      compareRun: target ? "true" : "",
+    },
+  };
+}
+
 function taxonomyTagGroups(selected: string[]) {
   const groups = new Map<string, string[]>();
   for (const id of selected) {
@@ -94,7 +135,11 @@ export function ExplorePage(props: {
   const [detailsReady, setDetailsReady] = useState(false);
   const [visibleCount, setVisibleCount] = useState(0);
   const [compareMode, setCompareMode] = useState(false);
-  const [selectedRecords, setSelectedRecords] = useState<string[]>([]);
+  // Keyed by the qualified `catalog:item` record id, not the bare item id:
+  // the same identifier exists in several catalogs (AC-2 is both an SP 800-53
+  // control and an SP 800-53A assessment procedure), so a bare id collapsed
+  // those rows into one selection and the comparison could never reach two.
+  const [selectedRecords, setSelectedRecords] = useState<SelectedRecord[]>([]);
   const connectedOnly = state.connectedOnly === "true";
   const hasFilters = Boolean(state.filter || state.publisher || state.kind || state.area || state.tags.length || connectedOnly);
   const searchStarted = Boolean(state.query.trim() || hasFilters);
@@ -453,13 +498,64 @@ export function ExplorePage(props: {
           >
             <IconGitCompare aria-hidden="true" size={17} />Compare
           </Button>
-          {compareMode && selectedRecords.length >= 2 ? (
-            <AppLink onNavigate={onNavigate} patch={{ crosswalk: "relationships", items: selectedRecords.join(",") }} variant="primary" view="matrix">
-              Compare {selectedRecords.length}
-            </AppLink>
-          ) : null}
         </>
       )}
+      compareTray={compareMode ? (() => {
+        const handoff = compareHandoffFor(selectedRecords);
+        const [sourceCatalog, targetCatalog] = handoff.catalogs;
+        const hint = selectedRecords.length === 0
+          ? "Select records to compare. Published mappings run between two publications."
+          : !targetCatalog
+            ? `All from ${catalogDisplayNameFor(sourceCatalog)}. Add a record from another publication, or choose a target on the next step.`
+            : handoff.catalogs.length > 2
+              ? `Compares ${catalogDisplayNameFor(sourceCatalog)} to ${catalogDisplayNameFor(targetCatalog)}. Records from your other selected publications are not included.`
+              : `Compares ${catalogDisplayNameFor(sourceCatalog)} to ${catalogDisplayNameFor(targetCatalog)}.`;
+        return (
+        <div aria-label="Comparison selection" className="compare-tray" role="region">
+          <div className="compare-tray__status">
+            <strong>{selectedRecords.length} selected</strong>
+            <span className="compare-tray__hint">{hint}</span>
+          </div>
+          {selectedRecords.length > 0 ? (
+            <ul className="compare-tray__items">
+              {selectedRecords.map((entry) => (
+                <li key={entry.id}>
+                  <span className="compare-tray__chip">
+                    <span className="compare-tray__chip-identity">{entry.identity}</span>
+                    <span className="compare-tray__chip-publication">{entry.publication}</span>
+                    <button
+                      aria-label={`Remove ${entry.identity} from the comparison`}
+                      className="compare-tray__remove"
+                      onClick={() => setSelectedRecords((items) => items.filter((item) => item.id !== entry.id))}
+                      type="button"
+                    >
+                      <IconX aria-hidden="true" size={14} />
+                    </button>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <div className="compare-tray__actions">
+            {selectedRecords.length > 0 ? (
+              <Button onClick={() => setSelectedRecords([])} type="button" variant="secondary">
+                Clear
+              </Button>
+            ) : null}
+            {selectedRecords.length >= 1 ? (
+              <AppLink
+                onNavigate={onNavigate}
+                patch={handoff.patch}
+                variant="primary"
+                view="matrix"
+              >
+                Compare {selectedRecords.length}
+              </AppLink>
+            ) : null}
+          </div>
+        </div>
+        );
+      })() : null}
       facetLabel="Library filters"
       onClearQuery={() => {
         setQueryDraft("");
@@ -570,7 +666,7 @@ export function ExplorePage(props: {
           {connectedOnly && !graphReady ? <li className="notice-inline" role="status">Loading connection data for this filter…</li> : null}
           {rows.slice(0, visibleCount).map((row: any) => {
             const recordType = displayNameFor("object_type", row.document.object_type);
-            const selected = selectedRecords.includes(row.document.item_id);
+            const selected = selectedRecords.some((entry) => entry.id === row.document.id);
             return (
               <li key={row.document.id}>
                 <article className="workspace-result-row" data-published-connection-count={row.relationshipCount} data-published-mapping-count={row.crossFrameworkCount} data-record-id={row.document.id} data-result-class="published-record">
@@ -579,7 +675,9 @@ export function ExplorePage(props: {
                       <input
                         aria-label={`Select ${row.accessibleName} for comparison`}
                         checked={selected}
-                        onChange={() => setSelectedRecords((items) => selected ? items.filter((id) => id !== row.document.item_id) : [...items, row.document.item_id])}
+                        onChange={() => setSelectedRecords((items) => selected
+                          ? items.filter((entry) => entry.id !== row.document.id)
+                          : [...items, { id: row.document.id, identity: row.identity, publication: row.publication }])}
                         type="checkbox"
                       />
                     </label>

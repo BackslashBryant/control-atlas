@@ -231,7 +231,10 @@ export function SearchOverlay(props: SearchOverlayProps) {
                 <IconX aria-hidden="true" size={18} stroke={1.8} />
               </button>
             </Dialog.Close>
-            <button className="visually-hidden" type="submit">Search</button>
+            {/* Submit control for implicit Enter submission, kept out of the
+                tab order so it is not an invisible stop between the input and
+                the results. */}
+            <button className="visually-hidden" tabIndex={-1} type="submit">Search</button>
           </form>
           <span aria-live="polite" className="visually-hidden" role="status">{submitStatus}</span>
 

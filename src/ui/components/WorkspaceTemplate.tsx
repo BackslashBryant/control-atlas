@@ -181,6 +181,9 @@ export function WorkspaceTemplate(props: {
   activeFilters?: ReactNode;
   children: ReactNode;
   compareControl?: ReactNode;
+  /** Docked selection tray, rendered below the results so it stays available
+      while the user scrolls and refines. */
+  compareTray?: ReactNode;
   renderFacets: (scope: "desktop" | "mobile") => ReactNode;
   facetLabel: string;
   headerAction?: ReactNode;
@@ -315,6 +318,7 @@ export function WorkspaceTemplate(props: {
         </aside>
         <div className="workspace-results" id={props.resultsId} tabIndex={-1}>{props.children}</div>
       </div>
+      {props.compareTray}
     </section>
   );
 }

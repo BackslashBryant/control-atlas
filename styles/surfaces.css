@@ -10015,6 +10015,117 @@ input[type="checkbox"] {
   display: none;
 }
 
+/* Docked comparison tray. Sticks to the bottom of the viewport so the
+   selection, its count, and the way out stay reachable while the user keeps
+   scrolling and refining the result list. */
+.compare-tray {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-3);
+  margin-top: var(--ca-space-4);
+  padding: var(--ca-space-3) var(--ca-space-4);
+  border: 1px solid var(--ca-nixie-glass-edge);
+  border-radius: var(--ca-radius-md);
+  background: var(--ca-surface-raised);
+  box-shadow: 0 -6px 24px color-mix(in srgb, var(--lsm-orbit) 45%, transparent);
+}
+
+.compare-tray__status {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 12ch;
+}
+
+.compare-tray__status strong {
+  color: var(--ca-nixie-filament);
+  font-family: var(--ca-font-mono);
+  font-size: var(--ca-text-small);
+  letter-spacing: 0.04em;
+}
+
+.compare-tray__hint {
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-micro);
+}
+
+.compare-tray__items {
+  display: flex;
+  flex: 1 1 20rem;
+  flex-wrap: wrap;
+  gap: var(--ca-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.compare-tray__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  padding: 4px 4px 4px var(--ca-space-3);
+  border: 1px solid var(--ca-border-subtle);
+  border-radius: var(--ca-radius-sm);
+  background: var(--ca-surface);
+}
+
+.compare-tray__chip-identity {
+  color: var(--ca-text);
+  font-size: var(--ca-text-micro);
+  font-weight: 600;
+}
+
+.compare-tray__chip-publication {
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-micro);
+}
+
+.compare-tray__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ca-radius-sm);
+  background: transparent;
+  color: var(--ca-text-muted);
+  cursor: pointer;
+}
+
+.compare-tray__remove:hover,
+.compare-tray__remove:focus-visible {
+  background: color-mix(in srgb, var(--ca-nixie-filament) 12%, transparent);
+  color: var(--ca-nixie-filament);
+}
+
+.compare-tray__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  margin-left: auto;
+}
+
+@media (max-width: 40rem) {
+  .compare-tray {
+    padding: var(--ca-space-3);
+  }
+
+  .compare-tray__actions {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .compare-tray__actions > * {
+    flex: 1 1 auto;
+  }
+}
+
 .workspace-mobile-filter-button {
   display: none;
   margin-bottom: var(--ca-space-3);

@@ -409,7 +409,10 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
               value={mapSearchDraft}
             />
           </div>
-          <button className="visually-hidden" type="submit">Search</button>
+          {/* Kept so the form has a submit control (implicit Enter submission),
+              but out of the tab order: an invisible tab stop strands sighted
+              keyboard users on a control they cannot see. */}
+          <button className="visually-hidden" tabIndex={-1} type="submit">Search</button>
         </form>
       </header>
       <span
