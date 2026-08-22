@@ -51,11 +51,15 @@ test("WS1 decorative surfaces resolve to one teal accent", async ({ page }) => {
       "--ca-secondary",
       "--ca-link",
       "--ca-priority",
-      "--ca-editorial",
       "--ca-info",
     ].map((token) => style.getPropertyValue(token).trim());
   });
   expect(new Set(aliases).size).toBe(1);
+
+  const editorial = await page.evaluate(() =>
+    globalThis.getComputedStyle(globalThis.document.documentElement).getPropertyValue("--ca-editorial").trim(),
+  );
+  expect(editorial).not.toBe(aliases[0]);
 
   const cardAccentColors = await page.locator(".home-secondary-action").evaluateAll(
     (cards) => cards.map((card) => globalThis.getComputedStyle(card, "::before").backgroundColor),
