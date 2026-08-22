@@ -93,7 +93,13 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
         <div className="resource-detail-grid">
           <article className="resource-detail-main">
             <DetailSection id="what-it-is" title="What it is">
-              <p>{resource.overview?.text || resource.summary}</p>
+              {/* Show overview text when distinct from the hero summary; skip when
+                  the hero already displayed the same summary (cardPurpose absent). */}
+              {resource.overview?.text
+                ? <p>{resource.overview.text}</p>
+                : resource.cardPurpose
+                  ? <p>{resource.summary}</p>
+                  : null}
               <EvidenceCopy section={resource.presentationProfile?.whatItDoes} />
               {resource.overview?.sourceUrl ? <p className="resource-detail-evidence"><a href={resource.overview.sourceUrl} rel="noopener noreferrer" target="_blank">{resource.overview.sourceType === "repository_readme" ? "Repository README" : "Publisher source"} <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}
             </DetailSection>
