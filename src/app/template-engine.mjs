@@ -343,8 +343,9 @@ function generateSecurityPlanStarter(options, controls, crossRef) {
   ]);
 
   // Real cross-referenced STIG/SRG rule IDs only — no placeholder rows.
+  // Opt-in only: STIG/SRG tables add ~50 pages for full baselines.
   const stigRows = [];
-  if (options.includeStigReferences !== false && crossRef) {
+  if (options.includeStigReferences === true && crossRef) {
     for (const c of controls) {
       if (!c.nodeId) continue;
       const refs = crossRefForControl(crossRef, c.nodeId);
@@ -886,8 +887,9 @@ function generateProfessionalSecurityPlan(options, controls, crossRef) {
   ]);
   const inheritanceHeaders = ["Control ID", "Inheritance Type", "Provider", "Provider Evidence", "Evidence Date", "Decision Basis"];
   const inheritanceRows = blankRows(10, inheritanceHeaders.length, ph, ["[Control ID]", "[Fully inherited | Hybrid]", "[Provider]", "[CRM/CIS, package, attestation]", "[YYYY-MM-DD]", "[Agreement or review basis]"]);
+  // Opt-in only: STIG/SRG tables add ~50 pages for full baselines.
   const stigRows = [];
-  if (options.includeStigReferences !== false && crossRef) {
+  if (options.includeStigReferences === true && crossRef) {
     for (const c of controls) {
       if (!c.nodeId) continue;
       const refs = crossRefForControl(crossRef, c.nodeId);
@@ -1520,7 +1522,7 @@ export function buildTemplateDocument(options, dataset) {
     includeEvidenceExpectations: options.includeEvidenceExpectations !== false,
     includeInheritancePrompts: options.includeInheritancePrompts !== false,
     includeReciprocityPrompts: options.includeReciprocityPrompts !== false,
-    includeStigReferences: options.includeStigReferences !== false,
+    includeStigReferences: options.includeStigReferences === true,
     includeEnhancements: options.includeEnhancements === true,
     environment: options.environment || "",
     sourceRefs,
