@@ -1303,9 +1303,6 @@ export function TemplatesPage(props: {
               </details>
             ) : null}
           </section>
-          <details className="workflow-reference">
-            <summary>{selectedWorkflow ? "Official sources, tools, and resources for this task" : "Official sources, tools, and related resources"}</summary>
-            <div className="stack disclosure-content">
           <section aria-labelledby="official-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>

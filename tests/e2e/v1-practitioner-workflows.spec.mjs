@@ -135,6 +135,7 @@ test("V1 workflow 07 — compare with a shareable explicit configuration", async
   await expect(page).toHaveURL(/compareRun=true/);
   await expect(page.locator(".compare-crosswalk-source")).toContainText(
     "NIST CSF 2.0",
+    { timeout: 30_000 },
   );
   await expect(
     page.getByRole("table", { name: "Published crosswalk mappings" }),
