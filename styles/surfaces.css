@@ -8081,14 +8081,18 @@ button.atlas-leverage-row:hover {
     font-size: 14px;
   }
 
-  .home-search {
-    grid-template-columns: auto minmax(0, 1fr);
-    padding: 6px 6px 6px 12px;
+  .home-search-trigger {
+    flex-wrap: wrap;
+    padding: var(--ca-space-3) var(--ca-space-3) var(--ca-space-3) var(--ca-space-4);
   }
 
-  .home-search button {
-    grid-column: 1 / -1;
-    width: 100%;
+  .home-search-trigger > span:first-of-type {
+    flex: 1 1 100%;
+  }
+
+  .home-search-trigger__action {
+    flex: 1 1 100%;
+    text-align: center;
   }
 
   .home-secondary-grid {
