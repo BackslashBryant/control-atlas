@@ -1270,15 +1270,12 @@ export function TemplatesPage(props: {
               </div>
             ) : null}
           </section>
+          {!selectedWorkflow ? (
           <section aria-labelledby="official-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
                 <p className="eyebrow">Published sources</p>
-                <h2 id="official-heading">
-                  {selectedWorkflow
-                    ? `Official resources for ${selectedWorkflow.title}`
-                    : "Official federal resources"}
-                </h2>
+                <h2 id="official-heading">Official federal resources</h2>
                 <p className="page-summary">
                   Publisher material and lifecycle labels are shown together.
                   Current, legacy, and guidance-only items remain distinct.
@@ -1327,16 +1324,14 @@ export function TemplatesPage(props: {
               </Button>
             ) : null}
           </section>
+          ) : null}
 
+          {!selectedWorkflow ? (
           <section aria-labelledby="tools-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
               <div>
                 <p className="eyebrow">Working tools</p>
-                <h2 id="tools-heading">
-                  {selectedWorkflow
-                    ? "Tools for this workflow"
-                    : "Federal and open-source tools"}
-                </h2>
+                <h2 id="tools-heading">Federal and open-source tools</h2>
                 <p className="page-summary">
                   See each tool's owner, inputs, outputs, and access
                   requirements.
@@ -1368,6 +1363,7 @@ export function TemplatesPage(props: {
               </Button>
             ) : null}
           </section>
+          ) : null}
 
           <section aria-labelledby="community-heading" className="nexus-section">
             <div className="section-header nexus-section-header">
