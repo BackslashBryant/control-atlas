@@ -3386,8 +3386,6 @@ button.atlas-path-crumb-authority:focus-visible {
 .drawer-list {
   display: grid;
   gap: var(--ca-space-4);
-  overflow: auto;
-  padding-right: var(--ca-space-2);
 }
 
 .drawer-glossary {
@@ -3395,6 +3393,69 @@ button.atlas-path-crumb-authority:focus-visible {
   grid-template-rows: auto minmax(0, 1fr);
   gap: var(--ca-space-4);
   min-height: 0;
+}
+
+.drawer-scroll-area {
+  display: grid;
+  gap: var(--ca-space-4);
+  overflow: auto;
+  padding-right: var(--ca-space-2);
+}
+
+.drawer-shortcuts {
+}
+
+.drawer-shortcuts h3 {
+  font-size: var(--ca-text-xs);
+  font-weight: 700;
+  font-family: var(--ca-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ca-text-muted);
+  margin: 0 0 var(--ca-space-3);
+}
+
+.drawer-shortcuts-list {
+  display: grid;
+  gap: var(--ca-space-2);
+  margin: 0;
+}
+
+.drawer-shortcuts-list > div {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: baseline;
+  gap: var(--ca-space-3);
+}
+
+.drawer-shortcuts-list dt {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--ca-font-mono);
+  font-size: var(--ca-text-xs);
+}
+
+.drawer-shortcuts-list dt span {
+  color: var(--ca-text-subtle);
+}
+
+.drawer-shortcuts-list dd {
+  margin: 0;
+  font-size: var(--ca-text-sm);
+  color: var(--ca-text-muted);
+}
+
+.drawer-shortcuts-list kbd {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--ca-border-strong);
+  background: var(--ca-surface-raised);
+  font-family: var(--ca-font-mono);
+  font-size: 10px;
+  color: var(--ca-text);
 }
 
 .drawer-item {
