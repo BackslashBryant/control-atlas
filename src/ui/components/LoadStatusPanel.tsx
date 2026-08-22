@@ -98,18 +98,25 @@ export function OfflineFallbackActions(props: {
 export function DataPendingNotice(props: {
   title?: string;
   description?: string;
+  slow?: boolean;
   onRetry?: () => void;
 }) {
   return (
-    <Panel className="max-w-[800px] mx-auto mt-[40px]" title={props.title || "Connection data is still loading"}>
+    <Panel className="max-w-[800px] mx-auto mt-[40px]" title={props.title || "Loading data"}>
       <p className="mb-[24px]">
-        {props.description ||
-          "This page needs the public mapping data. Wait a moment or retry if loading failed."}
+        {props.description || "This page needs the public mapping data. It should load in a moment."}
       </p>
-      {props.onRetry ? (
-        <Button variant="primary" onClick={props.onRetry}>
-          Retry loading
-        </Button>
+      {props.slow ? (
+        <>
+          <p className="mb-[16px] text-[var(--ca-warning)]">
+            This is taking longer than usual. Check your connection and reload if it does not complete.
+          </p>
+          {props.onRetry ? (
+            <Button variant="primary" onClick={props.onRetry}>
+              Retry loading
+            </Button>
+          ) : null}
+        </>
       ) : null}
     </Panel>
   );

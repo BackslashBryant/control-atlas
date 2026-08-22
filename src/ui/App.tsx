@@ -745,6 +745,7 @@ export function App() {
                 <AppContent
                   bundle={bundle}
                   loadError={loadError}
+                  loadSlow={loadSlow}
                   onNavigate={navigate}
                   onOpenGlossary={openGlossary}
                   onOpenNode={openNode}
@@ -810,6 +811,7 @@ export function App() {
 function AppContent(props: {
   bundle: RuntimeBundle | null;
   loadError: string;
+  loadSlow: boolean;
   state: ViewState;
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
   onOpenNode: (nodeId: string) => void;
@@ -822,6 +824,7 @@ function AppContent(props: {
   const {
     bundle,
     loadError,
+    loadSlow,
     state,
     onNavigate,
     onOpenNode,
@@ -851,6 +854,7 @@ function AppContent(props: {
       <DataPendingNotice
         description={loadingCopy.description}
         onRetry={onRetryLoad}
+        slow={loadSlow}
         title={loadingCopy.title}
       />
     );
@@ -871,6 +875,7 @@ function AppContent(props: {
       <DataPendingNotice
         description={loadingCopy.description}
         onRetry={onRetryLoad}
+        slow={loadSlow}
         title={loadingCopy.title}
       />
     );
@@ -907,7 +912,7 @@ function AppContent(props: {
   if (state.view === "atlas-map") {
     if (!bundle) {
       return (
-        <DataPendingNotice onRetry={onRetryLoad} title="Loading the Atlas" />
+        <DataPendingNotice onRetry={onRetryLoad} slow={loadSlow} title="Loading the Atlas" />
       );
     }
     return (
@@ -922,7 +927,7 @@ function AppContent(props: {
 
   if (state.view === "library-detail") {
     if (!bundle) {
-      return <DataPendingNotice onRetry={onRetryLoad} />;
+      return <DataPendingNotice onRetry={onRetryLoad} slow={loadSlow} />;
     }
     return (
       <ObjectDetailPage
@@ -937,7 +942,7 @@ function AppContent(props: {
 
   if (state.view === "catalog-detail") {
     if (!bundle) {
-      return <DataPendingNotice onRetry={onRetryLoad} title="Loading the Library" />;
+      return <DataPendingNotice onRetry={onRetryLoad} slow={loadSlow} title="Loading the Library" />;
     }
     return (
       <CatalogDetailPage
@@ -951,7 +956,7 @@ function AppContent(props: {
 
   if (state.view === "matrix") {
     if (!bundle) {
-      return <DataPendingNotice onRetry={onRetryLoad} />;
+      return <DataPendingNotice onRetry={onRetryLoad} slow={loadSlow} />;
     }
     return (
       <ComparePage
@@ -965,7 +970,7 @@ function AppContent(props: {
 
   if (state.view === "sources") {
     if (!bundle) {
-      return <DataPendingNotice onRetry={onRetryLoad} />;
+      return <DataPendingNotice onRetry={onRetryLoad} slow={loadSlow} />;
     }
     return (
       <SourcesPage bundle={bundle} onNavigate={onNavigate} state={state} />
@@ -986,7 +991,7 @@ function AppContent(props: {
 
   if (state.view === "templates") {
     if (!bundle) {
-      return <DataPendingNotice onRetry={onRetryLoad} />;
+      return <DataPendingNotice onRetry={onRetryLoad} slow={loadSlow} />;
     }
     return (
       <TemplatesPage bundle={bundle} onNavigate={onNavigate} state={state} />
@@ -1017,7 +1022,7 @@ function AppContent(props: {
 
   if (state.view === "retired") {
     if (!bundle) {
-      return <DataPendingNotice onRetry={onRetryLoad} />;
+      return <DataPendingNotice onRetry={onRetryLoad} slow={loadSlow} />;
     }
     return (
       <section className="notice">
@@ -1036,7 +1041,7 @@ function AppContent(props: {
   }
 
   if (!bundle) {
-    return <DataPendingNotice onRetry={onRetryLoad} />;
+    return <DataPendingNotice onRetry={onRetryLoad} slow={loadSlow} />;
   }
 
   return (
@@ -1088,7 +1093,7 @@ function routeLoadingCopy(view: ViewState["view"]) {
       return {
         title: "Loading connection data",
         description:
-          "Loading data. Try again if this takes too long.",
+          "Loading the public mapping data. This should complete in a moment.",
       };
   }
 }
