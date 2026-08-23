@@ -481,6 +481,96 @@
   display: block;
 }
 
+/* ── Atlas tag (unified taxonomy tag) ── */
+.atlas-tag {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  gap: var(--ca-space-2);
+  padding: var(--ca-space-1) var(--ca-space-3);
+  border: 1px solid var(--ca-border-strong);
+  border-radius: 999px;
+  background: var(--ca-surface-raised);
+}
+
+.atlas-tag--sm {
+  min-height: var(--ca-control-sm);
+  font-size: var(--ca-text-micro);
+}
+
+.atlas-tag--md {
+  min-height: 44px;
+  font-size: var(--ca-text-xs);
+}
+
+.atlas-tag--selected {
+  border-color: var(--ca-secondary);
+  background: color-mix(in oklch, var(--ca-secondary) 8%, var(--ca-surface-raised));
+}
+
+.atlas-tag__label {
+  color: var(--ca-link);
+  font-weight: 600;
+  font-family: var(--ca-font-mono);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.atlas-tag__label:is(:hover, :focus-visible) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.atlas-tag__type {
+  color: var(--ca-text-muted);
+  font-size: 0.85em;
+  text-transform: capitalize;
+}
+
+.atlas-tag__dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25em;
+  height: 1.25em;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ca-text-muted);
+  cursor: pointer;
+  font-size: 1em;
+  line-height: 1;
+}
+
+.atlas-tag__dismiss:is(:hover, :focus-visible) {
+  background: var(--ca-danger-subtle);
+  color: var(--ca-danger);
+}
+
+/* ── Identity mark ── */
+.identity-mark {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.identity-mark--monogram {
+  border-radius: var(--ca-radius-sm);
+  background: var(--ca-surface);
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono);
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.identity-mark--official {
+  object-fit: contain;
+}
+
 /* ── Confidence pip ── */
 .ca-confidence {
   display: inline-flex;
