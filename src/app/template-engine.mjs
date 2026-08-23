@@ -551,6 +551,7 @@ function generateEvidenceExpectationMatrix(options, controls, crossRef) {
  * @returns {TemplateDocument}
  */
 function generateSTIGEvidenceChecklist(options) {
+  const ph = placeholder(options);
   const headers = [
     "Rule ID",
     "Severity",
@@ -559,7 +560,7 @@ function generateSTIGEvidenceChecklist(options) {
     "Validation Method",
     "Notes",
   ];
-  const rows = Array.from({ length: 10 }, () => ["", "", "", "", "", ""]);
+  const rows = blankRows(10, headers.length, ph, ["[SV-..._rule]", "[CAT I | CAT II | CAT III]", "[Rule short name from benchmark]", "[Artifact name or screenshot ID]", "[Export | Screenshot | Query | Interview]", "[Scope, context, or follow-up]"]);
 
   /** @type {DocSection[]} */
   const sections = [

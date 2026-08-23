@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-21T05:01:23.862Z",
+  "generated_at": "2026-08-23T17:22:53.106Z",
   "count_semantics": {
     "discovered_expected_records": "Independent publisher inventory expected by the completeness contract.",
     "parsed_source_records": "Publisher records emitted by the source adapter before graph construction.",
