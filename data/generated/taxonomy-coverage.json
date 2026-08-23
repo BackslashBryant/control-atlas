@@ -2,14 +2,14 @@
   "schema_version": "1.0",
   "generated_at": "2026-08-16T22:50:51.977Z",
   "taxonomy_coverage": {
-    "contract_version": "1.3.0",
+    "contract_version": "2.0.0",
     "record_count": 30365,
     "tagged_record_count": 22663,
-    "record_dimension_decision_count": 182190,
+    "record_dimension_decision_count": 364380,
     "decision_counts": {
       "applicable": 36331,
       "not_applicable": 0,
-      "unreviewed": 145859
+      "unreviewed": 328049
     },
     "catalogs": [
       {
@@ -50,6 +50,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 3,
@@ -99,6 +135,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 134,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 134,
+            "tag_assignments": 0
           }
         }
       },
@@ -140,6 +212,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 128,
@@ -189,6 +297,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 224,
             "tag_assignments": 4916
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5137,
+            "tag_assignments": 0
           }
         }
       },
@@ -230,6 +374,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 2516,
@@ -279,6 +459,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 17021,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
           }
         }
       },
@@ -320,6 +536,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 13,
@@ -369,6 +621,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 320,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 320,
+            "tag_assignments": 0
           }
         }
       },
@@ -410,6 +698,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 4,
@@ -459,6 +783,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 3,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
           }
         }
       },
@@ -500,6 +860,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 17,
@@ -549,6 +945,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 68,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 68,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 68,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 68,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 68,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 68,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 68,
+            "tag_assignments": 0
           }
         }
       },
@@ -590,6 +1022,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 712,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 712,
@@ -639,6 +1107,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 109,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 109,
+            "tag_assignments": 0
           }
         }
       },
@@ -680,6 +1184,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 278,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 278,
@@ -729,6 +1269,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 17,
             "tag_assignments": 130
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 147,
+            "tag_assignments": 0
           }
         }
       },
@@ -774,6 +1350,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 14,
             "tag_assignments": 110
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 124,
+            "tag_assignments": 0
           }
         }
       },
@@ -819,6 +1431,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 17,
             "tag_assignments": 115
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 132,
+            "tag_assignments": 0
           }
         }
       },
@@ -860,6 +1508,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 7,
@@ -909,6 +1593,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 20,
             "tag_assignments": 1196
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1216,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1216,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1216,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1216,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1216,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1216,
+            "tag_assignments": 0
           }
         }
       },
@@ -954,6 +1674,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 20,
             "tag_assignments": 1014
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1034,
+            "tag_assignments": 0
           }
         }
       },
@@ -995,6 +1751,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 4,
@@ -1044,6 +1836,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 91,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 91,
+            "tag_assignments": 0
           }
         }
       },
@@ -1085,6 +1913,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 489,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 489,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 489,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 489,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 489,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 489,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 489,
@@ -1134,6 +1998,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 268,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 268,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 268,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 268,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 268,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 268,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 268,
+            "tag_assignments": 0
           }
         }
       },
@@ -1179,6 +2079,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 46,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 46,
+            "tag_assignments": 0
           }
         }
       },
@@ -1220,6 +2156,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 344,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 344,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 344,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 344,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 344,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 344,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 344,
@@ -1270,6 +2242,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 0,
             "tag_assignments": 1014
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 1014,
+            "tag_assignments": 0
           }
         }
       },
@@ -1310,6 +2318,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 794,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 794,
@@ -1358,6 +2402,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 8,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 8,
+            "tag_assignments": 0
           }
         }
       },
@@ -1398,6 +2478,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 22,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 22,
@@ -1446,6 +2562,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 0,
             "tag_assignments": 324
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 324,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 324,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 324,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 324,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 324,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 324,
+            "tag_assignments": 0
           }
         }
       },
@@ -1490,6 +2642,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 0,
             "tag_assignments": 872
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 872,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 872,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 872,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 872,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 872,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 872,
+            "tag_assignments": 0
           }
         }
       },
@@ -1530,6 +2718,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 271,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 271,
@@ -1578,6 +2802,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 88,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 88,
+            "tag_assignments": 0
           }
         }
       },
@@ -1618,6 +2878,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 6,
@@ -1666,6 +2962,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 25,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 25,
+            "tag_assignments": 0
           }
         }
       },
@@ -1706,6 +3038,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 3,
@@ -1754,6 +3122,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 11,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
           }
         }
       },
@@ -1794,6 +3198,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 2,
@@ -1842,6 +3282,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 243,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 243,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 243,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 243,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 243,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 243,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 243,
+            "tag_assignments": 0
           }
         }
       },
@@ -1882,6 +3358,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 181,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 181,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 181,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 181,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 181,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 181,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 181,
@@ -1930,6 +3442,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 52,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
           }
         }
       },
@@ -1970,6 +3518,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 236,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 236,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 236,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 236,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 236,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 236,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 236,
@@ -2018,6 +3602,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 32,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 32,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 32,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 32,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 32,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 32,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 32,
+            "tag_assignments": 0
           }
         }
       },
@@ -2058,6 +3678,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 128,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 128,
@@ -2106,6 +3762,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 3,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
           }
         }
       },
@@ -2150,6 +3842,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 472,
             "tag_assignments": 5271
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 5740,
+            "tag_assignments": 0
           }
         }
       },
@@ -2190,6 +3918,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 7,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 7,
@@ -2238,6 +4002,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 2516,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 2516,
+            "tag_assignments": 0
           }
         }
       },
@@ -2278,6 +4078,42 @@
             "tag_assignments": 3179
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 17021,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 17021,
@@ -2326,6 +4162,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 34,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 34,
+            "tag_assignments": 0
           }
         }
       },
@@ -2366,6 +4238,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 257,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 257,
@@ -2414,6 +4322,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 62,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 62,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 62,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 62,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 62,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 62,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 62,
+            "tag_assignments": 0
           }
         }
       },
@@ -2454,6 +4398,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 19,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 19,
@@ -2502,6 +4482,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 45,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 45,
+            "tag_assignments": 0
           }
         }
       },
@@ -2542,6 +4558,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 11,
@@ -2590,6 +4642,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 24,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 24,
+            "tag_assignments": 0
           }
         }
       },
@@ -2630,6 +4718,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 6,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 6,
@@ -2678,6 +4802,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 11,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 11,
+            "tag_assignments": 0
           }
         }
       },
@@ -2718,6 +4878,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 16,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 16,
@@ -2766,6 +4962,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 4,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 4,
+            "tag_assignments": 0
           }
         }
       },
@@ -2806,6 +5038,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 13,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 13,
@@ -2854,6 +5122,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 197,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 197,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 197,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 197,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 197,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 197,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 197,
+            "tag_assignments": 0
           }
         }
       },
@@ -2894,6 +5198,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 3,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 3,
@@ -2942,6 +5282,42 @@
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 52,
             "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
+          },
+          "topic": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 52,
+            "tag_assignments": 0
           }
         }
       },
@@ -2982,6 +5358,42 @@
             "tag_assignments": 0
           },
           "domain": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          },
+          "organization": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          },
+          "tool": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          },
+          "framework": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          },
+          "program": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          },
+          "artifact": {
+            "applicable_record_count": 0,
+            "not_applicable_record_count": 0,
+            "unreviewed_record_count": 12,
+            "tag_assignments": 0
+          },
+          "topic": {
             "applicable_record_count": 0,
             "not_applicable_record_count": 0,
             "unreviewed_record_count": 12,
@@ -3044,6 +5456,60 @@
         "not_applicable_record_count": 0,
         "unreviewed_record_count": 22887,
         "tag_assignments": 7481
+      },
+      {
+        "dimension": "organization",
+        "label": "Organization",
+        "record_count": 30365,
+        "applicable_record_count": 0,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 30365,
+        "tag_assignments": 0
+      },
+      {
+        "dimension": "tool",
+        "label": "Tool",
+        "record_count": 30365,
+        "applicable_record_count": 0,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 30365,
+        "tag_assignments": 0
+      },
+      {
+        "dimension": "framework",
+        "label": "Framework",
+        "record_count": 30365,
+        "applicable_record_count": 0,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 30365,
+        "tag_assignments": 0
+      },
+      {
+        "dimension": "program",
+        "label": "Program",
+        "record_count": 30365,
+        "applicable_record_count": 0,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 30365,
+        "tag_assignments": 0
+      },
+      {
+        "dimension": "artifact",
+        "label": "Artifact",
+        "record_count": 30365,
+        "applicable_record_count": 0,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 30365,
+        "tag_assignments": 0
+      },
+      {
+        "dimension": "topic",
+        "label": "Topic",
+        "record_count": 30365,
+        "applicable_record_count": 0,
+        "not_applicable_record_count": 0,
+        "unreviewed_record_count": 30365,
+        "tag_assignments": 0
       }
     ],
     "source_fields": [

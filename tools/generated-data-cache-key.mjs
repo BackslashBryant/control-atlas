@@ -8,6 +8,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const ENTRYPOINTS = [
+  "scripts/build-taxonomy-registry.mjs",
   "scripts/build-framework-data.mjs",
   "scripts/build-commons-index.mjs",
 ];
@@ -45,6 +46,8 @@ function localDependencies(entrypoints) {
       if (!specifier.startsWith(".")) continue;
       let dependency = resolve(dirname(absolutePath), specifier);
       if (!extname(dependency)) dependency += ".mjs";
+      const rel = normalize(relative(ROOT, dependency));
+      if (rel.startsWith("data/generated/")) continue;
       pending.push(dependency);
     }
   }

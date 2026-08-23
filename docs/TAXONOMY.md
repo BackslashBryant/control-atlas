@@ -2,15 +2,15 @@
 
 - **Owner:** Control Atlas data stewardship
 - **Status:** Canonical contract; coverage remains partial
-- **Contract version:** 1.3.0
-- **Last reviewed:** 2026-08-13
+- **Contract version:** 2.0.0
+- **Last reviewed:** 2026-08-23
 - **Supersession:** A later contract version must migrate stable tag IDs and update the generated coverage report in the same change.
 
 ## Purpose and boundary
 
 The governed taxonomy supports discovery. It does not create relationships, endorsements, or applicability claims from incidental prose. Publisher classifications, Control Atlas evidence-backed facets, and editorial navigation concepts remain separate layers.
 
-The executable vocabulary is `src/shared/taxonomy-contract.mjs`. The reproducible corpus report is `data/generated/taxonomy-coverage.json`.
+Term definitions are governed in `data/curated/taxonomy-terms.json`. Behavioral rules (source_basis, filter semantics, applicability resolution) remain in `src/shared/taxonomy-contract.mjs`. The reproducible corpus report is `data/generated/taxonomy-coverage.json`.
 
 ## Layers
 
@@ -21,6 +21,49 @@ The executable vocabulary is `src/shared/taxonomy-contract.mjs`. The reproducibl
 | `editorial` | A navigation or orientation concept. | No. Editorial concepts require a separate governed evidence rule before becoming record tags. |
 
 Assignment provenance remains explicit. A `publisher` assignment belongs to the publisher layer. An `inferred` assignment belongs to the `atlas_evidence` layer and must retain the exact structured field and deterministic rule that produced it.
+
+## Dimensions
+
+| Dimension | Label | Entity scope | Assignment status |
+| --- | --- | --- | --- |
+| `asset_class` | Asset Class | record, resource, template, playbook, export | Active — rules in record-taxonomy.mjs |
+| `environment` | Environment | record, resource, template, playbook, export | Active — rules in record-taxonomy.mjs |
+| `technology` | Technology | record, resource, template, playbook, export | Active — rules in record-taxonomy.mjs |
+| `vendor_brand` | Vendor / Brand | record, resource, template, playbook, export | Active — rules in record-taxonomy.mjs |
+| `product` | Product | record, resource, template, playbook, export | Active — rules in record-taxonomy.mjs |
+| `domain` | Security Domain | record, resource, template, playbook, export | Active — rules in record-taxonomy.mjs |
+| `organization` | Organization | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
+| `tool` | Tool | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
+| `framework` | Framework | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
+| `program` | Program | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
+| `artifact` | Artifact | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
+| `topic` | Topic | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
+
+## Taxonomy relationships
+
+Cross-term relationships are governed in `data/curated/taxonomy-relationships.json`. Each relationship has a source URL, validation state, and a `propagate_for_discovery` flag that controls whether the relationship surfaces related content during discovery.
+
+Relationship types: `operated_by`, `developed_by`, `published_by`, `part_of`.
+
+Cycles in discovery-propagation edges are validated at build time and rejected.
+
+## Identity registry
+
+The identity registry (`data/curated/identity-registry.json`) maps taxonomy terms to verified source identity marks. Each entry records:
+
+- `key` — stable identity key
+- `term_ids` — linked taxonomy terms
+- `mark_kind` — current mark type (monogram, icon, or official)
+- `verification_status` — `verified_official` (approved asset on file) or `fallback_only` (monogram/initials only)
+- `fallback` — always present; used when no verified asset exists
+
+The identity registry boundary: identity marks are decorative when text already names the entity. Marks never imply endorsement. The existing `resourceBrands.mjs` system coexists with the identity registry; migration is planned for WS4.
+
+The shared resolver lives at `src/shared/identity-registry.mjs` and exports `resolveIdentity(termId)`, `resolveIdentityByKey(key)`, and `IDENTITY_REGISTRY`.
+
+## Source-text non-interference rule
+
+Tags are never inferred from incidental prose, advisory text, or document titles. A tag requires an explicit publisher field or catalog classification named in the tag's `source_basis`. This prevents false matches from documents that merely mention a concept.
 
 ## Applicability decisions
 
@@ -47,16 +90,14 @@ Absence never means `not_applicable`. This prevents sparse metadata from being p
 
 ## Current coverage verdict
 
-The current generated corpus contains 30,365 records and six governed dimensions, producing 182,190 record-dimension decisions. Contract 1.3 preserves the existing stable IDs and adds an exact publisher-classification rule for DISA CCI's retained NIST family references. The rule requires the complete publisher-retained category tuple (`code`, `label`, and `provenance=referenced`); descriptions and other free text are excluded.
+The current generated corpus contains 30,365 records and twelve governed dimensions (six with active assignment rules, six with seed terms pending assignment rules in WS3). Coverage statistics below reflect the six active dimensions only; new dimensions contribute zero `applicable` decisions until WS3 adds assignment rules.
 
 | Measure | Count | Interpretation |
 | --- | ---: | --- |
 | Records with at least one governed tag | 22,663 | 74.6% of records have one or more positive decisions. |
-| `applicable` decisions | 36,331 | 19.9% of all record-dimension decisions have positive source-backed evidence. |
-| `not_applicable` decisions | 0 | No explicit negative decision has yet been recorded; this is not a claim that every dimension applies. |
-| `unreviewed` decisions | 145,859 | 80.1% of record-dimension decisions remain unreviewed. |
-
-DISA CCI now has 4,913 of 5,137 records classified to a governed security domain from exact publisher-retained NIST family references. The remaining 224 CCI records stay `unreviewed`; no negative applicability is inferred from a missing reference.
+| `applicable` decisions | 36,331 | Positive source-backed evidence across the six active dimensions. |
+| `not_applicable` decisions | 0 | No explicit negative decision has yet been recorded. |
+| `unreviewed` decisions | 328,057 | Includes all record-dimension decisions for the six new dimensions. |
 
 Dimension detail, all 27 publication rows, 40 record-type rows, source fields, assignment rules, and decision reconciliation are generated in `data/generated/taxonomy-coverage.json`. The taxonomy is therefore usable for the supported evidence-backed filters, but its overall applicability review is **partial**, not complete.
 
