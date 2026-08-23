@@ -513,8 +513,8 @@ function generateEvidenceExpectationMatrix(options, controls, crossRef) {
       c.id,
       c.title,
       truncatePlain(c.description),
-      refs && refs.cciIds.length ? refs.cciIds.join("; ") : "—",
-      refs && refs.stigIds.length ? refs.stigIds.join("; ") : "—",
+      refs && refs.cciIds.length ? cappedJoin(refs.cciIds, 5) : "—",
+      refs && refs.stigIds.length ? cappedJoin(refs.stigIds, 5) : "—",
       ph("[Artifact type + name]"),
     ];
   });
