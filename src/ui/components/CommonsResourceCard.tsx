@@ -20,11 +20,16 @@ import {
 import type { CommonsResource } from "../lib/commonsTypes";
 import type { ViewState } from "../lib/viewState";
 import { AppLink } from "./AppLink";
+import { AtlasTag } from "./AtlasTag";
 import {
   resourceAccessLabel,
   resourceBrandIdentity,
   resourceTypeLabel,
 } from "../lib/resourceBrands.mjs";
+import { taxonomyTagsForResource } from "../../shared/record-taxonomy.mjs";
+
+const TAG_PRIORITY = ["tool", "framework", "program", "organization"];
+const MAX_CARD_TAGS = 2;
 
 type CommonsResourceCardProps = {
   resource: CommonsResource;
@@ -82,6 +87,15 @@ export function CommonsResourceCard({
     (resource as CommonsResource & { cardPurpose?: string }).cardPurpose?.trim() ||
     resource.summary;
 
+  const cardTagIds = (() => {
+    if (!onNavigate) return [];
+    const tags = taxonomyTagsForResource(resource);
+    const sorted = TAG_PRIORITY.flatMap((dim) =>
+      tags.filter((t: { kind?: string }) => t.kind === dim).map((t: { id: string }) => t.id),
+    );
+    return sorted.slice(0, MAX_CARD_TAGS);
+  })();
+
   return (
     <article
       className={`commons-card resource-card resource-brand-accent--${identity.accent} group relative flex flex-col justify-between p-5 transition-colors duration-[120ms] hover:bg-[var(--ca-surface-raised)]`}
@@ -116,6 +130,14 @@ export function CommonsResourceCard({
             {resourceAccessLabel(resource)}
           </span>
         </div>
+
+        {cardTagIds.length > 0 ? (
+          <div className="related-in-atlas__tags" style={{ marginBlockStart: "var(--ca-space-xs)" }}>
+            {cardTagIds.map((tagId) => (
+              <AtlasTag key={tagId} onNavigate={onNavigate!} showIdentity size="sm" tagId={tagId} />
+            ))}
+          </div>
+        ) : null}
 
         <p className="resource-card-purpose">{cardPurpose}</p>
       </div>

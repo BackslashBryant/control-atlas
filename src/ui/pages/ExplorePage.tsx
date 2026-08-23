@@ -10,6 +10,7 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { LibraryAtlasMap, type LibraryMapItem } from "../components/LibraryAtlasMap";
 import { AppLink } from "../components/AppLink";
+import { AtlasTag } from "../components/AtlasTag";
 import { BucketTag } from "../components/TaxonomyTag";
 import {
   CheckboxFacet,
@@ -25,6 +26,7 @@ import {
 import { buildCatalogCoverageList, catalogCoverageForId, isLowCatalogCoverage } from "../lib/catalogCoverage";
 import { catalogDisplayNameFor } from "../lib/catalogProfiles";
 import { LIBRARY_KINDS, libraryKindForRawType, libraryKindLabel, rawTypesForKind } from "../lib/informationArchitecture";
+import { queryDiscoveryIndex } from "../../shared/discovery-index.mjs";
 import {
   TAXONOMY_CONTRACT,
   TAXONOMY_TAG_BY_ID,
@@ -700,6 +702,10 @@ export function ExplorePage(props: {
                       <div className="workspace-result-row__signals">
                         <span>{connectionSummary(row.crossFrameworkCount, row.crossFrameworkCatalogCount)}</span>
                         <BucketTag area={row.area.id}>{row.area.label}</BucketTag>
+                        {(row.document.taxonomy_tags || [])
+                          .filter((t: any) => ["organization", "framework", "program"].includes(t.kind))
+                          .slice(0, 3)
+                          .map((t: any) => <AtlasTag key={t.id} onNavigate={onNavigate} size="sm" tagId={t.id} />)}
                         {row.lowCoverage ? <span className="workspace-coverage-note">Limited coverage</span> : null}
                       </div>
                     ) : null}
@@ -715,6 +721,45 @@ export function ExplorePage(props: {
             <li><section className="empty-state"><h2>{hasFilters ? "Nothing matches these filters." : "No records found."}</h2><p>{hasFilters ? "Clear one and try again." : "Try another identifier or keyword."}</p><Button onClick={() => onNavigate("search", { area: "", connectedOnly: "", filter: "", kind: "", publisher: "", query: "", sort: "relevance", viewMode: "list" })} type="button" variant="primary">{hasFilters ? "Clear filters" : "Clear search"}</Button></section></li>
           ) : null}
         </ul>
+        {state.tags.length > 0 ? (() => {
+          const crossContent = queryDiscoveryIndex(state.tags);
+          const resources = crossContent.filter((e: any) => e.content_type === "resource");
+          const templates = crossContent.filter((e: any) => e.content_type === "template");
+          if (resources.length === 0 && templates.length === 0) return null;
+          return (
+            <section className="cross-content-discovery" aria-label="Related content across Control Atlas">
+              <h2>Also in Control Atlas</h2>
+              {resources.length > 0 ? (
+                <div>
+                  <h3>Resources ({resources.length})</h3>
+                  <ul className="cross-content-list">
+                    {resources.slice(0, 8).map((entry: any) => (
+                      <li key={entry.content_id}>
+                        <AppLink onNavigate={onNavigate} patch={{ id: entry.content_id }} view="commons-detail">
+                          {entry.title}
+                        </AppLink>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+              {templates.length > 0 ? (
+                <div>
+                  <h3>Templates ({templates.length})</h3>
+                  <ul className="cross-content-list">
+                    {templates.map((entry: any) => (
+                      <li key={entry.content_id}>
+                        <AppLink onNavigate={onNavigate} patch={{ templateType: entry.content_id.replace(/^tpl-/, ""), buildSection: "documents" }} view="templates">
+                          {entry.title}
+                        </AppLink>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </section>
+          );
+        })() : null}
         </>
       )}
     </WorkspaceTemplate>

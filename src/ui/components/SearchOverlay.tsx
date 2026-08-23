@@ -6,6 +6,8 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import { practitionerGuides } from "../../app/learn-content.mjs";
 import { requestSearchResultsFocus } from "../../shared/navigation-events";
 import { GLOBAL_SEARCH_PLACEHOLDER } from "../../shared/product-identity";
+import { TAXONOMY_TAGS, taxonomyTagMatchesQuery } from "../../shared/taxonomy-contract.mjs";
+import { AtlasTag } from "./AtlasTag";
 import { catalogDisplayNameFor } from "../lib/catalogProfiles";
 import {
   recordIdentityPresentationFor,
@@ -89,12 +91,17 @@ export function SearchOverlay(props: SearchOverlayProps) {
       )
       .slice(0, 3);
 
+    const matchingTags = needle.length >= 2
+      ? TAXONOMY_TAGS.filter((tag: any) => taxonomyTagMatchesQuery(tag, needle)).slice(0, 3)
+      : [];
+
     return {
       libraryResults,
       resourceResults,
       communityResults,
       guideResults,
       sourceResults,
+      matchingTags,
     };
   }, [bundle, query]);
 
@@ -242,12 +249,24 @@ export function SearchOverlay(props: SearchOverlayProps) {
             <p className="field-hint">Loading public data…</p>
           ) : !query.trim() ? (
             <p className="field-hint">{GLOBAL_SEARCH_PLACEHOLDER}</p>
-          ) : results.libraryResults.length === 0 && results.resourceResults.length === 0 && results.communityResults.length === 0 && results.guideResults.length === 0 && results.sourceResults.length === 0 ? (
+          ) : results.libraryResults.length === 0 && results.resourceResults.length === 0 && results.communityResults.length === 0 && results.guideResults.length === 0 && results.sourceResults.length === 0 && results.matchingTags.length === 0 ? (
             <p className="field-hint">
               No records or resources match &quot;{query.trim()}&quot;.
             </p>
           ) : (
             <div className="search-overlay-results-container space-y-4">
+              {results.matchingTags.length > 0 ? (
+                <div>
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-text-muted)] mb-2 px-3">
+                    Matching tags
+                  </div>
+                  <div className="related-in-atlas__tags" style={{ padding: "0 var(--ca-space-sm)" }}>
+                    {results.matchingTags.map((tag: any) => (
+                      <AtlasTag key={tag.id} onNavigate={onNavigate} showIdentity showType size="sm" tagId={tag.id} />
+                    ))}
+                  </div>
+                </div>
+              ) : null}
               {results.libraryResults.length > 0 ? (
                 <div>
                   <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ca-text-muted)] mb-2 px-3">

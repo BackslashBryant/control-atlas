@@ -10569,6 +10569,42 @@ input[type="checkbox"] {
   padding: var(--ca-space-4);
 }
 
+.cross-content-discovery {
+  margin-block-start: var(--ca-space-lg);
+  padding: var(--ca-space-md);
+  border-radius: var(--ca-radius-md);
+  border: 1px solid var(--ca-border);
+  background: var(--ca-surface-raised);
+}
+.cross-content-discovery h2 {
+  font-size: var(--ca-font-sm);
+  font-weight: 600;
+  color: var(--ca-text-secondary);
+  margin-block-end: var(--ca-space-sm);
+}
+.cross-content-discovery h3 {
+  font-size: var(--ca-font-xs);
+  font-weight: 600;
+  color: var(--ca-text-muted);
+  margin-block: var(--ca-space-xs);
+}
+.cross-content-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ca-space-2xs);
+}
+.cross-content-list a {
+  font-size: var(--ca-font-sm);
+  color: var(--ca-primary);
+  text-decoration: none;
+}
+.cross-content-list a:is(:hover, :focus-visible) {
+  text-decoration: underline;
+}
+
 .workspace-result-row--resource .workspace-result-row__link {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
