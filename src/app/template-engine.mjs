@@ -22,6 +22,7 @@ import {
   PRODUCT_DISCLAIMER as DISCLAIMER,
   STARTER_DOCUMENT_REVIEW_NOTICE,
 } from '../shared/disclaimer.mjs';
+import { CROSS_REF_CAP } from '../shared/dense-data.mjs';
 
 const EVIDENCE_TYPE_HINT = "Policy | Procedure | Config screenshot | System report | Access review | Scan output | Interview | Architecture diagram | Change record | Training record | Incident record | Log sample | Inventory export | Exception memo";
 
@@ -513,8 +514,8 @@ function generateEvidenceExpectationMatrix(options, controls, crossRef) {
       c.id,
       c.title,
       truncatePlain(c.description),
-      refs && refs.cciIds.length ? cappedJoin(refs.cciIds, 5) : "—",
-      refs && refs.stigIds.length ? cappedJoin(refs.stigIds, 5) : "—",
+      refs && refs.cciIds.length ? cappedJoin(refs.cciIds, CROSS_REF_CAP) : "—",
+      refs && refs.stigIds.length ? cappedJoin(refs.stigIds, CROSS_REF_CAP) : "—",
       ph("[Artifact type + name]"),
     ];
   });
@@ -948,8 +949,8 @@ function generateProfessionalEvidenceMatrix(options, controls, crossRef) {
     referenceRows.push([
       c.id,
       c.title,
-      refs?.cciIds.length ? cappedJoin(refs.cciIds, 5) : "N/A",
-      refs?.stigIds.length ? cappedJoin(refs.stigIds, 5) : "N/A",
+      refs?.cciIds.length ? cappedJoin(refs.cciIds, CROSS_REF_CAP) : "N/A",
+      refs?.stigIds.length ? cappedJoin(refs.stigIds, CROSS_REF_CAP) : "N/A",
     ]);
     return [c.id, c.title, ph("[Evidence type]"), ph("[Stable artifact name or ID]"), ph("[Owner role]"), ph("[Export | Query | Screenshot | Interview | Observation]"), ph("[Continuous | Monthly | Quarterly | Annual | Event-driven]"), ph("[YYYY-MM-DD or period]"), ph("[Repository, ticket, or approved link]"), ph("[High | Medium | Low]"), ph("[Needed | Requested | Received | Reviewed | Accepted | Gap]"), ph("[Scope, sufficiency, sample, exceptions, follow-up]")];
   });

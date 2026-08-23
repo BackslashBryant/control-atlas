@@ -759,9 +759,22 @@ export function InspectorDrawer(props: {
 }) {
   const drawerRef = React.useRef<HTMLElement | null>(null);
   const closeButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const invokerRef = React.useRef<HTMLElement | null>(null);
   const [isCompact, setIsCompact] = React.useState(() =>
     typeof window !== "undefined" ? window.innerWidth < 1024 : false,
   );
+
+  React.useEffect(() => {
+    if (!props.isOpen) return;
+    invokerRef.current = document.activeElement as HTMLElement | null;
+    return () => {
+      const target = invokerRef.current;
+      if (target && typeof target.focus === "function" && document.contains(target)) {
+        window.requestAnimationFrame(() => target.focus());
+      }
+      invokerRef.current = null;
+    };
+  }, [props.isOpen]);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -880,6 +893,47 @@ export function InspectorDrawer(props: {
         ) : null}
       </aside>
     </>
+  );
+}
+
+/**
+ * Keyboard-operable horizontal scroll region (P2-05, P2-11).
+ *
+ * Wraps wide content (tables, previews) in a focusable, labeled region
+ * with visible scroll affordance. Arrow keys scroll horizontally when focused.
+ */
+export function ScrollableRegion(props: {
+  label: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  const regionRef = React.useRef<HTMLDivElement>(null);
+  const handleKeyDown = React.useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      const el = regionRef.current;
+      if (!el) return;
+      const step = 120;
+      if (event.key === "ArrowRight") {
+        el.scrollLeft += step;
+        event.preventDefault();
+      } else if (event.key === "ArrowLeft") {
+        el.scrollLeft -= step;
+        event.preventDefault();
+      }
+    },
+    [],
+  );
+  return (
+    <div
+      aria-label={props.label}
+      className={`scrollable-region${props.className ? ` ${props.className}` : ""}`}
+      onKeyDown={handleKeyDown}
+      ref={regionRef}
+      role="region"
+      tabIndex={0}
+    >
+      {props.children}
+    </div>
   );
 }
 

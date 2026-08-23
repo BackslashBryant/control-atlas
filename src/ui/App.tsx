@@ -58,6 +58,13 @@ import {
   OPEN_SEARCH_OVERLAY_EVENT,
 } from "../shared/navigation-events";
 import {
+  focusRouteHeading,
+  nextNavigationKey,
+  restoreScrollPosition,
+  saveScrollPosition,
+  scrollToTop,
+} from "./lib/routeOrientation";
+import {
   activeBrandAction,
   BRAND_SURFACE_VIEWS,
 } from "../shared/brand-rotation";
@@ -227,10 +234,15 @@ export function App() {
       const hash = `#${to.startsWith("/") ? to : `/${to}`}`;
       const target = `${window.location.pathname}${window.location.search}${hash}`;
       if (options?.replace) {
-        window.history.replaceState(null, "", target);
+        window.history.replaceState(
+          { ...(window.history.state || {}) },
+          "",
+          target,
+        );
       } else {
+        saveScrollPosition();
         window.history.pushState(
-          { ...(window.history.state || {}), controlAtlasInternalNavigation: true },
+          { controlAtlasInternalNavigation: true, caNavKey: nextNavigationKey() },
           "",
           target,
         );
@@ -617,7 +629,7 @@ export function App() {
     if (changesWorkspace) pushNavigationRef.current = true;
     latestNavStateRef.current = nextState;
     routerNavigate(nextLocation);
-    if (changesWorkspace) window.scrollTo({ top: 0, behavior: "auto" });
+    if (changesWorkspace) scrollToTop();
   }
 
   // The global keydown listener is registered once with no deps; it reaches the
@@ -684,17 +696,12 @@ export function App() {
   }, [viewState]);
 
   useEffect(() => {
-    if (!pushNavigationRef.current) return;
+    if (!pushNavigationRef.current) {
+      restoreScrollPosition();
+      return;
+    }
     pushNavigationRef.current = false;
-    const frame = window.requestAnimationFrame(() => {
-      const heading = document.querySelector<HTMLElement>("#workspace h1");
-      if (heading) {
-        if (!heading.hasAttribute("tabindex")) heading.tabIndex = -1;
-        heading.focus({ preventScroll: true });
-      } else {
-        document.getElementById("workspace")?.focus({ preventScroll: true });
-      }
-    });
+    const frame = focusRouteHeading();
     return () => window.cancelAnimationFrame(frame);
   }, [viewState]);
 

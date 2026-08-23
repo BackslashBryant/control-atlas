@@ -42,6 +42,7 @@ import {
   DisclosurePanel,
   MissionPage,
   PageHeader,
+  ScrollableRegion,
   SelectField,
   StepIndicator,
   SummaryCard,
@@ -405,14 +406,9 @@ function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) 
               <p>{section.content}</p>
             ) : (
               <>
-                {/* A horizontally scrolling region must be reachable and
-                    announced: without a tabindex a keyboard user cannot scroll
-                    it at all, and without a name it is an anonymous scroll box. */}
-                <div
-                  aria-label={`${section.heading} table, scrolls horizontally`}
+                <ScrollableRegion
                   className="template-document-preview-table-wrap"
-                  role="region"
-                  tabIndex={0}
+                  label={`${section.heading} table, scrolls horizontally`}
                 >
                   <table>
                     <thead>
@@ -432,7 +428,7 @@ function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) 
                       ))}
                     </tbody>
                   </table>
-                </div>
+                </ScrollableRegion>
                 {section.rows?.length > 3 ? (
                   <p className="template-document-preview-more">
                     Plus {section.rows.length - 3} more rows in the downloaded document.
