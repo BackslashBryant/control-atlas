@@ -1221,46 +1221,42 @@ export function TemplatesPage(props: {
                     selectedTemplate.compatibility_level,
                 )}
               </Badge>
+              {selectedTemplateArtifacts.length > 0 ? (
+                <section aria-labelledby="template-official-heading" className="template-sources-panel">
+                  <h3 id="template-official-heading">Published sources</h3>
+                  <div className="nexus-grid">
+                    {selectedTemplateArtifacts.map((artifact) => (
+                      <OfficialArtifactCard
+                        artifact={artifact}
+                        fedrampTransition={fedrampTransition}
+                        key={artifact.artifact_id}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ) : selectedTemplate.official_alternative ? (
+                <SummaryCard title="Official resource">
+                  <p>
+                    Publisher material for this document:{" "}
+                    <a
+                      href={selectedTemplate.official_alternative.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {selectedTemplate.official_alternative.label}
+                      <IconExternalLink
+                        aria-hidden="true"
+                        size={14}
+                        stroke={1.8}
+                        style={{ verticalAlign: "text-bottom", marginLeft: 4 }}
+                      />
+                    </a>
+                    .
+                  </p>
+                </SummaryCard>
+              ) : null}
             </aside>
           </section>
-
-          {selectedTemplateArtifacts.length > 0 ? (
-            <details className="template-supporting-details">
-              <summary>Sources used by this document</summary>
-              <section aria-labelledby="template-official-heading" className="stack disclosure-content">
-                <h3 id="template-official-heading">Published sources</h3>
-                <div className="nexus-grid">
-                  {selectedTemplateArtifacts.map((artifact) => (
-                    <OfficialArtifactCard
-                      artifact={artifact}
-                      fedrampTransition={fedrampTransition}
-                      key={artifact.artifact_id}
-                    />
-                  ))}
-                </div>
-              </section>
-            </details>
-          ) : selectedTemplate.official_alternative ? (
-            <SummaryCard title="Official resource">
-              <p>
-                Publisher material for this document:{" "}
-                <a
-                  href={selectedTemplate.official_alternative.url}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {selectedTemplate.official_alternative.label}
-                  <IconExternalLink
-                    aria-hidden="true"
-                    size={14}
-                    stroke={1.8}
-                    style={{ verticalAlign: "text-bottom", marginLeft: 4 }}
-                  />
-                </a>
-                .
-              </p>
-            </SummaryCard>
-          ) : null}
 
           <section aria-labelledby="document-preview-section-heading" className="stack">
             <div className="section-header">

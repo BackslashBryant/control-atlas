@@ -7947,6 +7947,23 @@ button.atlas-leverage-row:hover {
   color: var(--ca-text-muted);
 }
 
+.template-sources-panel {
+  margin-top: var(--ca-space-5);
+  padding-top: var(--ca-space-5);
+  border-top: 1px solid var(--ca-border-subtle);
+}
+
+.template-sources-panel > h3 {
+  margin: 0 0 var(--ca-space-3);
+  font-size: var(--ca-text-sm);
+  font-weight: 650;
+  color: var(--ca-text-muted);
+}
+
+.template-sources-panel .nexus-grid {
+  grid-template-columns: 1fr;
+}
+
 .compare-scope-list {
   display: grid;
   gap: 0;
