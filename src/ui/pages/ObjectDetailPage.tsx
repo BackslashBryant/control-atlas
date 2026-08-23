@@ -508,6 +508,29 @@ export function ObjectDetailPage(props: {
                 </AppLink>
               </div>
             </section>
+          ) : presentation.sections.length === 1 && !missingSourceFields.length && source ? (
+            <section className="record-context-note" aria-labelledby="sparse-context-heading">
+              <h2 id="sparse-context-heading">Context</h2>
+              <p>
+                Publishers define this {kind.toLowerCase()} in a single official statement.{" "}
+                {connectionCount > 0
+                  ? `Its ${connectionCount} related record${connectionCount === 1 ? "" : "s"} provide the implementation detail, assessment criteria, and cross-framework mappings that give this record its operational meaning.`
+                  : "Use the Atlas map to see where this record sits in the broader framework hierarchy and discover related material across publications."}
+              </p>
+              <div className="card-actions">
+                <AppLink onNavigate={onNavigate} patch={{ node: node.id }} variant="secondary" view="atlas-map">
+                  Explore in Atlas
+                </AppLink>
+                <AppLink
+                  onNavigate={onNavigate}
+                  patch={{ crosswalk: "relationships", intent: "item-mapping", items: document.item_id, source: document.catalog_id }}
+                  variant="secondary"
+                  view="matrix"
+                >
+                  Compare this record
+                </AppLink>
+              </div>
+            </section>
           ) : null}
           {source ? (
             <p className="support-meta" data-record-source-identity>
