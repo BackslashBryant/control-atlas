@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "owner": "Control Atlas data stewardship",
+  "review_date": "2026-08-23",
+  "relationships": [
+    {
+      "from": "tool.emass",
+      "relationship": "operated_by",
+      "to": "organization.disa",
+      "source_url": "https://disa.mil/About/DISA-Capabilities/Enterprise-Mission-Assurance-Support-Service",
+      "validation_state": "approved",
+      "propagate_for_discovery": true
+    },
+    {
+      "from": "tool.stig-viewer",
+      "relationship": "developed_by",
+      "to": "organization.disa",
+      "source_url": "https://public.cyber.mil/stigs/srg-stig-tools/",
+      "validation_state": "approved",
+      "propagate_for_discovery": true
+    },
+    {
+      "from": "tool.scap-compliance-checker",
+      "relationship": "developed_by",
+      "to": "organization.disa",
+      "source_url": "https://public.cyber.mil/stigs/scap/",
+      "validation_state": "approved",
+      "propagate_for_discovery": true
+    },
+    {
+      "from": "tool.oscal",
+      "relationship": "developed_by",
+      "to": "organization.nist",
+      "source_url": "https://pages.nist.gov/OSCAL/",
+      "validation_state": "approved",
+      "propagate_for_discovery": true
+    },
+    {
+      "from": "framework.rmf",
+      "relationship": "published_by",
+      "to": "organization.nist",
+      "source_url": "https://csrc.nist.gov/projects/risk-management",
+      "validation_state": "approved",
+      "propagate_for_discovery": true
+    },
+    {
+      "from": "framework.nist-csf",
+      "relationship": "published_by",
+      "to": "organization.nist",
+      "source_url": "https://www.nist.gov/cyberframework",
+      "validation_state": "approved",
+      "propagate_for_discovery": true
+    },
+    {
+      "from": "framework.fedramp",
+      "relationship": "operated_by",
+      "to": "organization.fedramp",
+      "source_url": "https://www.fedramp.gov/",
+      "validation_state": "approved",
+      "propagate_for_discovery": true
+    },
+    {
+      "from": "framework.cmmc",
+      "relationship": "published_by",
+      "to": "organization.dod",
+      "source_url": "https://dodcio.defense.gov/CMMC/",
+      "validation_state": "approved",
+      "propagate_for_discovery": true
+    },
+    {
+      "from": "program.stig",
+      "relationship": "operated_by",
+      "to": "organization.disa",
+      "source_url": "https://public.cyber.mil/stigs/",
+      "validation_state": "approved",
+      "propagate_for_discovery": true
+    },
+    {
+      "from": "program.cmmc",
+      "relationship": "operated_by",
+      "to": "organization.dod",
+      "source_url": "https://dodcio.defense.gov/CMMC/",
+      "validation_state": "approved",
+      "propagate_for_discovery": true
+    },
+    {
+      "from": "organization.disa",
+      "relationship": "part_of",
+      "to": "organization.dod",
+      "source_url": "https://disa.mil/About",
+      "validation_state": "approved",
+      "propagate_for_discovery": false
+    },
+    {
+      "from": "organization.dcsa",
+      "relationship": "part_of",
+      "to": "organization.dod",
+      "source_url": "https://www.dcsa.mil/About-Us/",
+      "validation_state": "approved",
+      "propagate_for_discovery": false
+    },
+    {
+      "from": "organization.nsa",
+      "relationship": "part_of",
+      "to": "organization.dod",
+      "source_url": "https://www.nsa.gov/About/",
+      "validation_state": "approved",
+      "propagate_for_discovery": false
+    }
+  ]
+}
