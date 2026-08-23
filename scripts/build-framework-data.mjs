@@ -3643,7 +3643,7 @@ const catalogRecords = new Map();
     }
     // This sibling artifact is owned by build-commons-index.mjs. Framework
     // rebuilds must not erase another generator's committed output.
-    if (entry === "commons-search-index.json" || entry === "source-semantic-audit.json" || entry === "taxonomy-registry.json") {
+    if (entry === "commons-search-index.json" || entry === "source-semantic-audit.json" || entry === "taxonomy-registry.json" || entry === "discovery-index.json") {
       continue;
     }
     if (

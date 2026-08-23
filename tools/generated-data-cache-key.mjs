@@ -11,6 +11,7 @@ const ENTRYPOINTS = [
   "scripts/build-taxonomy-registry.mjs",
   "scripts/build-framework-data.mjs",
   "scripts/build-commons-index.mjs",
+  "scripts/build-discovery-index.mjs",
 ];
 
 function normalize(path) {
