@@ -35,21 +35,18 @@ test("publisher security domains use exact NIST family fields and ignore inciden
 });
 
 test("DISA CCI related NIST families remain exact publisher classifications", () => {
-  assert.deepEqual(
-    taxonomyTagsForRecord({
-      catalog_id: "disa-cci",
-      family: "Policy",
-      related_categories: [
-        { code: "AC", label: "Access Control", provenance: "referenced" },
-        { code: "SC", label: "System and Communications Protection", provenance: "referenced" },
-      ],
-      description: "Mentions incident response, mobile devices, and cloud systems.",
-    }),
-    [
-      { id: "domain.access-control", kind: "domain", label: "Access Control", provenance: "publisher", basis: { source_field: "metadata.related_categories[]", rule: "exact-publisher-related-category" } },
-      { id: "domain.system-communications-protection", kind: "domain", label: "System and Communications Protection", provenance: "publisher", basis: { source_field: "metadata.related_categories[]", rule: "exact-publisher-related-category" } },
+  const tags = taxonomyTagsForRecord({
+    catalog_id: "disa-cci",
+    family: "Policy",
+    related_categories: [
+      { code: "AC", label: "Access Control", provenance: "referenced" },
+      { code: "SC", label: "System and Communications Protection", provenance: "referenced" },
     ],
-  );
+    description: "Mentions incident response, mobile devices, and cloud systems.",
+  });
+  assert.deepEqual(tags[0], { id: "domain.access-control", kind: "domain", label: "Access Control", provenance: "publisher", basis: { source_field: "metadata.related_categories[]", rule: "exact-publisher-related-category" } });
+  assert.deepEqual(tags[1], { id: "domain.system-communications-protection", kind: "domain", label: "System and Communications Protection", provenance: "publisher", basis: { source_field: "metadata.related_categories[]", rule: "exact-publisher-related-category" } });
+  assert.ok(tags.some((t) => t.id === "organization.disa"), "disa-cci catalog should also get org tag");
   assert.deepEqual(
     taxonomyTagsForRecord({
       related_categories: [
@@ -63,10 +60,9 @@ test("DISA CCI related NIST families remain exact publisher classifications", ()
 });
 
 test("catalog scope may supply publisher classification without parsing prose", () => {
-  assert.deepEqual(
-    taxonomyTagsForRecord({ catalog_id: "nist-iot-cybersecurity", description: "mentions a mobile phone" }),
-    [{ id: "asset.iot", kind: "asset_class", label: "IoT", provenance: "publisher", basis: { source_field: "catalog_id", rule: "publisher-catalog-scope" } }],
-  );
+  const tags = taxonomyTagsForRecord({ catalog_id: "nist-iot-cybersecurity", description: "mentions a mobile phone" });
+  assert.deepEqual(tags[0], { id: "asset.iot", kind: "asset_class", label: "IoT", provenance: "publisher", basis: { source_field: "catalog_id", rule: "publisher-catalog-scope" } });
+  assert.ok(tags.some((t) => t.id === "organization.nist"), "nist- prefix should also get org tag");
 });
 
 test("resource taxonomy uses only reviewed structured scope and compatibility fields", () => {

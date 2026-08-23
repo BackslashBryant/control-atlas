@@ -1,4 +1,110 @@
+import registry from "../../data/generated/taxonomy-registry.json" with { type: "json" };
 import { TAXONOMY_TAG_BY_ID } from "./taxonomy-contract.mjs";
+
+/** @type {[RegExp, string][]} */
+const PUBLISHER_ORGANIZATION_PATTERNS = [
+  [/^(?:DISA|Defense Information Systems Agency)/i, "organization.disa"],
+  [/^(?:NIST|National Institute of Standards)/i, "organization.nist"],
+  [/^(?:CISA|Cybersecurity and Infrastructure)/i, "organization.cisa"],
+  [/^(?:FedRAMP)/i, "organization.fedramp"],
+  [/^(?:MITRE)/i, "organization.mitre"],
+  [/^(?:DCSA|Defense Counterintelligence)/i, "organization.dcsa"],
+  [/^(?:NSA)/i, "organization.nsa"],
+  [/^(?:DoD|Department of Defense)/i, "organization.dod"],
+];
+
+const CATALOG_ORGANIZATION_PREFIXES = [
+  ["disa-", "organization.disa"],
+  ["dod-", "organization.dod"],
+  ["nist-", "organization.nist"],
+  ["csf-", "organization.nist"],
+  ["fips-", "organization.nist"],
+  ["cisa-", "organization.cisa"],
+  ["fedramp-", "organization.fedramp"],
+  ["cmmc-", "organization.dod"],
+  ["cui-", "organization.nist"],
+  ["mitre-", "organization.mitre"],
+  ["microsoft-", "vendor.microsoft"],
+];
+
+/** @type {[RegExp, string][]} */
+const CATALOG_FRAMEWORK_RULES = [
+  [/^nist-800-53/, "framework.rmf"],
+  [/^nist-800-37/, "framework.rmf"],
+  [/^nist-800-171/, "framework.rmf"],
+  [/^nist-800-172/, "framework.rmf"],
+  [/^fedramp/, "framework.fedramp"],
+  [/^cmmc/, "framework.cmmc"],
+  [/^csf/, "framework.nist-csf"],
+  [/^nist-ai-rmf/, "framework.nist-csf"],
+];
+
+/** @type {[RegExp, string][]} */
+const CATALOG_PROGRAM_RULES = [
+  [/^disa-stig/, "program.stig"],
+  [/^disa-srg/, "program.stig"],
+  [/^cmmc/, "program.cmmc"],
+  [/^dod-zt/, "program.zero-trust"],
+  [/^microsoft-zt/, "program.zero-trust"],
+  [/^nist-zt/, "program.zero-trust"],
+];
+
+const RESOURCE_FRAMEWORK_MAP = new Map([
+  ["RMF", "framework.rmf"],
+  ["DoD RMF", "framework.rmf"],
+  ["NIST RMF", "framework.rmf"],
+  ["FedRAMP", "framework.fedramp"],
+  ["FedRAMP 20x", "framework.fedramp"],
+  ["FedRAMP Rev. 5", "framework.fedramp"],
+  ["NIST CSF", "framework.nist-csf"],
+  ["CSF", "framework.nist-csf"],
+  ["CMMC", "framework.cmmc"],
+]);
+
+const RESOURCE_PROGRAM_MAP = new Map([
+  ["STIG", "program.stig"],
+  ["CMMC", "program.cmmc"],
+  ["Zero Trust", "program.zero-trust"],
+]);
+
+const RESOURCE_TOPIC_MAP = new Map([
+  ["Continuous Monitoring", "topic.continuous-monitoring"],
+  ["Vulnerability Management", "topic.vulnerability-management"],
+  ["Configuration Management", "topic.configuration-management"],
+]);
+
+/** @type {[RegExp, string][]} */
+const RESOURCE_TOOL_PATTERNS = [
+  [/\bemass\b/i, "tool.emass"],
+  [/\bstig.viewer\b/i, "tool.stig-viewer"],
+  [/\bscap.compliance.checker\b|\bscc\b/i, "tool.scap-compliance-checker"],
+  [/\boscal\b/i, "tool.oscal"],
+];
+
+const SOURCE_REF_TAG_MAP = new Map([
+  ["mitre-emass-api-v3-22", ["tool.emass"]],
+  ["disa-stig-viewer-v1r7", ["tool.stig-viewer"]],
+  ["nist-oscal", ["tool.oscal"]],
+  ["fedramp-2026-rules", ["framework.fedramp"]],
+  ["nist-800-37-rev2", ["framework.rmf"]],
+  ["nist-sp-800-137", ["topic.continuous-monitoring"]],
+  ["disa-stig-library", ["program.stig"]],
+  ["disa-cci-list", ["program.stig"]],
+  ["disa-ppsm-training", ["organization.disa"]],
+  ["dod-ppsm-policy", ["organization.dod"]],
+  ["dcsa-hardware-list", ["organization.dcsa"]],
+  ["dcsa-software-list", ["organization.dcsa"]],
+]);
+
+const TEMPLATE_ARTIFACT_MAP = new Map([
+  ["tpl-ssp-starter", "artifact.ssp"],
+  ["tpl-poam", "artifact.poam"],
+  ["tpl-assess-plan", "artifact.sap"],
+  ["tpl-evid-exp", "artifact.sar"],
+]);
+
+const PROPAGATION_RELATIONSHIPS = registry.relationships
+  .filter((r) => r.propagate_for_discovery && r.validation_state === "approved");
 
 const VENDOR_PREFIXES = [
   ["Microsoft", "vendor.microsoft"],
@@ -144,6 +250,30 @@ export function taxonomyTagsForRecord(record) {
   }
   if (catalogId === "nist-iot-cybersecurity") add(tags, "asset.iot", "catalog_id", "publisher-catalog-scope", "publisher");
   if (catalogId === "nist-mobile-threats") add(tags, "asset.mobile", "catalog_id", "publisher-catalog-scope", "publisher");
+
+  if (catalogId) {
+    for (const [prefix, tagId] of CATALOG_ORGANIZATION_PREFIXES) {
+      if (catalogId.startsWith(prefix)) {
+        add(tags, tagId, "catalog_id", "catalog-publisher-organization");
+        break;
+      }
+    }
+    for (const [pattern, tagId] of CATALOG_FRAMEWORK_RULES) {
+      if (pattern.test(catalogId)) {
+        add(tags, tagId, "catalog_id", "catalog-framework-scope");
+      }
+    }
+    for (const [pattern, tagId] of CATALOG_PROGRAM_RULES) {
+      if (pattern.test(catalogId)) {
+        add(tags, tagId, "catalog_id", "catalog-program-scope");
+      }
+    }
+  }
+  if (benchmarkTitle) {
+    if (/\bSTIG\b/.test(benchmarkTitle)) {
+      add(tags, "program.stig", "metadata.benchmark_title", "explicit-stig-title");
+    }
+  }
   return tags;
 }
 
@@ -200,5 +330,77 @@ export function taxonomyTagsForResource(resource) {
     add(tags, "asset.application", "technologyScopes", "exact-structured-application-value", "atlas_evidence");
   }
 
+  const publisher = normalized(resource.publisher);
+  if (publisher) {
+    for (const [pattern, tagId] of PUBLISHER_ORGANIZATION_PATTERNS) {
+      if (pattern.test(publisher)) {
+        add(tags, tagId, "publisher", "publisher-organization-match", "atlas_evidence");
+        break;
+      }
+    }
+  }
+  for (const fw of resource.frameworks || []) {
+    const tagId = RESOURCE_FRAMEWORK_MAP.get(fw);
+    if (tagId) add(tags, tagId, "frameworks", "exact-structured-framework-value", "atlas_evidence");
+  }
+  for (const prog of resource.programs || []) {
+    const progTag = RESOURCE_PROGRAM_MAP.get(prog);
+    if (progTag) add(tags, progTag, "programs", "exact-structured-program-value", "atlas_evidence");
+    const topicTag = RESOURCE_TOPIC_MAP.get(prog);
+    if (topicTag) add(tags, topicTag, "programs", "exact-structured-topic-value", "atlas_evidence");
+  }
+  const toolScope = `${normalized(resource.id)} ${normalized(resource.shortName)}`.toLocaleLowerCase();
+  if (toolScope.trim()) {
+    for (const [pattern, tagId] of RESOURCE_TOOL_PATTERNS) {
+      if (pattern.test(toolScope)) {
+        add(tags, tagId, "id", "exact-structured-tool-identity", "atlas_evidence");
+      }
+    }
+  }
+
   return tags;
+}
+
+export function taxonomyTagsForTemplate(template) {
+  const tags = [];
+  for (const ref of template.source_refs || []) {
+    const tagIds = SOURCE_REF_TAG_MAP.get(ref);
+    if (tagIds) {
+      for (const tagId of tagIds) {
+        add(tags, tagId, "source_refs", "approved-source-reference", "atlas_evidence");
+      }
+    }
+  }
+  const artifactTagId = TEMPLATE_ARTIFACT_MAP.get(template.template_id);
+  if (artifactTagId) {
+    add(tags, artifactTagId, "template_id", "template-artifact-classification", "atlas_evidence");
+  }
+  return tags;
+}
+
+export function deriveTags(directTags) {
+  const directIds = new Set(directTags.map((t) => t.id));
+  const derived = [];
+  for (const tag of directTags) {
+    for (const rel of PROPAGATION_RELATIONSHIPS) {
+      if (rel.from !== tag.id) continue;
+      if (directIds.has(rel.to) || derived.some((d) => d.id === rel.to)) continue;
+      const definition = TAXONOMY_TAG_BY_ID.get(rel.to);
+      if (!definition) continue;
+      derived.push({
+        id: rel.to,
+        kind: definition.dimension,
+        label: definition.label,
+        provenance: "inferred",
+        basis: {
+          source_field: "taxonomy-relationship",
+          rule: `derived-${rel.relationship}`,
+        },
+        assignment: "derived",
+        origin_tag_id: tag.id,
+        relationship_type: rel.relationship,
+      });
+    }
+  }
+  return derived;
 }

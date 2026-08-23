@@ -7,6 +7,9 @@ const RECORD_SOURCE_BASIS = {
   technology: ["metadata.benchmark_title"],
   vendor_brand: ["metadata.benchmark_title"],
   product: ["metadata.benchmark_title"],
+  organization: ["catalog_id"],
+  framework: ["catalog_id"],
+  program: ["catalog_id", "metadata.benchmark_title"],
 };
 
 const RESOURCE_SOURCE_BASIS = {
@@ -14,6 +17,11 @@ const RESOURCE_SOURCE_BASIS = {
   product: ["technologyScopes", "compatibility.operatingSystems"],
   asset_class: ["technologyScopes"],
   environment: ["technologyScopes"],
+  organization: ["publisher"],
+  framework: ["frameworks"],
+  program: ["programs"],
+  tool: ["id", "shortName"],
+  topic: ["programs"],
 };
 
 function sourceBasisForDimension(dimension) {

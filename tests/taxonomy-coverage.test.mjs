@@ -48,7 +48,7 @@ test("generated taxonomy coverage reconciles governed dimensions to the publishe
   const cci = coverage.catalogs.find((catalog) => catalog.catalog_id === "disa-cci");
   assert.ok(cci, "DISA CCI coverage row is required");
   assert.equal(cci.record_count, 5137);
-  assert.equal(cci.tagged_record_count, 4913);
+  assert.equal(cci.tagged_record_count, 5137);
   assert.equal(cci.dimensions.domain.applicable_record_count, 4913);
   assert.equal(cci.dimensions.domain.unreviewed_record_count, 224);
   assert.ok(coverage.source_basis.some((basis) =>
