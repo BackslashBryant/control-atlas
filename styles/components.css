@@ -549,6 +549,27 @@
   color: var(--ca-danger);
 }
 
+/* ── Related in Atlas sidebar section ── */
+.related-in-atlas {
+  padding-block: var(--ca-space-sm);
+}
+.related-in-atlas h2 {
+  font-size: var(--ca-font-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ca-text-secondary);
+  margin-block-end: var(--ca-space-xs);
+}
+.related-in-atlas__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ca-space-xs);
+}
+.related-in-atlas__tags--inline {
+  margin-block-start: var(--ca-space-xs);
+}
+
 /* ── Identity mark ── */
 .identity-mark {
   display: inline-flex;

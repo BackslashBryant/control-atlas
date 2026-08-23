@@ -13,6 +13,7 @@ import { AcronymText } from "../components/AccessibleTerm";
 import { AppLink } from "../components/AppLink";
 import { CanonicalBreadcrumb } from "../components/CanonicalBreadcrumb";
 import { Button, ButtonLink } from "../components/lsm";
+import { AtlasTag } from "../components/AtlasTag";
 import { BucketTag, LineTag } from "../components/TaxonomyTag";
 import { catalogDisplayNameFor, catalogProfileFor } from "../lib/catalogProfiles";
 import {
@@ -37,6 +38,8 @@ import { TAXONOMY_TAG_BY_ID } from "../../shared/taxonomy-contract.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
 import { normalizeViewState, type ViewState } from "../lib/viewState";
+
+const ATLAS_TAG_DIMENSIONS = new Set(["organization", "framework", "program", "tool", "artifact", "topic"]);
 
 const ODP_PATTERN = /\[(?:Assignment|Selection)[^\]]*\]/g;
 
@@ -571,10 +574,25 @@ export function ObjectDetailPage(props: {
           className="record-template-sidebar"
           data-displayed-trace={displayedTrace.map((entry) => entry.id).join(">")}
         >
+          {(() => {
+            const atlasTagIds = (node.metadata?.taxonomy_tags || [])
+              .filter((t: { id?: string; kind?: string }) => t.id && ATLAS_TAG_DIMENSIONS.has(t.kind ?? ""))
+              .map((t: { id: string }) => t.id);
+            return atlasTagIds.length > 0 ? (
+              <section className="related-in-atlas">
+                <h2>Related in Control Atlas</h2>
+                <div className="related-in-atlas__tags">
+                  {atlasTagIds.map((tagId: string) => (
+                    <AtlasTag key={tagId} onNavigate={onNavigate} showIdentity size="sm" tagId={tagId} />
+                  ))}
+                </div>
+              </section>
+            ) : null;
+          })()}
           <section>
             <h2>About This Record</h2>
             <div className="record-classification-tags">
-              {recordTags.map((tag) => {
+              {recordTags.filter((tag) => !ATLAS_TAG_DIMENSIONS.has(tag.kind as string)).map((tag) => {
                 const content = tag.kind === "area" ? (
                   <BucketTag
                     area={tag.label}
@@ -587,9 +605,6 @@ export function ObjectDetailPage(props: {
                     <AcronymText>{tag.label}</AcronymText>
                   </LineTag>
                 );
-                // Prefer a governed taxonomy id (precise Library filter) even
-                // when the visible chip came from a publisher category with the
-                // same label; fall back to the area filter, then a plain search.
                 const governedId = TAXONOMY_TAG_BY_ID.has(tag.id)
                   ? tag.id
                   : (node.metadata?.taxonomy_tags || []).find(

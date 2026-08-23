@@ -15,9 +15,12 @@ import type { CommonsResource } from "../lib/commonsTypes";
 import { resourceDateLabel } from "../lib/commonsPresentation.mjs";
 import { serializeHashLocation } from "../lib/hashRoutes";
 import { resourceAccessLabel, resourceFieldLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
-import { taxonomyTagsForResource } from "../../shared/record-taxonomy.mjs";
+import { taxonomyTagsForResource, deriveTags } from "../../shared/record-taxonomy.mjs";
+import { AtlasTag } from "../components/AtlasTag";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { normalizeViewState, type ViewState } from "../lib/viewState";
+
+const ATLAS_TAG_DIMENSIONS = new Set(["organization", "framework", "program", "tool", "artifact", "topic"]);
 
 type Props = {
   bundle: RuntimeBundle | null;
@@ -54,7 +57,12 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
   const children = dataset?.resources.filter((entry) => resource.childResourceIds?.includes(entry.id)) || [];
   const collections = dataset?.collections.filter((collection) => resource.featuredCollections?.includes(collection.id)) || [];
   const usefulFor = [...resource.lifecycleStages, ...(resource.technologyScopes || []), ...resource.audiences].filter(Boolean);
-  const taxonomyTags = taxonomyTagsForResource(resource);
+  const allTags = taxonomyTagsForResource(resource);
+  const taxonomyTags = allTags.filter((t: { kind?: string }) => !ATLAS_TAG_DIMENSIONS.has(t.kind ?? ""));
+  const atlasTagIds = [
+    ...allTags.filter((t: { kind?: string }) => ATLAS_TAG_DIMENSIONS.has(t.kind ?? "")),
+    ...deriveTags(allTags),
+  ].reduce<string[]>((acc, t: { id: string }) => { if (!acc.includes(t.id)) acc.push(t.id); return acc; }, []);
   const warning = resource.resourceType === "community_forum"
     ? "Do not post CUI, credentials, system details, assessment evidence, or other non-public organizational information."
     : resource.warnings?.[0];
@@ -144,6 +152,16 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
           </article>
 
           <aside className="resource-detail-side">
+            {atlasTagIds.length > 0 ? (
+              <section className="related-in-atlas">
+                <h2>Related in Control Atlas</h2>
+                <div className="related-in-atlas__tags">
+                  {atlasTagIds.map((tagId: string) => (
+                    <AtlasTag key={tagId} onNavigate={onNavigate} showIdentity size="sm" tagId={tagId} />
+                  ))}
+                </div>
+              </section>
+            ) : null}
             <nav aria-label="On this page" className="resource-detail-toc">
               <strong>On this page</strong>
               <a href="#what-it-is">What it is</a>

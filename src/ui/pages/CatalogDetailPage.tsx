@@ -17,6 +17,8 @@ import {
   recordIdentityPresentationFor,
   recordPublisherName,
 } from "../lib/recordTitle";
+import { AtlasTag } from "../components/AtlasTag";
+import { taxonomyTagsForRecord } from "../../shared/record-taxonomy.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
 
@@ -84,6 +86,9 @@ export function CatalogDetailPage(props: {
     source?.publisher,
     catalog.display_group,
   );
+  const catalogAtlasTagIds = taxonomyTagsForRecord({ catalog_id: catalog.id })
+    .filter((t: { kind?: string }) => ["organization", "framework", "program"].includes(t.kind ?? ""))
+    .map((t: { id: string }) => t.id);
   const tierLabel = String(catalog.tier_label || "section").trim();
   const tierLabelPlural = String(
     catalog.tier_label_plural || `${tierLabel}s`,
@@ -161,6 +166,13 @@ export function CatalogDetailPage(props: {
         <p className="catalog-publisher" data-route-primary-copy="true">
           {publisherName}
         </p>
+        {catalogAtlasTagIds.length > 0 ? (
+          <div className="related-in-atlas__tags related-in-atlas__tags--inline">
+            {catalogAtlasTagIds.map((tagId: string) => (
+              <AtlasTag key={tagId} onNavigate={onNavigate} showIdentity size="sm" tagId={tagId} />
+            ))}
+          </div>
+        ) : null}
         <div className="catalog-facts" aria-label="Publication summary" data-route-primary-support="true">
           <span>
             <strong>
