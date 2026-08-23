@@ -171,6 +171,11 @@ function placeholder(options) {
   return (txt) => (options.includePlaceholders !== false ? txt : "");
 }
 
+function cappedJoin(ids, limit) {
+  if (ids.length <= limit) return ids.join("; ");
+  return ids.slice(0, limit).join("; ") + ` + ${ids.length - limit} more`;
+}
+
 /**
  * Truncate a plain-language summary at a word boundary so it fits a table
  * cell without mid-word cuts.
@@ -735,7 +740,8 @@ function generatePOAMStarter(options) {
     "Scheduled Completion",
     "Status",
   ];
-  const trackerRows = Array.from({ length: 10 }, () => ["", "", "", "", "", ""]);
+  const ph = placeholder(options);
+  const trackerRows = blankRows(10, trackerHeaders.length, ph, ["[Unique tracking number]", "[Plain-language weakness description]", "[Control ID and/or CCI number]", "[High | Medium | Low]", "[YYYY-MM-DD]", "[Open | Ongoing | Risk Accepted | Completed]"]);
 
   /** @type {DocSection[]} */
   const sections = [
@@ -942,8 +948,8 @@ function generateProfessionalEvidenceMatrix(options, controls, crossRef) {
     referenceRows.push([
       c.id,
       c.title,
-      refs?.cciIds.length ? refs.cciIds.join("; ") : "N/A",
-      refs?.stigIds.length ? refs.stigIds.join("; ") : "N/A",
+      refs?.cciIds.length ? cappedJoin(refs.cciIds, 5) : "N/A",
+      refs?.stigIds.length ? cappedJoin(refs.stigIds, 5) : "N/A",
     ]);
     return [c.id, c.title, ph("[Evidence type]"), ph("[Stable artifact name or ID]"), ph("[Owner role]"), ph("[Export | Query | Screenshot | Interview | Observation]"), ph("[Continuous | Monthly | Quarterly | Annual | Event-driven]"), ph("[YYYY-MM-DD or period]"), ph("[Repository, ticket, or approved link]"), ph("[High | Medium | Low]"), ph("[Needed | Requested | Received | Reviewed | Accepted | Gap]"), ph("[Scope, sufficiency, sample, exceptions, follow-up]")];
   });
@@ -959,9 +965,9 @@ function generateProfessionalEvidenceMatrix(options, controls, crossRef) {
 function generateProfessionalSTIGWorksheet(options) {
   const ph = placeholder(options);
   const headers = ["Benchmark ID", "Rule ID", "Status", "Comments", "Finding Details", "Severity Override", "Severity Override Reason", "FQDN", "IP Address", "MAC Address", "Host Name", "Technology Area"];
-  const rows = blankRows(20, headers.length, ph);
+  const rows = blankRows(20, headers.length, ph, ["[Benchmark ID]", "[SV-..._rule]", "[Not Reviewed | Open | Not a Finding | Not Applicable]", "[Implementation context or reviewer remarks]", "[Observed condition and test result]", "[CAT I | CAT II | CAT III]", "[Authorized justification for override]", "[Fully qualified domain name]", "[IP address]", "[MAC address]", "[Host name]", "[Network | Database | Application | ...]"]);
   const evidenceHeaders = ["Rule ID", "Evidence Artifact", "Validation Method", "Evidence Owner", "Evidence Date", "Review Notes"];
-  const evidenceRows = blankRows(20, evidenceHeaders.length, ph);
+  const evidenceRows = blankRows(20, evidenceHeaders.length, ph, ["[SV-..._rule]", "[Artifact name or ID]", "[Export | Screenshot | Query | Interview]", "[Owner role]", "[YYYY-MM-DD]", "[Scope, sufficiency, follow-up]"]);
   /** @type {DocSection[]} */
   const sections = [
     { type: "text", heading: "Import Contract", content: "The first table preserves the exact 12 CSV headers documented by the DISA STIG Viewer 3.x User Guide V1R7. Keep the header names and order unchanged. Save only the first table as CSV for import, then validate it in the target STIG Viewer version." },

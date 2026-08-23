@@ -615,130 +615,129 @@ export function ObjectDetailPage(props: {
               View source details
             </AppLink>
           </section>
+          {connectionGroups.length ? (
+            <section className="record-connections record-connections--related" data-record-section="related-records">
+              <div className="section-header">
+                <div>
+                  <h2>Related records</h2>
+                  <p>Formal published links to other publications.</p>
+                </div>
+                <Badge tone="info">{connectionCount}</Badge>
+              </div>
+              <div className="record-connection-groups">
+                {relatedConnectionGroups.map((group) => {
+                  const sample = document.catalog_id !== "disa-cci"
+                    ? group.items.slice(0, RECORD_GROUP_SAMPLE)
+                    : group.items;
+                  const overflow = group.items.length - sample.length;
+                  return (
+                    <section key={`${group.catalogId}:${group.relationshipType}`}>
+                      <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
+                      <ul>
+                        {sample.map((item) => {
+                          const relatedIdentity = runtimeRecordIdentityFor(bundle, item.nodeId);
+                          const sourceEvidence = item.sourceRefs.map((reference) => {
+                            const sourceRecord = reference.sourceId
+                              ? bundle.runtime.getSource(reference.sourceId)
+                              : null;
+                            return {
+                              evidenceQuality: reference.evidenceQuality
+                                ? displayNameFor("evidence_quality", reference.evidenceQuality)
+                                : "",
+                              locator: humanReadableEvidenceLocator(reference.locator),
+                              source: (
+                                reference.sourceName ||
+                                sourceRecord?.display_name ||
+                                sourceRecord?.name ||
+                                ""
+                              ),
+                              version: reference.sourceVersion || sourceRecord?.version || "",
+                            };
+                          }).filter((reference) => reference.source);
+                          const sourceNames = [...new Set(sourceEvidence.map((reference) => reference.source))];
+                          return (
+                            <li data-record-connection-id={item.edgeId} key={item.edgeId}>
+                              <AppLink
+                                aria-label={relatedIdentity.stableIdIsGenerated ? `Open ${relatedIdentity.accessibleName}` : undefined}
+                                onNavigate={onNavigate}
+                                patch={{ node: item.nodeId }}
+                                view="library-detail"
+                              >
+                                <strong>{relatedIdentity.stableIdIsGenerated ? relatedIdentity.primary : item.itemId}</strong>
+                                {relatedIdentity.stableIdIsGenerated && relatedIdentity.context
+                                  ? ` — ${relatedIdentity.context}`
+                                  : item.title !== item.itemId
+                                    ? ` — ${item.title}`
+                                    : ""}
+                              </AppLink>
+                              <span className="relationship-meta">
+                                <strong>Published connection</strong>
+                                {` · ${formatRelationshipLabel({ relationship_type: item.relationshipType })}`}
+                              </span>
+                              <span className="relationship-citation">
+                                <strong>Source</strong>
+                                {` · ${sourceNames.length ? sourceNames.join(" · ") : "Not recorded"}`}
+                              </span>
+                              <details className="mapping-row-details relationship-source-evidence">
+                                <summary aria-label={`Source evidence for ${relatedIdentity.primary}`}>Source evidence</summary>
+                                <dl className="relationship-source-facts">
+                                  <div>
+                                    <dt>How the connection was established</dt>
+                                    <dd>{displayNameFor("provenance_class", item.provenanceClass)}</dd>
+                                  </div>
+                                  {sourceEvidence.map((reference, referenceIndex) => (
+                                    <Fragment key={`${item.edgeId}:${reference.source}:${referenceIndex}`}>
+                                      <div>
+                                        <dt>Source record</dt>
+                                        <dd>{reference.source}</dd>
+                                      </div>
+                                      {reference.version ? (
+                                        <div>
+                                          <dt>Source version</dt>
+                                          <dd>{reference.version}</dd>
+                                        </div>
+                                      ) : null}
+                                      {reference.locator ? (
+                                        <div>
+                                          <dt>Locator</dt>
+                                          <dd>{reference.locator}</dd>
+                                        </div>
+                                      ) : null}
+                                      {reference.evidenceQuality ? (
+                                        <div>
+                                          <dt>Evidence quality</dt>
+                                          <dd>{reference.evidenceQuality}</dd>
+                                        </div>
+                                      ) : null}
+                                    </Fragment>
+                                  ))}
+                                </dl>
+                              </details>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                      {overflow > 0 ? (
+                        <AppLink
+                          className="record-connections-overflow"
+                          onNavigate={onNavigate}
+                          patch={{ node: node.id }}
+                          view="atlas-map"
+                        >
+                          +{overflow} more — Explore in Atlas
+                        </AppLink>
+                      ) : null}
+                    </section>
+                  );
+                })}
+              </div>
+              <AppLink className="record-connections-explore" onNavigate={onNavigate} patch={{ node: node.id }} view="atlas-map">
+                Explore all connections in Atlas
+              </AppLink>
+            </section>
+          ) : null}
         </aside>
       </div>
-
-      {connectionGroups.length ? (
-        <section className="record-connections record-connections--related" data-record-section="related-records">
-          <div className="section-header">
-            <div>
-              <h2>Related records</h2>
-              <p>Formal published links to other publications.</p>
-            </div>
-            <Badge tone="info">{connectionCount}</Badge>
-          </div>
-          <div className="record-connection-groups">
-            {relatedConnectionGroups.map((group) => {
-              const sample = document.catalog_id !== "disa-cci"
-                ? group.items.slice(0, RECORD_GROUP_SAMPLE)
-                : group.items;
-              const overflow = group.items.length - sample.length;
-              return (
-                <section key={`${group.catalogId}:${group.relationshipType}`}>
-                  <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
-                  <ul>
-                    {sample.map((item) => {
-                      const relatedIdentity = runtimeRecordIdentityFor(bundle, item.nodeId);
-                      const sourceEvidence = item.sourceRefs.map((reference) => {
-                        const sourceRecord = reference.sourceId
-                          ? bundle.runtime.getSource(reference.sourceId)
-                          : null;
-                        return {
-                          evidenceQuality: reference.evidenceQuality
-                            ? displayNameFor("evidence_quality", reference.evidenceQuality)
-                            : "",
-                          locator: humanReadableEvidenceLocator(reference.locator),
-                          source: (
-                            reference.sourceName ||
-                            sourceRecord?.display_name ||
-                            sourceRecord?.name ||
-                            ""
-                          ),
-                          version: reference.sourceVersion || sourceRecord?.version || "",
-                        };
-                      }).filter((reference) => reference.source);
-                      const sourceNames = [...new Set(sourceEvidence.map((reference) => reference.source))];
-                      return (
-                        <li data-record-connection-id={item.edgeId} key={item.edgeId}>
-                          <AppLink
-                            aria-label={relatedIdentity.stableIdIsGenerated ? `Open ${relatedIdentity.accessibleName}` : undefined}
-                            onNavigate={onNavigate}
-                            patch={{ node: item.nodeId }}
-                            view="library-detail"
-                          >
-                            <strong>{relatedIdentity.stableIdIsGenerated ? relatedIdentity.primary : item.itemId}</strong>
-                            {relatedIdentity.stableIdIsGenerated && relatedIdentity.context
-                              ? ` — ${relatedIdentity.context}`
-                              : item.title !== item.itemId
-                                ? ` — ${item.title}`
-                                : ""}
-                          </AppLink>
-                          <span className="relationship-meta">
-                            <strong>Published connection</strong>
-                            {` · ${formatRelationshipLabel({ relationship_type: item.relationshipType })}`}
-                          </span>
-                          <span className="relationship-citation">
-                            <strong>Source</strong>
-                            {` · ${sourceNames.length ? sourceNames.join(" · ") : "Not recorded"}`}
-                          </span>
-                          <details className="mapping-row-details relationship-source-evidence">
-                            <summary aria-label={`Source evidence for ${relatedIdentity.primary}`}>Source evidence</summary>
-                            <dl className="relationship-source-facts">
-                              <div>
-                                <dt>How the connection was established</dt>
-                                <dd>{displayNameFor("provenance_class", item.provenanceClass)}</dd>
-                              </div>
-                              {sourceEvidence.map((reference, referenceIndex) => (
-                                <Fragment key={`${item.edgeId}:${reference.source}:${referenceIndex}`}>
-                                  <div>
-                                    <dt>Source record</dt>
-                                    <dd>{reference.source}</dd>
-                                  </div>
-                                  {reference.version ? (
-                                    <div>
-                                      <dt>Source version</dt>
-                                      <dd>{reference.version}</dd>
-                                    </div>
-                                  ) : null}
-                                  {reference.locator ? (
-                                    <div>
-                                      <dt>Locator</dt>
-                                      <dd>{reference.locator}</dd>
-                                    </div>
-                                  ) : null}
-                                  {reference.evidenceQuality ? (
-                                    <div>
-                                      <dt>Evidence quality</dt>
-                                      <dd>{reference.evidenceQuality}</dd>
-                                    </div>
-                                  ) : null}
-                                </Fragment>
-                              ))}
-                            </dl>
-                          </details>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  {overflow > 0 ? (
-                    <AppLink
-                      className="record-connections-overflow"
-                      onNavigate={onNavigate}
-                      patch={{ node: node.id }}
-                      view="atlas-map"
-                    >
-                      +{overflow} more — Explore in Atlas
-                    </AppLink>
-                  ) : null}
-                </section>
-              );
-            })}
-          </div>
-          <AppLink className="record-connections-explore" onNavigate={onNavigate} patch={{ node: node.id }} view="atlas-map">
-            Explore all connections in Atlas
-          </AppLink>
-        </section>
-      ) : null}
 
     </section>
   );

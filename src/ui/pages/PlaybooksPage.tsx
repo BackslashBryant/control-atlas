@@ -84,7 +84,7 @@ export function PlaybooksPage(props: {
               <AppLink
                 className="guide-card"
                 data-guide-area={presentation.area}
-                data-guide-step={index + 1}
+                data-guide-number={index + 1}
                 key={article.id}
                 onNavigate={onNavigate}
                 patch={{ pattern: article.id }}
@@ -95,7 +95,7 @@ export function PlaybooksPage(props: {
                 </span>
                 <span className="guide-card__body">
                   <span className="guide-card__meta">
-                    <span className="guide-card__step">Step {String(index + 1).padStart(2, "0")}</span>
+                    <span className="guide-card__number">Guide {String(index + 1).padStart(2, "0")}</span>
                     <BucketTag area={presentation.area}>{presentation.area}</BucketTag>
                   </span>
                   <strong>{article.title}</strong>

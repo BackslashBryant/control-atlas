@@ -466,6 +466,7 @@ export function TemplatesPage(props: {
   const workflowDetailRef = useRef<HTMLElement | null>(null);
   const categoryFilter = state.category;
   const queryFilter = state.query;
+  const [includeStigRefs, setIncludeStigRefs] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [generationStatus, setGenerationStatus] = useState("");
   const [generationTone, setGenerationTone] = useState<"trust" | "warning">(
@@ -671,13 +672,14 @@ export function TemplatesPage(props: {
       includeInheritancePrompts: true,
       includeReciprocityPrompts: true,
       includeSourceFootnotes: true,
-      includeStigReferences: true,
+      includeStigReferences: includeStigRefs,
       sourceRefs,
       sources: bundle.runtime.dataset?.sources || [],
     };
   }, [
     bundle.runtime.dataset?.sources,
     generationSnapshot,
+    includeStigRefs,
     selectedFrameworkSourceId,
     selectedTemplate,
   ]);
@@ -1138,6 +1140,17 @@ export function TemplatesPage(props: {
                       />
                     ) : null}
                   </div>
+                  <label className="template-option-toggle">
+                    <input
+                      checked={includeStigRefs}
+                      onChange={(event) => setIncludeStigRefs(event.target.checked)}
+                      type="checkbox"
+                    />
+                    <span>
+                      Include STIG/SRG cross-reference table
+                      <span className="field-hint">Adds a reference table mapping controls to STIG and SRG rule identifiers. Adds approximately 50 pages for full baselines.</span>
+                    </span>
+                  </label>
                   {supportedFormats.length > 1 ? (
                     <ul className="format-help-list">
                       {supportedFormats.map((format: string) => (

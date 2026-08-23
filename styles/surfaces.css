@@ -1701,6 +1701,26 @@ li {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
+.template-option-toggle {
+  display: flex;
+  align-items: start;
+  gap: var(--ca-space-2);
+  margin-top: var(--ca-space-3);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--ca-text);
+}
+
+.template-option-toggle input {
+  margin-top: 0.2em;
+  flex-shrink: 0;
+}
+
+.template-option-toggle .field-hint {
+  display: block;
+  margin-top: var(--ca-space-1);
+}
+
 .format-help-list {
   margin: var(--ca-space-3) 0 0;
   padding-left: var(--ca-space-4);
@@ -7668,7 +7688,7 @@ button.atlas-leverage-row:hover {
   gap: var(--ca-space-2);
 }
 
-.guide-card__step {
+.guide-card__number {
   color: var(--ca-text-muted);
   font: 600 var(--ca-text-xs) / 1.4 var(--ca-font-mono);
   letter-spacing: 0.08em;
@@ -8914,9 +8934,9 @@ button.atlas-leverage-row:hover {
 }
 
 .record-connections--related {
-  width: 100%;
-  margin-top: var(--ca-space-8);
-  padding-top: var(--ca-space-8);
+  padding: var(--ca-space-4);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--ca-radius-md);
 }
 
 .mapping-row-details.relationship-source-evidence > summary {
@@ -8984,6 +9004,8 @@ button.atlas-leverage-row:hover {
 .record-template-sidebar {
   position: sticky;
   top: var(--ca-header-safe-offset);
+  max-height: calc(100vh - var(--ca-header-safe-offset) - var(--ca-space-4));
+  overflow-y: auto;
   grid-column: 2;
   grid-row: 1 / -1;
   display: grid;
@@ -9062,14 +9084,15 @@ button.atlas-leverage-row:hover {
   }
 
   .record-template-main,
-  .record-template-sidebar,
-  .record-connections--related {
+  .record-template-sidebar {
     grid-column: 1;
     grid-row: auto;
   }
 
   .record-template-sidebar {
     position: static;
+    max-height: none;
+    overflow-y: visible;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
 }

@@ -162,8 +162,8 @@ test("WS5 Guides implements a numbered, icon-bearing, whole-card Template F dire
   await expect(cards).toHaveCount(12);
   await expect(cards.locator(".guide-card__icon svg")).toHaveCount(12);
   await expect(cards.locator(".bucket-tag")).toHaveCount(12);
-  await expect(cards.locator(".guide-card__step")).toHaveText(
-    Array.from({ length: 12 }, (_, index) => `Step ${String(index + 1).padStart(2, "0")}`),
+  await expect(cards.locator(".guide-card__number")).toHaveText(
+    Array.from({ length: 12 }, (_, index) => `Guide ${String(index + 1).padStart(2, "0")}`),
   );
 
   const iconShapes = await cards.locator(".guide-card__icon svg").evaluateAll((icons) => (

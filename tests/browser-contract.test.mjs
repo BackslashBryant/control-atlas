@@ -410,7 +410,7 @@ test('Guides implement the numbered Template F directory contract', () => {
   assert.match(playbooksPage, /data-page-template="directory"/);
   assert.match(playbooksPage, /practitionerGuides\.map\(\(article, index\)/);
   assert.match(playbooksPage, /className="guide-card"/);
-  assert.match(playbooksPage, /Step \{String\(index \+ 1\)\.padStart\(2, "0"\)\}/);
+  assert.match(playbooksPage, /Guide \{String\(index \+ 1\)\.padStart\(2, "0"\)\}/);
   assert.match(playbooksPage, /<BucketTag area=\{presentation\.area\}/);
   assert.match(playbooksPage, /const \{ Icon \} = presentation/);
 });
