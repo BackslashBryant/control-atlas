@@ -51,10 +51,10 @@ test("WS3 Library uses Template C browse, facets, and fully linked record rows",
   expect(await recordRows.count()).toBeGreaterThan(0);
   await expect(recordRows.locator(".bucket-tag")).toHaveCount(await recordRows.count());
   await expect(row.locator(".workspace-result-row__signals")).toBeVisible();
-  await expect(row.getByRole("link")).toHaveCount(1);
+  await expect(row.locator(".workspace-result-row__link")).toHaveCount(1);
   const sizes = await row.evaluate((element) => ({
     row: element.getBoundingClientRect().width,
-    link: element.querySelector("a")?.getBoundingClientRect().width || 0,
+    link: element.querySelector(".workspace-result-row__link")?.getBoundingClientRect().width || 0,
   }));
   expect(sizes.link).toBeGreaterThan(sizes.row - 8);
   await expect(page.getByRole("button", { name: /Open record/i })).toHaveCount(0);
@@ -211,7 +211,7 @@ test("WS3 Library presents generated records with human identity at every govern
       await expect(row.locator(".workspace-result-row__meta")).toContainText(record.type);
       await expect(row.locator(".workspace-result-row__meta")).toContainText("NIST Zero Trust");
       await expect(row.locator(".workspace-result-row__meta")).not.toContainText("nist-zt");
-      const link = row.getByRole("link");
+      const link = row.locator(".workspace-result-row__link");
       await expect(link).toHaveAttribute(
         "aria-label",
         `Open ${record.primary}, ${record.type}, NIST Zero Trust`,
