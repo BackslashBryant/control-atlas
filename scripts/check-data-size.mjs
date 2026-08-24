@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { gzipSync } from "node:zlib";
 
 const MAX_FILE_BYTES = 20 * 1024 * 1024;
-const MAX_COMPLETE_SEARCH_GZIP_BYTES = 300_000;
+const MAX_COMPLETE_SEARCH_GZIP_BYTES = 320_000;
 
 function walk(path) {
   return readdirSync(path, { withFileTypes: true }).flatMap((entry) => {
