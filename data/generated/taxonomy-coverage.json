@@ -1,23 +1,23 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-16T22:50:51.977Z",
+  "generated_at": "2026-08-23T23:27:53.210Z",
   "taxonomy_coverage": {
     "contract_version": "2.0.0",
     "record_count": 30365,
-    "tagged_record_count": 22663,
+    "tagged_record_count": 30184,
     "record_dimension_decision_count": 364380,
     "decision_counts": {
-      "applicable": 36331,
+      "applicable": 89542,
       "not_applicable": 0,
-      "unreviewed": 328049
+      "unreviewed": 274838
     },
     "catalogs": [
       {
         "catalog_id": "cmmc-2",
         "catalog_name": "CMMC 2.0",
         "record_count": 3,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 3,
+        "tag_assignments": 9,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -56,10 +56,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 3,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 3,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 3
           },
           "tool": {
             "applicable_record_count": 0,
@@ -68,16 +68,16 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 3,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 3,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 3
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 3,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 3,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 3
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -97,8 +97,8 @@
         "catalog_id": "csf-2",
         "catalog_name": "NIST CSF 2.0",
         "record_count": 134,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 106,
+        "tag_assignments": 212,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -137,10 +137,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 106,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 134,
-            "tag_assignments": 0
+            "unreviewed_record_count": 28,
+            "tag_assignments": 106
           },
           "tool": {
             "applicable_record_count": 0,
@@ -149,10 +149,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 106,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 134,
-            "tag_assignments": 0
+            "unreviewed_record_count": 28,
+            "tag_assignments": 106
           },
           "program": {
             "applicable_record_count": 0,
@@ -178,8 +178,8 @@
         "catalog_id": "cui-policy",
         "catalog_name": "CUI Program",
         "record_count": 128,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 128,
+        "tag_assignments": 128,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -218,10 +218,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 128,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 128,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 128
           },
           "tool": {
             "applicable_record_count": 0,
@@ -259,8 +259,8 @@
         "catalog_id": "disa-cci",
         "catalog_name": "DISA CCI",
         "record_count": 5137,
-        "tagged_record_count": 4913,
-        "tag_assignments": 4916,
+        "tagged_record_count": 5137,
+        "tag_assignments": 10053,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -299,10 +299,10 @@
             "tag_assignments": 4916
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 5137,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 5137,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 5137
           },
           "tool": {
             "applicable_record_count": 0,
@@ -340,8 +340,8 @@
         "catalog_id": "disa-srg",
         "catalog_name": "DISA SRG",
         "record_count": 2516,
-        "tagged_record_count": 1613,
-        "tag_assignments": 1876,
+        "tagged_record_count": 2516,
+        "tag_assignments": 6908,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 1587,
@@ -380,10 +380,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 2516,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 2516,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 2516
           },
           "tool": {
             "applicable_record_count": 0,
@@ -398,10 +398,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 2516,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 2516,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 2516
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -421,8 +421,8 @@
         "catalog_id": "disa-stig",
         "catalog_name": "DISA STIG",
         "record_count": 17021,
-        "tagged_record_count": 12788,
-        "tag_assignments": 28919,
+        "tagged_record_count": 17021,
+        "tag_assignments": 62961,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 7544,
@@ -461,10 +461,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 17021,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 17021,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 17021
           },
           "tool": {
             "applicable_record_count": 0,
@@ -479,10 +479,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 17021,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 17021,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 17021
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -502,8 +502,8 @@
         "catalog_id": "dod-rai",
         "catalog_name": "DoD AI Assurance",
         "record_count": 13,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 11,
+        "tag_assignments": 11,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -542,10 +542,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 11,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 13,
-            "tag_assignments": 0
+            "unreviewed_record_count": 2,
+            "tag_assignments": 11
           },
           "tool": {
             "applicable_record_count": 0,
@@ -583,8 +583,8 @@
         "catalog_id": "dod-zt",
         "catalog_name": "DoD Zero Trust",
         "record_count": 320,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 320,
+        "tag_assignments": 640,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -623,10 +623,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 320,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 320,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 320
           },
           "tool": {
             "applicable_record_count": 0,
@@ -641,10 +641,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 320,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 320,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 320
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -664,8 +664,8 @@
         "catalog_id": "fedramp-rev5",
         "catalog_name": "FedRAMP Rev. 5",
         "record_count": 4,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 4,
+        "tag_assignments": 8,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -704,10 +704,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 4,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 4,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 4
           },
           "tool": {
             "applicable_record_count": 0,
@@ -716,10 +716,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 4,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 4,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 4
           },
           "program": {
             "applicable_record_count": 0,
@@ -745,8 +745,8 @@
         "catalog_id": "fips-199",
         "catalog_name": "FIPS 199",
         "record_count": 3,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 3,
+        "tag_assignments": 3,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -785,10 +785,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 3,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 3,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 3
           },
           "tool": {
             "applicable_record_count": 0,
@@ -826,8 +826,8 @@
         "catalog_id": "fips-200",
         "catalog_name": "FIPS 200",
         "record_count": 17,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 17,
+        "tag_assignments": 17,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -866,10 +866,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 17,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 17,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 17
           },
           "tool": {
             "applicable_record_count": 0,
@@ -907,8 +907,8 @@
         "catalog_id": "microsoft-zt-maturity",
         "catalog_name": "Microsoft Zero Trust Maturity Questionnaire",
         "record_count": 68,
-        "tagged_record_count": 11,
-        "tag_assignments": 11,
+        "tagged_record_count": 62,
+        "tag_assignments": 135,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 11,
@@ -929,10 +929,10 @@
             "tag_assignments": 0
           },
           "vendor_brand": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 62,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 68,
-            "tag_assignments": 0
+            "unreviewed_record_count": 6,
+            "tag_assignments": 62
           },
           "product": {
             "applicable_record_count": 0,
@@ -965,10 +965,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 62,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 68,
-            "tag_assignments": 0
+            "unreviewed_record_count": 6,
+            "tag_assignments": 62
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -988,8 +988,8 @@
         "catalog_id": "mitre-attack",
         "catalog_name": "MITRE ATT&CK",
         "record_count": 712,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 697,
+        "tag_assignments": 697,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -1028,10 +1028,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 697,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 712,
-            "tag_assignments": 0
+            "unreviewed_record_count": 15,
+            "tag_assignments": 697
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1069,8 +1069,8 @@
         "catalog_id": "mitre-attack-ics",
         "catalog_name": "MITRE ATT&CK for ICS",
         "record_count": 109,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 97,
+        "tag_assignments": 97,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -1109,10 +1109,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 97,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 109,
-            "tag_assignments": 0
+            "unreviewed_record_count": 12,
+            "tag_assignments": 97
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1150,8 +1150,8 @@
         "catalog_id": "mitre-d3fend",
         "catalog_name": "MITRE D3FEND",
         "record_count": 278,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 271,
+        "tag_assignments": 271,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -1190,10 +1190,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 271,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 278,
-            "tag_assignments": 0
+            "unreviewed_record_count": 7,
+            "tag_assignments": 271
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1232,7 +1232,7 @@
         "catalog_name": "SP 800-171 Rev. 3",
         "record_count": 147,
         "tagged_record_count": 130,
-        "tag_assignments": 138,
+        "tag_assignments": 398,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 8,
@@ -1271,10 +1271,10 @@
             "tag_assignments": 130
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 130,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 147,
-            "tag_assignments": 0
+            "unreviewed_record_count": 17,
+            "tag_assignments": 130
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1283,10 +1283,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 130,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 147,
-            "tag_assignments": 0
+            "unreviewed_record_count": 17,
+            "tag_assignments": 130
           },
           "program": {
             "applicable_record_count": 0,
@@ -1313,7 +1313,7 @@
         "catalog_name": "SP 800-171 Rev. 2",
         "record_count": 124,
         "tagged_record_count": 110,
-        "tag_assignments": 116,
+        "tag_assignments": 336,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 6,
@@ -1352,10 +1352,10 @@
             "tag_assignments": 110
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 110,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 124,
-            "tag_assignments": 0
+            "unreviewed_record_count": 14,
+            "tag_assignments": 110
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1364,10 +1364,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 110,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 124,
-            "tag_assignments": 0
+            "unreviewed_record_count": 14,
+            "tag_assignments": 110
           },
           "program": {
             "applicable_record_count": 0,
@@ -1394,7 +1394,7 @@
         "catalog_name": "SP 800-172 Rev. 3",
         "record_count": 132,
         "tagged_record_count": 115,
-        "tag_assignments": 117,
+        "tag_assignments": 347,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 2,
@@ -1433,10 +1433,10 @@
             "tag_assignments": 115
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 115,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 132,
-            "tag_assignments": 0
+            "unreviewed_record_count": 17,
+            "tag_assignments": 115
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1445,10 +1445,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 115,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 132,
-            "tag_assignments": 0
+            "unreviewed_record_count": 17,
+            "tag_assignments": 115
           },
           "program": {
             "applicable_record_count": 0,
@@ -1474,8 +1474,8 @@
         "catalog_id": "nist-800-37",
         "catalog_name": "SP 800-37 Rev. 2",
         "record_count": 7,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 7,
+        "tag_assignments": 14,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -1514,10 +1514,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 7,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 7,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 7
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1526,10 +1526,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 7,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 7,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 7
           },
           "program": {
             "applicable_record_count": 0,
@@ -1556,7 +1556,7 @@
         "catalog_name": "SP 800-53 Rev. 5",
         "record_count": 1216,
         "tagged_record_count": 1196,
-        "tag_assignments": 1255,
+        "tag_assignments": 3647,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 59,
@@ -1595,10 +1595,10 @@
             "tag_assignments": 1196
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 1196,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 1216,
-            "tag_assignments": 0
+            "unreviewed_record_count": 20,
+            "tag_assignments": 1196
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1607,10 +1607,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 1196,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 1216,
-            "tag_assignments": 0
+            "unreviewed_record_count": 20,
+            "tag_assignments": 1196
           },
           "program": {
             "applicable_record_count": 0,
@@ -1637,7 +1637,7 @@
         "catalog_name": "SP 800-53A Rev. 5",
         "record_count": 1034,
         "tagged_record_count": 1014,
-        "tag_assignments": 1065,
+        "tag_assignments": 3093,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 51,
@@ -1676,10 +1676,10 @@
             "tag_assignments": 1014
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 1014,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 1034,
-            "tag_assignments": 0
+            "unreviewed_record_count": 20,
+            "tag_assignments": 1014
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1688,10 +1688,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 1014,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 1034,
-            "tag_assignments": 0
+            "unreviewed_record_count": 20,
+            "tag_assignments": 1014
           },
           "program": {
             "applicable_record_count": 0,
@@ -1717,8 +1717,8 @@
         "catalog_id": "nist-800-53b",
         "catalog_name": "SP 800-53B",
         "record_count": 4,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 4,
+        "tag_assignments": 8,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -1757,10 +1757,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 4,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 4,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 4
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1769,10 +1769,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 4,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 4,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 4
           },
           "program": {
             "applicable_record_count": 0,
@@ -1798,8 +1798,8 @@
         "catalog_id": "nist-ai-rmf",
         "catalog_name": "AI RMF",
         "record_count": 91,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 72,
+        "tag_assignments": 144,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -1838,10 +1838,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 72,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 91,
-            "tag_assignments": 0
+            "unreviewed_record_count": 19,
+            "tag_assignments": 72
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1850,10 +1850,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 72,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 91,
-            "tag_assignments": 0
+            "unreviewed_record_count": 19,
+            "tag_assignments": 72
           },
           "program": {
             "applicable_record_count": 0,
@@ -1880,7 +1880,7 @@
         "catalog_name": "NIST IoT Device Cybersecurity",
         "record_count": 489,
         "tagged_record_count": 489,
-        "tag_assignments": 489,
+        "tag_assignments": 978,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 489,
@@ -1919,10 +1919,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 489,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 489,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 489
           },
           "tool": {
             "applicable_record_count": 0,
@@ -1961,7 +1961,7 @@
         "catalog_name": "NIST Mobile Threat Catalogue",
         "record_count": 268,
         "tagged_record_count": 268,
-        "tag_assignments": 314,
+        "tag_assignments": 582,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 268,
@@ -2000,10 +2000,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 268,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 268,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 268
           },
           "tool": {
             "applicable_record_count": 0,
@@ -2041,8 +2041,8 @@
         "catalog_id": "nist-ssdf",
         "catalog_name": "SSDF",
         "record_count": 46,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 42,
+        "tag_assignments": 42,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -2081,10 +2081,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 42,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 46,
-            "tag_assignments": 0
+            "unreviewed_record_count": 4,
+            "tag_assignments": 42
           },
           "tool": {
             "applicable_record_count": 0,
@@ -2122,8 +2122,8 @@
         "catalog_id": "nist-zt",
         "catalog_name": "NIST Zero Trust",
         "record_count": 344,
-        "tagged_record_count": 16,
-        "tag_assignments": 16,
+        "tagged_record_count": 344,
+        "tag_assignments": 704,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 5,
@@ -2162,10 +2162,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 344,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 344,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 344
           },
           "tool": {
             "applicable_record_count": 0,
@@ -2180,10 +2180,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 344,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 344,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 344
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -2205,7 +2205,7 @@
         "record_type": "assessment_procedure",
         "record_count": 1014,
         "tagged_record_count": 1014,
-        "tag_assignments": 1065,
+        "tag_assignments": 3093,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 51,
@@ -2244,10 +2244,10 @@
             "tag_assignments": 1014
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 1014,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 1014,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 1014
           },
           "tool": {
             "applicable_record_count": 0,
@@ -2256,10 +2256,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 1014,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 1014,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 1014
           },
           "program": {
             "applicable_record_count": 0,
@@ -2284,8 +2284,8 @@
       {
         "record_type": "attack_technique",
         "record_count": 794,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 794,
+        "tag_assignments": 794,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -2324,10 +2324,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 794,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 794,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 794
           },
           "tool": {
             "applicable_record_count": 0,
@@ -2364,8 +2364,8 @@
       {
         "record_type": "baseline",
         "record_count": 8,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 8,
+        "tag_assignments": 16,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -2404,10 +2404,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 8,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 8,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 8
           },
           "tool": {
             "applicable_record_count": 0,
@@ -2416,10 +2416,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 8,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 8,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 8
           },
           "program": {
             "applicable_record_count": 0,
@@ -2525,7 +2525,7 @@
         "record_type": "control",
         "record_count": 324,
         "tagged_record_count": 324,
-        "tag_assignments": 347,
+        "tag_assignments": 995,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 23,
@@ -2564,10 +2564,10 @@
             "tag_assignments": 324
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 324,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 324,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 324
           },
           "tool": {
             "applicable_record_count": 0,
@@ -2576,10 +2576,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 324,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 324,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 324
           },
           "program": {
             "applicable_record_count": 0,
@@ -2605,7 +2605,7 @@
         "record_type": "control_enhancement",
         "record_count": 872,
         "tagged_record_count": 872,
-        "tag_assignments": 908,
+        "tag_assignments": 2652,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 36,
@@ -2644,10 +2644,10 @@
             "tag_assignments": 872
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 872,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 872,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 872
           },
           "tool": {
             "applicable_record_count": 0,
@@ -2656,10 +2656,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 872,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 872,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 872
           },
           "program": {
             "applicable_record_count": 0,
@@ -2684,8 +2684,8 @@
       {
         "record_type": "defend_countermeasure",
         "record_count": 271,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 271,
+        "tag_assignments": 271,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -2724,10 +2724,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 271,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 271,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 271
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3004,8 +3004,8 @@
       {
         "record_type": "impact_category",
         "record_count": 3,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 3,
+        "tag_assignments": 3,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -3044,10 +3044,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 3,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 3,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 3
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3085,7 +3085,7 @@
         "record_type": "iot_capability",
         "record_count": 11,
         "tagged_record_count": 11,
-        "tag_assignments": 11,
+        "tag_assignments": 22,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 11,
@@ -3124,10 +3124,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 11,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 11,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 11
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3165,7 +3165,7 @@
         "record_type": "iot_capability_domain",
         "record_count": 2,
         "tagged_record_count": 2,
-        "tag_assignments": 2,
+        "tag_assignments": 4,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 2,
@@ -3204,10 +3204,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 2,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 2,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 2
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3245,7 +3245,7 @@
         "record_type": "iot_capability_element",
         "record_count": 243,
         "tagged_record_count": 243,
-        "tag_assignments": 243,
+        "tag_assignments": 486,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 243,
@@ -3284,10 +3284,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 243,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 243,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 243
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3325,7 +3325,7 @@
         "record_type": "iot_capability_subelement",
         "record_count": 181,
         "tagged_record_count": 181,
-        "tag_assignments": 181,
+        "tag_assignments": 362,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 181,
@@ -3364,10 +3364,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 181,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 181,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 181
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3405,7 +3405,7 @@
         "record_type": "iot_subcapability",
         "record_count": 52,
         "tagged_record_count": 52,
-        "tag_assignments": 52,
+        "tag_assignments": 104,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 52,
@@ -3444,10 +3444,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 52,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 52,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 52
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3485,7 +3485,7 @@
         "record_type": "mobile_threat",
         "record_count": 236,
         "tagged_record_count": 236,
-        "tag_assignments": 282,
+        "tag_assignments": 518,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 236,
@@ -3524,10 +3524,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 236,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 236,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 236
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3565,7 +3565,7 @@
         "record_type": "mobile_threat_category",
         "record_count": 32,
         "tagged_record_count": 32,
-        "tag_assignments": 32,
+        "tag_assignments": 64,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 32,
@@ -3604,10 +3604,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 32,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 32,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 32
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3644,8 +3644,8 @@
       {
         "record_type": "policy",
         "record_count": 128,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 128,
+        "tag_assignments": 128,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -3684,10 +3684,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 128,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 128,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 128
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3724,8 +3724,8 @@
       {
         "record_type": "program",
         "record_count": 3,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 3,
+        "tag_assignments": 9,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -3764,10 +3764,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 3,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 3,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 3
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3776,16 +3776,16 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 3,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 3,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 3
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 3,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 3,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 3
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -3804,8 +3804,8 @@
       {
         "record_type": "requirement",
         "record_count": 5740,
-        "tagged_record_count": 5268,
-        "tag_assignments": 5287,
+        "tagged_record_count": 5740,
+        "tag_assignments": 11560,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 16,
@@ -3844,10 +3844,10 @@
             "tag_assignments": 5271
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 5740,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 5740,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 5740
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3856,10 +3856,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 533,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 5740,
-            "tag_assignments": 0
+            "unreviewed_record_count": 5207,
+            "tag_assignments": 533
           },
           "program": {
             "applicable_record_count": 0,
@@ -3884,8 +3884,8 @@
       {
         "record_type": "rmf_step",
         "record_count": 7,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 7,
+        "tag_assignments": 14,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -3924,10 +3924,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 7,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 7,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 7
           },
           "tool": {
             "applicable_record_count": 0,
@@ -3936,10 +3936,10 @@
             "tag_assignments": 0
           },
           "framework": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 7,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 7,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 7
           },
           "program": {
             "applicable_record_count": 0,
@@ -3964,8 +3964,8 @@
       {
         "record_type": "srg_requirement",
         "record_count": 2516,
-        "tagged_record_count": 1613,
-        "tag_assignments": 1876,
+        "tagged_record_count": 2516,
+        "tag_assignments": 6908,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 1587,
@@ -4004,10 +4004,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 2516,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 2516,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 2516
           },
           "tool": {
             "applicable_record_count": 0,
@@ -4022,10 +4022,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 2516,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 2516,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 2516
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -4044,8 +4044,8 @@
       {
         "record_type": "stig_rule",
         "record_count": 17021,
-        "tagged_record_count": 12788,
-        "tag_assignments": 28919,
+        "tagged_record_count": 17021,
+        "tag_assignments": 62961,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 7544,
@@ -4084,10 +4084,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 17021,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 17021,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 17021
           },
           "tool": {
             "applicable_record_count": 0,
@@ -4102,10 +4102,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 17021,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 17021,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 17021
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -4204,8 +4204,8 @@
       {
         "record_type": "zt_activity",
         "record_count": 257,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 257,
+        "tag_assignments": 514,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -4244,10 +4244,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 257,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 257,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 257
           },
           "tool": {
             "applicable_record_count": 0,
@@ -4262,10 +4262,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 257,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 257,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 257
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -4284,8 +4284,8 @@
       {
         "record_type": "zt_assessment_question",
         "record_count": 62,
-        "tagged_record_count": 11,
-        "tag_assignments": 11,
+        "tagged_record_count": 62,
+        "tag_assignments": 135,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 11,
@@ -4306,10 +4306,10 @@
             "tag_assignments": 0
           },
           "vendor_brand": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 62,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 62,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 62
           },
           "product": {
             "applicable_record_count": 0,
@@ -4342,10 +4342,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 62,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 62,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 62
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -4364,8 +4364,8 @@
       {
         "record_type": "zt_build",
         "record_count": 19,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 19,
+        "tag_assignments": 38,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -4404,10 +4404,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 19,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 19,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 19
           },
           "tool": {
             "applicable_record_count": 0,
@@ -4422,10 +4422,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 19,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 19,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 19
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -4444,8 +4444,8 @@
       {
         "record_type": "zt_capability",
         "record_count": 45,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 45,
+        "tag_assignments": 90,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -4484,10 +4484,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 45,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 45,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 45
           },
           "tool": {
             "applicable_record_count": 0,
@@ -4502,10 +4502,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 45,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 45,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 45
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -4524,8 +4524,8 @@
       {
         "record_type": "zt_cloud_native_requirement",
         "record_count": 11,
-        "tagged_record_count": 9,
-        "tag_assignments": 9,
+        "tagged_record_count": 11,
+        "tag_assignments": 31,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 5,
@@ -4564,10 +4564,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 11,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 11,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 11
           },
           "tool": {
             "applicable_record_count": 0,
@@ -4582,10 +4582,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 11,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 11,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 11
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -4604,8 +4604,8 @@
       {
         "record_type": "zt_collaborator",
         "record_count": 24,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 24,
+        "tag_assignments": 48,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -4644,10 +4644,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 24,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 24,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 24
           },
           "tool": {
             "applicable_record_count": 0,
@@ -4662,10 +4662,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 24,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 24,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 24
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -4684,8 +4684,8 @@
       {
         "record_type": "zt_document",
         "record_count": 6,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 6,
+        "tag_assignments": 12,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -4724,10 +4724,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 6,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 6,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 6
           },
           "tool": {
             "applicable_record_count": 0,
@@ -4742,10 +4742,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 6,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 6,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 6
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -4764,8 +4764,8 @@
       {
         "record_type": "zt_logical_component",
         "record_count": 11,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 11,
+        "tag_assignments": 22,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -4804,10 +4804,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 11,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 11,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 11
           },
           "tool": {
             "applicable_record_count": 0,
@@ -4822,10 +4822,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 11,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 11,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 11
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -4844,8 +4844,8 @@
       {
         "record_type": "zt_mapping_contributor",
         "record_count": 16,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 16,
+        "tag_assignments": 32,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -4884,10 +4884,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 16,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 16,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 16
           },
           "tool": {
             "applicable_record_count": 0,
@@ -4902,10 +4902,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 16,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 16,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 16
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -4924,8 +4924,8 @@
       {
         "record_type": "zt_mapping_document",
         "record_count": 4,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 4,
+        "tag_assignments": 8,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -4964,10 +4964,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 4,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 4,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 4
           },
           "tool": {
             "applicable_record_count": 0,
@@ -4982,10 +4982,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 4,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 4,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 4
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -5004,8 +5004,8 @@
       {
         "record_type": "zt_pillar",
         "record_count": 13,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 7,
+        "tag_assignments": 14,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -5044,10 +5044,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 7,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 13,
-            "tag_assignments": 0
+            "unreviewed_record_count": 6,
+            "tag_assignments": 7
           },
           "tool": {
             "applicable_record_count": 0,
@@ -5062,10 +5062,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 7,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 13,
-            "tag_assignments": 0
+            "unreviewed_record_count": 6,
+            "tag_assignments": 7
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -5084,8 +5084,8 @@
       {
         "record_type": "zt_product_component",
         "record_count": 197,
-        "tagged_record_count": 7,
-        "tag_assignments": 7,
+        "tagged_record_count": 197,
+        "tag_assignments": 401,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -5124,10 +5124,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 197,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 197,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 197
           },
           "tool": {
             "applicable_record_count": 0,
@@ -5142,10 +5142,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 197,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 197,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 197
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -5164,8 +5164,8 @@
       {
         "record_type": "zt_publication",
         "record_count": 3,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 3,
+        "tag_assignments": 6,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -5204,10 +5204,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 3,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 3,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 3
           },
           "tool": {
             "applicable_record_count": 0,
@@ -5222,10 +5222,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 3,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 3,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 3
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -5244,8 +5244,8 @@
       {
         "record_type": "zt_reference_component",
         "record_count": 52,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 52,
+        "tag_assignments": 104,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -5284,10 +5284,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 52,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 52,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 52
           },
           "tool": {
             "applicable_record_count": 0,
@@ -5302,10 +5302,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 52,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 52,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 52
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -5324,8 +5324,8 @@
       {
         "record_type": "zt_tenet",
         "record_count": 12,
-        "tagged_record_count": 0,
-        "tag_assignments": 0,
+        "tagged_record_count": 12,
+        "tag_assignments": 24,
         "dimensions": {
           "asset_class": {
             "applicable_record_count": 0,
@@ -5364,10 +5364,10 @@
             "tag_assignments": 0
           },
           "organization": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 12,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 12,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 12
           },
           "tool": {
             "applicable_record_count": 0,
@@ -5382,10 +5382,10 @@
             "tag_assignments": 0
           },
           "program": {
-            "applicable_record_count": 0,
+            "applicable_record_count": 12,
             "not_applicable_record_count": 0,
-            "unreviewed_record_count": 12,
-            "tag_assignments": 0
+            "unreviewed_record_count": 0,
+            "tag_assignments": 12
           },
           "artifact": {
             "applicable_record_count": 0,
@@ -5434,10 +5434,10 @@
         "dimension": "vendor_brand",
         "label": "Vendor",
         "record_count": 30365,
-        "applicable_record_count": 9241,
+        "applicable_record_count": 9303,
         "not_applicable_record_count": 0,
-        "unreviewed_record_count": 21124,
-        "tag_assignments": 9241
+        "unreviewed_record_count": 21062,
+        "tag_assignments": 9303
       },
       {
         "dimension": "product",
@@ -5461,10 +5461,10 @@
         "dimension": "organization",
         "label": "Organization",
         "record_count": 30365,
-        "applicable_record_count": 0,
+        "applicable_record_count": 30122,
         "not_applicable_record_count": 0,
-        "unreviewed_record_count": 30365,
-        "tag_assignments": 0
+        "unreviewed_record_count": 243,
+        "tag_assignments": 30122
       },
       {
         "dimension": "tool",
@@ -5479,19 +5479,19 @@
         "dimension": "framework",
         "label": "Framework",
         "record_count": 30365,
-        "applicable_record_count": 0,
+        "applicable_record_count": 2761,
         "not_applicable_record_count": 0,
-        "unreviewed_record_count": 30365,
-        "tag_assignments": 0
+        "unreviewed_record_count": 27604,
+        "tag_assignments": 2761
       },
       {
         "dimension": "program",
         "label": "Program",
         "record_count": 30365,
-        "applicable_record_count": 0,
+        "applicable_record_count": 20266,
         "not_applicable_record_count": 0,
-        "unreviewed_record_count": 30365,
-        "tag_assignments": 0
+        "unreviewed_record_count": 10099,
+        "tag_assignments": 20266
       },
       {
         "dimension": "artifact",
@@ -5514,6 +5514,11 @@
     ],
     "source_fields": [
       {
+        "source_field": "catalog_id",
+        "record_count": 30184,
+        "tag_assignments": 53900
+      },
+      {
         "source_field": "metadata.benchmark_title",
         "record_count": 11684,
         "tag_assignments": 23170
@@ -5532,14 +5537,25 @@
         "source_field": "family",
         "record_count": 2565,
         "tag_assignments": 2691
-      },
-      {
-        "source_field": "catalog_id",
-        "record_count": 689,
-        "tag_assignments": 689
       }
     ],
     "source_basis": [
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "catalog_id",
+        "rule": "catalog-publisher-organization",
+        "record_count": 30184,
+        "tag_assignments": 30184
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "catalog_id",
+        "rule": "catalog-program-scope",
+        "record_count": 20266,
+        "tag_assignments": 20266
+      },
       {
         "taxonomy_layer": "atlas_evidence",
         "assignment_provenance": "inferred",
@@ -5571,6 +5587,14 @@
         "rule": "explicit-product-title",
         "record_count": 3179,
         "tag_assignments": 3179
+      },
+      {
+        "taxonomy_layer": "atlas_evidence",
+        "assignment_provenance": "inferred",
+        "source_field": "catalog_id",
+        "rule": "catalog-framework-scope",
+        "record_count": 2761,
+        "tag_assignments": 2761
       },
       {
         "taxonomy_layer": "publisher",

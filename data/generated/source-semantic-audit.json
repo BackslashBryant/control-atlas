@@ -3,7 +3,7 @@
   "generated_from": {
     "source_coverage_manifest": "2026-08-14T00:40:44.724Z",
     "catalog_source_inventory": "2026-08-13T16:29:35.465Z",
-    "source_count_ledger": "2026-08-23T18:51:33.379Z"
+    "source_count_ledger": "2026-08-23T23:28:06.683Z"
   },
   "purpose": "Per-catalog audit boundary for publisher structure, parser reconciliation, artifact provenance, representative semantic review, locator disposition, and official-source currentness review.",
   "catalog_count": 27,
