@@ -441,11 +441,13 @@ test("resource card uses the central identity seam and restrained anatomy", () =
   );
   const styles = readFileSync(resolve("styles/resources.css"), "utf8");
 
-  assert.match(card, /resourceBrandIdentity\(resource\)/);
+  assert.match(card, /resolveIdentity/);
+  assert.match(card, /taxonomyTagsForResource/);
+  assert.match(card, /IdentityMark/);
   assert.match(card, /resourceAccessLabel\(resource\)/);
   assert.match(card, /resourceTypeLabel\(resource\.resourceType\)/);
   assert.match(card, /cardPurpose/);
-  assert.doesNotMatch(card, /whyIncluded|frameworks\.map|artifactTypes\.map|CommonsLaneBadge/);
+  assert.doesNotMatch(card, /whyIncluded|frameworks\.map|artifactTypes\.map|CommonsLaneBadge|resourceBrandIdentity/);
   assert.match(styles, /\.resource-brand-mark[\s\S]*height:\s*44px/);
   assert.match(styles, /\.resource-brand-mark[\s\S]*width:\s*44px/);
   assert.match(styles, /@media \(max-width:\s*30rem\)[\s\S]*height:\s*40px/);

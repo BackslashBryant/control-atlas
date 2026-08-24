@@ -15,6 +15,7 @@ import type { CommonsResource } from "../lib/commonsTypes";
 import { resourceDateLabel } from "../lib/commonsPresentation.mjs";
 import { serializeHashLocation } from "../lib/hashRoutes";
 import { resourceAccessLabel, resourceFieldLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
+
 import { taxonomyTagsForResource, deriveTags } from "../../shared/record-taxonomy.mjs";
 import { AtlasTag } from "../components/AtlasTag";
 import type { RuntimeBundle } from "../lib/runtimeLoader";

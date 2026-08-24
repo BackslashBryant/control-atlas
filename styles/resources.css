@@ -762,6 +762,11 @@
   text-align: center;
 }
 
+.resource-brand-mark .identity-mark--monogram {
+  background: transparent;
+  color: inherit;
+}
+
 .resource-card-heading {
   min-width: 0;
 }
