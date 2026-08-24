@@ -510,7 +510,7 @@
 }
 
 .atlas-tag__label {
-  color: var(--ca-link);
+  color: var(--ca-text-primary);
   font-weight: 600;
   font-family: var(--ca-font-mono);
   letter-spacing: 0.02em;

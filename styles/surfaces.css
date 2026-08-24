@@ -8942,7 +8942,7 @@ button.atlas-leverage-row:hover {
 .record-connections-explore {
   display: inline-flex;
   margin-top: var(--ca-space-4);
-  color: var(--ca-link);
+  color: var(--ca-text-primary);
 }
 
 .record-connections--inline {
