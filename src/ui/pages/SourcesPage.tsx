@@ -77,27 +77,13 @@ function CopyStableSourceId(props: { id: string }) {
   );
 }
 
-function EmptyPublicationInspector() {
-  return (
-    <section className="source-inspector-card source-inspector-card--empty panel surface-blueprint">
-      <span className="label">SELECTED PUBLICATION</span>
-      <h2 className="source-inspector-title">
-        Select a publication
-      </h2>
-      <p className="source-inspector-empty-desc">
-        Publisher, version, source files, and published crosswalks will appear here.
-      </p>
-    </section>
-  );
-}
-
 function useCompactSourceInspector() {
   const [isCompact, setIsCompact] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth < 1024 : false,
+    typeof window !== "undefined" ? window.innerWidth < 1200 : false,
   );
 
   useEffect(() => {
-    const update = () => setIsCompact(window.innerWidth < 1024);
+    const update = () => setIsCompact(window.innerWidth < 1200);
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
@@ -573,19 +559,6 @@ export function SourcesPage(props: {
     setVisibleLimit(SOURCE_PAGE_SIZE);
   }, [state.lifecycle, state.publisher, state.query]);
 
-  const lastActiveSourceRef = useRef(state.source || "");
-  useEffect(() => {
-    if (state.source) {
-      lastActiveSourceRef.current = state.source;
-    } else if (lastActiveSourceRef.current) {
-      const triggerId = activeTriggerIdRef.current || lastActiveSourceRef.current;
-      window.setTimeout(() => {
-        document.getElementById(`source-trigger-${triggerId}`)?.focus();
-      }, 50);
-      lastActiveSourceRef.current = "";
-    }
-  }, [state.source]);
-
   const handleSelectPublication = (
     publicationId: string,
     event?: MouseEvent<HTMLButtonElement>,
@@ -594,7 +567,6 @@ export function SourcesPage(props: {
       activeTriggerRef.current = event.currentTarget;
     }
     activeTriggerIdRef.current = publicationId;
-    lastActiveSourceRef.current = publicationId;
     onNavigate("sources", {
       ...state,
       source: publicationId,
@@ -602,10 +574,33 @@ export function SourcesPage(props: {
   };
 
   const handleCloseInspector = () => {
+    const triggerId = activeTriggerIdRef.current || selectedPublicationRow?.id || "";
+    const rememberedTrigger = activeTriggerRef.current;
     onNavigate("sources", {
       ...state,
       source: "",
     });
+    if (!triggerId) return;
+
+    // Route state may remount Sources before the dialog's own close-autofocus
+    // phase runs. Keep this closure outside that lifecycle and wait until the
+    // modal has released the app's inert boundary before restoring focus.
+    let attempts = 0;
+    const restoreTriggerFocus = () => {
+      const app = document.getElementById("app");
+      const trigger = rememberedTrigger?.isConnected
+        ? rememberedTrigger
+        : document.getElementById(`source-trigger-${triggerId}`);
+      if (trigger instanceof HTMLElement && !app?.hasAttribute("inert")) {
+        trigger.focus({ preventScroll: true });
+        return;
+      }
+      attempts += 1;
+      if (attempts < 20) {
+        window.setTimeout(restoreTriggerFocus, 50);
+      }
+    };
+    window.setTimeout(restoreTriggerFocus, 0);
   };
 
   const handleResetFilters = () => {
@@ -648,7 +643,7 @@ export function SourcesPage(props: {
         </div>
       ) : null}
 
-      <div className="sources-workspace grid queue-layout">
+      <div className={`sources-workspace grid queue-layout${selectedPublicationRow ? " sources-workspace--inspecting" : ""}`}>
         <section aria-label="Publication register" className="sources-table-panel panel surface-scanline">
           {/* S2 Toolbar: compact admin toolbar */}
           <div className="admin-tools source-admin-tools">
@@ -909,18 +904,14 @@ export function SourcesPage(props: {
         </section>
 
         {/* S4, S7, S8 Scoped Publication Inspector */}
-        <aside className="work-stack sources-inspector-pane">
-          {selectedPublicationRow ? (
+        {selectedPublicationRow ? (
+          <aside className="work-stack sources-inspector-pane">
             <PublicationInspector
               onClose={handleCloseInspector}
               publication={selectedPublicationRow}
             />
-          ) : (
-            <div className="sources-inspector-empty-desktop">
-              <EmptyPublicationInspector />
-            </div>
-          )}
-        </aside>
+          </aside>
+        ) : null}
       </div>
     </MissionPage>
   );

@@ -38,7 +38,32 @@ const ICONS = {
   "disa-services-capabilities": IconServer,
 } as const;
 
+const COLLECTION_TONES: Record<string, string> = {
+  "dod-cybersecurity-portals": "governance",
+  "reciprocity-authorization-reuse": "governance",
+  "implementation-assessment-tools": "implementation",
+  "product-assurance-approved-products": "compliance",
+  "cloud-devsecops-software-factories": "architecture",
+  "cmmc-defense-industrial-base": "risk",
+  "cyber-workforce-training": "knowledge",
+  "practitioner-communities": "community",
+  "vulnerability-management-prioritization": "threats",
+  "detection-soc": "operations",
+  "threat-intelligence-investigation": "threats",
+  "dfir-threat-hunting": "threats",
+  "stig-configuration-automation": "implementation",
+  "network-security-analysis": "assessment",
+  "devsecops-supply-chain": "architecture",
+  "identity-access-security": "governance",
+  "disa-services-capabilities": "authority",
+};
+
 export function CollectionIcon(props: { collectionId: string; size?: number }) {
   const Icon = ICONS[props.collectionId as keyof typeof ICONS] || IconFolders;
-  return <Icon aria-hidden="true" size={props.size || 22} stroke={1.8} />;
+  const tone = COLLECTION_TONES[props.collectionId] || "neutral";
+  return (
+    <span aria-hidden="true" className="collection-icon" data-collection-tone={tone}>
+      <Icon size={props.size || 22} stroke={1.8} />
+    </span>
+  );
 }

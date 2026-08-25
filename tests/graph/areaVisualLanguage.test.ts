@@ -107,7 +107,8 @@ test("locked area hue pairs and global layout tokens are exact", () => {
     assert.ok(contrast(onDark, tokenValue("--ca-surface")) >= 3, `${slug} must remain visible on dark surfaces`);
   }
 
-  assert.match(tokens, /--ca-content-max:\s*75rem/);
+  assert.match(tokens, /--ca-content-max:\s*82rem/);
+  assert.match(tokens, /--ca-workspace-max:\s*100rem/);
   assert.match(tokens, /--ca-reading-measure:\s*45rem/);
   assert.match(tokens, /--ca-grid-gutter:\s*var\(--ca-space-6\)/);
   assert.match(tokens, /--ca-section-gap:\s*var\(--ca-space-12\)/);

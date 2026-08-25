@@ -287,7 +287,12 @@ export function CommonsPage(props: {
               const selected = selectedResourceIds.includes(resource.id);
               return (
                 <li key={resource.id}>
-                  <article className="workspace-result-row workspace-result-row--resource" data-resource-id={resource.id} data-result-class="resource">
+                  <article
+                    className="workspace-result-row workspace-result-row--resource"
+                    data-resource-id={resource.id}
+                    data-resource-type={resource.resourceType}
+                    data-result-class="resource"
+                  >
                     {compareMode ? (
                       <label className="workspace-result-select">
                         <input

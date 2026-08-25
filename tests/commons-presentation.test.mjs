@@ -481,7 +481,23 @@ test("Resource routes follow the Orbital catalog and knowledge-base compositions
   assert.match(detail, /Source &amp; maintenance details/);
   assert.doesNotMatch(detail, /Governed discovery tags/);
   assert.doesNotMatch(detail, /Publisher image from commit/);
-  assert.match(styles, /\.resource-catalog-grid\s*\{[\s\S]*repeat\(4,/);
-  assert.match(styles, /@media \(max-width:\s*64rem\)[\s\S]*\.resource-catalog-grid[\s\S]*repeat\(2,/);
+  assert.match(styles, /\.resource-catalog-grid\s*\{[\s\S]*repeat\(auto-fill,[\s\S]*18rem/);
+  assert.match(styles, /@media \(max-width:\s*64rem\)[\s\S]*\.resource-catalog-grid[\s\S]*17\.5rem/);
   assert.match(styles, /@media \(max-width:\s*48rem\)[\s\S]*\.resource-catalog-grid[\s\S]*grid-template-columns:\s*1fr/);
+});
+
+test("Resource and collection icon color communicates category instead of decoration", () => {
+  const directory = readFileSync(resolve("src/ui/pages/CommonsPage.tsx"), "utf8");
+  const resourceIcon = readFileSync(resolve("src/ui/components/ResourceTypeIcon.tsx"), "utf8");
+  const collectionIcon = readFileSync(resolve("src/ui/components/CollectionIcon.tsx"), "utf8");
+  const tokens = readFileSync(resolve("styles/tokens.css"), "utf8");
+  const styles = readFileSync(resolve("styles/surfaces.css"), "utf8");
+
+  assert.match(directory, /data-resource-type=\{resource\.resourceType\}/);
+  assert.match(resourceIcon, /data-resource-tone=\{tone\}/);
+  assert.match(collectionIcon, /data-collection-tone=\{tone\}/);
+  assert.match(tokens, /--ca-type-portal:/);
+  assert.match(tokens, /--ca-type-tool:/);
+  assert.match(styles, /\.resource-type-icon\[data-resource-tone="tool"\]/);
+  assert.match(styles, /\.collection-icon\[data-collection-tone="operations"\]/);
 });
