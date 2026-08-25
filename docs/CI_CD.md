@@ -1,5 +1,10 @@
 # Control Atlas CI/CD
 
+- **Owner:** Nexus and Pixel
+- **Status:** Canonical
+- **Last reviewed:** 2026-08-25
+- **Supersession:** Update this contract and the corresponding workflows or package scripts in the same approved change.
+
 Control Atlas uses three GitHub Actions workflows with one immutable site artifact.
 
 ## Workflow responsibilities

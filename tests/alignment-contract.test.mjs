@@ -13,6 +13,7 @@ const canonicalDocs = [
   "docs/DATA_POLICY.md",
   "docs/TAXONOMY.md",
   "docs/OPERATIONS.md",
+  "docs/CI_CD.md",
   "docs/BACKLOG.md",
   "docs/THIRD_PARTY_NOTICES.md",
 ];

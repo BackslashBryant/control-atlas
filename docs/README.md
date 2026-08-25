@@ -17,6 +17,7 @@ Only durable direction belongs in `docs/`:
 | Sources, publisher structure, relationships, and generated data | [Data policy](DATA_POLICY.md) |
 | Governed discovery vocabulary and applicability coverage | [Taxonomy contract](TAXONOMY.md) |
 | Verification, release, and operations | [Operations](OPERATIONS.md) |
+| CI/CD workflow architecture | [CI/CD](CI_CD.md) |
 | Open work only | [Backlog](BACKLOG.md) |
 | Third-party attribution | [Third-party notices](THIRD_PARTY_NOTICES.md) |
 

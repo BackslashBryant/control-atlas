@@ -31,5 +31,5 @@ test('source register desktop composition', async ({ page }) => {
 test('resource directory mobile composition', async ({ page }) => {
   await openStableWorkspace(page, '#/resources?showAll=true', { width: 390, height: 844 });
   await expect(page.locator('.workspace-result-list')).toBeVisible();
-  await expect(page.locator('#workspace')).toHaveScreenshot('resources-mobile.png');
+  await expect(page).toHaveScreenshot('resources-mobile.png', { fullPage: false });
 });
