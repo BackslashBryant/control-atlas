@@ -45,6 +45,7 @@ test('PR CI is an independent gate DAG around one immutable artifact', () => {
   assert.match(ci, /--shard=\$\{\{ matrix\.shard \}\}\/2/);
   assert.match(ci, /npm run test:a11y:smoke/);
   assert.match(ci, /npm run test:performance:ci/);
+  assert.match(ci, /checks:\n\s+name: checks\n\s+if: \$\{\{ always\(\) \}\}\n\s+needs: required/);
   assert.doesNotMatch(ci, /npm run audit:deps/);
 });
 

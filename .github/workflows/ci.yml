@@ -370,6 +370,17 @@ jobs:
             exit 1
           fi
 
+  checks:
+    name: checks
+    if: ${{ always() }}
+    needs: required
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish branch-protection compatibility status
+        env:
+          REQUIRED_RESULT: ${{ needs.required.result }}
+        run: test "$REQUIRED_RESULT" = success
+
   nightly-build:
     name: Nightly build and contracts
     if: >-

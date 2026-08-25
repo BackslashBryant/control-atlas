@@ -17,6 +17,8 @@ Control Atlas uses three GitHub Actions workflows with one immutable site artifa
 
 `Change map` determines which gates are required. Lint, types, unit tests, build, contracts, browser shards, accessibility, visual regression, Lighthouse, and workflow lint report independently. `Required CI` fails if any selected gate fails or is cancelled.
 
+The final `checks` job mirrors `Required CI` for compatibility with the repository's existing protected-branch status context. It does not bypass or duplicate validation.
+
 Routine checkout uses depth 1 and fetches only the comparison base SHA. Full history is reserved for the scheduled deep secret scan.
 
 ## Change-map policy
