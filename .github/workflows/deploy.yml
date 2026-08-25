@@ -71,9 +71,11 @@ jobs:
             echo 'The CI change map does not contain a valid buildRequired value.'
             exit 1
           fi
-          echo "deploy=$deploy" >> "$GITHUB_OUTPUT"
-          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
-          echo "sha=$RELEASE_SHA" >> "$GITHUB_OUTPUT"
+          {
+            echo "deploy=$deploy"
+            echo "run_id=$RUN_ID"
+            echo "sha=$RELEASE_SHA"
+          } >> "$GITHUB_OUTPUT"
 
   deploy:
     name: Deploy verified artifact
