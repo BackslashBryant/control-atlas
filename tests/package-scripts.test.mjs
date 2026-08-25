@@ -237,7 +237,7 @@ test('CI builds one exact-SHA artifact and omits per-push visual replay', () => 
   assert.doesNotMatch(ciWorkflow, /name: Download reusable exact-SHA site artifact/);
   assert.match(ciWorkflow, /name: Verify exact-SHA site artifact/);
   assert.match(ciWorkflow, /name: site-build/);
-  assert.match(ciWorkflow, /actions\/cache@v5/);
+  assert.match(ciWorkflow, /actions\/cache@v6/);
   assert.match(ciWorkflow, /GENERATED_CACHE_HIT/);
   assert.match(ciWorkflow, /Generated data cache unavailable or invalidated; rebuilding deterministically/);
   assert.doesNotMatch(ciWorkflow, /approved-layout-visuals/);
@@ -246,7 +246,7 @@ test('CI builds one exact-SHA artifact and omits per-push visual replay', () => 
 test('nightly full verification builds once and shards browser coverage', () => {
   assert.match(nightlyQualityWorkflow, /cron: '37 6 \* \* \*'/);
   assert.equal((nightlyQualityWorkflow.match(/Build once from cached or source data/g) ?? []).length, 1);
-  assert.match(nightlyQualityWorkflow, /actions\/cache@v5/);
+  assert.match(nightlyQualityWorkflow, /actions\/cache@v6/);
   assert.match(nightlyQualityWorkflow, /Generated data cache unavailable; rebuilding deterministically/);
   assert.match(nightlyQualityWorkflow, /shard: \[1, 2, 3, 4\]/);
   assert.match(nightlyQualityWorkflow, /--shard=\$\{\{ matrix\.shard \}\}\/4/);
