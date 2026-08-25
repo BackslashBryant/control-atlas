@@ -33,11 +33,37 @@ const ICONS = {
   training: IconSchool,
 } as const;
 
+const TYPE_TONES: Record<string, string> = {
+  catalog: "catalog",
+  community_forum: "community",
+  dataset: "data",
+  documentation: "reference",
+  ecosystem: "community",
+  government_portal: "portal",
+  historical_reference: "reference",
+  instruction: "learning",
+  marketplace: "catalog",
+  matrix: "data",
+  product_directory: "catalog",
+  restricted_service: "service",
+  service_portal: "service",
+  specification: "reference",
+  template: "reference",
+  tool: "tool",
+  training: "learning",
+};
+
 export function ResourceTypeIcon(props: { resourceType: string; size?: number }) {
   const Icon = ICONS[props.resourceType as keyof typeof ICONS] || IconWorld;
   const label = resourceTypeLabel(props.resourceType);
+  const tone = TYPE_TONES[props.resourceType] || "neutral";
   return (
-    <span aria-label={`${label} resource`} className="resource-type-icon" role="img">
+    <span
+      aria-label={`${label} resource`}
+      className="resource-type-icon"
+      data-resource-tone={tone}
+      role="img"
+    >
       <Icon aria-hidden="true" size={props.size || 20} stroke={1.8} />
     </span>
   );

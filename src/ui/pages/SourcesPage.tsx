@@ -77,27 +77,13 @@ function CopyStableSourceId(props: { id: string }) {
   );
 }
 
-function EmptyPublicationInspector() {
-  return (
-    <section className="source-inspector-card source-inspector-card--empty panel surface-blueprint">
-      <span className="label">SELECTED PUBLICATION</span>
-      <h2 className="source-inspector-title">
-        Select a publication
-      </h2>
-      <p className="source-inspector-empty-desc">
-        Publisher, version, source files, and published crosswalks will appear here.
-      </p>
-    </section>
-  );
-}
-
 function useCompactSourceInspector() {
   const [isCompact, setIsCompact] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth < 1024 : false,
+    typeof window !== "undefined" ? window.innerWidth < 1200 : false,
   );
 
   useEffect(() => {
-    const update = () => setIsCompact(window.innerWidth < 1024);
+    const update = () => setIsCompact(window.innerWidth < 1200);
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
@@ -648,7 +634,7 @@ export function SourcesPage(props: {
         </div>
       ) : null}
 
-      <div className="sources-workspace grid queue-layout">
+      <div className={`sources-workspace grid queue-layout${selectedPublicationRow ? " sources-workspace--inspecting" : ""}`}>
         <section aria-label="Publication register" className="sources-table-panel panel surface-scanline">
           {/* S2 Toolbar: compact admin toolbar */}
           <div className="admin-tools source-admin-tools">
@@ -909,18 +895,14 @@ export function SourcesPage(props: {
         </section>
 
         {/* S4, S7, S8 Scoped Publication Inspector */}
-        <aside className="work-stack sources-inspector-pane">
-          {selectedPublicationRow ? (
+        {selectedPublicationRow ? (
+          <aside className="work-stack sources-inspector-pane">
             <PublicationInspector
               onClose={handleCloseInspector}
               publication={selectedPublicationRow}
             />
-          ) : (
-            <div className="sources-inspector-empty-desktop">
-              <EmptyPublicationInspector />
-            </div>
-          )}
-        </aside>
+          </aside>
+        ) : null}
       </div>
     </MissionPage>
   );

@@ -463,6 +463,21 @@ body {
   padding-block: var(--ca-space-8) var(--ca-space-16);
 }
 
+/* Directory and data routes are working surfaces, not reading pages. Their
+   children already declare workspace ceilings, but the old outer content
+   ceiling constrained them first and stranded roughly half of wide screens. */
+#workspace:has(.app-shell:is(
+  [data-view="search"],
+  [data-view="commons"],
+  [data-view="compare"],
+  [data-view="sources"]
+)) {
+  width: min(
+    var(--ca-workspace-max),
+    calc(100vw - clamp(2rem, 5vw, 5rem))
+  );
+}
+
 #workspace:has(.app-shell[data-view="home"]) {
   width: 100%;
   max-width: none;

@@ -154,6 +154,21 @@
   --ca-area-authority-on-dark: #e0b15a;
   --ca-area-authority: var(--ca-area-authority-on-dark);
 
+  /* Resource kinds use a small, muted semantic palette so a portal, service,
+     tool, catalogue, learning destination, and community can be scanned
+     without turning the directory into a rainbow. Type colour is always
+     paired with a distinct icon and text label; lifecycle status keeps its
+     own badge vocabulary below. */
+  --ca-type-portal: var(--lsm-relay);
+  --ca-type-service: var(--lsm-amber);
+  --ca-type-tool: var(--lsm-orange-text);
+  --ca-type-catalog: var(--lsm-steel-text);
+  --ca-type-learning: var(--ca-area-knowledge);
+  --ca-type-community: var(--ca-area-architecture);
+  --ca-type-reference: var(--ca-area-governance);
+  --ca-type-data: var(--ca-area-assessment);
+  --ca-type-neutral: var(--ca-text-muted);
+
   /* Provenance: always paired with a text label. */
   --ca-prov-official: var(--lsm-relay);
   --ca-prov-dod: var(--lsm-gold);
@@ -284,8 +299,11 @@
   --ca-reading-measure: 45rem;
   --ca-content-md: var(--ca-reading-measure);
   --ca-content-lg: 60rem;
-  --ca-content-max: 75rem;
-  --ca-workspace-max: 88rem;
+  /* Page-family ceilings. Reading copy keeps its 45rem measure, directories
+     have a 82rem content rail, and data/browse workspaces can use 100rem.
+     The prior 75rem outer ceiling overrode every wider child workspace. */
+  --ca-content-max: 82rem;
+  --ca-workspace-max: 100rem;
   --ca-content-xl: var(--ca-content-max);
   --ca-grid-gutter: var(--ca-space-6);
   --ca-section-gap: var(--ca-space-12);

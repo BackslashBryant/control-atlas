@@ -18,7 +18,7 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await gotoApp(page, "/#/sources");
     await waitForAppReady(page);
 
-    // Initial state: 47 publications listed with empty inspector on desktop (S7)
+    // Initial state: the register uses the full workspace until a row is selected.
     const table = page.getByRole("table", { name: "Control Atlas publication register" });
     await expect(table).toBeVisible();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Sources");
@@ -33,7 +33,7 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
       "Status",
     ]);
     await expect(page.locator(".sources-page")).not.toContainText("Catalog profile");
-    await expect(page.locator(".sources-inspector-pane .source-inspector-card--empty")).toBeVisible();
+    await expect(page.locator(".sources-inspector-pane")).toHaveCount(0);
     await expect(page.locator(".sources-inspector-pane .source-inspector")).toHaveCount(0);
 
     // Select DoD AI Assurance
@@ -52,7 +52,7 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await expect(inspector).not.toHaveAttribute("role", "dialog");
   });
 
-  test("1024px keeps the register and inspector in a two-column non-modal workspace", async ({ page }) => {
+  test("1024px moves publication details to a modal instead of cramping the register", async ({ page }) => {
     await page.setViewportSize({ width: 1024, height: 900 });
     await gotoApp(page, "/#/sources");
     await waitForAppReady(page);
@@ -60,19 +60,11 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await page.getByRole("button", { name: "DoD AI Assurance" }).click();
     await waitForAppReady(page);
 
-    const workspace = page.locator(".sources-workspace");
     const table = page.getByRole("table", { name: "Control Atlas publication register" });
-    const inspector = page.locator(".sources-inspector-pane .source-inspector--inline");
-    await expect(workspace).toHaveCSS("display", "grid");
     await expect(table).toBeVisible();
-    await expect(inspector).toBeVisible();
-    await expect(page.getByRole("dialog")).toHaveCount(0);
-
-    const [tableBox, inspectorBox] = await Promise.all([table.boundingBox(), inspector.boundingBox()]);
-    expect(tableBox).not.toBeNull();
-    expect(inspectorBox).not.toBeNull();
-    expect(tableBox.width).toBeGreaterThan(inspectorBox.width);
-    expect(inspectorBox.x).toBeGreaterThan(tableBox.x + tableBox.width - 1);
+    await expect(page.locator(".sources-inspector-pane .source-inspector--inline")).toHaveCount(0);
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.getByRole("dialog")).toHaveClass(/source-inspector--modal/);
   });
 
   test("390px uses a focus-trapped modal inspector and returns focus to the row", async ({ page }) => {
