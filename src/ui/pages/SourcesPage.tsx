@@ -389,6 +389,12 @@ function PublicationInspector(props: {
             aria-modal="true"
             className="source-inspector source-inspector--modal panel surface-blueprint"
             id="source-inspector-detail"
+            onCloseAutoFocus={(event) => {
+              // Sources owns focus restoration because route state can remount
+              // the trigger. Prevent Radix's later default autofocus from
+              // racing and overriding handleCloseInspector's resolved target.
+              event.preventDefault();
+            }}
           >
             <PublicationInspectorContent
               close={
