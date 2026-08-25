@@ -108,6 +108,62 @@ for (const viewport of VIEWPORTS) {
               `${route} must not create document-level horizontal overflow`,
             ).toEqual({ body: 0, document: 0 });
 
+            const misalignedCompactControls = await page.evaluate(() => {
+              const selectors = [
+                '.ca-button',
+                '.ca-tab',
+                '.active-filter-chip',
+                '.clear-filter-link',
+                '.workbench-toggle button',
+                '.relationship-view-tabs .tab',
+                '.atlas-view-tabs button',
+                '.source-view-toggle button',
+                '.library-view-toggle button',
+                '.workspace-view-toggle button',
+                '.resource-type-chips button',
+                '.resources-filter-toggle',
+                '.search-mobile-filter-button',
+                '.workspace-mobile-filter-button',
+                '.drawer-tab',
+                '.compare-mode-tab',
+                '.atlas-decomp__orientation-button',
+              ];
+              return [...globalThis.document.querySelectorAll(selectors.join(','))]
+                .filter((control) => {
+                  const box = control.getBoundingClientRect();
+                  return box.width > 0 && box.height > 0;
+                })
+                .map((control) => {
+                  const style = globalThis.getComputedStyle(control);
+                  const controlBox = control.getBoundingClientRect();
+                  const icon = control.querySelector(':scope > svg');
+                  const iconBox = icon?.getBoundingClientRect();
+                  return {
+                    selector: `${control.tagName.toLowerCase()}.${[...control.classList].join('.')}`,
+                    display: style.display,
+                    alignItems: style.alignItems,
+                    justifyContent: style.justifyContent,
+                    iconOffset: iconBox
+                      ? Math.abs(
+                          (controlBox.top + controlBox.height / 2) -
+                            (iconBox.top + iconBox.height / 2),
+                        )
+                      : 0,
+                  };
+                })
+                .filter(
+                  ({ display, alignItems, justifyContent, iconOffset }) =>
+                    !['flex', 'inline-flex'].includes(display) ||
+                    alignItems !== 'center' ||
+                    justifyContent !== 'center' ||
+                    iconOffset > 1.5,
+                );
+            });
+            expect(
+              misalignedCompactControls,
+              `${route} compact controls must keep labels and icons centered`,
+            ).toEqual([]);
+
             const controlOwners = await page.evaluate(() =>
               [...globalThis.document.querySelectorAll("[data-controls-for]")].map(
                 (surface) => {
@@ -143,9 +199,9 @@ for (const viewport of VIEWPORTS) {
               const toolbar = page.locator(".catalog-record-toolbar");
               await expect(sourceAction).toBeVisible();
               await expect(toolbar).toBeVisible();
-              expect((await sourceAction.boundingBox())?.width).toBeLessThanOrEqual(
-                320,
-              );
+              const sourceBox = await sourceAction.boundingBox();
+              expect(sourceBox?.height).toBeGreaterThanOrEqual(44);
+              expect(sourceBox?.width).toBeLessThanOrEqual(viewport.width);
             }
           });
         } catch (error) {

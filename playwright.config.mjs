@@ -7,7 +7,6 @@ const baseURL = `http://localhost:${port}`;
 export default defineConfig({
   testDir: './tests/e2e',
   globalTeardown: './tools/playwright-global-teardown.mjs',
-  testIgnore: '**/approved-layout-visual.spec.mjs',
   fullyParallel: process.env.PLAYWRIGHT_FULLY_PARALLEL === '1',
   timeout: process.env.CI ? 45000 : 30000,
   workers: Math.max(1, Number.parseInt(process.env.PLAYWRIGHT_WORKERS ?? '1', 10) || 1),

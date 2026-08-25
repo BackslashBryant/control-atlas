@@ -1,6 +1,18 @@
 name: AI Control-Plane Hygiene
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repository-hygiene-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   ai-leak-check:
@@ -13,7 +25,7 @@ jobs:
         run: |
           # Skip template repo
           if [ -f ".repo-mode" ] && grep -qi "template" ".repo-mode"; then
-            echo "Template repo — AI files are expected. Skipping."
+            echo "Template repo: AI files are expected. Skipping."
             exit 0
           fi
 
@@ -69,4 +81,4 @@ jobs:
             exit 1
           fi
 
-          echo "? No AI control-plane files found in tracked content."
+          echo "No AI control-plane files found in tracked content."

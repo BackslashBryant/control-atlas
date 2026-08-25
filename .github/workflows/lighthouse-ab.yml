@@ -54,7 +54,10 @@ jobs:
             PORT=4317 npm run serve:static &
             local server_pid=$!
             for _ in $(seq 1 60); do
-              curl -sf http://localhost:4317/ >/dev/null && break || sleep 2
+              if curl -sf http://localhost:4317/ >/dev/null; then
+                break
+              fi
+              sleep 2
             done
             for i in 1 2 3; do
               local report="artifacts/lighthouse-ab/$label-$i.json"

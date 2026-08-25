@@ -27,9 +27,9 @@ test("landing presents Template B search, four destinations, and governed tag br
   await expect(page.locator(".home-search").getByRole("button", { name: "Search" })).toBeVisible();
   // The brand keycap lives in the persistent header, which Home now shares.
   await expect(page.locator(".site-header .brand-kbd")).toBeVisible();
-  // Pinned to the shape, not the literal: the word list is product copy and
-  // has been trimmed before. src/shared/brand-rotation.ts owns the order.
-  await expect(page.locator("[data-brand-word]")).toHaveText(/^[A-Z][a-z]+$/);
+  // Acronyms such as NIST are valid signals. Rotation behavior is covered
+  // below; this assertion only requires a non-empty initial signal.
+  await expect(page.locator("[data-brand-word]")).toHaveText(/\S+/);
   await expect(page.locator(".home-secondary-action")).toHaveCount(4);
   // Five practitioner questions, ordered the way the work runs. The sixth
   // card was a record-volume statistic, not a place to start.

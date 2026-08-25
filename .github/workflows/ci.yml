@@ -2,6 +2,8 @@ name: Public Repo Checks
 
 on:
   push:
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
 
@@ -17,39 +19,6 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
-      - name: Find reusable exact-SHA verification
-        id: reuse
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -u
-          echo "run_id=" >> "$GITHUB_OUTPUT"
-          response_file="$(mktemp)"
-          if ! gh api --method GET \
-            "/repos/${GITHUB_REPOSITORY}/actions/workflows/ci.yml/runs" \
-            -f head_sha="${GITHUB_SHA}" \
-            -f status=success \
-            -f per_page=20 > "$response_file"; then
-            echo "Exact-SHA lookup failed; running the full fail-closed gate."
-            exit 0
-          fi
-          run_id="$(
-            jq -r --arg current "${GITHUB_RUN_ID}" \
-              '.workflow_runs[]
-               | select((.id | tostring) != $current)
-               | select(.event == "push" and .head_branch != "main")
-               | .id' "$response_file" \
-              | head -n 1
-          )"
-          if [[ -n "$run_id" && "$run_id" != "null" ]]; then
-            echo "Reusing successful Public Repo Checks run ${run_id} for ${GITHUB_SHA}."
-            echo "run_id=${run_id}" >> "$GITHUB_OUTPUT"
-          else
-            echo "No prior exact-SHA success found; running the full fail-closed gate."
-          fi
-
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
@@ -68,47 +37,40 @@ jobs:
               --head "${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Download reusable exact-SHA site artifact
-        if: ${{ steps.reuse.outputs.run_id != '' && steps.scope.outputs.scope == 'full' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          VERIFIED_RUN_ID: ${{ steps.reuse.outputs.run_id }}
-        run: gh run download "$VERIFIED_RUN_ID" --name site-build --dir dist/site
-
       - name: Verify evidence-only change
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'evidence-only' }}
+        if: ${{ steps.scope.outputs.scope == 'evidence-only' }}
         run: git diff --check && node --test tests/change-scope.test.mjs tests/release-evidence.test.mjs
 
       - name: Calculate generated-data cache key
         id: generated-key
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        if: ${{ steps.scope.outputs.scope == 'full' }}
         shell: bash
         run: echo "key=$(node tools/generated-data-cache-key.mjs)" >> "$GITHUB_OUTPUT"
 
       - name: Restore generated data
         id: generated-cache
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        if: ${{ steps.scope.outputs.scope == 'full' }}
         uses: actions/cache@v5
         with:
           path: data/generated
           key: generated-data-${{ runner.os }}-v1-${{ steps.generated-key.outputs.key }}
 
       - uses: actions/setup-node@v6
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        if: ${{ steps.scope.outputs.scope == 'full' }}
         with:
           node-version: '22'
           cache: 'npm'
 
       - name: Install locked dependencies
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        if: ${{ steps.scope.outputs.scope == 'full' }}
         run: npm ci
 
       - name: Dependency audit
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        if: ${{ steps.scope.outputs.scope == 'full' }}
         run: npm run audit:deps
 
       - name: Build site once for this commit
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        if: ${{ steps.scope.outputs.scope == 'full' }}
         env:
           CONTROL_ATLAS_COMMIT_SHA: ${{ github.sha }}
           BUILD_MODE: ${{ steps.scope.outputs.build_mode }}
@@ -123,21 +85,21 @@ jobs:
           fi
 
       - name: Static, data, contract, and Guardian gates
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        if: ${{ steps.scope.outputs.scope == 'full' }}
         run: npm run verify:quality
 
       - name: Install Playwright Chromium
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        if: ${{ steps.scope.outputs.scope == 'full' }}
         run: npx playwright install chromium
 
       - name: Accessibility smoke
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        if: ${{ steps.scope.outputs.scope == 'full' }}
         env:
           PLAYWRIGHT_WORKERS: '2'
         run: npm run test:a11y:smoke
 
       - name: Critical browser smoke
-        if: ${{ steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        if: ${{ steps.scope.outputs.scope == 'full' }}
         env:
           PLAYWRIGHT_WORKERS: '2'
         run: npm run test:e2e:smoke
@@ -156,7 +118,7 @@ jobs:
           retention-days: 2
 
       - name: Upload Playwright failure artifacts
-        if: ${{ failure() && steps.reuse.outputs.run_id == '' && steps.scope.outputs.scope == 'full' }}
+        if: ${{ failure() && steps.scope.outputs.scope == 'full' }}
         uses: actions/upload-artifact@v7
         with:
           name: ci-playwright-artifacts
@@ -178,24 +140,3 @@ jobs:
           path: ci-change-scope.txt
           if-no-files-found: error
           retention-days: 2
-
-  lighthouse-report:
-    if: ${{ github.event_name == 'workflow_dispatch' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '22'
-          cache: 'npm'
-      - run: npm ci
-      - name: Run report-only Lighthouse evidence
-        continue-on-error: true
-        run: npm run test:performance
-      - name: Upload Lighthouse reports
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: lighthouse-ci-reports
-          path: artifacts/lighthouse-ci
-          if-no-files-found: warn

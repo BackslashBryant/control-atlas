@@ -9,10 +9,25 @@ jobs:
   sync-public:
     runs-on: ubuntu-latest
     steps:
+      - name: Check whether public sync is configured
+        id: target
+        env:
+          PUBLIC_REPO_URL: ${{ secrets.PUBLIC_REPO_URL }}
+        shell: bash
+        run: |
+          if [[ -n "$PUBLIC_REPO_URL" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_REPO_URL is not configured; no public mirror build is needed."
+          fi
+
       - name: Checkout Private Repository
+        if: ${{ steps.target.outputs.enabled == 'true' }}
         uses: actions/checkout@v6
 
       - name: Setup Node.js
+        if: ${{ steps.target.outputs.enabled == 'true' }}
         uses: actions/setup-node@v6
         with:
           node-version: '22'
@@ -23,26 +38,24 @@ jobs:
       # `npm run build:site` before syncing the public release." on every
       # push to main.
       - name: Install locked dependencies
+        if: ${{ steps.target.outputs.enabled == 'true' }}
         run: npm ci
 
       - name: Build the static site
+        if: ${{ steps.target.outputs.enabled == 'true' }}
         env:
           CONTROL_ATLAS_COMMIT_SHA: ${{ github.sha }}
         run: npm run build:site
 
       - name: Stage Public Files
+        if: ${{ steps.target.outputs.enabled == 'true' }}
         run: node tools/sync-public.mjs
 
       - name: Push to Public Repository
+        if: ${{ steps.target.outputs.enabled == 'true' }}
         env:
           PUBLIC_REPO_URL: ${{ secrets.PUBLIC_REPO_URL }}
         run: |
-          if [ -z "$PUBLIC_REPO_URL" ]; then
-            echo "PUBLIC_REPO_URL secret is not set. Skipping sync."
-            echo "To enable sync, set PUBLIC_REPO_URL to: https://x-access-token:<PAT>@github.com/<org>/<repo>.git"
-            exit 0
-          fi
-
           # Clone the target public repository
           git clone "$PUBLIC_REPO_URL" target-repo
           

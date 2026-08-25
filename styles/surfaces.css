@@ -9930,8 +9930,24 @@ input[type="checkbox"] {
     min-width: 0;
   }
 
+  .site-header .brand-lockup {
+    gap: 3px;
+  }
+
   .site-header .brand-kbd {
-    display: none;
+    display: inline-flex;
+    gap: 2px;
+    max-width: 100%;
+    font-size: 0.52rem;
+    letter-spacing: 0.03em;
+  }
+
+  .site-header .brand-key {
+    padding: 1px 3px;
+  }
+
+  .site-header .brand-plus {
+    padding: 0;
   }
 
   .site-header .brand-icon-mark {

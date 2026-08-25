@@ -1,0 +1,39 @@
+name: Workflow Lint
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workflow-lint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Validate GitHub Actions workflows with actionlint 1.7.12
+        shell: bash
+        run: |
+          version='1.7.12'
+          archive="actionlint_${version}_linux_amd64.tar.gz"
+          checksum_file="actionlint_${version}_checksums.txt"
+          release="https://github.com/rhysd/actionlint/releases/download/v${version}"
+          curl --fail --silent --show-error --location --remote-name "${release}/${archive}"
+          curl --fail --silent --show-error --location --remote-name "${release}/${checksum_file}"
+          grep "  ${archive}$" "$checksum_file" | sha256sum --check --strict
+          tar --extract --gzip --file "$archive" --no-same-owner actionlint
+          ./actionlint
