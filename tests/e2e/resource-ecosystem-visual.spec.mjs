@@ -14,6 +14,15 @@ const collections = [
   "cmmc-defense-industrial-base",
   "cyber-workforce-training",
   "practitioner-communities",
+  "vulnerability-management-prioritization",
+  "detection-soc",
+  "threat-intelligence-investigation",
+  "dfir-threat-hunting",
+  "stig-configuration-automation",
+  "network-security-analysis",
+  "devsecops-supply-chain",
+  "identity-access-security",
+  "disa-services-capabilities",
 ];
 
 async function open(page, hash) {
@@ -33,7 +42,7 @@ test("resource ecosystem visual evidence", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await open(page, "#/resources");
   await expect(page.getByRole("heading", { name: "Browse by Collection" })).toBeVisible();
-  await expect(page.locator(".workspace-browse-card--collection")).toHaveCount(8);
+  await expect(page.locator(".workspace-browse-card--collection")).toHaveCount(17);
   await expect(page.locator(".workspace-result-list")).toHaveCount(0);
   await shot(page, "01-landing-collections");
 
@@ -100,7 +109,7 @@ test("resource ecosystem remains usable at 320 pixels", async ({ page }) => {
 
   await open(page, "#/resources");
   await expect(page.getByRole("heading", { name: "Browse by Collection" })).toBeVisible();
-  await expect(page.locator(".workspace-browse-card--collection")).toHaveCount(8);
+  await expect(page.locator(".workspace-browse-card--collection")).toHaveCount(17);
   await shot(page, "23-mobile-landing-320");
 
   await open(page, "#/resources/portal-cis-workbench?from=commons");
@@ -120,7 +129,7 @@ test("resource directory supports keyboard use and a 200 percent zoom equivalent
   await search.press("Enter");
   await expect(page.getByText("I-Assure RMF artifact templates", { exact: true }).first()).toBeVisible();
 
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  const overflow = await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
 
   await page.keyboard.press("Tab");

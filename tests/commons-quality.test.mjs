@@ -139,7 +139,7 @@ for (const resource of dataset.resources) {
 }
 
 const exactTools = dataset.resources.filter((resource) => resource.resourceType === "tool");
-assert.equal(exactTools.length, 40, "All 40 tool records receive the tool contract");
+assert.ok(exactTools.length >= 40, "Every tool record receives the tool contract");
 for (const resource of exactTools) {
   assert.notEqual(resource.currentVersion, "Current", `${resource.id} must not use a Current placeholder`);
   assert.ok(resource.toolProfile, `${resource.id} tool profile`);
@@ -252,7 +252,7 @@ if (existsSync(CATALOG_BOOTSTRAP_PATH)) {
 }
 
 // 4. Validate collection integrity
-assert.equal(dataset.collections.length, 8, "Eight curated resource collections ship");
+assert.equal(dataset.collections.length, 17, "Seventeen curated resource collections ship");
 const collectionIds = new Set(dataset.collections.map((collection) => collection.id));
 assert.equal(collectionIds.size, dataset.collections.length, "Collection IDs are unique");
 for (const collection of dataset.collections) {
@@ -268,7 +268,10 @@ assert.ok(manifest.totalEvaluated >= 106, `Expected >= 106 total evaluated candi
 assert.ok(manifest.acceptedCount === dataset.resources.length, "Manifest accepted count matches dataset");
 assert.ok(manifest.rejectedCandidates.length >= 10, "Manifest records rejected candidates");
 for (const rej of manifest.rejectedCandidates) {
-  assert.ok(rej.candidateName && rej.url && rej.reason, "Rejected candidate missing required fields");
+  assert.ok(rej.candidateName && rej.url && rej.reason && rej.evidence, "Rejected candidate missing identity, reason, or evidence");
+  assert.match(rej.checkedAt, /^\d{4}-\d{2}-\d{2}$/, `${rej.candidateName} checked date`);
+  assert.match(rej.recheckAt, /^\d{4}-\d{2}-\d{2}$/, `${rej.candidateName} recheck date`);
+  assert.ok(rej.recheckAt > rej.checkedAt, `${rej.candidateName} recheck follows verification`);
 }
 console.log(`  ✓ Candidate Manifest Audit Passed (${manifest.totalEvaluated} total evaluated: ${manifest.acceptedCount} accepted, ${manifest.rejectedCount} rejected with rationale)`);
 

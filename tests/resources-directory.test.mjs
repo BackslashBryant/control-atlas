@@ -15,17 +15,14 @@ import { contextualResourceRecommendations } from "../src/ui/lib/contextualResou
 const dataset = JSON.parse(readFileSync(resolve("data/commons-resource-dataset.json"), "utf8"));
 const resources = dataset.resources;
 
-test("CA-RES-001/002: Resources retains its directory identity, eight collections, and complete browse taxonomy", () => {
-  // 2026-08-02: 96 -> 83. 13 official-lane resources removed — each
-  // duplicated a publication already canonically ingested as its own
-  // Catalog/Source (docs/DATA_POLICY.md).
-  assert.equal(resources.length, 114);
-  assert.equal(dataset.collections.length, 8);
+test("CA-RES-001/002: Resources retains its directory identity, expanded collections, and complete browse taxonomy", () => {
+  assert.equal(resources.length, 202);
+  assert.equal(dataset.collections.length, 17);
   const categories = resources.map(primaryBrowseCategory);
   assert.equal(categories.filter(Boolean).length, resources.length);
   assert.deepEqual(
     primaryBrowseCategoryCounts(resources).map(({ id, count }) => [id, count]),
-    [["rules", 1], ["catalogs", 27], ["templates", 5], ["tools", 61], ["community", 12], ["reference", 8]],
+    [["rules", 1], ["catalogs", 45], ["templates", 5], ["tools", 106], ["community", 33], ["reference", 12]],
   );
   assert.equal(new Set(PRIMARY_BROWSE_CATEGORIES.map(({ id }) => id)).size, 6);
 });

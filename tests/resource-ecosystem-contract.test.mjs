@@ -18,9 +18,18 @@ const expectedCollections = [
   "cmmc-defense-industrial-base",
   "cyber-workforce-training",
   "practitioner-communities",
+  "vulnerability-management-prioritization",
+  "detection-soc",
+  "threat-intelligence-investigation",
+  "dfir-threat-hunting",
+  "stig-configuration-automation",
+  "network-security-analysis",
+  "devsecops-supply-chain",
+  "identity-access-security",
+  "disa-services-capabilities",
 ];
 
-test("eight required collections are populated and mutually resolvable", () => {
+test("required collections are populated and mutually resolvable", () => {
   assert.deepEqual(dataset.collections.map((collection) => collection.id), expectedCollections);
   for (const collection of dataset.collections) {
     assert.ok(collection.resourceIds.length >= 4, `${collection.id} has useful coverage`);
@@ -40,7 +49,8 @@ test("every card and detail field has explicit source, access, identity, and rev
     assert.ok(resource.brandKey, `${resource.id} brand key`);
     assert.ok(resource.sourceEvidence, `${resource.id} source evidence`);
     assert.ok(resource.verificationMethod, `${resource.id} verification method`);
-    assert.match(resource.lastCheckedAt, /^2026-08-03$/);
+    assert.match(resource.lastCheckedAt, /^\d{4}-\d{2}-\d{2}$/);
+    assert.ok(resource.lastCheckedAt <= dataset.lastUpdated, `${resource.id} review date is not in the future`);
     assert.ok(Array.isArray(resource.technologyScopes));
     assert.ok(Array.isArray(resource.searchAliases));
     assert.ok(Array.isArray(resource.featuredCollections));
@@ -80,7 +90,10 @@ test("communities carry one exact safety warning and rejected candidates remain 
   }
   assert.equal(manifest.acceptedCount, dataset.resources.length);
   assert.equal(disposition.candidates.length, manifest.totalEvaluated);
-  assert.ok(manifest.rejectedCandidates.some((candidate) => /Tenable Audit Files/.test(candidate.candidateName)));
+  assert.ok(manifest.acceptedCandidates.some((candidate) => /Tenable Audit Files/.test(candidate.candidateName)));
+  assert.ok(manifest.acceptedCandidates.some((candidate) => candidate.candidateName === "Tenable Connect"));
+  assert.ok(manifest.rejectedCandidates.some((candidate) => candidate.candidateName === "Evaluate-STIG"));
+  assert.ok(manifest.acceptedCandidates.some((candidate) => candidate.candidateName === "Microsoft StigRepo" && candidate.lane === "legacy"));
   assert.ok(manifest.rejectedCandidates.some((candidate) => /Platform One Party Bus/.test(candidate.candidateName)));
 });
 
