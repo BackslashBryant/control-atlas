@@ -1,76 +1,76 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { classifyNameStatus } from '../tools/classify-change-scope.mjs';
+import {
+  classifyChangedPaths,
+  classifyNameStatus,
+} from '../tools/classify-change-scope.mjs';
 
-test('CI artifact evidence additions and modifications use the evidence-only path', () => {
-  const result = classifyNameStatus(
-    [
-      'A',
-      'artifacts/audits/control-atlas/evidence/results.md',
-      '',
-    ].join('\0'),
-  );
-
-  assert.deepEqual(result, {
-    scope: 'evidence-only',
-    reason: 'audits-only',
-    buildMode: 'none',
-  });
+test('audit evidence uses the narrow integrity path', () => {
+  const result = classifyChangedPaths(['artifacts/audits/control-atlas/results.md']);
+  assert.equal(result.scope, 'evidence-only');
+  assert.equal(result.evidenceOnly, true);
+  assert.equal(result.buildRequired, false);
+  assert.equal(result.browserRequired, false);
+  assert.equal(result.securityRequired, false);
 });
 
-test('runtime changes require full verification and select the conservative build mode', () => {
-  for (const path of [
-    'src/App.tsx',
-    '.github/workflows/ci.yml',
-    'tests/browser-contract.test.mjs',
-    'docs/PAGE_CONTRACTS.md',
-  ]) {
-    assert.deepEqual(classifyNameStatus(`M\0${path}\0`), {
-      scope: 'full',
-      reason: 'runtime-incremental',
-      buildMode: 'incremental',
-    }, path);
-  }
-
-  for (const path of [
-    'data/source-registry.json',
-    'maps/800-53-to-csf.json',
-    'scripts/build-framework-data.mjs',
-    'src/shared/federalGraph.mjs',
-    'tools/importers/framework-adapters.mjs',
-    'package-lock.json',
-  ]) {
-    assert.deepEqual(classifyNameStatus(`M\0${path}\0`), {
-      scope: 'full',
-      reason: 'runtime-full',
-      buildMode: 'full',
-    }, path);
-  }
+test('styles trigger build, browser, accessibility, and Lighthouse without unit tests', () => {
+  const result = classifyChangedPaths(['src/styles/orbital.css']);
+  assert.equal(result.stylesChanged, true);
+  assert.equal(result.buildMode, 'incremental');
+  assert.equal(result.buildRequired, true);
+  assert.equal(result.browserRequired, true);
+  assert.equal(result.accessibilityRequired, true);
+  assert.equal(result.lighthouseRequired, true);
+  assert.equal(result.unitRequired, false);
 });
 
-test('empty, deleted, renamed, copied, or malformed diffs fail closed', () => {
-  for (const diff of [
-    '',
-    'D\0artifacts/audits/old.md\0',
-    'R100\0artifacts/audits/old.md\0artifacts/audits/new.md\0',
-    'C100\0artifacts/audits/old.md\0artifacts/audits/new.md\0',
-    'X\0artifacts/audits/evidence.md\0',
-    'M\0',
-  ]) {
-    assert.deepEqual(
-      classifyNameStatus(diff),
-      expectFullResult(diff),
-      JSON.stringify(diff),
-    );
+test('data and dependency changes select the conservative build and relevant gates', () => {
+  for (const path of ['data/source-registry.json', 'scripts/build-framework-data.mjs', 'package-lock.json']) {
+    const result = classifyChangedPaths([path]);
+    assert.equal(result.buildMode, 'full', path);
+    assert.equal(result.buildRequired, true, path);
+    assert.equal(result.unitRequired, true, path);
+    assert.equal(result.browserRequired, true, path);
   }
+  assert.equal(classifyChangedPaths(['data/source-registry.json']).dataRequired, true);
+  assert.equal(classifyChangedPaths(['package-lock.json']).securityRequired, true);
 });
 
-function expectFullResult(diff) {
-  if (!diff) return { scope: 'full', reason: 'empty-diff', buildMode: 'full' };
-  const status = diff.split('\0')[0];
-  if (!/^[AM]\d*$/.test(status)) {
-    return { scope: 'full', reason: `unsupported-status-${status}`, buildMode: 'full' };
+test('workflow-only changes run fast, security, and actionlint gates without a site build', () => {
+  const result = classifyChangedPaths(['.github/workflows/ci.yml']);
+  assert.equal(result.workflowsChanged, true);
+  assert.equal(result.workflowLintRequired, true);
+  assert.equal(result.securityRequired, true);
+  assert.equal(result.buildRequired, false);
+  assert.equal(result.browserRequired, false);
+});
+
+test('browser-test changes build a fixture artifact but do not run unrelated unit tests', () => {
+  const result = classifyChangedPaths(['tests/e2e/navigation-fidelity.spec.mjs']);
+  assert.equal(result.testsChanged, true);
+  assert.equal(result.buildRequired, true);
+  assert.equal(result.browserRequired, true);
+  assert.equal(result.unitRequired, false);
+});
+
+test('deletes and renames are classified instead of forcing complete history', () => {
+  const deleted = classifyNameStatus('D\0src/retired.ts\0');
+  assert.equal(deleted.codeChanged, true);
+  assert.equal(deleted.buildRequired, true);
+
+  const renamed = classifyNameStatus('R100\0src/old.css\0src/new.css\0');
+  assert.equal(renamed.stylesChanged, true);
+  assert.deepEqual(renamed.changedPaths, ['src/old.css', 'src/new.css']);
+});
+
+test('empty and malformed diffs fail closed', () => {
+  for (const diff of ['', 'X-invalid\0src/app.ts\0', 'M\0']) {
+    const result = classifyNameStatus(diff);
+    assert.equal(result.scope, 'full');
+    assert.equal(result.buildMode, 'full');
+    assert.equal(result.buildRequired, true);
+    assert.equal(result.securityRequired, true);
   }
-  return { scope: 'full', reason: 'runtime-or-unknown-path-missing', buildMode: 'full' };
-}
+});

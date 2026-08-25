@@ -1,0 +1,236 @@
+name: Control Atlas Deploy
+
+on:
+  workflow_run:
+    workflows: [Control Atlas CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Successful main CI run ID containing the site artifact
+        required: true
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: control-atlas-production
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Resolve validated release
+    if: >-
+      ${{ github.event_name == 'workflow_dispatch' ||
+          (github.event.workflow_run.conclusion == 'success' &&
+           github.event.workflow_run.event == 'push' &&
+           github.event.workflow_run.head_branch == 'main') }}
+    runs-on: ubuntu-latest
+    outputs:
+      deploy: ${{ steps.release.outputs.deploy }}
+      run_id: ${{ steps.release.outputs.run_id }}
+      sha: ${{ steps.release.outputs.sha }}
+    steps:
+      - name: Verify selected CI run
+        id: run
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SELECTED_RUN_ID: ${{ github.event.workflow_run.id || inputs.run_id }}
+        shell: bash
+        run: |
+          run="$(gh api "/repos/${GITHUB_REPOSITORY}/actions/runs/${SELECTED_RUN_ID}")"
+          conclusion="$(jq -r '.conclusion' <<< "$run")"
+          event="$(jq -r '.event' <<< "$run")"
+          branch="$(jq -r '.head_branch' <<< "$run")"
+          sha="$(jq -r '.head_sha' <<< "$run")"
+          if [[ "$conclusion" != success || "$event" != push || "$branch" != main || ! "$sha" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Run ${SELECTED_RUN_ID} is not a successful main push validation."
+            exit 1
+          fi
+          echo "run_id=$SELECTED_RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: ci-change-map
+          path: .ci
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.run.outputs.run_id }}
+
+      - name: Decide whether deployment is required
+        id: release
+        env:
+          RUN_ID: ${{ steps.run.outputs.run_id }}
+          RELEASE_SHA: ${{ steps.run.outputs.sha }}
+        shell: bash
+        run: |
+          deploy="$(jq -r '.buildRequired' .ci/ci-change-map.json)"
+          if [[ "$deploy" != true && "$deploy" != false ]]; then
+            echo 'The CI change map does not contain a valid buildRequired value.'
+            exit 1
+          fi
+          echo "deploy=$deploy" >> "$GITHUB_OUTPUT"
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "sha=$RELEASE_SHA" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    name: Deploy verified artifact
+    needs: release
+    if: ${{ needs.release.outputs.deploy == 'true' }}
+    permissions:
+      actions: read
+      contents: read
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+      sha: ${{ needs.release.outputs.sha }}
+      run_id: ${{ needs.release.outputs.run_id }}
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: site-build
+          path: dist/site
+          github-token: ${{ github.token }}
+          run-id: ${{ needs.release.outputs.run_id }}
+      - name: Verify artifact provenance
+        env:
+          EXPECTED_SHA: ${{ needs.release.outputs.sha }}
+        shell: bash
+        run: |
+          actual_sha="$(jq -r '.commit_sha // empty' dist/site/release.json)"
+          if [[ "$actual_sha" != "$EXPECTED_SHA" ]]; then
+            echo "Site artifact SHA mismatch: expected $EXPECTED_SHA, found ${actual_sha:-missing}."
+            exit 1
+          fi
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: dist/site
+      - id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
+
+  live-smoke:
+    name: Production smoke
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Verify production behavior and exact SHA
+        run: npm run test:e2e:live
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ needs.deploy.outputs.page_url }}
+          EXPECTED_DEPLOY_SHA: ${{ needs.deploy.outputs.sha }}
+
+  lighthouse:
+    name: Production Lighthouse
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Wait for the exact release at the public edge
+        env:
+          EXPECTED_SHA: ${{ needs.deploy.outputs.sha }}
+          SITE_URL: ${{ needs.deploy.outputs.page_url }}
+        shell: bash
+        run: |
+          for attempt in {1..20}; do
+            actual_sha="$(
+              curl --fail --silent --show-error "${SITE_URL}release.json?attempt=${attempt}" 2>/dev/null |
+                jq -r '.commit_sha // empty' 2>/dev/null || true
+            )"
+            if [[ "$actual_sha" == "$EXPECTED_SHA" ]]; then
+              exit 0
+            fi
+            sleep 6
+          done
+          echo "Production did not converge to $EXPECTED_SHA within two minutes."
+          exit 1
+      - name: Run three production Lighthouse passes
+        env:
+          TARGET_URL: ${{ needs.deploy.outputs.page_url }}
+        shell: bash
+        run: |
+          mkdir -p artifacts/deployed-lighthouse
+          for pass in 1 2 3; do
+            npx lighthouse "$TARGET_URL" \
+              --quiet \
+              --chrome-flags='--headless --no-sandbox' \
+              --form-factor=mobile \
+              --screenEmulation.mobile \
+              --output=json \
+              --output-path="artifacts/deployed-lighthouse/run-${pass}.report.json"
+          done
+          LIGHTHOUSE_REPORT_DIR=artifacts/deployed-lighthouse node tools/summarize-lighthouse.mjs
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
+        with:
+          name: deployed-lighthouse
+          path: artifacts/deployed-lighthouse
+          if-no-files-found: warn
+          retention-days: 14
+
+  public-sync:
+    name: Sync configured public mirror
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Detect public mirror configuration
+        id: target
+        env:
+          PUBLIC_REPO_URL: ${{ secrets.PUBLIC_REPO_URL }}
+        run: echo "enabled=$([[ -n "$PUBLIC_REPO_URL" ]] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        if: ${{ steps.target.outputs.enabled == 'true' }}
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        if: ${{ steps.target.outputs.enabled == 'true' }}
+        with:
+          name: site-build
+          path: dist/site
+          github-token: ${{ github.token }}
+          run-id: ${{ needs.deploy.outputs.run_id }}
+      - name: Stage public release
+        if: ${{ steps.target.outputs.enabled == 'true' }}
+        run: node tools/sync-public.mjs
+      - name: Push public mirror
+        if: ${{ steps.target.outputs.enabled == 'true' }}
+        env:
+          PUBLIC_REPO_URL: ${{ secrets.PUBLIC_REPO_URL }}
+          RELEASE_SHA: ${{ needs.deploy.outputs.sha }}
+        shell: bash
+        run: |
+          git clone --depth=1 "$PUBLIC_REPO_URL" target-repo
+          find target-repo -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a dist-public/. target-repo/
+          cd target-repo
+          git config user.name 'GitHub Actions Sync'
+          git config user.email 'actions@github.com'
+          git add .
+          git commit -m "Sync verified release ${RELEASE_SHA}" || exit 0
+          git push origin main

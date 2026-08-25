@@ -3,6 +3,7 @@ import process from 'node:process';
 
 const port = process.env.PLAYWRIGHT_PORT ?? '4317';
 const baseURL = `http://localhost:${port}`;
+const browserName = process.env.PLAYWRIGHT_BROWSER ?? 'chromium';
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -11,6 +12,12 @@ export default defineConfig({
   timeout: process.env.CI ? 45000 : 30000,
   workers: Math.max(1, Number.parseInt(process.env.PLAYWRIGHT_WORKERS ?? '1', 10) || 1),
   retries: process.env.CI ? 1 : 0,
+  projects: [
+    {
+      name: browserName,
+      use: { browserName },
+    },
+  ],
   expect: {
     timeout: process.env.CI ? 15000 : 5000,
   },
