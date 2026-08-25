@@ -565,11 +565,28 @@ export function SourcesPage(props: {
       lastActiveSourceRef.current = state.source;
     } else if (lastActiveSourceRef.current) {
       const triggerId = activeTriggerIdRef.current || lastActiveSourceRef.current;
-      window.setTimeout(() => {
-        document.getElementById(`source-trigger-${triggerId}`)?.focus();
-      }, 50);
+      let attempts = 0;
+      let timer = 0;
+      const restoreTriggerFocus = () => {
+        const app = document.getElementById("app");
+        const rememberedTrigger = activeTriggerRef.current;
+        const trigger = rememberedTrigger?.isConnected
+          ? rememberedTrigger
+          : document.getElementById(`source-trigger-${triggerId}`);
+        if (trigger instanceof HTMLElement && !app?.hasAttribute("inert")) {
+          trigger.focus({ preventScroll: true });
+          return;
+        }
+        attempts += 1;
+        if (attempts < 10) {
+          timer = window.setTimeout(restoreTriggerFocus, 50);
+        }
+      };
+      timer = window.setTimeout(restoreTriggerFocus, 0);
       lastActiveSourceRef.current = "";
+      return () => window.clearTimeout(timer);
     }
+    return undefined;
   }, [state.source]);
 
   const handleSelectPublication = (

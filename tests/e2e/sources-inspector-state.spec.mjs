@@ -19,7 +19,7 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await waitForAppReady(page);
 
     // Initial state: the register uses the full workspace until a row is selected.
-    const table = page.getByRole("table", { name: "Control Atlas publication register" });
+    const table = page.locator(".source-table");
     await expect(table).toBeVisible();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Sources");
     await expect(page.locator(".sources-page .page-header")).toContainText(
@@ -60,7 +60,9 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await page.getByRole("button", { name: "DoD AI Assurance" }).click();
     await waitForAppReady(page);
 
-    const table = page.getByRole("table", { name: "Control Atlas publication register" });
+    // The register remains visually present behind the modal, but the modal's
+    // inert boundary correctly removes it from the accessibility tree.
+    const table = page.locator(".source-table");
     await expect(table).toBeVisible();
     await expect(page.locator(".sources-inspector-pane .source-inspector--inline")).toHaveCount(0);
     await expect(page.getByRole("dialog")).toBeVisible();

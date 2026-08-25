@@ -282,7 +282,7 @@ test("source detail has one return action and preserves the Sources workspace", 
       ),
     ).toBeLessThanOrEqual(1);
 
-    if (width < 1024) {
+    if (width < 1200) {
       const dialog = page.getByRole("dialog");
       await expect(dialog).toBeVisible();
       await dialog.getByRole("button", { name: "Close inspector" }).click();

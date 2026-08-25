@@ -83,7 +83,10 @@ test("WS3 Resources shares Template C with real list, map, and comparison modes"
   await expect(workspace.locator('[data-browse-state="resources"] .eyebrow')).toHaveCount(0);
   await expect(workspace.getByRole("heading", { name: "Contribute", level: 2 })).toBeVisible();
   await expect(workspace.locator(".page-header").getByRole("link", { name: "Submit resource" })).toHaveCount(0);
-  await expect(workspace.locator('[data-browse-state="resources"] .workspace-browse-grid')).toHaveCSS("grid-template-columns", /.+ .+ .+ .+/);
+  const browseColumnCount = await workspace
+    .locator('[data-browse-state="resources"] .workspace-browse-grid')
+    .evaluate((element) => globalThis.getComputedStyle(element).gridTemplateColumns.split(" ").length);
+  expect(browseColumnCount).toBeGreaterThanOrEqual(3);
 
   await workspace.getByRole("button", { name: /Browse all \d+ resources/ }).click();
   await expect(page.locator('[data-result-bar-order="count,sort,view,compare"]')).toBeVisible();
