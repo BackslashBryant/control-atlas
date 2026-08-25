@@ -1,142 +1,600 @@
-name: Public Repo Checks
+name: Control Atlas CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
+  schedule:
+    - cron: '37 6 * * *'
+    - cron: '17 7 * * 3'
+    - cron: '17 9 1 * *'
   workflow_dispatch:
+    inputs:
+      task:
+        description: Validation task to run
+        required: true
+        default: standard
+        type: choice
+        options: [standard, nightly, refresh, oscal, lighthouse-ab]
+      before_ref:
+        description: Lighthouse A/B baseline ref
+        required: false
+        default: v1.0.0
+      after_ref:
+        description: Lighthouse A/B candidate ref
+        required: false
 
 permissions:
   actions: read
   contents: read
 
 concurrency:
-  group: public-repo-checks-${{ github.ref }}
-  cancel-in-progress: true
+  group: >-
+    ci-${{ github.event_name == 'pull_request' && github.event.pull_request.number ||
+      github.event.schedule || inputs.task || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  NODE_VERSION: '22'
 
 jobs:
-  checks:
+  changes:
+    name: Change map
+    if: >-
+      ${{ github.event_name == 'push' || github.event_name == 'pull_request' ||
+          (github.event_name == 'workflow_dispatch' && inputs.task == 'standard') }}
+    runs-on: ubuntu-latest
+    outputs:
+      evidence_only: ${{ steps.scope.outputs.evidence_only }}
+      build_mode: ${{ steps.scope.outputs.build_mode }}
+      build_required: ${{ steps.scope.outputs.build_required }}
+      unit_required: ${{ steps.scope.outputs.unit_required }}
+      browser_required: ${{ steps.scope.outputs.browser_required }}
+      accessibility_required: ${{ steps.scope.outputs.accessibility_required }}
+      lighthouse_required: ${{ steps.scope.outputs.lighthouse_required }}
+      data_required: ${{ steps.scope.outputs.data_required }}
+      security_required: ${{ steps.scope.outputs.security_required }}
+      workflow_lint_required: ${{ steps.scope.outputs.workflow_lint_required }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Fetch only the comparison base
+        id: base
+        env:
+          EVENT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        shell: bash
+        run: |
+          base="$EVENT_BASE_SHA"
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" || -z "$base" || "$base" =~ ^0+$ ]]; then
+            echo "base=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git fetch --no-tags --depth=1 origin "$base"
+          git diff --check "$base..$GITHUB_SHA"
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+
+      - name: Classify changed scope once
+        id: scope
+        env:
+          BASE_SHA: ${{ steps.base.outputs.base }}
+        shell: bash
+        run: |
+          node tools/classify-change-scope.mjs \
+            --base "$BASE_SHA" \
+            --head "$GITHUB_SHA" \
+            --json ci-change-map.json >> "$GITHUB_OUTPUT"
+          cat ci-change-map.json
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: ci-change-map
+          path: ci-change-map.json
+          if-no-files-found: error
+          retention-days: 2
+
+  evidence:
+    name: Evidence integrity
+    needs: changes
+    if: ${{ needs.changes.outputs.evidence_only == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
-          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/change-scope.test.mjs tests/release-evidence.test.mjs
 
-      - name: Classify changed scope
-        id: scope
-        shell: bash
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: |
-          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
-            printf 'scope=full\nreason=manual-run\nbuild_mode=full\n' >> "$GITHUB_OUTPUT"
-          else
-            node tools/classify-change-scope.mjs \
-              --base "${BASE_SHA}" \
-              --head "${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
-          fi
+  fast:
+    name: Lint, types, and contracts
+    needs: changes
+    if: ${{ needs.changes.outputs.evidence_only != 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run lint:ci
+      - run: npm run typecheck
+      - run: npm run test:ci-contracts
 
-      - name: Verify evidence-only change
-        if: ${{ steps.scope.outputs.scope == 'evidence-only' }}
-        run: git diff --check && node --test tests/change-scope.test.mjs tests/release-evidence.test.mjs
+  unit:
+    name: Unit and component tests
+    needs: changes
+    if: ${{ needs.changes.outputs.unit_required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
 
+  build:
+    name: Build immutable site artifact
+    needs: changes
+    if: ${{ needs.changes.outputs.build_required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
       - name: Calculate generated-data cache key
         id: generated-key
-        if: ${{ steps.scope.outputs.scope == 'full' }}
-        shell: bash
         run: echo "key=$(node tools/generated-data-cache-key.mjs)" >> "$GITHUB_OUTPUT"
-
-      - name: Restore generated data
+      - name: Restore deterministic generated data
         id: generated-cache
-        if: ${{ steps.scope.outputs.scope == 'full' }}
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: data/generated
-          key: generated-data-${{ runner.os }}-v1-${{ steps.generated-key.outputs.key }}
-
-      - uses: actions/setup-node@v6
-        if: ${{ steps.scope.outputs.scope == 'full' }}
-        with:
-          node-version: '22'
-          cache: 'npm'
-
-      - name: Install locked dependencies
-        if: ${{ steps.scope.outputs.scope == 'full' }}
-        run: npm ci
-
-      - name: Dependency audit
-        if: ${{ steps.scope.outputs.scope == 'full' }}
-        run: npm run audit:deps
-
-      - name: Build site once for this commit
-        if: ${{ steps.scope.outputs.scope == 'full' }}
+          key: generated-data-${{ runner.os }}-v2-${{ steps.generated-key.outputs.key }}
+      - name: Build once
         env:
           CONTROL_ATLAS_COMMIT_SHA: ${{ github.sha }}
-          BUILD_MODE: ${{ steps.scope.outputs.build_mode }}
+          BUILD_MODE: ${{ needs.changes.outputs.build_mode }}
           GENERATED_CACHE_HIT: ${{ steps.generated-cache.outputs.cache-hit }}
         shell: bash
         run: |
           if [[ "$BUILD_MODE" == "incremental" && "$GENERATED_CACHE_HIT" == "true" ]]; then
             npm run build:site:incremental
           else
-            echo "Generated data cache unavailable or invalidated; rebuilding deterministically."
             npm run build:site
           fi
-
-      - name: Static, data, contract, and Guardian gates
-        if: ${{ steps.scope.outputs.scope == 'full' }}
-        run: npm run verify:quality
-
-      - name: Install Playwright Chromium
-        if: ${{ steps.scope.outputs.scope == 'full' }}
-        run: npx playwright install chromium
-
-      - name: Accessibility smoke
-        if: ${{ steps.scope.outputs.scope == 'full' }}
-        env:
-          PLAYWRIGHT_WORKERS: '2'
-        run: npm run test:a11y:smoke
-
-      - name: Critical browser smoke
-        if: ${{ steps.scope.outputs.scope == 'full' }}
-        env:
-          PLAYWRIGHT_WORKERS: '2'
-        run: npm run test:e2e:smoke
-
-      - name: Verify exact-SHA site artifact
-        if: ${{ success() && steps.scope.outputs.scope == 'full' }}
-        run: node tools/verify-site-artifact.mjs --sha "${GITHUB_SHA}"
-
-      - name: Upload exact-SHA site artifact
-        if: ${{ success() && steps.scope.outputs.scope == 'full' }}
-        uses: actions/upload-artifact@v7
+      - run: npm run verify:site-artifact -- --sha "$GITHUB_SHA"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: site-build
           path: dist/site
           if-no-files-found: error
           retention-days: 2
 
-      - name: Upload Playwright failure artifacts
-        if: ${{ failure() && steps.scope.outputs.scope == 'full' }}
-        uses: actions/upload-artifact@v7
+  contracts:
+    name: Static, data, and Guardian contracts
+    needs: [changes, build]
+    if: ${{ needs.changes.outputs.build_required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
-          name: ci-playwright-artifacts
-          path: |
-            test-results
-            playwright-report
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: site-build
+          path: dist/site
+      - run: npm run verify:contracts
+
+  browser:
+    name: Browser shard ${{ matrix.shard }}/2
+    needs: [changes, build]
+    if: ${{ needs.changes.outputs.browser_required == 'true' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: site-build
+          path: dist/site
+      - name: Run semantic browser contracts
+        env:
+          PLAYWRIGHT_BROWSER: chromium
+          PLAYWRIGHT_FULLY_PARALLEL: '1'
+          PLAYWRIGHT_WORKERS: '2'
+        run: npm run test:e2e:smoke -- --shard=${{ matrix.shard }}/2
+      - name: Upload browser failures
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: browser-failures-${{ matrix.shard }}
+          path: test-results
           if-no-files-found: ignore
+          retention-days: 7
 
-      - name: Record verified change scope
-        if: ${{ success() }}
-        shell: bash
-        run: printf '%s\n' '${{ steps.scope.outputs.scope }}' > ci-change-scope.txt
-
-      - name: Upload verified change scope
-        if: ${{ success() }}
-        uses: actions/upload-artifact@v7
+  accessibility:
+    name: Accessibility
+    needs: [changes, build]
+    if: ${{ needs.changes.outputs.accessibility_required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
-          name: ci-change-scope
-          path: ci-change-scope.txt
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: site-build
+          path: dist/site
+      - run: npm run test:a11y:smoke
+
+  visual:
+    name: Deliberate visual regression
+    needs: [changes, build]
+    if: ${{ needs.changes.outputs.browser_required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: site-build
+          path: dist/site
+      - name: Compare deliberate layout snapshots or bootstrap the first baseline
+        shell: bash
+        run: |
+          if compgen -G 'tests/e2e/visual-regression.spec.mjs-snapshots/*.png' > /dev/null; then
+            npm run test:visual
+          else
+            npm run test:visual -- --update-snapshots
+          fi
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
+        with:
+          name: visual-regression-baselines
+          path: tests/e2e/visual-regression.spec.mjs-snapshots
+          if-no-files-found: warn
+          retention-days: 7
+
+  lighthouse:
+    name: Lighthouse budgets
+    needs: [changes, build]
+    if: ${{ needs.changes.outputs.lighthouse_required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: site-build
+          path: dist/site
+      - run: npm run test:performance:ci
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: lighthouse-ci
+          path: artifacts/lighthouse-ci
+          if-no-files-found: ignore
+          retention-days: 7
+
+  workflow-lint:
+    name: Workflow syntax and action pins
+    needs: changes
+    if: ${{ needs.changes.outputs.workflow_lint_required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Validate workflows with actionlint 1.7.12
+        shell: bash
+        run: |
+          version='1.7.12'
+          archive="actionlint_${version}_linux_amd64.tar.gz"
+          checksums="actionlint_${version}_checksums.txt"
+          release="https://github.com/rhysd/actionlint/releases/download/v${version}"
+          curl --fail --silent --show-error --location --remote-name "${release}/${archive}"
+          curl --fail --silent --show-error --location --remote-name "${release}/${checksums}"
+          grep "  ${archive}$" "$checksums" | sha256sum --check --strict
+          tar --extract --gzip --file "$archive" --no-same-owner actionlint
+          ./actionlint
+          node tools/check-action-pins.mjs
+
+  required:
+    name: Required CI
+    if: ${{ always() && needs.changes.result != 'skipped' }}
+    needs: [changes, evidence, fast, unit, build, contracts, browser, accessibility, visual, lighthouse, workflow-lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every selected gate
+        env:
+          RESULTS: >-
+            ${{ join(needs.*.result, ' ') }}
+        shell: bash
+        run: |
+          echo "Gate results: $RESULTS"
+          if grep -Eq 'failure|cancelled' <<< "$RESULTS"; then
+            exit 1
+          fi
+
+  checks:
+    name: checks
+    if: ${{ always() }}
+    needs: required
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish branch-protection compatibility status
+        env:
+          REQUIRED_RESULT: ${{ needs.required.result }}
+        run: test "$REQUIRED_RESULT" = success
+
+  nightly-build:
+    name: Nightly build and contracts
+    if: >-
+      ${{ github.event.schedule == '37 6 * * *' ||
+          (github.event_name == 'workflow_dispatch' && inputs.task == 'nightly') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build:site
+        env:
+          CONTROL_ATLAS_COMMIT_SHA: ${{ github.sha }}
+      - run: npm run verify:quality
+      - run: npm run verify:site-artifact -- --sha "$GITHUB_SHA"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: nightly-site-build
+          path: dist/site
           if-no-files-found: error
           retention-days: 2
+
+  nightly-browser:
+    name: Nightly ${{ matrix.browser }} shard ${{ matrix.shard }}/2
+    needs: nightly-build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+        shard: [1, 2]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: nightly-site-build
+          path: dist/site
+      - name: Run complete browser suite
+        env:
+          PLAYWRIGHT_BROWSER: ${{ matrix.browser }}
+          PLAYWRIGHT_FULLY_PARALLEL: '1'
+          PLAYWRIGHT_WORKERS: '2'
+        run: npm run test:e2e:run -- --shard=${{ matrix.shard }}/2 --reporter=blob
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: ${{ !cancelled() }}
+        with:
+          name: nightly-blob-${{ matrix.browser }}-${{ matrix.shard }}
+          path: blob-report
+          if-no-files-found: error
+          retention-days: 2
+
+  nightly-accessibility:
+    name: Nightly complete accessibility
+    needs: nightly-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: nightly-site-build
+          path: dist/site
+      - run: npm run test:a11y:run -- --reporter=blob
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: ${{ !cancelled() }}
+        with:
+          name: nightly-blob-accessibility
+          path: blob-report
+          if-no-files-found: error
+          retention-days: 2
+
+  nightly-report:
+    name: Nightly browser report
+    if: >-
+      ${{ !cancelled() &&
+          (github.event.schedule == '37 6 * * *' ||
+           (github.event_name == 'workflow_dispatch' && inputs.task == 'nightly')) }}
+    needs: [nightly-browser, nightly-accessibility]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          pattern: nightly-blob-*
+          path: all-blob-reports
+          merge-multiple: true
+      - run: npx playwright merge-reports --reporter=html all-blob-reports
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: nightly-playwright-report
+          path: playwright-report
+          if-no-files-found: error
+          retention-days: 14
+
+  refresh:
+    name: Weekly validated data refresh
+    if: >-
+      ${{ github.event.schedule == '17 7 * * 3' ||
+          (github.event_name == 'workflow_dispatch' && inputs.task == 'refresh') }}
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Refresh validated build-time data
+        run: npm run refresh:data
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - run: npm run resources:health
+      - run: npx playwright install --with-deps chromium
+      - name: Verify refreshed repository
+        env:
+          PLAYWRIGHT_WORKERS: '2'
+        run: npm run precommit:incremental
+      - run: npm run sbom:generate
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: source-refresh-sbom-cdx-json
+          path: artifacts/sbom.cdx.json
+      - run: node scripts/report-refresh-diff.mjs refresh-pr-body.md
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          add-paths: |
+            data/**
+            maps/**
+          branch: automation/source-refresh
+          commit-message: 'chore(data): refresh public source snapshots'
+          title: 'chore(data): review refreshed public source snapshots'
+          body-path: refresh-pr-body.md
+          draft: true
+          delete-branch: true
+          labels: data-refresh
+
+  oscal:
+    name: Independent OSCAL validation
+    if: >-
+      ${{ github.event.schedule == '17 9 1 * *' ||
+          (github.event_name == 'workflow_dispatch' && inputs.task == 'oscal') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: npm ci
+      - run: npm run test:oscal:independent
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: oscal-cli-cross-check
+          path: artifacts/oscal-cli/cross-check.json
+
+  lighthouse-ab:
+    name: Lighthouse A/B diagnostic
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.task == 'lighthouse-ab' }}
+    runs-on: ubuntu-latest
+    env:
+      BEFORE_REF: ${{ inputs.before_ref || 'v1.0.0' }}
+      AFTER_REF: ${{ inputs.after_ref || github.sha }}
+      MAX_MEDIAN_DROP: '3'
+      ROUTE: '/#/explore?node=nist-800-53%3AAC-2&relationshipView=map'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Measure both refs on the same runner
+        run: node tools/run-lighthouse-ab.mjs
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
+        with:
+          name: lighthouse-ab
+          path: artifacts/lighthouse-ab
+          if-no-files-found: warn

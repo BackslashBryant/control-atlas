@@ -23,6 +23,11 @@ regexes = [
   '''^mitre-d3fend-ontology$''',
   '''^nist-800-172-rev3$''',
   '''^nist-800-37-rev2$''',
+  # Exact detector captures for two public NIST SP 1800-35 catalog keys. The
+  # generic-api-key rule captures only the first 23/28 characters, so these
+  # values intentionally match that bounded capture, not arbitrary NIST keys.
+  '''^nist-sp-1800-35-e3b$''',
+  '''^nist-sp-1800-35-csf2-mappi$''',
 ]
 commits = [
   "8993f4968ef5e019f6cdffe0d6bffec606f30b38",

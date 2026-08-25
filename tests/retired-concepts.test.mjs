@@ -19,7 +19,7 @@ test('runtime surfaces do not implement prohibited operational capabilities', ()
     'src/app/runtime.mjs',
     'src/ui/App.tsx',
     'package.json',
-    '.github/workflows/nightly-refresh.yml',
+    '.github/workflows/ci.yml',
   ];
   const prohibited = /\b(eMASS|Tenable|ACAS|Nessus|scan ingestion|evidence upload|compliance scoring|asset tracking)\b/i;
   for (const path of paths) {
