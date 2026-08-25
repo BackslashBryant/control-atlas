@@ -7,6 +7,8 @@ const ciWorkflow = readFileSync('.github/workflows/ci.yml', 'utf8');
 const pagesWorkflow = readFileSync('.github/workflows/pages.yml', 'utf8');
 const nightlyWorkflow = readFileSync('.github/workflows/nightly-refresh.yml', 'utf8');
 const nightlyQualityWorkflow = readFileSync('.github/workflows/nightly-quality.yml', 'utf8');
+const deployedLighthouseWorkflow = readFileSync('.github/workflows/deployed-lighthouse.yml', 'utf8');
+const workflowLintWorkflow = readFileSync('.github/workflows/workflow-lint.yml', 'utf8');
 const e2eConfig = readFileSync('playwright.e2e.config.mjs', 'utf8');
 const dependencyReviewWorkflowPath = '.github/workflows/dependency-review.yml';
 const dependabotPath = '.github/dependabot.yml';
@@ -28,15 +30,29 @@ test('deploy checks include the dependency audit while SBOM generation stays man
   assert.match(nightlyWorkflow, /npm run audit:deps/);
 });
 
-test('Lighthouse CI remains report-only when synthetic collection is unstable', () => {
+test('deployed Lighthouse runs automatically for the exact Pages release and gates web vitals', () => {
+  assert.doesNotMatch(ciWorkflow, /lighthouse-report:/);
   assert.match(
-    ciWorkflow,
-    /name: Run report-only Lighthouse evidence\s+continue-on-error: true\s+run: npm run test:performance/,
+    deployedLighthouseWorkflow,
+    /workflow_run:\s+workflows: \[GitHub Pages\]/,
   );
+  assert.match(deployedLighthouseWorkflow, /name: Check whether Pages actually deployed/);
+  assert.match(deployedLighthouseWorkflow, /EXPECTED_SHA: \$\{\{ github\.event\.workflow_run\.head_sha \}\}/);
+  assert.match(deployedLighthouseWorkflow, /release\.json\?attempt=/);
+  assert.match(deployedLighthouseWorkflow, /for i in 1 2 3/);
+  assert.match(deployedLighthouseWorkflow, /tools\/summarize-lighthouse\.mjs/);
   assert.match(
-    ciWorkflow,
-    /name: lighthouse-ci-reports\s+path: artifacts\/lighthouse-ci\s+if-no-files-found: warn/,
+    deployedLighthouseWorkflow,
+    /name: deployed-lighthouse\s+path: artifacts\/deployed-lighthouse\s+if-no-files-found: warn/,
   );
+});
+
+test('workflow changes are validated by checksum-verified actionlint', () => {
+  assert.match(workflowLintWorkflow, /paths:\s+- '\.github\/workflows\/\*\*'/);
+  assert.match(workflowLintWorkflow, /actionlint 1\.7\.12/);
+  assert.match(workflowLintWorkflow, /actionlint_\$\{version\}_checksums\.txt/);
+  assert.match(workflowLintWorkflow, /sha256sum --check --strict/);
+  assert.match(workflowLintWorkflow, /\.\/actionlint/);
 });
 
 test('security workflows exist for CodeQL and secret scanning', () => {
@@ -83,7 +99,6 @@ test('release scripts cover staged builds, static checks, and focused browser sm
   assert.equal(typeof packageJson.scripts['test:a11y:run'], 'string');
   assert.equal(typeof packageJson.scripts['test:e2e'], 'string');
   assert.equal(typeof packageJson.scripts['test:e2e:run'], 'string');
-  assert.equal(typeof packageJson.scripts['test:visual'], 'string');
   assert.equal(typeof packageJson.scripts['test:performance'], 'string');
   assert.equal(typeof packageJson.scripts['serve:static'], 'string');
   assert.equal(typeof packageJson.scripts['test:style'], 'string');
@@ -107,6 +122,12 @@ test('release scripts cover staged builds, static checks, and focused browser sm
   assert.match(packageJson.scripts.typecheck, /tsconfig\.app\.json/);
 });
 
+test('the pinned Vale installer extracts safely on unprivileged Linux runners', () => {
+  const valeInstaller = readFileSync('tools/run-vale.mjs', 'utf8');
+  assert.match(valeInstaller, /sha256/);
+  assert.match(valeInstaller, /--no-same-owner/);
+});
+
 test('precommit reuses one build and runs only the focused browser smoke', () => {
   const precommitSteps = packageJson.scripts.precommit
     .split('&&')
@@ -120,7 +141,7 @@ test('precommit reuses one build and runs only the focused browser smoke', () =>
   assert.match(packageJson.scripts['test:a11y'], /build:site.*test:a11y:run/);
   assert.match(packageJson.scripts['test:e2e'], /build:site.*test:e2e:run/);
   assert.match(e2eConfig, /accessibility\.spec\.mjs/);
-  assert.match(e2eConfig, /approved-layout-visual\.spec\.mjs/);
+  assert.doesNotMatch(e2eConfig, /approved-layout-visual\.spec\.mjs/);
   assert.match(packageJson.scripts['precommit:incremental'], /build:site:incremental/);
 });
 
@@ -162,16 +183,23 @@ test('ci workflows run the epic 0 hardening gates', () => {
   assert.match(nightlyWorkflow, /npm run precommit:incremental/);
 });
 
-test('CI reuses prior exact-SHA verification on main and otherwise fails closed', () => {
-  assert.match(ciWorkflow, /name: Find reusable exact-SHA verification/);
-  assert.match(ciWorkflow, /github\.ref == 'refs\/heads\/main'/);
-  assert.match(ciWorkflow, /head_sha/);
-  assert.match(
-    ciWorkflow,
-    /Exact-SHA lookup failed; running the full fail-closed gate/,
-  );
-  assert.match(ciWorkflow, /steps\.reuse\.outputs\.run_id == ''/);
+test('CI runs once per pull request and once for the merged main commit', () => {
+  assert.match(ciWorkflow, /push:\s+branches:\s+- main/);
+  assert.match(ciWorkflow, /pull_request:/);
+  assert.doesNotMatch(ciWorkflow, /Find reusable exact-SHA verification/);
+  assert.doesNotMatch(ciWorkflow, /steps\.reuse/);
   assert.doesNotMatch(ciWorkflow, /\[skip ci\]/);
+});
+
+test('branch-push hygiene checks do not duplicate pull request runs', () => {
+  for (const path of [
+    '.github/workflows/hygiene.yml',
+    '.github/workflows/secret-scan.yml',
+  ]) {
+    const workflow = readFileSync(path, 'utf8');
+    assert.match(workflow, /push:\s+branches:\s+- main/);
+    assert.match(workflow, /pull_request:/);
+  }
 });
 
 test('evidence-only changes take a narrow fail-closed check and publish their verified scope', () => {
@@ -204,9 +232,9 @@ test('Pages deploys the exact checked artifact without a routine rebuild', () =>
   assert.doesNotMatch(liveSmoke, /npx playwright install chromium/);
 });
 
-test('CI builds once, reuses the exact-SHA artifact on main, and omits per-push visual replay', () => {
+test('CI builds one exact-SHA artifact and omits per-push visual replay', () => {
   assert.match(ciWorkflow, /name: Build site once for this commit/);
-  assert.match(ciWorkflow, /name: Download reusable exact-SHA site artifact/);
+  assert.doesNotMatch(ciWorkflow, /name: Download reusable exact-SHA site artifact/);
   assert.match(ciWorkflow, /name: Verify exact-SHA site artifact/);
   assert.match(ciWorkflow, /name: site-build/);
   assert.match(ciWorkflow, /actions\/cache@v5/);
@@ -224,19 +252,24 @@ test('nightly full verification builds once and shards browser coverage', () => 
   assert.match(nightlyQualityWorkflow, /--shard=\$\{\{ matrix\.shard \}\}\/4/);
   assert.match(nightlyQualityWorkflow, /PLAYWRIGHT_FULLY_PARALLEL: '1'/);
   assert.match(nightlyQualityWorkflow, /playwright merge-reports/);
-  assert.match(nightlyQualityWorkflow, /npm run test:visual/);
-  assert.match(nightlyQualityWorkflow, /name: nightly-visual-evidence/);
-  assert.match(nightlyQualityWorkflow, /needs: \[e2e, accessibility, visual-review\]/);
-  assert.equal((nightlyQualityWorkflow.match(/playwright install --with-deps chromium/g) ?? []).length, 3);
+  assert.doesNotMatch(nightlyQualityWorkflow, /npm run test:visual/);
+  assert.doesNotMatch(nightlyQualityWorkflow, /visual-review:/);
+  assert.match(nightlyQualityWorkflow, /needs: \[e2e, accessibility\]/);
+  assert.equal((nightlyQualityWorkflow.match(/playwright install --with-deps chromium/g) ?? []).length, 2);
   assert.doesNotMatch(nightlyQualityWorkflow, /container:|mcr\.microsoft\.com\/playwright/);
-  assert.match(nightlyQualityWorkflow, /visual-review:[\s\S]*Install package-matched Chromium and system dependencies/);
+});
+
+test('weekly source refresh includes resource health and replaces the redundant monthly job', () => {
+  assert.match(nightlyWorkflow, /GITHUB_TOKEN: \$\{\{ github\.token \}\}/);
+  assert.match(nightlyWorkflow, /npm run resources:health/);
+  assert.match(nightlyWorkflow, /draft: true/);
+  assert.equal(existsSync('.github/workflows/commons-update.yml'), false);
 });
 
 test('browser workflows install Playwright on hosted Ubuntu without containers', () => {
   for (const path of [
     '.github/workflows/nightly-quality.yml',
     '.github/workflows/pages-live-smoke.yml',
-    '.github/workflows/update-visual-baselines.yml',
   ]) {
     const workflow = readFileSync(path, 'utf8');
     assert.doesNotMatch(workflow, /container:|mcr\.microsoft\.com\/playwright/);
@@ -255,7 +288,6 @@ test('npm-backed workflows use the official setup-node dependency cache', () => 
     '.github/workflows/oscal-validation.yml',
     '.github/workflows/pages-live-smoke.yml',
     '.github/workflows/pages.yml',
-    '.github/workflows/update-visual-baselines.yml',
   ]) {
     const workflow = readFileSync(path, 'utf8');
     const setupCount = (workflow.match(/actions\/setup-node@v6/g) ?? []).length;

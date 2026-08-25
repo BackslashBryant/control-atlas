@@ -152,6 +152,33 @@ test('prefers-reduced-motion halts brand flourish rotation and avoids animation'
   expect(currentWord).toBe(initialWord);
 });
 
+test('mobile routes keep the centered brand signal visible and rotating', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await gotoApp(page, '/#/library');
+  await waitForAppReady(page, { allowPartial: true });
+  await dismissOnboarding(page);
+
+  const flourish = page.locator('header.site-header .brand-kbd');
+  const activeKey = flourish.locator('.brand-key--active');
+  const activeWord = activeKey.locator('.brand-key-word');
+  await expect(flourish).toBeVisible();
+  await expect(activeWord).toBeVisible();
+
+  const firstWord = (await activeWord.textContent())?.trim();
+  expect(firstWord).toBeTruthy();
+  await expect.poll(async () => (await activeWord.textContent())?.trim(), {
+    timeout: 15_000,
+  }).not.toBe(firstWord);
+
+  const centerDelta = await activeWord.evaluate((word) => {
+    const wordBox = word.getBoundingClientRect();
+    const keyBox = word.parentElement.getBoundingClientRect();
+    return (wordBox.left + wordBox.width / 2) - (keyBox.left + keyBox.width / 2);
+  });
+  expect(Math.abs(centerDelta)).toBeLessThanOrEqual(1);
+  expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth)).toBeLessThanOrEqual(375);
+});
+
 test('mobile navigation sheet manages focus, Escape key, and toggle button return', async ({
   page,
 }) => {

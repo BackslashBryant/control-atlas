@@ -24,13 +24,15 @@ test('source refresh opens one human-reviewed draft PR after the full gate', () 
   assert.match(workflow, /contents: write/);
   assert.match(workflow, /pull-requests: write/);
   assert.match(workflow, /npm run refresh:data/);
+  assert.match(workflow, /GITHUB_TOKEN: \$\{\{ github\.token \}\}/);
+  assert.match(workflow, /npm run resources:health/);
   assert.match(workflow, /npm run audit:deps/);
   assert.match(workflow, /npx playwright install chromium/);
   assert.match(workflow, /npm run precommit:incremental/);
   assert.match(workflow, /npm run sbom:generate/);
   assert.match(workflow, /peter-evans\/create-pull-request@v8/);
   assert.match(workflow, /branch: automation\/source-refresh/);
-  assert.match(workflow, /draft: always-true/);
+  assert.match(workflow, /draft: true/);
   assert.match(workflow, /data\/\*\*/);
   assert.match(workflow, /maps\/\*\*/);
   assert.doesNotMatch(workflow, /git push|\[skip ci\]|auto-merge/i);

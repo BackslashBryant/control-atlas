@@ -1,27 +1,62 @@
 name: Deployed Lighthouse
 
-# Release evidence utility: measures the DEPLOYED public site from a clean
-# Ubuntu runner and publishes the reports as an artifact. Report-only — it
-# never writes to the repository and never gates a build. Exists because
-# local developer hosts produce unreliable Lighthouse numbers under load.
-# Trigger: manual dispatch, or push a branch named evidence/lighthouse*.
+# Measure the exact release after GitHub Pages finishes. This is deliberately
+# post-deploy: local synthetic scores are noisy and cannot prove the public
+# artifact is healthy.
 
 on:
+  workflow_run:
+    workflows: [GitHub Pages]
+    types: [completed]
   workflow_dispatch:
     inputs:
       url:
         description: Deployed URL to measure
         required: false
-        default: "https://rambulls.github.io/control-atlas/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map"
-  push:
-    branches:
-      - "evidence/lighthouse*"
+        default: "https://rambulls.github.io/control-atlas/"
 
 permissions:
+  actions: read
   contents: read
 
+concurrency:
+  group: deployed-lighthouse
+  cancel-in-progress: true
+
 jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.gate.outputs.run }}
+    steps:
+      - name: Check whether Pages actually deployed
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGES_RUN_ID: ${{ github.event.workflow_run.id }}
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          conclusion="$(
+            gh api "/repos/${GITHUB_REPOSITORY}/actions/runs/${PAGES_RUN_ID}/jobs" \
+              --jq '.jobs[] | select(.name == "deploy") | .conclusion'
+          )"
+          if [[ "$conclusion" == "success" ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
   measure:
+    needs: gate
+    if: >-
+      ${{ needs.gate.outputs.run == 'true' &&
+          (github.event_name == 'workflow_dispatch' ||
+           github.event.workflow_run.conclusion == 'success') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -30,9 +65,37 @@ jobs:
           node-version: "22"
           cache: "npm"
       - run: npm ci
+      - name: Wait for the exact release to reach the public edge
+        env:
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha }}
+          SITE_URL: https://rambulls.github.io/control-atlas/
+        shell: bash
+        run: |
+          if [[ -z "$EXPECTED_SHA" ]]; then
+            curl --fail --silent --show-error --retry 5 --retry-delay 3 \
+              --output /dev/null "${SITE_URL}release.json"
+            exit 0
+          fi
+
+          for attempt in {1..20}; do
+            actual_sha="$(
+              curl --fail --silent --show-error "${SITE_URL}release.json?attempt=${attempt}" 2>/dev/null \
+                | jq -r '.commit_sha // empty' 2>/dev/null \
+                || true
+            )"
+            if [[ "$actual_sha" == "$EXPECTED_SHA" ]]; then
+              echo "Verified deployed release $EXPECTED_SHA"
+              exit 0
+            fi
+            echo "Waiting for release $EXPECTED_SHA; public edge reports ${actual_sha:-unavailable}."
+            sleep 6
+          done
+
+          echo "Public release did not converge to $EXPECTED_SHA within two minutes."
+          exit 1
       - name: Run three deployed mobile Lighthouse passes
         env:
-          TARGET_URL: ${{ github.event.inputs.url || 'https://rambulls.github.io/control-atlas/#/atlas-map?node=nist-800-53%3AAC-2&relationshipView=map' }}
+          TARGET_URL: ${{ inputs.url || 'https://rambulls.github.io/control-atlas/' }}
         run: |
           mkdir -p artifacts/deployed-lighthouse
           for i in 1 2 3; do
@@ -42,34 +105,14 @@ jobs:
               --form-factor=mobile \
               --screenEmulation.mobile \
               --output=json \
-              --output-path="artifacts/deployed-lighthouse/run-$i.json"
+              --output-path="artifacts/deployed-lighthouse/run-$i.report.json"
           done
-          node -e "
-            const rows = [1,2,3].map((i) => {
-              const r = require('./artifacts/deployed-lighthouse/run-' + i + '.json');
-              return {
-                run: i,
-                performance: Math.round(r.categories.performance.score * 100),
-                accessibility: Math.round(r.categories.accessibility.score * 100),
-                fcp: r.audits['first-contentful-paint'].displayValue,
-                lcp: r.audits['largest-contentful-paint'].displayValue,
-                tbt: r.audits['total-blocking-time'].displayValue,
-                cls: r.audits['cumulative-layout-shift'].displayValue,
-              };
-            });
-            console.table(rows);
-            require('fs').writeFileSync(
-              'artifacts/deployed-lighthouse/summary.json',
-              JSON.stringify(rows, null, 2),
-            );
-            const floor = 50;
-            const min = Math.min(...rows.map((row) => row.performance));
-            console.log('Recorded floor: >= ' + floor + '; lowest run: ' + min);
-            console.log(min >= floor ? 'AT OR ABOVE FLOOR' : 'BELOW FLOOR');
-          "
+          LIGHTHOUSE_REPORT_DIR=artifacts/deployed-lighthouse \
+            node tools/summarize-lighthouse.mjs
       - name: Upload reports
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: deployed-lighthouse
           path: artifacts/deployed-lighthouse
-          if-no-files-found: error
+          if-no-files-found: warn

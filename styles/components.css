@@ -1,3 +1,62 @@
+.ca-button {
+  line-height: 1.2;
+  text-align: center;
+}
+
+.ca-button > svg {
+  flex: 0 0 auto;
+}
+
+/* One alignment contract for compact controls that predate the shared Button
+   primitive. Page styles own color and spacing; this layer owns the content
+   box so labels and icons do not drift between routes or breakpoints. */
+:is(
+  .ca-tab,
+  .active-filter-chip,
+  .clear-filter-link,
+  .workbench-toggle button,
+  .relationship-view-tabs .tab,
+  .atlas-view-tabs button,
+  .source-view-toggle button,
+  .library-view-toggle button,
+  .workspace-view-toggle button,
+  .resource-type-chips button,
+  .resources-filter-toggle,
+  .search-mobile-filter-button,
+  .workspace-mobile-filter-button,
+  .drawer-tab,
+  .compare-mode-tab,
+  .atlas-decomp__orientation-button
+) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+  text-align: center;
+}
+
+:is(
+  .ca-button,
+  .ca-tab,
+  .active-filter-chip,
+  .clear-filter-link,
+  .workbench-toggle button,
+  .relationship-view-tabs .tab,
+  .atlas-view-tabs button,
+  .source-view-toggle button,
+  .library-view-toggle button,
+  .workspace-view-toggle button,
+  .resource-type-chips button,
+  .resources-filter-toggle,
+  .search-mobile-filter-button,
+  .workspace-mobile-filter-button,
+  .drawer-tab,
+  .compare-mode-tab,
+  .atlas-decomp__orientation-button
+) > svg {
+  flex: 0 0 auto;
+}
+
 .ca-button-primary {
   border-color: var(--ca-primary);
   background: var(--ca-action-primary);
@@ -157,6 +216,13 @@
   white-space: nowrap;
 }
 
+/* Metadata values are right-aligned, but the animated keycap is a control-like
+   brand mark and must stay optically centered over its reserved width. */
+.signal-cover__meta .signal-cover__brand-signal > strong {
+  justify-self: stretch;
+  text-align: center;
+}
+
 .signal-cover__brand-signal i {
   visibility: hidden;
 }
@@ -217,6 +283,7 @@
 .signal-cover__action {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: var(--ca-control-md);
   padding-inline: var(--ca-space-6);
   border: 1px solid var(--ca-action-primary);
@@ -2706,5 +2773,3 @@
   font-size: 0.8rem;
   color: var(--ca-text-muted);
 }
-
-

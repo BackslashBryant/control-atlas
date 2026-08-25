@@ -5,6 +5,5 @@ export default defineConfig({
   ...baseConfig,
   testIgnore: [
     '**/accessibility.spec.mjs',
-    '**/approved-layout-visual.spec.mjs',
   ],
 });

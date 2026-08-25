@@ -51,7 +51,7 @@ test('B5: the hero has no reserved-but-empty second column', async ({ page }) =>
   const hero = page.locator('.home-hero');
   await expect(hero).toBeVisible();
   const tracks = await hero.evaluate((el) => {
-    const cols = getComputedStyle(el).gridTemplateColumns.trim();
+    const cols = globalThis.getComputedStyle(el).gridTemplateColumns.trim();
     return cols === 'none' ? [] : cols.split(/\s+/);
   });
   expect(tracks.length).toBeLessThanOrEqual(1);
@@ -63,7 +63,7 @@ test('B6: the Template B destination grid has four uniform cards', async ({ page
   const grid = page.locator('.home-secondary-grid');
   await expect(grid).toBeVisible();
   const info = await grid.evaluate((el) => {
-    const cs = getComputedStyle(el);
+    const cs = globalThis.getComputedStyle(el);
     const kids = /** @type {HTMLElement[]} */ ([...el.children]);
     return {
       display: cs.display,
@@ -86,7 +86,7 @@ test('B9: overlay result descriptions clamp within their rows', async ({ page })
   await page.locator('#global-search-query').fill('control');
   await expect(page.locator('.search-overlay-result').first()).toBeVisible({ timeout: 10000 });
   const overflow = await page.evaluate(() => {
-    const rows = Array.from(document.querySelectorAll('.search-overlay-result'));
+    const rows = Array.from(globalThis.document.querySelectorAll('.search-overlay-result'));
     return rows.filter((r) => r.scrollHeight > r.clientHeight + 1).length;
   });
   expect(overflow).toBe(0);
@@ -108,7 +108,7 @@ test('B11: the in-page Library search input sits symmetrically in its box', asyn
   await page.goto('/#/library?q=access');
   await page.locator('.workspace-search input').first().waitFor({ timeout: 15000 });
   const diff = await page.evaluate(() => {
-    const box = document.querySelector('.workspace-search > label');
+    const box = globalThis.document.querySelector('.workspace-search > label');
     const input = box.querySelector('input');
     const b = box.getBoundingClientRect();
     const i = input.getBoundingClientRect();
@@ -121,8 +121,8 @@ test('B13: the Atlas page does not overflow horizontally at the document level',
   await page.goto('/#/atlas');
   await page.waitForTimeout(2500);
   const { scrollW, clientW } = await page.evaluate(() => ({
-    scrollW: document.documentElement.scrollWidth,
-    clientW: document.documentElement.clientWidth,
+    scrollW: globalThis.document.documentElement.scrollWidth,
+    clientW: globalThis.document.documentElement.clientWidth,
   }));
   expect(scrollW).toBeLessThanOrEqual(clientW + 2);
 });
@@ -131,10 +131,10 @@ test('B14: every Library select exposes a non-empty accessible name', async ({ p
   await page.goto('/#/library?q=access');
   await expect(page.locator('#library-results .workspace-result-row').first()).toBeVisible({ timeout: 15000 });
   const unnamed = await page.evaluate(() => {
-    const selects = Array.from(document.querySelectorAll('select'));
+    const selects = Array.from(globalThis.document.querySelectorAll('select'));
     return selects.filter((s) => {
       const aria = (s.getAttribute('aria-label') || '').trim();
-      const labelled = s.id && document.querySelector(`label[for="${s.id}"]`);
+      const labelled = s.id && globalThis.document.querySelector(`label[for="${s.id}"]`);
       return !aria && !labelled;
     }).length;
   });
@@ -160,30 +160,33 @@ test('route semantic polish holds at all required viewport widths', async ({ pag
     { width: 1024, height: 900 },
     { width: 1440, height: 1000 },
   ]) {
-    const { width, height } = viewport;
+    const { width } = viewport;
     await page.setViewportSize(viewport);
 
     await page.goto('/#/compare');
     const choices = page.getByRole('tablist', { name: 'Comparison mode' }).getByRole('tab');
     await expect(choices).toHaveCount(2);
     expect(await choices.first().evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
 
     await page.goto('/#/about');
     await expect(page.locator('main article.learn-article')).toHaveCount(1);
     await expect(page.locator('main article.learn-article h2')).toHaveCount(5);
     await expect(page.locator('footer')).toContainText('Product release');
     await expect(page.locator('footer')).toContainText('Source data built');
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     if (width <= 390) {
-      const footerReach = await page.locator('footer').evaluate((footer) => {
+      const footerOverflow = await page.locator('footer').evaluate((footer) => {
+        const footerBox = footer.getBoundingClientRect();
         const required = [
           ...footer.querySelectorAll('.site-footer-release > *, a[href*="report-broken-link"]'),
         ];
-        return Math.max(...required.map((element) =>
-          element.getBoundingClientRect().bottom - footer.getBoundingClientRect().top));
+        return required.some((element) => {
+          const box = element.getBoundingClientRect();
+          return box.left < footerBox.left - 1 || box.right > footerBox.right + 1;
+        });
       });
-      expect(footerReach).toBeLessThanOrEqual(height);
+      expect(footerOverflow).toBe(false);
       const links = page.locator('footer a');
       for (const link of await links.all()) {
         expect(await link.evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);

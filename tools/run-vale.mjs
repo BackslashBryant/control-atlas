@@ -79,7 +79,13 @@ if (!(await exists(binaryPath))) {
         '-Command',
         `Expand-Archive -LiteralPath '${archivePath}' -DestinationPath '${installDir}' -Force`,
       ])
-    : await run('tar', [...asset.tarArgs, archivePath, '-C', installDir]);
+    : await run('tar', [
+        ...asset.tarArgs,
+        '--no-same-owner',
+        archivePath,
+        '-C',
+        installDir,
+      ]);
   if (extractCode !== 0 || !(await exists(binaryPath))) {
     throw new Error(`Vale archive extraction failed with exit code ${extractCode}`);
   }
