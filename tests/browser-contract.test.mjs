@@ -120,7 +120,9 @@ test('brand identity is immediate, generated, decorative, and motion-safe', () =
   assert.match(brand, /subscribeBrandRotation/);
   assert.match(rotation, /ATLAS_BRAND_SIGNALS/);
   assert.match(rotation, /BRAND_ROTATION_INTERVAL_MS = 2400/);
-  assert.match(rotation, /BRAND_ROTATION_SETTLE_MS = 8000/);
+  assert.match(rotation, /BRAND_ROTATION_SETTLE_MS = 2400/);
+  assert.match(rotation, /createBrandSignalPicker/);
+  assert.match(rotation, /Math\.random/);
   assert.match(brand, /brand-key">Ctrl/);
   assert.match(rotation, /BRAND_ROTATION_SETTLE_MS/);
   assert.match(rotation, /setTimeout/);
@@ -132,8 +134,8 @@ test('brand identity is immediate, generated, decorative, and motion-safe', () =
   assert.match(html, /class="brand-key">Alt/);
   assert.match(html, /data-brand-word>CONTROL_ATLAS_BRAND_SIGNAL_INITIAL/);
   assert.match(mainEntrypoint, /prefers-reduced-motion: reduce/);
-  assert.match(mainEntrypoint, /BRAND_WORDS/);
-  assert.match(mainEntrypoint, /ATLAS_SPLASH_SIGNALS/);
+  assert.match(mainEntrypoint, /createBrandSignalPicker/);
+  assert.doesNotMatch(mainEntrypoint, /ATLAS_SPLASH_SIGNALS/);
   assert.match(mainEntrypoint, /addEventListener\('change', onBrandMotionChange\)/);
   assert.equal(typeof packageJson.dependencies['@xyflow/react'], 'string');
   assert.equal(typeof packageJson.dependencies.elkjs, 'string');
@@ -377,6 +379,12 @@ test('landing page states what the product is before asking for action', () => {
   assert.match(html, /CONTROL_ATLAS_HOME/);
   assert.match(viteConfig, /renderStaticHome\(\)/);
   assert.match(viteConfig, /deriveAtlasScopeMetrics/);
+  assert.match(viteConfig, /cover\.headlineLead/);
+  assert.match(viteConfig, /signal-cover__signal-word/);
+  assert.match(
+    viteConfig,
+    /<aside class="signal-cover__meta"><p aria-hidden="true" class="signal-cover__brand-signature">[\s\S]*?signal-cover__meta-title/,
+  );
   assert.match(viteConfig, /\.replace\('<!-- CONTROL_ATLAS_HOME -->'/);
   assert.equal(HOME_DESTINATIONS.length, 4);
   assert.deepEqual(HOME_DESTINATIONS.map(({ label }) => label), [

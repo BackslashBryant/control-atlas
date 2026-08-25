@@ -19,9 +19,10 @@ export const SITE_COPY = Object.freeze({
     // metadata aside.
     cover: Object.freeze({
       eyebrow: "Control Atlas",
-      headline: "Make federal cybersecurity compliance make sense.",
+      headlineLead: "Make federal compliance",
+      headlineSignal: "make sense.",
       lead:
-        "Requirements, controls, STIGs, assessments, threats, defenses, Zero Trust, and guidance, connected in one place.",
+        "A free, public research tool that connects the requirements, controls, and guidance published by NIST, DISA, FedRAMP, MITRE, and CISA. Not a government system and not a GRC platform — a place to find what applies to your system and what to do next.",
       action: "Enter the Atlas",
       // KPI values are computed at build time from generated data (see
       // vite.config.ts renderStaticHome) — never hardcode counts here.

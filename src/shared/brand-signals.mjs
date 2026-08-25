@@ -213,19 +213,3 @@ export function buildAtlasBrandSignals({
       .map((signal) => Object.freeze(signal)),
   );
 }
-
-export function selectSplashBrandSignals(signals) {
-  const eligible = signals.filter((signal) => signal.splashEligible);
-  const byLabel = new Map(eligible.map((signal) => [signal.label, signal]));
-  const preferred = ["NIST", "STIG", "Zero Trust", "Servers", "Check"]
-    .map((label) => byLabel.get(label))
-    .filter(Boolean);
-  if (preferred.length >= 3) return Object.freeze(preferred);
-
-  const selected = [];
-  for (const category of ["source", "content", "topic", "action"]) {
-    const signal = eligible.find((candidate) => candidate.category === category);
-    if (signal) selected.push(signal);
-  }
-  return Object.freeze(selected.slice(0, 5));
-}

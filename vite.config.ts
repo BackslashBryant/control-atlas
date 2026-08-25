@@ -12,7 +12,6 @@ import {
   buildAtlasBrandSignals,
   countLibraryTaxonomyTags,
   deriveAtlasScopeMetrics,
-  selectSplashBrandSignals,
 } from './src/shared/brand-signals.mjs';
 import { HOME_LIBRARY_DISCOVERY } from './src/ui/lib/homeTagConstellation';
 
@@ -47,8 +46,7 @@ const atlasBrandSignals = buildAtlasBrandSignals({
     guides: Boolean(SITE_COPY.routes.guides?.title),
   },
 });
-const atlasSplashSignals = selectSplashBrandSignals(atlasBrandSignals);
-if (atlasBrandSignals.length === 0 || atlasSplashSignals.length === 0) {
+if (atlasBrandSignals.length === 0) {
   throw new Error('Atlas presentation has no eligible brand signals.');
 }
 const longestBrandSignal = atlasBrandSignals.reduce(
@@ -103,13 +101,7 @@ function renderStaticHome() {
   // over a plotted flight plan, closed by a calibration rail. The geometry is
   // decorative, so it stays aria-hidden and outside the reading corridor.
   const coverFlightPlan = `<svg class="signal-cover__flightplan" viewBox="0 0 760 430" aria-hidden="true" focusable="false"><g fill="none" stroke-linecap="round"><path d="M32 392C182 144 422 58 752 146" stroke="var(--lsm-grid-line)" opacity=".52"/><path d="M80 420C252 238 482 186 746 232" stroke="var(--lsm-gold)" opacity=".6"/><path d="M180 440C340 326 536 294 728 318" stroke="var(--lsm-gold)" stroke-dasharray="8 10" opacity=".44"/><path d="M476 306C572 260 650 248 734 252" stroke="var(--lsm-orange)" opacity=".56"/><circle cx="540" cy="214" r="7" stroke="var(--lsm-grid-line)"/><path d="M540 194v40M520 214h40" stroke="var(--lsm-dust)" opacity=".3"/></g><circle cx="540" cy="214" r="3" fill="var(--lsm-bone)"/><circle cx="670" cy="258" r="5" fill="var(--lsm-orange)"/></svg>`;
-  const firstSplashSignal = atlasSplashSignals[0].label;
-  const longestSplashSignal = atlasSplashSignals.reduce(
-    (longest: string, signal: { label: string }) =>
-      signal.label.length > longest.length ? signal.label : longest,
-    '',
-  );
-  const signalCover = `<div class="signal-cover" data-signal-cover hidden role="dialog" aria-modal="true" aria-label="Control Atlas introduction"><section class="signal-cover__hero">${coverFlightPlan}<div class="signal-cover__copy"><p class="signal-cover__eyebrow">${escapeHtml(cover.eyebrow)}</p><p aria-hidden="true" class="signal-cover__brand-signature"><span>Ctrl</span><b>+</b><span>Alt</span><b>+</b><span class="signal-cover__brand-signal"><i>${escapeHtml(longestSplashSignal)}</i><strong data-signal-cover-word>${escapeHtml(firstSplashSignal)}</strong></span></p><h1 class="signal-cover__headline">${escapeHtml(cover.headline)}</h1><p class="signal-cover__lead">${escapeHtml(cover.lead)}</p><p class="signal-cover__actions"><button class="signal-cover__action" data-signal-cover-enter type="button">${escapeHtml(cover.action)}</button></p></div><aside class="signal-cover__meta"><span class="signal-cover__meta-title">${escapeHtml(cover.metaTitle)}</span>${coverMeta}</aside></section><div class="signal-cover__rail"><span>${escapeHtml(cover.railLeft)}</span><span class="signal-cover__prompt">${escapeHtml(cover.prompt)}</span></div></div>`;
+  const signalCover = `<div class="signal-cover" data-signal-cover hidden role="dialog" aria-modal="true" aria-label="Control Atlas introduction"><section class="signal-cover__hero">${coverFlightPlan}<div class="signal-cover__copy"><p class="signal-cover__eyebrow">${escapeHtml(cover.eyebrow)}</p><h1 class="signal-cover__headline">${escapeHtml(cover.headlineLead)}<br><span class="signal-cover__signal-word">${escapeHtml(cover.headlineSignal)}</span></h1><p class="signal-cover__lead">${escapeHtml(cover.lead)}</p><p class="signal-cover__actions"><button class="signal-cover__action" data-signal-cover-enter type="button">${escapeHtml(cover.action)}</button></p></div><aside class="signal-cover__meta"><p aria-hidden="true" class="signal-cover__brand-signature"><span>Ctrl</span><b>+</b><span>Alt</span><b>+</b><span class="signal-cover__brand-signal"><i>${escapeHtml(longestBrandSignal)}</i><strong data-signal-cover-word>${escapeHtml(atlasBrandSignals[0].label)}</strong></span></p><span class="signal-cover__meta-title">${escapeHtml(cover.metaTitle)}</span>${coverMeta}</aside></section><div class="signal-cover__rail"><span>${escapeHtml(cover.railLeft)}</span><span class="signal-cover__prompt">${escapeHtml(cover.prompt)}</span></div></div>`;
   return `${signalCover}<section class="home-entry" aria-labelledby="home-title" data-template="B" data-visual-identity="universal-front-door">
     <div class="home-hero">
       <div class="home-hero-lead">
@@ -150,7 +142,6 @@ export default defineConfig({
   root: resolve(rootDir, 'src'),
   define: {
     'globalThis.__ATLAS_BRAND_SIGNALS__': JSON.stringify(atlasBrandSignals),
-    'globalThis.__ATLAS_SPLASH_SIGNALS__': JSON.stringify(atlasSplashSignals),
     'globalThis.__ATLAS_SCOPE_METRICS__': JSON.stringify(atlasScopeMetrics),
   },
   plugins: [
