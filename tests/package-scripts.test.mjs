@@ -62,7 +62,9 @@ test('security uses native GitHub controls without rebuilding the site', () => {
   assert.match(security, /actions\/dependency-review-action@[0-9a-f]{40}/);
   assert.match(security, /github\/codeql-action\/init@[0-9a-f]{40}/);
   assert.match(security, /build-mode: none/);
-  assert.match(security, /gitleaks\/gitleaks-action@[0-9a-f]{40}/);
+  assert.match(security, /Install checksum-verified Gitleaks 8\.24\.3/);
+  assert.match(security, /\.\/gitleaks dir \./);
+  assert.match(security, /github\/codeql-action\/upload-sarif@[0-9a-f]{40}/);
   assert.equal((security.match(/fetch-depth: 0/g) ?? []).length, 1);
   assert.doesNotMatch(security, /npm ci|npm run build:site|npm run audit:deps/);
   assert.ok(existsSync('.gitleaks.toml'));
