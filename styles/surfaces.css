@@ -6749,6 +6749,24 @@ button.atlas-leverage-row:hover {
   max-width: 64ch;
 }
 
+.home-breadth {
+  max-width: 68ch;
+  color: var(--ca-text-muted) !important;
+  font-size: var(--ca-text-base) !important;
+}
+
+.atlas-scope-strip {
+  margin: calc(var(--ca-space-2) * -1) 0 0;
+  color: var(--ca-text-subtle);
+  font: var(--ca-text-xs) / 1.5 var(--ca-font-mono);
+  letter-spacing: 0.025em;
+}
+
+.atlas-scope-strip span {
+  padding-inline: 0.35em;
+  color: var(--ca-border-strong);
+}
+
 .home-search {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;

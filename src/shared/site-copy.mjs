@@ -11,16 +11,17 @@ export const SITE_COPY = Object.freeze({
     headline: "Make federal cybersecurity compliance make sense.",
     definition:
       "Understand what applies, what it means, and what to do next.",
+    breadth:
+      "Search requirements, controls, STIGs, assessments, Zero Trust, threats, defenses, and guidance to see how the pieces fit together.",
     // Depth-0 Signal cover (first paint, before the Home surface). Composed as
     // the Orbital "editorial split, one invitation" landing recipe: eyebrow,
     // display headline with a signal word, lead, one action, and an archival
     // metadata aside.
     cover: Object.freeze({
-      eyebrow: "Control Atlas / Ctrl + Alt + Learn",
-      headlineLead: "Make federal compliance",
-      headlineSignal: "make sense.",
+      eyebrow: "Control Atlas",
+      headline: "Make federal cybersecurity compliance make sense.",
       lead:
-        "A free, public research tool that connects the requirements, controls, and guidance published by NIST, DISA, FedRAMP, MITRE, and CISA. Not a government system and not a GRC platform — a place to find what applies to your system and what to do next.",
+        "Requirements, controls, STIGs, assessments, threats, defenses, Zero Trust, and guidance, connected in one place.",
       action: "Enter the Atlas",
       // KPI values are computed at build time from generated data (see
       // vite.config.ts renderStaticHome) — never hardcode counts here.
@@ -93,7 +94,7 @@ export const SITE_COPY = Object.freeze({
     }),
     about: Object.freeze({
       title: "About",
-      purpose: "Learn what Control Atlas covers and where its limits are.",
+      purpose: "See why Control Atlas exists, what it brings together, and where its limits are.",
     }),
     start: Object.freeze({
       title: "Start here",

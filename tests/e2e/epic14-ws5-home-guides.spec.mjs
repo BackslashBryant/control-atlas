@@ -136,10 +136,10 @@ test("WS6 About is a five-section knowledge-base article with the exact research
     { exact: true },
   )).toBeVisible();
   for (const title of [
-    "What Control Atlas is",
-    "How it is organized",
-    "How sources and crosswalks work",
-    "What Control Atlas does not decide",
+    "Why Control Atlas exists",
+    "What's in here",
+    "Built for the people doing the work",
+    "Follow it back to the source",
     "About the project",
   ]) {
     const heading = article.getByRole("heading", { level: 2, name: title });

@@ -53,6 +53,7 @@ export function SiteFooter(props: {
           <p className="text-[var(--ca-text-muted)] text-[13px] mb-[12px]">Open source under the MIT license.</p>
           <a className="footer-link block mt-[12px] text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px]" href="https://github.com/rambulls/control-atlas/issues/new?template=submit-resource.yml" rel="noopener noreferrer" target="_blank">Submit resource</a>
           <a className="footer-link block mt-[12px] text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px]" href="https://github.com/rambulls/control-atlas/issues/new?template=report-broken-link.yml" rel="noopener noreferrer" target="_blank">Report a problem</a>
+          <a className="footer-link block mt-[12px] text-[var(--ca-text-muted)] hover:text-[var(--ca-secondary)] text-[13px]" href="https://buymeacoffee.com/ram.bulls" rel="noopener noreferrer" target="_blank">Support Control Atlas</a>
         </div>
       </div>
       <div className="site-footer-release max-w-[1280px] mx-auto border-t border-[var(--ca-border)] pt-[24px] flex flex-wrap gap-x-[24px] gap-y-[8px]">

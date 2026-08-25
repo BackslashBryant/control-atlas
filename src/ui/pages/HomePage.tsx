@@ -8,6 +8,7 @@ import {
 } from "@tabler/icons-react";
 
 import { HOME_CONTENT, HOME_DESTINATIONS } from "../../shared/home-content.mjs";
+import { ATLAS_SCOPE_METRICS } from "../../shared/atlas-presentation";
 import { AppLink } from "../components/AppLink";
 import { HOME_LIBRARY_DISCOVERY } from "../lib/homeTagConstellation";
 import type { ViewState } from "../lib/viewState";
@@ -37,6 +38,7 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
           <header className="home-entry-header">
             <h1 id="home-title">{HOME_CONTENT.headline}</h1>
             <p className="home-product-identity">{HOME_CONTENT.definition}</p>
+            <p className="home-breadth">{HOME_CONTENT.breadth}</p>
           </header>
 
           <button
@@ -49,6 +51,16 @@ export function HomePage({ onNavigate, onOpenSearch }: HomePageProps) {
             <span>{HOME_CONTENT.searchPlaceholder}</span>
             <span className="home-search-trigger__action">Search</span>
           </button>
+
+          {ATLAS_SCOPE_METRICS ? (
+            <p className="atlas-scope-strip">
+              {ATLAS_SCOPE_METRICS.compact.records} searchable records
+              <span aria-hidden="true"> · </span>
+              {ATLAS_SCOPE_METRICS.compact.connections} connections
+              <span aria-hidden="true"> · </span>
+              {ATLAS_SCOPE_METRICS.compact.publications} source publications
+            </p>
+          ) : null}
 
         </div>
       </div>

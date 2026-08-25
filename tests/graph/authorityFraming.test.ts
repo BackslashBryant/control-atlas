@@ -30,10 +30,10 @@ test("orientation names all four mandate kinds", () => {
   assert.match(atlasTree, /issued_without_federal_mandate/);
 });
 
-test("curated organization is plainly separated from publisher structure", () => {
-  assert.match(aboutPage, /How it is organized/);
-  assert.match(aboutPage, /This navigation layer never replaces a source's own structure/);
-  assert.match(aboutPage, /publisher keep their original publication order/);
+test("the practitioner story preserves publisher authority in plain language", () => {
+  assert.match(aboutPage, /Follow it back to the source/);
+  assert.match(aboutPage, /does not replace NIST, DISA, DoD, FedRAMP, MITRE/);
+  assert.match(aboutPage, /get back to the official source/);
   assert.doesNotMatch(aboutPage, /organizing spine|Control Atlas overlay|publisher hierarchy|provenance|confidence|trust register/i);
   assert.doesNotMatch(aboutPage, /Not a publisher source|never a publisher/i);
   assert.doesNotMatch(sourcesPage, /Not a publisher source|never a publisher/i);

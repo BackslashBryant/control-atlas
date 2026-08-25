@@ -1,34 +1,13 @@
-// The rotating keycap in the masthead is a real keyboard shortcut, not a
-// decoration: whatever word is showing, Ctrl+Alt+<its first letter> goes to the
-// surface named here. Every word must therefore earn its place — the list is
-// short on purpose, and each word says something this product actually does.
-export const BRAND_ACTIONS = [
-  { word: "Explore", surface: "atlas" },
-  { word: "Trace", surface: "sources" },
-  { word: "Crosswalk", surface: "compare" },
-  { word: "Browse", surface: "catalogs" },
-  { word: "Draft", surface: "build" },
-  { word: "Find", surface: "search" },
-  { word: "Verify", surface: "sources" },
-  { word: "Reconcile", surface: "compare" },
-  { word: "Learn", surface: "learn" },
-] as const;
+import {
+  ATLAS_BRAND_SIGNALS,
+  type AtlasBrandSignal,
+} from "./atlas-presentation";
 
-export type BrandAction = (typeof BRAND_ACTIONS)[number];
-
-export const BRAND_WORDS = BRAND_ACTIONS.map(({ word }) => word);
-
-// Brand surface -> ViewState["view"]. Kept here beside BRAND_ACTIONS so a new
-// word cannot name a surface with nowhere to go; src/ui/App.tsx consumes it.
-export const BRAND_SURFACE_VIEWS: Record<BrandAction["surface"], string> = {
-  atlas: "atlas-map",
-  build: "templates",
-  catalogs: "catalog-detail",
-  compare: "matrix",
-  learn: "patterns",
-  search: "search",
-  sources: "sources",
-};
+// Ctrl + Alt + … is a visual Control Atlas signature. The labels are injected
+// from generated corpus coverage during the Vite build and never carry routes,
+// destinations, or keyboard bindings.
+export const BRAND_SIGNALS = ATLAS_BRAND_SIGNALS;
+export const BRAND_WORDS = BRAND_SIGNALS.map(({ label }) => label);
 
 export const BRAND_ROTATION_INTERVAL_MS = 2400;
 export const BRAND_ROTATION_TRANSITION_MS = 320;
@@ -38,28 +17,23 @@ export const LONGEST_BRAND_WORD = BRAND_WORDS.reduce((longest, word) =>
   word.length > longest.length ? word : longest,
 );
 
-// One rotation for the whole app. The masthead and the home hero both render a
-// flourish; if each ran its own timer they would drift apart and the keyboard
-// shortcut would be ambiguous. Ref-counted so the timers stop when the last
-// flourish unmounts.
+// One rotation for the whole app. The masthead and any repeated flourish stay
+// visually synchronized, while reduced-motion users receive the first stable
+// generated signal.
 let activeIndex = 0;
 let subscriberCount = 0;
 let settleTimer = 0;
 let rotationTimer = 0;
 let motionQuery: MediaQueryList | null = null;
-const listeners = new Set<(action: BrandAction) => void>();
-
-export function activeBrandAction(): BrandAction {
-  return BRAND_ACTIONS[activeIndex];
-}
+const listeners = new Set<(signal: AtlasBrandSignal) => void>();
 
 function publish() {
-  const action = BRAND_ACTIONS[activeIndex];
-  for (const listener of listeners) listener(action);
+  const signal = BRAND_SIGNALS[activeIndex];
+  for (const listener of listeners) listener(signal);
 }
 
 function showNextWord() {
-  activeIndex = (activeIndex + 1) % BRAND_ACTIONS.length;
+  activeIndex = (activeIndex + 1) % BRAND_SIGNALS.length;
   publish();
 }
 
@@ -74,7 +48,7 @@ function startRotation() {
   stopTimers();
   activeIndex = 0;
   publish();
-  if (motionQuery?.matches) return;
+  if (motionQuery?.matches || BRAND_SIGNALS.length < 2) return;
   settleTimer = window.setTimeout(() => {
     showNextWord();
     rotationTimer = window.setInterval(showNextWord, BRAND_ROTATION_INTERVAL_MS);
@@ -82,10 +56,10 @@ function startRotation() {
 }
 
 export function subscribeBrandRotation(
-  listener: (action: BrandAction) => void,
+  listener: (signal: AtlasBrandSignal) => void,
 ): () => void {
   listeners.add(listener);
-  listener(BRAND_ACTIONS[activeIndex]);
+  listener(BRAND_SIGNALS[activeIndex]);
   subscriberCount += 1;
   if (subscriberCount === 1 && typeof window !== "undefined") {
     motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");

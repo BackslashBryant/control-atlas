@@ -1,15 +1,18 @@
-import { PageHeader, PageJumpNav } from "../lib/pagePrimitives";
+import { ATLAS_SCOPE_METRICS } from "../../shared/atlas-presentation";
 import {
   PRODUCT_DECISION_BOUNDARY,
   PRODUCT_DEFINITION,
 } from "../../shared/product-identity";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
+import { PageHeader, PageJumpNav } from "../lib/pagePrimitives";
+
+const SUPPORT_URL = "https://buymeacoffee.com/ram.bulls";
 
 const ABOUT_SECTIONS = [
-  { id: "about-what-it-is", label: "What Control Atlas is" },
-  { id: "about-organization", label: "How it is organized" },
-  { id: "about-sources", label: "How sources and crosswalks work" },
-  { id: "about-boundary", label: "What Control Atlas does not decide" },
+  { id: "about-why", label: "Why Control Atlas exists" },
+  { id: "about-contents", label: "What's in here" },
+  { id: "about-practitioners", label: "Built for the people doing the work" },
+  { id: "about-sources", label: "Follow it back to the source" },
   { id: "about-project", label: "About the project" },
 ];
 
@@ -20,62 +23,87 @@ export function AboutPage() {
 
       <div className="about-layout">
         <article className="learn-article">
-          <section id="about-what-it-is">
-            <h2>What Control Atlas is</h2>
+          <section id="about-why">
+            <h2>Why Control Atlas exists</h2>
+            <p>
+              Federal cybersecurity work is scattered everywhere: regulations,
+              NIST publications, DISA STIGs and SRGs, assessment procedures,
+              spreadsheets, crosswalks, Zero Trust guidance, threat frameworks,
+              and dozens of websites.
+            </p>
             <p>{PRODUCT_DEFINITION}</p>
             <p>
-              It brings federal cybersecurity publications into one public place so
-              practitioners can find the official record, understand its context,
-              and continue to the next piece of work.
+              It brings those pieces together so you can find what you are looking
+              for, understand where it fits, see what connects to it, and get back
+              to the work.
             </p>
           </section>
 
-          <section id="about-organization">
-            <h2>How it is organized</h2>
+          <section id="about-contents">
+            <h2>What's in here</h2>
+            {ATLAS_SCOPE_METRICS ? (
+              <dl aria-label="Control Atlas scope" className="about-scope-metrics">
+                <div>
+                  <dt>Searchable records</dt>
+                  <dd>{ATLAS_SCOPE_METRICS.records.toLocaleString("en-US")}</dd>
+                </div>
+                <div>
+                  <dt>Connections</dt>
+                  <dd>{ATLAS_SCOPE_METRICS.connections.toLocaleString("en-US")}</dd>
+                </div>
+                <div>
+                  <dt>Source publications</dt>
+                  <dd>{ATLAS_SCOPE_METRICS.publications.toLocaleString("en-US")}</dd>
+                </div>
+              </dl>
+            ) : null}
             <p>
-              Nine areas — Governance, Risk, Compliance, Architecture,
-              Implementation, Assessment, Operations, Threats &amp; Defense, and
-              Knowledge — describe how Control Atlas organizes topics for browsing.
+              Controls and requirements. STIGs and SRGs. Assessment procedures.
+              Baselines. CMMC. FedRAMP. CUI. Zero Trust. ATT&amp;CK and D3FEND.
+              Practitioner resources and working tools.
             </p>
+          </section>
+
+          <section id="about-practitioners">
+            <h2>Built for the people doing the work</h2>
+            <p>Control Atlas is built for the people who actually have to use this stuff.</p>
             <p>
-              This navigation layer never replaces a source's own structure. NIST,
-              DISA, and every other publisher keep their original publication order,
-              headings, identifiers, and relationships.
+              The goal is not another compliance platform. It is a free place to
+              make sense of the material we already work with, without bouncing
+              between twenty tabs, PDFs, spreadsheets, and disconnected sites.
             </p>
           </section>
 
           <section id="about-sources">
-            <h2>How sources and crosswalks work</h2>
+            <h2>Follow it back to the source</h2>
             <p>
-              Each publication and connection names its publisher, cited version,
-              official link, and last-checked date. Crosswalks remain separate from
-              the publisher's original structure.
+              Control Atlas does not replace NIST, DISA, DoD, FedRAMP, MITRE, or
+              any other publisher. When something matters, you should be able to
+              see where it came from and get back to the official source.
             </p>
-            <p>
-              Connection details state the source and how the connection was
-              established, so an official crosswalk is distinguishable from a
-              normalized or inferred link. Sources contains the supporting source
-              details for each record.
-            </p>
-          </section>
-
-          <section id="about-boundary">
-            <h2>What Control Atlas does not decide</h2>
+            <p>Control Atlas helps connect the dots. It does not make authorization or compliance decisions for you.</p>
             <p>{PRODUCT_DECISION_BOUNDARY}</p>
-            <p>
-              A publication, tag, or connection can support research. It does not
-              determine applicability, satisfy a control, or replace an assessor or
-              authorizing official.
-            </p>
           </section>
 
           <section id="about-project">
             <h2>About the project</h2>
             <p>
-              Control Atlas is open source under the MIT license and is not a
-              government system. No account or upload is required; document work
-              runs in the browser and does not store organizational data.
+              Control Atlas is free and open source under the MIT license. It is
+              not a government system, no account is required, and document work
+              runs locally in your browser without storing organizational data.
             </p>
+            <p>
+              If Control Atlas saves you time or you want to help keep it growing,
+              you can support the project.
+            </p>
+            <a
+              className="about-support-link"
+              href={SUPPORT_URL}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <span aria-hidden="true">☕</span> Support Control Atlas
+            </a>
           </section>
         </article>
 
