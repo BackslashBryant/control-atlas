@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-12T15:53:26.816Z",
+  "generated_at": "2026-08-25T13:27:29.716Z",
   "status": "COMPLETE",
   "stage_contract": [
     "discover",
@@ -15,6 +15,52 @@
     "publish"
   ],
   "resources": [
+    {
+      "resource_id": "ecosystem-abuse-ch",
+      "source_url": "https://abuse.ch/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "3 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
     {
       "resource_id": "tool-grype-vulnerability-scanner",
       "source_url": "https://github.com/anchore/grype",
@@ -154,6 +200,98 @@
       }
     },
     {
+      "resource_id": "tool-atomic-red-team",
+      "source_url": "https://github.com/redcanaryco/atomic-red-team",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "3 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "ecosystem-attack-workbench",
+      "source_url": "https://github.com/mitre-attack",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "3 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "tool-awesome-oscal",
       "source_url": "https://github.com/oscal-club/awesome-oscal",
       "stages": {
@@ -246,8 +384,192 @@
       }
     },
     {
+      "resource_id": "community-aws-repost-security",
+      "source_url": "https://repost.aws/topics?sort=popular",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-bloodhound-ce",
+      "source_url": "https://github.com/SpecterOps/BloodHound",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "training-cdse",
       "source_url": "https://www.cdse.edu/Training/Cybersecurity/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "service-censys",
+      "source_url": "https://search.censys.io/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "reference-cert-vulnerability-notes",
+      "source_url": "https://www.kb.cert.org/vuls/",
       "stages": {
         "discover": {
           "status": "complete",
@@ -522,6 +844,52 @@
       }
     },
     {
+      "resource_id": "tool-cisa-decider",
+      "source_url": "https://github.com/cisagov/Decider",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "dataset-cisa-known-exploited-vulnerabilities-json",
       "source_url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
       "stages": {
@@ -660,6 +1028,52 @@
       }
     },
     {
+      "resource_id": "tool-cisa-malcolm",
+      "source_url": "https://github.com/cisagov/Malcolm",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "2 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "official-niccs-training-catalog",
       "source_url": "https://niccs.cisa.gov/",
       "stages": {
@@ -724,6 +1138,98 @@
         "parse": {
           "status": "complete",
           "evidence": "README-derived fields were extracted by the resource enrichment adapter"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "dataset-cisa-vulnrichment",
+      "source_url": "https://github.com/cisagov/vulnrichment",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-cisco-security",
+      "source_url": "https://community.cisco.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
         },
         "normalize": {
           "status": "complete",
@@ -1120,6 +1626,190 @@
       }
     },
     {
+      "resource_id": "tool-cpat",
+      "source_url": "https://github.com/NSWC-Crane/C-PAT",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-crowdstrike",
+      "source_url": "https://community.crowdstrike.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-cyberark",
+      "source_url": "https://github.com/cyberark/community",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-cyberchef",
+      "source_url": "https://github.com/gchq/CyberChef",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "tool-cyclonedx-cli",
       "source_url": "https://github.com/CycloneDX/cyclonedx-cli",
       "stages": {
@@ -1168,6 +1858,98 @@
     {
       "resource_id": "portal-dcsa-nisp-cybersecurity",
       "source_url": "https://www.dcsa.mil/Industrial-Security/NISP-Cybersecurity-Office-NCSO/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "service-disa-deas",
+      "source_url": "https://help.disa.mil/deas/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "service-disa-deos",
+      "source_url": "https://www.cloud.mil/deos/",
       "stages": {
         "discover": {
           "status": "complete",
@@ -1304,8 +2086,192 @@
       }
     },
     {
+      "resource_id": "service-disa-acas",
+      "source_url": "https://help.disa.mil/cybersecurity/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "catalog-disa-cloud-offerings",
+      "source_url": "https://www.cloud.mil/disa/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "portal-disa-connect",
       "source_url": "https://connect.disa.mil/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "3 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "catalog-disa-products",
+      "source_url": "https://connect.disa.mil/product/Product2/Default",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "2 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-disa-scap-compliance-checker",
+      "source_url": "https://public.cyber.mil/stigs/scap/",
       "stages": {
         "discover": {
           "status": "complete",
@@ -1396,8 +2362,8 @@
       }
     },
     {
-      "resource_id": "tool-disa-scap-compliance-checker",
-      "source_url": "https://public.cyber.mil/stigs/scap/",
+      "resource_id": "portal-dod-stig-srg",
+      "source_url": "https://www.cyber.mil/stigs/",
       "stages": {
         "discover": {
           "status": "complete",
@@ -1442,8 +2408,8 @@
       }
     },
     {
-      "resource_id": "portal-dod-stig-srg",
-      "source_url": "https://www.cyber.mil/stigs/",
+      "resource_id": "service-disa-vms",
+      "source_url": "https://hybridcloud.disa.mil/offerings/vms",
       "stages": {
         "discover": {
           "status": "complete",
@@ -2040,6 +3006,98 @@
       }
     },
     {
+      "resource_id": "catalog-elastic-detection-rules",
+      "source_url": "https://github.com/elastic/detection-rules",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-elastic-security",
+      "source_url": "https://discuss.elastic.co/c/announcements/security-announcements/31",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "portal-dod-enterprise-connections-library",
       "source_url": "https://www.cyber.mil/connect/ec-document-library/",
       "stages": {
@@ -2070,6 +3128,52 @@
         "relationships": {
           "status": "complete",
           "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-f5-devcentral",
+      "source_url": "https://community.f5.com/category/Forums",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
         },
         "presentation": {
           "status": "complete",
@@ -2454,6 +3558,236 @@
       }
     },
     {
+      "resource_id": "dataset-first-epss",
+      "source_url": "https://www.first.org/epss/data.html",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-fortinet",
+      "source_url": "https://community.fortinet.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "dataset-github-advisory-database",
+      "source_url": "https://github.com/advisories/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-gitleaks",
+      "source_url": "https://github.com/gitleaks/gitleaks",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "service-greynoise-visualizer",
+      "source_url": "https://viz.greynoise.io/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "tool-gsa-oscal-ssp-word",
       "source_url": "https://github.com/GSA/oscal-ssp-to-word",
       "stages": {
@@ -2464,6 +3798,52 @@
         "acquire": {
           "status": "complete",
           "evidence": "repository API facts and README evidence were captured"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "reference-gtfobins",
+      "source_url": "https://gtfobins.github.io/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
         },
         "attest": {
           "status": "complete",
@@ -2638,6 +4018,98 @@
       }
     },
     {
+      "resource_id": "community-information-security-stackexchange",
+      "source_url": "https://security.stackexchange.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-kape",
+      "source_url": "https://www.kroll.com/en/services/cyber/reactive-services/kroll-artifact-parser-and-extractor-kape",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "tool-kics",
       "source_url": "https://github.com/Checkmarx/kics",
       "stages": {
@@ -2776,6 +4248,144 @@
       }
     },
     {
+      "resource_id": "tool-kyverno",
+      "source_url": "https://kyverno.io/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "reference-lolbas",
+      "source_url": "https://lolbas-project.github.io/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "reference-loldrivers",
+      "source_url": "https://www.loldrivers.io/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "tool-lynis",
       "source_url": "https://github.com/CISOfy/lynis",
       "stages": {
@@ -2806,6 +4416,144 @@
         "relationships": {
           "status": "not_applicable",
           "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-maester",
+      "source_url": "https://github.com/maester365/maester",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "reference-malpedia",
+      "source_url": "https://malpedia.caad.fkie.fraunhofer.de/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "dataset-malwarebazaar",
+      "source_url": "https://bazaar.abuse.ch/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
         },
         "presentation": {
           "status": "complete",
@@ -2868,8 +4616,284 @@
       }
     },
     {
+      "resource_id": "community-microsoft-security",
+      "source_url": "https://techcommunity.microsoft.com/category/microsoft-security",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "4 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "tool-microsoft-security-compliance-toolkit",
       "source_url": "https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/windows-security-configuration-framework/security-compliance-toolkit-10",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "reference-microsoft-security-update-guide",
+      "source_url": "https://msrc.microsoft.com/update-guide/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "reference-microsoft-stigrepo",
+      "source_url": "https://github.com/microsoft/StigRepo",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-microsoft-sysinternals",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysinternals-suite",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-microsoft365dsc",
+      "source_url": "https://github.com/Microsoft365DSC/Microsoft365DSC",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-misp",
+      "source_url": "https://github.com/MISP/MISP",
       "stages": {
         "discover": {
           "status": "complete",
@@ -2944,6 +4968,98 @@
         "relationships": {
           "status": "not_applicable",
           "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-mitre-attack-navigator",
+      "source_url": "https://github.com/mitre-attack/attack-navigator",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "3 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-mitre-caldera",
+      "source_url": "https://github.com/mitre/caldera",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "3 explicit ecosystem or companion relationship(s)"
         },
         "presentation": {
           "status": "complete",
@@ -3558,6 +5674,98 @@
       }
     },
     {
+      "resource_id": "tool-nist-mscp",
+      "source_url": "https://github.com/usnistgov/macos_security",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "repository-nist-ncp",
+      "source_url": "https://ncp.nist.gov/repository",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "official-nist-nvd-api",
       "source_url": "https://nvd.nist.gov/developers/vulnerabilities",
       "stages": {
@@ -3788,6 +5996,52 @@
       }
     },
     {
+      "resource_id": "tool-nmap",
+      "source_url": "https://nmap.org/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "official-csfc-capability-packages",
       "source_url": "https://www.nsa.gov/Resources/Commercial-Solutions-for-Classified-Program/",
       "stages": {
@@ -3818,6 +6072,98 @@
         "relationships": {
           "status": "not_applicable",
           "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "ecosystem-nuclei",
+      "source_url": "https://github.com/projectdiscovery/nuclei",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "ecosystem-nuwc-newport-rmf-tools",
+      "source_url": "https://github.com/NUWCDIVNPT",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "2 explicit ecosystem or companion relationship(s)"
         },
         "presentation": {
           "status": "complete",
@@ -3928,6 +6274,52 @@
     {
       "resource_id": "legacy-opencontrol-compliance-masonry",
       "source_url": "https://github.com/opencontrol/compliance-masonry",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-opencti",
+      "source_url": "https://github.com/OpenCTI-Platform/opencti",
       "stages": {
         "discover": {
           "status": "complete",
@@ -4156,6 +6548,52 @@
       }
     },
     {
+      "resource_id": "ecosystem-osv",
+      "source_url": "https://github.com/google/osv-scanner",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "tool-dependency-track",
       "source_url": "https://github.com/DependencyTrack/dependency-track",
       "stages": {
@@ -4174,6 +6612,52 @@
         "parse": {
           "status": "complete",
           "evidence": "README-derived fields were extracted by the resource enrichment adapter"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-palo-alto",
+      "source_url": "https://live.paloaltonetworks.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
         },
         "normalize": {
           "status": "complete",
@@ -4414,8 +6898,54 @@
           "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
         },
         "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "service-disa-pdisp",
+      "source_url": "https://connect.disa.mil/product/private-data-internet-service-provider/01t83000000GvquAAC",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
           "status": "not_applicable",
-          "reason": "publisher resource declares no directory relationships"
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
         },
         "presentation": {
           "status": "complete",
@@ -4496,6 +7026,328 @@
         "parse": {
           "status": "complete",
           "evidence": "README-derived fields were extracted by the resource enrichment adapter"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-qualys",
+      "source_url": "https://community.qualys.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-reddit-crowdstrike",
+      "source_url": "https://www.reddit.com/r/crowdstrike/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-reddit-fortinet",
+      "source_url": "https://www.reddit.com/r/fortinet/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-reddit-netsec",
+      "source_url": "https://www.reddit.com/r/netsec/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-reddit-paloaltonetworks",
+      "source_url": "https://www.reddit.com/r/paloaltonetworks/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-reddit-tenable",
+      "source_url": "https://www.reddit.com/r/tenable/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-rapid7",
+      "source_url": "https://discuss.rapid7.com/latest?no_definitions=true",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
         },
         "normalize": {
           "status": "complete",
@@ -4800,6 +7652,52 @@
       }
     },
     {
+      "resource_id": "reference-sans-isc",
+      "source_url": "https://isc.sans.edu/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "tool-scoutsuite",
       "source_url": "https://github.com/nccgroup/ScoutSuite",
       "stages": {
@@ -4830,6 +7728,420 @@
         "relationships": {
           "status": "not_applicable",
           "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-security-onion",
+      "source_url": "https://securityonion.net/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-semgrep",
+      "source_url": "https://github.com/semgrep/semgrep",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-servicenow-secops",
+      "source_url": "https://www.servicenow.com/community/secops/ct-p/security-operations",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "service-shadowserver-dashboard",
+      "source_url": "https://dashboard.shadowserver.org/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "service-shodan",
+      "source_url": "https://www.shodan.io/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "ecosystem-sigmahq",
+      "source_url": "https://github.com/SigmaHQ/sigma",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "ecosystem-sigstore-cosign",
+      "source_url": "https://github.com/sigstore/cosign",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-splunk",
+      "source_url": "https://community.splunk.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "catalog-splunk-security-content",
+      "source_url": "https://research.splunk.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
         },
         "presentation": {
           "status": "complete",
@@ -4966,8 +8278,284 @@
           "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
         },
         "relationships": {
+          "status": "complete",
+          "evidence": "2 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-suricata",
+      "source_url": "https://suricata.io/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-tanium",
+      "source_url": "https://site.tanium.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
           "status": "not_applicable",
           "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "catalog-tenable-audit-files",
+      "source_url": "https://www.tenable.com/audits",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "community-tenable-connect",
+      "source_url": "https://connect.tenable.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "3 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "catalog-tenable-plugin-database",
+      "source_url": "https://www.tenable.com/plugins/pipeline",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "reference-tenable-documentation",
+      "source_url": "https://docs.tenable.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
         },
         "presentation": {
           "status": "complete",
@@ -5122,6 +8710,98 @@
       }
     },
     {
+      "resource_id": "dataset-threatfox",
+      "source_url": "https://threatfox.abuse.ch/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "reference-trackr-openscap",
+      "source_url": "https://www.trackr.live/scans/openscap/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "2 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
       "resource_id": "tool-trivy",
       "source_url": "https://github.com/aquasecurity/trivy",
       "stages": {
@@ -5140,6 +8820,236 @@
         "parse": {
           "status": "complete",
           "evidence": "README-derived fields were extracted by the resource enrichment adapter"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "dataset-urlhaus",
+      "source_url": "https://urlhaus.abuse.ch/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "service-urlscan",
+      "source_url": "https://urlscan.io/about",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-velociraptor",
+      "source_url": "https://github.com/Velocidex/velociraptor",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "service-virustotal",
+      "source_url": "https://www.virustotal.com/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-volatility-3",
+      "source_url": "https://github.com/volatilityfoundation/volatility3",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
         },
         "normalize": {
           "status": "complete",
@@ -5244,6 +9154,144 @@
         "relationships": {
           "status": "not_applicable",
           "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-wireshark",
+      "source_url": "https://www.wireshark.org/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-yara-x",
+      "source_url": "https://github.com/VirusTotal/yara-x",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "not_applicable",
+          "reason": "publisher resource declares no directory relationships"
+        },
+        "presentation": {
+          "status": "complete",
+          "evidence": "type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition"
+        },
+        "reconcile": {
+          "status": "complete",
+          "evidence": "accepted candidate name, URL, and lane reconcile to the published resource"
+        },
+        "publish": {
+          "status": "complete",
+          "evidence": "resource is present in the generated Commons search index"
+        }
+      }
+    },
+    {
+      "resource_id": "tool-zeek",
+      "source_url": "https://zeek.org/",
+      "stages": {
+        "discover": {
+          "status": "complete",
+          "evidence": "accepted candidate manifest contains the canonical URL"
+        },
+        "acquire": {
+          "status": "not_applicable",
+          "reason": "external locator is curated; upstream bytes are not copied into Control Atlas"
+        },
+        "attest": {
+          "status": "complete",
+          "evidence": "source locator, review date, and verification method are recorded"
+        },
+        "parse": {
+          "status": "not_applicable",
+          "reason": "publisher locator is represented by reviewed metadata rather than parsed publisher content"
+        },
+        "normalize": {
+          "status": "complete",
+          "evidence": "resource conforms to the normalized Commons record contract"
+        },
+        "structure": {
+          "status": "complete",
+          "evidence": "resource lane, type, and collection memberships use the Commons directory taxonomy"
+        },
+        "relationships": {
+          "status": "complete",
+          "evidence": "1 explicit ecosystem or companion relationship(s)"
         },
         "presentation": {
           "status": "complete",

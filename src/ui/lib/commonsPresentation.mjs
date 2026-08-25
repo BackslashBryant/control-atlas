@@ -61,6 +61,8 @@ const ORG_MONOGRAMS = {
   "cyber.mil": "DoD",
   "whs.mil": "DoD",
   "dso.mil": "DoD",
+  "disa.mil": "DISA",
+  "cloud.mil": "DISA",
   "defense.gov": "DoD",
   "cnss.gov": "CNSS",
   "nsa.gov": "NSA",

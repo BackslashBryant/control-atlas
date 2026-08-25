@@ -80,7 +80,7 @@ export const RESOURCE_BRAND_REGISTRY = Object.freeze({
     accent: "defense",
     namePatterns: ["disa ", "stig viewer", "scap compliance checker"],
     ownerPatterns: ["disa", "defense information systems agency"],
-    hosts: ["disa.mil"],
+    hosts: ["disa.mil", "cloud.mil"],
   }),
   dod_cyber_exchange: brand({
     key: "dod_cyber_exchange",

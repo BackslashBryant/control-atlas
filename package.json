@@ -51,7 +51,8 @@
     "refresh:data": "node ./scripts/refresh-data.mjs",
     "reconcile:source-freshness": "node ./scripts/reconcile-source-freshness.mjs",
     "sbom:generate": "cyclonedx-npm --package-lock-only --output-format json --output-file artifacts/sbom.cdx.json",
-    "test": "npm run test:tokens && npm run test:copy-contract && npm run test:authority && npm run test:atlas && npm run test:data && npm run test:runtime && npm run test:graph && npm run test:record-presentation && npm run test:nist-ingestion && npm run test:ingestion",
+    "test": "npm run test:tokens && npm run test:operator-ecosystem && npm run test:copy-contract && npm run test:authority && npm run test:atlas && npm run test:data && npm run test:runtime && npm run test:graph && npm run test:record-presentation && npm run test:nist-ingestion && npm run test:ingestion",
+    "test:operator-ecosystem": "node --test ./tests/commons-operator-ecosystem.test.mjs",
     "test:tokens": "node --test ./tests/orbital-token-drift.test.mjs",
     "test:copy-contract": "node --test ./tests/copy-contract.test.mjs",
     "test:record-presentation": "tsx --test ./tests/graph/recordPresentation.test.ts",
@@ -59,7 +60,8 @@
     "test:atlas": "node --test ./tests/atlas-neighborhood.test.mjs",
     "test:correction:contracts": "tsx --test ./tests/graph/ancestorPath.test.ts ./tests/graph/atlasSearch.test.ts ./tests/graph/atlasModel.test.ts ./tests/graph/atlasDrilldown.test.ts ./tests/graph/routeIdentity.test.ts ./tests/graph/epic4-route-state.test.ts ./tests/graph/buildRouteState.test.ts ./tests/graph/brandRotation.test.ts ./tests/graph/catalogInventory.test.ts ./tests/graph/compareModeState.test.ts ./tests/graph/sourceRegister.test.ts ./tests/graph/templateGenerationState.test.ts ./tests/graph/runtimeLoader.test.ts ./tests/graph/chunkRecovery.test.ts ./tests/graph/librarySearchTransport.test.ts ./tests/graph/officialText.test.ts && node --test ./tests/resources-directory.test.mjs ./tests/resource-search.test.mjs ./tests/learn-content.test.mjs ./tests/browser-contract.test.mjs ./tests/catalog-publication-identity.test.mjs",
     "test:correction:local": "npm run build:site && playwright test --config playwright.e2e.config.mjs tests/e2e/epic1-atlas-correctness.spec.mjs tests/e2e/navigation-fidelity.spec.mjs tests/e2e/epic5-source-first-records.spec.mjs tests/e2e/epic6-responsive-accessibility.spec.mjs",
-    "resources:validate": "node scripts/build-commons-index.mjs && node --test ./tests/commons-presentation.test.mjs ./tests/commons-quality.test.mjs ./tests/commons-search-benchmark.test.mjs ./tests/resources-directory.test.mjs ./tests/resource-search.test.mjs",
+    "resources:operator-ecosystem": "node scripts/apply-commons-operator-ecosystem.mjs && node scripts/enrich-commons-resources.mjs && node scripts/build-commons-index.mjs && node scripts/verify-resource-ingestion.mjs",
+    "resources:validate": "node scripts/build-commons-index.mjs && node --test ./tests/commons-operator-ecosystem.test.mjs ./tests/commons-presentation.test.mjs ./tests/commons-quality.test.mjs ./tests/commons-search-benchmark.test.mjs ./tests/resources-directory.test.mjs ./tests/resource-search.test.mjs",
     "resources:enrich": "node scripts/enrich-commons-resources.mjs --refresh",
     "resources:validate-media": "node scripts/enrich-commons-resources.mjs --validate-media",
     "resources:health": "node scripts/check-commons-health.mjs",
@@ -108,7 +110,8 @@
     "verify:manifests": "node ./scripts/verify-manifests.mjs",
     "verify:completeness": "node ./scripts/verify-completeness.mjs",
     "verify:ingestion": "node ./scripts/verify-ingestion-pipeline.mjs && node ./scripts/verify-resource-ingestion.mjs",
-    "verify:quality": "npm run verify:discovery && npm run verify:manifests && npm run verify:completeness && npm run verify:ingestion && node ./tools/hygiene-check.mjs && npm run check:oscal && npm run lint && npm run lint:nist-ingestion && npm run lint:ingestion && npm run typecheck && npm test && npm run test:browser && npm run smoke:dom && npm run verify:public"
+    "lint:operator-ecosystem": "eslint scripts/apply-commons-operator-ecosystem.mjs tests/commons-operator-ecosystem.test.mjs --max-warnings=0",
+    "verify:quality": "npm run verify:discovery && npm run verify:manifests && npm run verify:completeness && npm run verify:ingestion && node ./tools/hygiene-check.mjs && npm run check:oscal && npm run lint && npm run lint:operator-ecosystem && npm run lint:nist-ingestion && npm run lint:ingestion && npm run typecheck && npm test && npm run test:browser && npm run smoke:dom && npm run verify:public"
   },
   "engines": {
     "node": ">=22.22.0"

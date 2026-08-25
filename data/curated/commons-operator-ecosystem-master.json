@@ -1,0 +1,820 @@
+{
+  "schemaVersion": "1.0",
+  "validatedAsOf": "2026-08-25",
+  "defaultDirective": "add",
+  "candidates": [
+    {
+      "number": 1,
+      "name": "DISA Assured Compliance Assessment Solution (ACAS)",
+      "canonicalUrl": "https://help.disa.mil/cybersecurity/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "service-disa-acas",
+      "evidence": "https://help.disa.mil/cybersecurity/"
+    },
+    {
+      "number": 2,
+      "name": "DISA Vulnerability Management Service (VMS)",
+      "canonicalUrl": "https://hybridcloud.disa.mil/offerings/vms",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "service-disa-vms",
+      "evidence": "https://hybridcloud.disa.mil/offerings/vms"
+    },
+    {
+      "number": 3,
+      "name": "Evaluate-STIG",
+      "canonicalUrl": "https://public.cyber.mil/stigs/",
+      "directive": "reject",
+      "finalDisposition": "rejected",
+      "resourceId": null,
+      "evidence": "https://github.com/NUWCDIVNPT/stig-manager/issues/2058"
+    },
+    {
+      "number": 4,
+      "name": "NIST National Checklist Program (NCP)",
+      "canonicalUrl": "https://ncp.nist.gov/repository",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "repository-nist-ncp",
+      "evidence": "https://ncp.nist.gov/repository"
+    },
+    {
+      "number": 5,
+      "name": "NIST macOS Security Compliance Project (mSCP)",
+      "canonicalUrl": "https://github.com/usnistgov/macos_security",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-nist-mscp",
+      "evidence": "https://github.com/usnistgov/macos_security"
+    },
+    {
+      "number": 6,
+      "name": "MITRE ATT&CK Navigator",
+      "canonicalUrl": "https://github.com/mitre-attack/attack-navigator",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-mitre-attack-navigator",
+      "evidence": "https://github.com/mitre-attack/attack-navigator"
+    },
+    {
+      "number": 7,
+      "name": "ATT&CK Workbench",
+      "canonicalUrl": "https://github.com/mitre-attack",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "ecosystem-attack-workbench",
+      "evidence": "https://github.com/mitre-attack"
+    },
+    {
+      "number": 8,
+      "name": "MITRE CALDERA",
+      "canonicalUrl": "https://github.com/mitre/caldera",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-mitre-caldera",
+      "evidence": "https://github.com/mitre/caldera"
+    },
+    {
+      "number": 9,
+      "name": "CISA Malcolm",
+      "canonicalUrl": "https://github.com/cisagov/Malcolm",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-cisa-malcolm",
+      "evidence": "https://github.com/cisagov/Malcolm"
+    },
+    {
+      "number": 10,
+      "name": "CISA Decider",
+      "canonicalUrl": "https://github.com/cisagov/Decider",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-cisa-decider",
+      "evidence": "https://github.com/cisagov/Decider"
+    },
+    {
+      "number": 11,
+      "name": "CISA Vulnrichment",
+      "canonicalUrl": "https://github.com/cisagov/vulnrichment",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "dataset-cisa-vulnrichment",
+      "evidence": "https://github.com/cisagov/vulnrichment"
+    },
+    {
+      "number": 12,
+      "name": "FIRST EPSS",
+      "canonicalUrl": "https://www.first.org/epss/data.html",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "dataset-first-epss",
+      "evidence": "https://www.first.org/epss/data.html"
+    },
+    {
+      "number": 13,
+      "name": "CERT/CC Vulnerability Notes Database",
+      "canonicalUrl": "https://www.kb.cert.org/vuls/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "reference-cert-vulnerability-notes",
+      "evidence": "https://www.kb.cert.org/vuls/"
+    },
+    {
+      "number": 14,
+      "name": "GitHub Advisory Database",
+      "canonicalUrl": "https://github.com/advisories/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "dataset-github-advisory-database",
+      "evidence": "https://github.com/advisories/"
+    },
+    {
+      "number": 15,
+      "name": "Microsoft Security Update Guide",
+      "canonicalUrl": "https://msrc.microsoft.com/update-guide/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "reference-microsoft-security-update-guide",
+      "evidence": "https://msrc.microsoft.com/update-guide/"
+    },
+    {
+      "number": 16,
+      "name": "Tenable Connect",
+      "canonicalUrl": "https://connect.tenable.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-tenable-connect",
+      "evidence": "https://connect.tenable.com/"
+    },
+    {
+      "number": 17,
+      "name": "Splunk Community",
+      "canonicalUrl": "https://community.splunk.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-splunk",
+      "evidence": "https://community.splunk.com/"
+    },
+    {
+      "number": 18,
+      "name": "Rapid7 Discuss",
+      "canonicalUrl": "https://discuss.rapid7.com/latest?no_definitions=true",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-rapid7",
+      "evidence": "https://discuss.rapid7.com/latest?no_definitions=true"
+    },
+    {
+      "number": 19,
+      "name": "Qualys Community",
+      "canonicalUrl": "https://community.qualys.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-qualys",
+      "evidence": "https://community.qualys.com/"
+    },
+    {
+      "number": 20,
+      "name": "Palo Alto LIVEcommunity",
+      "canonicalUrl": "https://live.paloaltonetworks.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-palo-alto",
+      "evidence": "https://live.paloaltonetworks.com/"
+    },
+    {
+      "number": 21,
+      "name": "Fortinet Community",
+      "canonicalUrl": "https://community.fortinet.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-fortinet",
+      "evidence": "https://community.fortinet.com/"
+    },
+    {
+      "number": 22,
+      "name": "Cisco Security Community",
+      "canonicalUrl": "https://community.cisco.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-cisco-security",
+      "evidence": "https://community.cisco.com/"
+    },
+    {
+      "number": 23,
+      "name": "Elastic Discuss — Security",
+      "canonicalUrl": "https://discuss.elastic.co/c/announcements/security-announcements/31",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-elastic-security",
+      "evidence": "https://discuss.elastic.co/c/announcements/security-announcements/31"
+    },
+    {
+      "number": 24,
+      "name": "ServiceNow Security Operations Community",
+      "canonicalUrl": "https://www.servicenow.com/community/secops/ct-p/security-operations",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-servicenow-secops",
+      "evidence": "https://www.servicenow.com/community/secops/ct-p/security-operations"
+    },
+    {
+      "number": 25,
+      "name": "Microsoft Security Community",
+      "canonicalUrl": "https://techcommunity.microsoft.com/category/microsoft-security",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-microsoft-security",
+      "evidence": "https://techcommunity.microsoft.com/category/microsoft-security"
+    },
+    {
+      "number": 26,
+      "name": "F5 DevCentral",
+      "canonicalUrl": "https://community.f5.com/category/Forums",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-f5-devcentral",
+      "evidence": "https://community.f5.com/category/Forums"
+    },
+    {
+      "number": 27,
+      "name": "AWS re:Post — Security, Identity & Compliance",
+      "canonicalUrl": "https://repost.aws/topics?sort=popular",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-aws-repost-security",
+      "evidence": "https://repost.aws/topics?sort=popular"
+    },
+    {
+      "number": 28,
+      "name": "CrowdStrike Community",
+      "canonicalUrl": "https://community.crowdstrike.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-crowdstrike",
+      "evidence": "https://community.crowdstrike.com/"
+    },
+    {
+      "number": 29,
+      "name": "Tanium Community / Tanium Titans",
+      "canonicalUrl": "https://site.tanium.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-tanium",
+      "evidence": "https://site.tanium.com/"
+    },
+    {
+      "number": 30,
+      "name": "CyberArk Technical Community / Commons",
+      "canonicalUrl": "https://github.com/cyberark/community",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-cyberark",
+      "evidence": "https://github.com/cyberark/community"
+    },
+    {
+      "number": 31,
+      "name": "Tenable Plugin Database",
+      "canonicalUrl": "https://www.tenable.com/plugins/pipeline",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "catalog-tenable-plugin-database",
+      "evidence": "https://www.tenable.com/plugins/pipeline"
+    },
+    {
+      "number": 32,
+      "name": "Tenable Audit Files / Compliance Checks",
+      "canonicalUrl": "https://www.tenable.com/audits",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "catalog-tenable-audit-files",
+      "evidence": "https://www.tenable.com/audits"
+    },
+    {
+      "number": 33,
+      "name": "Splunk Security Content",
+      "canonicalUrl": "https://research.splunk.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "catalog-splunk-security-content",
+      "evidence": "https://research.splunk.com/"
+    },
+    {
+      "number": 34,
+      "name": "Elastic Detection Rules",
+      "canonicalUrl": "https://github.com/elastic/detection-rules",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "catalog-elastic-detection-rules",
+      "evidence": "https://github.com/elastic/detection-rules"
+    },
+    {
+      "number": 35,
+      "name": "VirusTotal",
+      "canonicalUrl": "https://www.virustotal.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "service-virustotal",
+      "evidence": "https://www.virustotal.com/"
+    },
+    {
+      "number": 36,
+      "name": "Shodan",
+      "canonicalUrl": "https://www.shodan.io/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "service-shodan",
+      "evidence": "https://www.shodan.io/"
+    },
+    {
+      "number": 37,
+      "name": "Censys",
+      "canonicalUrl": "https://search.censys.io/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "service-censys",
+      "evidence": "https://search.censys.io/"
+    },
+    {
+      "number": 38,
+      "name": "GreyNoise Visualizer",
+      "canonicalUrl": "https://viz.greynoise.io/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "service-greynoise-visualizer",
+      "evidence": "https://viz.greynoise.io/"
+    },
+    {
+      "number": 39,
+      "name": "urlscan.io",
+      "canonicalUrl": "https://urlscan.io/about",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "service-urlscan",
+      "evidence": "https://urlscan.io/about"
+    },
+    {
+      "number": 40,
+      "name": "abuse.ch",
+      "canonicalUrl": "https://abuse.ch/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "ecosystem-abuse-ch",
+      "evidence": "https://abuse.ch/"
+    },
+    {
+      "number": 41,
+      "name": "URLhaus",
+      "canonicalUrl": "https://urlhaus.abuse.ch/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "dataset-urlhaus",
+      "evidence": "https://urlhaus.abuse.ch/"
+    },
+    {
+      "number": 42,
+      "name": "MalwareBazaar",
+      "canonicalUrl": "https://bazaar.abuse.ch/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "dataset-malwarebazaar",
+      "evidence": "https://bazaar.abuse.ch/"
+    },
+    {
+      "number": 43,
+      "name": "ThreatFox",
+      "canonicalUrl": "https://threatfox.abuse.ch/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "dataset-threatfox",
+      "evidence": "https://threatfox.abuse.ch/"
+    },
+    {
+      "number": 44,
+      "name": "Malpedia",
+      "canonicalUrl": "https://malpedia.caad.fkie.fraunhofer.de/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "reference-malpedia",
+      "evidence": "https://malpedia.caad.fkie.fraunhofer.de/"
+    },
+    {
+      "number": 45,
+      "name": "SANS Internet Storm Center",
+      "canonicalUrl": "https://isc.sans.edu/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "reference-sans-isc",
+      "evidence": "https://isc.sans.edu/"
+    },
+    {
+      "number": 46,
+      "name": "Shadowserver Dashboard",
+      "canonicalUrl": "https://dashboard.shadowserver.org/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "service-shadowserver-dashboard",
+      "evidence": "https://dashboard.shadowserver.org/"
+    },
+    {
+      "number": 47,
+      "name": "LOLBAS",
+      "canonicalUrl": "https://lolbas-project.github.io/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "reference-lolbas",
+      "evidence": "https://lolbas-project.github.io/"
+    },
+    {
+      "number": 48,
+      "name": "GTFOBins",
+      "canonicalUrl": "https://gtfobins.github.io/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "reference-gtfobins",
+      "evidence": "https://gtfobins.github.io/"
+    },
+    {
+      "number": 49,
+      "name": "LOLDrivers",
+      "canonicalUrl": "https://www.loldrivers.io/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "reference-loldrivers",
+      "evidence": "https://www.loldrivers.io/"
+    },
+    {
+      "number": 50,
+      "name": "Security Onion",
+      "canonicalUrl": "https://securityonion.net/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-security-onion",
+      "evidence": "https://securityonion.net/"
+    },
+    {
+      "number": 51,
+      "name": "Zeek",
+      "canonicalUrl": "https://zeek.org/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-zeek",
+      "evidence": "https://zeek.org/"
+    },
+    {
+      "number": 52,
+      "name": "Suricata",
+      "canonicalUrl": "https://suricata.io/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-suricata",
+      "evidence": "https://suricata.io/"
+    },
+    {
+      "number": 53,
+      "name": "SigmaHQ",
+      "canonicalUrl": "https://github.com/SigmaHQ/sigma",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "ecosystem-sigmahq",
+      "evidence": "https://github.com/SigmaHQ/sigma"
+    },
+    {
+      "number": 54,
+      "name": "Velociraptor",
+      "canonicalUrl": "https://github.com/Velocidex/velociraptor",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-velociraptor",
+      "evidence": "https://github.com/Velocidex/velociraptor"
+    },
+    {
+      "number": 55,
+      "name": "MISP",
+      "canonicalUrl": "https://github.com/MISP/MISP",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-misp",
+      "evidence": "https://github.com/MISP/MISP"
+    },
+    {
+      "number": 56,
+      "name": "OpenCTI",
+      "canonicalUrl": "https://github.com/OpenCTI-Platform/opencti",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-opencti",
+      "evidence": "https://github.com/OpenCTI-Platform/opencti"
+    },
+    {
+      "number": 57,
+      "name": "Wireshark",
+      "canonicalUrl": "https://www.wireshark.org/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-wireshark",
+      "evidence": "https://www.wireshark.org/"
+    },
+    {
+      "number": 58,
+      "name": "Nmap",
+      "canonicalUrl": "https://nmap.org/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-nmap",
+      "evidence": "https://nmap.org/"
+    },
+    {
+      "number": 59,
+      "name": "Microsoft Sysinternals Suite",
+      "canonicalUrl": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysinternals-suite",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-microsoft-sysinternals",
+      "evidence": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysinternals-suite"
+    },
+    {
+      "number": 60,
+      "name": "CyberChef",
+      "canonicalUrl": "https://github.com/gchq/CyberChef",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-cyberchef",
+      "evidence": "https://github.com/gchq/CyberChef"
+    },
+    {
+      "number": 61,
+      "name": "Volatility 3",
+      "canonicalUrl": "https://github.com/volatilityfoundation/volatility3",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-volatility-3",
+      "evidence": "https://github.com/volatilityfoundation/volatility3"
+    },
+    {
+      "number": 62,
+      "name": "KAPE",
+      "canonicalUrl": "https://www.kroll.com/en/services/cyber/reactive-services/kroll-artifact-parser-and-extractor-kape",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-kape",
+      "evidence": "https://www.kroll.com/en/services/cyber/reactive-services/kroll-artifact-parser-and-extractor-kape"
+    },
+    {
+      "number": 63,
+      "name": "BloodHound Community Edition",
+      "canonicalUrl": "https://github.com/SpecterOps/BloodHound",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-bloodhound-ce",
+      "evidence": "https://github.com/SpecterOps/BloodHound"
+    },
+    {
+      "number": 64,
+      "name": "YARA-X",
+      "canonicalUrl": "https://github.com/VirusTotal/yara-x",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-yara-x",
+      "evidence": "https://github.com/VirusTotal/yara-x"
+    },
+    {
+      "number": 65,
+      "name": "Atomic Red Team",
+      "canonicalUrl": "https://github.com/redcanaryco/atomic-red-team",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-atomic-red-team",
+      "evidence": "https://github.com/redcanaryco/atomic-red-team"
+    },
+    {
+      "number": 66,
+      "name": "Nuclei + nuclei-templates",
+      "canonicalUrl": "https://github.com/projectdiscovery/nuclei",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "ecosystem-nuclei",
+      "evidence": "https://github.com/projectdiscovery/nuclei"
+    },
+    {
+      "number": 67,
+      "name": "OSV.dev + OSV-Scanner",
+      "canonicalUrl": "https://github.com/google/osv-scanner",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "ecosystem-osv",
+      "evidence": "https://github.com/google/osv-scanner"
+    },
+    {
+      "number": 68,
+      "name": "Semgrep",
+      "canonicalUrl": "https://github.com/semgrep/semgrep",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-semgrep",
+      "evidence": "https://github.com/semgrep/semgrep"
+    },
+    {
+      "number": 69,
+      "name": "Gitleaks",
+      "canonicalUrl": "https://github.com/gitleaks/gitleaks",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-gitleaks",
+      "evidence": "https://github.com/gitleaks/gitleaks"
+    },
+    {
+      "number": 70,
+      "name": "Kyverno",
+      "canonicalUrl": "https://kyverno.io/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-kyverno",
+      "evidence": "https://kyverno.io/"
+    },
+    {
+      "number": 71,
+      "name": "Sigstore / cosign",
+      "canonicalUrl": "https://github.com/sigstore/cosign",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "ecosystem-sigstore-cosign",
+      "evidence": "https://github.com/sigstore/cosign"
+    },
+    {
+      "number": 72,
+      "name": "Maester",
+      "canonicalUrl": "https://github.com/maester365/maester",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-maester",
+      "evidence": "https://github.com/maester365/maester"
+    },
+    {
+      "number": 73,
+      "name": "Microsoft365DSC",
+      "canonicalUrl": "https://github.com/Microsoft365DSC/Microsoft365DSC",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-microsoft365dsc",
+      "evidence": "https://github.com/Microsoft365DSC/Microsoft365DSC"
+    },
+    {
+      "number": 74,
+      "name": "Information Security Stack Exchange",
+      "canonicalUrl": "https://security.stackexchange.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-information-security-stackexchange",
+      "evidence": "https://security.stackexchange.com/"
+    },
+    {
+      "number": 75,
+      "name": "r/netsec",
+      "canonicalUrl": "https://www.reddit.com/r/netsec/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-reddit-netsec",
+      "evidence": "https://www.reddit.com/r/netsec/"
+    },
+    {
+      "number": 76,
+      "name": "r/tenable",
+      "canonicalUrl": "https://www.reddit.com/r/tenable/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-reddit-tenable",
+      "evidence": "https://www.reddit.com/r/tenable/"
+    },
+    {
+      "number": 77,
+      "name": "r/fortinet",
+      "canonicalUrl": "https://www.reddit.com/r/fortinet/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-reddit-fortinet",
+      "evidence": "https://www.reddit.com/r/fortinet/"
+    },
+    {
+      "number": 78,
+      "name": "r/crowdstrike",
+      "canonicalUrl": "https://www.reddit.com/r/crowdstrike/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-reddit-crowdstrike",
+      "evidence": "https://www.reddit.com/r/crowdstrike/"
+    },
+    {
+      "number": 79,
+      "name": "r/paloaltonetworks",
+      "canonicalUrl": "https://www.reddit.com/r/paloaltonetworks/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "community-reddit-paloaltonetworks",
+      "evidence": "https://www.reddit.com/r/paloaltonetworks/"
+    }
+  ],
+  "supplementalCandidates": [
+    {
+      "number": 1,
+      "name": "Microsoft StigRepo",
+      "canonicalUrl": "https://github.com/microsoft/StigRepo",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "reference-microsoft-stigrepo",
+      "evidence": "https://github.com/microsoft/StigRepo",
+      "scopeBasis": "Evidence-backed user expansion after the original 79-candidate inventory."
+    },
+    {
+      "number": 2,
+      "name": "NUWC Newport RMF Tools",
+      "canonicalUrl": "https://github.com/NUWCDIVNPT",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "ecosystem-nuwc-newport-rmf-tools",
+      "evidence": "https://github.com/NUWCDIVNPT",
+      "scopeBasis": "Evidence-backed user expansion after the original 79-candidate inventory."
+    },
+    {
+      "number": 3,
+      "name": "Crane POA&M Automation Tool (C-PAT)",
+      "canonicalUrl": "https://github.com/NSWC-Crane/C-PAT",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "tool-cpat",
+      "evidence": "https://github.com/NSWC-Crane/C-PAT",
+      "scopeBasis": "Evidence-backed user expansion after the original 79-candidate inventory."
+    },
+    {
+      "number": 4,
+      "name": "DISA Product Catalog",
+      "canonicalUrl": "https://connect.disa.mil/product/Product2/Default",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "catalog-disa-products",
+      "evidence": "https://connect.disa.mil/product/Product2/Default",
+      "scopeBasis": "Evidence-backed user expansion after the original 79-candidate inventory."
+    },
+    {
+      "number": 5,
+      "name": "Private Data Internet Service Provider (PDISP)",
+      "canonicalUrl": "https://connect.disa.mil/product/private-data-internet-service-provider/01t83000000GvquAAC",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "service-disa-pdisp",
+      "evidence": "https://connect.disa.mil/product/private-data-internet-service-provider/01t83000000GvquAAC",
+      "scopeBasis": "Evidence-backed user expansion after the original 79-candidate inventory."
+    },
+    {
+      "number": 6,
+      "name": "DISA Cloud Offerings",
+      "canonicalUrl": "https://www.cloud.mil/disa/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "catalog-disa-cloud-offerings",
+      "evidence": "https://www.cloud.mil/disa/",
+      "scopeBasis": "Evidence-backed user expansion after the original 79-candidate inventory."
+    },
+    {
+      "number": 7,
+      "name": "Defense Enterprise Office Solution (DEOS)",
+      "canonicalUrl": "https://www.cloud.mil/deos/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "service-disa-deos",
+      "evidence": "https://www.cloud.mil/deos/",
+      "scopeBasis": "Evidence-backed user expansion after the original 79-candidate inventory."
+    },
+    {
+      "number": 8,
+      "name": "Defense Enterprise Authentication Service (DEAS)",
+      "canonicalUrl": "https://help.disa.mil/deas/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "service-disa-deas",
+      "evidence": "https://help.disa.mil/deas/",
+      "scopeBasis": "Evidence-backed user expansion after the original 79-candidate inventory."
+    },
+    {
+      "number": 9,
+      "name": "Trackr.Live OpenSCAP Guide",
+      "canonicalUrl": "https://www.trackr.live/scans/openscap/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "reference-trackr-openscap",
+      "evidence": "https://www.trackr.live/scans/openscap/",
+      "scopeBasis": "Evidence-backed user expansion after the original 79-candidate inventory."
+    },
+    {
+      "number": 10,
+      "name": "Tenable Product Documentation",
+      "canonicalUrl": "https://docs.tenable.com/",
+      "directive": "add",
+      "finalDisposition": "accepted",
+      "resourceId": "reference-tenable-documentation",
+      "evidence": "https://docs.tenable.com/",
+      "scopeBasis": "Evidence-backed user expansion after the original 79-candidate inventory."
+    }
+  ]
+}
