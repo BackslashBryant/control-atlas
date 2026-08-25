@@ -144,12 +144,12 @@ test('prefers-reduced-motion halts brand flourish rotation and avoids animation'
   const activeKey = page.locator('.brand-key--active .brand-key-word');
   await expect(activeKey).toBeVisible();
   const initialWord = (await activeKey.textContent())?.trim();
-  expect(initialWord).toBe('NIST');
+  expect(initialWord).toBeTruthy();
 
   // Wait 3 seconds and ensure word does not change under reduced motion
   await page.waitForTimeout(3000);
   const currentWord = (await activeKey.textContent())?.trim();
-  expect(currentWord).toBe('NIST');
+  expect(currentWord).toBe(initialWord);
 });
 
 test('mobile navigation sheet manages focus, Escape key, and toggle button return', async ({

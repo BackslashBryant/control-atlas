@@ -1,9 +1,8 @@
 import {
   BRAND_ROTATION_INTERVAL_MS,
   BRAND_ROTATION_TRANSITION_MS,
-  BRAND_WORDS,
+  createBrandSignalPicker,
 } from './shared/brand-rotation';
-import { ATLAS_SPLASH_SIGNALS } from './shared/atlas-presentation';
 import {
   beginRouteTransition,
   completeRouteTransition,
@@ -195,17 +194,17 @@ function startBrandRotation() {
     return;
   }
 
+  const pickSignal = createBrandSignalPicker();
   brandMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
   brandMotionMedia.addEventListener('change', onBrandMotionChange);
+  wordElement.textContent = pickSignal().label;
   if (brandMotionMedia.matches) return;
 
-  let wordIndex = 0;
   brandRotationInterval = window.setInterval(() => {
     wordElement.classList.remove('word-enter');
     wordElement.classList.add('word-exit');
     brandRotationTransition = window.setTimeout(() => {
-      wordIndex = (wordIndex + 1) % BRAND_WORDS.length;
-      wordElement.textContent = BRAND_WORDS[wordIndex];
+      wordElement.textContent = pickSignal().label;
       wordElement.classList.remove('word-exit');
       wordElement.classList.add('word-enter');
     }, BRAND_ROTATION_TRANSITION_MS);
@@ -216,7 +215,6 @@ function onBrandMotionChange() {
   const wordElement = rootElement.querySelector<HTMLElement>('[data-brand-word]');
   if (!wordElement) return;
   stopBrandRotation();
-  wordElement.textContent = BRAND_WORDS[0];
   wordElement.classList.remove('word-exit');
   wordElement.classList.add('word-enter');
   startBrandRotation();
@@ -326,31 +324,28 @@ function connectSignalCover() {
   }
   // Lift out of the Home shell's stacking context so the fixed overlay covers
   // the sticky header too — a full Depth-0 takeover.
-  document.body.appendChild(cover);
-  cover.removeAttribute('hidden');
   const enterButton = cover.querySelector<HTMLButtonElement>('[data-signal-cover-enter]');
   const signalWord = cover.querySelector<HTMLElement>('[data-signal-cover-word]');
+  const pickSignal = createBrandSignalPicker();
+  if (signalWord) signalWord.textContent = pickSignal().label;
+  document.body.appendChild(cover);
+  cover.removeAttribute('hidden');
   (enterButton || cover).focus();
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let signalTimer = 0;
+  let signalInterval = 0;
   let signalTransition = 0;
-  if (!reduce && signalWord && ATLAS_SPLASH_SIGNALS.length > 1) {
-    let signalIndex = 0;
+  if (!reduce && signalWord) {
     const advanceSignal = () => {
       signalWord.classList.remove('signal-cover__brand-word--enter');
       signalWord.classList.add('signal-cover__brand-word--exit');
       signalTransition = window.setTimeout(() => {
-        signalIndex += 1;
-        signalWord.textContent = ATLAS_SPLASH_SIGNALS[signalIndex].label;
+        signalWord.textContent = pickSignal().label;
         signalWord.classList.remove('signal-cover__brand-word--exit');
         void signalWord.offsetWidth;
         signalWord.classList.add('signal-cover__brand-word--enter');
-        if (signalIndex < ATLAS_SPLASH_SIGNALS.length - 1) {
-          signalTimer = window.setTimeout(advanceSignal, 760);
-        }
-      }, 180);
+      }, BRAND_ROTATION_TRANSITION_MS / 2);
     };
-    signalTimer = window.setTimeout(advanceSignal, 900);
+    signalInterval = window.setInterval(advanceSignal, BRAND_ROTATION_INTERVAL_MS);
   }
   let dismissed = false;
   function dismiss() {
@@ -361,7 +356,7 @@ function connectSignalCover() {
     } catch {
       /* sessionStorage unavailable — dismiss anyway */
     }
-    window.clearTimeout(signalTimer);
+    window.clearInterval(signalInterval);
     window.clearTimeout(signalTransition);
     window.removeEventListener('keydown', onCoverKey);
     if (reduce) {

@@ -6,8 +6,8 @@ import {
   buildAtlasBrandSignals,
   countLibraryTaxonomyTags,
   deriveAtlasScopeMetrics,
-  selectSplashBrandSignals,
 } from "../../src/shared/brand-signals.mjs";
+import { createBrandSignalPicker } from "../../src/shared/brand-rotation";
 
 function generated(name: string) {
   return JSON.parse(readFileSync(`data/generated/${name}`, "utf8"));
@@ -106,15 +106,15 @@ test("zero-coverage topics and unavailable practitioner actions are excluded", (
   assert.equal(withoutTopics.some(({ category }: { category: string }) => category === "topic"), false);
 });
 
-test("splash sample is a restrained, coverage-backed Control Atlas signature", () => {
-  const signals = currentSignals();
-  const sample = selectSplashBrandSignals(signals);
-  assert.ok(sample.length >= 3 && sample.length <= 5);
-  assert.deepEqual(sample.map(({ label }: { label: string }) => label), [
-    "NIST",
-    "STIG",
-    "Zero Trust",
-    "Servers",
-    "Check",
-  ]);
+test("random rotation exhausts a shuffled signal bag before repeating", () => {
+  const signals = currentSignals().slice(0, 6);
+  const pickSignal = createBrandSignalPicker(signals, () => 0);
+  const firstCycle = signals.map(() => pickSignal());
+  const firstCycleIds = firstCycle.map(({ id }) => id);
+
+  assert.equal(new Set(firstCycleIds).size, signals.length);
+  assert.deepEqual(new Set(firstCycleIds), new Set(signals.map(({ id }) => id)));
+
+  const secondCycleFirst = pickSignal();
+  assert.notEqual(secondCycleFirst.id, firstCycle.at(-1)?.id);
 });

@@ -122,6 +122,12 @@
   letter-spacing: 0.04em;
 }
 
+.signal-cover__meta .signal-cover__brand-signature {
+  width: 100%;
+  padding-bottom: var(--ca-space-4);
+  border-bottom: 1px solid color-mix(in srgb, var(--lsm-gold) 36%, transparent);
+}
+
 .signal-cover__brand-signature > span:not(.signal-cover__brand-signal) {
   padding: 5px 8px;
   border: 1px solid var(--ca-border-strong);
@@ -166,12 +172,11 @@
 }
 
 .signal-cover__headline {
-  max-width: 14ch;
   margin: 0;
   font-family: var(--ca-font-display);
-  font-size: clamp(2.7rem, 5.8vw, 5.8rem);
+  font-size: clamp(3.5rem, 9vw, 8rem);
   font-weight: 700;
-  line-height: 0.92;
+  line-height: 0.79;
   letter-spacing: -0.045em;
   text-wrap: balance;
 }
@@ -331,8 +336,8 @@
   }
 
   .signal-cover__headline {
-    max-width: 16ch;
-    font-size: clamp(2.45rem, 10vw, 4.6rem);
+    font-size: clamp(3.25rem, 14vw, 5rem);
+    line-height: 0.82;
   }
 
   .signal-cover__hero::before {
@@ -2701,6 +2706,5 @@
   font-size: 0.8rem;
   color: var(--ca-text-muted);
 }
-
 
 
