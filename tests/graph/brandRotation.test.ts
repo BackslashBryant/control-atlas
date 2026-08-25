@@ -1,74 +1,120 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
-  BRAND_ACTIONS,
-  BRAND_SURFACE_VIEWS,
-  BRAND_WORDS,
-} from "../../src/shared/brand-rotation";
+  buildAtlasBrandSignals,
+  countLibraryTaxonomyTags,
+  deriveAtlasScopeMetrics,
+  selectSplashBrandSignals,
+} from "../../src/shared/brand-signals.mjs";
 
-const PRODUCT_SURFACES = new Set([
-  "atlas",
-  "build",
-  "catalogs",
-  "compare",
-  "learn",
-  "search",
-  "sources",
-]);
+function generated(name: string) {
+  return JSON.parse(readFileSync(`data/generated/${name}`, "utf8"));
+}
 
-const DECISION_OR_SELF_PRAISE_WORDS =
-  /^(?:Approve|Assess|Audit|Authorize|Baseline|Clarify|Comply|Demystify|Inherit|Recommend|Secure|Simplify)$/i;
+const librarySearchIndex = generated("library-search-index.json");
+const connectionInventory = generated("connection-inventory.json");
+const publicationIdentityIndex = generated("publication-identity-index.json");
+const shards = librarySearchIndex.sharded_collection.shards.map(({ path }: { path: string }) =>
+  generated(path),
+);
+const tagCounts = countLibraryTaxonomyTags(librarySearchIndex, shards);
 
-const EXPECTED_BRAND_WORDS = [
-  "Explore",
-  "Trace",
-  "Crosswalk",
-  "Browse",
-  "Draft",
-  "Find",
-  "Verify",
-  "Reconcile",
-  "Learn",
-] as const;
+function currentSignals(capabilities = {
+  search: true,
+  sources: true,
+  compare: true,
+  guides: true,
+  connections: true,
+}) {
+  return buildAtlasBrandSignals({
+    publicationIdentityIndex,
+    tagCounts,
+    capabilities,
+  });
+}
 
-test("every rotating brand action names a real Control Atlas surface", () => {
-  assert.equal(BRAND_ACTIONS.length, EXPECTED_BRAND_WORDS.length);
-  assert.deepEqual(
-    BRAND_WORDS,
-    EXPECTED_BRAND_WORDS,
+test("scope metrics are exact, corpus-wide, and cross-checked", () => {
+  const metrics = deriveAtlasScopeMetrics({
+    librarySearchIndex,
+    connectionInventory,
+    publicationIdentityIndex,
+  });
+
+  assert.equal(metrics.records, librarySearchIndex.library_search_index.document_count);
+  assert.equal(metrics.connections, connectionInventory.connection_inventory.publishedLinks);
+  assert.equal(metrics.publications, publicationIdentityIndex.identities.length);
+  assert.match(metrics.compact.records, /^\d+K\+$/);
+  assert.match(metrics.compact.connections, /^\d+K\+$/);
+});
+
+test("invalid or disagreeing metric inputs fail instead of displaying zero", () => {
+  assert.throws(
+    () => deriveAtlasScopeMetrics({
+      librarySearchIndex: {
+        library_search_index: { document_count: 3 },
+        sharded_collection: { record_count: 2 },
+      },
+      connectionInventory,
+      publicationIdentityIndex,
+    }),
+    /record counts disagree/,
   );
-  assert.equal(new Set(BRAND_WORDS).size, BRAND_WORDS.length);
+  assert.throws(
+    () => deriveAtlasScopeMetrics({
+      librarySearchIndex,
+      connectionInventory: { connection_inventory: { publishedLinks: 0 } },
+      publicationIdentityIndex,
+    }),
+    /connections must be a positive integer/,
+  );
+});
 
-  for (const action of BRAND_ACTIONS) {
-    assert.ok(
-      PRODUCT_SURFACES.has(action.surface),
-      `${action.word} points to unsupported surface ${action.surface}`,
-    );
-    assert.doesNotMatch(action.word, DECISION_OR_SELF_PRAISE_WORDS);
+test("brand signals are eligible, deterministic, deduplicated, and non-navigational", () => {
+  const signals = currentSignals();
+  assert.ok(signals.length > 10);
+  assert.deepEqual(signals, currentSignals());
+  assert.equal(new Set(signals.map(({ label }: { label: string }) => label.toLowerCase())).size, signals.length);
+
+  for (const signal of signals) {
+    assert.ok(signal.count > 0, `${signal.label} has no current coverage`);
+    assert.ok(signal.splashEligible);
+    assert.ok(["source", "content", "topic", "action"].includes(signal.category));
+    assert.equal("route" in signal, false);
+    assert.equal("destination" in signal, false);
+    assert.equal("surface" in signal, false);
+    assert.equal("keyboard" in signal, false);
   }
 });
 
-test("every rotating word resolves to a distinct, routable keyboard shortcut", () => {
-  // The keycap advertises Ctrl+Alt+<first letter>; App.tsx matches the word on
-  // display. Unique first letters keep the promise unambiguous even so.
-  const initials = BRAND_WORDS.map((word) => word[0].toUpperCase());
-  assert.equal(new Set(initials).size, initials.length);
+test("zero-coverage topics and unavailable practitioner actions are excluded", () => {
+  const withoutCapabilities = currentSignals({
+    search: false,
+    sources: false,
+    compare: false,
+    guides: false,
+    connections: false,
+  });
+  assert.equal(withoutCapabilities.some(({ category }: { category: string }) => category === "action"), false);
 
-  for (const action of BRAND_ACTIONS) {
-    const view = BRAND_SURFACE_VIEWS[action.surface];
-    assert.ok(view, `${action.surface} has no view to navigate to`);
-    assert.match(view, /^[a-z-]+$/);
-  }
-  assert.deepEqual(
-    new Set(Object.keys(BRAND_SURFACE_VIEWS)),
-    PRODUCT_SURFACES,
-  );
+  const withoutTopics = buildAtlasBrandSignals({
+    publicationIdentityIndex,
+    tagCounts: new Map(),
+    capabilities: { search: true },
+  });
+  assert.equal(withoutTopics.some(({ category }: { category: string }) => category === "topic"), false);
 });
 
-test("the rotation spans the seven launch surfaces", () => {
-  assert.deepEqual(
-    new Set(BRAND_ACTIONS.map(({ surface }) => surface)),
-    PRODUCT_SURFACES,
-  );
+test("splash sample is a restrained, coverage-backed Control Atlas signature", () => {
+  const signals = currentSignals();
+  const sample = selectSplashBrandSignals(signals);
+  assert.ok(sample.length >= 3 && sample.length <= 5);
+  assert.deepEqual(sample.map(({ label }: { label: string }) => label), [
+    "NIST",
+    "STIG",
+    "Zero Trust",
+    "Servers",
+    "Check",
+  ]);
 });

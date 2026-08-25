@@ -61,14 +61,7 @@ export const helpSurfaces = [
   },
 ];
 
-// Keyboard shortcuts belong here, not on About. The Ctrl+Alt entry describes
-// the header keycap, which rotates: the letter is always the first letter of
-// the word currently showing (see src/shared/brand-rotation.ts).
 export const helpShortcuts = [
   { keys: "Ctrl + K", action: "Open search" },
-  {
-    keys: "Ctrl + Alt + first letter",
-    action: "Open the section named on the keyboard shortcut",
-  },
   { keys: "Esc", action: "Close a dialog, drawer, or menu" },
 ];

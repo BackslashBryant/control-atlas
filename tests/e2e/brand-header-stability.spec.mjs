@@ -18,8 +18,8 @@ test('every rotating brand word renders without clipping', async ({ page }) => {
   const word = page.locator('header.site-header .brand-key-word');
   await expect(word).toHaveCount(1);
 
-  // "Crosswalk" used to overflow a fixed 9.5ch keycap and rendered as
-  // "Crosswal". Sample the rotation and require every word to fit its box.
+  // Generated signals have different widths. Sample the rotation and require
+  // every word to fit its reserved box.
   const seen = new Set();
   for (let tick = 0; tick < 24 && seen.size < 4; tick += 1) {
     const measured = await word.evaluate((element) => ({
@@ -144,12 +144,12 @@ test('prefers-reduced-motion halts brand flourish rotation and avoids animation'
   const activeKey = page.locator('.brand-key--active .brand-key-word');
   await expect(activeKey).toBeVisible();
   const initialWord = (await activeKey.textContent())?.trim();
-  expect(initialWord).toBe('Explore');
+  expect(initialWord).toBe('NIST');
 
   // Wait 3 seconds and ensure word does not change under reduced motion
   await page.waitForTimeout(3000);
   const currentWord = (await activeKey.textContent())?.trim();
-  expect(currentWord).toBe('Explore');
+  expect(currentWord).toBe('NIST');
 });
 
 test('mobile navigation sheet manages focus, Escape key, and toggle button return', async ({

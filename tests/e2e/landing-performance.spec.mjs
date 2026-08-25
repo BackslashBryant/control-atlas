@@ -58,7 +58,7 @@ test("the local release server mirrors production compression for built styles",
   expect(response.headers()["content-encoding"]).toBe("gzip");
 });
 
-test("protected Ctrl+Alt slogan rotates and native Home history remains coherent", async ({
+test("Ctrl + Alt brand signature rotates and native Home history remains coherent", async ({
   page,
 }) => {
   await page.goto("/");

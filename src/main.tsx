@@ -3,6 +3,7 @@ import {
   BRAND_ROTATION_TRANSITION_MS,
   BRAND_WORDS,
 } from './shared/brand-rotation';
+import { ATLAS_SPLASH_SIGNALS } from './shared/atlas-presentation';
 import {
   beginRouteTransition,
   completeRouteTransition,
@@ -328,8 +329,29 @@ function connectSignalCover() {
   document.body.appendChild(cover);
   cover.removeAttribute('hidden');
   const enterButton = cover.querySelector<HTMLButtonElement>('[data-signal-cover-enter]');
+  const signalWord = cover.querySelector<HTMLElement>('[data-signal-cover-word]');
   (enterButton || cover).focus();
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let signalTimer = 0;
+  let signalTransition = 0;
+  if (!reduce && signalWord && ATLAS_SPLASH_SIGNALS.length > 1) {
+    let signalIndex = 0;
+    const advanceSignal = () => {
+      signalWord.classList.remove('signal-cover__brand-word--enter');
+      signalWord.classList.add('signal-cover__brand-word--exit');
+      signalTransition = window.setTimeout(() => {
+        signalIndex += 1;
+        signalWord.textContent = ATLAS_SPLASH_SIGNALS[signalIndex].label;
+        signalWord.classList.remove('signal-cover__brand-word--exit');
+        void signalWord.offsetWidth;
+        signalWord.classList.add('signal-cover__brand-word--enter');
+        if (signalIndex < ATLAS_SPLASH_SIGNALS.length - 1) {
+          signalTimer = window.setTimeout(advanceSignal, 760);
+        }
+      }, 180);
+    };
+    signalTimer = window.setTimeout(advanceSignal, 900);
+  }
   let dismissed = false;
   function dismiss() {
     if (dismissed) return;
@@ -339,6 +361,8 @@ function connectSignalCover() {
     } catch {
       /* sessionStorage unavailable — dismiss anyway */
     }
+    window.clearTimeout(signalTimer);
+    window.clearTimeout(signalTransition);
     window.removeEventListener('keydown', onCoverKey);
     if (reduce) {
       cover.remove();

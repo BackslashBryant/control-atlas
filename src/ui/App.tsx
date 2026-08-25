@@ -64,10 +64,6 @@ import {
   saveScrollPosition,
   scrollToTop,
 } from "./lib/routeOrientation";
-import {
-  activeBrandAction,
-  BRAND_SURFACE_VIEWS,
-} from "../shared/brand-rotation";
 
 /**
  * Wraps a lazy route so a chunk 404 left behind by a deploy reloads the page
@@ -573,20 +569,6 @@ export function App() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      // The header keycap advertises Ctrl+Alt+<word>; make it real. Matched
-      // against the word currently displayed, so words that share a first
-      // letter never collide. Checked before Ctrl+K so Ctrl+Alt+K is not
-      // swallowed by the search overlay.
-      if (event.altKey && (event.metaKey || event.ctrlKey)) {
-        const action = activeBrandAction();
-        if (event.key.toLowerCase() === action.word[0].toLowerCase()) {
-          event.preventDefault();
-          navigateRef.current(
-            BRAND_SURFACE_VIEWS[action.surface] as ViewState["view"],
-          );
-          return;
-        }
-      }
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
         openSearchOverlay();

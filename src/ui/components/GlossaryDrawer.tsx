@@ -3,7 +3,6 @@ import { IconSearch, IconX } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { glossaryData } from "../../app/glossary-data.mjs";
-import { BRAND_ACTIONS, BRAND_SURFACE_VIEWS } from "../../shared/brand-rotation";
 import { templatesForPatterns } from "../lib/glossarySearch.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
@@ -86,24 +85,10 @@ export function GlossaryDrawer(props: {
                     <dt><kbd>Ctrl</kbd><span>+</span><kbd>K</kbd></dt>
                     <dd>Open search</dd>
                   </div>
-                  {BRAND_ACTIONS.filter((action, index, arr) =>
-                    arr.findIndex((a) => a.word[0] === action.word[0]) === index
-                  ).map((action) => (
-                    <div key={action.word}>
-                      <dt>
-                        <kbd>Ctrl</kbd><span>+</span><kbd>Alt</kbd><span>+</span>
-                        <kbd>{action.word[0].toUpperCase()}</kbd>
-                      </dt>
-                      <dd>
-                        <AppLink
-                          onNavigate={onNavigate}
-                          view={BRAND_SURFACE_VIEWS[action.surface] as ViewState["view"]}
-                        >
-                          {action.word}
-                        </AppLink>
-                      </dd>
-                    </div>
-                  ))}
+                  <div>
+                    <dt><kbd>Esc</kbd></dt>
+                    <dd>Close this drawer</dd>
+                  </div>
                 </dl>
               </section>
             ) : null}

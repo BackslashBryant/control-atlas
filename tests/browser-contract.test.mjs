@@ -111,32 +111,14 @@ test('frontend foundation uses React, Vite, TypeScript, and Radix primitives', (
   assert.ok(existsSync('src/ui/lib/viewState.ts'), 'src/ui/lib/viewState.ts must exist');
 });
 
-test('brand identity is immediate, animated, and does not use an entrance gate', () => {
+test('brand identity is immediate, generated, decorative, and motion-safe', () => {
   const app = readFileSync('src/ui/App.tsx', 'utf8');
   const brand = readFileSync('src/ui/components/BrandLockup.tsx', 'utf8');
   const rotation = readFileSync('src/shared/brand-rotation.ts', 'utf8');
   assert.doesNotMatch(app, /BrandEntranceOverlay/);
-  assert.match(brand, /BRAND_ACTIONS/);
-  // The rotation timers live in the shared module now: one ticker drives every
-  // flourish so Ctrl+Alt+<word> resolves against a single displayed word.
+  assert.match(brand, /BRAND_SIGNALS/);
   assert.match(brand, /subscribeBrandRotation/);
-  for (const featureWord of [
-    "Trace",
-    "Explore",
-    "Crosswalk",
-    "Browse",
-    "Draft",
-    "Find",
-    "Verify",
-    "Reconcile",
-    "Learn",
-  ]) {
-    assert.match(rotation, new RegExp(`"${featureWord}"`));
-  }
-  assert.doesNotMatch(
-    rotation,
-    /word: "(?:Approve|Comply|Authorize|Inherit|Baseline|Assess|Audit|Recommend|Secure|Simplify|Clarify|Demystify)"/,
-  );
+  assert.match(rotation, /ATLAS_BRAND_SIGNALS/);
   assert.match(rotation, /BRAND_ROTATION_INTERVAL_MS = 2400/);
   assert.match(rotation, /BRAND_ROTATION_SETTLE_MS = 8000/);
   assert.match(brand, /brand-key">Ctrl/);
@@ -144,14 +126,14 @@ test('brand identity is immediate, animated, and does not use an entrance gate',
   assert.match(rotation, /setTimeout/);
   assert.match(rotation, /setInterval/);
   assert.doesNotMatch(brand, /classList/);
-  // The shortcut the keycap advertises is wired to the one global listener.
-  assert.match(app, /BRAND_SURFACE_VIEWS/);
-  assert.match(app, /activeBrandAction/);
+  assert.doesNotMatch(app, /BRAND_SURFACE_VIEWS|activeBrandAction/);
+  assert.doesNotMatch(brand, /Keyboard shortcut|Press Ctrl|title=/);
   assert.match(html, /class="brand-key">Ctrl/);
   assert.match(html, /class="brand-key">Alt/);
-  assert.match(html, /data-brand-word>Explore/);
+  assert.match(html, /data-brand-word>CONTROL_ATLAS_BRAND_SIGNAL_INITIAL/);
   assert.match(mainEntrypoint, /prefers-reduced-motion: reduce/);
   assert.match(mainEntrypoint, /BRAND_WORDS/);
+  assert.match(mainEntrypoint, /ATLAS_SPLASH_SIGNALS/);
   assert.match(mainEntrypoint, /addEventListener\('change', onBrandMotionChange\)/);
   assert.equal(typeof packageJson.dependencies['@xyflow/react'], 'string');
   assert.equal(typeof packageJson.dependencies.elkjs, 'string');
@@ -385,6 +367,8 @@ test('landing page states what the product is before asking for action', () => {
   const homeContent = readFileSync('src/shared/home-content.mjs', 'utf8');
   const viteConfig = readFileSync('vite.config.ts', 'utf8');
   assert.match(homePage, /HOME_CONTENT\.definition/);
+  assert.match(homePage, /HOME_CONTENT\.breadth/);
+  assert.match(homePage, /ATLAS_SCOPE_METRICS/);
   assert.match(homeContent, /SITE_COPY\.home/);
   assert.equal(HOME_CONTENT.headline, 'Make federal cybersecurity compliance make sense.');
   assert.equal(HOME_CONTENT.definition, 'Understand what applies, what it means, and what to do next.');
@@ -392,6 +376,7 @@ test('landing page states what the product is before asking for action', () => {
   assert.match(homePage, /data-template="B"/);
   assert.match(html, /CONTROL_ATLAS_HOME/);
   assert.match(viteConfig, /renderStaticHome\(\)/);
+  assert.match(viteConfig, /deriveAtlasScopeMetrics/);
   assert.match(viteConfig, /\.replace\('<!-- CONTROL_ATLAS_HOME -->'/);
   assert.equal(HOME_DESTINATIONS.length, 4);
   assert.deepEqual(HOME_DESTINATIONS.map(({ label }) => label), [
@@ -402,6 +387,17 @@ test('landing page states what the product is before asking for action', () => {
   assert.match(homePage, /home-library-kpis/);
   assert.match(homePage, /Start with what you came to find\./);
   assert.doesNotMatch(homePage, /data-record-count|tag-count-scale|More records, bigger tag/);
+});
+
+test('About and footer expose one quiet, safe project-support link each', () => {
+  const about = readFileSync('src/ui/pages/AboutPage.tsx', 'utf8');
+  const footer = readFileSync('src/ui/components/SiteFooter.tsx', 'utf8');
+  for (const surface of [about, footer]) {
+    assert.match(surface, /https:\/\/buymeacoffee\.com\/ram\.bulls/);
+    assert.match(surface, /rel="noopener noreferrer"/);
+    assert.match(surface, /target="_blank"/);
+  }
+  assert.doesNotMatch(mainEntrypoint, /buymeacoffee\.com/);
 });
 
 test('Guides implement the numbered Template F directory contract', () => {

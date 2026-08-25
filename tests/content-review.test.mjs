@@ -414,21 +414,20 @@ test('about page states the exact product definition and decision boundary witho
   assert.match(aboutPage, /PRODUCT_DEFINITION/);
   assert.match(aboutPage, /PRODUCT_DECISION_BOUNDARY/);
   for (const heading of [
-    'What Control Atlas is',
-    'How it is organized',
-    'How sources and crosswalks work',
-    'What Control Atlas does not decide',
+    'Why Control Atlas exists',
+    "What's in here",
+    'Built for the people doing the work',
+    'Follow it back to the source',
     'About the project',
   ]) {
     assert.match(aboutPage, new RegExp(`<h2>${heading}</h2>`));
   }
   assert.doesNotMatch(aboutPage, /SummaryCard|about-card-grid/);
-  assert.doesNotMatch(aboutPage, /organizing spine|Control Atlas overlay|publisher hierarchy|provenance|confidence|trust register/i);
+  assert.doesNotMatch(aboutPage, /organizing spine|Control Atlas overlay|publisher hierarchy|provenance|confidence|trust register|ontology|taxonomy architecture/i);
   assert.doesNotMatch(aboutPage, /Path shows|Map and List show|graph parenting|not as parents|focus semantics/i);
   assert.doesNotMatch(aboutPage, /\b(?:Roots|Trunk|Twigs|Leaves|Fruit|Acorns)\b/);
   assert.doesNotMatch(aboutPage, /plain English|right starting point/i);
-  // About explains the model once; it is not the keyboard-shortcut page and
-  // not a doctrine dump.
+  // About tells the practitioner story; it is not the flourish-shortcut page.
   assert.doesNotMatch(aboutPage, /Ctrl \+|keyboard shortcut/i);
   assert.doesNotMatch(aboutPage, /Where to go next/i);
   assert.ok(
