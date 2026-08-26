@@ -88,7 +88,7 @@ test("WS5 Library discovery cards open the counted canonical filter states", asy
     await gotoApp(page, "/");
     await waitForAppReady(page, { allowPartial: true });
     const discovery = page.locator(".home-library-kpi").filter({ hasText: label });
-    const count = (await discovery.locator(".home-library-kpi__count").innerText()).replace(" records", "");
+    const count = (await discovery.locator(".home-library-kpi__count").innerText()).replace(/\s+records$/i, "");
     expect(count).toMatch(/^\d[\d,]*$/);
     await discovery.click();
 
