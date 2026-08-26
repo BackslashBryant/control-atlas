@@ -24,6 +24,7 @@ import {
   resolveNativeType,
 } from '../src/shared/data-trust-contracts.mjs';
 import { recordPresentationProfile } from '../src/shared/record-presentation.mjs';
+import { repairKnownSourceEncoding } from '../src/shared/text-fidelity.mjs';
 
 const generated = (name) => readGeneratedCollection('.', name);
 // build-framework-data.mjs omits evidence_ids from an edge when it is
@@ -491,8 +492,21 @@ test('DISA STIG and SRG records carry full, untruncated check and fix text', () 
     const sourceById = new Map(sourceRecords.map((record) => [record.id, record]));
     for (const node of records) {
       const source = sourceById.get(node.metadata?.item_id);
-      assert.equal(node.metadata.check_text, source?.check_text, `${node.id} check text must match the parsed publisher record`);
-      assert.equal(node.metadata.fix_text, source?.fix_text, `${node.id} fix text must match the parsed publisher record`);
+      assert.equal(
+        node.metadata.check_text,
+        repairKnownSourceEncoding(source?.check_text),
+        `${node.id} check text must preserve the parsed publisher record after known encoding repair`,
+      );
+      assert.equal(
+        node.metadata.fix_text,
+        repairKnownSourceEncoding(source?.fix_text),
+        `${node.id} fix text must preserve the parsed publisher record after known encoding repair`,
+      );
+      assert.doesNotMatch(
+        `${node.metadata.check_text}\n${node.metadata.fix_text}`,
+        /â€|Ã|Â/,
+        `${node.id} must not publish known mojibake`,
+      );
     }
   }
 });

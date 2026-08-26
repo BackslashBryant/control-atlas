@@ -353,7 +353,7 @@ test('DISA XCCDF parser preserves full-length prose fields without truncation', 
 });
 
 test('DISA XCCDF parser repairs known UTF-8 mojibake before publication', () => {
-  const xml = sampleStigXml.replace(
+  const xml = sampleStigXml.replaceAll(
     'Accounts must be managed.',
     'The command uses â€˜quotedâ€™ values and an â€œexampleâ€ label.',
   );
