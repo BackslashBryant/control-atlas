@@ -35,8 +35,8 @@ test('source register desktop composition', async ({ page }) => {
     register.boundingBox(),
     evidence.boundingBox(),
     page.evaluate(() => ({
-      clientWidth: document.documentElement.clientWidth,
-      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: globalThis.document.documentElement.clientWidth,
+      scrollWidth: globalThis.document.documentElement.scrollWidth,
     })),
   ]);
 
