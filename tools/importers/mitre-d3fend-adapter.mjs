@@ -28,7 +28,7 @@ export function parseD3fendTechniques(techniqueDocument) {
   const records = [];
   for (const entry of graph) {
     const d3fendId = entry['d3f:d3fend-id'];
-    if (!d3fendId) continue;
+    if (!d3fendId || !String(d3fendId).startsWith('D3-')) continue;
     const label = entry['rdfs:label'] || d3fendId;
     const definition = entry['d3f:definition'] || entry['d3f:kb-article'] || '';
     const slug = uriLocalName(entry['@id']);
@@ -53,7 +53,7 @@ export function parseD3fendTechniques(techniqueDocument) {
         key: D3FEND_ONTOLOGY_SOURCE,
         snapshot_date: '',
         version: '',
-        locator: `technique/all.json#${d3fendId}`,
+        locator: `d3fend.json#${d3fendId}`,
       },
     });
   }
@@ -69,6 +69,8 @@ export function buildD3fendCatalogDocument(records, metadata) {
     source_version: metadata.version,
     snapshot_date: metadata.snapshotDate,
     checksum: metadata.checksum,
+    checksum_basis: metadata.checksumBasis || 'canonical_json',
+    source_artifact_byte_length: metadata.byteLength,
     provenance: metadata.provenance || 'MITRE D3FEND defensive technique catalog',
     records,
   };
@@ -257,6 +259,8 @@ export function buildMappingDocument(relationships, metadata) {
     source_version: metadata.version,
     snapshot_date: metadata.snapshotDate,
     checksum: metadata.checksum,
+    checksum_basis: metadata.checksumBasis || 'canonical_json',
+    source_artifact_byte_length: metadata.byteLength,
     provenance: metadata.provenance,
     relationships,
   };

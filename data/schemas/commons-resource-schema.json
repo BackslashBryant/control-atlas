@@ -79,7 +79,6 @@
           "audiences",
           "artifactTypes",
           "accessType",
-          "costType",
           "accountRequired",
           "authenticationRequired",
           "officialStatus",
@@ -94,7 +93,13 @@
           "overview",
           "compatibility",
           "media",
-          "presentationProfile"
+          "presentationProfile",
+          "entityKind",
+          "profileId",
+          "origin",
+          "sourceRefs",
+          "lifecycle",
+          "claimEvidence"
         ],
         "properties": {
           "id": { "type": "string" },
@@ -143,7 +148,7 @@
               "unknown"
             ]
           },
-          "costType": { "type": "string" },
+          "costType": { "type": "string", "minLength": 1 },
           "accountRequired": { "type": "boolean" },
           "authenticationRequired": { "type": "boolean" },
           "publicAccessNotes": { "type": ["string", "null"] },
@@ -254,7 +259,7 @@
           },
           "presentationProfile": {
             "type": "object",
-            "required": ["profileType", "template", "whatItDoes", "whoItIsFor", "limitations"],
+            "required": ["profileType", "template", "whatItDoes"],
             "properties": {
               "profileType": { "type": "string" },
               "template": { "type": "string", "enum": ["tool", "reference", "training", "directory", "community", "data", "ecosystem", "destination", "artifact"] },
@@ -265,7 +270,6 @@
           },
           "toolProfile": {
             "type": "object",
-            "required": ["inputs", "outputs", "formats", "integrations", "installation", "usage", "license", "maintenance", "release"],
             "properties": {
               "inputs": { "$ref": "#/definitions/evidenceSection" },
               "outputs": { "$ref": "#/definitions/evidenceSection" },
@@ -307,7 +311,39 @@
             }
           },
           "automatedFields": { "type": "array", "items": { "type": "string" } },
-          "manualFields": { "type": "array", "items": { "type": "string" } }
+          "manualFields": { "type": "array", "items": { "type": "string" } },
+          "entityKind": { "const": "resource" },
+          "profileId": { "type": "string", "pattern": "^resource\\." },
+          "origin": {
+            "enum": ["publisher_exact", "publisher_normalized", "publisher_derived", "atlas_editorial", "atlas_inferred"]
+          },
+          "sourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string", "format": "uri" } },
+          "lifecycle": {
+            "type": "object",
+            "required": ["status", "evidenceRefs"],
+            "properties": {
+              "status": { "type": "string" },
+              "evidenceRefs": { "type": "array", "items": { "type": "string", "format": "uri" } },
+              "replacedBy": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "claimEvidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["fieldPath", "origin", "evidenceRefs", "reviewStatus"],
+              "properties": {
+                "fieldPath": { "type": "string", "pattern": "^/" },
+                "origin": {
+                  "enum": ["publisher_exact", "publisher_normalized", "publisher_derived", "atlas_editorial", "atlas_inferred"]
+                },
+                "evidenceRefs": { "type": "array", "items": { "type": "string", "format": "uri" } },
+                "transformation": { "type": "string" },
+                "reviewStatus": { "enum": ["reviewed", "pending", "rejected"] }
+              }
+            }
+          }
         },
         "allOf": [
           {

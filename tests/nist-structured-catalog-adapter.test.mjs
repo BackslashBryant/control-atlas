@@ -25,6 +25,7 @@ test('NIST IoT workbooks reconcile every publisher row without synthetic records
   assert.equal(iot.records.length, 489);
   assert.ok(iot.records.every((record) => record.parent_id && record.source_fragments.length > 0));
   assert.ok(iot.records.every((record) => record.source_fragments.every((fragment) => fragment.sheet && fragment.cell)));
+  assert.equal(iot.records.filter((record) => record.description && record.description === record.title).length, 0);
 });
 
 test('NIST Mobile Threat JSON and CSV reconcile threats, categories, blanks, and CVEs', () => {

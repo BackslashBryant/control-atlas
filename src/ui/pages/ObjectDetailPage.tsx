@@ -336,6 +336,13 @@ export function ObjectDetailPage(props: {
   const publishedName = identityPresentation.secondary;
   const kind = displayNameFor("object_type", objectType);
   const officialSourceUrl = source?.artifact_url || source?.catalog_browse_url || "";
+  const claimOrigin = node.metadata?.origin || "publisher_normalized";
+  const sourceIdentityLabel = claimOrigin === "atlas_editorial"
+    ? "Control Atlas context"
+    : claimOrigin === "publisher_derived"
+      ? "Publisher-derived projection"
+      : "Publisher source";
+  const lifecycleStatus = String(node.lifecycle_status || "active");
   const edges = bundle.runtime.getEdgesForNode(node.id, {
     publication_status: "published",
   });
@@ -419,6 +426,11 @@ export function ObjectDetailPage(props: {
             <AcronymText>{identityPresentation.context}</AcronymText>
           </p>
         ) : null}
+        {lifecycleStatus !== "active" ? (
+          <p className="record-identity-context" data-record-lifecycle={lifecycleStatus}>
+            <Badge tone="warning">{displayNameFor("lifecycle_status", lifecycleStatus)}</Badge>
+          </p>
+        ) : null}
         <div className="record-title-actions" data-route-primary-support="true">
           {officialSourceUrl ? (
             <ButtonLink
@@ -427,7 +439,7 @@ export function ObjectDetailPage(props: {
               target="_blank"
               variant="primary"
             >
-              View official source
+              {claimOrigin === "atlas_editorial" ? "View Atlas source" : "View official source"}
             </ButtonLink>
           ) : null}
           <AppLink
@@ -537,7 +549,7 @@ export function ObjectDetailPage(props: {
           ) : null}
           {source ? (
             <p className="support-meta" data-record-source-identity>
-              Source excerpt from {source.display_name || source.name}
+              {sourceIdentityLabel} · {source.display_name || source.name}
             </p>
           ) : null}
           {!source ? (
@@ -551,7 +563,12 @@ export function ObjectDetailPage(props: {
               <p>The published text for this record did not load.</p>
             </section>
           ) : (
-            <div className="record-official-text" data-record-section="official-text" data-source-text="published">
+            <div
+              className="record-official-text"
+              data-claim-origin={claimOrigin}
+              data-record-section="official-text"
+              data-source-text="published"
+            >
               {presentation.sections.map((section) => {
                 const value = sourceMetadata[section.field as keyof typeof sourceMetadata];
                 if (Array.isArray(value) ? value.length === 0 : !String(value || "").trim()) return null;

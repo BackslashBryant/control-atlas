@@ -22,7 +22,6 @@ const COPY_PATHS = [
   ["data", "data"],
   ["maps", "maps"],
 ];
-const VITE_BUILD_COMMAND = "vite build";
 const reuseGenerated = process.argv.includes("--reuse-generated");
 
 function copyIntoDist(sourceRelativePath, destRelativePath) {
@@ -107,7 +106,7 @@ if (!/^\d{4}-\d{2}-\d{2}T/.test(sourceDataGeneratedAt || "")) {
   throw new Error("Generated sources are missing a valid generated_at timestamp");
 }
 
-execFileSync("npx", VITE_BUILD_COMMAND.split(" "), {
+execFileSync(process.execPath, [join(ROOT, "node_modules/vite/bin/vite.js"), "build"], {
   cwd: ROOT,
   env: {
     ...process.env,
@@ -134,8 +133,8 @@ for (const [sourceRelativePath, destRelativePath] of COPY_PATHS) {
 }
 
 execFileSync(
-  "npm",
-  ["run", "build:atlas-network", "--", "--output", "dist/site/data/generated/atlas-network.json"],
+  process.execPath,
+  ["--import", "tsx", join(ROOT, "scripts/build-atlas-network-artifact.ts"), "--output", "dist/site/data/generated/atlas-network.json"],
   { cwd: ROOT, stdio: "inherit", shell: process.platform === "win32" },
 );
 

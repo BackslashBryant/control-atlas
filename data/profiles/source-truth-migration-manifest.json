@@ -1,0 +1,610 @@
+{
+  "schema_version": "1.0",
+  "migration_id": "source-truth-profiles-v1",
+  "generated_at": "2026-08-25",
+  "stable_id_policy": "Existing identifiers and routes are preserved; only canonical kind, profile, origin, and assertion metadata are added.",
+  "mappings": [
+    {
+      "old_type": "csv",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.csv",
+      "status": "active"
+    },
+    {
+      "old_type": "html",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "status": "active"
+    },
+    {
+      "old_type": "json",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.json",
+      "status": "active"
+    },
+    {
+      "old_type": "json_ld",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.json_ld",
+      "status": "active"
+    },
+    {
+      "old_type": "oscal_json",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "status": "active"
+    },
+    {
+      "old_type": "oscal_xml",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_xml",
+      "status": "active"
+    },
+    {
+      "old_type": "other",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.other",
+      "status": "active"
+    },
+    {
+      "old_type": "pdf",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "status": "active"
+    },
+    {
+      "old_type": "spreadsheet",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "status": "active"
+    },
+    {
+      "old_type": "stix",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.stix",
+      "status": "active"
+    },
+    {
+      "old_type": "xccdf",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.xccdf",
+      "status": "active"
+    },
+    {
+      "old_type": "xml",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.xml",
+      "status": "active"
+    },
+    {
+      "old_type": "editorial",
+      "entity_kind": "publication",
+      "profile_id": "publication.editorial",
+      "status": "active"
+    },
+    {
+      "old_type": "ingestion",
+      "entity_kind": "publication",
+      "profile_id": "publication.ingestion",
+      "status": "active"
+    },
+    {
+      "old_type": "mapping",
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "status": "active"
+    },
+    {
+      "old_type": "publication",
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "status": "active"
+    },
+    {
+      "old_type": "reference",
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "status": "active"
+    },
+    {
+      "old_type": "supplemental",
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "status": "active"
+    },
+    {
+      "old_type": "assessment_procedure",
+      "entity_kind": "content_record",
+      "profile_id": "record.assessment_procedure",
+      "status": "active"
+    },
+    {
+      "old_type": "attack_technique",
+      "entity_kind": "content_record",
+      "profile_id": "record.attack_technique",
+      "status": "active"
+    },
+    {
+      "old_type": "baseline",
+      "entity_kind": "content_record",
+      "profile_id": "record.baseline",
+      "status": "active"
+    },
+    {
+      "old_type": "benchmark",
+      "entity_kind": "content_record",
+      "profile_id": "record.benchmark",
+      "status": "active"
+    },
+    {
+      "old_type": "catalog",
+      "entity_kind": "content_record",
+      "profile_id": "record.catalog",
+      "status": "active"
+    },
+    {
+      "old_type": "category",
+      "entity_kind": "content_record",
+      "profile_id": "record.category",
+      "status": "active"
+    },
+    {
+      "old_type": "control",
+      "entity_kind": "content_record",
+      "profile_id": "record.control",
+      "status": "active"
+    },
+    {
+      "old_type": "control_enhancement",
+      "entity_kind": "content_record",
+      "profile_id": "record.control_enhancement",
+      "status": "active"
+    },
+    {
+      "old_type": "defend_countermeasure",
+      "entity_kind": "content_record",
+      "profile_id": "record.defend_countermeasure",
+      "status": "active"
+    },
+    {
+      "old_type": "family",
+      "entity_kind": "content_record",
+      "profile_id": "record.family",
+      "status": "active"
+    },
+    {
+      "old_type": "function",
+      "entity_kind": "content_record",
+      "profile_id": "record.function",
+      "status": "active"
+    },
+    {
+      "old_type": "group",
+      "entity_kind": "content_record",
+      "profile_id": "record.group",
+      "status": "active"
+    },
+    {
+      "old_type": "impact_category",
+      "entity_kind": "content_record",
+      "profile_id": "record.impact_category",
+      "status": "active"
+    },
+    {
+      "old_type": "iot_capability",
+      "entity_kind": "content_record",
+      "profile_id": "record.iot_capability",
+      "status": "active"
+    },
+    {
+      "old_type": "iot_capability_domain",
+      "entity_kind": "content_record",
+      "profile_id": "record.iot_capability_domain",
+      "status": "active"
+    },
+    {
+      "old_type": "iot_capability_element",
+      "entity_kind": "content_record",
+      "profile_id": "record.iot_capability_element",
+      "status": "active"
+    },
+    {
+      "old_type": "iot_capability_subelement",
+      "entity_kind": "content_record",
+      "profile_id": "record.iot_capability_subelement",
+      "status": "active"
+    },
+    {
+      "old_type": "iot_subcapability",
+      "entity_kind": "content_record",
+      "profile_id": "record.iot_subcapability",
+      "status": "active"
+    },
+    {
+      "old_type": "limb",
+      "entity_kind": "content_record",
+      "profile_id": "record.limb",
+      "status": "active"
+    },
+    {
+      "old_type": "mobile_threat",
+      "entity_kind": "content_record",
+      "profile_id": "record.mobile_threat",
+      "status": "active"
+    },
+    {
+      "old_type": "mobile_threat_category",
+      "entity_kind": "content_record",
+      "profile_id": "record.mobile_threat_category",
+      "status": "active"
+    },
+    {
+      "old_type": "policy",
+      "entity_kind": "content_record",
+      "profile_id": "record.policy",
+      "status": "active"
+    },
+    {
+      "old_type": "policy_directive",
+      "entity_kind": "content_record",
+      "profile_id": "record.policy_directive",
+      "status": "active"
+    },
+    {
+      "old_type": "program",
+      "entity_kind": "content_record",
+      "profile_id": "record.program",
+      "status": "active"
+    },
+    {
+      "old_type": "regulation",
+      "entity_kind": "content_record",
+      "profile_id": "record.regulation",
+      "status": "active"
+    },
+    {
+      "old_type": "requirement",
+      "entity_kind": "content_record",
+      "profile_id": "record.requirement",
+      "status": "active"
+    },
+    {
+      "old_type": "rmf_step",
+      "entity_kind": "content_record",
+      "profile_id": "record.rmf_step",
+      "status": "active"
+    },
+    {
+      "old_type": "srg_requirement",
+      "entity_kind": "content_record",
+      "profile_id": "record.srg_requirement",
+      "status": "active"
+    },
+    {
+      "old_type": "statute",
+      "entity_kind": "content_record",
+      "profile_id": "record.statute",
+      "status": "active"
+    },
+    {
+      "old_type": "stig_rule",
+      "entity_kind": "content_record",
+      "profile_id": "record.stig_rule",
+      "status": "active"
+    },
+    {
+      "old_type": "tactic",
+      "entity_kind": "content_record",
+      "profile_id": "record.tactic",
+      "status": "active"
+    },
+    {
+      "old_type": "trunk",
+      "entity_kind": "content_record",
+      "profile_id": "record.trunk",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_activity",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_activity",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_assessment_question",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_assessment_question",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_build",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_build",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_capability",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_capability",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_cloud_native_requirement",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_cloud_native_requirement",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_collaborator",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_collaborator",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_document",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_document",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_logical_component",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_logical_component",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_mapping_contributor",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_mapping_contributor",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_mapping_document",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_mapping_document",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_overlay_section",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_overlay_section",
+      "status": "dormant"
+    },
+    {
+      "old_type": "zt_pillar",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_pillar",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_product_component",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_product_component",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_publication",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_publication",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_reference_component",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_reference_component",
+      "status": "active"
+    },
+    {
+      "old_type": "zt_tenet",
+      "entity_kind": "content_record",
+      "profile_id": "record.zt_tenet",
+      "status": "active"
+    },
+    {
+      "old_type": "catalog",
+      "entity_kind": "resource",
+      "profile_id": "resource.catalog",
+      "status": "active"
+    },
+    {
+      "old_type": "community_forum",
+      "entity_kind": "resource",
+      "profile_id": "resource.community_forum",
+      "status": "active"
+    },
+    {
+      "old_type": "dataset",
+      "entity_kind": "resource",
+      "profile_id": "resource.dataset",
+      "status": "active"
+    },
+    {
+      "old_type": "documentation",
+      "entity_kind": "resource",
+      "profile_id": "resource.documentation",
+      "status": "active"
+    },
+    {
+      "old_type": "ecosystem",
+      "entity_kind": "resource",
+      "profile_id": "resource.ecosystem",
+      "status": "active"
+    },
+    {
+      "old_type": "government_portal",
+      "entity_kind": "resource",
+      "profile_id": "resource.government_portal",
+      "status": "active"
+    },
+    {
+      "old_type": "historical_reference",
+      "entity_kind": "resource",
+      "profile_id": "resource.historical_reference",
+      "status": "active"
+    },
+    {
+      "old_type": "instruction",
+      "entity_kind": "resource",
+      "profile_id": "resource.instruction",
+      "status": "active"
+    },
+    {
+      "old_type": "marketplace",
+      "entity_kind": "resource",
+      "profile_id": "resource.marketplace",
+      "status": "active"
+    },
+    {
+      "old_type": "matrix",
+      "entity_kind": "resource",
+      "profile_id": "resource.matrix",
+      "status": "active"
+    },
+    {
+      "old_type": "product_directory",
+      "entity_kind": "resource",
+      "profile_id": "resource.product_directory",
+      "status": "active"
+    },
+    {
+      "old_type": "restricted_service",
+      "entity_kind": "resource",
+      "profile_id": "resource.restricted_service",
+      "status": "active"
+    },
+    {
+      "old_type": "service_portal",
+      "entity_kind": "resource",
+      "profile_id": "resource.service_portal",
+      "status": "active"
+    },
+    {
+      "old_type": "specification",
+      "entity_kind": "resource",
+      "profile_id": "resource.specification",
+      "status": "active"
+    },
+    {
+      "old_type": "template",
+      "entity_kind": "resource",
+      "profile_id": "resource.template",
+      "status": "active"
+    },
+    {
+      "old_type": "tool",
+      "entity_kind": "resource",
+      "profile_id": "resource.tool",
+      "status": "active"
+    },
+    {
+      "old_type": "training",
+      "entity_kind": "resource",
+      "profile_id": "resource.training",
+      "status": "active"
+    }
+  ],
+  "relationship_mappings": [
+    {
+      "old_label": "applies_to",
+      "predicate": "applies_to",
+      "profile_id": "assertion.applies_to",
+      "status": "active"
+    },
+    {
+      "old_label": "assesses",
+      "predicate": "assesses",
+      "profile_id": "assertion.assesses",
+      "status": "active"
+    },
+    {
+      "old_label": "Concept Crosswalk",
+      "predicate": "concept_crosswalk",
+      "profile_id": "assertion.concept_crosswalk",
+      "status": "active"
+    },
+    {
+      "old_label": "contains",
+      "predicate": "contains",
+      "profile_id": "assertion.contains",
+      "status": "active"
+    },
+    {
+      "old_label": "depends_on",
+      "predicate": "depends_on",
+      "profile_id": "assertion.depends_on",
+      "status": "active"
+    },
+    {
+      "old_label": "extends",
+      "predicate": "extends",
+      "profile_id": "assertion.extends",
+      "status": "active"
+    },
+    {
+      "old_label": "issued_under",
+      "predicate": "issued_under",
+      "profile_id": "assertion.issued_under",
+      "status": "active"
+    },
+    {
+      "old_label": "maps_to",
+      "predicate": "maps_to",
+      "profile_id": "assertion.maps_to",
+      "status": "active"
+    },
+    {
+      "old_label": "mitigates",
+      "predicate": "mitigates",
+      "profile_id": "assertion.mitigates",
+      "status": "active"
+    },
+    {
+      "old_label": "organizes",
+      "predicate": "organizes",
+      "profile_id": "assertion.organizes",
+      "status": "active"
+    },
+    {
+      "old_label": "protects",
+      "predicate": "protects",
+      "profile_id": "assertion.protects",
+      "status": "active"
+    },
+    {
+      "old_label": "references",
+      "predicate": "references",
+      "profile_id": "assertion.references",
+      "status": "active"
+    },
+    {
+      "old_label": "requires",
+      "predicate": "requires",
+      "profile_id": "assertion.requires",
+      "status": "active"
+    },
+    {
+      "old_label": "selects",
+      "predicate": "selects",
+      "profile_id": "assertion.selects",
+      "status": "active"
+    },
+    {
+      "old_label": "supported_by",
+      "predicate": "supported_by",
+      "profile_id": "assertion.supported_by",
+      "status": "active"
+    },
+    {
+      "old_label": "supports",
+      "predicate": "supports",
+      "profile_id": "assertion.supports",
+      "status": "active"
+    },
+    {
+      "old_label": "uses",
+      "predicate": "uses",
+      "profile_id": "assertion.uses",
+      "status": "active"
+    }
+  ]
+}

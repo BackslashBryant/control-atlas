@@ -137,3 +137,35 @@ test('parseEnterpriseAttackStix preserves every publisher tactic membership', ()
     ],
   );
 });
+
+test('parseEnterpriseAttackStix converts publisher HTML and retains lifecycle history', () => {
+  const sample = {
+    objects: [
+      {
+        type: 'attack-pattern',
+        id: 'attack-pattern--retired',
+        name: '<strong>Retired</strong> technique',
+        description: '<p>Publisher &amp; history<br>remains useful.</p>',
+        revoked: true,
+        external_references: [{ source_name: 'mitre-attack', external_id: 'T0001' }],
+      },
+      {
+        type: 'attack-pattern',
+        id: 'attack-pattern--deprecated',
+        name: 'Deprecated technique',
+        description: 'Historical publisher text.',
+        x_mitre_deprecated: true,
+        external_references: [{ source_name: 'mitre-attack', external_id: 'T0002' }],
+      },
+    ],
+  };
+  const document = parseEnterpriseAttackStix(sample, {
+    artifactUrl: 'https://example.test/enterprise-attack-19.2.json',
+    version: '19.2', snapshotDate: '2026-08-25', checksum: 'sha256:sample',
+  });
+  assert.equal(document.records.length, 2);
+  assert.equal(document.records[0].status, 'withdrawn');
+  assert.equal(document.records[0].title, 'T0001 Retired technique');
+  assert.equal(document.records[0].description, 'Publisher & history remains useful.');
+  assert.equal(document.records[1].status, 'deprecated');
+});

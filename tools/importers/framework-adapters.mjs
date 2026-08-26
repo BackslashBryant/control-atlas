@@ -104,10 +104,10 @@ function publicCatalog(sourceKey, snapshotDate, definitions) {
 
 export function buildFedrampPublicCatalog(snapshotDate, baselineMembership = null) {
   return publicCatalog(FEDRAMP_SOURCE, snapshotDate, [
-    { id: 'LI-SAAS', type: 'fedramp-baseline', framework: 'fedramp', title: 'LI-SaaS Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Tailored baseline for low-impact software-as-a-service offerings.', locator: 'rev5/documents-templates/#LI-SaaS', metadata: { controls: baselineMembership?.['LI-SAAS'] || [] } },
-    { id: 'LOW', type: 'fedramp-baseline', framework: 'fedramp', title: 'Low Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 Low security control baseline.', locator: 'rev5/documents-templates/#Low', metadata: { controls: baselineMembership?.['LOW'] || [] } },
-    { id: 'MODERATE', type: 'fedramp-baseline', framework: 'fedramp', title: 'Moderate Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 Moderate security control baseline.', locator: 'rev5/documents-templates/#Moderate', metadata: { controls: baselineMembership?.['MODERATE'] || [] } },
-    { id: 'HIGH', type: 'fedramp-baseline', framework: 'fedramp', title: 'High Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 High security control baseline.', locator: 'rev5/documents-templates/#High', metadata: { controls: baselineMembership?.['HIGH'] || [] } },
+    { id: 'LI-SAAS', type: 'fedramp-baseline', framework: 'fedramp', title: 'LI-SaaS Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Tailored baseline for low-impact software-as-a-service offerings.', status: 'historical', locator: 'rev5/documents-templates/#LI-SaaS', metadata: { controls: baselineMembership?.['LI-SAAS'] || [] } },
+    { id: 'LOW', type: 'fedramp-baseline', framework: 'fedramp', title: 'Low Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 Low security control baseline.', status: 'historical', locator: 'rev5/documents-templates/#Low', metadata: { controls: baselineMembership?.['LOW'] || [] } },
+    { id: 'MODERATE', type: 'fedramp-baseline', framework: 'fedramp', title: 'Moderate Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 Moderate security control baseline.', status: 'historical', locator: 'rev5/documents-templates/#Moderate', metadata: { controls: baselineMembership?.['MODERATE'] || [] } },
+    { id: 'HIGH', type: 'fedramp-baseline', framework: 'fedramp', title: 'High Baseline', family: 'Rev. 5 Baselines', description: 'FedRAMP Rev. 5 High security control baseline.', status: 'historical', locator: 'rev5/documents-templates/#High', metadata: { controls: baselineMembership?.['HIGH'] || [] } },
   ]);
 }
 

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://control-atlas.local/schemas/atlas-entity.schema.json",
+  "title": "Control Atlas canonical entity envelope",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "id", "entity_kind", "profile_id", "title", "lifecycle", "source_refs", "origin", "payload", "operational"],
+  "properties": {
+    "schema_version": { "type": "string", "minLength": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "entity_kind": { "enum": ["organization", "publication", "artifact", "content_record", "resource"] },
+    "profile_id": { "type": "string", "minLength": 3 },
+    "title": { "type": "string", "minLength": 1 },
+    "aliases": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "publisher_id": { "type": "string", "minLength": 1 },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "evidence_refs"],
+      "properties": {
+        "status": { "$ref": "#/$defs/lifecycleStatus" },
+        "effective_date": { "type": "string", "format": "date" },
+        "retired_date": { "type": "string", "format": "date" },
+        "replaced_by": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "evidence_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "source_refs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "origin": { "$ref": "#/$defs/origin" },
+    "payload": { "type": "object" },
+    "operational": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parser_id", "parser_version", "review_status"],
+      "properties": {
+        "retrieved_at": { "type": ["string", "null"] },
+        "checked_at": { "type": ["string", "null"] },
+        "parser_id": { "type": "string", "minLength": 1 },
+        "parser_version": { "type": "string", "minLength": 1 },
+        "review_status": { "enum": ["reviewed", "pending", "blocked", "not_required"] }
+      }
+    }
+  },
+  "$defs": {
+    "origin": {
+      "enum": ["publisher_exact", "publisher_normalized", "publisher_derived", "atlas_editorial", "atlas_inferred"]
+    },
+    "lifecycleStatus": {
+      "enum": ["active", "draft", "retired", "sunset", "withdrawn", "deprecated", "archived", "historical", "superseded", "restricted", "unknown"]
+    }
+  }
+}

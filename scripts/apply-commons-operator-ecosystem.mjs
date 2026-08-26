@@ -156,6 +156,16 @@ function evidenceSection(status, text, sourceUrl, values = []) {
   return { status, text, sourceUrl, ...(values.length ? { values } : {}) };
 }
 
+function claim(fieldPath, origin, sourceUrl, transformation = null) {
+  return {
+    fieldPath,
+    origin,
+    evidenceRefs: sourceUrl ? [sourceUrl] : [],
+    ...(transformation ? { transformation } : {}),
+    reviewStatus: "reviewed",
+  };
+}
+
 function makeResource(entry) {
   const days = entry.days || (entry.resourceType === "community_forum" ? 45 : entry.resourceType === "dataset" ? 45 : 90);
   const sourceUrl = entry.evidence || entry.url;
@@ -180,27 +190,27 @@ function makeResource(entry) {
     frameworks: [],
     programs: [],
     controlFamilies: [],
-    lifecycleStages: entry.lifecycleStages || ["Implement", "Assess", "Monitor"],
-    audiences: entry.audiences || ["Cybersecurity Practitioner"],
+    lifecycleStages: entry.lifecycleStages || [],
+    audiences: entry.audiences || [],
     artifactTypes: entry.resourceType === "dataset" ? ["data"] : entry.resourceType === "tool" || entry.resourceType === "ecosystem" ? ["tool"] : ["web"],
-    technologyScopes: ["general_it"],
-    platforms: ["all"],
+    technologyScopes: entry.technologyScopes || [],
+    platforms: entry.platforms || [],
     jurisdictions: entry.lane === "official" ? ["U.S. Federal"] : [],
     governmentBranches: [],
     formats: entry.formats || [],
     accessType,
-    costType: entry.costType || "free",
+    ...(entry.costType ? { costType: entry.costType } : {}),
     accountRequired: Boolean(entry.accountRequired),
     authenticationRequired: Boolean(entry.authenticationRequired),
-    publicAccessNotes: entry.publicAccessNotes || "Public publisher destination; linked services, downloads, or participation may have additional terms.",
+    publicAccessNotes: entry.publicAccessNotes || null,
     openSource: Boolean(entry.openSource),
     repositoryUrl: null,
     license: null,
     licenseUrl: null,
     redistributionPolicy: null,
-    officialStatus: entry.officialStatus || (entry.lane === "official" ? "official" : entry.lane === "commercial" ? "publisher-operated" : entry.lane === "legacy" ? "retired" : "community"),
-    maturity: "stable",
-    maintenanceStatus: entry.maintenanceStatus || "active",
+    officialStatus: entry.officialStatus || null,
+    maturity: null,
+    maintenanceStatus: entry.maintenanceStatus || "unknown",
     currentVersion: null,
     publisherUpdatedAt: null,
     lastReleaseAt: null,
@@ -210,7 +220,7 @@ function makeResource(entry) {
     nextCheckAt: plusDays(CHECKED_AT, days),
     updateMethod: "manual",
     updateCadence: `${days} days`,
-    freshnessStatus: "current",
+    freshnessStatus: null,
     supersedes: null,
     supersededBy: entry.supersededBy || null,
     legacyReason: entry.legacyReason || null,
@@ -247,25 +257,37 @@ function makeResource(entry) {
       profileType: entry.resourceType,
       template: profileTemplate(entry.resourceType),
       whatItDoes: evidenceSection("documented", summary, sourceUrl),
-      whoItIsFor: evidenceSection("documented", "Intended audience: Cybersecurity Practitioner.", sourceUrl, ["Cybersecurity Practitioner"]),
-      limitations: warnings.length ? evidenceSection("documented", warnings.join(" "), sourceUrl, warnings) : evidenceSection("not_documented", "No additional limitations were documented in the reviewed source.", sourceUrl),
+      ...(entry.audiences?.length
+        ? { whoItIsFor: evidenceSection("documented", `Intended audience: ${entry.audiences.join(", ")}.`, sourceUrl, entry.audiences) }
+        : {}),
+      ...(warnings.length ? { limitations: evidenceSection("documented", warnings.join(" "), sourceUrl, warnings) } : {}),
     },
+    entityKind: "resource",
+    profileId: `resource.${entry.resourceType}`,
+    origin: "atlas_editorial",
+    lifecycle: {
+      status: entry.maintenanceStatus || (entry.lane === "legacy" ? "historical" : "unknown"),
+      evidenceRefs: entry.maintenanceStatus || entry.lane === "legacy" ? [sourceUrl] : [],
+      ...(entry.supersededBy ? { replacedBy: [entry.supersededBy] } : {}),
+    },
+    sourceRefs: [sourceUrl],
+    claimEvidence: [
+      claim("/name", "publisher_normalized", sourceUrl),
+      claim("/publisher", "publisher_normalized", sourceUrl),
+      claim("/summary", "atlas_editorial", sourceUrl, "Atlas directory summary based on the linked destination."),
+      claim("/whyIncluded", "atlas_editorial", sourceUrl, "Atlas inclusion rationale."),
+      claim("/accessType", "publisher_normalized", sourceUrl),
+      ...(entry.publicAccessNotes ? [claim("/publicAccessNotes", "publisher_normalized", sourceUrl)] : []),
+      ...(entry.costType ? [claim("/costType", "publisher_normalized", sourceUrl)] : []),
+      ...(entry.maintenanceStatus ? [claim("/maintenanceStatus", "publisher_normalized", sourceUrl)] : []),
+      ...(entry.supersededBy ? [claim("/lifecycle/replacedBy", "publisher_normalized", sourceUrl)] : []),
+    ],
     repositoryEvidence: null,
     automatedFields: [],
     manualFields: ["summary", "whyIncluded", "accessType", "sourceEvidence"],
   };
   if (entry.resourceType === "tool") {
-    resource.toolProfile = {
-      inputs: evidenceSection("not_documented", "Supported inputs were not documented in the reviewed source inventory.", sourceUrl),
-      outputs: evidenceSection("not_documented", "Supported outputs were not documented in the reviewed source inventory.", sourceUrl),
-      formats: evidenceSection("not_documented", "Supported data formats were not documented in the reviewed source inventory.", sourceUrl),
-      integrations: evidenceSection("not_documented", "Integrations were not documented in the reviewed source inventory.", sourceUrl),
-      installation: evidenceSection("not_documented", "Installation requirements were not documented in the reviewed source inventory.", sourceUrl),
-      usage: evidenceSection("not_documented", "Run or usage guidance was not documented in the reviewed source inventory.", sourceUrl),
-      license: evidenceSection("not_documented", "A software license was not recorded in the reviewed source inventory.", sourceUrl),
-      maintenance: { status: entry.maintenanceStatus || "active", text: entry.legacyReason || `Publisher activity was verified on ${CHECKED_AT}.`, sourceUrl },
-      release: { status: "not_documented", version: null, name: null, url: entry.url, publishedAt: null, prerelease: false },
-    };
+    resource.toolProfile = {};
   }
   return resource;
 }

@@ -38,9 +38,11 @@ const BASE_PROFILES = Object.freeze({
   iot_subcapability: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Sub-Capability", kind: "text" })]), required: Object.freeze(["description"]) }),
   iot_capability_element: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability Element", kind: "text" }), Object.freeze({ field: "publisher_mappings", heading: "Publisher Mappings", kind: "publisher_mappings" })]), required: Object.freeze(["description"]) }),
   iot_capability_subelement: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability Sub-Element", kind: "text" }), Object.freeze({ field: "publisher_mappings", heading: "Publisher Mappings", kind: "publisher_mappings" })]), required: Object.freeze(["description"]) }),
+  limb: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Control Atlas Area", kind: "text" })]), required: Object.freeze(["title", "description"]) }),
   mobile_threat_category: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Threat Category", kind: "text" })]), required: Object.freeze(["description"]) }),
   mobile_threat: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "threat_origin", heading: "Published Origin", kind: "text" }), Object.freeze({ field: "exploit_examples", heading: "Exploit Examples", kind: "list" }), Object.freeze({ field: "cve_examples", heading: "CVE Examples", kind: "list" }), Object.freeze({ field: "countermeasures", heading: "Possible Countermeasures", kind: "countermeasures" }), Object.freeze({ field: "publisher_field_availability", heading: "Publisher Field Availability", kind: "text" })]), required: Object.freeze(["title"]) }),
   policy: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Policy Statement", kind: "text" })]), required: Object.freeze(["description"]) }),
+  policy_directive: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Authority Summary", kind: "text" })]), required: Object.freeze(["title", "description"]) }),
   program: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Program Level", kind: "text" })]), required: Object.freeze(["description"]) }),
   requirement: Object.freeze({
     sections: Object.freeze([
@@ -50,6 +52,7 @@ const BASE_PROFILES = Object.freeze({
     ]),
     required: Object.freeze(["description"]),
   }),
+  regulation: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Authority Summary", kind: "text" })]), required: Object.freeze(["title", "description"]) }),
   rmf_step: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "RMF Step", kind: "text" })]), required: Object.freeze(["description"]) }),
   srg_requirement: Object.freeze({
     sections: Object.freeze([
@@ -59,6 +62,7 @@ const BASE_PROFILES = Object.freeze({
     ]),
     required: Object.freeze(["description", "check_text", "fix_text"]),
   }),
+  statute: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Authority Summary", kind: "text" })]), required: Object.freeze(["title", "description"]) }),
   stig_rule: Object.freeze({
     sections: Object.freeze([
       Object.freeze({ field: "description", heading: "Discussion", kind: "text" }),
@@ -68,6 +72,7 @@ const BASE_PROFILES = Object.freeze({
     required: Object.freeze(["description", "check_text", "fix_text"]),
   }),
   tactic: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Tactic Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
+  trunk: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Control Atlas Scope", kind: "text" })]), required: Object.freeze(["title", "description"]) }),
   zt_activity: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Activity", kind: "text" })]), required: Object.freeze(["description"]) }),
   zt_assessment_question: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Assessment Guidance", kind: "text" }), Object.freeze({ field: "answer_options", heading: "Answer Options", kind: "list" })]), required: Object.freeze(["description", "answer_options"]) }),
   zt_build: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Implementation Summary", kind: "text" }), Object.freeze({ field: "architecture_sections", heading: "Architecture", kind: "structured" }), Object.freeze({ field: "implementation_sections", heading: "Implementation Guide", kind: "structured" })]), required: Object.freeze(["description", "architecture_sections", "implementation_sections"]) }),

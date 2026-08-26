@@ -29,13 +29,17 @@ const COMMITTED = {
   attackMap: join(ROOT, 'maps', 'attack-to-d3fend.json'),
   nistMap: join(ROOT, 'maps', 'd3fend-to-800-53.json'),
 };
+const HYDRATION_MANIFEST = join(ROOT, 'data', 'artifact-hydration-manifest.json');
+
+const ATTACK_RELEASE = '19.2';
+const ATTACK_RELEASE_COMMIT = '6cda5ad8462c79e14fbb872f4e09059b18e0cfc4';
+const D3FEND_RELEASE = '1.5.0';
 
 const REMOTE = {
   enterpriseAttack:
-    'https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json',
+    `https://raw.githubusercontent.com/mitre-attack/attack-stix-data/${ATTACK_RELEASE_COMMIT}/enterprise-attack/enterprise-attack-${ATTACK_RELEASE}.json`,
   icsAttack:
-    'https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json',
-  d3fendTechniques: 'https://d3fend.mitre.org/api/technique/all.json',
+    `https://raw.githubusercontent.com/mitre-attack/attack-stix-data/${ATTACK_RELEASE_COMMIT}/ics-attack/ics-attack-${ATTACK_RELEASE}.json`,
   d3fendOntology: 'https://d3fend.mitre.org/ontologies/d3fend.json',
   d3fendMappings: 'https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json',
 };
@@ -46,6 +50,61 @@ function checksum(value) {
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'));
+}
+
+function hydrationEntry(id, document, recordCount) {
+  return {
+    id,
+    status: 'OK',
+    http: 200,
+    url: document.source_artifact,
+    sha256: document.checksum,
+    byte_length: document.source_artifact_byte_length,
+    record_count: recordCount,
+    retrieved_at: document.snapshot_date,
+  };
+}
+
+function updateHydrationManifest(result) {
+  const manifest = readJson(HYDRATION_MANIFEST);
+  const replacements = new Map([
+    ['artifact-mitre-attack-enterprise', hydrationEntry(
+      'artifact-mitre-attack-enterprise',
+      result.enterprise,
+      result.enterprise.records.length,
+    )],
+    ['artifact-mitre-attack-ics', hydrationEntry(
+      'artifact-mitre-attack-ics',
+      result.ics,
+      result.ics.records.length,
+    )],
+    ['artifact-mitre-d3fend-ontology', hydrationEntry(
+      'artifact-mitre-d3fend-ontology',
+      result.d3fend,
+      result.d3fend.records.length,
+    )],
+    ['artifact-mitre-d3fend-mappings', hydrationEntry(
+      'artifact-mitre-d3fend-mappings',
+      result.attackMap,
+      result.attackMap.relationships.length,
+    )],
+  ]);
+  const seen = new Set();
+  const results = (manifest.results || []).map((entry) => {
+    const replacement = replacements.get(entry.id);
+    if (!replacement) return entry;
+    seen.add(entry.id);
+    return replacement;
+  });
+  for (const [id, entry] of replacements) {
+    if (!seen.has(id)) results.push(entry);
+  }
+  writeJsonAtomically(HYDRATION_MANIFEST, {
+    ...manifest,
+    generated_at: new Date().toISOString(),
+    hydrated: replacements.size,
+    results,
+  });
 }
 
 function snapshotDateFromStix(document) {
@@ -92,27 +151,23 @@ export async function fetchMitreData(options = {}) {
     const [
       enterpriseStix,
       icsStix,
-      d3fendTechniques,
       d3fendOntology,
       d3fendMappings,
     ] = await Promise.all([
       fetchJson(REMOTE.enterpriseAttack, fetchImpl),
       fetchJson(REMOTE.icsAttack, fetchImpl),
-      fetchJson(REMOTE.d3fendTechniques, fetchImpl),
       fetchJson(REMOTE.d3fendOntology, fetchImpl),
       fetchJson(REMOTE.d3fendMappings, fetchImpl),
     ]);
 
     const snapshotDate = new Date().toISOString().slice(0, 10);
-    const enterpriseVersion = snapshotDateFromStix(enterpriseStix);
-    const icsVersion = snapshotDateFromStix(icsStix);
-    const d3fendVersion =
-      d3fendOntology?.['@graph']?.find((entry) => entry['d3f:version'])?.['d3f:version'] ||
-      snapshotDate;
+    const enterpriseVersion = ATTACK_RELEASE;
+    const icsVersion = ATTACK_RELEASE;
+    const d3fendVersion = D3FEND_RELEASE;
 
     const enterpriseChecksum = checksum(JSON.stringify(enterpriseStix));
     const icsChecksum = checksum(JSON.stringify(icsStix));
-    const d3fendChecksum = checksum(JSON.stringify(d3fendTechniques));
+    const d3fendChecksum = checksum(JSON.stringify(d3fendOntology));
     const mappingsChecksum = checksum(JSON.stringify(d3fendMappings));
 
     const enterprise = parseEnterpriseAttackStix(enterpriseStix, {
@@ -120,6 +175,7 @@ export async function fetchMitreData(options = {}) {
       version: enterpriseVersion,
       snapshotDate,
       checksum: enterpriseChecksum,
+      byteLength: Buffer.byteLength(JSON.stringify(enterpriseStix)),
       locatorPrefix: 'enterprise-attack.json',
     });
     const ics = parseIcsAttackStix(icsStix, {
@@ -127,11 +183,13 @@ export async function fetchMitreData(options = {}) {
       version: icsVersion,
       snapshotDate,
       checksum: icsChecksum,
+      byteLength: Buffer.byteLength(JSON.stringify(icsStix)),
       locatorPrefix: 'ics-attack.json',
     });
 
-    const d3fendRecords = parseD3fendTechniques(d3fendTechniques);
     const d3fendTactics = resolveD3fendTactics(d3fendOntology);
+    const d3fendRecords = parseD3fendTechniques(d3fendOntology)
+      .filter((record) => d3fendTactics.has(record.id));
     const d3fendDefinitions = resolveD3fendDefinitions(d3fendOntology);
     for (const record of d3fendRecords) {
       record.source.snapshot_date = snapshotDate;
@@ -140,18 +198,19 @@ export async function fetchMitreData(options = {}) {
       record.family = tactic?.title || '';
       record.metadata.tactic_id = tactic?.id || null;
       record.metadata.tactic_title = tactic?.title || null;
-      // technique/all.json rarely carries d3f:definition; the full ontology
-      // graph does, keyed by the same d3fend-id (fetch-framework-catalogs
-      // measured 271/278 empty descriptions before this join existed).
+      // Keep the defensive-technique projection sourced from the versioned
+      // ontology graph. Empty definitions remain absent rather than receiving
+      // adapter-authored prose.
       if (!record.description) {
         record.description = d3fendDefinitions.get(record.id) || '';
       }
     }
     const d3fend = buildD3fendCatalogDocument(d3fendRecords, {
-      artifactUrl: REMOTE.d3fendTechniques,
+      artifactUrl: REMOTE.d3fendOntology,
       version: String(d3fendVersion),
       snapshotDate,
       checksum: d3fendChecksum,
+      byteLength: Buffer.byteLength(JSON.stringify(d3fendOntology)),
     });
 
     const slugToD3fendId = buildSlugToD3fendIdMap(d3fendRecords);
@@ -166,9 +225,10 @@ export async function fetchMitreData(options = {}) {
       attackCatalogLookup,
       {
         artifactUrl: REMOTE.d3fendMappings,
-        version: snapshotDate,
+        version: D3FEND_RELEASE,
         snapshotDate,
         checksum: mappingsChecksum,
+        byteLength: Buffer.byteLength(JSON.stringify(d3fendMappings)),
       },
     );
     const nistRelationships = buildD3fendToNistRelationships(
@@ -179,14 +239,16 @@ export async function fetchMitreData(options = {}) {
         version: String(d3fendVersion),
         snapshotDate,
         checksum: checksum(JSON.stringify(d3fendOntology)),
+        byteLength: Buffer.byteLength(JSON.stringify(d3fendOntology)),
       },
     );
 
     const attackMap = buildMappingDocument(attackRelationships, {
       artifactUrl: REMOTE.d3fendMappings,
-      version: snapshotDate,
+      version: D3FEND_RELEASE,
       snapshotDate,
       checksum: mappingsChecksum,
+      byteLength: Buffer.byteLength(JSON.stringify(d3fendMappings)),
       provenance: 'MITRE D3FEND inferred ATT&CK technique to defensive technique mappings',
     });
     const nistMap = buildMappingDocument(nistRelationships, {
@@ -194,6 +256,7 @@ export async function fetchMitreData(options = {}) {
       version: String(d3fendVersion),
       snapshotDate,
       checksum: checksum(JSON.stringify(d3fendOntology)),
+      byteLength: Buffer.byteLength(JSON.stringify(d3fendOntology)),
       provenance: 'MITRE D3FEND NIST SP 800-53 Rev. 5 control to defensive technique mappings',
     });
 
@@ -227,6 +290,7 @@ async function main() {
   writeJsonAtomically(COMMITTED.d3fend, result.d3fend);
   writeJsonAtomically(COMMITTED.attackMap, result.attackMap);
   writeJsonAtomically(COMMITTED.nistMap, result.nistMap);
+  if (!result.fallbackMode) updateHydrationManifest(result);
 
   if (result.fallbackMode) {
     console.log(`MITRE fetch fallback: ${result.fallbackMode}`);

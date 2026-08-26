@@ -55,6 +55,12 @@ import {
   SUPPORTED_RECORD_TYPES,
 } from "../src/shared/record-presentation.mjs";
 import {
+  assertionClassForEdge,
+  assertionProfileId,
+  normalizeProfileToken,
+  recordProfileId,
+} from "../src/shared/entity-profiles.mjs";
+import {
   CATALOG_STRUCTURE_IDS,
   catalogStructureProfile,
   structurePathIsAllowed,
@@ -62,6 +68,7 @@ import {
 import { TAXONOMY_CONTRACT } from "../src/shared/taxonomy-contract.mjs";
 import { taxonomyTagsForRecord } from "../src/shared/record-taxonomy.mjs";
 import {
+  connectionEvidenceIdsForEdge,
   publisherStructureMembershipForEdge,
   resolveAtlasStructureRole,
   resolveNativeType,
@@ -144,6 +151,16 @@ const NON_RECORD_NODE_TYPES = new Set([
   "trunk",
 ]);
 const SUPPORTED_RECORD_TYPE_SET = new Set(SUPPORTED_RECORD_TYPES);
+const PUBLISHER_DERIVED_CATALOGS = new Set([
+  "cmmc-2",
+  "cui-policy",
+  "dod-rai",
+  "fedramp-rev5",
+  "fips-199",
+  "fips-200",
+  "nist-800-37",
+  "nist-800-53b",
+]);
 
 export function cciClassificationLabel(value = "") {
   const parts = [...new Set(String(value).split(",").map((part) => part.trim().toLocaleLowerCase()).filter(Boolean))];
@@ -810,8 +827,43 @@ function attachNodeProvenance(node, sourceId, registry) {
   if (structureRole) node.metadata.atlas_structure_role = structureRole;
   node.metadata.native_type = resolveNativeType(node);
   node.metadata.publication_id = resolvePublicationId(node);
+  node.metadata.origin = node.metadata.object_layer === "atlas_structure"
+    ? "atlas_editorial"
+    : PUBLISHER_DERIVED_CATALOGS.has(node.metadata.catalog_id)
+      ? "publisher_derived"
+      : "publisher_normalized";
+  node.entity_kind = "content_record";
+  node.profile_id = recordProfileId(node.node_type);
   node.source_material_id = primaryArtifactId;
   return node;
+}
+
+function attachEntityProfilesAndEvidenceIntegrity(graph, registry) {
+  const edgeByEvidenceId = new Map();
+  for (const edge of graph.edges) {
+    edge.relationship_type = normalizeProfileToken(edge.relationship_type);
+    edge.status = edge.status || "active";
+    edge.authority_class = edge.authority_class || (edge.publication_status === "editorial" ? "atlas_editorial" : "publisher");
+    edge.entity_kind = "assertion";
+    edge.profile_id = assertionProfileId(edge.relationship_type);
+    edge.assertion_class = assertionClassForEdge(edge);
+    for (const evidenceId of connectionEvidenceIdsForEdge(edge)) edgeByEvidenceId.set(evidenceId, edge);
+  }
+  for (const evidence of graph.evidence) {
+    const edge = edgeByEvidenceId.get(evidence.id);
+    const artifact = edge?.source_artifact_id ? registry.byId.get(edge.source_artifact_id) : null;
+    const source = registry.byId.get(evidence.source_id);
+    if (!evidence.checksum) {
+      evidence.checksum = artifact?.checksum || artifact?.sha256 || source?.checksum || source?.sha256 || null;
+    }
+    if (!evidence.checksum) {
+      evidence.integrity_status = evidence.evidence_quality === "editorial" ? "editorial" : "locator_only";
+    }
+    if (!evidence.source_version) {
+      evidence.source_version = artifact?.version || source?.version || `retrieved:${String(evidence.retrieved_at || "unknown").slice(0, 10)}`;
+      evidence.version_basis = artifact?.version || source?.version ? "publisher_or_artifact" : "retrieval_snapshot";
+    }
+  }
 }
 
 function pushEligibleNode(state, registry, node, sourceId) {
@@ -1238,6 +1290,7 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
   }
 
   const edgeId = `edge:${payload.subjectId}`;
+  const relationshipType = normalizeProfileToken(payload.relationshipType);
   const evidenceLocators = [...new Set(
     (payload.evidenceLocators?.length ? payload.evidenceLocators : [payload.locator || `${payload.sourceId}#relationship`])
       .filter(Boolean),
@@ -1284,15 +1337,15 @@ function addPublishedEdge(state, registry, nodeIds, payload) {
     id: edgeId,
     source_node_id: payload.sourceNodeId,
     target_node_id: payload.targetNodeId,
-    relationship_type: payload.relationshipType,
+    relationship_type: relationshipType,
     raw_relationship_type: payload.rawRelationshipType || payload.relationshipType,
     relationship_class:
       payload.relationshipClass ||
-      defaultRelationshipClass(payload.relationshipType),
+      defaultRelationshipClass(relationshipType),
     mapping_model:
       payload.mappingModel ||
       payload.relationshipClass ||
-      defaultRelationshipClass(payload.relationshipType),
+      defaultRelationshipClass(relationshipType),
     source_artifact_id: aliasArtifact(payload.sourceArtifactId || `artifact-${payload.sourceId}`),
     source_locator: payload.locator || `${payload.sourceId}#relationship`,
     status: payload.status || "active",
@@ -3417,6 +3470,7 @@ export function buildFrameworkData() {
     evidence: edgeState.evidence,
     findings,
   };
+  attachEntityProfilesAndEvidenceIntegrity(graph, registry);
   validateRecordPresentation(graph.nodes);
   const errors = [
     ...validateGraphArtifacts(graph),

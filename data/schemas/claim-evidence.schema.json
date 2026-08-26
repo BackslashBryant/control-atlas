@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://control-atlas.local/schemas/claim-evidence.schema.json",
+  "title": "Control Atlas field-level claim evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["entity_id", "field_path", "origin", "evidence_refs", "review_status"],
+  "properties": {
+    "entity_id": { "type": "string", "minLength": 1 },
+    "field_path": { "type": "string", "pattern": "^/" },
+    "origin": { "enum": ["publisher_exact", "publisher_normalized", "publisher_derived", "atlas_editorial", "atlas_inferred"] },
+    "evidence_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "transformation": { "type": "string", "minLength": 1 },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "review_status": { "enum": ["reviewed", "pending", "rejected"] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "origin": { "const": "atlas_inferred" } } },
+      "then": { "required": ["confidence", "transformation"] },
+      "else": { "not": { "required": ["confidence"] } }
+    },
+    {
+      "if": { "properties": { "origin": { "enum": ["publisher_exact", "publisher_normalized", "publisher_derived"] } } },
+      "then": { "properties": { "evidence_refs": { "minItems": 1 } } }
+    }
+  ]
+}

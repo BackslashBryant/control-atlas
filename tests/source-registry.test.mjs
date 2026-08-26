@@ -74,9 +74,9 @@ test('reviewed publication identity stays distinct from parser artifacts', () =>
   );
 
   const d3fend = byId.get('mitre-d3fend-ontology');
-  assert.equal(d3fend.version, '1.4.0');
+  assert.equal(d3fend.version, '1.5.0');
   assert.equal(d3fend.catalog_browse_url, 'https://d3fend.mitre.org/');
-  assert.equal(d3fend.artifact_url, 'https://d3fend.mitre.org/api/technique/all.json');
+  assert.equal(d3fend.artifact_url, 'https://d3fend.mitre.org/ontologies/d3fend.json');
 
   const assessment = byId.get('nist-800-53a-assessment-procedures');
   assert.equal(assessment.version, 'Revision 5, Release 5.2.0');

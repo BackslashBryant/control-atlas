@@ -22,7 +22,10 @@
         "identity_kind": "reference",
         "supplemental_role": "automation",
         "note": "Open XCCDF/SCAP/OVAL + STIG profiles"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-cyber-mil-stig-compilations",
@@ -44,7 +47,10 @@
         "identity_kind": "reference",
         "supplemental_role": "reference_only",
         "note": "Official quarterly compilation index (observation page)"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-cyber-mil-stig-downloads",
@@ -66,7 +72,10 @@
         "identity_kind": "reference",
         "supplemental_role": "reference_only",
         "note": "Official individual STIG downloads index (observation page)"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-cyber-mil-stig-gpo",
@@ -88,7 +97,10 @@
         "identity_kind": "reference",
         "supplemental_role": "reference_only",
         "note": "Official Group Policy Object packages index (observation page)"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-cybersecdef-stig",
@@ -110,7 +122,10 @@
         "identity_kind": "reference",
         "supplemental_role": "historical",
         "note": "Historical XSLT STIG transforms; unmaintained since 2017"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-heimdall-tools",
@@ -132,7 +147,10 @@
         "identity_kind": "reference",
         "supplemental_role": "automation",
         "note": "Security results viewer/comparison (HDF/OHDF)"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-microsoft-powerstig",
@@ -154,7 +172,10 @@
         "identity_kind": "reference",
         "supplemental_role": "automation",
         "note": "PowerShell DSC STIG automation + parsed StigData XML"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-mitre-cis-cci-mappings",
@@ -176,7 +197,10 @@
         "identity_kind": "reference",
         "supplemental_role": "mapping",
         "note": "CIS<->CCI<->800-53 JSON mappings; new/immature"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-mitre-saf",
@@ -198,7 +222,10 @@
         "identity_kind": "reference",
         "supplemental_role": "automation",
         "note": "STIG result conversion/validation tooling (XCCDF/CKL/OHDF)"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-nist-informative-references",
@@ -220,7 +247,10 @@
         "identity_kind": "reference",
         "supplemental_role": "reconciliation",
         "note": "CSF informative references (also embedded in the CSF v2.0 OSCAL catalog artifact)"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-nuwcdivnpt-github-org",
@@ -242,7 +272,10 @@
         "identity_kind": "reference",
         "supplemental_role": "reference_only",
         "note": "Publisher org for STIG Manager"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-nuwcdivnpt-stig-manager",
@@ -264,7 +297,10 @@
         "identity_kind": "reference",
         "supplemental_role": "automation",
         "note": "STIG assessment management API/client"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-stigviewer-catalog",
@@ -286,7 +322,10 @@
         "identity_kind": "reference",
         "supplemental_role": "reference_only",
         "note": "Third-party STIG browse/reconciliation feed"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-stigviewer-clkb-api",
@@ -308,7 +347,10 @@
         "identity_kind": "reference",
         "supplemental_role": "reference_only",
         "note": "CKLB checklist format reference"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-vulcan-framework",
@@ -330,7 +372,10 @@
         "identity_kind": "reference",
         "supplemental_role": "assessment",
         "note": "STIG authoring workflow from SRGs"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-32-cfr-170",
@@ -356,7 +401,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:32-CFR-170"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-32-cfr-2002",
@@ -382,7 +430,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:32-CFR-2002"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-dfars-252-204-7012",
@@ -409,7 +460,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:DFARS-252.204-7012"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-dfars-252-204-7021",
@@ -436,7 +490,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:DFARS-252.204-7021"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-dod-zt-strategy",
@@ -462,7 +519,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:DOD-ZT-STRATEGY"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-dodd-5144-02",
@@ -488,7 +548,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:DODD-5144.02"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-dodi-8500-01",
@@ -514,7 +577,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:DODI-8500.01"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-eo-13556",
@@ -540,7 +606,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:EO-13556"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-eo-13800",
@@ -566,7 +635,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:EO-13800"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-omb-circular-a-130",
@@ -592,7 +664,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:OMB-CIRCULAR-A-130"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-omb-m-24-15",
@@ -618,7 +693,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:OMB-M-24-15"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-omb-m-26-05",
@@ -642,7 +720,10 @@
       "metadata": {
         "identity_kind": "reference",
         "note": "Current policy evidence that M-22-18 and M-23-16 were rescinded and agencies may choose SSDF resources."
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-pl-116-92-sec-1648",
@@ -668,7 +749,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:PL-116-92-SEC-1648"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-usc-40-11331",
@@ -694,7 +778,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:USC-40-11331"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-usc-41-1303",
@@ -720,7 +807,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:USC-41-1303"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-usc-44-3504",
@@ -746,7 +836,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:USC-44-3504"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-usc-44-3554",
@@ -772,7 +865,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:USC-44-3554"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-usc-44-3608",
@@ -798,7 +894,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:USC-44-3608"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "authority-usc-44-3614",
@@ -824,7 +923,10 @@
       "metadata": {
         "identity_kind": "publication",
         "authority_node_id": "authority:USC-44-3614"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "community-cci-research",
@@ -852,7 +954,10 @@
         ],
         "parser": "community-research-register",
         "identity_kind": "reference"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "control-atlas-structure",
@@ -877,7 +982,10 @@
       "metadata": {
         "identity_kind": "editorial",
         "note": "The Cybersecurity trunk, its nine limbs, and every catalog->limb attachment. Never publisher-declared; always badged 'Control Atlas structure'."
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.editorial",
+      "origin": "atlas_editorial"
     },
     {
       "id": "cyber-mil-stig-compilations",
@@ -923,7 +1031,10 @@
         },
         "identity_kind": "supplemental",
         "canonical_publication_id": "disa-stig-library"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "cyber-mil-stig-downloads",
@@ -966,7 +1077,10 @@
         },
         "identity_kind": "supplemental",
         "canonical_publication_id": "disa-stig-library"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "cyber-mil-stig-gpo",
@@ -1006,7 +1120,10 @@
         },
         "identity_kind": "supplemental",
         "canonical_publication_id": "disa-stig-library"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "disa-cci-list",
@@ -1036,7 +1153,10 @@
         ],
         "parser": "cci-xml",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "disa-cci-nist-references",
@@ -1068,7 +1188,10 @@
         "parser": "cci-xml",
         "identity_kind": "supplemental",
         "canonical_publication_id": "disa-cci-list"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "disa-srg-library",
@@ -1189,7 +1312,10 @@
           }
         ],
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "disa-stig-library",
@@ -1250,7 +1376,10 @@
           }
         ],
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "disa-stig-srg-cci-references",
@@ -1288,7 +1417,10 @@
         },
         "identity_kind": "supplemental",
         "canonical_publication_id": "disa-stig-library"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-cmmc-rule",
@@ -1319,7 +1451,10 @@
         ],
         "parser": "ecfr-xml",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-rai-toolkit",
@@ -1349,7 +1484,10 @@
         "version_unknown_reason": "The current publisher landing page and operational toolkit do not expose a release version.",
         "provenance_note": "The current CDAO Responsible AI resource page links to the AI Assurance Toolkit through the CDAO-branded Tradewinds page, which identifies the AcqBot application as the operational toolkit. The publisher landing page and application locator are retained separately; the current publisher surfaces do not expose a release number.",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-capabilities",
@@ -1379,7 +1517,10 @@
         "version_unknown_reason": "The publisher PDF does not state a release version.",
         "identity_kind": "supplemental",
         "canonical_publication_id": "dod-zt-reference-architecture-v2"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-execution-roadmap",
@@ -1408,7 +1549,10 @@
         "parser": "pdfplumber-located-lines",
         "identity_kind": "supplemental",
         "canonical_publication_id": "dod-zt-reference-architecture-v2"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-newsletter-2024-11",
@@ -1438,7 +1582,10 @@
         "identity_kind": "supplemental",
         "canonical_publication_id": "dod-zt-reference-architecture-v2"
       },
-      "format": "pdf"
+      "format": "pdf",
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-operational-technology",
@@ -1468,7 +1615,10 @@
         "identity_kind": "supplemental",
         "canonical_publication_id": "dod-zt-reference-architecture-v2"
       },
-      "format": "pdf"
+      "format": "pdf",
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-overlays-2024",
@@ -1499,7 +1649,10 @@
         "successor_not_identified": true,
         "identity_kind": "supplemental",
         "canonical_publication_id": "dod-zt-reference-architecture-v2"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-reference-architecture-v2",
@@ -1529,7 +1682,10 @@
         ],
         "parser": "pdfplumber-located-lines",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-strategy",
@@ -1558,7 +1714,10 @@
         "parser": "pdfplumber-located-lines",
         "identity_kind": "supplemental",
         "canonical_publication_id": "dod-zt-reference-architecture-v2"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-strategy-placemats",
@@ -1589,7 +1748,10 @@
         "identity_kind": "supplemental",
         "canonical_publication_id": "dod-zt-reference-architecture-v2"
       },
-      "format": "pdf"
+      "format": "pdf",
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "fedramp-2026-rules",
@@ -1624,7 +1786,10 @@
         "source_repository": "https://github.com/FedRAMP/rules",
         "identity_kind": "supplemental",
         "canonical_publication_id": "fedramp-rev5"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "fedramp-rev5",
@@ -1639,7 +1804,7 @@
         "OMB M-24-15 (legacy Rev. 5 transition)"
       ],
       "license_or_use": "GSA FedRAMP Open Source License / Public Domain",
-      "lifecycle_status": "active",
+      "lifecycle_status": "historical",
       "eligibility_status": "eligible",
       "access_status": "public",
       "version": "Legacy Rev5 security controls baseline workbook",
@@ -1657,7 +1822,10 @@
         "parser": "fedramp-legacy-baseline-workbook",
         "transition_note": "The workbook is an official legacy reference. Use the Consolidated Rules for 2026 and rule-specific effective dates for current decisions.",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "isoo-cui-regulation",
@@ -1688,7 +1856,10 @@
         ],
         "parser": "ecfr-xml",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "microsoft-zero-trust-maturity-questionnaire-v1-1",
@@ -1716,7 +1887,10 @@
         ],
         "parser": "zero-trust-questionnaire-xlsx",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "mitre-attack-enterprise",
@@ -1731,10 +1905,10 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "2026-08-05",
-      "retrieved_at": "2026-08-13",
+      "version": "19.2",
+      "retrieved_at": "2026-08-25",
       "retrieval_method": "direct_file_import",
-      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
+      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-19.2.json",
       "catalog_browse_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
       "federal_referenced_by": [],
       "graph_eligible": true,
@@ -1744,7 +1918,10 @@
         ],
         "parser": "stix-json",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "mitre-attack-ics",
@@ -1759,10 +1936,10 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "2026-08-05",
-      "retrieved_at": "2026-08-13",
+      "version": "19.2",
+      "retrieved_at": "2026-08-25",
       "retrieval_method": "direct_file_import",
-      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
+      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/ics-attack/ics-attack-19.2.json",
       "catalog_browse_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
       "federal_referenced_by": [],
       "graph_eligible": true,
@@ -1772,7 +1949,10 @@
         ],
         "parser": "stix-json",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "mitre-cis-cci-mappings",
@@ -1801,7 +1981,10 @@
         "parser": "github-json",
         "identity_kind": "mapping",
         "canonical_publication_id": "disa-cci-list"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "mitre-d3fend-mappings",
@@ -1816,8 +1999,8 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "2026-08-13",
-      "retrieved_at": "2026-08-13",
+      "version": "1.5.0",
+      "retrieved_at": "2026-08-25",
       "retrieval_method": "api_import",
       "artifact_url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
       "catalog_browse_url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
@@ -1832,7 +2015,10 @@
         "parser": "json-ld",
         "identity_kind": "mapping",
         "canonical_publication_id": "mitre-d3fend-ontology"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "mitre-d3fend-ontology",
@@ -1847,10 +2033,10 @@
       "lifecycle_status": "active",
       "eligibility_status": "eligible",
       "access_status": "public",
-      "version": "1.4.0",
-      "retrieved_at": "2026-06-19",
+      "version": "1.5.0",
+      "retrieved_at": "2026-08-25",
       "retrieval_method": "api_import",
-      "artifact_url": "https://d3fend.mitre.org/api/technique/all.json",
+      "artifact_url": "https://d3fend.mitre.org/ontologies/d3fend.json",
       "catalog_browse_url": "https://d3fend.mitre.org/",
       "federal_referenced_by": [],
       "graph_eligible": true,
@@ -1860,7 +2046,10 @@
         ],
         "parser": "json-ld",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nara-cui-registry",
@@ -1892,7 +2081,10 @@
         "parser": "nara-cui-registry-html",
         "identity_kind": "supplemental",
         "canonical_publication_id": "isoo-cui-regulation"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-171",
@@ -1922,7 +2114,10 @@
         "frameworks": [
           "nist-800-171"
         ]
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-171-oscal-mappings",
@@ -1954,7 +2149,10 @@
         "parser": "oscal-json",
         "identity_kind": "supplemental",
         "canonical_publication_id": "nist-800-171"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-171-rev2",
@@ -1985,7 +2183,10 @@
         ],
         "parser": "csv",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-172-rev3",
@@ -2013,7 +2214,10 @@
         ],
         "parser": "oscal-json",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-37-rev2",
@@ -2043,7 +2247,10 @@
         ],
         "parser": "pdf-extract",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-53",
@@ -2073,7 +2280,10 @@
         "frameworks": [
           "nist-800-53"
         ]
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-53-rev4-rev5-crosswalk",
@@ -2113,7 +2323,10 @@
         ],
         "identity_kind": "mapping",
         "canonical_publication_id": "disa-cci-list"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-53a-assessment-procedures",
@@ -2144,7 +2357,10 @@
         ],
         "parser": "oscal-assessment-procedures",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-53b-baselines",
@@ -2176,7 +2392,10 @@
         ],
         "parser": "oscal-profile",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-ai-rmf-playbook",
@@ -2204,7 +2423,10 @@
         ],
         "parser": "json",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-csf-2",
@@ -2233,7 +2455,10 @@
         "frameworks": [
           "csf-2"
         ]
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-csf-53-supplemental",
@@ -2266,7 +2491,10 @@
         "parser": "olir-xlsx",
         "identity_kind": "mapping",
         "canonical_publication_id": "nist-800-53"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-csf11-csf20-crosswalk",
@@ -2298,7 +2526,10 @@
         "parser": "olir-xlsx",
         "identity_kind": "mapping",
         "canonical_publication_id": "nist-csf-2"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-fips-199",
@@ -2328,7 +2559,10 @@
         ],
         "parser": "pdf-extract",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-fips-200",
@@ -2358,7 +2592,10 @@
         ],
         "parser": "pdf-extract",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-iot-device-cybersecurity-requirement-catalogs",
@@ -2386,7 +2623,10 @@
         ],
         "parser": "nist-iot-requirement-xlsx",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-iot-requirements-80053-mapping-draft",
@@ -2415,7 +2655,10 @@
         "parser": "nist-iot-requirement-xlsx",
         "identity_kind": "mapping",
         "canonical_publication_id": "nist-iot-device-cybersecurity-requirement-catalogs"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-iot-requirements-csf11-mapping-draft",
@@ -2444,7 +2687,10 @@
         "parser": "nist-iot-requirement-xlsx",
         "identity_kind": "mapping",
         "canonical_publication_id": "nist-iot-device-cybersecurity-requirement-catalogs"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-mobile-threat-catalogue",
@@ -2472,7 +2718,10 @@
         ],
         "parser": "nist-mobile-threat-json",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-mobile-threat-catalogue-cve-list",
@@ -2502,7 +2751,10 @@
         "identity_kind": "supplemental",
         "canonical_publication_id": "nist-mobile-threat-catalogue"
       },
-      "format": "csv"
+      "format": "csv",
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-olir-csf2-to-sp800-171",
@@ -2535,7 +2787,10 @@
         "parser": "olir-xlsx",
         "identity_kind": "mapping",
         "canonical_publication_id": "nist-csf-2"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-olir-csf2-to-sp800-53",
@@ -2568,7 +2823,10 @@
         "parser": "olir-xlsx",
         "identity_kind": "mapping",
         "canonical_publication_id": "nist-csf-2"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-oscal",
@@ -2602,7 +2860,10 @@
           "nist-ssdf"
         ],
         "parser": "oscal-json"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.ingestion",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-sp-1800-35",
@@ -2630,7 +2891,10 @@
         ],
         "parser": "explicit-html-markup",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-sp-1800-35-critical-software-mappings",
@@ -2659,7 +2923,10 @@
         "parser": "nist-zero-trust-mapping-xlsx",
         "identity_kind": "mapping",
         "canonical_publication_id": "nist-sp-1800-35"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-sp-1800-35-csf11-mappings",
@@ -2688,7 +2955,10 @@
         "parser": "nist-zero-trust-mapping-xlsx",
         "identity_kind": "mapping",
         "canonical_publication_id": "nist-sp-1800-35"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-sp-1800-35-csf2-mappings",
@@ -2717,7 +2987,10 @@
         "parser": "nist-zero-trust-mapping-xlsx",
         "identity_kind": "mapping",
         "canonical_publication_id": "nist-sp-1800-35"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-sp-1800-35-sp80053-mappings",
@@ -2746,7 +3019,10 @@
         "parser": "nist-zero-trust-mapping-xlsx",
         "identity_kind": "mapping",
         "canonical_publication_id": "nist-sp-1800-35"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-sp-800-207",
@@ -2774,7 +3050,10 @@
         ],
         "parser": "pdfplumber-located-lines",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-sp-800-207a",
@@ -2802,7 +3081,10 @@
         ],
         "parser": "pdfplumber-located-lines",
         "identity_kind": "publication"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-ssdf",
@@ -2829,7 +3111,10 @@
         "frameworks": [
           "nist-ssdf"
         ]
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-ssdf-oscal",
@@ -2857,7 +3142,10 @@
           "nist-ssdf"
         ],
         "parser": "oscal-json"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.ingestion",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nuwcdivnpt-github-org",
@@ -2893,7 +3181,10 @@
           "fallbacks": []
         },
         "identity_kind": "reference"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nuwcdivnpt-stig-manager",
@@ -2930,7 +3221,10 @@
           "fallbacks": []
         },
         "identity_kind": "reference"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "stigviewer-catalog",
@@ -2967,7 +3261,10 @@
           "fallbacks": []
         },
         "identity_kind": "reference"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     },
     {
       "id": "stigviewer-clkb-api",
@@ -3004,7 +3301,10 @@
           "fallbacks": []
         },
         "identity_kind": "reference"
-      }
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "origin": "publisher_normalized"
     }
   ],
   "artifacts": [
@@ -3030,7 +3330,10 @@
       "license_or_use": "U.S. Government Work / Public Domain",
       "metadata": {
         "version_unknown_reason": "The current publisher landing page does not expose a release version."
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-control-atlas-structure",
@@ -3055,7 +3358,10 @@
       "metadata": {
         "pipeline_scope": "governance",
         "pipeline_scope_reason": "Product-authored organizing structure is verified as governance evidence and is not a publisher catalog source."
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.json",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-disa-cci-list",
@@ -3076,7 +3382,10 @@
       "parser_version": "1.0.0",
       "record_count": 5137,
       "relationship_count": 3838,
-      "license_or_use": "DISA STIG / CCI Terms of Use"
+      "license_or_use": "DISA STIG / CCI Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_xml",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-disa-compilation-zip",
@@ -3097,7 +3406,10 @@
       "parser_version": "1.0.0",
       "record_count": 0,
       "relationship_count": 0,
-      "license_or_use": "U.S. Government public domain"
+      "license_or_use": "U.S. Government public domain",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.other",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-disa-srg-library",
@@ -3118,7 +3430,10 @@
       "parser_version": "1.0.0",
       "record_count": 2542,
       "relationship_count": 2541,
-      "license_or_use": "DISA STIG Terms of Use"
+      "license_or_use": "DISA STIG Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.xccdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-disa-stig-library",
@@ -3139,7 +3454,10 @@
       "parser_version": "1.0.0",
       "record_count": 17376,
       "relationship_count": 17375,
-      "license_or_use": "DISA STIG Terms of Use"
+      "license_or_use": "DISA STIG Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.xccdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-disa-stig-srg-cci-references",
@@ -3160,7 +3478,10 @@
       "parser_version": "1.0.0",
       "record_count": 0,
       "relationship_count": 28412,
-      "license_or_use": "DISA STIG Terms of Use"
+      "license_or_use": "DISA STIG Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.xccdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-dod-cmmc-rule",
@@ -3181,7 +3502,10 @@
       "parser_version": "1.0.0",
       "record_count": 4,
       "relationship_count": 115,
-      "license_or_use": "32 CFR Part 170 CMMC Program Rule Public Domain"
+      "license_or_use": "32 CFR Part 170 CMMC Program Rule Public Domain",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.xml",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-dod-rai-toolkit",
@@ -3205,7 +3529,10 @@
       "license_or_use": "CDAO public resource; no separate license stated",
       "metadata": {
         "version_unknown_reason": "The current operational toolkit does not expose a release version."
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-dod-zt-capabilities",
@@ -3229,7 +3556,10 @@
       "license_or_use": "Official DoD CIO public release",
       "metadata": {
         "version_unknown_reason": "The publisher PDF does not state a release version."
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-dod-zt-execution-roadmap",
@@ -3250,7 +3580,10 @@
       "parser_version": "1.0.0",
       "record_count": 1,
       "relationship_count": 0,
-      "license_or_use": "Official DoD CIO public release"
+      "license_or_use": "Official DoD CIO public release",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-dod-zt-newsletter-2024-11",
@@ -3271,7 +3604,10 @@
       "parser_version": "1.0.0",
       "record_count": 0,
       "relationship_count": 0,
-      "license_or_use": "Official DoD CIO public release"
+      "license_or_use": "Official DoD CIO public release",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-dod-zt-operational-technology",
@@ -3292,7 +3628,10 @@
       "parser_version": "1.0.0",
       "record_count": 106,
       "relationship_count": 0,
-      "license_or_use": "Official DoD CIO public release"
+      "license_or_use": "Official DoD CIO public release",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-dod-zt-overlays-2024",
@@ -3313,7 +3652,10 @@
       "parser_version": "1.0.0",
       "record_count": 1,
       "relationship_count": 1903,
-      "license_or_use": "Official DoD CIO public release"
+      "license_or_use": "Official DoD CIO public release",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-dod-zt-reference-architecture-v2",
@@ -3334,7 +3676,10 @@
       "parser_version": "1.0.0",
       "record_count": 13,
       "relationship_count": 0,
-      "license_or_use": "Official DoD CIO public release"
+      "license_or_use": "Official DoD CIO public release",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-dod-zt-strategy",
@@ -3355,7 +3700,10 @@
       "parser_version": "1.0.0",
       "record_count": 1,
       "relationship_count": 0,
-      "license_or_use": "Official DoD CIO public release"
+      "license_or_use": "Official DoD CIO public release",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-dod-zt-strategy-placemats",
@@ -3379,7 +3727,10 @@
       "license_or_use": "Official DoD CIO public release",
       "metadata": {
         "version_unknown_reason": "The publisher placemat PDF does not state a release version."
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-fedramp-2026-rules",
@@ -3400,18 +3751,21 @@
       "parser_version": "1.0.0",
       "record_count": 5,
       "relationship_count": 0,
-      "license_or_use": "Official FedRAMP public source data; FedRAMP names and marks remain GSA property"
+      "license_or_use": "Official FedRAMP public source data; FedRAMP names and marks remain GSA property",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.json",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-fedramp-rev5",
       "publication_source_id": "fedramp-rev5",
       "name": "FedRAMP Rev. 5 Baselines Artifact",
       "display_name": "FedRAMP Rev. 5 (legacy transition) Artifact",
-      "source_role": "primary_data",
+      "source_role": "historical",
       "authority_class": "government_mapping",
       "format": "spreadsheet",
       "version": "Legacy Rev5 security controls baseline workbook",
-      "lifecycle_status": "active",
+      "lifecycle_status": "historical",
       "retrieval_method": "direct_file_import",
       "retrieved_at": "2026-08-07",
       "artifact_url": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx",
@@ -3421,7 +3775,10 @@
       "parser_version": "1.0.0",
       "record_count": 6,
       "relationship_count": 1045,
-      "license_or_use": "GSA FedRAMP Open Source License / Public Domain"
+      "license_or_use": "GSA FedRAMP Open Source License / Public Domain",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-isoo-cui-regulation",
@@ -3442,7 +3799,10 @@
       "parser_version": "1.0.0",
       "record_count": 2,
       "relationship_count": 1,
-      "license_or_use": "eCFR Public Domain"
+      "license_or_use": "eCFR Public Domain",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.xml",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-microsoft-zero-trust-maturity-questionnaire-v1-1",
@@ -3463,7 +3823,10 @@
       "parser_version": "1.0.0",
       "record_count": 62,
       "relationship_count": 0,
-      "license_or_use": "Microsoft Download Center terms"
+      "license_or_use": "Microsoft Download Center terms",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_normalized"
     },
     {
       "id": "artifact-mitre-attack-enterprise",
@@ -3473,18 +3836,24 @@
       "source_role": "primary_data",
       "authority_class": "publisher",
       "format": "stix",
-      "version": "2026-08-05",
+      "version": "19.2",
       "lifecycle_status": "active",
       "retrieval_method": "direct_file_import",
-      "retrieved_at": "2026-08-13",
-      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
-      "byte_length": 53835637,
-      "sha256": "sha256:dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4",
+      "retrieved_at": "2026-08-25",
+      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-19.2.json",
+      "byte_length": 38961746,
+      "sha256": "sha256:fbe2a38a817899d4f3cf5f6ee5f29b332448ad6ebac0d3eee519e774778f49bc",
       "parser": "stix-json",
       "parser_version": "1.0.0",
-      "record_count": 697,
-      "relationship_count": 712,
-      "license_or_use": "MITRE ATT&CK Terms of Use"
+      "record_count": 858,
+      "relationship_count": 0,
+      "license_or_use": "MITRE ATT&CK Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.stix",
+      "origin": "publisher_exact",
+      "metadata": {
+        "checksum_basis": "canonical_json"
+      }
     },
     {
       "id": "artifact-mitre-attack-ics",
@@ -3494,18 +3863,24 @@
       "source_role": "primary_data",
       "authority_class": "publisher",
       "format": "stix",
-      "version": "2026-08-05",
+      "version": "19.2",
       "lifecycle_status": "active",
       "retrieval_method": "direct_file_import",
-      "retrieved_at": "2026-08-13",
-      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
-      "byte_length": 4057891,
-      "sha256": "sha256:08b83d2cea6b6d6752468ef0e62e2ab2a53c9443ef72c439ecccb07ab9e89da9",
+      "retrieved_at": "2026-08-25",
+      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/ics-attack/ics-attack-19.2.json",
+      "byte_length": 2854063,
+      "sha256": "sha256:348a4e9a54dd9011329f92e0fd20ba72cae2fec76f0e2790b1e98f0de8f139bf",
       "parser": "stix-json",
       "parser_version": "1.0.0",
-      "record_count": 97,
-      "relationship_count": 109,
-      "license_or_use": "MITRE ATT&CK Terms of Use"
+      "record_count": 106,
+      "relationship_count": 0,
+      "license_or_use": "MITRE ATT&CK Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.stix",
+      "origin": "publisher_exact",
+      "metadata": {
+        "checksum_basis": "canonical_json"
+      }
     },
     {
       "id": "artifact-mitre-d3fend-mappings",
@@ -3515,18 +3890,24 @@
       "source_role": "mapping",
       "authority_class": "publisher",
       "format": "json_ld",
-      "version": "2026-08-13",
+      "version": "1.5.0",
       "lifecycle_status": "active",
-      "retrieval_method": "api_import",
-      "retrieved_at": "2026-08-13",
+      "retrieval_method": "direct_file_import",
+      "retrieved_at": "2026-08-25",
       "artifact_url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
-      "byte_length": 59995026,
-      "sha256": "sha256:684f0a1872868a64b9046e66111e28cb9f0dc46c08e8f044b803fd8b493260ba",
+      "byte_length": 38722880,
+      "sha256": "sha256:3f103c5703fdfc8c2e658d8b81fb22b1cf7ef281d83ee324f4a3a176076f5d37",
       "parser": "d3fend-json-ld",
       "parser_version": "1.0.0",
-      "record_count": 16164,
-      "relationship_count": 3796,
-      "license_or_use": "MITRE D3FEND Terms of Use"
+      "record_count": 0,
+      "relationship_count": 3927,
+      "license_or_use": "MITRE D3FEND Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.json_ld",
+      "origin": "publisher_exact",
+      "metadata": {
+        "checksum_basis": "canonical_json"
+      }
     },
     {
       "id": "artifact-mitre-d3fend-ontology",
@@ -3536,18 +3917,24 @@
       "source_role": "primary_data",
       "authority_class": "publisher",
       "format": "json_ld",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "lifecycle_status": "active",
-      "retrieval_method": "api_import",
-      "retrieved_at": "2026-08-07",
-      "artifact_url": "https://d3fend.mitre.org/api/technique/all.json",
-      "byte_length": 36638,
-      "sha256": "sha256:34e2f5a360027a63e3d4bade8eaff783933fd4f2cb0d88cc4c1d7f970a85c4ff",
+      "retrieval_method": "direct_file_import",
+      "retrieved_at": "2026-08-25",
+      "artifact_url": "https://d3fend.mitre.org/ontologies/d3fend.json",
+      "byte_length": 3931695,
+      "sha256": "sha256:11e6ce26ab2bef1500ca9747a74c05ec98c0c554658c09d26bfbfa752d278a45",
       "parser": "d3fend-json-ld",
       "parser_version": "1.0.0",
       "record_count": 271,
-      "relationship_count": 278,
-      "license_or_use": "MITRE D3FEND Terms of Use"
+      "relationship_count": 0,
+      "license_or_use": "MITRE D3FEND Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.json_ld",
+      "origin": "publisher_exact",
+      "metadata": {
+        "checksum_basis": "canonical_json"
+      }
     },
     {
       "id": "artifact-nara-cui-registry",
@@ -3568,7 +3955,10 @@
       "parser_version": "1.0.0",
       "record_count": 126,
       "relationship_count": 126,
-      "license_or_use": "National Archives Public Domain"
+      "license_or_use": "National Archives Public Domain",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-800-171-oscal-mappings",
@@ -3590,7 +3980,10 @@
       "parser_version": "1.5.0",
       "record_count": 130,
       "relationship_count": 305,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-800-171-rev2",
@@ -3611,7 +4004,10 @@
       "parser_version": "1.0.0",
       "record_count": 117,
       "relationship_count": 125,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.csv",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-800-172-rev3",
@@ -3632,7 +4028,10 @@
       "parser_version": "1.5.0",
       "record_count": 115,
       "relationship_count": 133,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-800-37-rev2",
@@ -3653,7 +4052,10 @@
       "parser_version": "1.0.0",
       "record_count": 8,
       "relationship_count": 14,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-800-53",
@@ -3674,7 +4076,10 @@
       "parser_version": "1.5.0",
       "record_count": 1196,
       "relationship_count": 3244,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-800-53-rev4-rev5-crosswalk",
@@ -3695,7 +4100,10 @@
       "parser_version": "1.0.0",
       "record_count": 2,
       "relationship_count": 1506,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-800-53b-baselines",
@@ -3716,7 +4124,10 @@
       "parser_version": "1.5.0",
       "record_count": 5,
       "relationship_count": 902,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-ai-rmf-playbook",
@@ -3737,7 +4148,10 @@
       "parser_version": "1.0.0",
       "record_count": 72,
       "relationship_count": 91,
-      "license_or_use": "NIST AI Resource Center Terms of Use"
+      "license_or_use": "NIST AI Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.json",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-csf-2",
@@ -3758,7 +4172,10 @@
       "parser_version": "1.5.0",
       "record_count": 219,
       "relationship_count": 134,
-      "license_or_use": "NIST Terms of Use"
+      "license_or_use": "NIST Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-csf-53-supplemental",
@@ -3779,7 +4196,10 @@
       "parser_version": "1.0.0",
       "record_count": 2,
       "relationship_count": 0,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-csf-reference-tool-export",
@@ -3800,7 +4220,10 @@
       "parser_version": "1.0.0",
       "record_count": 106,
       "relationship_count": 0,
-      "license_or_use": "NIST Terms of Use"
+      "license_or_use": "NIST Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-csf11-csf20-crosswalk",
@@ -3821,7 +4244,10 @@
       "parser_version": "1.0.0",
       "record_count": 0,
       "relationship_count": 0,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-fips-199",
@@ -3842,7 +4268,10 @@
       "parser_version": "1.0.0",
       "record_count": 4,
       "relationship_count": 3,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-fips-200",
@@ -3863,7 +4292,10 @@
       "parser_version": "1.0.0",
       "record_count": 18,
       "relationship_count": 17,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-iot-requirements-80053-mapping-draft",
@@ -3884,7 +4316,10 @@
       "parser_version": "1.0.0",
       "record_count": 489,
       "relationship_count": 450,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-iot-requirements-csf11-mapping-draft",
@@ -3905,7 +4340,10 @@
       "parser_version": "1.0.0",
       "record_count": 489,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-mobile-threat-catalogue",
@@ -3926,7 +4364,10 @@
       "parser_version": "1.0.0",
       "record_count": 268,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.json",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-mobile-threat-catalogue-cve-list",
@@ -3947,7 +4388,10 @@
       "parser_version": "1.0.0",
       "record_count": 249,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.csv",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-olir-csf2-to-sp800-171",
@@ -3968,7 +4412,10 @@
       "parser_version": "1.0.0",
       "record_count": 0,
       "relationship_count": 313,
-      "license_or_use": "NIST CSRC OLIR Program License-free Public Domain"
+      "license_or_use": "NIST CSRC OLIR Program License-free Public Domain",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-olir-csf2-to-sp800-53",
@@ -3989,7 +4436,10 @@
       "parser_version": "1.0.0",
       "record_count": 0,
       "relationship_count": 746,
-      "license_or_use": "NIST CSRC OLIR Program License-free Public Domain"
+      "license_or_use": "NIST CSRC OLIR Program License-free Public Domain",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35",
@@ -4010,7 +4460,10 @@
       "parser_version": "1.0.0",
       "record_count": 1,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-critical-software-mappings",
@@ -4031,7 +4484,10 @@
       "parser_version": "1.0.0",
       "record_count": 386,
       "relationship_count": 386,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-csf11-mappings",
@@ -4052,7 +4508,10 @@
       "parser_version": "1.0.0",
       "record_count": 387,
       "relationship_count": 387,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-csf2-mappings",
@@ -4073,7 +4532,10 @@
       "parser_version": "1.0.0",
       "record_count": 673,
       "relationship_count": 673,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b1-architecture",
@@ -4094,7 +4556,10 @@
       "parser_version": "1.0.0",
       "record_count": 11,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b1-guide",
@@ -4115,7 +4580,10 @@
       "parser_version": "1.0.0",
       "record_count": 63,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b2-architecture",
@@ -4136,7 +4604,10 @@
       "parser_version": "1.0.0",
       "record_count": 9,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b2-guide",
@@ -4157,7 +4628,10 @@
       "parser_version": "1.0.0",
       "record_count": 18,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b3-architecture",
@@ -4178,7 +4652,10 @@
       "parser_version": "1.0.0",
       "record_count": 1,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b3-guide",
@@ -4199,7 +4676,10 @@
       "parser_version": "1.0.0",
       "record_count": 1,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b4-architecture",
@@ -4220,7 +4700,10 @@
       "parser_version": "1.0.0",
       "record_count": 10,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b4-guide",
@@ -4241,7 +4724,10 @@
       "parser_version": "1.0.0",
       "record_count": 18,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b5-architecture",
@@ -4262,7 +4748,10 @@
       "parser_version": "1.0.0",
       "record_count": 12,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b5-guide",
@@ -4283,7 +4772,10 @@
       "parser_version": "1.0.0",
       "record_count": 20,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b6-architecture",
@@ -4304,7 +4796,10 @@
       "parser_version": "1.0.0",
       "record_count": 8,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e1b6-guide",
@@ -4325,7 +4820,10 @@
       "parser_version": "1.0.0",
       "record_count": 14,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e2b1-architecture",
@@ -4346,7 +4844,10 @@
       "parser_version": "1.0.0",
       "record_count": 11,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e2b1-guide",
@@ -4367,7 +4868,10 @@
       "parser_version": "1.0.0",
       "record_count": 21,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e2b3-architecture",
@@ -4388,7 +4892,10 @@
       "parser_version": "1.0.0",
       "record_count": 13,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e2b3-guide",
@@ -4409,7 +4916,10 @@
       "parser_version": "1.0.0",
       "record_count": 40,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e2b4-architecture",
@@ -4430,7 +4940,10 @@
       "parser_version": "1.0.0",
       "record_count": 11,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e2b4-guide",
@@ -4451,7 +4964,10 @@
       "parser_version": "1.0.0",
       "record_count": 34,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e2b5-architecture",
@@ -4472,7 +4988,10 @@
       "parser_version": "1.0.0",
       "record_count": 13,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e2b5-guide",
@@ -4493,7 +5012,10 @@
       "parser_version": "1.0.0",
       "record_count": 27,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e2b6-architecture",
@@ -4514,7 +5036,10 @@
       "parser_version": "1.0.0",
       "record_count": 9,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e2b6-guide",
@@ -4535,7 +5060,10 @@
       "parser_version": "1.0.0",
       "record_count": 20,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e3b1-architecture",
@@ -4556,7 +5084,10 @@
       "parser_version": "1.0.0",
       "record_count": 8,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e3b1-guide",
@@ -4577,7 +5108,10 @@
       "parser_version": "1.0.0",
       "record_count": 36,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e3b2-architecture",
@@ -4598,7 +5132,10 @@
       "parser_version": "1.0.0",
       "record_count": 9,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e3b2-guide",
@@ -4619,7 +5156,10 @@
       "parser_version": "1.0.0",
       "record_count": 14,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e3b3-architecture",
@@ -4640,7 +5180,10 @@
       "parser_version": "1.0.0",
       "record_count": 10,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e3b3-guide",
@@ -4661,7 +5204,10 @@
       "parser_version": "1.0.0",
       "record_count": 14,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e3b4-architecture",
@@ -4682,7 +5228,10 @@
       "parser_version": "1.0.0",
       "record_count": 9,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e3b4-guide",
@@ -4703,7 +5252,10 @@
       "parser_version": "1.0.0",
       "record_count": 23,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e3b5-architecture",
@@ -4724,7 +5276,10 @@
       "parser_version": "1.0.0",
       "record_count": 9,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e3b5-guide",
@@ -4745,7 +5300,10 @@
       "parser_version": "1.0.0",
       "record_count": 20,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e4b3-architecture",
@@ -4766,7 +5324,10 @@
       "parser_version": "1.0.0",
       "record_count": 8,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e4b3-guide",
@@ -4787,7 +5348,10 @@
       "parser_version": "1.0.0",
       "record_count": 33,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e4b4-architecture",
@@ -4808,7 +5372,10 @@
       "parser_version": "1.0.0",
       "record_count": 8,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e4b4-guide",
@@ -4829,7 +5396,10 @@
       "parser_version": "1.0.0",
       "record_count": 38,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e4b5-architecture",
@@ -4850,7 +5420,10 @@
       "parser_version": "1.0.0",
       "record_count": 6,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-e4b5-guide",
@@ -4871,7 +5444,10 @@
       "parser_version": "1.0.0",
       "record_count": 10,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.html",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-1800-35-sp80053-mappings",
@@ -4892,7 +5468,10 @@
       "parser_version": "1.0.0",
       "record_count": 1114,
       "relationship_count": 1114,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-800-207",
@@ -4913,7 +5492,10 @@
       "parser_version": "1.0.0",
       "record_count": 19,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-sp-800-207a",
@@ -4934,7 +5516,10 @@
       "parser_version": "1.0.0",
       "record_count": 12,
       "relationship_count": 0,
-      "license_or_use": "NIST Public Access and Copyright Notice"
+      "license_or_use": "NIST Public Access and Copyright Notice",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.pdf",
+      "origin": "publisher_exact"
     },
     {
       "id": "artifact-nist-ssdf",
@@ -4955,7 +5540,10 @@
       "parser_version": "1.5.0",
       "record_count": 61,
       "relationship_count": 46,
-      "license_or_use": "NIST Computer Security Resource Center Terms of Use"
+      "license_or_use": "NIST Computer Security Resource Center Terms of Use",
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_exact"
     }
   ],
   "catalog_source_bundles": [
@@ -4976,7 +5564,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.cmmc-2.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.cmmc-2.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "csf-2",
@@ -5000,7 +5591,10 @@
         "evidence_locator": "data/csf-reference-tool-manifest.json#reconciliation.subcategories",
         "imported_evidence_locator": "data/csf-subcategories.json#reconciliation.subcategories",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "cui-policy",
@@ -5021,7 +5615,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.cui-policy.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.cui-policy.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "disa-cci",
@@ -5044,7 +5641,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.disa-cci.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.disa-cci.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "disa-srg",
@@ -5064,7 +5664,10 @@
         "imported_evidence_locator": "data/disa-artifact-manifest.json#reconciliation.srg_records_parsed",
         "basis": "Full parse of the official DISA July 2026 SRG/STIG compilation (U_SRG-STIG_Library_July_2026.zip). Expected = SRG XCCDF requirement records across all ingested benchmarks.",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "disa-stig",
@@ -5091,7 +5694,10 @@
         "imported_evidence_locator": "data/disa-artifact-manifest.json#reconciliation.stig_records_parsed",
         "basis": "Full parse of the official DISA July 2026 SRG/STIG compilation (U_SRG-STIG_Library_July_2026.zip). Expected = STIG XCCDF rule records across all ingested benchmarks.",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "dod-rai",
@@ -5112,7 +5718,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.dod-rai.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.dod-rai.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "dod-zt",
@@ -5139,7 +5748,10 @@
         "evidence_locator": "data/curated/dod-zt/source-manifest.json#reconciliation.atlas_records_expected",
         "imported_evidence_locator": "data/dod-zt.json#record_count",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "fedramp-rev5",
@@ -5160,7 +5772,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.fedramp-rev5.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.fedramp-rev5.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "fips-199",
@@ -5179,7 +5794,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.fips-199.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.fips-199.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "fips-200",
@@ -5198,7 +5816,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.fips-200.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.fips-200.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "microsoft-zt-maturity",
@@ -5216,7 +5837,10 @@
         "evidence_locator": "data/curated/nist-zt/structured-source-manifest.json#reconciliation.questionnaire_records",
         "imported_evidence_locator": "data/curated/nist-zt/structured-source-manifest.json#reconciliation.questionnaire_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "mitre-attack",
@@ -5237,7 +5861,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.mitre-attack.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.mitre-attack.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "mitre-attack-ics",
@@ -5256,7 +5883,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.mitre-attack-ics.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.mitre-attack-ics.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "mitre-d3fend",
@@ -5277,7 +5907,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.mitre-d3fend.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.mitre-d3fend.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-800-171",
@@ -5299,7 +5932,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-171.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-171.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-800-171-rev2",
@@ -5318,7 +5954,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-171-rev2.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-171-rev2.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-800-172",
@@ -5337,7 +5976,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-172.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-172.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-800-37",
@@ -5356,7 +5998,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-37.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-37.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-800-53",
@@ -5384,7 +6029,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-53.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-53.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-800-53a",
@@ -5403,7 +6051,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-53a.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-53a.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-800-53b",
@@ -5422,7 +6073,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-53b.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-800-53b.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-ai-rmf",
@@ -5441,7 +6095,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-ai-rmf.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-ai-rmf.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-iot-cybersecurity",
@@ -5461,7 +6118,10 @@
         "evidence_locator": "data/curated/nist-structured-catalogs/source-manifest.json#reconciliation.iot.records",
         "imported_evidence_locator": "data/curated/nist-structured-catalogs/source-manifest.json#reconciliation.iot.records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-mobile-threats",
@@ -5486,7 +6146,10 @@
             "reason": "Seven publisher JSON entries contain no threat ID, category, title, or content."
           }
         ]
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-ssdf",
@@ -5505,7 +6168,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-ssdf.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-ssdf.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     },
     {
       "catalog_id": "nist-zt",
@@ -5570,7 +6236,10 @@
         "evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-zt.discovered_records",
         "imported_evidence_locator": "data/generated/catalog-source-inventory.json#catalogs.nist-zt.normalized_records",
         "exclusions": []
-      }
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
     }
   ],
   "sources": [
@@ -5597,7 +6266,10 @@
       "metadata": {
         "identity_kind": "editorial",
         "note": "The Cybersecurity trunk, its nine limbs, and every catalog->limb attachment. Never publisher-declared; always badged 'Control Atlas structure'."
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.json",
+      "origin": "atlas_editorial"
     },
     {
       "id": "nist-oscal",
@@ -5632,7 +6304,10 @@
           "nist-ssdf"
         ],
         "parser": "oscal-json"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-53",
@@ -5663,7 +6338,10 @@
         "frameworks": [
           "nist-800-53"
         ]
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-171",
@@ -5693,7 +6371,10 @@
         "frameworks": [
           "nist-800-171"
         ]
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-csf-2",
@@ -5723,7 +6404,10 @@
         "frameworks": [
           "csf-2"
         ]
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-ssdf",
@@ -5750,7 +6434,10 @@
         "frameworks": [
           "nist-ssdf"
         ]
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-171-rev2",
@@ -5780,7 +6467,10 @@
           "nist-800-171-rev2"
         ],
         "parser": "csv"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-172-rev3",
@@ -5807,7 +6497,10 @@
           "nist-800-172"
         ],
         "parser": "oscal-json"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_normalized"
     },
     {
       "id": "isoo-cui-regulation",
@@ -5837,7 +6530,10 @@
           "cui-policy"
         ],
         "parser": "ecfr-xml"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nara-cui-registry",
@@ -5867,7 +6563,10 @@
           "cui-policy"
         ],
         "parser": "nara-cui-registry-html"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "disa-cci-list",
@@ -5896,7 +6595,10 @@
           "disa-cci"
         ],
         "parser": "cci-xml"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_xml",
+      "origin": "publisher_normalized"
     },
     {
       "id": "disa-stig-library",
@@ -5956,7 +6658,10 @@
             "checksum": "sha256:7553bc92c09fdd53a32270f5b69971924725d478fb8ddf5ded430bc88f5b93b5"
           }
         ]
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.xccdf",
+      "origin": "publisher_normalized"
     },
     {
       "id": "disa-srg-library",
@@ -6076,7 +6781,10 @@
             "checksum": "sha256:9470b9caadd3ff44b90e608c524012fa719c9b3541b3f0bb027b38b5b9e67971"
           }
         ]
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.xccdf",
+      "origin": "publisher_normalized"
     },
     {
       "id": "disa-stig-srg-cci-references",
@@ -6112,7 +6820,10 @@
           "resolved_from": "gold",
           "fallbacks": []
         }
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.xccdf",
+      "origin": "publisher_normalized"
     },
     {
       "id": "cyber-mil-stig-compilations",
@@ -6156,7 +6867,10 @@
             "nuwcdivnpt-stig-manager"
           ]
         }
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "cyber-mil-stig-downloads",
@@ -6197,7 +6911,10 @@
             "stigviewer-clkb-api"
           ]
         }
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "cyber-mil-stig-gpo",
@@ -6235,7 +6952,10 @@
             "nuwcdivnpt-stig-manager"
           ]
         }
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "stigviewer-catalog",
@@ -6271,7 +6991,10 @@
           "resolved_from": "silver",
           "fallbacks": []
         }
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "stigviewer-clkb-api",
@@ -6307,7 +7030,10 @@
           "resolved_from": "silver",
           "fallbacks": []
         }
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nuwcdivnpt-github-org",
@@ -6342,7 +7068,10 @@
           "resolved_from": "silver",
           "fallbacks": []
         }
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nuwcdivnpt-stig-manager",
@@ -6378,7 +7107,10 @@
           "resolved_from": "silver",
           "fallbacks": []
         }
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-ai-rmf-playbook",
@@ -6405,7 +7137,10 @@
           "nist-ai-rmf"
         ],
         "parser": "json"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.api",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-ssdf-oscal",
@@ -6433,7 +7168,10 @@
           "nist-ssdf"
         ],
         "parser": "oscal-json"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-cmmc-rule",
@@ -6463,7 +7201,10 @@
           "cmmc-2"
         ],
         "parser": "ecfr-xml"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "fedramp-rev5",
@@ -6485,7 +7226,7 @@
       "checksum": "sha256:aff2fa5eebd556ebed2a6d9eb562554967870780e9b3f85234ae1aabffe8156b",
       "access_status": "public",
       "license_or_use": "GSA FedRAMP Open Source License / Public Domain",
-      "lifecycle_status": "active",
+      "lifecycle_status": "historical",
       "eligibility_status": "eligible",
       "federal_referenced_by": [],
       "graph_eligible": true,
@@ -6496,7 +7237,10 @@
         ],
         "parser": "fedramp-legacy-baseline-workbook",
         "transition_note": "The workbook is an official legacy reference. Use the Consolidated Rules for 2026 and rule-specific effective dates for current decisions."
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_normalized"
     },
     {
       "id": "fedramp-2026-rules",
@@ -6530,7 +7274,10 @@
         "parser": "fedramp-consolidated-rules-json",
         "schema_url": "https://raw.githubusercontent.com/FedRAMP/rules/main/schemas/fedramp-consolidated-rules.schema.json",
         "source_repository": "https://github.com/FedRAMP/rules"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.json",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-rai-toolkit",
@@ -6558,7 +7305,10 @@
         ],
         "parser": "dod-rai-toolkit-html",
         "version_unknown_reason": "The current publisher landing page and operational toolkit do not expose a release version."
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-53b-baselines",
@@ -6589,7 +7339,10 @@
           "nist-800-53b"
         ],
         "parser": "oscal-profile"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-fips-199",
@@ -6618,7 +7371,10 @@
           "fips-199"
         ],
         "parser": "pdf-extract"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-fips-200",
@@ -6647,7 +7403,10 @@
           "fips-200"
         ],
         "parser": "pdf-extract"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-37-rev2",
@@ -6676,7 +7435,10 @@
           "nist-800-37"
         ],
         "parser": "pdf-extract"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-53a-assessment-procedures",
@@ -6706,7 +7468,10 @@
           "nist-800-53"
         ],
         "parser": "oscal-assessment-procedures"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-csf-53-supplemental",
@@ -6737,7 +7502,10 @@
           "csf-2"
         ],
         "parser": "olir-xlsx"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-csf11-csf20-crosswalk",
@@ -6767,7 +7535,10 @@
           "csf-2"
         ],
         "parser": "olir-xlsx"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-171-oscal-mappings",
@@ -6797,7 +7568,10 @@
           "nist-800-171"
         ],
         "parser": "oscal-json"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_json",
+      "origin": "publisher_normalized"
     },
     {
       "id": "disa-cci-nist-references",
@@ -6827,7 +7601,10 @@
           "nist-800-53"
         ],
         "parser": "cci-xml"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.oscal_xml",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-53-rev4-rev5-crosswalk",
@@ -6865,7 +7642,10 @@
             "purpose": "Revision 4 Appendix J privacy controls to Revision 5"
           }
         ]
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_normalized"
     },
     {
       "id": "mitre-attack-enterprise",
@@ -6875,12 +7655,12 @@
       "owner": "MITRE",
       "provenance_class": "mitre_published",
       "mandate_basis": [],
-      "version": "2026-08-05",
-      "retrieved_at": "2026-08-13",
+      "version": "19.2",
+      "retrieved_at": "2026-08-25",
       "retrieval_method": "download",
-      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
+      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-19.2.json",
       "artifact_type": "stix",
-      "checksum": "sha256:c7714f4a636b16c39d8db759b60135040ceb75d3c1d93f78a39fcef212e8ed9e",
+      "checksum": "sha256:fbe2a38a817899d4f3cf5f6ee5f29b332448ad6ebac0d3eee519e774778f49bc",
       "access_status": "public",
       "license_or_use": "MITRE ATT&CK Terms of Use",
       "lifecycle_status": "active",
@@ -6892,7 +7672,10 @@
           "mitre-attack"
         ],
         "parser": "stix-json"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.stix",
+      "origin": "publisher_normalized"
     },
     {
       "id": "mitre-attack-ics",
@@ -6902,12 +7685,12 @@
       "owner": "MITRE",
       "provenance_class": "mitre_published",
       "mandate_basis": [],
-      "version": "2026-08-05",
-      "retrieved_at": "2026-08-13",
+      "version": "19.2",
+      "retrieved_at": "2026-08-25",
       "retrieval_method": "download",
-      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
+      "artifact_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/ics-attack/ics-attack-19.2.json",
       "artifact_type": "stix",
-      "checksum": "sha256:c4d304f9736247390287f54d761a13c8ead2ebf14ee68adea4e012a6dce35192",
+      "checksum": "sha256:348a4e9a54dd9011329f92e0fd20ba72cae2fec76f0e2790b1e98f0de8f139bf",
       "access_status": "public",
       "license_or_use": "MITRE ATT&CK Terms of Use",
       "lifecycle_status": "active",
@@ -6919,7 +7702,10 @@
           "mitre-attack-ics"
         ],
         "parser": "stix-json"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.stix",
+      "origin": "publisher_normalized"
     },
     {
       "id": "mitre-d3fend-ontology",
@@ -6929,12 +7715,12 @@
       "owner": "MITRE",
       "provenance_class": "mitre_published",
       "mandate_basis": [],
-      "version": "1.4.0",
-      "retrieved_at": "2026-06-19",
+      "version": "1.5.0",
+      "retrieved_at": "2026-08-25",
       "retrieval_method": "api",
-      "artifact_url": "https://d3fend.mitre.org/api/technique/all.json",
+      "artifact_url": "https://d3fend.mitre.org/ontologies/d3fend.json",
       "artifact_type": "api",
-      "checksum": "sha256:5b80bcfcbafd78f5b2fa75cccb0417f52b79558395c39bfe0301c430dba6ad70",
+      "checksum": "sha256:11e6ce26ab2bef1500ca9747a74c05ec98c0c554658c09d26bfbfa752d278a45",
       "access_status": "public",
       "license_or_use": "MITRE D3FEND Terms of Use",
       "lifecycle_status": "active",
@@ -6946,7 +7732,10 @@
           "mitre-d3fend"
         ],
         "parser": "json-ld"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.api",
+      "origin": "publisher_normalized"
     },
     {
       "id": "mitre-d3fend-mappings",
@@ -6956,12 +7745,12 @@
       "owner": "MITRE",
       "provenance_class": "mitre_published",
       "mandate_basis": [],
-      "version": "2026-08-13",
-      "retrieved_at": "2026-08-13",
+      "version": "1.5.0",
+      "retrieved_at": "2026-08-25",
       "retrieval_method": "api",
       "artifact_url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
       "artifact_type": "api",
-      "checksum": "sha256:f4c3845b39f14a3ac6f8badeebc1d81be68f0b9eebcd12cc8bd550e212724b9f",
+      "checksum": "sha256:3f103c5703fdfc8c2e658d8b81fb22b1cf7ef281d83ee324f4a3a176076f5d37",
       "access_status": "public",
       "license_or_use": "MITRE D3FEND Terms of Use",
       "lifecycle_status": "active",
@@ -6975,7 +7764,10 @@
           "nist-800-53"
         ],
         "parser": "json-ld"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.api",
+      "origin": "publisher_normalized"
     },
     {
       "id": "mitre-cis-cci-mappings",
@@ -7002,7 +7794,10 @@
           "disa-cci"
         ],
         "parser": "github-json"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.api",
+      "origin": "publisher_normalized"
     },
     {
       "id": "community-cci-research",
@@ -7029,7 +7824,10 @@
           "disa-cci"
         ],
         "parser": "community-research-register"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-olir-csf2-to-sp800-53",
@@ -7060,7 +7858,10 @@
           "nist-800-53"
         ],
         "parser": "olir-xlsx"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_normalized"
     },
     {
       "id": "nist-olir-csf2-to-sp800-171",
@@ -7091,7 +7892,10 @@
           "nist-800-171"
         ],
         "parser": "olir-xlsx"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.spreadsheet",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-reference-architecture-v2",
@@ -7120,7 +7924,10 @@
           "dod-zt"
         ],
         "parser": "pdf-extract"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-strategy",
@@ -7149,7 +7956,10 @@
           "dod-zt"
         ],
         "parser": "pdf-extract"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-overlays-2024",
@@ -7180,7 +7990,10 @@
         ],
         "parser": "dod-zt-overlay-json",
         "disambiguation": "DoD control overlays on ZT pillars (RMF overlay sense), not overlay networks or ZTNA."
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-capabilities",
@@ -7209,7 +8022,10 @@
           "dod-zt"
         ],
         "parser": "pdf-extract"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     },
     {
       "id": "dod-zt-execution-roadmap",
@@ -7238,7 +8054,10 @@
           "dod-zt"
         ],
         "parser": "pdf-extract"
-      }
+      },
+      "entity_kind": "artifact",
+      "profile_id": "artifact.publication",
+      "origin": "publisher_normalized"
     }
   ],
   "freshness": {
@@ -7506,30 +8325,30 @@
       {
         "source_id": "mitre-attack-enterprise",
         "sync_model": "auto_synced",
-        "last_checked": "2026-08-13",
-        "last_imported": "2026-08-13",
-        "hash": "sha256:d4af20476f1e70ab9085ed8314a50f49b8a9106eae36fa7e5750fc0193bf8e4e"
+        "last_checked": "2026-08-25",
+        "last_imported": "2026-08-25",
+        "hash": "sha256:fbe2a38a817899d4f3cf5f6ee5f29b332448ad6ebac0d3eee519e774778f49bc"
       },
       {
         "source_id": "mitre-attack-ics",
         "sync_model": "auto_synced",
-        "last_checked": "2026-08-13",
-        "last_imported": "2026-08-13",
-        "hash": "sha256:33c2ecb581e38c247cc2bcfb984118d3133e5f96e376634da76739abd261ddb3"
+        "last_checked": "2026-08-25",
+        "last_imported": "2026-08-25",
+        "hash": "sha256:348a4e9a54dd9011329f92e0fd20ba72cae2fec76f0e2790b1e98f0de8f139bf"
       },
       {
         "source_id": "mitre-d3fend-ontology",
         "sync_model": "auto_synced",
-        "last_checked": "2026-08-13",
-        "last_imported": "2026-08-08",
-        "hash": "sha256:78b218e94e19e5854056b7190efd0be9de1120b55fc671574d4531641b153aaa"
+        "last_checked": "2026-08-25",
+        "last_imported": "2026-08-25",
+        "hash": "sha256:11e6ce26ab2bef1500ca9747a74c05ec98c0c554658c09d26bfbfa752d278a45"
       },
       {
         "source_id": "mitre-d3fend-mappings",
         "sync_model": "auto_synced",
-        "last_checked": "2026-08-13",
-        "last_imported": "2026-08-13",
-        "hash": "sha256:3d7226f7a1fdd976da4df3d09d77d902738b036ac8c3960569434307d68832d3"
+        "last_checked": "2026-08-25",
+        "last_imported": "2026-08-25",
+        "hash": "sha256:3f103c5703fdfc8c2e658d8b81fb22b1cf7ef281d83ee324f4a3a176076f5d37"
       },
       {
         "source_id": "mitre-cis-cci-mappings",

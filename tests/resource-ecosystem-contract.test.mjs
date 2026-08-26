@@ -40,12 +40,12 @@ test("required collections are populated and mutually resolvable", () => {
   }
 });
 
-test("every card and detail field has explicit source, access, identity, and review metadata", () => {
+test("every card has source, access, identity, and review metadata without requiring optional claims", () => {
   const wordCount = (value) => value.trim().split(/\s+/).length;
   for (const resource of dataset.resources) {
     assert.ok(resource.cardPurpose.length >= 20, `${resource.id} card purpose`);
     assert.ok(resource.publisherType, `${resource.id} publisher type`);
-    assert.ok(resource.officialStatus, `${resource.id} official status`);
+    if (resource.officialStatus) assert.equal(typeof resource.officialStatus, "string", `${resource.id} optional official status`);
     assert.ok(resource.brandKey, `${resource.id} brand key`);
     assert.ok(resource.sourceEvidence, `${resource.id} source evidence`);
     assert.ok(resource.verificationMethod, `${resource.id} verification method`);

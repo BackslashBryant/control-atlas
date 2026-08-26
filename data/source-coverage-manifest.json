@@ -1,6 +1,6 @@
 {
   "schema_version": "4.0",
-  "generated_at": "2026-08-14T00:40:44.724Z",
+  "generated_at": "2026-08-25T23:16:16.449Z",
   "completeness": {
     "total_publications": 100,
     "total_artifacts": 92,
@@ -260,8 +260,8 @@
     {
       "catalog_id": "mitre-attack",
       "completeness_status": "reconciled",
-      "expected_records": 697,
-      "imported_records": 697,
+      "expected_records": 858,
+      "imported_records": 858,
       "excluded_records": 0,
       "missing_records": 0,
       "expected_basis": "Exact unique record identities emitted by the catalog source adapter from provenance-attested publisher material, counted before structural groups, relationships, or graph publication.",
@@ -272,17 +272,16 @@
       "supplemental_artifacts": 0,
       "mapping_artifacts": 1,
       "methods": [
-        "direct_file_import",
-        "api_import"
+        "direct_file_import"
       ],
-      "last_refresh": "2026-08-13",
+      "last_refresh": "2026-08-25",
       "has_shard": true
     },
     {
       "catalog_id": "mitre-attack-ics",
       "completeness_status": "reconciled",
-      "expected_records": 97,
-      "imported_records": 97,
+      "expected_records": 106,
+      "imported_records": 106,
       "excluded_records": 0,
       "missing_records": 0,
       "expected_basis": "Exact unique record identities emitted by the catalog source adapter from provenance-attested publisher material, counted before structural groups, relationships, or graph publication.",
@@ -295,7 +294,7 @@
       "methods": [
         "direct_file_import"
       ],
-      "last_refresh": "2026-08-13",
+      "last_refresh": "2026-08-25",
       "has_shard": true
     },
     {
@@ -313,9 +312,9 @@
       "supplemental_artifacts": 0,
       "mapping_artifacts": 1,
       "methods": [
-        "api_import"
+        "direct_file_import"
       ],
-      "last_refresh": "2026-08-13",
+      "last_refresh": "2026-08-25",
       "has_shard": true
     },
     {

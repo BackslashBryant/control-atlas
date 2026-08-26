@@ -98,18 +98,17 @@ async function parseIoTWorkbook(bytes, source) {
       const capabilityId = stableId('CAPABILITY', domainTitle, capability);
       const subcapabilityId = stableId('SUBCAPABILITY', domainTitle, capability, subcapability);
       addRecord(records, {
-        id: capabilityId,
-        type: 'iot_capability',
-        title: capability,
-        description: capability,
-        parent_id: domainId,
+      id: capabilityId,
+      type: 'iot_capability',
+      title: capability,
+      parent_id: domainId,
         source_fragments: [cellFragment(source.source_key, worksheet.sheet, rowIndex, 0, 'capability', capability)],
       });
       addRecord(records, {
-        id: subcapabilityId,
-        type: 'iot_subcapability',
-        title: subcapability,
-        description: isTechnical ? text(row[2]) || subcapability : subcapability,
+      id: subcapabilityId,
+      type: 'iot_subcapability',
+      title: subcapability,
+      ...(isTechnical && text(row[2]) && text(row[2]) !== subcapability ? { description: text(row[2]) } : {}),
         parent_id: capabilityId,
         source_fragments: [
           cellFragment(source.source_key, worksheet.sheet, rowIndex, 1, 'subcapability', subcapability),
@@ -123,7 +122,6 @@ async function parseIoTWorkbook(bytes, source) {
           id: elementId,
           type: 'iot_capability_element',
           title: element,
-          description: element,
           parent_id: subcapabilityId,
           source_fragments: [cellFragment(source.source_key, worksheet.sheet, rowIndex, 2, 'element', element)],
         });
@@ -136,7 +134,6 @@ async function parseIoTWorkbook(bytes, source) {
         id: leafId,
         type: text(row[3]) && !isTechnical ? 'iot_capability_subelement' : 'iot_capability_element',
         title: leaf,
-        description: leaf,
         parent_id: parentId,
         publisher_mappings: targetIds.map((targetId) => ({
           target_catalog: mappingKind === 'sp_800_53' ? 'nist-800-53' : 'nist-csf-1.1',
