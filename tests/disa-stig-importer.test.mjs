@@ -352,6 +352,8 @@ test('DISA XCCDF parser preserves full-length prose fields without truncation', 
   assert.ok(!record.check_text.endsWith('...'));
 });
 
+// Exercise both the Group and Rule descriptions because the normalized record
+// is sourced from the Rule-level XCCDF payload.
 test('DISA XCCDF parser repairs known UTF-8 mojibake before publication', () => {
   const xml = sampleStigXml.replaceAll(
     'Accounts must be managed.',
