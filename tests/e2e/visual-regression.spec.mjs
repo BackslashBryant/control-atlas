@@ -25,6 +25,7 @@ test('resource directory desktop composition', async ({ page }) => {
 test('source register desktop composition', async ({ page }) => {
   await openStableWorkspace(page, '#/sources', { width: 1440, height: 1000 });
   await expect(page.getByRole('heading', { name: 'Sources' })).toBeVisible();
+  await page.locator('.source-title-link').first().click();
 
   const register = page.locator('.sources-table-panel');
   const evidence = page.locator('.sources-inspector-pane');
