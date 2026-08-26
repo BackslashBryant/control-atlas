@@ -6,6 +6,10 @@ const baseURL = `http://localhost:${port}`;
 const browserName = process.env.PLAYWRIGHT_BROWSER ?? 'chromium';
 
 export default defineConfig({
+  captureGitInfo: {
+    commit: false,
+    diff: false,
+  },
   testDir: './tests/e2e',
   globalTeardown: './tools/playwright-global-teardown.mjs',
   fullyParallel: process.env.PLAYWRIGHT_FULLY_PARALLEL === '1',
