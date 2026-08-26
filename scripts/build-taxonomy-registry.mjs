@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 
 import { writeJsonAtomically } from "./lib/write-json-atomically.mjs";
+import { generatedAt } from "./lib/stable-generated-at.mjs";
 
 const terms = JSON.parse(readFileSync("data/curated/taxonomy-terms.json", "utf8"));
 const relationships = JSON.parse(readFileSync("data/curated/taxonomy-relationships.json", "utf8"));
@@ -116,7 +117,7 @@ for (const identity of identities.identities) {
 
 const registry = {
   schema_version: "1.0",
-  generated_at: new Date().toISOString(),
+  generated_at: generatedAt(),
   source: {
     terms_version: terms.schema_version,
     relationships_version: relationships.schema_version,

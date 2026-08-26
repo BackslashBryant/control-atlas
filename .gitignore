@@ -6,6 +6,7 @@ __pycache__/
 dist/
 build/
 out/
+data/generated/
 
 # AI-assistant working notes, process clutter, and local agent state
 docs/guardrails/

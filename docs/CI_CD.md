@@ -29,6 +29,14 @@ Routine checkout uses depth 1 and fetches only the comparison base SHA. Full his
 - Audit evidence changes run the narrow evidence-integrity gate and do not deploy.
 - Unknown paths fail closed as runtime code.
 
+## Generated data ownership
+
+`data/generated/` is derived build output. It is ignored by Git and reconstructed from versioned publisher snapshots, curated corrections, registries, schemas, maps, parsers, and generators.
+
+`npm run generate:data` produces the complete derived data surface. CI caches it by canonical-input hash and publishes it as an immutable intermediate artifact. The site build and data-dependent tests consume that same artifact, while browser, accessibility, Lighthouse, and deployment consume the validated `site-build` artifact.
+
+`npm run verify:generated-reproducibility` performs two clean generations and requires identical file counts, byte counts, and SHA-256 tree digests. Generation uses `CONTROL_ATLAS_GENERATED_AT`, `SOURCE_DATE_EPOCH`, or the latest versioned source-observation date, in that order, so output does not depend on a prior generated directory, an unrelated UI commit, or wall-clock time.
+
 ## Browser policy
 
 - Pull requests use Chromium with two functional shards, axe accessibility checks, and three deliberate visual snapshots.

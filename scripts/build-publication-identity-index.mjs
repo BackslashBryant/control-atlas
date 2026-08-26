@@ -8,6 +8,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
+import { generatedAt } from './lib/stable-generated-at.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY = join(ROOT, 'data/source-registry.json');
@@ -111,22 +112,11 @@ const orphanArtifacts = artifacts
 
 const index = {
   schema_version: '1.0',
-  generated_at: new Date().toISOString(),
+  generated_at: generatedAt(),
   identity_count: identities.length,
   identities,
   orphans: { publications: orphanPublications, artifacts: orphanArtifacts },
 };
-
-try {
-  const previous = JSON.parse(readFileSync(OUT, 'utf8'));
-  const { generated_at: previousGeneratedAt, ...previousStable } = previous;
-  const { generated_at: _next, ...nextStable } = index;
-  if (previousGeneratedAt && JSON.stringify(previousStable) === JSON.stringify(nextStable)) {
-    index.generated_at = previousGeneratedAt;
-  }
-} catch {
-  // A missing or unreadable prior index is replaced by the current one.
-}
 
 writeJsonAtomically(OUT, index);
 console.log(`publication-identity-index: ${identities.length} canonical identities; ${orphanPublications.length} orphan publication(s); ${orphanArtifacts.length} orphan artifact(s).`);

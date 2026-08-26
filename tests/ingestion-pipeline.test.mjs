@@ -9,13 +9,20 @@ import {
 import { preserveGeneratedAt } from '../scripts/lib/stable-generated-at.mjs';
 import { DELTA_REASONS } from '../scripts/lib/delta-reasons.mjs';
 
-test('generated ingestion ledgers preserve their timestamp when content is unchanged', () => {
+test('generated ingestion ledgers use the reproducible build timestamp', () => {
   const path = 'data/generated/ingestion-stage-ledger.json';
   const previous = JSON.parse(readFileSync(path, 'utf8'));
   const next = { ...previous, generated_at: '2099-01-01T00:00:00.000Z' };
-  assert.equal(preserveGeneratedAt(path, next).generated_at, previous.generated_at);
-  next.status = 'FAILED';
-  assert.equal(preserveGeneratedAt(path, next).generated_at, '2099-01-01T00:00:00.000Z');
+  const original = process.env.CONTROL_ATLAS_GENERATED_AT;
+  process.env.CONTROL_ATLAS_GENERATED_AT = '2030-01-02T03:04:05.000Z';
+  try {
+    assert.equal(preserveGeneratedAt(path, next).generated_at, '2030-01-02T03:04:05.000Z');
+    next.status = 'FAILED';
+    assert.equal(preserveGeneratedAt(path, next).generated_at, '2030-01-02T03:04:05.000Z');
+  } finally {
+    if (original === undefined) delete process.env.CONTROL_ATLAS_GENERATED_AT;
+    else process.env.CONTROL_ATLAS_GENERATED_AT = original;
+  }
 });
 
 test('every source uses one complete ingestion lifecycle with explicit presentation', () => {

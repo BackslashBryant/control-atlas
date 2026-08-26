@@ -1,10 +1,12 @@
-import { existsSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
+import { dirname } from 'node:path';
 
 function sleep(milliseconds) {
   Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, milliseconds);
 }
 
 export function writeJsonAtomically(destination, document, { attempts = 5 } = {}) {
+  mkdirSync(dirname(destination), { recursive: true });
   const temporary = `${destination}.${process.pid}.${Date.now()}.tmp`;
   writeFileSync(temporary, `${JSON.stringify(document, null, 2)}\n`, 'utf8');
 
