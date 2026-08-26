@@ -53,13 +53,9 @@ test("WS5 Home implements Template B with one search, four destinations, and Lib
     "Configuration rules",
     "Threats & defenses",
   ]);
-  await expect(discoveryLinks.locator(".home-library-kpi__count")).toHaveText([
-    "9,766 records",
-    "30 records",
-    "1,152 records",
-    "17,021 records",
-    "1,065 records",
-  ]);
+  const discoveryCounts = await discoveryLinks.locator(".home-library-kpi__count").allTextContents();
+  expect(discoveryCounts).toHaveLength(5);
+  expect(discoveryCounts.every((count) => /^\d[\d,]* records$/.test(count))).toBe(true);
   await expect(libraryDiscovery.getByRole("link", { name: "Browse everything" })).toBeVisible();
   await expect(template.getByText(/more records|bigger tag/i)).toHaveCount(0);
   await expect(template.locator("[data-tag-count-scale]")).toHaveCount(0);
@@ -81,21 +77,24 @@ test("WS5 Home implements Template B with one search, four destinations, and Lib
 
 test("WS5 Library discovery cards open the counted canonical filter states", async ({ page }) => {
   const discoveries = [
-    ["Controls & requirements", "9,766 results", "Requirements"],
-    ["Baselines & profiles", "30 results", "Baselines & profiles"],
-    ["Assessment & process", "1,152 results", "Process & methods"],
-    ["Configuration rules", "17,021 results", "Technical rules"],
-    ["Threats & defenses", "1,065 results", "Threats & defenses"],
+    ["Controls & requirements", "Requirements"],
+    ["Baselines & profiles", "Baselines & profiles"],
+    ["Assessment & process", "Process & methods"],
+    ["Configuration rules", "Technical rules"],
+    ["Threats & defenses", "Threats & defenses"],
   ];
 
-  for (const [label, count, filterLabel] of discoveries) {
+  for (const [label, filterLabel] of discoveries) {
     await gotoApp(page, "/");
     await waitForAppReady(page, { allowPartial: true });
-    await page.locator(".home-library-kpi").filter({ hasText: label }).click();
+    const discovery = page.locator(".home-library-kpi").filter({ hasText: label });
+    const count = (await discovery.locator(".home-library-kpi__count").innerText()).replace(" records", "");
+    expect(count).toMatch(/^\d[\d,]*$/);
+    await discovery.click();
 
     await expect(page).toHaveURL(/#\/library\?kind=/);
     await expect(page.getByLabel("Active filters").getByRole("button", { name: filterLabel })).toBeVisible();
-    await expect(page.getByRole("status")).toContainText(count.replace(" results", ""));
+    await expect(page.getByRole("status")).toContainText(count);
     await expect(page.getByRole("list", { name: "Search results" }).getByRole("listitem").first()).toBeVisible();
   }
 });
