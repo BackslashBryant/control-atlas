@@ -77,6 +77,42 @@
       "status": "active"
     },
     {
+      "old_type": "editorial",
+      "entity_kind": "publication",
+      "profile_id": "publication.editorial",
+      "status": "active"
+    },
+    {
+      "old_type": "ingestion",
+      "entity_kind": "publication",
+      "profile_id": "publication.ingestion",
+      "status": "active"
+    },
+    {
+      "old_type": "mapping",
+      "entity_kind": "publication",
+      "profile_id": "publication.mapping",
+      "status": "active"
+    },
+    {
+      "old_type": "publication",
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "status": "active"
+    },
+    {
+      "old_type": "reference",
+      "entity_kind": "publication",
+      "profile_id": "publication.reference",
+      "status": "active"
+    },
+    {
+      "old_type": "supplemental",
+      "entity_kind": "publication",
+      "profile_id": "publication.supplemental",
+      "status": "active"
+    },
+    {
       "old_type": "assessment_procedure",
       "entity_kind": "content_record",
       "profile_id": "record.assessment_procedure",
@@ -386,42 +422,6 @@
       "old_type": "zt_tenet",
       "entity_kind": "content_record",
       "profile_id": "record.zt_tenet",
-      "status": "active"
-    },
-    {
-      "old_type": "editorial",
-      "entity_kind": "publication",
-      "profile_id": "publication.editorial",
-      "status": "active"
-    },
-    {
-      "old_type": "ingestion",
-      "entity_kind": "publication",
-      "profile_id": "publication.ingestion",
-      "status": "active"
-    },
-    {
-      "old_type": "mapping",
-      "entity_kind": "publication",
-      "profile_id": "publication.mapping",
-      "status": "active"
-    },
-    {
-      "old_type": "publication",
-      "entity_kind": "publication",
-      "profile_id": "publication.publication",
-      "status": "active"
-    },
-    {
-      "old_type": "reference",
-      "entity_kind": "publication",
-      "profile_id": "publication.reference",
-      "status": "active"
-    },
-    {
-      "old_type": "supplemental",
-      "entity_kind": "publication",
-      "profile_id": "publication.supplemental",
       "status": "active"
     },
     {
