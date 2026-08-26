@@ -30,6 +30,7 @@ test('PR CI creates one change map from a shallow checkout and targeted base fet
 test('PR CI is an independent gate DAG around one immutable artifact', () => {
   for (const job of [
     'Lint, types, and contracts',
+    'Prepare reproducible generated data',
     'Unit and component tests',
     'Build immutable site artifact',
     'Static, data, and Guardian contracts',
@@ -40,7 +41,9 @@ test('PR CI is an independent gate DAG around one immutable artifact', () => {
   ]) assert.match(ci, new RegExp(`name: ${job}`));
 
   assert.equal((ci.match(/name: site-build/g) ?? []).length >= 4, true);
-  assert.equal((ci.match(/npm run build:site(?:\s|$)/g) ?? []).length, 2);
+  assert.equal((ci.match(/npm run build:site:incremental/g) ?? []).length, 2);
+  assert.match(ci, /npm run verify:generated-reproducibility/);
+  assert.match(ci, /name: generated-data/);
   assert.match(ci, /shard: \[1, 2\]/);
   assert.match(ci, /--shard=\$\{\{ matrix\.shard \}\}\/2/);
   assert.match(ci, /npm run test:a11y:smoke/);
@@ -99,6 +102,9 @@ test('package scripts expose deterministic split gates and full local verificati
   for (const script of [
     'build:site',
     'build:site:incremental',
+    'generate:data',
+    'materialize:generated',
+    'verify:generated-reproducibility',
     'lint:ci',
     'typecheck',
     'test',

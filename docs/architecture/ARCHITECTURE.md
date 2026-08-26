@@ -104,7 +104,7 @@ Blocked relationships remain graph-health findings and never become displayable 
 - `scripts/`: fetch and orchestrate public-data refresh/build flows.
 - `tools/importers/`, `tools/normalizers/`, `tools/validators/`, and `tools/relationship-builders/`: product pipeline modules for public data ingestion, normalization, validation, and relationship assembly.
 - `data/source-registry.json`: canonical source registry file retained under the new public-facing Provenance Registry naming.
-- `data/generated/`: validated static runtime bundles and build-governance artifacts.
+- `data/generated/`: ignored local/CI build output containing validated runtime bundles and build-governance artifacts. It is reconstructed from versioned canonical inputs and never committed.
 - `src/app/runtime.mjs`: pure browser query and export APIs over static bundles.
 - `dist/site/`: generated deploy surface used by Pages and public sync.
 - `tests/`: graph, source, runtime, browser-contract, and product-boundary gates.

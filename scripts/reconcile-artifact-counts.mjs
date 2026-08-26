@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { readGeneratedCollection } from './lib/generated-graph-artifacts.mjs';
 import { resolveExpectedLocator } from './lib/completeness.mjs';
 import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
+import { generatedAt } from './lib/stable-generated-at.mjs';
 import { validateRelationshipEvidenceAttachment } from '../src/shared/data-trust-contracts.mjs';
 import { NORMALIZED_TO_LEAF_DELTA_REASONS } from './lib/delta-reasons.mjs';
 
@@ -137,7 +138,7 @@ const catalogs = (registry.catalog_source_bundles || []).map((bundle) => {
 
 const ledger = {
   schema_version: '1.0',
-  generated_at: new Date().toISOString(),
+  generated_at: generatedAt(),
   count_semantics: {
     discovered_expected_records: 'Independent publisher inventory expected by the completeness contract.',
     parsed_source_records: 'Publisher records emitted by the source adapter before graph construction.',

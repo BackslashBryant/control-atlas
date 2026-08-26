@@ -68,7 +68,7 @@ function assertGeneratedDataComplete() {
 }
 
 if (reuseGenerated) {
-  console.log("Reusing committed generated data (input scope excludes graph builders and source data).");
+  console.log("Reusing the validated generated-data artifact.");
 } else {
   // Run deterministic artifact builders in-process. On Windows, repeatedly
   // nesting Node through execFileSync can terminate before diagnostics are

@@ -5,6 +5,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { generatedAt } from './lib/stable-generated-at.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'data/generated/catalog-source-inventory.json');
@@ -72,25 +73,10 @@ for (const [catalogId, profile] of Object.entries(PROFILES)) {
 
 const inventory = {
   schema_version: '1.0',
-  generated_at: new Date().toISOString(),
+  generated_at: generatedAt(),
   count_boundary: 'source adapter output before structural groups, graph nodes, or relationship expansion',
   catalogs,
 };
-
-// A build timestamp describes when the inventory changed, not when an
-// identical inventory happened to be checked again. Preserve it when every
-// source-side count and contract is unchanged so routine builds stay byte
-// deterministic.
-try {
-  const previous = JSON.parse(readFileSync(OUT, 'utf8'));
-  const { generated_at: previousGeneratedAt, ...previousStable } = previous;
-  const { generated_at: _nextGeneratedAt, ...nextStable } = inventory;
-  if (previousGeneratedAt && JSON.stringify(previousStable) === JSON.stringify(nextStable)) {
-    inventory.generated_at = previousGeneratedAt;
-  }
-} catch {
-  // A missing or unreadable prior inventory is replaced by the current one.
-}
 
 writeFileSync(OUT, `${JSON.stringify(inventory, null, 2)}\n`, 'utf8');
 console.log(`catalog-source-inventory: ${Object.keys(catalogs).length} catalogs reconciled before graph construction.`);

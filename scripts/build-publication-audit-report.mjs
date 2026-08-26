@@ -6,6 +6,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
+import { generatedAt } from './lib/stable-generated-at.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY = join(ROOT, 'data/source-registry.json');
@@ -62,7 +63,7 @@ const nonzeroDeltas = ledger.catalogs
 
 const report = {
   schema_version: '1.0',
-  generated_at: new Date().toISOString(),
+  generated_at: generatedAt(),
   summary: {
     canonical_publication_count: index.identities.length,
     alias_count: index.identities.reduce((total, identity) => total + identity.alias_source_ids.length, 0),
@@ -87,17 +88,6 @@ const report = {
   quarantined_rows: quarantinedRows,
   nonzero_deltas: nonzeroDeltas,
 };
-
-try {
-  const previous = JSON.parse(readFileSync(OUT, 'utf8'));
-  const { generated_at: previousGeneratedAt, ...previousStable } = previous;
-  const { generated_at: _next, ...nextStable } = report;
-  if (previousGeneratedAt && JSON.stringify(previousStable) === JSON.stringify(nextStable)) {
-    report.generated_at = previousGeneratedAt;
-  }
-} catch {
-  // A missing or unreadable prior report is replaced by the current one.
-}
 
 writeJsonAtomically(OUT, report);
 console.log(

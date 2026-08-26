@@ -7,6 +7,7 @@ import {
   taxonomyTagsForTemplate,
   deriveTags,
 } from "../src/shared/record-taxonomy.mjs";
+import { generatedAt } from "./lib/stable-generated-at.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -60,6 +61,6 @@ for (const template of templates) {
   });
 }
 
-const output = { schema_version: "1.0", generated_at: new Date().toISOString(), entries };
+const output = { schema_version: "1.0", generated_at: generatedAt(), entries };
 writeFileSync(join(GENERATED, "discovery-index.json"), JSON.stringify(output, null, 2) + "\n");
 console.log(`Discovery index: ${entries.length} entries (${entries.filter((e) => e.content_type === "resource").length} resources, ${entries.filter((e) => e.content_type === "template").length} templates)`);

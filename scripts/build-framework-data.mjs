@@ -16,6 +16,7 @@ import {
   isValidSourceTextPresentation,
 } from "../src/shared/source-text-presentation.mjs";
 import { writeJsonAtomically } from "./lib/write-json-atomically.mjs";
+import { generatedAt as reproducibleGeneratedAt } from "./lib/stable-generated-at.mjs";
 import { validateGraphArtifacts } from "../tools/validators/federal-graph.mjs";
 import { loadSourceRegistry } from "../tools/validators/source-registry.mjs";
 import {
@@ -2412,34 +2413,12 @@ function collectionFingerprint(values) {
   return createHash("sha256").update(JSON.stringify(values)).digest("hex");
 }
 
-function existingGeneratedAt(collections) {
-  let generatedAt = null;
-  for (const [name, values] of Object.entries(collections)) {
-    const path = join(GENERATED, `${name}.json`);
-    if (!existsSync(path)) return null;
-    const existing = readJson(path);
-    const collection = runtimeCollectionKey(name);
-    if (!existing.generated_at || existing.schema_version !== "1.0")
-      return null;
-    if (generatedAt && existing.generated_at !== generatedAt) return null;
-    if (SHARDED_RUNTIME_COLLECTIONS.has(name)) {
-      if (existing.sharded_collection?.content_sha256 !== collectionFingerprint(values)) {
-        return null;
-      }
-      generatedAt ||= existing.generated_at;
-      continue;
-    }
-    if (JSON.stringify(existing[collection]) !== JSON.stringify(values))
-      return null;
-    generatedAt = existing.generated_at;
-  }
-  return generatedAt;
-}
-
-function loadExistingCollections() {
+function loadBaselineCollections() {
+  const baselineRoot = process.env.CONTROL_ATLAS_BASELINE_GENERATED_DIR;
+  if (!baselineRoot) return {};
   const previous = {};
   for (const name of RUNTIME_COLLECTIONS) {
-    const path = join(GENERATED, `${name}.json`);
+    const path = join(baselineRoot, `${name}.json`);
     if (!existsSync(path)) continue;
     const existing = readJson(path);
     previous[name] = existing.sharded_collection ? null : existing;
@@ -3515,9 +3494,8 @@ export function buildFrameworkData() {
     "graph-health": graph.findings,
     "atlas-spine": atlasSpine,
   };
-  const previousCollections = loadExistingCollections();
-  const generatedAt =
-    existingGeneratedAt(collections) || new Date().toISOString();
+  const previousCollections = loadBaselineCollections();
+  const generatedAt = reproducibleGeneratedAt();
 
   const sourceManifests = buildSourceManifests(graph);
   const buildManifest = createBuildManifest(graph);
