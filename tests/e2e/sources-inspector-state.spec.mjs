@@ -144,7 +144,10 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     const inspector = page.locator(".sources-inspector-pane .source-inspector--inline");
     await expect(inspector).toBeVisible();
 
-    const fileItems = inspector.locator(".source-material-item");
+    const fileItems = inspector
+      .locator("details.source-inspector-section")
+      .filter({ hasText: /^Source files \(\d+\)/ })
+      .locator(".source-material-item");
     await expect(fileItems).toHaveCount(sourceCount);
 
     // Verify details & field provenance disclosure exists
