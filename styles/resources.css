@@ -889,3 +889,30 @@
     border-inline-start-width: 3px;
   }
 }
+
+.resource-summary-copy {
+  display: grid;
+  gap: var(--ca-space-1);
+}
+
+.resource-summary-copy__label {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono);
+  font-size: var(--ca-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.resource-summary-copy--hero {
+  margin-block-start: var(--ca-space-2);
+}
+
+.resource-summary-copy--row {
+  margin-block-start: var(--ca-space-2);
+}
+
+.resource-summary-copy--row .workspace-result-row__snippet {
+  margin-block-start: 0;
+}

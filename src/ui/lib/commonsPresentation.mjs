@@ -50,6 +50,29 @@ export function resourceDateLabel(value) {
 }
 
 /**
+ * Keep publisher text and Control Atlas editorial context visibly distinct.
+ * Resource summaries are useful browse copy, but they must never look like a
+ * quotation or claim made by the publisher when Atlas wrote or inferred them.
+ */
+export function resourceSummaryPresentation(resource) {
+  const cardPurpose = typeof resource?.cardPurpose === "string" ? resource.cardPurpose.trim() : "";
+  const text = cardPurpose || String(resource?.summary || "").trim();
+  const fieldPath = cardPurpose ? "/cardPurpose" : "/summary";
+  const evidence = Array.isArray(resource?.claimEvidence)
+    ? resource.claimEvidence.find((entry) => entry?.fieldPath === fieldPath)
+      || resource.claimEvidence.find((entry) => entry?.fieldPath === "/summary")
+    : null;
+  const origin = evidence?.origin || resource?.origin || "atlas_editorial";
+  const atlasAuthored = origin === "atlas_editorial" || origin === "atlas_inferred";
+
+  return {
+    text,
+    origin,
+    label: atlasAuthored ? "Control Atlas summary" : "Publisher summary",
+  };
+}
+
+/**
  * Publishing organization per registrable domain. Each entry is checkable from
  * the hostname itself — no guessing. Hosts absent from this map fall back to a
  * generic glyph plus the hostname, which is honest rather than approximate.

@@ -49,6 +49,12 @@ export const CATALOG_STRUCTURE_PROFILES = Object.freeze({
     ["catalog", "mobile_threat_category", "mobile_threat"],
   ]),
   "fedramp-rev5": profile("fedramp-rev5", "FedRAMP Rev. 5", [["catalog", "baseline"]]),
+  "fedramp-2026": profile("fedramp-2026", "FedRAMP Consolidated Rules for 2026", [
+    ["catalog", "control_context"],
+    ["catalog", "definition"],
+    ["catalog", "rule"],
+    ["catalog", "key_security_indicator"],
+  ]),
   "fips-199": profile("fips-199", "FIPS 199", [["catalog", "impact_category"]]),
   "fips-200": profile("fips-200", "FIPS 200", [["catalog", "requirement"]]),
   "mitre-attack": profile("mitre-attack", "MITRE ATT&CK Enterprise", [

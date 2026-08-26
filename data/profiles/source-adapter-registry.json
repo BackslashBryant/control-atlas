@@ -96,7 +96,10 @@
         "json"
       ],
       "produced_profile_ids": [
-        "record.requirement"
+        "record.control_context",
+        "record.definition",
+        "record.key_security_indicator",
+        "record.rule"
       ],
       "field_transformations": [
         "publisher JSON fields to normalized rule records; absent fields omitted"
@@ -106,8 +109,30 @@
       "failure_policy": "fail_closed",
       "source_policy": "Current 2026 rules are current; the Rev. 5 workbook is retained as historical material.",
       "catalog_ids": [
-        "fedramp-rev5"
+        "fedramp-2026"
       ]
+    },
+    {
+      "adapter_id": "fedramp-rev5-workbook",
+      "adapter_version": "1.0.0",
+      "catalog_ids": [
+        "fedramp-rev5"
+      ],
+      "accepted_source_types": [
+        "spreadsheet"
+      ],
+      "produced_profile_ids": [
+        "record.baseline"
+      ],
+      "field_transformations": [
+        "preserve legacy baseline identifiers and control membership without treating the workbook as current rules"
+      ],
+      "relationship_rules": [
+        "transition relationships to the Consolidated Rules remain Atlas-authored assertions with explicit evidence"
+      ],
+      "fixture_set": "tests/fedramp-transition.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "The Rev. 5 workbook is historical transition material and is never the primary artifact for current FedRAMP rules."
     },
     {
       "adapter_id": "github-resource-evidence",

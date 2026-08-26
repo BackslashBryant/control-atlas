@@ -351,3 +351,20 @@ test('DISA XCCDF parser preserves full-length prose fields without truncation', 
   assert.equal(record.check_text, longCheck);
   assert.ok(!record.check_text.endsWith('...'));
 });
+
+// Exercise both the Group and Rule descriptions because the normalized record
+// is sourced from the Rule-level XCCDF payload.
+test('DISA XCCDF parser repairs known UTF-8 mojibake before publication', () => {
+  const xml = sampleStigXml.replaceAll(
+    'Accounts must be managed.',
+    'The command uses â€˜quotedâ€™ values and an â€œexampleâ€ label.',
+  );
+  const result = parseDisaXccdf(xml, {
+    sourceKey: 'disa-stig-library',
+    sourceUrl: 'https://public.cyber.mil/stigs/downloads/',
+    sourceSha256: 'sha256:test',
+    snapshotDate: '2026-08-26',
+  });
+  assert.match(result.records[0].description, /'quoted' values and an "example" label/);
+  assert.doesNotMatch(result.records[0].description, /â€|Ã|Â/);
+});

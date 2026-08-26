@@ -165,7 +165,7 @@ export function resolveControlAliases(rawNeedle) {
     }
 
     // 2. MITRE ATT&CK sub-technique: "t1059/001", "t1059-001", "t1059 001", "t1059.001"
-    const attackMatch = input.match(/^(t\d{4})[/\-\s](\d{3})$/i);
+    const attackMatch = input.match(/^(t\d{4})[./\-\s](\d{3})$/i);
     if (attackMatch) {
       aliases.add(`${attackMatch[1].toLowerCase()}.${attackMatch[2]}`);
       continue;
@@ -468,6 +468,7 @@ export function createFederalGraphRuntime(opts) { const res = _createFederalGrap
     "dod-rai": { name: "DoD AI Assurance", group: "DoD" },
     "dod-zt": { name: "DoD Zero Trust", group: "DoD" },
     "fedramp-rev5": { name: "FedRAMP Rev. 5", group: "Other" },
+    "fedramp-2026": { name: "FedRAMP Consolidated Rules for 2026", group: "FedRAMP" },
     "fips-199": { name: "FIPS 199", group: "NIST" },
     "fips-200": { name: "FIPS 200", group: "NIST" },
     "nist-800-171": { name: "SP 800-171 Rev. 3", group: "NIST" },

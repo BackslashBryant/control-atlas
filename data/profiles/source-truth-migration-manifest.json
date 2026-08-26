@@ -155,6 +155,12 @@
       "status": "active"
     },
     {
+      "old_type": "control_context",
+      "entity_kind": "content_record",
+      "profile_id": "record.control_context",
+      "status": "active"
+    },
+    {
       "old_type": "control_enhancement",
       "entity_kind": "content_record",
       "profile_id": "record.control_enhancement",
@@ -164,6 +170,12 @@
       "old_type": "defend_countermeasure",
       "entity_kind": "content_record",
       "profile_id": "record.defend_countermeasure",
+      "status": "active"
+    },
+    {
+      "old_type": "definition",
+      "entity_kind": "content_record",
+      "profile_id": "record.definition",
       "status": "active"
     },
     {
@@ -221,6 +233,12 @@
       "status": "active"
     },
     {
+      "old_type": "key_security_indicator",
+      "entity_kind": "content_record",
+      "profile_id": "record.key_security_indicator",
+      "status": "active"
+    },
+    {
       "old_type": "limb",
       "entity_kind": "content_record",
       "profile_id": "record.limb",
@@ -272,6 +290,12 @@
       "old_type": "rmf_step",
       "entity_kind": "content_record",
       "profile_id": "record.rmf_step",
+      "status": "active"
+    },
+    {
+      "old_type": "rule",
+      "entity_kind": "content_record",
+      "profile_id": "record.rule",
       "status": "active"
     },
     {

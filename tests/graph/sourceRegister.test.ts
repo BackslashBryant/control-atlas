@@ -51,7 +51,7 @@ test("source layers preserve truthful nullable fields and exact layer counts", (
   const layers = buildSourceLayers(sources.sources, catalogs);
   assert.deepEqual(
     Object.fromEntries(Object.entries(layers).map(([layer, rows]) => [layer, rows.length])),
-    { organization: 2, publication: 47, connection: 26, ingestion: 117 },
+    { organization: 2, publication: 48, connection: 27, ingestion: 115 },
   );
 
   // Phase 2 (T2.1-T2.3): the publication layer must be exactly the set of
@@ -248,7 +248,7 @@ test("generated layer completeness accounts for every field state and fails requ
 
 test("all governed publication reviews resolve without replacing source check dates", () => {
   const reviewedCatalogs = catalogs.filter((catalog) => catalog.source_review);
-  assert.equal(reviewedCatalogs.length, 27);
+  assert.equal(reviewedCatalogs.length, 28);
 
   for (const catalog of reviewedCatalogs) {
     const reviews = publicationReviewsForSource(
@@ -330,9 +330,9 @@ test("all governed publication reviews resolve without replacing source check da
   );
 });
 
-test("canonical publication register builds exactly 47 publication rows with role-grouped source materials", () => {
+test("canonical publication register builds exactly 48 publication rows with role-grouped source materials", () => {
   const publications = buildPublicationRegister(sources.sources, catalogs);
-  assert.equal(publications.length, 47);
+  assert.equal(publications.length, 48);
 
   // Every publication row must have non-empty displayTitle, publisher, and valid field states
   for (const pub of publications) {

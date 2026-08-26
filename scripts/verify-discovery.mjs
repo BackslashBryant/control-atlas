@@ -75,7 +75,12 @@ if (existsSync(regPath)) {
     : { results: [] };
   const attested = new Set((hydration.results || []).filter((r) => r.status === 'OK').map((r) => r.id));
   for (const b of reg.catalog_source_bundles || []) {
-    const hasEvidence = (b.primary_artifact_ids || []).some((id) => attested.has(id));
+    const hasPrimaryEvidence = (b.primary_artifact_ids || []).some((id) => attested.has(id));
+    const hasDisclosedMappingInventory = b.expected_inventory?.primary_extraction_status === 'not_performed'
+      && b.expected_inventory?.evidence_class === 'publisher_mapping_inventory'
+      && (b.mapping_source_ids || []).length > 0
+      && (b.mapping_source_ids || []).every((id) => attested.has(id));
+    const hasEvidence = hasPrimaryEvidence || hasDisclosedMappingInventory;
     if (!hasEvidence) {
       err(`catalog ${b.catalog_id} has no attested primary artifact (unaccounted applicable source)`);
     }

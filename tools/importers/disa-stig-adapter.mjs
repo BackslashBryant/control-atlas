@@ -4,6 +4,7 @@ import { XMLParser, XMLValidator } from 'fast-xml-parser';
 import { parse as parseHtml } from 'node-html-parser';
 import yauzl from 'yauzl';
 import { unzipSync, strFromU8 } from 'fflate';
+import { repairKnownSourceEncoding } from '../../src/shared/text-fidelity.mjs';
 
 const parser = new XMLParser({
   ignoreAttributes: false,
@@ -20,10 +21,10 @@ function textValue(value) {
   if (value === undefined || value === null) return '';
   if (Array.isArray(value)) return textValue(value[0]);
   if (typeof value === 'object') {
-    if (value['#text'] !== undefined) return String(value['#text']).trim();
+    if (value['#text'] !== undefined) return repairKnownSourceEncoding(value['#text']).trim();
     return '';
   }
-  return String(value).trim();
+  return repairKnownSourceEncoding(value).trim();
 }
 
 function asArray(value) {
@@ -40,7 +41,7 @@ function stripMarkup(value = '') {
 }
 
 function preserveSourceText(value = '') {
-  const text = parseHtml(String(value)
+  const text = parseHtml(repairKnownSourceEncoding(value)
     .replace(/<!\[CDATA\[|\]\]>/g, '')
     .replace(/<\/?(?:p|div|li)\b[^>]*>/gi, '<br>')).textContent
     .replace(/\r\n?/g, '\n');

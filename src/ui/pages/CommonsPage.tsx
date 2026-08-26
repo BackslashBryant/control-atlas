@@ -23,6 +23,7 @@ import {
 import { Button } from "../components/lsm";
 import type { CommonsCollection, CommonsResource } from "../lib/commonsTypes";
 import { resourceAccessLabel, resourceFieldLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
+import { resourceSummaryPresentation } from "../lib/commonsPresentation.mjs";
 import {
   filterDirectoryResources,
   searchDirectoryResources,
@@ -285,6 +286,7 @@ export function CommonsPage(props: {
           <ul aria-label="Resource results" className="workspace-result-list resource-catalog-grid">
             {filtered.map((resource) => {
               const selected = selectedResourceIds.includes(resource.id);
+              const summary = resourceSummaryPresentation(resource);
               return (
                 <li key={resource.id}>
                   <article
@@ -327,7 +329,10 @@ export function CommonsPage(props: {
                           <span>{resource.publisher}</span>
                         </div>
                         <h3>{resource.name}</h3>
-                        <p className="workspace-result-row__snippet">{resource.cardPurpose || resource.summary}</p>
+                        <div className="resource-summary-copy resource-summary-copy--row">
+                          <span className="resource-summary-copy__label">{summary.label}</span>
+                          <p className="workspace-result-row__snippet">{summary.text}</p>
+                        </div>
                         {resourceAccessLabel(resource) || resource.maintenanceStatus ? <div className="workspace-result-row__signals">
                           {resourceAccessLabel(resource) ? <span>{resourceAccessLabel(resource)}</span> : null}
                           {resource.maintenanceStatus ? <span>{resourceFieldLabel(resource.maintenanceStatus)}</span> : null}

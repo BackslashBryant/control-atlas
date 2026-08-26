@@ -1846,3 +1846,21 @@ test("STIG catalog chain returns complete nodes without a 250 record cap", () =>
   const chain = runtime.buildStigChain({ chain_catalog: "disa-stig" });
   assert.equal(chain.rows.length, 350, "All 350 STIG nodes must be included without 250 truncation");
 });
+
+test("runtime preserves exact dotted ATT&CK sub-technique identifiers", () => {
+  const node = {
+    id: "mitre-attack:T1098.004",
+    node_type: "attack_technique",
+    label: "T1098.004 SSH Authorized Keys",
+    metadata: { catalog_id: "mitre-attack", item_id: "T1098.004", title: "SSH Authorized Keys" },
+  };
+  const runtime = createFederalGraphRuntime({
+    nodes: [node],
+    edges: [],
+    evidence: [],
+    sources: [],
+    graphHealth: [],
+    librarySearch: { serialized_index: "", documents: [] },
+  });
+  assert.equal(runtime.searchNodes("T1098.004")[0].id, node.id);
+});

@@ -38,7 +38,7 @@ function sourceRefsAreValid(owner, refs) {
   }
 }
 
-test("authority spine covers exactly the 27 Atlas publications", () => {
+test("authority spine covers exactly the 28 Atlas publications", () => {
   const expected = [
     ...Object.keys(tree.catalogLimbs),
     ...tree.syntheticCatalogs.map((entry) => entry.catalog_id),
@@ -46,7 +46,7 @@ test("authority spine covers exactly the 27 Atlas publications", () => {
   const actual = authority.publications.map((entry) => entry.catalog_id).sort();
   assert.equal(new Set(actual).size, actual.length, "duplicate authority publication");
   assert.deepEqual(actual, expected);
-  assert.equal(actual.length, 27);
+  assert.equal(actual.length, 28);
 });
 
 test("authority instruments use the three authorized node types and registered official sources", () => {

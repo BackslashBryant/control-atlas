@@ -43,6 +43,8 @@ const ATLAS_TAG_DIMENSIONS = new Set(["organization", "framework", "program", "t
 
 const ODP_PATTERN = /\[(?:Assignment|Selection)[^\]]*\]/g;
 
+const PUBLISHER_INLINE_PATTERN = /(`[^`\n]+`|\[[^\]]+\]\(https?:\/\/[^)\s]+\)|\(Citation:\s*[^)]+\)|\[(?:Assignment|Selection)[^\]]*\])/g;
+
 function renderOdpText(text: string): ReactNode {
   if (!text) return text;
   const parts = text.split(ODP_PATTERN);
@@ -60,6 +62,29 @@ function renderOdpText(text: string): ReactNode {
     }
   });
   return nodes;
+}
+
+function renderPublisherInlineText(text: string): ReactNode {
+  if (!text) return text;
+  const parts = text.split(PUBLISHER_INLINE_PATTERN);
+  return parts.map((part, index) => {
+    if (!part) return null;
+    if (/^\[(?:Assignment|Selection)[^\]]*\]$/.test(part)) {
+      return <span className="odp-param" key={`odp-${index}`}>{part}</span>;
+    }
+    if (part.startsWith("`") && part.endsWith("`")) {
+      return <code className="publisher-inline-code" key={`code-${index}`}>{part.slice(1, -1)}</code>;
+    }
+    const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)$/);
+    if (link) {
+      return <a href={link[2]} key={`link-${index}`} rel="noopener noreferrer" target="_blank">{link[1]}</a>;
+    }
+    const citation = part.match(/^\(Citation:\s*([^)]+)\)$/);
+    if (citation) {
+      return <cite className="publisher-citation" key={`citation-${index}`}>Source: {citation[1]}</cite>;
+    }
+    return <Fragment key={`text-${index}`}>{part}</Fragment>;
+  });
 }
 
 function CopyableCodeSnippet(props: { value: string }) {
@@ -122,7 +147,7 @@ function SourceTextBlocks(props: { value: string; presentation?: any }) {
             const isCodeStep = Boolean(followingCode) && itemIndex === block.items.length - 1;
             return (
               <li className={isCodeStep ? "source-procedure-list__code-step" : undefined} key={`${item.start}-${itemIndex}`}>
-                <span>{renderOdpText(text.slice(item.start, item.end))}</span>
+                <span>{renderPublisherInlineText(text.slice(item.start, item.end))}</span>
                 {isCodeStep && followingCode ? (
                   <CopyableCodeSnippet value={text.slice(followingCode.start, followingCode.end)} />
                 ) : null}
@@ -135,7 +160,7 @@ function SourceTextBlocks(props: { value: string; presentation?: any }) {
       continue;
     }
     rendered.push(
-      <p key={`paragraph-${block.start}-${index}`}>{renderOdpText(text.slice(block.start, block.end))}</p>,
+      <p key={`paragraph-${block.start}-${index}`}>{renderPublisherInlineText(text.slice(block.start, block.end))}</p>,
     );
   }
 
@@ -157,7 +182,7 @@ function StructuredPublisherSections(props: { value: any[] }) {
               return (
                 <List className="source-structured-list" key={key}>
                   {(block.items || []).map((item: string, itemIndex: number) => (
-                    <li key={`${key}-${itemIndex}`}>{renderOdpText(item)}</li>
+                    <li key={`${key}-${itemIndex}`}>{renderPublisherInlineText(item)}</li>
                   ))}
                 </List>
               );
@@ -165,7 +190,7 @@ function StructuredPublisherSections(props: { value: any[] }) {
             if (block.type === "code") {
               return <CopyableCodeSnippet key={key} value={String(block.text || "")} />;
             }
-            return <p key={key}>{renderOdpText(String(block.text || ""))}</p>;
+            return <p key={key}>{renderPublisherInlineText(String(block.text || ""))}</p>;
           })}
         </section>
       ))}
@@ -178,7 +203,7 @@ function SourceSectionContent(props: { kind: string; value: any; presentation?: 
     return <StructuredPublisherSections value={props.value} />;
   }
   if (props.kind === "list") {
-    return <ul className="source-structured-list">{props.value.map((item: string) => <li key={item}>{renderOdpText(item)}</li>)}</ul>;
+    return <ul className="source-structured-list">{props.value.map((item: string) => <li key={item}>{renderPublisherInlineText(item)}</li>)}</ul>;
   }
   if (props.kind === "references") {
     return (

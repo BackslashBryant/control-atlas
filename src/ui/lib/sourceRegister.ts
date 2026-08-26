@@ -68,6 +68,8 @@ export type SourceMaterialItem = {
   publisher: string;
   format: string;
   retrievedAt: string | null;
+  version: string | null;
+  checksum: string | null;
   recordCount: number | null;
   relationshipCount: number | null;
   url: string;
@@ -408,6 +410,12 @@ function resolveSourceMaterialItems(
             ? "Reference page"
             : ""),
         retrievedAt: source.retrieved_at || null,
+        version: isRecordedString(source.version) ? source.version.trim() : null,
+        checksum: isRecordedString(source.sha256)
+          ? source.sha256.trim()
+          : isRecordedString(source.checksum)
+            ? source.checksum.trim()
+            : null,
         recordCount:
           typeof source.record_count === "number" ? source.record_count : null,
         relationshipCount:

@@ -71,10 +71,11 @@
     "mitre-attack": "atlas:LIMB-THREAT",
     "mitre-attack-ics": "atlas:LIMB-THREAT",
     "mitre-d3fend": "atlas:LIMB-THREAT",
-    "nist-mobile-threats": "atlas:LIMB-THREAT"
+    "nist-mobile-threats": "atlas:LIMB-THREAT",
+    "fedramp-2026": "atlas:LIMB-COMPLIANCE"
   },
   "_syntheticCatalogsDoc": "Publications without an upstream catalog node receive a deterministic `<catalog_id>:CATALOG` root. Only the publisher-native outer level declared here attaches to it. Baselines remain applicability relationships unless their own publication profile defines a native baseline record.",
-  "_residualLimbsDoc": "Total-trunk-connectivity backfill (owner 2026-07-31: 'everything must connect to the trunk, period'). Catalog_ids here have neither a real nor a synthetic catalog root \u2014 they are baseline / applicability sets. Their orphan nodes connect to the trunk via an editorial `organizes` edge to the named limb, satisfying connectivity while keeping baselines OFF the structural spine (they remain Class-2 applicability overlays). Any orphan whose catalog_id HAS a real catalog root is instead backfilled structurally to that root by the build (same-catalog rule); the build fails loudly if ANY node still cannot reach the trunk.",
+  "_residualLimbsDoc": "Total-trunk-connectivity backfill (owner 2026-07-31: 'everything must connect to the trunk, period'). Catalog_ids here have neither a real nor a synthetic catalog root — they are baseline / applicability sets. Their orphan nodes connect to the trunk via an editorial `organizes` edge to the named limb, satisfying connectivity while keeping baselines OFF the structural spine (they remain Class-2 applicability overlays). Any orphan whose catalog_id HAS a real catalog root is instead backfilled structurally to that root by the build (same-catalog rule); the build fails loudly if ANY node still cannot reach the trunk.",
   "residualLimbs": {},
   "syntheticCatalogs": [
     {
@@ -103,7 +104,9 @@
       "limb": "atlas:LIMB-ASSESSMENT",
       "label": "NIST SP 800-53A Assessment Procedures",
       "source_id": "nist-800-53a-assessment-procedures",
-      "attachNodeTypes": ["family"],
+      "attachNodeTypes": [
+        "family"
+      ],
       "description": "The procedures an assessor follows to decide whether each control is working."
     },
     {
@@ -111,7 +114,7 @@
       "limb": "atlas:LIMB-COMPLIANCE",
       "label": "FedRAMP Rev. 5 Baselines",
       "source_id": "fedramp-rev5",
-      "description": "What a cloud service must meet to be authorized for federal use."
+      "description": "Legacy Rev. 5 baselines retained for historical and transition reference."
     },
     {
       "catalog_id": "nist-800-53b",
