@@ -135,7 +135,7 @@ export function RelationshipGraphTable(props: {
                 {displayNameFor("confidence", edge.confidence)}
               </td>
               <td data-label="Relationship explanation">
-                <strong>{explanation.label}:</strong> {explanation.text}
+                {explanation ? <><strong>{explanation.label}:</strong> {explanation.text}</> : null}
                 {edge.source_refs?.length ? (
                   <details className="relationship-source-refs">
                     <summary>

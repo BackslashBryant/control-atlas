@@ -12,7 +12,7 @@ const BASE_PROFILES = Object.freeze({
   attack_technique: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Technique Description", kind: "text" })]), required: Object.freeze(["description"]) }),
   baseline: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Baseline", kind: "text" })]), required: Object.freeze(["description"]) }),
   benchmark: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Benchmark Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
-  catalog: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Publication Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
+  catalog: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Publication Summary", kind: "text" })]), required: Object.freeze([]) }),
   category: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Category Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
   control: Object.freeze({
     sections: Object.freeze([
@@ -97,6 +97,13 @@ const CATALOG_OVERRIDES = Object.freeze({
   "dod-rai:requirement": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Guidance", kind: "text" })]), required: Object.freeze(["description"]) }),
   "dod-zt:zt_activity": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Activity", kind: "text" }), Object.freeze({ field: "outcomes", heading: "Published Outcomes", kind: "text" }), Object.freeze({ field: "end_state", heading: "Published End State", kind: "text" }), Object.freeze({ field: "predecessors", heading: "Predecessor Activities", kind: "list" }), Object.freeze({ field: "successors", heading: "Successor Activities", kind: "list" })]), required: Object.freeze(["description"]) }),
   "nist-ai-rmf:requirement": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Action", kind: "text" })]), required: Object.freeze(["description"]) }),
+  "nist-800-171:requirement": Object.freeze({ sections: Object.freeze([DESCRIPTION]), required: Object.freeze([]) }),
+  "nist-800-172:requirement": Object.freeze({ sections: Object.freeze([DESCRIPTION]), required: Object.freeze([]) }),
+  "nist-iot-cybersecurity:iot_capability_domain": Object.freeze({ sections: BASE_PROFILES.iot_capability_domain.sections, required: Object.freeze([]) }),
+  "nist-iot-cybersecurity:iot_capability": Object.freeze({ sections: BASE_PROFILES.iot_capability.sections, required: Object.freeze([]) }),
+  "nist-iot-cybersecurity:iot_subcapability": Object.freeze({ sections: BASE_PROFILES.iot_subcapability.sections, required: Object.freeze([]) }),
+  "nist-iot-cybersecurity:iot_capability_element": Object.freeze({ sections: BASE_PROFILES.iot_capability_element.sections, required: Object.freeze([]) }),
+  "nist-iot-cybersecurity:iot_capability_subelement": Object.freeze({ sections: BASE_PROFILES.iot_capability_subelement.sections, required: Object.freeze([]) }),
   "nist-ssdf:requirement": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Practice", kind: "text" })]), required: Object.freeze(["description"]) }),
 });
 
@@ -110,6 +117,7 @@ export function recordPresentationProfile(catalogId, nodeType) {
 
 export function missingRequiredRecordFields(profile, metadata = {}) {
   return profile.required.filter((field) => {
+    if (metadata.structural_group === true && field === "description") return false;
     const value = metadata[field];
     return Array.isArray(value) ? value.length === 0 : !String(value || "").trim();
   });

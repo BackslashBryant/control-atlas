@@ -400,13 +400,13 @@ function resolveSourceMaterialItems(
       return {
         id: source.id,
         displayTitle,
-        publisher: source.owner || parent?.owner || "Publisher not recorded",
+        publisher: source.owner || parent?.owner || "",
         format:
           source.format ||
           source.artifact_type ||
           (source.metadata?.identity_kind === "reference"
             ? "Reference page"
-            : "Not recorded"),
+            : ""),
         retrievedAt: source.retrieved_at || null,
         recordCount:
           typeof source.record_count === "number" ? source.record_count : null,
@@ -438,8 +438,8 @@ function resolveConnectionEvidenceItems(
       return {
         id: source.id,
         displayTitle,
-        publisher: source.owner || parent?.owner || "Publisher not recorded",
-        format: source.format || source.artifact_type || "Not recorded",
+        publisher: source.owner || parent?.owner || "",
+        format: source.format || source.artifact_type || "",
         retrievedAt: source.retrieved_at || null,
         relationshipCount:
           typeof source.relationship_count === "number"

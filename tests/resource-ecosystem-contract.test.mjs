@@ -40,10 +40,10 @@ test("required collections are populated and mutually resolvable", () => {
   }
 });
 
-test("every card has source, access, identity, and review metadata without requiring optional claims", () => {
-  const wordCount = (value) => value.trim().split(/\s+/).length;
+test("every card has identity and review metadata while optional editorial claims stay optional", () => {
+  const wordCount = (value) => value ? value.trim().split(/\s+/).length : 0;
   for (const resource of dataset.resources) {
-    assert.ok(resource.cardPurpose.length >= 20, `${resource.id} card purpose`);
+    if (resource.cardPurpose) assert.ok(resource.cardPurpose.length >= 20, `${resource.id} card purpose`);
     assert.ok(resource.publisherType, `${resource.id} publisher type`);
     if (resource.officialStatus) assert.equal(typeof resource.officialStatus, "string", `${resource.id} optional official status`);
     assert.ok(resource.brandKey, `${resource.id} brand key`);
@@ -56,7 +56,7 @@ test("every card has source, access, identity, and review metadata without requi
     assert.ok(Array.isArray(resource.featuredCollections));
     assert.ok(wordCount(resource.summary) <= 25, `${resource.id} summary exceeds 25 words`);
     assert.ok(wordCount(resource.whyIncluded) <= 35, `${resource.id} why listed exceeds 35 words`);
-    assert.ok(wordCount(resource.cardPurpose) <= 18, `${resource.id} card purpose exceeds 18 words`);
+    if (resource.cardPurpose) assert.ok(wordCount(resource.cardPurpose) <= 18, `${resource.id} card purpose exceeds 18 words`);
 
     const hostname = new URL(resource.canonicalUrl).hostname;
     assert.doesNotMatch(hostname, /(^|\.)(example\.(com|org|net)|invalid|localhost)$/i, `${resource.id} uses a non-canonical test domain`);
@@ -71,7 +71,8 @@ test("parent and child ecosystem relationships resolve without becoming publicat
   assert.equal(byId.get("directory-common-criteria-products").parentEcosystemId, "ecosystem-common-criteria");
   assert.equal(byId.get("tool-platform-one-ironbank").parentEcosystemId, "ecosystem-platform-one");
   assert.equal(byId.get("portal-disa-servicenow").parentEcosystemId, "portal-disa-connect");
-  assert.equal(byId.get("portal-disa-servicenow").accessType, "dod_network_required");
+  assert.equal(byId.get("portal-disa-servicenow").accessType, undefined);
+  assert.match(byId.get("portal-disa-servicenow").publicAccessNotes, /NIPRNet or NIPRNet VPN/);
 });
 
 test("aliases find current resources and removed publications stay out of Resources", () => {

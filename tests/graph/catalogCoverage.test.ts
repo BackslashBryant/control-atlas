@@ -56,7 +56,7 @@ test("unmapped publications explain the gap according to mandate evidence", () =
       pct: 0,
       mandate: "contractual",
     }),
-    "No published mappings yet.",
+    "",
   );
 });
 
@@ -70,7 +70,7 @@ test("thin mandated publications report the absence of published mappings", () =
       pct: 2,
       mandate: "statutory",
     }),
-    "No published mappings yet.",
+    "",
   );
   assert.equal(
     catalogCoverageMessage({
@@ -81,6 +81,6 @@ test("thin mandated publications report the absence of published mappings", () =
       pct: 0,
       mandate: "federal_policy_or_regulatory_mandate",
     }),
-    "No published mappings yet.",
+    "",
   );
 });

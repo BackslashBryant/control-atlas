@@ -523,28 +523,10 @@ export function ObjectDetailPage(props: {
                 </AppLink>
               </div>
             </section>
-          ) : presentation.sections.length === 1 && !missingSourceFields.length && source ? (
-            <section className="record-context-note" aria-labelledby="sparse-context-heading">
-              <h2 id="sparse-context-heading">Context</h2>
-              <p>
-                Publishers define this {kind.toLowerCase()} in a single official statement.{" "}
-                {connectionCount > 0
-                  ? `Its ${connectionCount} related record${connectionCount === 1 ? "" : "s"} provide the implementation detail, assessment criteria, and cross-framework mappings that give this record its operational meaning.`
-                  : "Use the Atlas map to see where this record sits in the broader framework hierarchy and discover related material across publications."}
-              </p>
-              <div className="card-actions">
-                <AppLink onNavigate={onNavigate} patch={{ node: node.id }} variant="secondary" view="atlas-map">
-                  Explore in Atlas
-                </AppLink>
-                <AppLink
-                  onNavigate={onNavigate}
-                  patch={{ crosswalk: "relationships", intent: "item-mapping", items: document.item_id, source: document.catalog_id }}
-                  variant="secondary"
-                  view="matrix"
-                >
-                  Compare this record
-                </AppLink>
-              </div>
+          ) : node.metadata?.structural_group === true ? (
+            <section className="record-context-note" data-claim-origin="atlas_editorial">
+              <h2>Structural grouping</h2>
+              <p>This {kind.toLowerCase()} organizes records within {catalogName}.</p>
             </section>
           ) : null}
           {source ? (
@@ -559,7 +541,7 @@ export function ObjectDetailPage(props: {
             </section>
           ) : missingSourceFields.length ? (
             <section className="notice" data-record-source-error role="alert">
-              <h2>Record data unavailable</h2>
+              <h2>Unable to load published text</h2>
               <p>The published text for this record did not load.</p>
             </section>
           ) : (
@@ -647,10 +629,10 @@ export function ObjectDetailPage(props: {
               })}
             </div>
             <dl className="record-source-facts">
-              <div>
+              {publisherName ? <div>
                 <dt>Publisher</dt>
-                <dd>{publisherName || "Not recorded"}</dd>
-              </div>
+                <dd>{publisherName}</dd>
+              </div> : null}
               <div>
                 <dt>Publication</dt>
                 <dd>{catalogName}{source?.version ? ` · ${source.version}` : ""}</dd>
@@ -729,10 +711,10 @@ export function ObjectDetailPage(props: {
                                 <strong>Published connection</strong>
                                 {` · ${formatRelationshipLabel({ relationship_type: item.relationshipType })}`}
                               </span>
-                              <span className="relationship-citation">
+                              {sourceNames.length ? <span className="relationship-citation">
                                 <strong>Source</strong>
-                                {` · ${sourceNames.length ? sourceNames.join(" · ") : "Not recorded"}`}
-                              </span>
+                                {` · ${sourceNames.join(" · ")}`}
+                              </span> : null}
                               <details className="mapping-row-details relationship-source-evidence">
                                 <summary aria-label={`Source evidence for ${relatedIdentity.primary}`}>Source evidence</summary>
                                 <dl className="relationship-source-facts">

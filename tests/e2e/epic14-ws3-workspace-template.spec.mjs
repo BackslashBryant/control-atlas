@@ -124,7 +124,7 @@ test("WS3 Resource detail uses a knowledge-base reading sequence", async ({ page
     "What it is",
     "How to use or access",
     "Screenshots",
-    "Related resources",
+    "Filed under",
   ]);
   await expect(page.getByRole("heading", { name: "Governed discovery tags" })).toHaveCount(0);
   const details = page.locator("details.resource-detail-maintenance");

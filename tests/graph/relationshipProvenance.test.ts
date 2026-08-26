@@ -21,10 +21,7 @@ test("relationship explanations preserve their provenance boundary", () => {
     },
     {
       edge: {},
-      expected: {
-        label: "No published rationale",
-        text: "No published rationale was supplied for this relationship.",
-      },
+      expected: null,
     },
   ] as const;
 

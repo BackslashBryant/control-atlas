@@ -835,6 +835,31 @@ function attachNodeProvenance(node, sourceId, registry) {
   node.entity_kind = "content_record";
   node.profile_id = recordProfileId(node.node_type);
   node.source_material_id = primaryArtifactId;
+  const sourceLocator = node.metadata?.source_locator || `${sourceId}#${node.id}`;
+  const sourceReference = `${primaryArtifactId}#${sourceLocator}`;
+  node.source_refs = [sourceReference];
+  const presentationFields = recordPresentationProfile(
+    node.metadata?.catalog_id || "",
+    node.node_type,
+  ).sections.map((section) => section.field);
+  const materialFields = [...new Set(["title", ...presentationFields])];
+  node.claim_evidence = materialFields
+    .filter((field) => {
+      const value = node.metadata?.[field];
+      return Array.isArray(value) ? value.length > 0 : Boolean(String(value || "").trim());
+    })
+    .map((field) => ({
+      entity_id: node.id,
+      field_path: `/metadata/${field}`,
+      origin: node.metadata.origin,
+      evidence_refs: node.metadata.origin === "atlas_editorial" ? [] : [sourceReference],
+      ...(node.metadata.origin === "publisher_derived"
+        ? { transformation: "Deterministic projection from the cited publisher artifact." }
+        : node.metadata.origin === "atlas_editorial"
+          ? { transformation: "Control Atlas structural context." }
+          : {}),
+      review_status: "reviewed",
+    }));
   return node;
 }
 

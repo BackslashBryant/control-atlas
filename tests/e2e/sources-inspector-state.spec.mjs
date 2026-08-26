@@ -133,17 +133,22 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await gotoApp(page, "/#/sources?source=dod-rai-toolkit");
     await waitForAppReady(page);
 
-    // Row pill says "2 source files"
+    // The row count must reconcile to the normalized source ledger.
     const pill = page.locator(".source-register-row--selected .source-attached-pill");
     await expect(pill).toBeVisible();
-    await expect(pill).toContainText("2 source files");
+    const pillTitle = await pill.getAttribute("title");
+    const sourceCount = Number(pillTitle?.match(/^(\d+) source files?/)?.[1]);
+    expect(sourceCount).toBeGreaterThan(0);
 
-    // Inspector visibly exposes both source files
+    // The inspector visibly exposes exactly that many source files.
     const inspector = page.locator(".sources-inspector-pane .source-inspector--inline");
     await expect(inspector).toBeVisible();
 
-    const fileItems = inspector.locator(".source-material-item");
-    await expect(fileItems).toHaveCount(2);
+    const fileItems = inspector
+      .locator("details.source-inspector-section")
+      .filter({ hasText: /^Source files \(\d+\)/ })
+      .locator(".source-material-item");
+    await expect(fileItems).toHaveCount(sourceCount);
 
     // Verify details & field provenance disclosure exists
     const techDetails = inspector.locator(".source-inspector-provenance");

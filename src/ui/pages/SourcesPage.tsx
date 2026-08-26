@@ -34,7 +34,7 @@ const SOURCE_PAGE_SIZE = 25;
  */
 function VerificationDate(props: { field: { value: string | null; state: string; reason: string } }) {
   const { field } = props;
-  if (!field.value) return <>—</>;
+  if (!field.value) return null;
   if (field.state === "derived") {
     return (
       <span className="source-checked-derived" title={field.reason}>
@@ -124,7 +124,7 @@ function PublicationInspectorContent(props: {
     ? `${publication.catalogCounts.normalized_records.toLocaleString()} normalized records indexed in Search & Explore`
     : isAuthority
       ? "Statutory / regulatory reference document"
-      : publication.coverageSummary || "—";
+      : publication.coverageSummary;
 
   return (
     <>
@@ -132,39 +132,39 @@ function PublicationInspectorContent(props: {
         <div>
           <span className="label">SELECTED PUBLICATION</span>
           {heading}
-          <p className="source-inspector-publisher">
-            {publication.publisher.value || "—"}
-          </p>
+          {publication.publisher.value ? (
+            <p className="source-inspector-publisher">{publication.publisher.value}</p>
+          ) : null}
         </div>
         {close}
       </header>
 
       <div className="source-inspector-content">
         <section aria-label="Source status summary" className="source-status-overview">
-          <div className="system-stat">
-            <span>Version / current through</span>
-            <strong>{publication.version.value || "—"}</strong>
-          </div>
-
-          <div className="system-stat">
-            <span>Status</span>
-            <div>
-              <Badge
-                tone={
-                  publication.lifecycle.value === "active"
-                    ? "success"
-                    : "warning"
-                }
-              >
-                {displayNameFor("lifecycle_status", publication.lifecycle.value || "")}
-              </Badge>
+          {publication.version.value ? (
+            <div className="system-stat">
+              <span>Version / current through</span>
+              <strong>{publication.version.value}</strong>
             </div>
-          </div>
+          ) : null}
 
-          <div className="system-stat">
-            <span>Last checked</span>
-            <strong><VerificationDate field={publication.verifiedAt} /></strong>
-          </div>
+          {publication.lifecycle.value ? (
+            <div className="system-stat">
+              <span>Status</span>
+              <div>
+                <Badge tone={publication.lifecycle.value === "active" ? "success" : "warning"}>
+                  {displayNameFor("lifecycle_status", publication.lifecycle.value)}
+                </Badge>
+              </div>
+            </div>
+          ) : null}
+
+          {publication.verifiedAt.value ? (
+            <div className="system-stat">
+              <span>Last checked</span>
+              <strong><VerificationDate field={publication.verifiedAt} /></strong>
+            </div>
+          ) : null}
 
           <div className="system-stat">
             <span>Control Atlas coverage</span>
@@ -328,17 +328,17 @@ function PublicationInspectorContent(props: {
               {sourceUsageSummary(publication.rawSource || {})}
             </p>
             <ul className="source-provenance-list">
-              <li>
-                <strong>Source roles:</strong> <span>{sourceRoles || "Not recorded"}</span>
-              </li>
-              <li>
+              {sourceRoles ? <li>
+                <strong>Source roles:</strong> <span>{sourceRoles}</span>
+              </li> : null}
+              {publication.provenance ? <li>
                 <strong>Provenance class:</strong>{" "}
-                <span>{publication.provenance || "Official source"}</span>
-              </li>
-              <li>
+                <span>{publication.provenance}</span>
+              </li> : null}
+              {publication.eligibility ? <li>
                 <strong>Eligibility status:</strong>{" "}
-                <span>{publication.eligibility || "Eligible"}</span>
-              </li>
+                <span>{publication.eligibility}</span>
+              </li> : null}
               <li>
                 <strong>Access status:</strong>{" "}
                 <span>{publication.access || "Public"}</span>
@@ -807,19 +807,20 @@ export function SourcesPage(props: {
                             >
                               {row.displayTitle}
                             </button>
-                            <span className="source-mobile-publisher">
-                              {row.publisher.value || "—"}
-                            </span>
-                            <div className="source-mobile-meta">
-                              <span>{row.version.value || "—"}</span>
-                              <span> · </span>
-                              <span className="source-mobile-status">
-                                {displayNameFor(
-                                  "lifecycle_status",
-                                  row.lifecycle.value || "",
-                                )}
-                              </span>
-                            </div>
+                            {row.publisher.value ? (
+                              <span className="source-mobile-publisher">{row.publisher.value}</span>
+                            ) : null}
+                            {row.version.value || row.lifecycle.value ? (
+                              <div className="source-mobile-meta">
+                                {row.version.value ? <span>{row.version.value}</span> : null}
+                                {row.version.value && row.lifecycle.value ? <span> · </span> : null}
+                                {row.lifecycle.value ? (
+                                  <span className="source-mobile-status">
+                                    {displayNameFor("lifecycle_status", row.lifecycle.value)}
+                                  </span>
+                                ) : null}
+                              </div>
+                            ) : null}
                             {materialCount > 0 || mappingCount > 0 ? (
                               <span
                                 className="source-attached-pill"
@@ -851,11 +852,11 @@ export function SourcesPage(props: {
                         </td>
 
                         <td className="source-col-publisher">
-                          {row.publisher.value || "—"}
+                          {row.publisher.value || ""}
                         </td>
 
                         <td className="source-col-version">
-                          {row.version.value || "—"}
+                          {row.version.value || ""}
                         </td>
 
                         <td className="source-col-checked">
@@ -863,18 +864,11 @@ export function SourcesPage(props: {
                         </td>
 
                         <td className="source-col-status">
-                          <Badge
-                            tone={
-                              row.lifecycle.value === "active"
-                                ? "success"
-                                : "warning"
-                            }
-                          >
-                            {displayNameFor(
-                              "lifecycle_status",
-                              row.lifecycle.value || "",
-                            )}
-                          </Badge>
+                          {row.lifecycle.value ? (
+                            <Badge tone={row.lifecycle.value === "active" ? "success" : "warning"}>
+                              {displayNameFor("lifecycle_status", row.lifecycle.value)}
+                            </Badge>
+                          ) : null}
                         </td>
                       </tr>
                     );

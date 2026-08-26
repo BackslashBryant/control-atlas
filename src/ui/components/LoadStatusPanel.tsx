@@ -38,7 +38,7 @@ export function LoadErrorPanel(props: {
   children?: ReactNode;
 }) {
   return (
-    <Panel className="max-w-[800px] mx-auto mt-[40px] border-[var(--ca-danger)]" title="Record data unavailable">
+    <Panel className="max-w-[800px] mx-auto mt-[40px] border-[var(--ca-danger)]" title="Unable to load this record">
       <p className="mb-[16px] font-bold text-[var(--ca-danger)]">{props.message}</p>
       <p className="mb-[24px]">
         Check your connection, then retry. Guides and About still work without

@@ -1,0 +1,3343 @@
+{
+  "schema_version": "1.0",
+  "organizations": [
+    {
+      "schema_version": "1.0",
+      "id": "organization.abuse-ch",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "abuse.ch",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:dataset-malwarebazaar:publisher-destination",
+        "resource:dataset-threatfox:publisher-destination",
+        "resource:dataset-urlhaus:publisher-destination",
+        "resource:ecosystem-abuse-ch:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.amazon-web-services",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Amazon Web Services",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:commercial-aws-govcloud-docs:publisher-destination",
+        "resource:community-aws-repost-security:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.anchore",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Anchore",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-grype-vulnerability-scanner:publisher-destination",
+        "resource:tool-syft-sbom-generator:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.ansible-lockdown-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Ansible Lockdown Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-ansible-lockdown:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.aqua-security",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Aqua Security",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-kube-bench:publisher-destination",
+        "resource:tool-trivy:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.censys",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Censys",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:service-censys:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.center-for-internet-security",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Center for Internet Security",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:portal-cis-workbench:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.center-for-internet-security-cis",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Center for Internet Security (CIS)",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:commercial-cis-benchmarks-free:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.cert-coordination-center",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "CERT Coordination Center",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:reference-cert-vulnerability-notes:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.checkmarx",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Checkmarx",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-kics:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.chief-digital-and-artificial-intelligence-office",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Chief Digital and Artificial Intelligence Office",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "dod-rai-toolkit"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.cisa",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "CISA",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:dataset-cisa-known-exploited-vulnerabilities-json:publisher-destination",
+        "resource:official-cisa-kev-catalog:publisher-destination",
+        "resource:official-cisa-services-catalog:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.cisa-niccs",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "CISA NICCS",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:official-niccs-training-catalog:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.cisco",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Cisco",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-cisco-security:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.cisofoundation-cisophy",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "CISOfoundation / CISOPHY",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-lynis:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.cncf-graduated",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "CNCF Graduated",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-falco-runtime-security:publisher-destination",
+        "resource:tool-open-policy-agent:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.cncf-incubating",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "CNCF Incubating",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-cloud-custodian:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.cncf-sandbox",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "CNCF Sandbox",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-kubescape:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.common-criteria-recognition-arrangement",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Common Criteria Recognition Arrangement",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:directory-common-criteria-labs:publisher-destination",
+        "resource:directory-common-criteria-products:publisher-destination",
+        "resource:directory-common-criteria-profiles:publisher-destination",
+        "resource:directory-common-criteria-schemes:publisher-destination",
+        "resource:ecosystem-common-criteria:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.community",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Community",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "community-cci-research"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.complianceascode",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "ComplianceAsCode",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "artifact-complianceascode-content"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.complianceascode-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "ComplianceAsCode Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-complianceascode-discussions:publisher-destination",
+        "resource:tool-compliance-as-code:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.control-atlas",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Control Atlas",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "control-atlas-structure"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.crowdstrike",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "CrowdStrike",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-crowdstrike:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.cyberark",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "CyberArk",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-cyberark:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.cybersecdef",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "CyberSecDef",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "artifact-cybersecdef-stig"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.cybersecurity-and-infrastructure-security-agency",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Cybersecurity and Infrastructure Security Agency",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:dataset-cisa-vulnrichment:publisher-destination",
+        "resource:tool-cisa-cset:publisher-destination",
+        "resource:tool-cisa-decider:publisher-destination",
+        "resource:tool-cisa-malcolm:publisher-destination",
+        "resource:tool-cisa-scubagear:publisher-destination",
+        "resource:training-cisa-learning:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.defense-counterintelligence-and-security-agency",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Defense Counterintelligence and Security Agency",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:portal-dcsa-nisp-cybersecurity:publisher-destination",
+        "resource:service-dcsa-nisp-emass:publisher-destination",
+        "resource:training-cdse:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.defense-information-systems-agency",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Defense Information Systems Agency",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:catalog-disa-cloud-offerings:publisher-destination",
+        "resource:catalog-disa-products:publisher-destination",
+        "resource:directory-dodin-apl:publisher-destination",
+        "resource:ecosystem-dod-cyber-exchange:publisher-destination",
+        "resource:portal-disa-connect:publisher-destination",
+        "resource:portal-disa-servicenow:publisher-destination",
+        "resource:portal-dod-enterprise-connections-library:publisher-destination",
+        "resource:portal-dod-enterprise-connections:publisher-destination",
+        "resource:portal-dod-policy-guidance:publisher-destination",
+        "resource:portal-dod-stig-srg:publisher-destination",
+        "resource:service-disa-acas:publisher-destination",
+        "resource:service-disa-deas:publisher-destination",
+        "resource:service-disa-deos:publisher-destination",
+        "resource:service-disa-pdisp:publisher-destination",
+        "resource:service-disa-vms:publisher-destination",
+        "resource:tool-disa-scap-compliance-checker:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.defense-logistics-agency",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Defense Logistics Agency",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:service-sprs-cyber-reports:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.department-of-defense",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Department of Defense",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "authority-32-cfr-170",
+        "authority-dfars-252-204-7012",
+        "authority-dfars-252-204-7021",
+        "authority-dodd-5144-02",
+        "authority-dodi-8500-01",
+        "resource:service-dod-rmf-knowledge-service:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.department-of-defense-chief-information-officer",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Department of Defense Chief Information Officer",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "authority-dod-zt-strategy",
+        "dod-zt-capabilities",
+        "dod-zt-execution-roadmap",
+        "dod-zt-newsletter-2024-11",
+        "dod-zt-operational-technology",
+        "dod-zt-overlays-2024",
+        "dod-zt-reference-architecture-v2",
+        "dod-zt-strategy",
+        "dod-zt-strategy-placemats",
+        "resource:ecosystem-dod-cyber-workforce:publisher-destination",
+        "resource:portal-dod-cio-library:publisher-destination",
+        "resource:portal-dod-cmmc-documentation:publisher-destination",
+        "resource:portal-dod-cmmc:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.department-of-defense-office-of-small-business-programs",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Department of Defense Office of Small Business Programs",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:portal-project-spectrum:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.department-of-the-air-force",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Department of the Air Force",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:portal-software-af:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.department-of-the-air-force-platform-one",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Department of the Air Force Platform One",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:directory-platform-one-marketplace:publisher-destination",
+        "resource:ecosystem-platform-one:publisher-destination",
+        "resource:portal-platform-one-resources:publisher-destination",
+        "resource:service-platform-one-big-bang:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.dhs-privacy-office",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "DHS Privacy Office",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:template-privacy-impact-assessment:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.disa",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "DISA",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "artifact-cyber-mil-stig-compilations",
+        "artifact-cyber-mil-stig-downloads",
+        "artifact-cyber-mil-stig-gpo",
+        "cyber-mil-stig-compilations",
+        "cyber-mil-stig-downloads",
+        "cyber-mil-stig-gpo",
+        "disa-cci-list",
+        "disa-cci-nist-references",
+        "disa-srg-library",
+        "disa-stig-library",
+        "disa-stig-srg-cci-references",
+        "resource:tool-disa-stig-viewer:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.disa-cyber-exchange",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "DISA Cyber Exchange",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:legacy-diacap-transition:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.dod",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "DoD",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "dod-cmmc-rule"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.dod-cio",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "DoD CIO",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:official-dcwf-work-roles:publisher-destination",
+        "resource:official-dod-8140-matrix:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.dod-platform-one",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "DoD Platform One",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-platform-one-ironbank:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.elastic",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Elastic",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:catalog-elastic-detection-rules:publisher-destination",
+        "resource:community-elastic-security:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.executive-office-of-the-president",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Executive Office of the President",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "authority-eo-13556",
+        "authority-eo-13800"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.f5",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "F5",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-f5-devcentral:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.fedramp",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "FedRAMP",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "fedramp-2026-rules",
+        "fedramp-rev5",
+        "resource:guidance-fedramp-20x-package-reuse:publisher-destination",
+        "resource:portal-fedramp-rev5-stakeholders:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.fedramp-pmo-gsa",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "FedRAMP PMO (GSA)",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:official-fedramp-20x:publisher-destination",
+        "resource:official-fedramp-marketplace:publisher-destination",
+        "resource:template-fedramp-poam-rev5:publisher-destination",
+        "resource:template-fedramp-ssp-rev5:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.fortinet",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Fortinet",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-fortinet:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.forum-of-incident-response-and-security-teams",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Forum of Incident Response and Security Teams",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:dataset-first-epss:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.fraunhofer-fkie",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Fraunhofer FKIE",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:reference-malpedia:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.github",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "GitHub",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:dataset-github-advisory-database:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.gitleaks-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Gitleaks Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-gitleaks:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.google",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Google",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:ecosystem-osv:publisher-destination",
+        "resource:service-virustotal:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.government-communications-headquarters",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Government Communications Headquarters",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-cyberchef:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.greynoise-intelligence",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "GreyNoise Intelligence",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:service-greynoise-visualizer:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.gsa-technology-transformation-services",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "GSA Technology Transformation Services",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-gsa-oscal-ssp-word:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.gtfobins-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "GTFOBins Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:reference-gtfobins:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.i-assure",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "I-Assure",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:template-i-assure-ssp-worksheet:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.ibm-open-source",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "IBM Open Source",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-compliance-trestle:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.isoo",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "ISOO",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "isoo-cui-regulation"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.kroll",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Kroll",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-kape:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.kyverno-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Kyverno Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-kyverno:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.linux-foundation",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Linux Foundation",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-osquery:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.lolbas-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "LOLBAS Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:reference-lolbas:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.loldrivers-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "LOLDrivers Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:reference-loldrivers:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.maester-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Maester Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-maester:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.microsoft",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Microsoft",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "artifact-microsoft-powerstig",
+        "microsoft-zero-trust-maturity-questionnaire-v1-1",
+        "resource:commercial-azure-government-docs:publisher-destination",
+        "resource:community-microsoft-security:publisher-destination",
+        "resource:reference-microsoft-security-update-guide:publisher-destination",
+        "resource:reference-microsoft-stigrepo:publisher-destination",
+        "resource:tool-microsoft-security-compliance-toolkit:publisher-destination",
+        "resource:tool-microsoft-sysinternals:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.microsoft-open-source",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Microsoft Open Source",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-powerstig:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.microsoft365dsc-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Microsoft365DSC Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-microsoft365dsc:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.misp-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "MISP Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-misp:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.mitre",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "MITRE",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "artifact-heimdall-tools",
+        "artifact-mitre-cis-cci-mappings",
+        "artifact-mitre-saf",
+        "artifact-vulcan-framework",
+        "mitre-attack-enterprise",
+        "mitre-attack-ics",
+        "mitre-cis-cci-mappings",
+        "mitre-d3fend-mappings",
+        "mitre-d3fend-ontology",
+        "resource:ecosystem-attack-workbench:publisher-destination",
+        "resource:tool-mitre-attack-navigator:publisher-destination",
+        "resource:tool-mitre-caldera:publisher-destination",
+        "resource:tool-mitre-emass-client:publisher-destination",
+        "resource:tool-mitre-heimdall:publisher-destination",
+        "resource:tool-mitre-saf-cli:publisher-destination",
+        "resource:tool-mitre-vulcan:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.mitre-cti",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "MITRE CTI",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:dataset-mitre-attack-json:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.mitre-d3fend",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "MITRE D3FEND",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:dataset-mitre-d3fend-json:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.nara",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "NARA",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "nara-cui-registry",
+        "resource:official-cui-registry:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.national-archives-and-records-administration",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "National Archives and Records Administration",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "authority-32-cfr-2002"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.national-information-assurance-partnership",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "National Information Assurance Partnership",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:directory-niap-pcl:publisher-destination",
+        "resource:directory-niap-profiles:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.national-institute-of-standards-and-technology",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "National Institute of Standards and Technology",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-nist-oscal:publisher-destination",
+        "resource:directory-nist-cavp:publisher-destination",
+        "resource:directory-nist-cmvp-modules:publisher-destination",
+        "resource:portal-nice-framework:publisher-destination",
+        "resource:portal-nist-cmvp:publisher-destination",
+        "resource:repository-nist-ncp:publisher-destination",
+        "resource:tool-nist-mscp:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.naval-surface-warfare-center-crane-division",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Naval Surface Warfare Center Crane Division",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-cpat:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.naval-undersea-warfare-center",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Naval Undersea Warfare Center",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-stig-manager:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.naval-undersea-warfare-center-division-newport",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Naval Undersea Warfare Center Division Newport",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:ecosystem-nuwc-newport-rmf-tools:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.ncc-group",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "NCC Group",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-scoutsuite:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.niap",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "NIAP",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:official-niap-ccevs:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.nist",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "NIST",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "artifact-nist-informative-references",
+        "nist-800-171",
+        "nist-800-171-oscal-mappings",
+        "nist-800-171-rev2",
+        "nist-800-172-rev3",
+        "nist-800-37-rev2",
+        "nist-800-53",
+        "nist-800-53-rev4-rev5-crosswalk",
+        "nist-800-53a-assessment-procedures",
+        "nist-800-53b-baselines",
+        "nist-ai-rmf-playbook",
+        "nist-csf-2",
+        "nist-csf-53-supplemental",
+        "nist-csf11-csf20-crosswalk",
+        "nist-fips-199",
+        "nist-fips-200",
+        "nist-iot-device-cybersecurity-requirement-catalogs",
+        "nist-iot-requirements-80053-mapping-draft",
+        "nist-iot-requirements-csf11-mapping-draft",
+        "nist-mobile-threat-catalogue",
+        "nist-mobile-threat-catalogue-cve-list",
+        "nist-olir-csf2-to-sp800-171",
+        "nist-olir-csf2-to-sp800-53",
+        "nist-oscal",
+        "nist-sp-800-207",
+        "nist-sp-800-207a",
+        "nist-ssdf",
+        "nist-ssdf-oscal",
+        "resource:official-nist-privacy-framework:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.nist-nccoe",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "NIST NCCoE",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "nist-sp-1800-35",
+        "nist-sp-1800-35-critical-software-mappings",
+        "nist-sp-1800-35-csf11-mappings",
+        "nist-sp-1800-35-csf2-mappings",
+        "nist-sp-1800-35-sp80053-mappings"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.nist-nvd",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "NIST NVD",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:official-nist-nvd-api:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.nist-oscal-team",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "NIST OSCAL Team",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:official-nist-oscal:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.nmap-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Nmap Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-nmap:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.nsa-csfc-office",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "NSA CSfC Office",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:official-csfc-capability-packages:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.nuwc-division-newport",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "NUWC Division Newport",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "artifact-nuwcdivnpt-github-org",
+        "artifact-nuwcdivnpt-stig-manager"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.nuwcdivnpt",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "NUWCDIVNPT",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "nuwcdivnpt-github-org",
+        "nuwcdivnpt-stig-manager"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.office-of-management-and-budget",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Office of Management and Budget",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "authority-omb-circular-a-130",
+        "authority-omb-m-24-15",
+        "authority-omb-m-26-05"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.office-of-the-law-revision-counsel",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Office of the Law Revision Counsel",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "authority-usc-40-11331",
+        "authority-usc-41-1303",
+        "authority-usc-44-3504",
+        "authority-usc-44-3554",
+        "authority-usc-44-3608",
+        "authority-usc-44-3614"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.open-information-security-foundation",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Open Information Security Foundation",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-suricata:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.opencontrol-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "OpenControl Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:legacy-opencontrol-compliance-masonry:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.opencontrols-ai",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "OpenControls.ai",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "stigviewer-catalog",
+        "stigviewer-clkb-api"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.opencti-platform",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "OpenCTI Platform",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-opencti:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.openscap-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "OpenSCAP Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-openscap-workbench:publisher-destination",
+        "resource:tool-openscap:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.openssf",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "OpenSSF",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-openssf-scorecard:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.oscal-community",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "OSCAL Community",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-awesome-oscal:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.owasp-cyclonedx",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "OWASP CycloneDX",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-cyclonedx-cli:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.owasp-foundation",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "OWASP Foundation",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-dependency-track:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.palo-alto-networks",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Palo Alto Networks",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-palo-alto:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.palo-alto-networks-bridgecrew",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Palo Alto Networks / Bridgecrew",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-checkov:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.projectdiscovery",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "ProjectDiscovery",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:ecosystem-nuclei:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.prowler-open-source",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Prowler Open Source",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-prowler-cloud-security:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.qualys",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Qualys",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-qualys:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.rapid7",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Rapid7",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-rapid7:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.red-canary",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Red Canary",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-atomic-red-team:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.reddit",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Reddit",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-reddit-crowdstrike:publisher-destination",
+        "resource:community-reddit-fortinet:publisher-destination",
+        "resource:community-reddit-netsec:publisher-destination",
+        "resource:community-reddit-paloaltonetworks:publisher-destination",
+        "resource:community-reddit-tenable:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.reddit-community",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Reddit / Community",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-reddit-cmmc:publisher-destination",
+        "resource:community-reddit-devsecops:publisher-destination",
+        "resource:community-reddit-fedramp:publisher-destination",
+        "resource:community-reddit-grc:publisher-destination",
+        "resource:community-reddit-nistcontrols:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.sans-institute",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "SANS Institute",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:template-sans-security-policy:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.sans-technology-institute",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "SANS Technology Institute",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:reference-sans-isc:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.scip-ag",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "scip AG",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-hardening-kitty:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.security-onion-solutions",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Security Onion Solutions",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-security-onion:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.semgrep",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Semgrep",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-semgrep:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.servicenow",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "ServiceNow",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-servicenow-secops:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.shodan",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Shodan",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:service-shodan:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.sigmahq",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "SigmaHQ",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:ecosystem-sigmahq:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.sigstore",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Sigstore",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:ecosystem-sigstore-cosign:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.specterops",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "SpecterOps",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-bloodhound-ce:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.splunk",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Splunk",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:catalog-splunk-security-content:publisher-destination",
+        "resource:community-splunk:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.stack-exchange",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Stack Exchange",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-information-security-stackexchange:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.stigviewer-com",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "STIGViewer.com",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "artifact-stigviewer-catalog",
+        "artifact-stigviewer-clkb-api"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.tanium",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Tanium",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-tanium:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.tenable",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Tenable",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:catalog-tenable-audit-files:publisher-destination",
+        "resource:catalog-tenable-plugin-database:publisher-destination",
+        "resource:community-tenable-connect:publisher-destination",
+        "resource:reference-tenable-documentation:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.tenable-open-source",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Tenable Open Source",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-terrascan:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.the-cyber-ab",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "The Cyber AB",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:directory-cyber-ab-marketplace:publisher-destination",
+        "resource:ecosystem-cyber-ab:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.the-shadowserver-foundation",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "The Shadowserver Foundation",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:service-shadowserver-dashboard:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.trackr-live",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Trackr.Live",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:reference-trackr-openscap:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.turbot",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Turbot",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-steampipe:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.united-states-congress",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "United States Congress",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "authority-pl-116-92-sec-1648"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.urlscan-io",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "urlscan.io",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:service-urlscan:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.velocidex-enterprises",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Velocidex Enterprises",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-velociraptor:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.virustotal",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "VirusTotal",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-yara-x:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.volatility-foundation",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Volatility Foundation",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-volatility-3:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.wazuh",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Wazuh",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:community-wazuh:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.wazuh-inc",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Wazuh Inc.",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-wazuh-siem:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.wireshark-foundation",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Wireshark Foundation",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-wireshark:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "organization.zeek-project",
+      "entity_kind": "organization",
+      "profile_id": "organization.base",
+      "title": "Zeek Project",
+      "lifecycle": {
+        "status": "unknown",
+        "evidence_refs": []
+      },
+      "source_refs": [
+        "resource:tool-zeek:publisher-destination"
+      ],
+      "origin": "publisher_normalized",
+      "payload": {},
+      "operational": {
+        "retrieved_at": null,
+        "checked_at": null,
+        "parser_id": "source-truth-organization-index",
+        "parser_version": "1.0.0",
+        "review_status": "reviewed"
+      }
+    }
+  ]
+}

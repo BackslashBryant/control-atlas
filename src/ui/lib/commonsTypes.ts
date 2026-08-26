@@ -43,7 +43,7 @@ export type CommonsPopularitySignals = {
 };
 
 export type CommonsEvidenceSection = {
-  status: "documented" | "not_documented" | "not_applicable";
+  status: "documented";
   text: string;
   sourceUrl: string;
   values?: string[];
@@ -62,10 +62,10 @@ export type CommonsResource = {
   id: string;
   name: string;
   shortName: string;
-  cardPurpose: string;
+  cardPurpose?: string;
   slug: string;
   summary: string;
-  whyIncluded: string;
+  whyIncluded?: string;
   canonicalUrl: string;
   alternateUrls?: string[];
   publisher: string;
@@ -84,7 +84,7 @@ export type CommonsResource = {
   jurisdictions?: string[];
   governmentBranches?: string[];
   formats?: string[];
-  accessType: CommonsAccessType;
+  accessType?: CommonsAccessType;
   costType?: string;
   accountRequired?: boolean;
   authenticationRequired?: boolean;
@@ -96,7 +96,7 @@ export type CommonsResource = {
   redistributionPolicy?: string | null;
   officialStatus?: string | null;
   maturity?: string | null;
-  maintenanceStatus: CommonsMaintenanceStatus;
+  maintenanceStatus?: CommonsMaintenanceStatus;
   currentVersion?: string | null;
   publisherUpdatedAt?: string | null;
   lastReleaseAt?: string | null;
@@ -164,7 +164,7 @@ export type CommonsResource = {
   presentationProfile?: {
     profileType: string;
     template: "tool" | "reference" | "training" | "directory" | "community" | "data" | "ecosystem" | "destination" | "artifact";
-    whatItDoes: CommonsEvidenceSection;
+    whatItDoes?: CommonsEvidenceSection;
     whoItIsFor?: CommonsEvidenceSection;
     limitations?: CommonsEvidenceSection;
   };
@@ -212,6 +212,14 @@ export type CommonsResourceDataset = {
   lastUpdated: string;
   collections: CommonsCollection[];
   resources: CommonsResource[];
+  evidenceCatalog?: Array<{
+    id: string;
+    sourceUrl: string;
+    locatorType: "canonical_url" | "publisher_product_record" | "heading_path" | "captured_fragment" | "repository_commit";
+    locator: string;
+    retrievedAt: string;
+    reviewStatus: "reviewed" | "pending" | "rejected";
+  }>;
 };
 
 export type CommonsSearchIndexDoc = {
@@ -220,7 +228,7 @@ export type CommonsSearchIndexDoc = {
   shortName: string;
   slug: string;
   summary: string;
-  whyIncluded: string;
+  whyIncluded?: string;
   canonicalUrl: string;
   publisher: string;
   resourceLane: CommonsResourceLane;
@@ -230,9 +238,9 @@ export type CommonsSearchIndexDoc = {
   lifecycleStages: string[];
   audiences: string[];
   artifactTypes: string[];
-  accessType: CommonsAccessType;
+  accessType?: CommonsAccessType;
   costType?: string;
-  maintenanceStatus: CommonsMaintenanceStatus;
+  maintenanceStatus?: CommonsMaintenanceStatus;
   openSource: boolean;
   popularitySignals: CommonsPopularitySignals;
   companionResources: string[];

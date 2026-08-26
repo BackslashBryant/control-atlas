@@ -4,6 +4,7 @@ import test from 'node:test';
 
 import {
   classifyOscalDocument,
+  parse800171Catalog,
   parse800171CsvCatalog,
   parse800172Catalog,
   parse80053Catalog,
@@ -314,4 +315,34 @@ test('CSF 2.0 catalog normalization threads Function and Category grouping onto 
     category_id: 'GV.OC',
     category: 'Organizational Context',
   });
+});
+
+test('OSCAL normalization never promotes a title or identifier into missing publisher prose', () => {
+  const catalog171 = validOscalCatalog({
+    catalog: {
+      groups: [{
+        id: 'ac',
+        class: 'family',
+        title: 'Access Control',
+        controls: [{ id: '3.1.1', class: 'requirement', title: '3.1.1' }],
+      }],
+    },
+  });
+  const requirement171 = parse800171Catalog(catalog171, 'nist-oscal').records[0];
+  assert.equal(requirement171.title, '3.1.1');
+  assert.equal(requirement171.description, '');
+
+  const catalog172 = validOscalCatalog({
+    catalog: {
+      groups: [{
+        id: 'ac',
+        class: 'family',
+        title: 'Access Control',
+        controls: [{ id: '3.1.1e', class: 'security_requirement', title: '3.1.1e' }],
+      }],
+    },
+  });
+  const requirement172 = parse800172Catalog(catalog172, 'nist-oscal').records[0];
+  assert.equal(requirement172.title, '3.1.1e');
+  assert.equal(requirement172.description, '');
 });

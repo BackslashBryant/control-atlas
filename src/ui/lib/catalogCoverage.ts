@@ -71,7 +71,7 @@ export function catalogCoverageMessage(coverage: CatalogCoverage) {
     coverage.mandate === "contractual" ||
     coverage.mandate === "federal_policy_or_regulatory_mandate"
   ) {
-    return "No published mappings yet.";
+    return "";
   }
   return "Low map coverage — a missing link is not proof that no relationship exists.";
 }

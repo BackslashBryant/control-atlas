@@ -1,7 +1,7 @@
 export type RelationshipExplanation = {
-  label: "Published rationale" | "Navigation note" | "No published rationale";
+  label: "Published rationale" | "Navigation note";
   text: string;
-};
+} | null;
 
 /** Separates published relationship text from Control Atlas navigation context. */
 export function relationshipExplanation(edge: {
@@ -14,8 +14,5 @@ export function relationshipExplanation(edge: {
   if (edge.navigation_note) {
     return { label: "Navigation note", text: edge.navigation_note };
   }
-  return {
-    label: "No published rationale",
-    text: "No published rationale was supplied for this relationship.",
-  };
+  return null;
 }

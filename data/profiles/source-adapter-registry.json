@@ -1,94 +1,359 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "2.0",
   "generated_at": "2026-08-25",
   "adapters": [
     {
-      "adapter_id": "fedramp-consolidated-rules-json",
-      "adapter_version": "1.0.0",
-      "accepted_source_types": ["json"],
-      "produced_profile_ids": ["record.requirement"],
-      "field_transformations": ["publisher JSON fields to normalized rule records; absent fields omitted"],
-      "relationship_rules": [],
-      "fixture_set": "tests/fedramp-transition.test.mjs",
-      "failure_policy": "fail_closed",
-      "source_policy": "Current 2026 rules are current; the Rev. 5 workbook is retained as historical material."
-    },
-    {
-      "adapter_id": "mitre-attack-stix",
+      "adapter_id": "atlas-reviewed-publication-projection",
       "adapter_version": "2.0.0",
-      "accepted_source_types": ["stix"],
-      "produced_profile_ids": ["record.attack_technique"],
-      "field_transformations": ["STIX text to plain publisher text", "revoked to withdrawn lifecycle", "x_mitre_deprecated to deprecated lifecycle"],
-      "relationship_rules": ["publisher tactic memberships remain publisher-derived structural assertions"],
-      "fixture_set": "tests/mitre-attack-importer.test.mjs",
+      "catalog_ids": [
+        "cmmc-2",
+        "cui-policy",
+        "dod-rai",
+        "fips-199",
+        "fips-200",
+        "nist-800-37"
+      ],
+      "accepted_source_types": [
+        "html",
+        "pdf",
+        "publication"
+      ],
+      "produced_profile_ids": [
+        "record.baseline",
+        "record.category",
+        "record.impact_category",
+        "record.policy",
+        "record.requirement",
+        "record.rmf_step"
+      ],
+      "field_transformations": [
+        "project reviewed source fragments into concise Atlas records labeled publisher-derived"
+      ],
+      "relationship_rules": [
+        "only explicit publisher relationships are published mappings; Atlas organization remains navigation"
+      ],
+      "fixture_set": "tests/data-trust-contracts.test.mjs",
       "failure_policy": "fail_closed",
-      "source_policy": "Use ATT&CK 19.2 STIX at commit 6cda5ad8462c79e14fbb872f4e09059b18e0cfc4."
-    },
-    {
-      "adapter_id": "mitre-d3fend-json-ld",
-      "adapter_version": "2.0.0",
-      "accepted_source_types": ["json_ld"],
-      "produced_profile_ids": ["record.defend_countermeasure"],
-      "field_transformations": ["D3FEND ontology classes with D3- identifiers to defensive technique records"],
-      "relationship_rules": ["publisher ontology mappings retain their source locator"],
-      "fixture_set": "tests/mitre-d3fend-importer.test.mjs",
-      "failure_policy": "fail_closed",
-      "source_policy": "Use the D3FEND 1.5.0 ontology JSON-LD artifact and canonical-json checksum."
-    },
-    {
-      "adapter_id": "nist-oscal-profile",
-      "adapter_version": "1.5.0",
-      "accepted_source_types": ["oscal_json", "oscal_xml"],
-      "produced_profile_ids": ["record.baseline"],
-      "field_transformations": ["OSCAL profile imports to baseline membership assertions"],
-      "relationship_rules": ["profile imports produce publisher-derived selects assertions"],
-      "fixture_set": "tests/oscal-normalize.test.mjs",
-      "failure_policy": "fail_closed",
-      "source_policy": "Use NIST OSCAL profiles instead of hand-authored baseline membership."
-    },
-    {
-      "adapter_id": "nist-iot-capability-workbooks",
-      "adapter_version": "2.0.0",
-      "accepted_source_types": ["spreadsheet"],
-      "produced_profile_ids": ["record.iot_capability_domain", "record.iot_capability", "record.iot_subcapability", "record.iot_capability_element", "record.iot_capability_subelement"],
-      "field_transformations": ["publisher cells to stable capability hierarchy", "title is never copied into an absent description"],
-      "relationship_rules": ["mapping workbook rows produce informative mapping assertions only"],
-      "fixture_set": "tests/nist-structured-catalog-adapter.test.mjs",
-      "failure_policy": "fail_closed",
-      "source_policy": "Capability hierarchy is primary; mapping workbooks are supporting artifacts."
-    },
-    {
-      "adapter_id": "nist-800-171-172-oscal",
-      "adapter_version": "1.5.0",
-      "accepted_source_types": ["oscal_json"],
-      "produced_profile_ids": ["record.requirement"],
-      "field_transformations": ["preserve publisher identifiers, titles, hierarchy, and source locators"],
-      "relationship_rules": ["only publisher mappings become published assertions"],
-      "fixture_set": "tests/oscal-normalize.test.mjs",
-      "failure_policy": "fail_closed",
-      "source_policy": "OSCAL records are primary."
-    },
-    {
-      "adapter_id": "github-resource-evidence",
-      "adapter_version": "2.0.0",
-      "accepted_source_types": ["git", "html"],
-      "produced_profile_ids": ["resource.tool"],
-      "field_transformations": ["derive repository identity from repositoryUrl or canonicalUrl", "pin README evidence to a commit", "omit unsupported sections"],
-      "relationship_rules": [],
-      "fixture_set": "tests/commons-presentation.test.mjs",
-      "failure_policy": "omit_optional_fields",
-      "source_policy": "Never invent installation, usage, input, output, format, integration, release, or cost facts."
+      "source_policy": "Never present Atlas-authored summaries as verbatim publisher text."
     },
     {
       "adapter_id": "disa-product-resource",
       "adapter_version": "2.0.0",
-      "accepted_source_types": ["html", "publication"],
-      "produced_profile_ids": ["resource.restricted_service", "resource.service_portal", "resource.product_directory"],
-      "field_transformations": ["publisher product identity and public operational facts to resource fields", "missing cost omitted"],
-      "relationship_rules": ["replacement links require publisher evidence"],
+      "accepted_source_types": [
+        "html",
+        "publication"
+      ],
+      "produced_profile_ids": [
+        "resource.restricted_service",
+        "resource.service_portal",
+        "resource.product_directory"
+      ],
+      "field_transformations": [
+        "publisher product identity and public operational facts to resource fields",
+        "missing cost omitted"
+      ],
+      "relationship_rules": [
+        "replacement links require publisher evidence"
+      ],
       "fixture_set": "tests/commons-operator-ecosystem.test.mjs",
       "failure_policy": "omit_optional_fields",
-      "source_policy": "PDISP and other DISA services never receive a default cost."
+      "source_policy": "PDISP and other DISA services never receive a default cost.",
+      "catalog_ids": []
+    },
+    {
+      "adapter_id": "disa-xccdf-cci",
+      "adapter_version": "2.0.0",
+      "catalog_ids": [
+        "disa-cci",
+        "disa-srg",
+        "disa-stig"
+      ],
+      "accepted_source_types": [
+        "xccdf",
+        "xml"
+      ],
+      "produced_profile_ids": [
+        "record.benchmark",
+        "record.srg_requirement",
+        "record.stig_rule",
+        "record.requirement"
+      ],
+      "field_transformations": [
+        "decode XCCDF and CCI text as UTF-8",
+        "preserve benchmark, rule, check, fix, release, and package boundaries"
+      ],
+      "relationship_rules": [
+        "CCI references and benchmark containment retain publisher locators"
+      ],
+      "fixture_set": "tests/disa-stig-importer.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "A successful compilation does not assert publisher completeness."
+    },
+    {
+      "adapter_id": "fedramp-consolidated-rules-json",
+      "adapter_version": "1.0.0",
+      "accepted_source_types": [
+        "json"
+      ],
+      "produced_profile_ids": [
+        "record.requirement"
+      ],
+      "field_transformations": [
+        "publisher JSON fields to normalized rule records; absent fields omitted"
+      ],
+      "relationship_rules": [],
+      "fixture_set": "tests/fedramp-transition.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Current 2026 rules are current; the Rev. 5 workbook is retained as historical material.",
+      "catalog_ids": [
+        "fedramp-rev5"
+      ]
+    },
+    {
+      "adapter_id": "github-resource-evidence",
+      "adapter_version": "2.0.0",
+      "accepted_source_types": [
+        "git",
+        "html"
+      ],
+      "produced_profile_ids": [
+        "resource.tool"
+      ],
+      "field_transformations": [
+        "derive repository identity from repositoryUrl or canonicalUrl",
+        "pin README evidence to a commit",
+        "omit unsupported sections"
+      ],
+      "relationship_rules": [],
+      "fixture_set": "tests/commons-presentation.test.mjs",
+      "failure_policy": "omit_optional_fields",
+      "source_policy": "Never invent installation, usage, input, output, format, integration, release, or cost facts.",
+      "catalog_ids": []
+    },
+    {
+      "adapter_id": "mitre-attack-stix",
+      "adapter_version": "2.0.0",
+      "accepted_source_types": [
+        "stix"
+      ],
+      "produced_profile_ids": [
+        "record.attack_technique"
+      ],
+      "field_transformations": [
+        "STIX text to plain publisher text",
+        "revoked to withdrawn lifecycle",
+        "x_mitre_deprecated to deprecated lifecycle"
+      ],
+      "relationship_rules": [
+        "publisher tactic memberships remain publisher-derived structural assertions"
+      ],
+      "fixture_set": "tests/mitre-attack-importer.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Use ATT&CK 19.2 STIX at commit 6cda5ad8462c79e14fbb872f4e09059b18e0cfc4.",
+      "catalog_ids": [
+        "mitre-attack",
+        "mitre-attack-ics"
+      ]
+    },
+    {
+      "adapter_id": "mitre-d3fend-json-ld",
+      "adapter_version": "2.0.0",
+      "accepted_source_types": [
+        "json_ld"
+      ],
+      "produced_profile_ids": [
+        "record.defend_countermeasure"
+      ],
+      "field_transformations": [
+        "D3FEND ontology classes with D3- identifiers to defensive technique records"
+      ],
+      "relationship_rules": [
+        "publisher ontology mappings retain their source locator"
+      ],
+      "fixture_set": "tests/mitre-d3fend-importer.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Use the D3FEND 1.5.0 ontology JSON-LD artifact and canonical-json checksum.",
+      "catalog_ids": [
+        "mitre-d3fend"
+      ]
+    },
+    {
+      "adapter_id": "nist-800-171-172-oscal",
+      "adapter_version": "1.5.0",
+      "accepted_source_types": [
+        "oscal_json"
+      ],
+      "produced_profile_ids": [
+        "record.requirement"
+      ],
+      "field_transformations": [
+        "preserve publisher identifiers, titles, hierarchy, and source locators"
+      ],
+      "relationship_rules": [
+        "only publisher mappings become published assertions"
+      ],
+      "fixture_set": "tests/oscal-normalize.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "OSCAL records are primary.",
+      "catalog_ids": [
+        "nist-800-171",
+        "nist-800-171-rev2",
+        "nist-800-172"
+      ]
+    },
+    {
+      "adapter_id": "nist-ai-rmf-playbook",
+      "adapter_version": "2.0.0",
+      "catalog_ids": [
+        "nist-ai-rmf"
+      ],
+      "accepted_source_types": [
+        "json"
+      ],
+      "produced_profile_ids": [
+        "record.requirement"
+      ],
+      "field_transformations": [
+        "preserve playbook action identity and publisher category structure"
+      ],
+      "relationship_rules": [],
+      "fixture_set": "tests/record-taxonomy.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "AI RMF records map to the AI RMF taxonomy, never the CSF taxonomy."
+    },
+    {
+      "adapter_id": "nist-iot-capability-workbooks",
+      "adapter_version": "2.0.0",
+      "accepted_source_types": [
+        "spreadsheet"
+      ],
+      "produced_profile_ids": [
+        "record.iot_capability_domain",
+        "record.iot_capability",
+        "record.iot_subcapability",
+        "record.iot_capability_element",
+        "record.iot_capability_subelement"
+      ],
+      "field_transformations": [
+        "publisher cells to stable capability hierarchy",
+        "title is never copied into an absent description"
+      ],
+      "relationship_rules": [
+        "mapping workbook rows produce informative mapping assertions only"
+      ],
+      "fixture_set": "tests/nist-structured-catalog-adapter.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Capability hierarchy is primary; mapping workbooks are supporting artifacts.",
+      "catalog_ids": [
+        "nist-iot-cybersecurity"
+      ]
+    },
+    {
+      "adapter_id": "nist-mobile-threat-catalog",
+      "adapter_version": "2.0.0",
+      "catalog_ids": [
+        "nist-mobile-threats"
+      ],
+      "accepted_source_types": [
+        "csv",
+        "json"
+      ],
+      "produced_profile_ids": [
+        "record.mobile_threat",
+        "record.mobile_threat_category"
+      ],
+      "field_transformations": [
+        "preserve publisher title and structured threat fields without generated descriptions"
+      ],
+      "relationship_rules": [],
+      "fixture_set": "tests/nist-structured-catalog-adapter.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Title-only entries remain title-only."
+    },
+    {
+      "adapter_id": "nist-oscal-catalog",
+      "adapter_version": "2.0.0",
+      "catalog_ids": [
+        "csf-2",
+        "nist-800-53",
+        "nist-800-53a",
+        "nist-ssdf"
+      ],
+      "accepted_source_types": [
+        "oscal_json"
+      ],
+      "produced_profile_ids": [
+        "record.control",
+        "record.control_enhancement",
+        "record.assessment_procedure",
+        "record.category",
+        "record.function",
+        "record.requirement"
+      ],
+      "field_transformations": [
+        "preserve publisher identifiers, hierarchy, prose, parameters, and source paths"
+      ],
+      "relationship_rules": [
+        "publisher OSCAL containment remains structural; published mappings retain artifact locators"
+      ],
+      "fixture_set": "tests/oscal-normalize.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Validate publisher OSCAL before projection; omit absent optional prose."
+    },
+    {
+      "adapter_id": "nist-oscal-profile",
+      "adapter_version": "1.5.0",
+      "accepted_source_types": [
+        "oscal_json",
+        "oscal_xml"
+      ],
+      "produced_profile_ids": [
+        "record.baseline"
+      ],
+      "field_transformations": [
+        "OSCAL profile imports to baseline membership assertions"
+      ],
+      "relationship_rules": [
+        "profile imports produce publisher-derived selects assertions"
+      ],
+      "fixture_set": "tests/oscal-normalize.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Use NIST OSCAL profiles instead of hand-authored baseline membership.",
+      "catalog_ids": [
+        "nist-800-53b"
+      ]
+    },
+    {
+      "adapter_id": "zero-trust-source-family",
+      "adapter_version": "2.0.0",
+      "catalog_ids": [
+        "dod-zt",
+        "microsoft-zt-maturity",
+        "nist-zt"
+      ],
+      "accepted_source_types": [
+        "html",
+        "pdf",
+        "spreadsheet"
+      ],
+      "produced_profile_ids": [
+        "record.zt_activity",
+        "record.zt_assessment_question",
+        "record.zt_build",
+        "record.zt_capability",
+        "record.zt_document",
+        "record.zt_pillar",
+        "record.zt_tenet"
+      ],
+      "field_transformations": [
+        "preserve source-specific hierarchy and precise page, table, cell, or heading locators"
+      ],
+      "relationship_rules": [
+        "mapping workbook assertions remain publisher-derived and source-scoped"
+      ],
+      "fixture_set": "tests/zero-trust-workbook-adapter.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Each publisher remains a separate publication and authority boundary."
     }
   ]
 }

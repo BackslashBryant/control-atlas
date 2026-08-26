@@ -1472,8 +1472,8 @@
       "version": null,
       "retrieved_at": "2026-08-07",
       "retrieval_method": "extracted_from_official_publication",
-      "artifact_url": "https://rai.acqbot.com/executive-summary",
-      "catalog_browse_url": "https://www.ai.mil/Initiatives/About/Resources/Pathway-to-AI-Readiness/Responsible-AI/",
+      "artifact_url": "https://www.ai.mil/Latest/Blog/Article-Display/Article/3940314/responsible-ai-toolkit/",
+      "catalog_browse_url": "https://www.ai.mil/Latest/Blog/Article-Display/Article/3940314/responsible-ai-toolkit/",
       "federal_referenced_by": [],
       "graph_eligible": true,
       "metadata": {
@@ -1482,7 +1482,7 @@
         ],
         "parser": "dod-rai-toolkit-html",
         "version_unknown_reason": "The current publisher landing page and operational toolkit do not expose a release version.",
-        "provenance_note": "The current CDAO Responsible AI resource page links to the AI Assurance Toolkit through the CDAO-branded Tradewinds page, which identifies the AcqBot application as the operational toolkit. The publisher landing page and application locator are retained separately; the current publisher surfaces do not expose a release number.",
+        "provenance_note": "The official CDAO Responsible AI Toolkit article is canonical. Operational or secondary toolkit destinations are supporting links only.",
         "identity_kind": "publication"
       },
       "entity_kind": "publication",
@@ -3512,7 +3512,7 @@
       "publication_source_id": "dod-rai-toolkit",
       "name": "CDAO AI Assurance Toolkit Executive Summary",
       "display_name": "DoD AI Assurance Toolkit Artifact",
-      "source_role": "primary_data",
+      "source_role": "reference_only",
       "authority_class": "publisher",
       "format": "html",
       "version": null,
@@ -3528,11 +3528,12 @@
       "relationship_count": 13,
       "license_or_use": "CDAO public resource; no separate license stated",
       "metadata": {
-        "version_unknown_reason": "The current operational toolkit does not expose a release version."
+        "version_unknown_reason": "The current operational toolkit does not expose a release version.",
+        "provenance_note": "Supporting operational toolkit capture. The official ai.mil CDAO article is canonical for publication identity."
       },
       "entity_kind": "artifact",
       "profile_id": "artifact.html",
-      "origin": "publisher_exact"
+      "origin": "publisher_derived"
     },
     {
       "id": "artifact-dod-zt-capabilities",
@@ -4402,7 +4403,7 @@
       "authority_class": "publisher",
       "format": "spreadsheet",
       "version": "2.0-final",
-      "lifecycle_status": "final",
+      "lifecycle_status": "active",
       "retrieval_method": "direct_file_import",
       "retrieved_at": "2026-08-07",
       "artifact_url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/CSFv2.0_Concept_Crosswalk_SP171r3_OLIR.xlsx",
@@ -4415,7 +4416,10 @@
       "license_or_use": "NIST CSRC OLIR Program License-free Public Domain",
       "entity_kind": "artifact",
       "profile_id": "artifact.spreadsheet",
-      "origin": "publisher_exact"
+      "origin": "publisher_exact",
+      "metadata": {
+        "release_status": "final"
+      }
     },
     {
       "id": "artifact-nist-olir-csf2-to-sp800-53",
@@ -4426,7 +4430,7 @@
       "authority_class": "publisher",
       "format": "spreadsheet",
       "version": "2.0-final",
-      "lifecycle_status": "final",
+      "lifecycle_status": "active",
       "retrieval_method": "direct_file_import",
       "retrieved_at": "2024-02-20",
       "artifact_url": "https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx",
@@ -4439,7 +4443,10 @@
       "license_or_use": "NIST CSRC OLIR Program License-free Public Domain",
       "entity_kind": "artifact",
       "profile_id": "artifact.spreadsheet",
-      "origin": "publisher_exact"
+      "origin": "publisher_exact",
+      "metadata": {
+        "release_status": "final"
+      }
     },
     {
       "id": "artifact-nist-sp-1800-35",
@@ -7285,14 +7292,14 @@
       "display_name": "DoD AI Assurance",
       "display_group": "CDAO",
       "owner": "Chief Digital and Artificial Intelligence Office",
-      "provenance_class": "federal_published",
+      "provenance_class": "control_atlas_derived",
       "mandate_basis": [],
       "version": null,
-      "retrieved_at": "2026-06-09",
+      "retrieved_at": "2026-08-14",
       "retrieval_method": "extracted_from_official_publication",
-      "artifact_url": "https://rai.acqbot.com/executive-summary",
+      "artifact_url": "https://www.ai.mil/Latest/Blog/Article-Display/Article/3940314/responsible-ai-toolkit/",
       "artifact_type": "publication",
-      "checksum": "sha256:26bed4c4a32b11224c7e42da17655710088685e69933d656a10d476506c1dbeb",
+      "checksum": "sha256:89ee5d7b65cf317fd101e27e0d25e3e68fb01ea13d458867f12d54a6e8eb8a5d",
       "access_status": "public",
       "license_or_use": "CDAO public resource; no separate license stated",
       "lifecycle_status": "active",
@@ -7304,11 +7311,12 @@
           "dod-rai"
         ],
         "parser": "dod-rai-toolkit-html",
-        "version_unknown_reason": "The current publisher landing page and operational toolkit do not expose a release version."
+        "version_unknown_reason": "The current publisher landing page and operational toolkit do not expose a release version.",
+        "provenance_note": "Catalog records are deterministic Atlas projections reconciled to the official CDAO Responsible AI Toolkit article; they are not verbatim publisher records."
       },
       "entity_kind": "artifact",
       "profile_id": "artifact.publication",
-      "origin": "publisher_normalized"
+      "origin": "atlas_editorial"
     },
     {
       "id": "nist-800-53b-baselines",

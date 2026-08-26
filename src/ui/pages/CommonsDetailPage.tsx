@@ -57,6 +57,10 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
 
   const parent = resource.parentEcosystemId ? dataset?.resources.find((entry) => entry.id === resource.parentEcosystemId) : null;
   const children = dataset?.resources.filter((entry) => resource.childResourceIds?.includes(entry.id)) || [];
+  const relatedResources = dataset?.resources.filter((entry) => [
+    ...(resource.companionResources || []),
+    ...(resource.officialCounterparts || []),
+  ].includes(entry.id)) || [];
   const collections = dataset?.collections.filter((collection) => resource.featuredCollections?.includes(collection.id)) || [];
   const usefulFor = [...resource.lifecycleStages, ...(resource.technologyScopes || []), ...resource.audiences].filter(Boolean);
   const allTags = taxonomyTagsForResource(resource);
@@ -69,6 +73,20 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
     ? "Do not post CUI, credentials, system details, assessment evidence, or other non-public organizational information."
     : resource.warnings?.[0];
   const profileSections = new Set(effectiveProfile(resource.profileId)?.display_sections || []);
+  const replacement = resource.supersededBy && profileSections.has("replacement")
+    ? dataset?.resources.find((entry) => entry.id === resource.supersededBy)
+    : null;
+  const heroSummary = resource.cardPurpose || resource.summary;
+  const overviewText = resource.overview?.text?.trim() && resource.overview.text.trim() !== heroSummary.trim()
+    ? resource.overview.text.trim()
+    : "";
+  const whatItDoes = resource.presentationProfile?.whatItDoes;
+  const whatItDoesText = whatItDoes?.status === "documented"
+    && whatItDoes.text.trim() !== heroSummary.trim()
+    && whatItDoes.text.trim() !== overviewText
+      ? whatItDoes.text.trim()
+      : "";
+  const hasOverview = profileSections.has("overview") && Boolean(overviewText || whatItDoesText);
   const hasAudience = profileSections.has("who_for") && (resource.presentationProfile?.whoItIsFor?.status === "documented"
     || usefulFor.length > 0);
   const hasLimitations = profileSections.has("limitations") && resource.presentationProfile?.limitations?.status === "documented";
@@ -79,6 +97,26 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
         return section && typeof section === "object" && "status" in section && section.status === "documented";
       })
     : [];
+  const accessLabel = resourceAccessLabel(resource);
+  const hasAccess = profileSections.has("access") && Boolean(
+    accessLabel
+    || resource.costType
+    || resource.officialStatus
+    || resource.publicAccessNotes
+    || documentedToolSections.length
+    || resource.repositoryUrl
+    || resource.downloadLinks?.length
+    || resource.toolProfile?.release?.status === "published"
+  );
+  const hasRelatedResources = profileSections.has("related") && Boolean(parent || children.length || relatedResources.length || replacement);
+  const hasMaintenanceDetails = (profileSections.has("source_maintenance") || profileSections.has("maintenance")) && Boolean(
+    resource.currentVersion
+    || resource.maintenanceStatus
+    || resource.license
+    || resource.lastCommitAt
+    || resource.publisherUpdatedAt
+    || resource.repositoryEvidence
+  );
 
   const copyLink = async () => {
     await navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#${serializeHashLocation(normalizeViewState("commons-detail", { id }))}`);
@@ -102,7 +140,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
             {!["active", "unknown"].includes(lifecycleStatus) ? <span className="badge tone-warning">{resourceFieldLabel(lifecycleStatus)}</span> : null}
             <h1>{resource.name}</h1>
             <p className="resource-detail-owner">Publisher <strong>{resource.publisher}</strong></p>
-            <p className="resource-detail-summary">{resource.cardPurpose || resource.summary}</p>
+            <p className="resource-detail-summary">{heroSummary}</p>
             <div className="resource-detail-actions">
               <a className="resource-primary-link" href={resource.canonicalUrl} rel="noopener noreferrer" target="_blank">Open resource <IconExternalLink aria-hidden="true" size={16} /></a>
               {resource.repositoryUrl ? <a href={resource.repositoryUrl} rel="noopener noreferrer" target="_blank">Source repository <IconExternalLink aria-hidden="true" size={15} /></a> : null}
@@ -114,23 +152,17 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
 
         <div className="resource-detail-grid">
           <article className="resource-detail-main">
-            <DetailSection id="what-it-is" title="What it is">
-              {/* Show overview text when distinct from the hero summary; skip when
-                  the hero already displayed the same summary (cardPurpose absent). */}
-              {resource.overview?.text
-                ? <p>{resource.overview.text}</p>
-                : resource.cardPurpose
-                  ? <p>{resource.summary}</p>
-                  : null}
-              <EvidenceCopy section={resource.presentationProfile?.whatItDoes} />
+            {hasOverview ? <DetailSection id="what-it-is" title="What it is">
+              {overviewText ? <p>{overviewText}</p> : null}
+              {whatItDoesText && whatItDoes ? <EvidenceCopy section={{ ...whatItDoes, text: whatItDoesText }} /> : null}
               {resource.overview?.sourceUrl ? <p className="resource-detail-evidence"><a href={resource.overview.sourceUrl} rel="noopener noreferrer" target="_blank">{resource.overview.sourceType === "repository_readme" ? "Repository README" : "Publisher source"} <IconExternalLink aria-hidden="true" size={14} /></a></p> : null}
-            </DetailSection>
+            </DetailSection> : null}
             {hasAudience ? <DetailSection id="who-it-is-for" title="Who it's for">
               <EvidenceCopy section={resource.presentationProfile?.whoItIsFor} />
               {usefulFor.length ? <div aria-label="Useful for" className="resource-detail-tags">{usefulFor.map((item) => <span key={item}>{resourceFieldLabel(item)}</span>)}</div> : null}
             </DetailSection> : null}
-            <DetailSection id="access" title="How to use or access">
-              <dl className="resource-detail-facts"><div><dt>Access</dt><dd>{resourceAccessLabel(resource)}</dd></div>{resource.costType ? <div><dt>Cost</dt><dd>{resourceFieldLabel(resource.costType)}</dd></div> : null}{resource.officialStatus ? <div><dt>Status</dt><dd>{resourceFieldLabel(resource.officialStatus)}</dd></div> : null}</dl>
+            {hasAccess ? <DetailSection id="access" title="How to use or access">
+              <dl className="resource-detail-facts">{accessLabel ? <div><dt>Access</dt><dd>{accessLabel}</dd></div> : null}{resource.costType ? <div><dt>Cost</dt><dd>{resourceFieldLabel(resource.costType)}</dd></div> : null}{resource.officialStatus ? <div><dt>Status</dt><dd>{resourceFieldLabel(resource.officialStatus)}</dd></div> : null}</dl>
               {resource.publicAccessNotes ? <p>{resource.publicAccessNotes}</p> : null}
               {resource.toolProfile && documentedToolSections.length ? (
                 <div className="resource-tool-profile">
@@ -140,20 +172,22 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
                   {resource.toolProfile.formats?.status === "documented" || resource.toolProfile.integrations?.status === "documented" ? <section><h3>Formats and integrations</h3><EvidenceCopy section={resource.toolProfile.formats} /><EvidenceCopy section={resource.toolProfile.integrations} /></section> : null}
                 </div>
               ) : null}
-              <ul className="resource-link-list"><li><a href={resource.canonicalUrl} rel="noopener noreferrer" target="_blank">Official resource <IconExternalLink aria-hidden="true" size={14} /></a></li>{resource.repositoryUrl ? <li><a href={resource.repositoryUrl} rel="noopener noreferrer" target="_blank">Source repository <IconExternalLink aria-hidden="true" size={14} /></a></li> : null}{resource.toolProfile?.release?.status === "published" && resource.toolProfile.release.url ? <li><a href={resource.toolProfile.release.url} rel="noopener noreferrer" target="_blank">Releases <IconExternalLink aria-hidden="true" size={14} /></a></li> : null}{resource.downloadLinks?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Publisher download <IconExternalLink aria-hidden="true" size={14} /></a></li>)}{resource.alternateUrls?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Alternate publisher link <IconExternalLink aria-hidden="true" size={14} /></a></li>)}</ul>
-            </DetailSection>
+              <ul className="resource-link-list">{resource.repositoryUrl ? <li><a href={resource.repositoryUrl} rel="noopener noreferrer" target="_blank">Source repository <IconExternalLink aria-hidden="true" size={14} /></a></li> : null}{resource.toolProfile?.release?.status === "published" && resource.toolProfile.release.url ? <li><a href={resource.toolProfile.release.url} rel="noopener noreferrer" target="_blank">Releases <IconExternalLink aria-hidden="true" size={14} /></a></li> : null}{resource.downloadLinks?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Publisher download <IconExternalLink aria-hidden="true" size={14} /></a></li>)}{resource.alternateUrls?.map((url) => <li key={url}><a href={url} rel="noopener noreferrer" target="_blank">Alternate publisher link <IconExternalLink aria-hidden="true" size={14} /></a></li>)}</ul>
+            </DetailSection> : null}
             {resource.media?.status === "available" ? (
               <DetailSection id="screenshots" title="Screenshots">
                 <div className="resource-detail-media">{resource.media.items.map((item) => <figure key={`${item.url}-${item.sha256}`}><img alt={item.alt} height={item.height} loading="lazy" src={item.url} width={item.width} /><figcaption>Publisher image. <a href={item.sourceUrl} rel="noopener noreferrer" target="_blank">View source</a></figcaption></figure>)}</div>
               </DetailSection>
             ) : null}
             {hasLimitations ? <DetailSection id="limitations" title="Limitations"><EvidenceCopy section={resource.presentationProfile?.limitations} /></DetailSection> : null}
-            <DetailSection id="related-resources" title="Related resources">
+            {hasRelatedResources ? <DetailSection id="related-resources" title="Related resources">
+              {replacement ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ ...viewState, id: replacement.id }} view="commons-detail"><span>Replaced by</span><strong>{replacement.name}</strong></AppLink> : null}
               {parent ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ ...viewState, id: parent.id }} view="commons-detail"><span>Part of</span><strong>{parent.name}</strong></AppLink> : null}
               {children.map((child) => <AppLink className="resource-context-link" key={child.id} onNavigate={onNavigate} patch={{ ...viewState, id: child.id }} view="commons-detail"><span>Related service</span><strong>{child.name}</strong></AppLink>)}
-              {collections.map((collection) => <AppLink className="resource-context-link" key={collection.id} onNavigate={onNavigate} patch={{ collection: collection.id, showAll: "true" }} view="commons"><span>Collection</span><strong>{collection.title}</strong></AppLink>)}
-              <AppLink className="resource-library-search" onNavigate={onNavigate} patch={{ query: resource.frameworks[0] || resource.programs?.[0] || resource.shortName }} view="search"><IconBook2 aria-hidden="true" size={16} />Find related publications</AppLink>
-            </DetailSection>
+              {relatedResources.map((related) => <AppLink className="resource-context-link" key={related.id} onNavigate={onNavigate} patch={{ ...viewState, id: related.id }} view="commons-detail"><span>Companion</span><strong>{related.name}</strong></AppLink>)}
+            </DetailSection> : null}
+            {collections.length ? <DetailSection id="filed-under" title="Filed under">{collections.map((collection) => <AppLink className="resource-context-link" key={collection.id} onNavigate={onNavigate} patch={{ collection: collection.id, showAll: "true" }} view="commons"><span>Collection</span><strong>{collection.title}</strong></AppLink>)}</DetailSection> : null}
+            {(resource.frameworks[0] || resource.programs?.[0] || resource.shortName) ? <AppLink className="resource-library-search" onNavigate={onNavigate} patch={{ query: resource.frameworks[0] || resource.programs?.[0] || resource.shortName }} view="search"><IconBook2 aria-hidden="true" size={16} />Find related publications</AppLink> : null}
             {taxonomyTags.length ? (
               <DetailSection id="related-topics" title="Related topics">
                 <div className="resource-detail-tags">
@@ -178,23 +212,24 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
             ) : null}
             <nav aria-label="On this page" className="resource-detail-toc">
               <strong>On this page</strong>
-              <a href="#what-it-is">What it is</a>
+              {hasOverview ? <a href="#what-it-is">What it is</a> : null}
               {hasAudience ? <a href="#who-it-is-for">Who it's for</a> : null}
-              <a href="#access">How to use or access</a>
+              {hasAccess ? <a href="#access">How to use or access</a> : null}
               {resource.media?.status === "available" ? <a href="#screenshots">Screenshots</a> : null}
               {hasLimitations ? <a href="#limitations">Limitations</a> : null}
-              <a href="#related-resources">Related resources</a>
+              {hasRelatedResources ? <a href="#related-resources">Related resources</a> : null}
+              {collections.length ? <a href="#filed-under">Filed under</a> : null}
               {taxonomyTags.length ? <a href="#related-topics">Related topics</a> : null}
             </nav>
-            <dl className="resource-detail-brief"><div><dt>Type</dt><dd>{resourceTypeLabel(resource.resourceType)}</dd></div>{resource.maintainer && resource.maintainer !== resource.publisher ? <div><dt>Maintained by</dt><dd>{resource.maintainer}</dd></div> : null}<div><dt>Why it is listed</dt><dd>{resource.whyIncluded}</dd></div></dl>
-            <details className="resource-detail-maintenance">
+            <dl className="resource-detail-brief"><div><dt>Type</dt><dd>{resourceTypeLabel(resource.resourceType)}</dd></div>{resource.maintainer && resource.maintainer !== resource.publisher ? <div><dt>Maintained by</dt><dd>{resource.maintainer}</dd></div> : null}{resource.whyIncluded ? <div><dt>Atlas context</dt><dd>{resource.whyIncluded}</dd></div> : null}</dl>
+            {hasMaintenanceDetails ? <details className="resource-detail-maintenance">
               <summary>Source &amp; maintenance details</summary>
               <div>
-                <dl className="resource-detail-facts stacked">{resource.currentVersion || resource.toolProfile?.release.status === "not_published" ? <div><dt>Release</dt><dd>{resource.currentVersion || "No published GitHub release"}</dd></div> : null}{resource.maintenanceStatus !== "unknown" ? <div><dt>Maintenance</dt><dd>{resourceFieldLabel(resource.maintenanceStatus)}</dd></div> : null}{resource.license ? <div><dt>License</dt><dd>{resource.license}</dd></div> : null}{resource.lastCommitAt ? <div><dt>Last repository activity</dt><dd><ResourceDate fallback="" value={resource.lastCommitAt} /></dd></div> : null}{resource.publisherUpdatedAt ? <div><dt>Publisher updated</dt><dd><ResourceDate fallback="" value={resource.publisherUpdatedAt} /></dd></div> : null}{resource.lastCheckedAt ? <div><dt>Last checked</dt><dd><ResourceDate fallback="" value={resource.lastCheckedAt} /></dd></div> : null}{resource.nextCheckAt ? <div><dt>Next review</dt><dd><ResourceDate fallback="" value={resource.nextCheckAt} /></dd></div> : null}{resource.verificationMethod ? <div><dt>Verification method</dt><dd>{resourceFieldLabel(resource.verificationMethod)}</dd></div> : null}{resource.repositoryEvidence ? <div><dt>Evidence commit</dt><dd><a href={resource.repositoryEvidence.commitUrl} rel="noopener noreferrer" target="_blank">{resource.repositoryEvidence.commitSha.slice(0, 7)} <IconExternalLink aria-hidden="true" size={13} /></a></dd></div> : null}</dl>
+                <dl className="resource-detail-facts stacked">{resource.currentVersion ? <div><dt>Release</dt><dd>{resource.currentVersion}</dd></div> : null}{resource.maintenanceStatus ? <div><dt>Maintenance</dt><dd>{resourceFieldLabel(resource.maintenanceStatus)}</dd></div> : null}{resource.license ? <div><dt>License</dt><dd>{resource.license}</dd></div> : null}{resource.lastCommitAt ? <div><dt>Last repository activity</dt><dd><ResourceDate fallback="" value={resource.lastCommitAt} /></dd></div> : null}{resource.publisherUpdatedAt ? <div><dt>Publisher updated</dt><dd><ResourceDate fallback="" value={resource.publisherUpdatedAt} /></dd></div> : null}{resource.lastCheckedAt ? <div><dt>Last checked</dt><dd><ResourceDate fallback="" value={resource.lastCheckedAt} /></dd></div> : null}{resource.nextCheckAt ? <div><dt>Next review</dt><dd><ResourceDate fallback="" value={resource.nextCheckAt} /></dd></div> : null}{resource.verificationMethod ? <div><dt>Verification method</dt><dd>{resourceFieldLabel(resource.verificationMethod)}</dd></div> : null}{resource.repositoryEvidence ? <div><dt>Evidence commit</dt><dd><a href={resource.repositoryEvidence.commitUrl} rel="noopener noreferrer" target="_blank">{resource.repositoryEvidence.commitSha.slice(0, 7)} <IconExternalLink aria-hidden="true" size={13} /></a></dd></div> : null}</dl>
                 {resource.compatibility?.status === "documented" ? <section><h3>Compatibility evidence</h3><div className="resource-detail-tags">{[...resource.compatibility.operatingSystems, ...resource.compatibility.environments].map((item) => <span key={item}>{item}</span>)}</div>{resource.compatibility.note ? <p>{resource.compatibility.note}</p> : null}<p className="resource-detail-evidence"><a href={resource.compatibility.sourceUrl} rel="noopener noreferrer" target="_blank">View evidence <IconExternalLink aria-hidden="true" size={14} /></a></p></section> : null}
                 {taxonomyTags.length ? <section><h3>Topic basis</h3><p>Related topics are derived from reviewed technology scope and compatibility fields.</p></section> : null}
               </div>
-            </details>
+            </details> : null}
           </aside>
         </div>
       </div>

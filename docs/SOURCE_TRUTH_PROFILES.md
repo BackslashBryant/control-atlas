@@ -4,11 +4,13 @@ Owner: Control Atlas data stewardship
 
 Status: Active
 
-Last reviewed: 2026-08-25
+Last reviewed: 2026-08-26
 
 Supersession: This document governs source-truth profile and adapter additions until replaced by an approved data-policy revision.
 
 Control Atlas connects publisher records, artifacts, resources, and relationships. It does not fill empty pages with guessed facts. Unknown optional values stay absent.
+
+The current governed inventory covers 138 Organization envelopes, 202 Resources, 100 Publications, 142 source Artifacts, 30,969 Content Records, and 77,230 Assertions. Fourteen declared adapters cover all 27 catalog bundles.
 
 ## Canonical objects
 
@@ -31,6 +33,8 @@ Origin values have precise meanings:
 5. Run `npm run build:data`, `npm run verify:profiles`, and `npm run verify:source-truth`.
 
 Do not copy a title into a missing description. Do not infer cost, audience, access, lifecycle, completeness, or a replacement. Do not use a mutable branch URL when a release or commit exists.
+
+For mixed-access destinations, distinguish the public information page from the service or action behind it. Store a scoped, sourced access-boundary note instead of applying a blanket authentication label to the page. PDISP is the reference case: its product record is public, while ordering and connection actions require authorized DoD access.
 
 ## Add a profile
 

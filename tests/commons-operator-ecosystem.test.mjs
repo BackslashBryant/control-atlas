@@ -57,19 +57,21 @@ test("Evaluate-STIG stays rejected while archived StigRepo remains discoverable"
   assert.equal(stigRepo.resourceLane, "legacy");
   assert.equal(stigRepo.maintenanceStatus, "archived");
   assert.match(stigRepo.legacyReason, /archived/);
-  assert.equal(stigRepo.supersededBy, null);
+  assert.equal(stigRepo.supersededBy, undefined);
   assert.ok(stigRepo.companionResources.includes("tool-powerstig"));
   assert.ok(byId.get("tool-powerstig").communityLinks.includes("https://github.com/Microsoft/PowerStig/wiki/"));
   assert.ok(byId.get("tool-powerstig").companionResources.includes("reference-microsoft-stigrepo"));
 });
 
-test("restricted resources are accepted based on value and disclose their access boundary", () => {
+test("restricted resources disclose scoped access boundaries without classifying the public page", () => {
   for (const id of ["service-disa-acas", "service-disa-vms", "community-tenable-connect", "catalog-tenable-audit-files", "community-crowdstrike", "community-tanium"]) {
     const resource = byId.get(id);
     assert.ok(resource, `${id} accepted`);
-    assert.notEqual(resource.accessType, "public", `${id} restriction encoded`);
-    assert.equal(resource.authenticationRequired, true, `${id} authentication disclosed`);
+    assert.equal(resource.accessType, undefined, `${id} does not conflate page and service access`);
+    assert.equal(resource.authenticationRequired, undefined, `${id} does not invent a blanket authentication flag`);
     assert.ok(resource.publicAccessNotes.length >= 30, `${id} access note`);
+    const accessClaim = resource.claimEvidence.find((claim) => claim.fieldPath === "/publicAccessNotes");
+    assert.ok(accessClaim?.evidenceRefs.length, `${id} access note is evidence-backed`);
   }
   assert.equal(rejectedByName.has("Tenable Connect"), false);
   assert.equal(rejectedByName.has("Tenable Audit Files / Compliance Checks"), false);
@@ -116,7 +118,7 @@ test("freshness and rejected-candidate recheck cadences are enforceable", () => 
     const maximumDays = resource.resourceType === "community_forum" ? 45 : resource.resourceType === "dataset" ? 60 : 90;
     const cadence = daysBetween(resource.lastCheckedAt, resource.nextCheckAt);
     assert.ok(cadence > 0 && cadence <= maximumDays, `${resource.id} cadence ${cadence} days`);
-    assert.equal(resource.freshnessStatus, null, `${resource.id} does not turn a review date into a publisher freshness claim`);
+    assert.equal(resource.freshnessStatus, undefined, `${resource.id} omits an unsupported publisher freshness claim`);
   }
   for (const candidate of manifest.rejectedCandidates) {
     assert.ok(candidate.evidence, `${candidate.candidateName} rejection evidence`);
