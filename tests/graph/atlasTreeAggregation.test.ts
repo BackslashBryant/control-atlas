@@ -52,7 +52,7 @@ test("real spine focus states stay within the 120-node render budget", () => {
     new Set(aggregateAuthorityOverview(model).flatMap((node) => node.memberIds)).size,
     model.authorityNodes.length,
   );
-  assert.equal(model.publications.length, 27);
+  assert.equal(model.publications.length, 28);
   assert.equal(model.areas.length, 9);
 });
 

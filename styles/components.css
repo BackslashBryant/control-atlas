@@ -2762,3 +2762,25 @@
   font-size: 0.8rem;
   color: var(--ca-text-muted);
 }
+
+.source-register-boundary {
+  max-width: 72ch;
+  margin: calc(-1 * var(--ca-space-3)) 0 var(--ca-space-5);
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+  line-height: 1.55;
+}
+
+.source-coverage-basis {
+  margin: 0;
+  padding: var(--ca-space-3);
+  border-inline-start: 3px solid var(--ca-border-strong);
+  background: color-mix(in srgb, var(--ca-surface-raised) 72%, transparent);
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+  line-height: 1.55;
+}
+
+.source-coverage-basis strong {
+  color: var(--ca-text);
+}

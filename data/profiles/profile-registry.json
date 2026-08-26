@@ -22,6 +22,669 @@
   ],
   "profiles": [
     {
+      "profile_id": "artifact.base",
+      "entity_kind": "artifact",
+      "native_type": "artifact",
+      "status": "active",
+      "required_fields": [
+        "id",
+        "title",
+        "publisher_id",
+        "format",
+        "retrieved_at",
+        "checksum"
+      ],
+      "optional_fields": [
+        "version",
+        "parser_id",
+        "parser_version",
+        "record_count",
+        "relationship_count"
+      ],
+      "allowed_origins": [
+        "publisher_exact",
+        "publisher_normalized",
+        "publisher_derived",
+        "atlas_editorial"
+      ],
+      "evidence_required_fields": [
+        "title",
+        "format",
+        "retrieved_at",
+        "checksum"
+      ],
+      "display_sections": [
+        "identity",
+        "retrieval",
+        "parser",
+        "coverage",
+        "advanced"
+      ],
+      "prohibited_fields": [],
+      "conditional_fields": [],
+      "field_origins": {
+        "id": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial"
+        ],
+        "title": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial"
+        ],
+        "publisher_id": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial"
+        ],
+        "format": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial"
+        ],
+        "retrieved_at": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial"
+        ],
+        "checksum": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial"
+        ]
+      },
+      "evidence_rules": {
+        "title": {
+          "required": true,
+          "locator_types": [
+            "artifact_path",
+            "captured_fragment",
+            "canonical_url",
+            "heading_path",
+            "object_path",
+            "page_fragment",
+            "publisher_product_record",
+            "repository_commit",
+            "spreadsheet_cell"
+          ]
+        },
+        "format": {
+          "required": true,
+          "locator_types": [
+            "artifact_path",
+            "captured_fragment",
+            "canonical_url",
+            "heading_path",
+            "object_path",
+            "page_fragment",
+            "publisher_product_record",
+            "repository_commit",
+            "spreadsheet_cell"
+          ]
+        },
+        "retrieved_at": {
+          "required": true,
+          "locator_types": [
+            "artifact_path",
+            "captured_fragment",
+            "canonical_url",
+            "heading_path",
+            "object_path",
+            "page_fragment",
+            "publisher_product_record",
+            "repository_commit",
+            "spreadsheet_cell"
+          ]
+        },
+        "checksum": {
+          "required": true,
+          "locator_types": [
+            "artifact_path",
+            "captured_fragment",
+            "canonical_url",
+            "heading_path",
+            "object_path",
+            "page_fragment",
+            "publisher_product_record",
+            "repository_commit",
+            "spreadsheet_cell"
+          ]
+        }
+      },
+      "lifecycle_rules": {
+        "allowed_statuses": [
+          "active",
+          "draft",
+          "retired",
+          "sunset",
+          "withdrawn",
+          "deprecated",
+          "archived",
+          "historical",
+          "superseded",
+          "restricted",
+          "unknown"
+        ],
+        "replacement_requires_evidence": true
+      },
+      "source_expectations": {
+        "accepted_source_types": [
+          "api",
+          "csv",
+          "git",
+          "html",
+          "json",
+          "json_ld",
+          "oscal_json",
+          "oscal_xml",
+          "other",
+          "pdf",
+          "spreadsheet",
+          "stix",
+          "xccdf",
+          "xml"
+        ],
+        "parser_required": true,
+        "failure_policy": "fail_closed"
+      },
+      "search_presentation": {
+        "title_field": "title",
+        "subtitle_fields": [
+          "publisher_id",
+          "profile_id"
+        ],
+        "filter_fields": [
+          "entity_kind",
+          "profile_id",
+          "publisher_id",
+          "lifecycle.status"
+        ],
+        "badge_fields": [
+          "lifecycle.status",
+          "origin"
+        ]
+      },
+      "display_rules": {
+        "omit_empty_sections": true,
+        "label_atlas_content": true
+      },
+      "allowed_incoming_predicates": [
+        "applies_to",
+        "assesses",
+        "concept_crosswalk",
+        "contains",
+        "depends_on",
+        "extends",
+        "issued_under",
+        "maps_to",
+        "mitigates",
+        "organizes",
+        "protects",
+        "references",
+        "requires",
+        "selects",
+        "source_bundle",
+        "supported_by",
+        "supports",
+        "uses"
+      ],
+      "allowed_outgoing_predicates": [
+        "applies_to",
+        "assesses",
+        "concept_crosswalk",
+        "contains",
+        "depends_on",
+        "extends",
+        "issued_under",
+        "maps_to",
+        "mitigates",
+        "organizes",
+        "protects",
+        "references",
+        "requires",
+        "selects",
+        "source_bundle",
+        "supported_by",
+        "supports",
+        "uses"
+      ],
+      "validation": {
+        "severity": "error",
+        "review_required": false
+      }
+    },
+    {
+      "profile_id": "artifact.csv",
+      "entity_kind": "artifact",
+      "native_type": "csv",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "artifact.html",
+      "entity_kind": "artifact",
+      "native_type": "html",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "artifact.json",
+      "entity_kind": "artifact",
+      "native_type": "json",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "artifact.json_ld",
+      "entity_kind": "artifact",
+      "native_type": "json_ld",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "artifact.oscal_json",
+      "entity_kind": "artifact",
+      "native_type": "oscal_json",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "artifact.oscal_xml",
+      "entity_kind": "artifact",
+      "native_type": "oscal_xml",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "artifact.other",
+      "entity_kind": "artifact",
+      "native_type": "other",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "artifact.pdf",
+      "entity_kind": "artifact",
+      "native_type": "pdf",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "artifact.spreadsheet",
+      "entity_kind": "artifact",
+      "native_type": "spreadsheet",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "artifact.stix",
+      "entity_kind": "artifact",
+      "native_type": "stix",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "artifact.xccdf",
+      "entity_kind": "artifact",
+      "native_type": "xccdf",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "artifact.xml",
+      "entity_kind": "artifact",
+      "native_type": "xml",
+      "status": "active",
+      "parent_profile_id": "artifact.base"
+    },
+    {
+      "profile_id": "assertion.applies_to",
+      "entity_kind": "assertion",
+      "native_type": "applies_to",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.assesses",
+      "entity_kind": "assertion",
+      "native_type": "assesses",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.base",
+      "entity_kind": "assertion",
+      "native_type": "assertion",
+      "status": "active",
+      "required_fields": [
+        "id",
+        "subject_id",
+        "predicate",
+        "object_id",
+        "assertion_class",
+        "authority",
+        "lifecycle"
+      ],
+      "optional_fields": [
+        "transformation",
+        "confidence"
+      ],
+      "allowed_origins": [
+        "publisher_exact",
+        "publisher_normalized",
+        "publisher_derived",
+        "atlas_editorial",
+        "atlas_inferred"
+      ],
+      "evidence_required_fields": [
+        "predicate",
+        "authority"
+      ],
+      "display_sections": [
+        "relationship",
+        "authority",
+        "evidence"
+      ],
+      "allowed_assertion_classes": [
+        "structural",
+        "published_mapping",
+        "publisher_derived",
+        "atlas_navigation",
+        "atlas_inferred"
+      ],
+      "prohibited_fields": [],
+      "conditional_fields": [],
+      "field_origins": {
+        "id": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial",
+          "atlas_inferred"
+        ],
+        "subject_id": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial",
+          "atlas_inferred"
+        ],
+        "predicate": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial",
+          "atlas_inferred"
+        ],
+        "object_id": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial",
+          "atlas_inferred"
+        ],
+        "assertion_class": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial",
+          "atlas_inferred"
+        ],
+        "authority": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial",
+          "atlas_inferred"
+        ],
+        "lifecycle": [
+          "publisher_exact",
+          "publisher_normalized",
+          "publisher_derived",
+          "atlas_editorial",
+          "atlas_inferred"
+        ]
+      },
+      "evidence_rules": {
+        "predicate": {
+          "required": true,
+          "locator_types": [
+            "artifact_path",
+            "captured_fragment",
+            "canonical_url",
+            "heading_path",
+            "object_path",
+            "page_fragment",
+            "publisher_product_record",
+            "repository_commit",
+            "spreadsheet_cell"
+          ]
+        },
+        "authority": {
+          "required": true,
+          "locator_types": [
+            "artifact_path",
+            "captured_fragment",
+            "canonical_url",
+            "heading_path",
+            "object_path",
+            "page_fragment",
+            "publisher_product_record",
+            "repository_commit",
+            "spreadsheet_cell"
+          ]
+        }
+      },
+      "lifecycle_rules": {
+        "allowed_statuses": [
+          "active",
+          "draft",
+          "retired",
+          "sunset",
+          "withdrawn",
+          "deprecated",
+          "archived",
+          "historical",
+          "superseded",
+          "restricted",
+          "unknown"
+        ],
+        "replacement_requires_evidence": true
+      },
+      "source_expectations": {
+        "accepted_source_types": [
+          "editorial",
+          "graph",
+          "structured_mapping"
+        ],
+        "parser_required": true,
+        "failure_policy": "fail_closed"
+      },
+      "search_presentation": {
+        "title_field": "predicate",
+        "subtitle_fields": [
+          "authority"
+        ],
+        "filter_fields": [
+          "entity_kind",
+          "profile_id",
+          "publisher_id",
+          "lifecycle.status"
+        ],
+        "badge_fields": [
+          "lifecycle.status",
+          "origin"
+        ]
+      },
+      "display_rules": {
+        "omit_empty_sections": true,
+        "label_atlas_content": true
+      },
+      "allowed_incoming_predicates": [
+        "applies_to",
+        "assesses",
+        "concept_crosswalk",
+        "contains",
+        "depends_on",
+        "extends",
+        "issued_under",
+        "maps_to",
+        "mitigates",
+        "organizes",
+        "protects",
+        "references",
+        "requires",
+        "selects",
+        "source_bundle",
+        "supported_by",
+        "supports",
+        "uses"
+      ],
+      "allowed_outgoing_predicates": [
+        "applies_to",
+        "assesses",
+        "concept_crosswalk",
+        "contains",
+        "depends_on",
+        "extends",
+        "issued_under",
+        "maps_to",
+        "mitigates",
+        "organizes",
+        "protects",
+        "references",
+        "requires",
+        "selects",
+        "source_bundle",
+        "supported_by",
+        "supports",
+        "uses"
+      ],
+      "validation": {
+        "severity": "error",
+        "review_required": false
+      }
+    },
+    {
+      "profile_id": "assertion.concept_crosswalk",
+      "entity_kind": "assertion",
+      "native_type": "concept_crosswalk",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.contains",
+      "entity_kind": "assertion",
+      "native_type": "contains",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.depends_on",
+      "entity_kind": "assertion",
+      "native_type": "depends_on",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.extends",
+      "entity_kind": "assertion",
+      "native_type": "extends",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.issued_under",
+      "entity_kind": "assertion",
+      "native_type": "issued_under",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.maps_to",
+      "entity_kind": "assertion",
+      "native_type": "maps_to",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.mitigates",
+      "entity_kind": "assertion",
+      "native_type": "mitigates",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.organizes",
+      "entity_kind": "assertion",
+      "native_type": "organizes",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.protects",
+      "entity_kind": "assertion",
+      "native_type": "protects",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.references",
+      "entity_kind": "assertion",
+      "native_type": "references",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.requires",
+      "entity_kind": "assertion",
+      "native_type": "requires",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.selects",
+      "entity_kind": "assertion",
+      "native_type": "selects",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.source_bundle",
+      "entity_kind": "assertion",
+      "native_type": "source_bundle",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.supported_by",
+      "entity_kind": "assertion",
+      "native_type": "supported_by",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.supports",
+      "entity_kind": "assertion",
+      "native_type": "supports",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
+      "profile_id": "assertion.uses",
+      "entity_kind": "assertion",
+      "native_type": "uses",
+      "status": "active",
+      "parent_profile_id": "assertion.base"
+    },
+    {
       "profile_id": "organization.base",
       "entity_kind": "organization",
       "native_type": "organization",
@@ -370,34 +1033,6 @@
       }
     },
     {
-      "profile_id": "publication.publication",
-      "entity_kind": "publication",
-      "native_type": "publication",
-      "status": "active",
-      "parent_profile_id": "publication.base"
-    },
-    {
-      "profile_id": "publication.supplemental",
-      "entity_kind": "publication",
-      "native_type": "supplemental",
-      "status": "active",
-      "parent_profile_id": "publication.base"
-    },
-    {
-      "profile_id": "publication.mapping",
-      "entity_kind": "publication",
-      "native_type": "mapping",
-      "status": "active",
-      "parent_profile_id": "publication.base"
-    },
-    {
-      "profile_id": "publication.reference",
-      "entity_kind": "publication",
-      "native_type": "reference",
-      "status": "active",
-      "parent_profile_id": "publication.base"
-    },
-    {
       "profile_id": "publication.editorial",
       "entity_kind": "publication",
       "native_type": "editorial",
@@ -415,327 +1050,46 @@
       "parent_profile_id": "publication.base"
     },
     {
-      "profile_id": "artifact.base",
-      "entity_kind": "artifact",
-      "native_type": "artifact",
+      "profile_id": "publication.mapping",
+      "entity_kind": "publication",
+      "native_type": "mapping",
       "status": "active",
-      "required_fields": [
-        "id",
-        "title",
-        "publisher_id",
-        "format",
-        "retrieved_at",
-        "checksum"
-      ],
-      "optional_fields": [
-        "version",
-        "parser_id",
-        "parser_version",
-        "record_count",
-        "relationship_count"
-      ],
-      "allowed_origins": [
-        "publisher_exact",
-        "publisher_normalized",
-        "publisher_derived",
-        "atlas_editorial"
-      ],
-      "evidence_required_fields": [
-        "title",
-        "format",
-        "retrieved_at",
-        "checksum"
-      ],
-      "display_sections": [
-        "identity",
-        "retrieval",
-        "parser",
-        "coverage",
-        "advanced"
-      ],
-      "prohibited_fields": [],
-      "conditional_fields": [],
-      "field_origins": {
-        "id": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial"
-        ],
-        "title": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial"
-        ],
-        "publisher_id": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial"
-        ],
-        "format": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial"
-        ],
-        "retrieved_at": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial"
-        ],
-        "checksum": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial"
-        ]
-      },
-      "evidence_rules": {
-        "title": {
-          "required": true,
-          "locator_types": [
-            "artifact_path",
-            "captured_fragment",
-            "canonical_url",
-            "heading_path",
-            "object_path",
-            "page_fragment",
-            "publisher_product_record",
-            "repository_commit",
-            "spreadsheet_cell"
-          ]
-        },
-        "format": {
-          "required": true,
-          "locator_types": [
-            "artifact_path",
-            "captured_fragment",
-            "canonical_url",
-            "heading_path",
-            "object_path",
-            "page_fragment",
-            "publisher_product_record",
-            "repository_commit",
-            "spreadsheet_cell"
-          ]
-        },
-        "retrieved_at": {
-          "required": true,
-          "locator_types": [
-            "artifact_path",
-            "captured_fragment",
-            "canonical_url",
-            "heading_path",
-            "object_path",
-            "page_fragment",
-            "publisher_product_record",
-            "repository_commit",
-            "spreadsheet_cell"
-          ]
-        },
-        "checksum": {
-          "required": true,
-          "locator_types": [
-            "artifact_path",
-            "captured_fragment",
-            "canonical_url",
-            "heading_path",
-            "object_path",
-            "page_fragment",
-            "publisher_product_record",
-            "repository_commit",
-            "spreadsheet_cell"
-          ]
-        }
-      },
-      "lifecycle_rules": {
-        "allowed_statuses": [
-          "active",
-          "draft",
-          "retired",
-          "sunset",
-          "withdrawn",
-          "deprecated",
-          "archived",
-          "historical",
-          "superseded",
-          "restricted",
-          "unknown"
-        ],
-        "replacement_requires_evidence": true
-      },
-      "source_expectations": {
-        "accepted_source_types": [
-          "api",
-          "csv",
-          "git",
-          "html",
-          "json",
-          "json_ld",
-          "oscal_json",
-          "oscal_xml",
-          "other",
-          "pdf",
-          "spreadsheet",
-          "stix",
-          "xccdf",
-          "xml"
-        ],
-        "parser_required": true,
-        "failure_policy": "fail_closed"
-      },
-      "search_presentation": {
-        "title_field": "title",
-        "subtitle_fields": [
-          "publisher_id",
-          "profile_id"
-        ],
-        "filter_fields": [
-          "entity_kind",
-          "profile_id",
-          "publisher_id",
-          "lifecycle.status"
-        ],
-        "badge_fields": [
-          "lifecycle.status",
-          "origin"
-        ]
-      },
-      "display_rules": {
-        "omit_empty_sections": true,
-        "label_atlas_content": true
-      },
-      "allowed_incoming_predicates": [
-        "applies_to",
-        "assesses",
-        "concept_crosswalk",
-        "contains",
-        "depends_on",
-        "extends",
-        "issued_under",
-        "maps_to",
-        "mitigates",
-        "organizes",
-        "protects",
-        "references",
-        "requires",
-        "selects",
-        "source_bundle",
-        "supported_by",
-        "supports",
-        "uses"
-      ],
-      "allowed_outgoing_predicates": [
-        "applies_to",
-        "assesses",
-        "concept_crosswalk",
-        "contains",
-        "depends_on",
-        "extends",
-        "issued_under",
-        "maps_to",
-        "mitigates",
-        "organizes",
-        "protects",
-        "references",
-        "requires",
-        "selects",
-        "source_bundle",
-        "supported_by",
-        "supports",
-        "uses"
-      ],
-      "validation": {
-        "severity": "error",
-        "review_required": false
-      }
+      "parent_profile_id": "publication.base"
     },
     {
-      "profile_id": "artifact.csv",
-      "entity_kind": "artifact",
-      "native_type": "csv",
+      "profile_id": "publication.publication",
+      "entity_kind": "publication",
+      "native_type": "publication",
       "status": "active",
-      "parent_profile_id": "artifact.base"
+      "parent_profile_id": "publication.base"
     },
     {
-      "profile_id": "artifact.html",
-      "entity_kind": "artifact",
-      "native_type": "html",
+      "profile_id": "publication.reference",
+      "entity_kind": "publication",
+      "native_type": "reference",
       "status": "active",
-      "parent_profile_id": "artifact.base"
+      "parent_profile_id": "publication.base"
     },
     {
-      "profile_id": "artifact.json",
-      "entity_kind": "artifact",
-      "native_type": "json",
+      "profile_id": "publication.supplemental",
+      "entity_kind": "publication",
+      "native_type": "supplemental",
       "status": "active",
-      "parent_profile_id": "artifact.base"
+      "parent_profile_id": "publication.base"
     },
     {
-      "profile_id": "artifact.json_ld",
-      "entity_kind": "artifact",
-      "native_type": "json_ld",
+      "profile_id": "record.assessment_procedure",
+      "entity_kind": "content_record",
+      "native_type": "assessment_procedure",
       "status": "active",
-      "parent_profile_id": "artifact.base"
+      "parent_profile_id": "record.base"
     },
     {
-      "profile_id": "artifact.oscal_json",
-      "entity_kind": "artifact",
-      "native_type": "oscal_json",
+      "profile_id": "record.attack_technique",
+      "entity_kind": "content_record",
+      "native_type": "attack_technique",
       "status": "active",
-      "parent_profile_id": "artifact.base"
-    },
-    {
-      "profile_id": "artifact.oscal_xml",
-      "entity_kind": "artifact",
-      "native_type": "oscal_xml",
-      "status": "active",
-      "parent_profile_id": "artifact.base"
-    },
-    {
-      "profile_id": "artifact.other",
-      "entity_kind": "artifact",
-      "native_type": "other",
-      "status": "active",
-      "parent_profile_id": "artifact.base"
-    },
-    {
-      "profile_id": "artifact.pdf",
-      "entity_kind": "artifact",
-      "native_type": "pdf",
-      "status": "active",
-      "parent_profile_id": "artifact.base"
-    },
-    {
-      "profile_id": "artifact.spreadsheet",
-      "entity_kind": "artifact",
-      "native_type": "spreadsheet",
-      "status": "active",
-      "parent_profile_id": "artifact.base"
-    },
-    {
-      "profile_id": "artifact.stix",
-      "entity_kind": "artifact",
-      "native_type": "stix",
-      "status": "active",
-      "parent_profile_id": "artifact.base"
-    },
-    {
-      "profile_id": "artifact.xccdf",
-      "entity_kind": "artifact",
-      "native_type": "xccdf",
-      "status": "active",
-      "parent_profile_id": "artifact.base"
-    },
-    {
-      "profile_id": "artifact.xml",
-      "entity_kind": "artifact",
-      "native_type": "xml",
-      "status": "active",
-      "parent_profile_id": "artifact.base"
+      "parent_profile_id": "record.base"
     },
     {
       "profile_id": "record.base",
@@ -975,20 +1329,6 @@
       }
     },
     {
-      "profile_id": "record.assessment_procedure",
-      "entity_kind": "content_record",
-      "native_type": "assessment_procedure",
-      "status": "active",
-      "parent_profile_id": "record.base"
-    },
-    {
-      "profile_id": "record.attack_technique",
-      "entity_kind": "content_record",
-      "native_type": "attack_technique",
-      "status": "active",
-      "parent_profile_id": "record.base"
-    },
-    {
       "profile_id": "record.baseline",
       "entity_kind": "content_record",
       "native_type": "baseline",
@@ -1024,6 +1364,13 @@
       "parent_profile_id": "record.base"
     },
     {
+      "profile_id": "record.control_context",
+      "entity_kind": "content_record",
+      "native_type": "control_context",
+      "status": "active",
+      "parent_profile_id": "record.base"
+    },
+    {
       "profile_id": "record.control_enhancement",
       "entity_kind": "content_record",
       "native_type": "control_enhancement",
@@ -1034,6 +1381,13 @@
       "profile_id": "record.defend_countermeasure",
       "entity_kind": "content_record",
       "native_type": "defend_countermeasure",
+      "status": "active",
+      "parent_profile_id": "record.base"
+    },
+    {
+      "profile_id": "record.definition",
+      "entity_kind": "content_record",
+      "native_type": "definition",
       "status": "active",
       "parent_profile_id": "record.base"
     },
@@ -1097,6 +1451,13 @@
       "profile_id": "record.iot_subcapability",
       "entity_kind": "content_record",
       "native_type": "iot_subcapability",
+      "status": "active",
+      "parent_profile_id": "record.base"
+    },
+    {
+      "profile_id": "record.key_security_indicator",
+      "entity_kind": "content_record",
+      "native_type": "key_security_indicator",
       "status": "active",
       "parent_profile_id": "record.base"
     },
@@ -1167,6 +1528,13 @@
       "profile_id": "record.rmf_step",
       "entity_kind": "content_record",
       "native_type": "rmf_step",
+      "status": "active",
+      "parent_profile_id": "record.base"
+    },
+    {
+      "profile_id": "record.rule",
+      "entity_kind": "content_record",
+      "native_type": "rule",
       "status": "active",
       "parent_profile_id": "record.base"
     },
@@ -1787,346 +2155,6 @@
       "native_type": "training",
       "status": "active",
       "parent_profile_id": "resource.base"
-    },
-    {
-      "profile_id": "assertion.base",
-      "entity_kind": "assertion",
-      "native_type": "assertion",
-      "status": "active",
-      "required_fields": [
-        "id",
-        "subject_id",
-        "predicate",
-        "object_id",
-        "assertion_class",
-        "authority",
-        "lifecycle"
-      ],
-      "optional_fields": [
-        "transformation",
-        "confidence"
-      ],
-      "allowed_origins": [
-        "publisher_exact",
-        "publisher_normalized",
-        "publisher_derived",
-        "atlas_editorial",
-        "atlas_inferred"
-      ],
-      "evidence_required_fields": [
-        "predicate",
-        "authority"
-      ],
-      "display_sections": [
-        "relationship",
-        "authority",
-        "evidence"
-      ],
-      "allowed_assertion_classes": [
-        "structural",
-        "published_mapping",
-        "publisher_derived",
-        "atlas_navigation",
-        "atlas_inferred"
-      ],
-      "prohibited_fields": [],
-      "conditional_fields": [],
-      "field_origins": {
-        "id": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial",
-          "atlas_inferred"
-        ],
-        "subject_id": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial",
-          "atlas_inferred"
-        ],
-        "predicate": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial",
-          "atlas_inferred"
-        ],
-        "object_id": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial",
-          "atlas_inferred"
-        ],
-        "assertion_class": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial",
-          "atlas_inferred"
-        ],
-        "authority": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial",
-          "atlas_inferred"
-        ],
-        "lifecycle": [
-          "publisher_exact",
-          "publisher_normalized",
-          "publisher_derived",
-          "atlas_editorial",
-          "atlas_inferred"
-        ]
-      },
-      "evidence_rules": {
-        "predicate": {
-          "required": true,
-          "locator_types": [
-            "artifact_path",
-            "captured_fragment",
-            "canonical_url",
-            "heading_path",
-            "object_path",
-            "page_fragment",
-            "publisher_product_record",
-            "repository_commit",
-            "spreadsheet_cell"
-          ]
-        },
-        "authority": {
-          "required": true,
-          "locator_types": [
-            "artifact_path",
-            "captured_fragment",
-            "canonical_url",
-            "heading_path",
-            "object_path",
-            "page_fragment",
-            "publisher_product_record",
-            "repository_commit",
-            "spreadsheet_cell"
-          ]
-        }
-      },
-      "lifecycle_rules": {
-        "allowed_statuses": [
-          "active",
-          "draft",
-          "retired",
-          "sunset",
-          "withdrawn",
-          "deprecated",
-          "archived",
-          "historical",
-          "superseded",
-          "restricted",
-          "unknown"
-        ],
-        "replacement_requires_evidence": true
-      },
-      "source_expectations": {
-        "accepted_source_types": [
-          "editorial",
-          "graph",
-          "structured_mapping"
-        ],
-        "parser_required": true,
-        "failure_policy": "fail_closed"
-      },
-      "search_presentation": {
-        "title_field": "predicate",
-        "subtitle_fields": [
-          "authority"
-        ],
-        "filter_fields": [
-          "entity_kind",
-          "profile_id",
-          "publisher_id",
-          "lifecycle.status"
-        ],
-        "badge_fields": [
-          "lifecycle.status",
-          "origin"
-        ]
-      },
-      "display_rules": {
-        "omit_empty_sections": true,
-        "label_atlas_content": true
-      },
-      "allowed_incoming_predicates": [
-        "applies_to",
-        "assesses",
-        "concept_crosswalk",
-        "contains",
-        "depends_on",
-        "extends",
-        "issued_under",
-        "maps_to",
-        "mitigates",
-        "organizes",
-        "protects",
-        "references",
-        "requires",
-        "selects",
-        "source_bundle",
-        "supported_by",
-        "supports",
-        "uses"
-      ],
-      "allowed_outgoing_predicates": [
-        "applies_to",
-        "assesses",
-        "concept_crosswalk",
-        "contains",
-        "depends_on",
-        "extends",
-        "issued_under",
-        "maps_to",
-        "mitigates",
-        "organizes",
-        "protects",
-        "references",
-        "requires",
-        "selects",
-        "source_bundle",
-        "supported_by",
-        "supports",
-        "uses"
-      ],
-      "validation": {
-        "severity": "error",
-        "review_required": false
-      }
-    },
-    {
-      "profile_id": "assertion.concept_crosswalk",
-      "entity_kind": "assertion",
-      "native_type": "concept_crosswalk",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.applies_to",
-      "entity_kind": "assertion",
-      "native_type": "applies_to",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.assesses",
-      "entity_kind": "assertion",
-      "native_type": "assesses",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.contains",
-      "entity_kind": "assertion",
-      "native_type": "contains",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.depends_on",
-      "entity_kind": "assertion",
-      "native_type": "depends_on",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.extends",
-      "entity_kind": "assertion",
-      "native_type": "extends",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.issued_under",
-      "entity_kind": "assertion",
-      "native_type": "issued_under",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.maps_to",
-      "entity_kind": "assertion",
-      "native_type": "maps_to",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.mitigates",
-      "entity_kind": "assertion",
-      "native_type": "mitigates",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.organizes",
-      "entity_kind": "assertion",
-      "native_type": "organizes",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.protects",
-      "entity_kind": "assertion",
-      "native_type": "protects",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.references",
-      "entity_kind": "assertion",
-      "native_type": "references",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.requires",
-      "entity_kind": "assertion",
-      "native_type": "requires",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.selects",
-      "entity_kind": "assertion",
-      "native_type": "selects",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.source_bundle",
-      "entity_kind": "assertion",
-      "native_type": "source_bundle",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.supported_by",
-      "entity_kind": "assertion",
-      "native_type": "supported_by",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.supports",
-      "entity_kind": "assertion",
-      "native_type": "supports",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
-    },
-    {
-      "profile_id": "assertion.uses",
-      "entity_kind": "assertion",
-      "native_type": "uses",
-      "status": "active",
-      "parent_profile_id": "assertion.base"
     }
   ]
 }

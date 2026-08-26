@@ -62,8 +62,14 @@ const identities = canonicalPublications.map((pub) => {
   // Alias publications carry their own kind: "supplemental" rows are source
   // materials of this identity; "mapping" rows are connection evidence.
   for (const alias of aliasPublications) {
-    if (alias.metadata?.identity_kind === 'mapping') connectionEvidence.push(alias.id);
-    else sourceMaterials.other.push(alias.id);
+    const hasCanonicalArtifact = attachedArtifacts.some(
+      (artifact) => artifact.publication_source_id === alias.id,
+    );
+    if (alias.metadata?.identity_kind === 'mapping') {
+      if (!hasCanonicalArtifact) connectionEvidence.push(alias.id);
+    } else {
+      sourceMaterials.other.push(alias.id);
+    }
   }
 
   const catalogCounts = bundle && catalogInventory?.catalogs?.[bundle.catalog_id]

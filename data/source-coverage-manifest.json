@@ -4,10 +4,10 @@
   "completeness": {
     "total_publications": 100,
     "total_artifacts": 92,
-    "total_catalog_bundles": 27,
+    "total_catalog_bundles": 28,
     "manual_seed_artifacts": 0,
     "catalog_states": {
-      "reconciled": 27,
+      "reconciled": 28,
       "partial": 0,
       "discovered": 0,
       "unknown": 0,
@@ -178,6 +178,26 @@
       "has_shard": true
     },
     {
+      "catalog_id": "fedramp-2026",
+      "completeness_status": "reconciled",
+      "expected_records": 444,
+      "imported_records": 444,
+      "excluded_records": 0,
+      "missing_records": 0,
+      "expected_basis": "Every native control-context, definition, rule, and key security indicator with publisher text in the official Consolidated Rules JSON.",
+      "expected_evidence": "data/fedramp-2026-catalog.json#source_inventory.total",
+      "imported_evidence": "data/fedramp-2026-catalog.json#record_count",
+      "exclusions": [],
+      "primary_artifacts": 1,
+      "supplemental_artifacts": 0,
+      "mapping_artifacts": 0,
+      "methods": [
+        "direct_file_import"
+      ],
+      "last_refresh": "2026-08-07",
+      "has_shard": true
+    },
+    {
       "catalog_id": "fedramp-rev5",
       "completeness_status": "reconciled",
       "expected_records": 4,
@@ -189,7 +209,7 @@
       "imported_evidence": "data/generated/catalog-source-inventory.json#catalogs.fedramp-rev5.normalized_records",
       "exclusions": [],
       "primary_artifacts": 1,
-      "supplemental_artifacts": 1,
+      "supplemental_artifacts": 0,
       "mapping_artifacts": 0,
       "methods": [
         "direct_file_import"
@@ -485,13 +505,13 @@
       "imported_records": 489,
       "excluded_records": 0,
       "missing_records": 0,
-      "expected_basis": "All structural records parsed from both official NIST IoT mapping workbooks after exact path reconciliation.",
+      "expected_basis": "Unique NIST IoT catalog records normalized from the two publisher mapping workbooks and reconciled by exact record path. The catalog page supplies publication identity; the draft workbooks supply mapping data.",
       "expected_evidence": "data/curated/nist-structured-catalogs/source-manifest.json#reconciliation.iot.records",
       "imported_evidence": "data/curated/nist-structured-catalogs/source-manifest.json#reconciliation.iot.records",
       "exclusions": [],
-      "primary_artifacts": 1,
+      "primary_artifacts": 0,
       "supplemental_artifacts": 0,
-      "mapping_artifacts": 1,
+      "mapping_artifacts": 2,
       "methods": [
         "official_structured_export"
       ],

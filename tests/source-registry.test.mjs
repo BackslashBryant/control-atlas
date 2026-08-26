@@ -247,3 +247,18 @@ test('restricted, limited, and excluded sources still require full provenance me
   const errors = validateSourceRegistry(invalid);
   assert.ok(errors.some((error) => error.includes('missing required field: license_or_use')));
 });
+
+test('current, historical, mapping, and immutable source roles remain explicit', () => {
+  const current = registry.publications.find((entry) => entry.id === 'fedramp-2026-rules');
+  const historical = registry.publications.find((entry) => entry.id === 'fedramp-rev5');
+  assert.equal(current.lifecycle_status, 'active');
+  assert.equal(historical.lifecycle_status, 'historical');
+  const iot = registry.catalog_source_bundles.find((entry) => entry.catalog_id === 'nist-iot-cybersecurity');
+  assert.deepEqual(iot.primary_artifact_ids, []);
+  assert.equal(iot.mapping_source_ids.length, 2);
+  assert.equal(iot.expected_inventory.primary_extraction_status, 'not_performed');
+  const d3fend = registry.artifacts.find((entry) => entry.id === 'artifact-mitre-d3fend-ontology');
+  assert.equal(d3fend.version, '1.5.0');
+  assert.match(d3fend.sha256, /^sha256:[a-f0-9]{64}$/);
+  assert.equal(d3fend.metadata.immutable_capture_path, 'data/d3fend-countermeasures.json');
+});

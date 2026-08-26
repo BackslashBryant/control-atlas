@@ -12,7 +12,7 @@ import "../../../styles/resources.css";
 import { ResourceIdentityMark } from "../components/CommonsResourceCard";
 import { AppLink } from "../components/AppLink";
 import type { CommonsResource } from "../lib/commonsTypes";
-import { resourceDateLabel } from "../lib/commonsPresentation.mjs";
+import { resourceDateLabel, resourceSummaryPresentation } from "../lib/commonsPresentation.mjs";
 import { serializeHashLocation } from "../lib/hashRoutes";
 import { resourceAccessLabel, resourceFieldLabel, resourceTypeLabel } from "../lib/resourceBrands.mjs";
 
@@ -73,10 +73,15 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
     ? "Do not post CUI, credentials, system details, assessment evidence, or other non-public organizational information."
     : resource.warnings?.[0];
   const profileSections = new Set(effectiveProfile(resource.profileId)?.display_sections || []);
-  const replacement = resource.supersededBy && profileSections.has("replacement")
-    ? dataset?.resources.find((entry) => entry.id === resource.supersededBy)
-    : null;
-  const heroSummary = resource.cardPurpose || resource.summary;
+  const replacementIds = [...new Set([
+    ...(resource.lifecycle?.replacedBy || []),
+    ...(resource.supersededBy ? [resource.supersededBy] : []),
+  ])];
+  const replacements = profileSections.has("replacement")
+    ? replacementIds.map((replacementId) => dataset?.resources.find((entry) => entry.id === replacementId)).filter(Boolean) as CommonsResource[]
+    : [];
+  const summary = resourceSummaryPresentation(resource);
+  const heroSummary = summary.text;
   const overviewText = resource.overview?.text?.trim() && resource.overview.text.trim() !== heroSummary.trim()
     ? resource.overview.text.trim()
     : "";
@@ -108,7 +113,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
     || resource.downloadLinks?.length
     || resource.toolProfile?.release?.status === "published"
   );
-  const hasRelatedResources = profileSections.has("related") && Boolean(parent || children.length || relatedResources.length || replacement);
+  const hasRelatedResources = profileSections.has("related") && Boolean(parent || children.length || relatedResources.length || replacements.length);
   const hasMaintenanceDetails = (profileSections.has("source_maintenance") || profileSections.has("maintenance")) && Boolean(
     resource.currentVersion
     || resource.maintenanceStatus
@@ -140,7 +145,10 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
             {!["active", "unknown"].includes(lifecycleStatus) ? <span className="badge tone-warning">{resourceFieldLabel(lifecycleStatus)}</span> : null}
             <h1>{resource.name}</h1>
             <p className="resource-detail-owner">Publisher <strong>{resource.publisher}</strong></p>
-            <p className="resource-detail-summary">{heroSummary}</p>
+            <div className="resource-summary-copy resource-summary-copy--hero">
+              <span className="resource-summary-copy__label">{summary.label}</span>
+              <p className="resource-detail-summary">{heroSummary}</p>
+            </div>
             <div className="resource-detail-actions">
               <a className="resource-primary-link" href={resource.canonicalUrl} rel="noopener noreferrer" target="_blank">Open resource <IconExternalLink aria-hidden="true" size={16} /></a>
               {resource.repositoryUrl ? <a href={resource.repositoryUrl} rel="noopener noreferrer" target="_blank">Source repository <IconExternalLink aria-hidden="true" size={15} /></a> : null}
@@ -181,7 +189,7 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
             ) : null}
             {hasLimitations ? <DetailSection id="limitations" title="Limitations"><EvidenceCopy section={resource.presentationProfile?.limitations} /></DetailSection> : null}
             {hasRelatedResources ? <DetailSection id="related-resources" title="Related resources">
-              {replacement ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ ...viewState, id: replacement.id }} view="commons-detail"><span>Replaced by</span><strong>{replacement.name}</strong></AppLink> : null}
+              {replacements.map((replacement) => <AppLink className="resource-context-link" key={replacement.id} onNavigate={onNavigate} patch={{ ...viewState, id: replacement.id }} view="commons-detail"><span>Replaced by</span><strong>{replacement.name}</strong></AppLink>)}
               {parent ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ ...viewState, id: parent.id }} view="commons-detail"><span>Part of</span><strong>{parent.name}</strong></AppLink> : null}
               {children.map((child) => <AppLink className="resource-context-link" key={child.id} onNavigate={onNavigate} patch={{ ...viewState, id: child.id }} view="commons-detail"><span>Related service</span><strong>{child.name}</strong></AppLink>)}
               {relatedResources.map((related) => <AppLink className="resource-context-link" key={related.id} onNavigate={onNavigate} patch={{ ...viewState, id: related.id }} view="commons-detail"><span>Companion</span><strong>{related.name}</strong></AppLink>)}

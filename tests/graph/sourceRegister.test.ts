@@ -248,7 +248,7 @@ test("generated layer completeness accounts for every field state and fails requ
 
 test("all governed publication reviews resolve without replacing source check dates", () => {
   const reviewedCatalogs = catalogs.filter((catalog) => catalog.source_review);
-  assert.equal(reviewedCatalogs.length, 27);
+  assert.equal(reviewedCatalogs.length, 28);
 
   for (const catalog of reviewedCatalogs) {
     const reviews = publicationReviewsForSource(

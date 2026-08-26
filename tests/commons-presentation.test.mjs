@@ -9,6 +9,7 @@ import {
   hostIdentity,
   resourceDateLabel,
   resourceHost,
+  resourceSummaryPresentation,
 } from "../src/ui/lib/commonsPresentation.mjs";
 import {
   RESOURCE_BRAND_REGISTRY,
@@ -500,4 +501,16 @@ test("Resource and collection icon color communicates category instead of decora
   assert.match(tokens, /--ca-type-tool:/);
   assert.match(styles, /\.resource-type-icon\[data-resource-tone="tool"\]/);
   assert.match(styles, /\.collection-icon\[data-collection-tone="operations"\]/);
+});
+
+test("Resource summaries disclose whether Atlas or the publisher wrote the browse copy", () => {
+  assert.deepEqual(resourceSummaryPresentation({
+    summary: "Atlas text",
+    claimEvidence: [{ fieldPath: "/summary", origin: "atlas_editorial" }],
+  }), { text: "Atlas text", origin: "atlas_editorial", label: "Control Atlas summary" });
+  assert.deepEqual(resourceSummaryPresentation({
+    summary: "Publisher text",
+    claimEvidence: [{ fieldPath: "/summary", origin: "publisher_normalized" }],
+  }), { text: "Publisher text", origin: "publisher_normalized", label: "Publisher summary" });
+  assert.ok(resources.every((resource) => resourceSummaryPresentation(resource).label === "Control Atlas summary"));
 });

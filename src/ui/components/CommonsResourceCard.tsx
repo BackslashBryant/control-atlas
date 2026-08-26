@@ -24,6 +24,7 @@ import {
 } from "../lib/resourceBrands.mjs";
 import { resolveIdentity } from "../../shared/identity-registry.mjs";
 import { taxonomyTagsForResource } from "../../shared/record-taxonomy.mjs";
+import { resourceSummaryPresentation } from "../lib/commonsPresentation.mjs";
 
 const TAG_PRIORITY = ["tool", "framework", "program", "organization"];
 const MAX_CARD_TAGS = 2;
@@ -115,9 +116,7 @@ export function CommonsResourceCard({
 }: CommonsResourceCardProps) {
   const mark = resolveResourceMark(resource);
   const accent = mark?.accent || "neutral";
-  const cardPurpose =
-    (resource as CommonsResource & { cardPurpose?: string }).cardPurpose?.trim() ||
-    resource.summary;
+  const summary = resourceSummaryPresentation(resource);
   const accessLabel = resourceAccessLabel(resource);
 
   const cardTagIds = (() => {
@@ -170,7 +169,10 @@ export function CommonsResourceCard({
           </div>
         ) : null}
 
-        <p className="resource-card-purpose">{cardPurpose}</p>
+        <div className="resource-summary-copy">
+          <span className="resource-summary-copy__label">{summary.label}</span>
+          <p className="resource-card-purpose">{summary.text}</p>
+        </div>
       </div>
 
       <div className="pt-3 border-t border-[color-mix(in_srgb,var(--ca-border)_80%,transparent)] flex items-center justify-between gap-2 mt-auto">

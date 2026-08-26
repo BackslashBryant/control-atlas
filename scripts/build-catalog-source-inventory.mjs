@@ -20,6 +20,7 @@ const PROFILES = Object.freeze({
   'dod-rai': { file: 'data/dod-rai.json' },
   'dod-zt': { file: 'data/dod-zt.json' },
   'fedramp-rev5': { file: 'data/fedramp-baselines.json' },
+  'fedramp-2026': { file: 'data/fedramp-2026-catalog.json' },
   'fips-199': { file: 'data/fips-199.json' },
   'fips-200': { file: 'data/fips-200.json' },
   'microsoft-zt-maturity': { file: 'data/microsoft-zt-maturity.json' },

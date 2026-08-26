@@ -1767,7 +1767,7 @@
       ],
       "license_or_use": "Official FedRAMP public source data; FedRAMP names and marks remain GSA property",
       "lifecycle_status": "active",
-      "eligibility_status": "limited",
+      "eligibility_status": "eligible",
       "access_status": "public",
       "version": "2026.07.14.01",
       "retrieved_at": "2026-07-16",
@@ -1775,20 +1775,20 @@
       "artifact_url": "https://raw.githubusercontent.com/FedRAMP/rules/main/fedramp-consolidated-rules.json",
       "catalog_browse_url": "https://www.fedramp.gov/2026/",
       "federal_referenced_by": [],
-      "graph_eligible": false,
+      "graph_eligible": true,
       "metadata": {
         "frameworks": [
+          "fedramp-2026",
           "fedramp-20x",
           "fedramp-rev5"
         ],
         "parser": "fedramp-consolidated-rules-json",
         "schema_url": "https://raw.githubusercontent.com/FedRAMP/rules/main/schemas/fedramp-consolidated-rules.schema.json",
         "source_repository": "https://github.com/FedRAMP/rules",
-        "identity_kind": "supplemental",
-        "canonical_publication_id": "fedramp-rev5"
+        "identity_kind": "publication"
       },
       "entity_kind": "publication",
-      "profile_id": "publication.supplemental",
+      "profile_id": "publication.publication",
       "origin": "publisher_normalized"
     },
     {
@@ -2045,7 +2045,8 @@
           "mitre-d3fend"
         ],
         "parser": "json-ld",
-        "identity_kind": "publication"
+        "identity_kind": "publication",
+        "provenance_note": "The official destination is mutable. Control Atlas binds version 1.5.0 to the committed ontology capture and its SHA-256 checksum."
       },
       "entity_kind": "publication",
       "profile_id": "publication.publication",
@@ -2622,7 +2623,8 @@
           "nist-iot-cybersecurity"
         ],
         "parser": "nist-iot-requirement-xlsx",
-        "identity_kind": "publication"
+        "identity_kind": "publication",
+        "provenance_note": "The official catalog page establishes publication identity. Indexed records were normalized from NIST's two draft mapping workbooks; Control Atlas does not claim an independent catalog extraction."
       },
       "entity_kind": "publication",
       "profile_id": "publication.publication",
@@ -3738,7 +3740,7 @@
       "publication_source_id": "fedramp-2026-rules",
       "name": "FedRAMP Consolidated Rules for 2026 Structured Data Artifact",
       "display_name": "FedRAMP Consolidated Rules for 2026 Artifact",
-      "source_role": "enrichment",
+      "source_role": "primary_data",
       "authority_class": "government_mapping",
       "format": "json",
       "version": "2026.07.14.01",
@@ -3750,7 +3752,7 @@
       "sha256": "sha256:135707003f0aaa5ceb10d7d32c2681e5b1585a4eaf4403d0d135837787e5ae8e",
       "parser": "fedramp-consolidated-rules-json",
       "parser_version": "1.0.0",
-      "record_count": 5,
+      "record_count": 444,
       "relationship_count": 0,
       "license_or_use": "Official FedRAMP public source data; FedRAMP names and marks remain GSA property",
       "entity_kind": "artifact",
@@ -3934,7 +3936,9 @@
       "profile_id": "artifact.json_ld",
       "origin": "publisher_exact",
       "metadata": {
-        "checksum_basis": "canonical_json"
+        "checksum_basis": "canonical_json",
+        "immutable_capture_path": "data/d3fend-countermeasures.json",
+        "version_binding": "The committed, checksummed ontology capture identifies publisher version 1.5.0."
       }
     },
     {
@@ -4300,14 +4304,14 @@
     },
     {
       "id": "artifact-nist-iot-requirements-80053-mapping-draft",
-      "publication_source_id": "nist-iot-device-cybersecurity-requirement-catalogs",
+      "publication_source_id": "nist-iot-requirements-80053-mapping-draft",
       "name": "NIST IoT Requirements to SP 800-53 Workbook",
       "display_name": "NIST IoT Requirements to SP 800-53 Workbook",
-      "source_role": "primary_data",
+      "source_role": "mapping",
       "authority_class": "publisher",
       "format": "spreadsheet",
       "version": "Draft",
-      "lifecycle_status": "active",
+      "lifecycle_status": "draft",
       "retrieval_method": "official_structured_export",
       "retrieved_at": "2026-08-12",
       "artifact_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_800-53.xlsx",
@@ -4331,7 +4335,7 @@
       "authority_class": "publisher",
       "format": "spreadsheet",
       "version": "Draft",
-      "lifecycle_status": "active",
+      "lifecycle_status": "draft",
       "retrieval_method": "official_structured_export",
       "retrieved_at": "2026-08-12",
       "artifact_url": "https://pages.nist.gov/IoT-Device-Cybersecurity-Requirement-Catalogs/InformativeReferences/files/DRAFT_NIST_IoT_Device_Cybersecurity_Requirements_Catalog_to_Cybersecurity_Framework.xlsx",
@@ -5761,14 +5765,34 @@
       "origin": "atlas_editorial"
     },
     {
+      "catalog_id": "fedramp-2026",
+      "publication_source_id": "fedramp-2026-rules",
+      "primary_artifact_ids": [
+        "artifact-fedramp-2026-rules"
+      ],
+      "enrichment_artifact_ids": [],
+      "mapping_source_ids": [],
+      "assessment_source_ids": [],
+      "automation_source_ids": [],
+      "reconciliation_source_ids": [],
+      "expected_inventory": {
+        "basis": "Every native control-context, definition, rule, and key security indicator with publisher text in the official Consolidated Rules JSON.",
+        "evidence_class": "native_json_inventory",
+        "evidence_locator": "data/fedramp-2026-catalog.json#source_inventory.total",
+        "imported_evidence_locator": "data/fedramp-2026-catalog.json#record_count",
+        "exclusions": []
+      },
+      "entity_kind": "assertion",
+      "profile_id": "assertion.source_bundle",
+      "origin": "atlas_editorial"
+    },
+    {
       "catalog_id": "fedramp-rev5",
       "publication_source_id": "fedramp-rev5",
       "primary_artifact_ids": [
         "artifact-fedramp-rev5"
       ],
-      "enrichment_artifact_ids": [
-        "artifact-fedramp-2026-rules"
-      ],
+      "enrichment_artifact_ids": [],
       "mapping_source_ids": [],
       "assessment_source_ids": [],
       "automation_source_ids": [],
@@ -6110,18 +6134,19 @@
     {
       "catalog_id": "nist-iot-cybersecurity",
       "publication_source_id": "nist-iot-device-cybersecurity-requirement-catalogs",
-      "primary_artifact_ids": [
-        "artifact-nist-iot-requirements-80053-mapping-draft"
-      ],
+      "primary_artifact_ids": [],
       "enrichment_artifact_ids": [],
       "mapping_source_ids": [
+        "artifact-nist-iot-requirements-80053-mapping-draft",
         "artifact-nist-iot-requirements-csf11-mapping-draft"
       ],
       "assessment_source_ids": [],
       "automation_source_ids": [],
       "reconciliation_source_ids": [],
       "expected_inventory": {
-        "basis": "All structural records parsed from both official NIST IoT mapping workbooks after exact path reconciliation.",
+        "basis": "Unique NIST IoT catalog records normalized from the two publisher mapping workbooks and reconciled by exact record path. The catalog page supplies publication identity; the draft workbooks supply mapping data.",
+        "evidence_class": "publisher_mapping_inventory",
+        "primary_extraction_status": "not_performed",
         "evidence_locator": "data/curated/nist-structured-catalogs/source-manifest.json#reconciliation.iot.records",
         "imported_evidence_locator": "data/curated/nist-structured-catalogs/source-manifest.json#reconciliation.iot.records",
         "exclusions": []

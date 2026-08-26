@@ -67,6 +67,7 @@ import {
 } from "../src/shared/catalog-structure.mjs";
 import { TAXONOMY_CONTRACT } from "../src/shared/taxonomy-contract.mjs";
 import { taxonomyTagsForRecord } from "../src/shared/record-taxonomy.mjs";
+import { repairKnownSourceEncoding } from "../src/shared/text-fidelity.mjs";
 import {
   connectionEvidenceIdsForEdge,
   publisherStructureMembershipForEdge,
@@ -226,6 +227,7 @@ const CATALOGS = [
   ["csf-subcategories.json", "csf-2", "nist-oscal", "requirement"],
   ["cmmc-practices.json", "cmmc-2", "dod-cmmc-rule", "program"],
   ["fedramp-baselines.json", "fedramp-rev5", "fedramp-rev5", "baseline"],
+  ["fedramp-2026-catalog.json", "fedramp-2026", "fedramp-2026-rules", "requirement"],
   ["cui-policy.json", "cui-policy", "isoo-cui-regulation", "policy"],
   ["ccis.json", "disa-cci", "disa-cci-list", "requirement"],
   ["ai-rmf.json", "nist-ai-rmf", "nist-ai-rmf-playbook", "requirement"],
@@ -619,6 +621,13 @@ const CATALOG_SUMMARIES = new Map([
     },
   ],
   [
+    "fedramp-2026",
+    {
+      sourceId: "fedramp-2026-rules",
+      title: "FedRAMP Consolidated Rules for 2026",
+    },
+  ],
+  [
     "dod-zt",
     {
       sourceId: "dod-zt-reference-architecture-v2",
@@ -793,13 +802,15 @@ function aliasArtifact(id) {
 function attachNodeProvenance(node, sourceId, registry) {
   const source = registry.byId.get(sourceId);
   const defaultArtifactId = aliasArtifact(`artifact-${sourceId}`);
-  const bundlePrimaryArtifactId = registry.catalogSourceBundles
-    .find((bundle) => bundle.catalog_id === node.metadata?.catalog_id)
-    ?.primary_artifact_ids?.[0];
+  const sourceBundle = registry.catalogSourceBundles
+    .find((bundle) => bundle.catalog_id === node.metadata?.catalog_id);
+  const bundleSourceArtifactId = sourceBundle?.primary_artifact_ids?.[0]
+    || sourceBundle?.mapping_source_ids?.[0]
+    || sourceBundle?.enrichment_artifact_ids?.[0];
   const primaryArtifactId = aliasArtifact(
     node.metadata?.primary_artifact_id ||
       node.metadata?.contributing_artifact_ids?.[0] ||
-      (registry.byId.has(defaultArtifactId) ? defaultArtifactId : bundlePrimaryArtifactId) ||
+      (registry.byId.has(defaultArtifactId) ? defaultArtifactId : bundleSourceArtifactId) ||
       defaultArtifactId,
   );
   node.publication_source_id = sourceId;
@@ -1086,7 +1097,9 @@ function buildNodes(registry) {
         registry,
         {
           id,
-          node_type: SUPPORTED_RECORD_TYPE_SET.has(record.type) && /^(?:zt_|iot_|mobile_)/.test(record.type)
+          node_type: SUPPORTED_RECORD_TYPE_SET.has(record.type) && (
+            /^(?:zt_|iot_|mobile_)/.test(record.type) || catalogId === "fedramp-2026"
+          )
             ? record.type
             : nodeType(defaultType, record.id),
           // DISA CCI records carry their own identifier as the title, so the
@@ -1111,7 +1124,7 @@ function buildNodes(registry) {
             description:
               catalogId === "nist-mobile-threats" && record.type === "mobile_threat"
                 ? ""
-                : record.description || "",
+                : repairKnownSourceEncoding(record.description || ""),
             // The catalogue legitimately has three title-only entries. Surface
             // that source coverage explicitly instead of rendering an empty
             // record or inventing explanatory publisher prose.
@@ -1155,8 +1168,8 @@ function buildNodes(registry) {
             nist_control: record.nist_control || null,
             type: record.type || null,
             references: record.references || null,
-            check_text: record.check_text || null,
-            fix_text: record.fix_text || null,
+            check_text: record.check_text ? repairKnownSourceEncoding(record.check_text) : null,
+            fix_text: record.fix_text ? repairKnownSourceEncoding(record.fix_text) : null,
             superseded_by: record.metadata?.superseded_by || null,
             discussion: record.metadata?.discussion || null,
             related_controls: record.metadata?.related_controls || null,

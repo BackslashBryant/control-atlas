@@ -11,6 +11,9 @@ const rules = JSON.parse(readFileSync('data/fedramp-2026-rules.json', 'utf8'));
 const schema = JSON.parse(readFileSync('data/fedramp-2026-rules.schema.json', 'utf8'));
 const transitions = JSON.parse(readFileSync('data/fedramp-transition-index.json', 'utf8'));
 const artifacts = JSON.parse(readFileSync('data/official-artifact-registry.json', 'utf8'));
+const catalog = JSON.parse(readFileSync('data/fedramp-2026-catalog.json', 'utf8'));
+const sourceRegistry = JSON.parse(readFileSync('data/source-registry.json', 'utf8'));
+const adapterRegistry = JSON.parse(readFileSync('data/profiles/source-adapter-registry.json', 'utf8'));
 
 test('official FedRAMP 2026 rules validate against the official schema', () => {
   const ajv = new Ajv2020({ allErrors: true, strict: false });
@@ -96,4 +99,37 @@ test('FedRAMP baseline workbook parser preserves program-specific membership', (
     HIGH: ['SC-7.3'],
     'LI-SAAS': ['IA-2.1'],
   });
+});
+
+test('current FedRAMP rules and historical Rev. 5 remain distinct source families', () => {
+  assert.equal(catalog.source_version, rules.info.version);
+  assert.equal(catalog.record_count, 444);
+  assert.deepEqual(catalog.source_inventory, {
+    control_context: 77,
+    definitions: 75,
+    rules: 246,
+    key_security_indicators: 46,
+    total: 444,
+  });
+  assert.deepEqual(
+    [...new Set(catalog.records.map((record) => record.type))].sort(),
+    ['control_context', 'definition', 'key_security_indicator', 'rule'],
+  );
+  const current = sourceRegistry.publications.find((entry) => entry.id === 'fedramp-2026-rules');
+  const historical = sourceRegistry.publications.find((entry) => entry.id === 'fedramp-rev5');
+  assert.equal(current.lifecycle_status, 'active');
+  assert.equal(current.graph_eligible, true);
+  assert.equal(historical.lifecycle_status, 'historical');
+  const currentBundle = sourceRegistry.catalog_source_bundles.find((entry) => entry.catalog_id === 'fedramp-2026');
+  const historicalBundle = sourceRegistry.catalog_source_bundles.find((entry) => entry.catalog_id === 'fedramp-rev5');
+  assert.deepEqual(currentBundle.primary_artifact_ids, ['artifact-fedramp-2026-rules']);
+  assert.ok(!historicalBundle.enrichment_artifact_ids.includes('artifact-fedramp-2026-rules'));
+  const currentAdapter = adapterRegistry.adapters.find((entry) => entry.adapter_id === 'fedramp-consolidated-rules-json');
+  assert.deepEqual(currentAdapter.catalog_ids, ['fedramp-2026']);
+  assert.deepEqual(currentAdapter.produced_profile_ids, [
+    'record.control_context',
+    'record.definition',
+    'record.key_security_indicator',
+    'record.rule',
+  ]);
 });

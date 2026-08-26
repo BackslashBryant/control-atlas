@@ -139,7 +139,7 @@ test("authority nodes and issued-under relationships emit outside canonical orga
   const issuedUnder = edges.filter(
     (edge) => edge.relationship_type === "issued_under",
   );
-  assert.equal(issuedUnder.length, 35);
+  assert.equal(issuedUnder.length, 37);
   assert.ok(
     issuedUnder.every(
       (edge) =>
@@ -187,7 +187,7 @@ test("runtime Atlas spine carries full L0-L3 structure and L4 summaries", () => 
     }
   }
   const catalogEntries = entries.filter((entry) => entry.node_type === "catalog");
-  assert.equal(catalogEntries.length, 27);
+  assert.equal(catalogEntries.length, 28);
   const publicationsByArea = new Map();
   for (const entry of catalogEntries) {
     publicationsByArea.set(
@@ -200,7 +200,7 @@ test("runtime Atlas spine carries full L0-L3 structure and L4 summaries", () => 
     assert.ok(entry.publication_type);
     assert.ok(entry.mandate_note);
   }
-  assert.equal(publicationsByArea.get("atlas:LIMB-COMPLIANCE"), 11);
+  assert.equal(publicationsByArea.get("atlas:LIMB-COMPLIANCE"), 12);
   assert.equal(publicationsByArea.get("atlas:LIMB-GOVERNANCE"), 3);
   assert.equal(publicationsByArea.get("atlas:LIMB-IMPLEMENTATION"), 3);
   assert.ok((publicationsByArea.get("atlas:LIMB-RISK") || 0) > 0);

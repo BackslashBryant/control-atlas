@@ -12,6 +12,7 @@ import {
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const resourcePath = join(ROOT, "data", "commons-resource-dataset.json");
 const sourcePath = join(ROOT, "data", "source-registry.json");
+const fedramp2026Path = join(ROOT, "data", "fedramp-2026-catalog.json");
 const profilePath = join(ROOT, "data", "profiles", "profile-registry.json");
 const adapterPath = join(ROOT, "data", "profiles", "source-adapter-registry.json");
 const organizationPath = join(ROOT, "data", "organizations.json");
@@ -249,6 +250,7 @@ function migrateResources() {
 
 function migrateSourceRegistry() {
   const registry = JSON.parse(readFileSync(sourcePath, "utf8"));
+  const fedramp2026 = JSON.parse(readFileSync(fedramp2026Path, "utf8"));
   const mitreCatalogs = new Map([...mitreCatalogPaths].map(([id, path]) => [id, JSON.parse(readFileSync(path, "utf8"))]));
   const syncMitreIdentity = (entry, catalog, kind) => {
     entry.version = catalog.source_version;
@@ -268,6 +270,28 @@ function migrateSourceRegistry() {
     const mitreCatalog = mitreCatalogs.get(publication.id);
     if (mitreCatalog) syncMitreIdentity(publication, mitreCatalog, "publication");
     if (publication.id === "fedramp-rev5") publication.lifecycle_status = "historical";
+    if (publication.id === "fedramp-2026-rules") {
+      publication.graph_eligible = true;
+      publication.eligibility_status = "eligible";
+      publication.metadata = {
+        ...(publication.metadata || {}),
+        frameworks: ["fedramp-2026", "fedramp-20x", "fedramp-rev5"],
+        identity_kind: "publication",
+      };
+      delete publication.metadata.canonical_publication_id;
+    }
+    if (publication.id === "nist-iot-device-cybersecurity-requirement-catalogs") {
+      publication.metadata = {
+        ...(publication.metadata || {}),
+        provenance_note: "The official catalog page establishes publication identity. Indexed records were normalized from NIST's two draft mapping workbooks; Control Atlas does not claim an independent catalog extraction.",
+      };
+    }
+    if (publication.id === "mitre-d3fend-ontology") {
+      publication.metadata = {
+        ...(publication.metadata || {}),
+        provenance_note: "The official destination is mutable. Control Atlas binds version 1.5.0 to the committed ontology capture and its SHA-256 checksum.",
+      };
+    }
     if (publication.id === "dod-rai-toolkit") {
       publication.artifact_url = "https://www.ai.mil/Latest/Blog/Article-Display/Article/3940314/responsible-ai-toolkit/";
       publication.catalog_browse_url = publication.artifact_url;
@@ -288,6 +312,26 @@ function migrateSourceRegistry() {
     if (artifact.id === "artifact-fedramp-rev5") {
       artifact.lifecycle_status = "historical";
       artifact.source_role = "historical";
+    }
+    if (artifact.id === "artifact-fedramp-2026-rules") {
+      artifact.source_role = "primary_data";
+      artifact.record_count = fedramp2026.record_count;
+    }
+    if (artifact.id === "artifact-nist-iot-requirements-80053-mapping-draft") {
+      artifact.publication_source_id = "nist-iot-requirements-80053-mapping-draft";
+      artifact.source_role = "mapping";
+      artifact.lifecycle_status = "draft";
+    }
+    if (artifact.id === "artifact-nist-iot-requirements-csf11-mapping-draft") {
+      artifact.source_role = "mapping";
+      artifact.lifecycle_status = "draft";
+    }
+    if (artifact.id === "artifact-mitre-d3fend-ontology") {
+      artifact.metadata = {
+        ...(artifact.metadata || {}),
+        immutable_capture_path: "data/d3fend-countermeasures.json",
+        version_binding: "The committed, checksummed ontology capture identifies publisher version 1.5.0.",
+      };
     }
     if (artifact.id === "artifact-dod-rai-toolkit") {
       artifact.source_role = "reference_only";
@@ -329,7 +373,50 @@ function migrateSourceRegistry() {
     bundle.entity_kind = "assertion";
     bundle.profile_id = "assertion.source_bundle";
     bundle.origin = "atlas_editorial";
+    if (bundle.catalog_id === "fedramp-rev5") {
+      bundle.enrichment_artifact_ids = (bundle.enrichment_artifact_ids || [])
+        .filter((id) => id !== "artifact-fedramp-2026-rules");
+    }
+    if (bundle.catalog_id === "nist-iot-cybersecurity") {
+      bundle.primary_artifact_ids = [];
+      bundle.mapping_source_ids = [
+        "artifact-nist-iot-requirements-80053-mapping-draft",
+        "artifact-nist-iot-requirements-csf11-mapping-draft",
+      ];
+      bundle.expected_inventory = {
+        basis: "Unique NIST IoT catalog records normalized from the two publisher mapping workbooks and reconciled by exact record path. The catalog page supplies publication identity; the draft workbooks supply mapping data.",
+        evidence_class: "publisher_mapping_inventory",
+        primary_extraction_status: "not_performed",
+        evidence_locator: "data/curated/nist-structured-catalogs/source-manifest.json#reconciliation.iot.records",
+        imported_evidence_locator: "data/curated/nist-structured-catalogs/source-manifest.json#reconciliation.iot.records",
+        exclusions: [],
+      };
+    }
   }
+  const fedrampBundle = {
+    catalog_id: "fedramp-2026",
+    publication_source_id: "fedramp-2026-rules",
+    primary_artifact_ids: ["artifact-fedramp-2026-rules"],
+    enrichment_artifact_ids: [],
+    mapping_source_ids: [],
+    assessment_source_ids: [],
+    automation_source_ids: [],
+    reconciliation_source_ids: [],
+    expected_inventory: {
+      basis: "Every native control-context, definition, rule, and key security indicator with publisher text in the official Consolidated Rules JSON.",
+      evidence_class: "native_json_inventory",
+      evidence_locator: "data/fedramp-2026-catalog.json#source_inventory.total",
+      imported_evidence_locator: "data/fedramp-2026-catalog.json#record_count",
+      exclusions: [],
+    },
+    entity_kind: "assertion",
+    profile_id: "assertion.source_bundle",
+    origin: "atlas_editorial",
+  };
+  const fedrampBundleIndex = (registry.catalog_source_bundles || []).findIndex((bundle) => bundle.catalog_id === "fedramp-2026");
+  if (fedrampBundleIndex >= 0) registry.catalog_source_bundles[fedrampBundleIndex] = fedrampBundle;
+  else registry.catalog_source_bundles.push(fedrampBundle);
+  registry.catalog_source_bundles.sort((left, right) => left.catalog_id.localeCompare(right.catalog_id));
   for (const freshness of registry.freshness?.sources || []) {
     const mitreCatalog = mitreCatalogs.get(freshness.source_id);
     if (!mitreCatalog) continue;
@@ -458,7 +545,8 @@ function upgradeAdapterRegistry() {
   const registry = JSON.parse(readFileSync(adapterPath, "utf8"));
   registry.schema_version = "2.0";
   const catalogsByAdapter = {
-    "fedramp-consolidated-rules-json": ["fedramp-rev5"],
+    "fedramp-consolidated-rules-json": ["fedramp-2026"],
+    "fedramp-rev5-workbook": ["fedramp-rev5"],
     "mitre-attack-stix": ["mitre-attack", "mitre-attack-ics"],
     "mitre-d3fend-json-ld": ["mitre-d3fend"],
     "nist-oscal-profile": ["nist-800-53b"],
@@ -468,7 +556,29 @@ function upgradeAdapterRegistry() {
     "disa-product-resource": [],
   };
   for (const adapter of registry.adapters || []) adapter.catalog_ids = catalogsByAdapter[adapter.adapter_id] || adapter.catalog_ids || [];
+  const fedrampRulesAdapter = (registry.adapters || [])
+    .find((adapter) => adapter.adapter_id === "fedramp-consolidated-rules-json");
+  if (fedrampRulesAdapter) {
+    fedrampRulesAdapter.produced_profile_ids = [
+      "record.control_context",
+      "record.definition",
+      "record.key_security_indicator",
+      "record.rule",
+    ];
+  }
   const additions = [
+    {
+      adapter_id: "fedramp-rev5-workbook",
+      adapter_version: "1.0.0",
+      catalog_ids: ["fedramp-rev5"],
+      accepted_source_types: ["spreadsheet"],
+      produced_profile_ids: ["record.baseline"],
+      field_transformations: ["preserve legacy baseline identifiers and control membership without treating the workbook as current rules"],
+      relationship_rules: ["transition relationships to the Consolidated Rules remain Atlas-authored assertions with explicit evidence"],
+      fixture_set: "tests/fedramp-transition.test.mjs",
+      failure_policy: "fail_closed",
+      source_policy: "The Rev. 5 workbook is historical transition material and is never the primary artifact for current FedRAMP rules.",
+    },
     {
       adapter_id: "nist-oscal-catalog",
       adapter_version: "2.0.0",

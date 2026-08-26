@@ -29,6 +29,7 @@ const PUBLICATION_KINDS: Record<string, string> = {
   "dod-rai": "Risk framework",
   "csf-2": "Outcome framework",
   "fedramp-rev5": "Authorization program",
+  "fedramp-2026": "Authorization program",
   "cmmc-2": "Certification program",
   "disa-stig": "Implementation standard",
   "disa-srg": "Implementation standard",
@@ -63,6 +64,7 @@ const RECORD_LABELS: Record<string, string> = {
   "nist-800-171": "Requirements",
   "nist-800-53": "Controls",
   "fedramp-rev5": "Baselines",
+  "fedramp-2026": "Rules and definitions",
   "disa-stig": "STIG rules",
   "disa-srg": "SRG requirements",
   "disa-cci": "Identifiers",
@@ -99,6 +101,8 @@ const SYNOPSES: Record<string, string> = {
     "Control baselines for low-, moderate-, and high-impact systems, with tailoring guidance.",
   "fedramp-rev5":
     "FedRAMP control baselines and parameters for cloud service authorization.",
+  "fedramp-2026":
+    "Current FedRAMP rules, definitions, and key security indicators with publisher-stated effective dates and applicability.",
   "nist-800-171":
     "Requirements for protecting Controlled Unclassified Information in nonfederal systems and organizations.",
   "nist-800-171-rev2":

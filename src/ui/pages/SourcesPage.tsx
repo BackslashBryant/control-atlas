@@ -173,6 +173,13 @@ function PublicationInspectorContent(props: {
 
         </section>
 
+        {publication.rawSource?.metadata?.provenance_note ? (
+          <p className="source-coverage-basis">
+            <strong>Coverage basis:</strong>{" "}
+            {publication.rawSource.metadata.provenance_note}
+          </p>
+        ) : null}
+
         {publication.officialLink ? (
           <ButtonLink
             className="source-inspector-official-link"
@@ -209,6 +216,7 @@ function PublicationInspectorContent(props: {
                     ) : null}
                   </div>
                   <div className="source-material-meta">
+                    {item.version ? <span>Version {item.version}</span> : null}
                     {item.retrievedAt ? (
                       <span>
                         Retrieved{" "}
@@ -217,6 +225,9 @@ function PublicationInspectorContent(props: {
                     ) : null}
                     {typeof item.recordCount === "number" && item.recordCount > 0 ? (
                       <span>{item.recordCount.toLocaleString()} records</span>
+                    ) : null}
+                    {item.checksum ? (
+                      <span title={item.checksum}>SHA-256 {item.checksum.replace(/^sha256:/i, "").slice(0, 12)}…</span>
                     ) : null}
                   </div>
                   {item.url ? (
@@ -633,6 +644,10 @@ export function SourcesPage(props: {
         summary="Verify publisher, version, and source material for publications used in Control Atlas."
         title={SITE_COPY.routes.sources.title}
       />
+
+      <p className="source-register-boundary">
+        This register includes {publicationCount.toLocaleString()} publisher publications that anchor searchable records or published connections. Supporting files and crosswalks appear inside each publication.
+      </p>
 
       {state.source && !selectedPublicationRow ? (
         <div className="source-not-found-banner" role="alert">
