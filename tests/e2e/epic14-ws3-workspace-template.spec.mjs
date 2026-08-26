@@ -258,3 +258,9 @@ test("WS3 global search and publication rows use the same generated identity con
     await expect(row).not.toContainText("COLLABORATOR-APPGATE-835EC7F121");
     expect(
       await page.evaluate(
+        () => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
+      ),
+      `${width}px publication overflow`,
+    ).toBeLessThanOrEqual(1);
+  }
+});
