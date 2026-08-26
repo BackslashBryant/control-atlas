@@ -36,7 +36,7 @@ const CATALOG_FRAMEWORK_RULES = [
   [/^fedramp/, "framework.fedramp"],
   [/^cmmc/, "framework.cmmc"],
   [/^csf/, "framework.nist-csf"],
-  [/^nist-ai-rmf/, "framework.nist-csf"],
+  [/^nist-ai-rmf/, "framework.nist-ai-rmf"],
 ];
 
 /** @type {[RegExp, string][]} */
@@ -58,6 +58,8 @@ const RESOURCE_FRAMEWORK_MAP = new Map([
   ["FedRAMP Rev. 5", "framework.fedramp"],
   ["NIST CSF", "framework.nist-csf"],
   ["CSF", "framework.nist-csf"],
+  ["NIST AI RMF", "framework.nist-ai-rmf"],
+  ["AI RMF", "framework.nist-ai-rmf"],
   ["CMMC", "framework.cmmc"],
 ]);
 

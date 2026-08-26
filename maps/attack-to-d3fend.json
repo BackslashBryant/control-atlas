@@ -2,9 +2,11 @@
   "schema_version": "2.0",
   "source_key": "mitre-d3fend-mappings",
   "source_artifact": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
-  "source_version": "2026-08-13",
-  "snapshot_date": "2026-08-13",
+  "source_version": "1.5.0",
+  "snapshot_date": "2026-08-25",
   "checksum": "sha256:3f103c5703fdfc8c2e658d8b81fb22b1cf7ef281d83ee324f4a3a176076f5d37",
+  "checksum_basis": "canonical_json",
+  "source_artifact_byte_length": 38722880,
   "provenance": "MITRE D3FEND inferred ATT&CK technique to defensive technique mappings",
   "relationships": [
     {
@@ -135,6 +137,66 @@
       "relationship_type": "mitigates",
       "why": "MITRE D3FEND maps ATT&CK technique T0802 to defensive technique D3-NTF (Network Traffic Filtering).",
       "source_locator": "d3fend-full-mappings.json#T0802:D3-NTF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0803",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MAN",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0803 to defensive technique D3-MAN (Message Authentication).",
+      "source_locator": "d3fend-full-mappings.json#T0803:D3-MAN",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0803",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MENCR",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0803 to defensive technique D3-MENCR (Message Encryption).",
+      "source_locator": "d3fend-full-mappings.json#T0803:D3-MENCR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0803",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-NTF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0803 to defensive technique D3-NTF (Network Traffic Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T0803:D3-NTF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0805",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MAN",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0805 to defensive technique D3-MAN (Message Authentication).",
+      "source_locator": "d3fend-full-mappings.json#T0805:D3-MAN",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0805",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MENCR",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0805 to defensive technique D3-MENCR (Message Encryption).",
+      "source_locator": "d3fend-full-mappings.json#T0805:D3-MENCR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0805",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-NTF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0805 to defensive technique D3-NTF (Network Traffic Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T0805:D3-NTF",
       "evidence_source": "mitre-d3fend-mappings"
     },
     {
@@ -525,6 +587,206 @@
       "relationship_type": "mitigates",
       "why": "MITRE D3FEND maps ATT&CK technique T0811 to defensive technique D3-SWI (Software Inventory).",
       "source_locator": "d3fend-full-mappings.json#T0811:D3-SWI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-AA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-AA (Agent Authentication).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-AA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-AL",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-AL (Account Locking).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-AL",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-AM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-AM (Access Modeling).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-AM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-ANCI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-ANCI (Authentication Cache Invalidation).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-ANCI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CCSA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-CCSA (Credential Compromise Scope Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-CCSA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CDP",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-CDP (Change Default Password).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-CDP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CH",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-CH (Credential Hardening).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-CH",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CR",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-CR (Credential Revocation).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-CR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CRO",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-CRO (Credential Rotation).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-CRO",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CTS",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-CTS (Credential Transmission Scoping).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-CTS",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-DUC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-DUC (Decoy User Credential).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-DUC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MFA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-MFA (Multi-factor Authentication).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-MFA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-OTP",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-OTP (One-time Password).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-OTP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-PR",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-PR (Password Rotation).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-PR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-PWA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-PWA (Password Authentication).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-PWA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RIC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-RIC (Reissue Credential).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-RIC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RUAA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-RUAA (Restore User Account Access).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-RUAA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-SPP",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-SPP (Strong Password Policy).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-SPP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-UAP",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-UAP (User Account Permissions).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-UAP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0812",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-ULA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0812 to defensive technique D3-ULA (Unlock Account).",
+      "source_locator": "d3fend-full-mappings.json#T0812:D3-ULA",
       "evidence_source": "mitre-d3fend-mappings"
     },
     {
@@ -1979,6 +2241,116 @@
     },
     {
       "source_catalog": "mitre-attack-ics",
+      "source_id": "T0839",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-AVE",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0839 to defensive technique D3-AVE (Asset Vulnerability Enumeration).",
+      "source_locator": "d3fend-full-mappings.json#T0839:D3-AVE",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0839",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FBA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0839 to defensive technique D3-FBA (Firmware Behavior Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T0839:D3-FBA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0839",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FEMC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0839 to defensive technique D3-FEMC (Firmware Embedded Monitoring Code).",
+      "source_locator": "d3fend-full-mappings.json#T0839:D3-FEMC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0839",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FV",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0839 to defensive technique D3-FV (Firmware Verification).",
+      "source_locator": "d3fend-full-mappings.json#T0839:D3-FV",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0839",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MAN",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0839 to defensive technique D3-MAN (Message Authentication).",
+      "source_locator": "d3fend-full-mappings.json#T0839:D3-MAN",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0839",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MENCR",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0839 to defensive technique D3-MENCR (Message Encryption).",
+      "source_locator": "d3fend-full-mappings.json#T0839:D3-MENCR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0839",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-NTF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0839 to defensive technique D3-NTF (Network Traffic Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T0839:D3-NTF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0839",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RFUM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0839 to defensive technique D3-RFUM (Remote Firmware Update Monitoring).",
+      "source_locator": "d3fend-full-mappings.json#T0839:D3-RFUM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0839",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RS",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0839 to defensive technique D3-RS (Restore Software).",
+      "source_locator": "d3fend-full-mappings.json#T0839:D3-RS",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0839",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-SU",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0839 to defensive technique D3-SU (Software Update).",
+      "source_locator": "d3fend-full-mappings.json#T0839:D3-SU",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0839",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-SWI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0839 to defensive technique D3-SWI (Software Inventory).",
+      "source_locator": "d3fend-full-mappings.json#T0839:D3-SWI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
       "source_id": "T0840",
       "target_catalog": "mitre-d3fend",
       "target_id": "D3-APCA",
@@ -3045,6 +3417,146 @@
       "relationship_type": "mitigates",
       "why": "MITRE D3FEND maps ATT&CK technique T0853 to defensive technique D3-RFAM (Remote File Access Mediation).",
       "source_locator": "d3fend-full-mappings.json#T0853:D3-RFAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0855",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MAN",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0855 to defensive technique D3-MAN (Message Authentication).",
+      "source_locator": "d3fend-full-mappings.json#T0855:D3-MAN",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0855",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MENCR",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0855 to defensive technique D3-MENCR (Message Encryption).",
+      "source_locator": "d3fend-full-mappings.json#T0855:D3-MENCR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0855",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-NTF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0855 to defensive technique D3-NTF (Network Traffic Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T0855:D3-NTF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0856",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MAN",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0856 to defensive technique D3-MAN (Message Authentication).",
+      "source_locator": "d3fend-full-mappings.json#T0856:D3-MAN",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0856",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MENCR",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0856 to defensive technique D3-MENCR (Message Encryption).",
+      "source_locator": "d3fend-full-mappings.json#T0856:D3-MENCR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0856",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-NTF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0856 to defensive technique D3-NTF (Network Traffic Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T0856:D3-NTF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0857",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-EHB",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0857 to defensive technique D3-EHB (Endpoint Health Beacon).",
+      "source_locator": "d3fend-full-mappings.json#T0857:D3-EHB",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0857",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-LLM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0857 to defensive technique D3-LLM (Logical Link Mapping).",
+      "source_locator": "d3fend-full-mappings.json#T0857:D3-LLM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0857",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MAN",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0857 to defensive technique D3-MAN (Message Authentication).",
+      "source_locator": "d3fend-full-mappings.json#T0857:D3-MAN",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0857",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MENCR",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0857 to defensive technique D3-MENCR (Message Encryption).",
+      "source_locator": "d3fend-full-mappings.json#T0857:D3-MENCR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0857",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-NNI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0857 to defensive technique D3-NNI (Network Node Inventory).",
+      "source_locator": "d3fend-full-mappings.json#T0857:D3-NNI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0857",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-NTF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0857 to defensive technique D3-NTF (Network Traffic Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T0857:D3-NTF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0857",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-PLM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0857 to defensive technique D3-PLM (Physical Link Mapping).",
+      "source_locator": "d3fend-full-mappings.json#T0857:D3-PLM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0857",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RNA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0857 to defensive technique D3-RNA (Restore Network Access).",
+      "source_locator": "d3fend-full-mappings.json#T0857:D3-RNA",
       "evidence_source": "mitre-d3fend-mappings"
     },
     {
@@ -5425,6 +5937,96 @@
       "relationship_type": "mitigates",
       "why": "MITRE D3FEND maps ATT&CK technique T0890 to defensive technique D3-SSC (Shadow Stack Comparisons).",
       "source_locator": "d3fend-full-mappings.json#T0890:D3-SSC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0891",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-ANCI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0891 to defensive technique D3-ANCI (Authentication Cache Invalidation).",
+      "source_locator": "d3fend-full-mappings.json#T0891:D3-ANCI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0891",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CCSA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0891 to defensive technique D3-CCSA (Credential Compromise Scope Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T0891:D3-CCSA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0891",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CH",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0891 to defensive technique D3-CH (Credential Hardening).",
+      "source_locator": "d3fend-full-mappings.json#T0891:D3-CH",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0891",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CR",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0891 to defensive technique D3-CR (Credential Revocation).",
+      "source_locator": "d3fend-full-mappings.json#T0891:D3-CR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0891",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CRO",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0891 to defensive technique D3-CRO (Credential Rotation).",
+      "source_locator": "d3fend-full-mappings.json#T0891:D3-CRO",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0891",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CTS",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0891 to defensive technique D3-CTS (Credential Transmission Scoping).",
+      "source_locator": "d3fend-full-mappings.json#T0891:D3-CTS",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0891",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-DUC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0891 to defensive technique D3-DUC (Decoy User Credential).",
+      "source_locator": "d3fend-full-mappings.json#T0891:D3-DUC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0891",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MFA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0891 to defensive technique D3-MFA (Multi-factor Authentication).",
+      "source_locator": "d3fend-full-mappings.json#T0891:D3-MFA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack-ics",
+      "source_id": "T0891",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RIC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T0891 to defensive technique D3-RIC (Reissue Credential).",
+      "source_locator": "d3fend-full-mappings.json#T0891:D3-RIC",
       "evidence_source": "mitre-d3fend-mappings"
     },
     {
@@ -12359,6 +12961,116 @@
     },
     {
       "source_catalog": "mitre-attack",
+      "source_id": "T1053.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1053.004 to defensive technique D3-CF (Content Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T1053.004:D3-CF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1053.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1053.004 to defensive technique D3-CM (Content Modification).",
+      "source_locator": "d3fend-full-mappings.json#T1053.004:D3-CM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1053.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CQ",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1053.004 to defensive technique D3-CQ (Content Quarantine).",
+      "source_locator": "d3fend-full-mappings.json#T1053.004:D3-CQ",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1053.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-DF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1053.004 to defensive technique D3-DF (Decoy File).",
+      "source_locator": "d3fend-full-mappings.json#T1053.004:D3-DF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1053.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1053.004 to defensive technique D3-FA (File Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1053.004:D3-FA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1053.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FE",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1053.004 to defensive technique D3-FE (File Encryption).",
+      "source_locator": "d3fend-full-mappings.json#T1053.004:D3-FE",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1053.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FEV",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1053.004 to defensive technique D3-FEV (File Eviction).",
+      "source_locator": "d3fend-full-mappings.json#T1053.004:D3-FEV",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1053.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FIM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1053.004 to defensive technique D3-FIM (File Integrity Monitoring).",
+      "source_locator": "d3fend-full-mappings.json#T1053.004:D3-FIM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1053.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-LFP",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1053.004 to defensive technique D3-LFP (Local File Permissions).",
+      "source_locator": "d3fend-full-mappings.json#T1053.004:D3-LFP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1053.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1053.004 to defensive technique D3-RF (Restore File).",
+      "source_locator": "d3fend-full-mappings.json#T1053.004:D3-RF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1053.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RFAM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1053.004 to defensive technique D3-RFAM (Remote File Access Mediation).",
+      "source_locator": "d3fend-full-mappings.json#T1053.004:D3-RFAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
       "source_id": "T1053.005",
       "target_catalog": "mitre-d3fend",
       "target_id": "D3-ABPI",
@@ -13735,6 +14447,146 @@
       "relationship_type": "mitigates",
       "why": "MITRE D3FEND maps ATT&CK technique T1068 to defensive technique D3-SSC (Shadow Stack Comparisons).",
       "source_locator": "d3fend-full-mappings.json#T1068:D3-SSC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-AEM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.001 to defensive technique D3-AEM (Application Exception Monitoring).",
+      "source_locator": "d3fend-full-mappings.json#T1070.001:D3-AEM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-OPM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.001 to defensive technique D3-OPM (Operational Process Monitoring).",
+      "source_locator": "d3fend-full-mappings.json#T1070.001:D3-OPM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-CF (Content Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-CF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-CM (Content Modification).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-CM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CQ",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-CQ (Content Quarantine).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-CQ",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-DF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-DF (Decoy File).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-DF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-FA (File Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-FA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FE",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-FE (File Encryption).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-FE",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FEV",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-FEV (File Eviction).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-FEV",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FIM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-FIM (File Integrity Monitoring).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-FIM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-LFP",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-LFP (Local File Permissions).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-LFP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-RF (Restore File).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-RF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RFAM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-RFAM (Remote File Access Mediation).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-RFAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1070.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-SFA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1070.002 to defensive technique D3-SFA (System File Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1070.002:D3-SFA",
       "evidence_source": "mitre-d3fend-mappings"
     },
     {
@@ -20275,6 +21127,96 @@
       "relationship_type": "mitigates",
       "why": "MITRE D3FEND maps ATT&CK technique T1140 to defensive technique D3-SCF (System Call Filtering).",
       "source_locator": "d3fend-full-mappings.json#T1140:D3-SCF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1142",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-ANCI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1142 to defensive technique D3-ANCI (Authentication Cache Invalidation).",
+      "source_locator": "d3fend-full-mappings.json#T1142:D3-ANCI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1142",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CCSA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1142 to defensive technique D3-CCSA (Credential Compromise Scope Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1142:D3-CCSA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1142",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CH",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1142 to defensive technique D3-CH (Credential Hardening).",
+      "source_locator": "d3fend-full-mappings.json#T1142:D3-CH",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1142",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CR",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1142 to defensive technique D3-CR (Credential Revocation).",
+      "source_locator": "d3fend-full-mappings.json#T1142:D3-CR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1142",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CRO",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1142 to defensive technique D3-CRO (Credential Rotation).",
+      "source_locator": "d3fend-full-mappings.json#T1142:D3-CRO",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1142",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CTS",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1142 to defensive technique D3-CTS (Credential Transmission Scoping).",
+      "source_locator": "d3fend-full-mappings.json#T1142:D3-CTS",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1142",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-DUC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1142 to defensive technique D3-DUC (Decoy User Credential).",
+      "source_locator": "d3fend-full-mappings.json#T1142:D3-DUC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1142",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-MFA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1142 to defensive technique D3-MFA (Multi-factor Authentication).",
+      "source_locator": "d3fend-full-mappings.json#T1142:D3-MFA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1142",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RIC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1142 to defensive technique D3-RIC (Reissue Credential).",
+      "source_locator": "d3fend-full-mappings.json#T1142:D3-RIC",
       "evidence_source": "mitre-d3fend-mappings"
     },
     {
@@ -29139,6 +30081,116 @@
     },
     {
       "source_catalog": "mitre-attack",
+      "source_id": "T1547.011",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1547.011 to defensive technique D3-CF (Content Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T1547.011:D3-CF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1547.011",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1547.011 to defensive technique D3-CM (Content Modification).",
+      "source_locator": "d3fend-full-mappings.json#T1547.011:D3-CM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1547.011",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CQ",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1547.011 to defensive technique D3-CQ (Content Quarantine).",
+      "source_locator": "d3fend-full-mappings.json#T1547.011:D3-CQ",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1547.011",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-DF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1547.011 to defensive technique D3-DF (Decoy File).",
+      "source_locator": "d3fend-full-mappings.json#T1547.011:D3-DF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1547.011",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1547.011 to defensive technique D3-FA (File Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1547.011:D3-FA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1547.011",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FE",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1547.011 to defensive technique D3-FE (File Encryption).",
+      "source_locator": "d3fend-full-mappings.json#T1547.011:D3-FE",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1547.011",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FEV",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1547.011 to defensive technique D3-FEV (File Eviction).",
+      "source_locator": "d3fend-full-mappings.json#T1547.011:D3-FEV",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1547.011",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FIM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1547.011 to defensive technique D3-FIM (File Integrity Monitoring).",
+      "source_locator": "d3fend-full-mappings.json#T1547.011:D3-FIM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1547.011",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-LFP",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1547.011 to defensive technique D3-LFP (Local File Permissions).",
+      "source_locator": "d3fend-full-mappings.json#T1547.011:D3-LFP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1547.011",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1547.011 to defensive technique D3-RF (Restore File).",
+      "source_locator": "d3fend-full-mappings.json#T1547.011:D3-RF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1547.011",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RFAM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1547.011 to defensive technique D3-RFAM (Remote File Access Mediation).",
+      "source_locator": "d3fend-full-mappings.json#T1547.011:D3-RFAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
       "source_id": "T1548.001",
       "target_catalog": "mitre-d3fend",
       "target_id": "D3-AM",
@@ -32439,6 +33491,516 @@
     },
     {
       "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-ABPI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-ABPI (Application-based Process Isolation).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-ABPI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-HBPI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-HBPI (Hardware-based Process Isolation).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-HBPI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-HR",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-HR (Host Reboot).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-HR",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-HS",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-HS (Host Shutdown).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-HS",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-KBPI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-KBPI (Kernel-based Process Isolation).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-KBPI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-PLA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-PLA (Process Lineage Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-PLA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-PS",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-PS (Process Suspension).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-PS",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-PSA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-PSA (Process Spawn Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-PSA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-PSMD",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-PSMD (Process Self-Modification Detection).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-PSMD",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-PT",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-PT (Process Termination).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-PT",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-SCF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-SCF (System Call Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-SCF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.001",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-SDM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.001 to defensive technique D3-SDM (System Daemon Monitoring).",
+      "source_locator": "d3fend-full-mappings.json#T1562.001:D3-SDM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-ACH",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.002 to defensive technique D3-ACH (Application Configuration Hardening).",
+      "source_locator": "d3fend-full-mappings.json#T1562.002:D3-ACH",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.002 to defensive technique D3-CI (Configuration Inventory).",
+      "source_locator": "d3fend-full-mappings.json#T1562.002:D3-CI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-DRA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.002 to defensive technique D3-DRA (Disable Remote Access).",
+      "source_locator": "d3fend-full-mappings.json#T1562.002:D3-DRA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.002 to defensive technique D3-RC (Restore Configuration).",
+      "source_locator": "d3fend-full-mappings.json#T1562.002:D3-RC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-ACH",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-ACH (Application Configuration Hardening).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-ACH",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-CF (Content Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-CF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-CI (Configuration Inventory).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-CI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-CM (Content Modification).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-CM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CQ",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-CQ (Content Quarantine).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-CQ",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-DA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-DA (Dynamic Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-DA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-DF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-DF (Decoy File).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-DF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-DRA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-DRA (Disable Remote Access).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-DRA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-EAL",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-EAL (Executable Allowlisting).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-EAL",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-EDL",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-EDL (Executable Denylisting).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-EDL",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-EFA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-EFA (Emulated File Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-EFA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-FA (File Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-FA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FE",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-FE (File Encryption).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-FE",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FEV",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-FEV (File Eviction).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-FEV",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FIM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-FIM (File Integrity Monitoring).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-FIM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-LFP",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-LFP (Local File Permissions).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-LFP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-RC (Restore Configuration).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-RC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-RF (Restore File).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-RF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RFAM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-RFAM (Remote File Access Mediation).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-RFAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.003",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RKD",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.003 to defensive technique D3-RKD (Registry Key Deletion).",
+      "source_locator": "d3fend-full-mappings.json#T1562.003:D3-RKD",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.004 to defensive technique D3-CI (Configuration Inventory).",
+      "source_locator": "d3fend-full-mappings.json#T1562.004:D3-CI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.004",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.004 to defensive technique D3-RC (Restore Configuration).",
+      "source_locator": "d3fend-full-mappings.json#T1562.004:D3-RC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.007",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.007 to defensive technique D3-CI (Configuration Inventory).",
+      "source_locator": "d3fend-full-mappings.json#T1562.007:D3-CI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.007",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.007 to defensive technique D3-RC (Restore Configuration).",
+      "source_locator": "d3fend-full-mappings.json#T1562.007:D3-RC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.008",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.008 to defensive technique D3-CI (Configuration Inventory).",
+      "source_locator": "d3fend-full-mappings.json#T1562.008:D3-CI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.008",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.008 to defensive technique D3-RC (Restore Configuration).",
+      "source_locator": "d3fend-full-mappings.json#T1562.008:D3-RC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.009",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.009 to defensive technique D3-CI (Configuration Inventory).",
+      "source_locator": "d3fend-full-mappings.json#T1562.009:D3-CI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.009",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CQ",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.009 to defensive technique D3-CQ (Content Quarantine).",
+      "source_locator": "d3fend-full-mappings.json#T1562.009:D3-CQ",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.009",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RC",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.009 to defensive technique D3-RC (Restore Configuration).",
+      "source_locator": "d3fend-full-mappings.json#T1562.009:D3-RC",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.009",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-SICA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.009 to defensive technique D3-SICA (System Init Config Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1562.009:D3-SICA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.010",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-SYSVA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.010 to defensive technique D3-SYSVA (System Vulnerability Assessment).",
+      "source_locator": "d3fend-full-mappings.json#T1562.010:D3-SYSVA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.013",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-EHB",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.013 to defensive technique D3-EHB (Endpoint Health Beacon).",
+      "source_locator": "d3fend-full-mappings.json#T1562.013:D3-EHB",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.013",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-LLM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.013 to defensive technique D3-LLM (Logical Link Mapping).",
+      "source_locator": "d3fend-full-mappings.json#T1562.013:D3-LLM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.013",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-NNI",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.013 to defensive technique D3-NNI (Network Node Inventory).",
+      "source_locator": "d3fend-full-mappings.json#T1562.013:D3-NNI",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1562.013",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-PLM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1562.013 to defensive technique D3-PLM (Physical Link Mapping).",
+      "source_locator": "d3fend-full-mappings.json#T1562.013:D3-PLM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
       "source_id": "T1563",
       "target_catalog": "mitre-d3fend",
       "target_id": "D3-APCA",
@@ -35735,6 +37297,116 @@
       "relationship_type": "mitigates",
       "why": "MITRE D3FEND maps ATT&CK technique T1574.001 to defensive technique D3-RFAM (Remote File Access Mediation).",
       "source_locator": "d3fend-full-mappings.json#T1574.001:D3-RFAM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1574.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1574.002 to defensive technique D3-CF (Content Filtering).",
+      "source_locator": "d3fend-full-mappings.json#T1574.002:D3-CF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1574.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1574.002 to defensive technique D3-CM (Content Modification).",
+      "source_locator": "d3fend-full-mappings.json#T1574.002:D3-CM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1574.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-CQ",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1574.002 to defensive technique D3-CQ (Content Quarantine).",
+      "source_locator": "d3fend-full-mappings.json#T1574.002:D3-CQ",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1574.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-DF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1574.002 to defensive technique D3-DF (Decoy File).",
+      "source_locator": "d3fend-full-mappings.json#T1574.002:D3-DF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1574.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FA",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1574.002 to defensive technique D3-FA (File Analysis).",
+      "source_locator": "d3fend-full-mappings.json#T1574.002:D3-FA",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1574.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FE",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1574.002 to defensive technique D3-FE (File Encryption).",
+      "source_locator": "d3fend-full-mappings.json#T1574.002:D3-FE",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1574.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FEV",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1574.002 to defensive technique D3-FEV (File Eviction).",
+      "source_locator": "d3fend-full-mappings.json#T1574.002:D3-FEV",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1574.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-FIM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1574.002 to defensive technique D3-FIM (File Integrity Monitoring).",
+      "source_locator": "d3fend-full-mappings.json#T1574.002:D3-FIM",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1574.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-LFP",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1574.002 to defensive technique D3-LFP (Local File Permissions).",
+      "source_locator": "d3fend-full-mappings.json#T1574.002:D3-LFP",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1574.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RF",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1574.002 to defensive technique D3-RF (Restore File).",
+      "source_locator": "d3fend-full-mappings.json#T1574.002:D3-RF",
+      "evidence_source": "mitre-d3fend-mappings"
+    },
+    {
+      "source_catalog": "mitre-attack",
+      "source_id": "T1574.002",
+      "target_catalog": "mitre-d3fend",
+      "target_id": "D3-RFAM",
+      "relationship_type": "mitigates",
+      "why": "MITRE D3FEND maps ATT&CK technique T1574.002 to defensive technique D3-RFAM (Remote File Access Mediation).",
+      "source_locator": "d3fend-full-mappings.json#T1574.002:D3-RFAM",
       "evidence_source": "mitre-d3fend-mappings"
     },
     {

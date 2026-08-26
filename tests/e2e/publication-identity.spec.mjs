@@ -69,12 +69,9 @@ test("OSCAL-fed records display exact publication identity, not ingestion identi
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
-    await expect(
-      page.getByText(`Source excerpt from ${publication}`, { exact: true }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(`Source excerpt from ${ingestion}`, { exact: true }),
-    ).toHaveCount(0);
+    const sourceIdentity = page.locator("[data-record-source-identity]");
+    await expect(sourceIdentity).toContainText(`Publisher source · ${publication}`);
+    await expect(sourceIdentity).not.toContainText(ingestion);
   }
 });
 

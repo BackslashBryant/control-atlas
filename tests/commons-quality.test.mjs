@@ -92,7 +92,11 @@ for (const r of dataset.resources) {
     `Resource ${r.id} has invalid compatibility status`,
   );
   assert.ok(r.compatibility.sourceUrl?.startsWith("https://"), `Resource ${r.id} compatibility needs evidence URL`);
-  assert.ok(r.compatibility.note?.trim(), `Resource ${r.id} compatibility needs an honest note`);
+  if (r.compatibility.status === "documented") {
+    assert.ok(r.compatibility.note?.trim(), `Resource ${r.id} documented compatibility needs an evidence note`);
+  } else if (r.compatibility.status === "not_stated") {
+    assert.equal(r.compatibility.note, "", `Resource ${r.id} must not narrate absent compatibility`);
+  }
   assert.ok(r.media, `Resource ${r.id} missing media disposition`);
   assert.equal(
     r.media.status === "available",
@@ -107,7 +111,7 @@ for (const r of dataset.resources) {
     assert.ok(media.sourceUrl.startsWith("https://"), `Resource ${r.id} media needs publisher evidence`);
     assert.ok(media.alt.trim(), `Resource ${r.id} media needs alt text`);
   }
-  if (/^https:\/\/github\.com\/[^/]+\/[^/]+\/?$/.test(r.repositoryUrl || "")) {
+  if (r.repositoryEvidence) {
     assert.ok(r.repositoryEvidence?.readmeUrl, `Resource ${r.id} repository needs README evidence`);
     assert.ok(r.repositoryEvidence?.facts?.defaultBranch, `Resource ${r.id} repository needs source-backed facts`);
   }
@@ -132,8 +136,9 @@ for (const resource of dataset.resources) {
   assert.ok(resource.presentationProfile?.template, `${resource.id} presentation template`);
   for (const field of ["whatItDoes", "whoItIsFor", "limitations"]) {
     const section = resource.presentationProfile?.[field];
-    assert.ok(section, `${resource.id} ${field}`);
-    assert.ok(["documented", "not_documented", "not_applicable"].includes(section.status), `${resource.id} ${field} status`);
+    if (field === "whatItDoes") assert.ok(section, `${resource.id} ${field}`);
+    if (!section) continue;
+    assert.equal(section.status, "documented", `${resource.id} ${field} status`);
     assert.ok(section.text && section.sourceUrl, `${resource.id} ${field} evidence`);
   }
 }
@@ -145,12 +150,12 @@ for (const resource of exactTools) {
   assert.ok(resource.toolProfile, `${resource.id} tool profile`);
   for (const field of ["inputs", "outputs", "formats", "integrations", "installation", "usage"]) {
     const section = resource.toolProfile[field];
-    assert.ok(section, `${resource.id} ${field}`);
-    assert.ok(["documented", "not_documented", "not_applicable"].includes(section.status), `${resource.id} ${field} status`);
+    if (!section) continue;
+    assert.equal(section.status, "documented", `${resource.id} ${field} status`);
     assert.ok(section.text && section.sourceUrl, `${resource.id} ${field} evidence`);
   }
-  assert.ok(resource.toolProfile.maintenance?.status, `${resource.id} maintenance status`);
-  assert.ok(resource.toolProfile.release?.status, `${resource.id} release status`);
+  if (resource.toolProfile.maintenance) assert.notEqual(resource.toolProfile.maintenance.status, "unknown", `${resource.id} maintenance is evidence-backed`);
+  if (resource.toolProfile.release) assert.notEqual(resource.toolProfile.release.status, "not_documented", `${resource.id} release is evidence-backed`);
 }
 
 const repositoryBackedTools = exactTools.filter((resource) => resource.repositoryEvidence);
@@ -187,12 +192,12 @@ assert.deepEqual(
 const iAssure = dataset.resources.find((resource) => resource.id === "template-i-assure-ssp-worksheet");
 assert.equal(iAssure?.canonicalUrl, "https://i-assure.com/products/rmf-templates/");
 assert.equal(iAssure?.resourceType, "template");
-assert.equal(iAssure?.costType, "free");
+assert.equal(iAssure?.costType, undefined);
 assert.equal(iAssure?.publisherType, "commercial");
 assert.match(iAssure?.officialStatus || "", /commercial publisher/i);
 assert.match(iAssure?.whyIncluded || "", /paid service offerings are outside/i);
 for (const resource of dataset.resources.filter((entry) => entry.resourceLane === "commercial")) {
-  assert.doesNotMatch(resource.officialStatus, /^community$/i, `${resource.id} must label publisher ownership accurately`);
+  if (resource.officialStatus) assert.doesNotMatch(resource.officialStatus, /^community$/i, `${resource.id} must label publisher ownership accurately`);
 }
 for (const removedId of [
   "portal-tenable-audits",

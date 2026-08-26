@@ -42,7 +42,7 @@ function sha256(value) {
 
 function repositoryIdentity(resource) {
   try {
-    const url = new URL(resource.repositoryUrl || "");
+    const url = new URL(resource.repositoryUrl || resource.canonicalUrl || "");
     if (url.hostname !== "github.com") return null;
     const parts = url.pathname.split("/").filter(Boolean);
     if (parts.length === 2) {
@@ -66,7 +66,7 @@ function excerpt(value, maximum = 1800) {
   if (cleaned.length <= maximum) return cleaned;
   const shortened = cleaned.slice(0, maximum);
   const boundary = shortened.lastIndexOf(" ");
-  return `${shortened.slice(0, boundary > maximum * 0.75 ? boundary : maximum).trim()}â€¦`;
+  return `${shortened.slice(0, boundary > maximum * 0.75 ? boundary : maximum).trim()}…`;
 }
 
 function readmeOverview(readme) {
@@ -95,10 +95,8 @@ function matchingSection(sections, patterns) {
   return sections.find((section) => patterns.some((pattern) => pattern.test(section.heading))) || null;
 }
 
-function documentedSection(section, sourceUrl, missingText) {
-  return section
-    ? { status: "documented", text: section.text, sourceUrl }
-    : { status: "not_documented", text: missingText, sourceUrl };
+function documentedSection(section, sourceUrl) {
+  return section ? { status: "documented", text: section.text, sourceUrl } : null;
 }
 
 function githubHeaders(accept = "application/vnd.github+json") {
@@ -311,9 +309,7 @@ function baseCompatibility(resource) {
     operatingSystems,
     environments: [],
     sourceUrl: resource.sourceEvidence,
-    note: operatingSystems.length
-      ? "Publisher-supported platforms recorded by the reviewed resource inventory."
-      : "The reviewed publisher source does not state a specific supported operating system.",
+    note: operatingSystems.length ? "Publisher-supported platforms recorded by the reviewed resource inventory." : "",
   };
 }
 
@@ -328,43 +324,37 @@ function presentationProfile(resource, overview) {
     profileType: resource.resourceType,
     template: PROFILE_TEMPLATES[resource.resourceType] || "reference",
     whatItDoes: presentationSection("documented", resource.summary, resource.sourceEvidence),
-    whoItIsFor: audienceValues.length
-      ? presentationSection("documented", `Intended audience: ${audienceValues.join(", ")}.`, resource.sourceEvidence, audienceValues)
-      : presentationSection("not_documented", "The reviewed source does not identify a specific intended audience.", resource.sourceEvidence),
-    limitations: limitations.length
-      ? presentationSection("documented", limitations.join(" "), resource.sourceEvidence, limitations)
-      : presentationSection("not_documented", "No additional limitations were documented in the reviewed source.", overview.sourceUrl),
+    ...(audienceValues.length
+      ? { whoItIsFor: presentationSection("documented", `Intended audience: ${audienceValues.join(", ")}.`, resource.sourceEvidence, audienceValues) }
+      : {}),
+    ...(limitations.length
+      ? { limitations: presentationSection("documented", limitations.join(" "), resource.sourceEvidence, limitations) }
+      : {}),
   };
 }
 
 function toolProfile(resource, evidence) {
   const readmeUrl = evidence?.readmeUrl || resource.sourceEvidence;
-  const section = (name, missing) => documentedSection(evidence?.sections?.[name], readmeUrl, missing);
+  const section = (name) => documentedSection(evidence?.sections?.[name], readmeUrl);
+  const maintenance = evidence?.facts
+    ? {
+        status: evidence.facts.archived ? "archived" : "active",
+        text: evidence.facts.archived
+          ? "The repository is archived."
+          : `Latest repository push: ${evidence.facts.lastPushedAt}.`,
+        sourceUrl: evidence.repositoryApiUrl,
+      }
+    : null;
   return {
-    inputs: section("inputs", "Supported inputs were not documented in the reviewed source."),
-    outputs: section("outputs", "Supported outputs were not documented in the reviewed source."),
-    formats: section("formats", "Supported data formats were not documented in the reviewed source."),
-    integrations: section("integrations", "Integrations were not documented in the reviewed source."),
-    installation: section("installation", "Installation requirements were not documented in the reviewed source."),
-    usage: section("usage", "Run or usage guidance was not documented in the reviewed source."),
-    license: resource.license
-      ? { status: "documented", text: resource.license, sourceUrl: evidence?.repositoryApiUrl || resource.sourceEvidence }
-      : { status: "not_documented", text: "A software license was not documented in the reviewed source.", sourceUrl: readmeUrl },
-    maintenance: {
-      status: resource.maintenanceStatus,
-      text: evidence?.facts?.archived
-        ? "The repository is archived."
-        : (evidence?.facts?.lastPushedAt ? `Latest repository push: ${evidence.facts.lastPushedAt}.` : "Repository maintenance activity was not available."),
-      sourceUrl: evidence?.repositoryApiUrl || resource.sourceEvidence,
-    },
-    release: evidence?.release || {
-      status: "not_documented",
-      version: null,
-      name: null,
-      url: resource.canonicalUrl,
-      publishedAt: null,
-      prerelease: false,
-    },
+    ...(section("inputs") ? { inputs: section("inputs") } : {}),
+    ...(section("outputs") ? { outputs: section("outputs") } : {}),
+    ...(section("formats") ? { formats: section("formats") } : {}),
+    ...(section("integrations") ? { integrations: section("integrations") } : {}),
+    ...(section("installation") ? { installation: section("installation") } : {}),
+    ...(section("usage") ? { usage: section("usage") } : {}),
+    ...(resource.license ? { license: { status: "documented", text: resource.license, sourceUrl: evidence?.repositoryApiUrl || resource.sourceEvidence } } : {}),
+    ...(maintenance ? { maintenance } : {}),
+    ...(evidence?.release ? { release: evidence.release } : {}),
   };
 }
 
@@ -374,6 +364,7 @@ let mediaCount = 0;
 let failureCount = 0;
 for (const resource of dataset.resources) {
   const identity = repositoryIdentity(resource);
+  if (identity?.scope === "repository" && !resource.repositoryUrl) resource.repositoryUrl = resource.canonicalUrl;
   let repositoryEvidence = resource.repositoryEvidence || null;
   if (REFRESH && identity && (!REFRESH_ID || REFRESH_ID === resource.id)) {
     try {

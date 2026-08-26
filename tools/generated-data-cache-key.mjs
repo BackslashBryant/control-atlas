@@ -57,11 +57,11 @@ function localDependencies(entrypoints) {
 }
 
 export function generatedDataCacheInputs() {
-  return [
+  return [...new Set([
     "package-lock.json",
     ...trackedSourceData(),
     ...localDependencies(ENTRYPOINTS),
-  ].sort();
+  ])].sort();
 }
 
 export function calculateGeneratedDataCacheKey() {

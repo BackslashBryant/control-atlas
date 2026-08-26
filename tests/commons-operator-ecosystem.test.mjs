@@ -116,7 +116,7 @@ test("freshness and rejected-candidate recheck cadences are enforceable", () => 
     const maximumDays = resource.resourceType === "community_forum" ? 45 : resource.resourceType === "dataset" ? 60 : 90;
     const cadence = daysBetween(resource.lastCheckedAt, resource.nextCheckAt);
     assert.ok(cadence > 0 && cadence <= maximumDays, `${resource.id} cadence ${cadence} days`);
-    assert.equal(resource.freshnessStatus, "current");
+    assert.equal(resource.freshnessStatus, null, `${resource.id} does not turn a review date into a publisher freshness claim`);
   }
   for (const candidate of manifest.rejectedCandidates) {
     assert.ok(candidate.evidence, `${candidate.candidateName} rejection evidence`);

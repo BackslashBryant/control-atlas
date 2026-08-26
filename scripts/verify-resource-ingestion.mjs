@@ -30,8 +30,8 @@ function presentationStage(resource) {
   if (!['documented', 'not_stated', 'not_applicable'].includes(compatibility?.status)) {
     return failed('compatibility disposition is missing');
   }
-  if (!compatibility.sourceUrl || (!compatibility.note && compatibility.status !== 'not_applicable')) {
-    return failed('compatibility evidence or explicit limitation is missing');
+  if (compatibility.status === 'documented' && (!compatibility.sourceUrl || !compatibility.note)) {
+    return failed('documented compatibility evidence is incomplete');
   }
   if (!['available', 'not_available'].includes(media?.status)) {
     return failed('media disposition is missing');
@@ -45,16 +45,13 @@ function presentationStage(resource) {
   if (resource.presentationProfile?.profileType !== resource.resourceType
     || !resource.presentationProfile?.template
     || !resource.presentationProfile?.whatItDoes?.sourceUrl
-    || !resource.presentationProfile?.whoItIsFor?.sourceUrl
-    || !resource.presentationProfile?.limitations?.sourceUrl) {
+    || resource.presentationProfile?.whoItIsFor?.status === 'not_documented'
+    || resource.presentationProfile?.limitations?.status === 'not_documented') {
     return failed('type-specific presentation profile is incomplete');
   }
   if (resource.resourceType === 'tool') {
-    const requiredToolSections = ['inputs', 'outputs', 'formats', 'integrations', 'installation', 'usage'];
     if (!resource.toolProfile
-      || requiredToolSections.some((field) => !resource.toolProfile[field]?.status || !resource.toolProfile[field]?.sourceUrl)
-      || !resource.toolProfile.release?.status
-      || !resource.toolProfile.maintenance?.status) {
+      || Object.values(resource.toolProfile).some((section) => section?.status === 'not_documented')) {
       return failed('tool presentation profile is incomplete');
     }
   }

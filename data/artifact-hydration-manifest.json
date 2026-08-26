@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-14T00:05:18.702Z",
-  "hydrated": 1,
+  "generated_at": "2026-08-25T23:11:18.444Z",
+  "hydrated": 4,
   "removed_orphans": [],
   "results": [
     {
@@ -37,41 +37,41 @@
       "id": "artifact-mitre-attack-enterprise",
       "status": "OK",
       "http": 200,
-      "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
-      "sha256": "sha256:dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4",
-      "byte_length": 53835637,
-      "record_count": 697,
-      "retrieved_at": "2026-08-07"
+      "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-19.2.json",
+      "sha256": "sha256:fbe2a38a817899d4f3cf5f6ee5f29b332448ad6ebac0d3eee519e774778f49bc",
+      "byte_length": 38961746,
+      "record_count": 858,
+      "retrieved_at": "2026-08-25"
     },
     {
       "id": "artifact-mitre-attack-ics",
       "status": "OK",
       "http": 200,
-      "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json",
-      "sha256": "sha256:08b83d2cea6b6d6752468ef0e62e2ab2a53c9443ef72c439ecccb07ab9e89da9",
-      "byte_length": 4057891,
-      "record_count": 97,
-      "retrieved_at": "2026-08-07"
+      "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/ics-attack/ics-attack-19.2.json",
+      "sha256": "sha256:348a4e9a54dd9011329f92e0fd20ba72cae2fec76f0e2790b1e98f0de8f139bf",
+      "byte_length": 2854063,
+      "record_count": 106,
+      "retrieved_at": "2026-08-25"
     },
     {
       "id": "artifact-mitre-d3fend-ontology",
       "status": "OK",
       "http": 200,
-      "url": "https://d3fend.mitre.org/api/technique/all.json",
-      "sha256": "sha256:34e2f5a360027a63e3d4bade8eaff783933fd4f2cb0d88cc4c1d7f970a85c4ff",
-      "byte_length": 36638,
+      "url": "https://d3fend.mitre.org/ontologies/d3fend.json",
+      "sha256": "sha256:11e6ce26ab2bef1500ca9747a74c05ec98c0c554658c09d26bfbfa752d278a45",
+      "byte_length": 3931695,
       "record_count": 271,
-      "retrieved_at": "2026-08-07"
+      "retrieved_at": "2026-08-25"
     },
     {
       "id": "artifact-mitre-d3fend-mappings",
       "status": "OK",
       "http": 200,
       "url": "https://d3fend.mitre.org/api/ontology/inference/d3fend-full-mappings.json",
-      "sha256": "sha256:684f0a1872868a64b9046e66111e28cb9f0dc46c08e8f044b803fd8b493260ba",
-      "byte_length": 59995026,
-      "record_count": 16164,
-      "retrieved_at": "2026-08-07"
+      "sha256": "sha256:3f103c5703fdfc8c2e658d8b81fb22b1cf7ef281d83ee324f4a3a176076f5d37",
+      "byte_length": 38722880,
+      "record_count": 3927,
+      "retrieved_at": "2026-08-25"
     },
     {
       "id": "artifact-disa-cci-list",

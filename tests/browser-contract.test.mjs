@@ -433,6 +433,7 @@ test('mounted record surfaces render official descriptions rather than synthetic
   const surfaces = [detailPage, readFileSync('src/ui/pages/CatalogDetailPage.tsx', 'utf8'), readFileSync('src/ui/pages/AtlasMapPage.tsx', 'utf8'), readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8'), readFileSync('src/ui/components/SearchOverlay.tsx', 'utf8')].join('\n');
   assert.match(detailPage, /recordPresentationProfile/);
   assert.match(detailPage, /data-source-text="published"/);
+  assert.match(detailPage, /data-claim-origin=\{claimOrigin\}/);
   assert.doesNotMatch(surfaces, /No narrative description was published for this record/);
   assert.doesNotMatch(surfaces, /plain_language_summary|plain_action/);
 });
@@ -440,7 +441,7 @@ test('mounted record surfaces render official descriptions rather than synthetic
 test('concise DISA CCI records orient the user before the publisher requirement', () => {
   const detail = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
   const startHere = detail.indexOf('CCI records deliberately publish a concise requirement');
-  const sourceExcerpt = detail.indexOf('Source excerpt from');
+  const sourceExcerpt = detail.indexOf('data-record-source-identity');
   assert.ok(startHere >= 0, 'CCI records need an explicit source-first orientation');
   assert.ok(sourceExcerpt > startHere, 'CCI orientation must appear before the terse publisher requirement');
   assert.match(detail, /Explore connections/);

@@ -3,6 +3,8 @@ import { readFileSync } from "node:fs";
 import { writeJsonAtomically } from "./lib/write-json-atomically.mjs";
 import { generatedAt } from "./lib/stable-generated-at.mjs";
 
+const OUT = "data/generated/taxonomy-registry.json";
+
 const terms = JSON.parse(readFileSync("data/curated/taxonomy-terms.json", "utf8"));
 const relationships = JSON.parse(readFileSync("data/curated/taxonomy-relationships.json", "utf8"));
 const identities = JSON.parse(readFileSync("data/curated/identity-registry.json", "utf8"));
@@ -132,7 +134,7 @@ const registry = {
   identities: identities.identities,
 };
 
-writeJsonAtomically("data/generated/taxonomy-registry.json", registry);
+writeJsonAtomically(OUT, registry);
 
 console.log(
   `taxonomy-registry: ${terms.dimensions.length} dimensions, ` +

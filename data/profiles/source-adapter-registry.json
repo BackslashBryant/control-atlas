@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-08-25",
+  "adapters": [
+    {
+      "adapter_id": "fedramp-consolidated-rules-json",
+      "adapter_version": "1.0.0",
+      "accepted_source_types": ["json"],
+      "produced_profile_ids": ["record.requirement"],
+      "field_transformations": ["publisher JSON fields to normalized rule records; absent fields omitted"],
+      "relationship_rules": [],
+      "fixture_set": "tests/fedramp-transition.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Current 2026 rules are current; the Rev. 5 workbook is retained as historical material."
+    },
+    {
+      "adapter_id": "mitre-attack-stix",
+      "adapter_version": "2.0.0",
+      "accepted_source_types": ["stix"],
+      "produced_profile_ids": ["record.attack_technique"],
+      "field_transformations": ["STIX text to plain publisher text", "revoked to withdrawn lifecycle", "x_mitre_deprecated to deprecated lifecycle"],
+      "relationship_rules": ["publisher tactic memberships remain publisher-derived structural assertions"],
+      "fixture_set": "tests/mitre-attack-importer.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Use ATT&CK 19.2 STIX at commit 6cda5ad8462c79e14fbb872f4e09059b18e0cfc4."
+    },
+    {
+      "adapter_id": "mitre-d3fend-json-ld",
+      "adapter_version": "2.0.0",
+      "accepted_source_types": ["json_ld"],
+      "produced_profile_ids": ["record.defend_countermeasure"],
+      "field_transformations": ["D3FEND ontology classes with D3- identifiers to defensive technique records"],
+      "relationship_rules": ["publisher ontology mappings retain their source locator"],
+      "fixture_set": "tests/mitre-d3fend-importer.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Use the D3FEND 1.5.0 ontology JSON-LD artifact and canonical-json checksum."
+    },
+    {
+      "adapter_id": "nist-oscal-profile",
+      "adapter_version": "1.5.0",
+      "accepted_source_types": ["oscal_json", "oscal_xml"],
+      "produced_profile_ids": ["record.baseline"],
+      "field_transformations": ["OSCAL profile imports to baseline membership assertions"],
+      "relationship_rules": ["profile imports produce publisher-derived selects assertions"],
+      "fixture_set": "tests/oscal-normalize.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Use NIST OSCAL profiles instead of hand-authored baseline membership."
+    },
+    {
+      "adapter_id": "nist-iot-capability-workbooks",
+      "adapter_version": "2.0.0",
+      "accepted_source_types": ["spreadsheet"],
+      "produced_profile_ids": ["record.iot_capability_domain", "record.iot_capability", "record.iot_subcapability", "record.iot_capability_element", "record.iot_capability_subelement"],
+      "field_transformations": ["publisher cells to stable capability hierarchy", "title is never copied into an absent description"],
+      "relationship_rules": ["mapping workbook rows produce informative mapping assertions only"],
+      "fixture_set": "tests/nist-structured-catalog-adapter.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "Capability hierarchy is primary; mapping workbooks are supporting artifacts."
+    },
+    {
+      "adapter_id": "nist-800-171-172-oscal",
+      "adapter_version": "1.5.0",
+      "accepted_source_types": ["oscal_json"],
+      "produced_profile_ids": ["record.requirement"],
+      "field_transformations": ["preserve publisher identifiers, titles, hierarchy, and source locators"],
+      "relationship_rules": ["only publisher mappings become published assertions"],
+      "fixture_set": "tests/oscal-normalize.test.mjs",
+      "failure_policy": "fail_closed",
+      "source_policy": "OSCAL records are primary."
+    },
+    {
+      "adapter_id": "github-resource-evidence",
+      "adapter_version": "2.0.0",
+      "accepted_source_types": ["git", "html"],
+      "produced_profile_ids": ["resource.tool"],
+      "field_transformations": ["derive repository identity from repositoryUrl or canonicalUrl", "pin README evidence to a commit", "omit unsupported sections"],
+      "relationship_rules": [],
+      "fixture_set": "tests/commons-presentation.test.mjs",
+      "failure_policy": "omit_optional_fields",
+      "source_policy": "Never invent installation, usage, input, output, format, integration, release, or cost facts."
+    },
+    {
+      "adapter_id": "disa-product-resource",
+      "adapter_version": "2.0.0",
+      "accepted_source_types": ["html", "publication"],
+      "produced_profile_ids": ["resource.restricted_service", "resource.service_portal", "resource.product_directory"],
+      "field_transformations": ["publisher product identity and public operational facts to resource fields", "missing cost omitted"],
+      "relationship_rules": ["replacement links require publisher evidence"],
+      "fixture_set": "tests/commons-operator-ecosystem.test.mjs",
+      "failure_policy": "omit_optional_fields",
+      "source_policy": "PDISP and other DISA services never receive a default cost."
+    }
+  ]
+}

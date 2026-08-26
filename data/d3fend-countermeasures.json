@@ -1,10 +1,12 @@
 {
   "schema_version": "2.0",
   "source_key": "mitre-d3fend-ontology",
-  "source_artifact": "https://d3fend.mitre.org/api/technique/all.json",
-  "source_version": "4",
-  "snapshot_date": "2026-08-13",
-  "checksum": "sha256:34e2f5a360027a63e3d4bade8eaff783933fd4f2cb0d88cc4c1d7f970a85c4ff",
+  "source_artifact": "https://d3fend.mitre.org/ontologies/d3fend.json",
+  "source_version": "1.5.0",
+  "snapshot_date": "2026-08-25",
+  "checksum": "sha256:11e6ce26ab2bef1500ca9747a74c05ec98c0c554658c09d26bfbfa752d278a45",
+  "checksum_basis": "canonical_json",
+  "source_artifact_byte_length": 3931695,
   "provenance": "MITRE D3FEND defensive technique catalog",
   "records": [
     {
@@ -22,9 +24,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-AA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-AA"
       }
     },
     {
@@ -37,18 +39,18 @@
       "metadata": {
         "technique_slug": "Application-basedProcessIsolation",
         "synonym": [
-          "Sandbox",
+          "Browser-based Process Isolation",
           "Remote Browser Isolation",
-          "Browser-based Process Isolation"
+          "Sandbox"
         ],
         "tactic_id": "Isolate",
         "tactic_title": "Isolate"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ABPI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ABPI"
       }
     },
     {
@@ -66,9 +68,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ACA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ACA"
       }
     },
     {
@@ -86,9 +88,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ACH"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ACH"
       }
     },
     {
@@ -106,9 +108,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-AEM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-AEM"
       }
     },
     {
@@ -126,9 +128,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-AH"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-AH"
       }
     },
     {
@@ -149,9 +151,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-AI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-AI"
       }
     },
     {
@@ -169,9 +171,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-AL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-AL"
       }
     },
     {
@@ -189,9 +191,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ALLM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ALLM"
       }
     },
     {
@@ -209,9 +211,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-AM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-AM"
       }
     },
     {
@@ -229,9 +231,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-AMED"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-AMED"
       }
     },
     {
@@ -249,9 +251,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ANAA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ANAA"
       }
     },
     {
@@ -269,9 +271,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ANCI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ANCI"
       }
     },
     {
@@ -289,9 +291,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ANET"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ANET"
       }
     },
     {
@@ -309,9 +311,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-APA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-APA"
       }
     },
     {
@@ -329,9 +331,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-APCA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-APCA"
       }
     },
     {
@@ -349,9 +351,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-APLM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-APLM"
       }
     },
     {
@@ -369,9 +371,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-APM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-APM"
       }
     },
     {
@@ -389,9 +391,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-AVE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-AVE"
       }
     },
     {
@@ -409,9 +411,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-AZET"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-AZET"
       }
     },
     {
@@ -429,9 +431,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-BA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-BA"
       }
     },
     {
@@ -449,9 +451,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-BAN"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-BAN"
       }
     },
     {
@@ -469,9 +471,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-BDI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-BDI"
       }
     },
     {
@@ -489,9 +491,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-BMA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-BMA"
       }
     },
     {
@@ -509,9 +511,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-BSE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-BSE"
       }
     },
     {
@@ -529,9 +531,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CA"
       }
     },
     {
@@ -549,9 +551,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CAA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CAA"
       }
     },
     {
@@ -569,9 +571,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CBAN"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CBAN"
       }
     },
     {
@@ -589,9 +591,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CCSA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CCSA"
       }
     },
     {
@@ -609,9 +611,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CDP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CDP"
       }
     },
     {
@@ -629,9 +631,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CE"
       }
     },
     {
@@ -649,9 +651,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CERO"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CERO"
       }
     },
     {
@@ -669,9 +671,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CF"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CF"
       }
     },
     {
@@ -689,9 +691,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CFC"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CFC"
       }
     },
     {
@@ -709,9 +711,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CFI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CFI"
       }
     },
     {
@@ -729,9 +731,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CH"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CH"
       }
     },
     {
@@ -749,9 +751,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CHN"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CHN"
       }
     },
     {
@@ -769,9 +771,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CI"
       }
     },
     {
@@ -789,9 +791,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CIA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CIA"
       }
     },
     {
@@ -809,9 +811,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CM"
       }
     },
     {
@@ -829,9 +831,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CNE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CNE"
       }
     },
     {
@@ -849,9 +851,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CNR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CNR"
       }
     },
     {
@@ -869,9 +871,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CNS"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CNS"
       }
     },
     {
@@ -889,9 +891,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CP"
       }
     },
     {
@@ -909,9 +911,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CQ"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CQ"
       }
     },
     {
@@ -929,9 +931,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CR"
       }
     },
     {
@@ -949,9 +951,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CRO"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CRO"
       }
     },
     {
@@ -969,9 +971,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CS"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CS"
       }
     },
     {
@@ -989,9 +991,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CSPP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CSPP"
       }
     },
     {
@@ -1009,9 +1011,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CTS"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CTS"
       }
     },
     {
@@ -1029,9 +1031,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-CV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-CV"
       }
     },
     {
@@ -1044,17 +1046,17 @@
       "metadata": {
         "technique_slug": "DynamicAnalysis",
         "synonym": [
-          "Malware Sandbox",
-          "Malware Detonation"
+          "Malware Detonation",
+          "Malware Sandbox"
         ],
         "tactic_id": "Detect",
         "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DA"
       }
     },
     {
@@ -1072,9 +1074,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DAM"
       }
     },
     {
@@ -1092,9 +1094,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DCE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DCE"
       }
     },
     {
@@ -1112,9 +1114,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DE"
       }
     },
     {
@@ -1135,9 +1137,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DEM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DEM"
       }
     },
     {
@@ -1155,9 +1157,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DENCR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DENCR"
       }
     },
     {
@@ -1175,9 +1177,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DF"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DF"
       }
     },
     {
@@ -1198,9 +1200,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DI"
       }
     },
     {
@@ -1218,9 +1220,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DKE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DKE"
       }
     },
     {
@@ -1238,9 +1240,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DKF"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DKF"
       }
     },
     {
@@ -1258,9 +1260,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DKP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DKP"
       }
     },
     {
@@ -1278,9 +1280,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DLIC"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DLIC"
       }
     },
     {
@@ -1298,9 +1300,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DLV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DLV"
       }
     },
     {
@@ -1318,9 +1320,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DNL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DNL"
       }
     },
     {
@@ -1338,9 +1340,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DNR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DNR"
       }
     },
     {
@@ -1358,9 +1360,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DNRA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DNRA"
       }
     },
     {
@@ -1378,9 +1380,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DNSAL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DNSAL"
       }
     },
     {
@@ -1398,9 +1400,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DNSCE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DNSCE"
       }
     },
     {
@@ -1418,9 +1420,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DNSDL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DNSDL"
       }
     },
     {
@@ -1438,9 +1440,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DNSTA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DNSTA"
       }
     },
     {
@@ -1458,9 +1460,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DO"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DO"
       }
     },
     {
@@ -1478,9 +1480,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DP"
       }
     },
     {
@@ -1498,9 +1500,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DPLM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DPLM"
       }
     },
     {
@@ -1518,9 +1520,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DPR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DPR"
       }
     },
     {
@@ -1538,9 +1540,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DQSA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DQSA"
       }
     },
     {
@@ -1558,9 +1560,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DRA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DRA"
       }
     },
     {
@@ -1578,9 +1580,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DRT"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DRT"
       }
     },
     {
@@ -1598,9 +1600,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DST"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DST"
       }
     },
     {
@@ -1618,9 +1620,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DTP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DTP"
       }
     },
     {
@@ -1638,9 +1640,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-DUC"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-DUC"
       }
     },
     {
@@ -1658,9 +1660,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-EAL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-EAL"
       }
     },
     {
@@ -1678,9 +1680,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-EBWSAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-EBWSAM"
       }
     },
     {
@@ -1698,9 +1700,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-EDL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-EDL"
       }
     },
     {
@@ -1718,9 +1720,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-EF"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-EF"
       }
     },
     {
@@ -1738,9 +1740,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-EFA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-EFA"
       }
     },
     {
@@ -1758,9 +1760,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-EHB"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-EHB"
       }
     },
     {
@@ -1778,9 +1780,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-EHPV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-EHPV"
       }
     },
     {
@@ -1798,9 +1800,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-EI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-EI"
       }
     },
     {
@@ -1821,9 +1823,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ELM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ELM"
       }
     },
     {
@@ -1841,9 +1843,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-EMH"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-EMH"
       }
     },
     {
@@ -1861,9 +1863,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-EPL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-EPL"
       }
     },
     {
@@ -1881,9 +1883,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ER"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ER"
       }
     },
     {
@@ -1901,9 +1903,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ET"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ET"
       }
     },
     {
@@ -1921,9 +1923,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FA"
       }
     },
     {
@@ -1941,9 +1943,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FAPA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FAPA"
       }
     },
     {
@@ -1961,9 +1963,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FBA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FBA"
       }
     },
     {
@@ -1981,9 +1983,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FC"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FC"
       }
     },
     {
@@ -2001,9 +2003,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FCA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FCA"
       }
     },
     {
@@ -2021,9 +2023,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FCDC"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FCDC"
       }
     },
     {
@@ -2041,9 +2043,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FCOA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FCOA"
       }
     },
     {
@@ -2056,17 +2058,17 @@
       "metadata": {
         "technique_slug": "FileContentRules",
         "synonym": [
-          "File Signatures",
-          "File Content Signatures"
+          "File Content Signatures",
+          "File Signatures"
         ],
         "tactic_id": "Detect",
         "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FCR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FCR"
       }
     },
     {
@@ -2084,9 +2086,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FE"
       }
     },
     {
@@ -2104,9 +2106,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FEMC"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FEMC"
       }
     },
     {
@@ -2124,9 +2126,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FEV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FEV"
       }
     },
     {
@@ -2144,9 +2146,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FFV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FFV"
       }
     },
     {
@@ -2164,9 +2166,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FH"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FH"
       }
     },
     {
@@ -2184,9 +2186,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FHRA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FHRA"
       }
     },
     {
@@ -2204,9 +2206,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FIM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FIM"
       }
     },
     {
@@ -2224,9 +2226,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FISV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FISV"
       }
     },
     {
@@ -2244,9 +2246,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FMBV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FMBV"
       }
     },
     {
@@ -2264,9 +2266,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FMCV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FMCV"
       }
     },
     {
@@ -2284,9 +2286,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FMVV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FMVV"
       }
     },
     {
@@ -2304,9 +2306,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FRDDL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FRDDL"
       }
     },
     {
@@ -2324,9 +2326,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FRIDL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FRIDL"
       }
     },
     {
@@ -2344,9 +2346,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-FV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-FV"
       }
     },
     {
@@ -2364,9 +2366,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-HBPI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-HBPI"
       }
     },
     {
@@ -2384,9 +2386,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-HBWP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-HBWP"
       }
     },
     {
@@ -2399,17 +2401,17 @@
       "metadata": {
         "technique_slug": "HardwareComponentInventory",
         "synonym": [
-          "Hardware Component Inventorying",
-          "Hardware Component Discovery"
+          "Hardware Component Discovery",
+          "Hardware Component Inventorying"
         ],
         "tactic_id": "Model",
         "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-HCI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-HCI"
       }
     },
     {
@@ -2427,9 +2429,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-HD"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-HD"
       }
     },
     {
@@ -2447,9 +2449,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-HDDL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-HDDL"
       }
     },
     {
@@ -2467,9 +2469,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-HDL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-HDL"
       }
     },
     {
@@ -2487,9 +2489,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-HR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-HR"
       }
     },
     {
@@ -2507,9 +2509,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-HS"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-HS"
       }
     },
     {
@@ -2527,9 +2529,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-IAA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-IAA"
       }
     },
     {
@@ -2547,9 +2549,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-IBCA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-IBCA"
       }
     },
     {
@@ -2567,9 +2569,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ID"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ID"
       }
     },
     {
@@ -2587,9 +2589,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-IDA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-IDA"
       }
     },
     {
@@ -2607,9 +2609,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-IHN"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-IHN"
       }
     },
     {
@@ -2627,9 +2629,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-IOPR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-IOPR"
       }
     },
     {
@@ -2647,9 +2649,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-IPCTA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-IPCTA"
       }
     },
     {
@@ -2667,9 +2669,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-IPRA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-IPRA"
       }
     },
     {
@@ -2687,9 +2689,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-IRA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-IRA"
       }
     },
     {
@@ -2707,9 +2709,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-IRV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-IRV"
       }
     },
     {
@@ -2727,9 +2729,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ISVA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ISVA"
       }
     },
     {
@@ -2747,9 +2749,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ITF"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ITF"
       }
     },
     {
@@ -2767,9 +2769,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-JFAPA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-JFAPA"
       }
     },
     {
@@ -2787,9 +2789,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-KBPI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-KBPI"
       }
     },
     {
@@ -2807,9 +2809,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-LAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-LAM"
       }
     },
     {
@@ -2827,9 +2829,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-LAMED"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-LAMED"
       }
     },
     {
@@ -2847,9 +2849,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-LFAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-LFAM"
       }
     },
     {
@@ -2867,9 +2869,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-LFP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-LFP"
       }
     },
     {
@@ -2887,9 +2889,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-LLM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-LLM"
       }
     },
     {
@@ -2902,17 +2904,17 @@
       "metadata": {
         "technique_slug": "MessageAnalysis",
         "synonym": [
-          "Email Or Messaging Analysis",
-          "Electronic Message Analysis"
+          "Electronic Message Analysis",
+          "Email Or Messaging Analysis"
         ],
         "tactic_id": "Detect",
         "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-MA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-MA"
       }
     },
     {
@@ -2930,9 +2932,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-MAN"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-MAN"
       }
     },
     {
@@ -2950,9 +2952,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-MBSV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-MBSV"
       }
     },
     {
@@ -2970,9 +2972,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-MBT"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-MBT"
       }
     },
     {
@@ -2990,9 +2992,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-MENCR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-MENCR"
       }
     },
     {
@@ -3010,9 +3012,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-MFA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-MFA"
       }
     },
     {
@@ -3030,9 +3032,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-MH"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-MH"
       }
     },
     {
@@ -3053,9 +3055,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-MSM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-MSM"
       }
     },
     {
@@ -3073,9 +3075,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NAM"
       }
     },
     {
@@ -3093,9 +3095,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NI"
       }
     },
     {
@@ -3113,9 +3115,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NM"
       }
     },
     {
@@ -3128,17 +3130,17 @@
       "metadata": {
         "technique_slug": "NetworkNodeInventory",
         "synonym": [
-          "System Inventorying",
-          "System Discovery"
+          "System Discovery",
+          "System Inventorying"
         ],
         "tactic_id": "Model",
         "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NNI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NNI"
       }
     },
     {
@@ -3156,9 +3158,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NPC"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NPC"
       }
     },
     {
@@ -3176,9 +3178,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NRAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NRAM"
       }
     },
     {
@@ -3196,9 +3198,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NTA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NTA"
       }
     },
     {
@@ -3216,9 +3218,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NTCD"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NTCD"
       }
     },
     {
@@ -3236,9 +3238,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NTF"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NTF"
       }
     },
     {
@@ -3251,19 +3253,19 @@
       "metadata": {
         "technique_slug": "NetworkTrafficPolicyMapping",
         "synonym": [
-          "IPS Policy Mapping",
-          "Web Security Gateway Policy Mapping",
+          "DLP Policy Mapping",
           "Firewall Mapping",
-          "DLP Policy Mapping"
+          "IPS Policy Mapping",
+          "Web Security Gateway Policy Mapping"
         ],
         "tactic_id": "Model",
         "tactic_title": "Model"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NTPM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NTPM"
       }
     },
     {
@@ -3281,9 +3283,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NTSA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NTSA"
       }
     },
     {
@@ -3301,9 +3303,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-NVA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-NVA"
       }
     },
     {
@@ -3321,9 +3323,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-OAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-OAM"
       }
     },
     {
@@ -3341,9 +3343,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ODM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ODM"
       }
     },
     {
@@ -3361,9 +3363,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-OE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-OE"
       }
     },
     {
@@ -3381,9 +3383,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-OLV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-OLV"
       }
     },
     {
@@ -3401,9 +3403,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-OM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-OM"
       }
     },
     {
@@ -3421,9 +3423,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-OMM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-OMM"
       }
     },
     {
@@ -3441,9 +3443,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-OPM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-OPM"
       }
     },
     {
@@ -3461,9 +3463,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-OPR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-OPR"
       }
     },
     {
@@ -3481,9 +3483,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ORA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ORA"
       }
     },
     {
@@ -3501,9 +3503,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-OSM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-OSM"
       }
     },
     {
@@ -3521,9 +3523,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-OTF"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-OTF"
       }
     },
     {
@@ -3541,9 +3543,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-OTP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-OTP"
       }
     },
     {
@@ -3561,9 +3563,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-OVAR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-OVAR"
       }
     },
     {
@@ -3581,9 +3583,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PA"
       }
     },
     {
@@ -3601,9 +3603,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PAM"
       }
     },
     {
@@ -3621,9 +3623,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PAN"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PAN"
       }
     },
     {
@@ -3641,9 +3643,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PBWSAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PBWSAM"
       }
     },
     {
@@ -3661,9 +3663,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PCA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PCA"
       }
     },
     {
@@ -3681,9 +3683,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PCSV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PCSV"
       }
     },
     {
@@ -3701,9 +3703,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PE"
       }
     },
     {
@@ -3721,9 +3723,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PEH"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PEH"
       }
     },
     {
@@ -3741,9 +3743,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PFV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PFV"
       }
     },
     {
@@ -3756,17 +3758,17 @@
       "metadata": {
         "technique_slug": "PlatformHardening",
         "synonym": [
-          "System Hardening",
-          "Endpoint Hardening"
+          "Endpoint Hardening",
+          "System Hardening"
         ],
         "tactic_id": "Harden",
         "tactic_title": "Harden"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PH"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PH"
       }
     },
     {
@@ -3784,9 +3786,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PHAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PHAM"
       }
     },
     {
@@ -3804,9 +3806,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PHDURA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PHDURA"
       }
     },
     {
@@ -3824,9 +3826,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PLA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PLA"
       }
     },
     {
@@ -3844,9 +3846,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PLLM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PLLM"
       }
     },
     {
@@ -3864,9 +3866,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PLM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PLM"
       }
     },
     {
@@ -3884,9 +3886,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PM"
       }
     },
     {
@@ -3904,9 +3906,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PMAD"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PMAD"
       }
     },
     {
@@ -3924,9 +3926,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PR"
       }
     },
     {
@@ -3944,9 +3946,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PS"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PS"
       }
     },
     {
@@ -3964,9 +3966,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PSA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PSA"
       }
     },
     {
@@ -3987,9 +3989,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PSEP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PSEP"
       }
     },
     {
@@ -4002,17 +4004,17 @@
       "metadata": {
         "technique_slug": "ProximitySensorMonitoring",
         "synonym": [
-          "RFID Reader Monitoring",
-          "Proximity Reader Monitoring"
+          "Proximity Reader Monitoring",
+          "RFID Reader Monitoring"
         ],
         "tactic_id": "Detect",
         "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PSM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PSM"
       }
     },
     {
@@ -4030,9 +4032,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PSMD"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PSMD"
       }
     },
     {
@@ -4050,9 +4052,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PT"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PT"
       }
     },
     {
@@ -4070,9 +4072,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PUM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PUM"
       }
     },
     {
@@ -4090,9 +4092,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PV"
       }
     },
     {
@@ -4110,9 +4112,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-PWA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-PWA"
       }
     },
     {
@@ -4130,9 +4132,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RA"
       }
     },
     {
@@ -4150,9 +4152,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RAM"
       }
     },
     {
@@ -4170,9 +4172,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RAPA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RAPA"
       }
     },
     {
@@ -4190,9 +4192,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RC"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RC"
       }
     },
     {
@@ -4210,9 +4212,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RD"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RD"
       }
     },
     {
@@ -4230,9 +4232,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RDI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RDI"
       }
     },
     {
@@ -4250,9 +4252,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RE"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RE"
       }
     },
     {
@@ -4270,9 +4272,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RF"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RF"
       }
     },
     {
@@ -4290,9 +4292,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RFAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RFAM"
       }
     },
     {
@@ -4310,9 +4312,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RFS"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RFS"
       }
     },
     {
@@ -4330,9 +4332,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RFUM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RFUM"
       }
     },
     {
@@ -4350,9 +4352,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RH"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RH"
       }
     },
     {
@@ -4370,9 +4372,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RIC"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RIC"
       }
     },
     {
@@ -4390,9 +4392,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RKD"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RKD"
       }
     },
     {
@@ -4410,9 +4412,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RN"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RN"
       }
     },
     {
@@ -4430,9 +4432,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RNA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RNA"
       }
     },
     {
@@ -4450,9 +4452,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RO"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RO"
       }
     },
     {
@@ -4470,9 +4472,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RPA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RPA"
       }
     },
     {
@@ -4490,9 +4492,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RRID"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RRID"
       }
     },
     {
@@ -4510,9 +4512,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RS"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RS"
       }
     },
     {
@@ -4530,9 +4532,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RTA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RTA"
       }
     },
     {
@@ -4550,9 +4552,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RTSD"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RTSD"
       }
     },
     {
@@ -4570,9 +4572,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-RUAA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-RUAA"
       }
     },
     {
@@ -4593,9 +4595,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SAOR"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SAOR"
       }
     },
     {
@@ -4613,9 +4615,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SBV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SBV"
       }
     },
     {
@@ -4633,9 +4635,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SCA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SCA"
       }
     },
     {
@@ -4653,9 +4655,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SCF"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SCF"
       }
     },
     {
@@ -4673,9 +4675,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SCH"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SCH"
       }
     },
     {
@@ -4693,9 +4695,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SCP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SCP"
       }
     },
     {
@@ -4713,9 +4715,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SDA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SDA"
       }
     },
     {
@@ -4733,9 +4735,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SDM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SDM"
       }
     },
     {
@@ -4753,9 +4755,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SEA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SEA"
       }
     },
     {
@@ -4773,9 +4775,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SFA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SFA"
       }
     },
     {
@@ -4793,9 +4795,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SFCV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SFCV"
       }
     },
     {
@@ -4813,9 +4815,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SFV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SFV"
       }
     },
     {
@@ -4833,9 +4835,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SHN"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SHN"
       }
     },
     {
@@ -4848,17 +4850,17 @@
       "metadata": {
         "technique_slug": "SystemInitConfigAnalysis",
         "synonym": [
-          "Startup Analysis",
-          "Autorun Analysis"
+          "Autorun Analysis",
+          "Startup Analysis"
         ],
         "tactic_id": "Detect",
         "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SICA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SICA"
       }
     },
     {
@@ -4876,9 +4878,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SJA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SJA"
       }
     },
     {
@@ -4896,9 +4898,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SMRA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SMRA"
       }
     },
     {
@@ -4916,9 +4918,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SPP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SPP"
       }
     },
     {
@@ -4936,9 +4938,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SRA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SRA"
       }
     },
     {
@@ -4956,9 +4958,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SSC"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SSC"
       }
     },
     {
@@ -4976,9 +4978,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ST"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ST"
       }
     },
     {
@@ -4996,9 +4998,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SU"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SU"
       }
     },
     {
@@ -5016,9 +5018,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SVCDM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SVCDM"
       }
     },
     {
@@ -5039,9 +5041,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SWI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SWI"
       }
     },
     {
@@ -5059,9 +5061,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SYSDM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SYSDM"
       }
     },
     {
@@ -5079,9 +5081,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SYSM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SYSM"
       }
     },
     {
@@ -5099,9 +5101,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-SYSVA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-SYSVA"
       }
     },
     {
@@ -5119,9 +5121,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-TAAN"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-TAAN"
       }
     },
     {
@@ -5139,9 +5141,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-TB"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-TB"
       }
     },
     {
@@ -5159,9 +5161,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-TBA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-TBA"
       }
     },
     {
@@ -5182,9 +5184,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-TBI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-TBI"
       }
     },
     {
@@ -5202,9 +5204,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-TL"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-TL"
       }
     },
     {
@@ -5222,9 +5224,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-UA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-UA"
       }
     },
     {
@@ -5242,9 +5244,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-UAP"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-UAP"
       }
     },
     {
@@ -5257,17 +5259,17 @@
       "metadata": {
         "technique_slug": "UserBehaviorAnalysis",
         "synonym": [
-          "UBA",
-          "Credential Monitoring"
+          "Credential Monitoring",
+          "UBA"
         ],
         "tactic_id": "Detect",
         "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-UBA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-UBA"
       }
     },
     {
@@ -5285,9 +5287,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-UDTA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-UDTA"
       }
     },
     {
@@ -5305,9 +5307,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-UGLPA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-UGLPA"
       }
     },
     {
@@ -5325,9 +5327,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-UGPH"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-UGPH"
       }
     },
     {
@@ -5345,9 +5347,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-ULA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-ULA"
       }
     },
     {
@@ -5365,9 +5367,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-URA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-URA"
       }
     },
     {
@@ -5385,9 +5387,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-USICA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-USICA"
       }
     },
     {
@@ -5405,9 +5407,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-VI"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-VI"
       }
     },
     {
@@ -5420,17 +5422,17 @@
       "metadata": {
         "technique_slug": "VideoSurveillance",
         "synonym": [
-          "Video Monitoring",
-          "CCTV Surveillance"
+          "CCTV Surveillance",
+          "Video Monitoring"
         ],
         "tactic_id": "Detect",
         "tactic_title": "Detect"
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-VS"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-VS"
       }
     },
     {
@@ -5448,9 +5450,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-VTV"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-VTV"
       }
     },
     {
@@ -5468,9 +5470,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-WSAA"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-WSAA"
       }
     },
     {
@@ -5488,9 +5490,9 @@
       },
       "source": {
         "key": "mitre-d3fend-ontology",
-        "snapshot_date": "2026-08-13",
-        "version": "4",
-        "locator": "technique/all.json#D3-WSAM"
+        "snapshot_date": "2026-08-25",
+        "version": "1.5.0",
+        "locator": "d3fend.json#D3-WSAM"
       }
     }
   ]

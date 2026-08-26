@@ -85,6 +85,7 @@
 
     { "id": "framework.rmf", "label": "RMF", "dimension": "framework", "aliases": ["Risk Management Framework", "NIST RMF"], "status": "active", "hierarchy": ["framework", "framework.rmf"], "identity_key": null, "owner": "Control Atlas data stewardship", "review_date": "2026-08-23" },
     { "id": "framework.nist-csf", "label": "NIST CSF", "dimension": "framework", "aliases": ["Cybersecurity Framework", "NIST Cybersecurity Framework", "CSF"], "status": "active", "hierarchy": ["framework", "framework.nist-csf"], "identity_key": null, "owner": "Control Atlas data stewardship", "review_date": "2026-08-23" },
+    { "id": "framework.nist-ai-rmf", "label": "NIST AI RMF", "dimension": "framework", "aliases": ["Artificial Intelligence Risk Management Framework", "AI RMF"], "status": "active", "hierarchy": ["framework", "framework.nist-ai-rmf"], "identity_key": null, "owner": "Control Atlas data stewardship", "review_date": "2026-08-25" },
     { "id": "framework.fedramp", "label": "FedRAMP", "dimension": "framework", "aliases": ["Federal Risk and Authorization Management Program"], "status": "active", "hierarchy": ["framework", "framework.fedramp"], "identity_key": "fedramp", "owner": "Control Atlas data stewardship", "review_date": "2026-08-23" },
     { "id": "framework.cmmc", "label": "CMMC", "dimension": "framework", "aliases": ["Cybersecurity Maturity Model Certification"], "status": "active", "hierarchy": ["framework", "framework.cmmc"], "identity_key": null, "owner": "Control Atlas data stewardship", "review_date": "2026-08-23" },
 

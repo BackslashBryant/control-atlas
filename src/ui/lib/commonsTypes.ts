@@ -85,7 +85,7 @@ export type CommonsResource = {
   governmentBranches?: string[];
   formats?: string[];
   accessType: CommonsAccessType;
-  costType: string;
+  costType?: string;
   accountRequired?: boolean;
   authenticationRequired?: boolean;
   publicAccessNotes?: string | null;
@@ -165,19 +165,19 @@ export type CommonsResource = {
     profileType: string;
     template: "tool" | "reference" | "training" | "directory" | "community" | "data" | "ecosystem" | "destination" | "artifact";
     whatItDoes: CommonsEvidenceSection;
-    whoItIsFor: CommonsEvidenceSection;
-    limitations: CommonsEvidenceSection;
+    whoItIsFor?: CommonsEvidenceSection;
+    limitations?: CommonsEvidenceSection;
   };
   toolProfile?: {
-    inputs: CommonsEvidenceSection;
-    outputs: CommonsEvidenceSection;
-    formats: CommonsEvidenceSection;
-    integrations: CommonsEvidenceSection;
-    installation: CommonsEvidenceSection;
-    usage: CommonsEvidenceSection;
-    license: CommonsEvidenceSection;
-    maintenance: { status: string; text: string; sourceUrl: string };
-    release: CommonsReleaseEvidence;
+    inputs?: CommonsEvidenceSection;
+    outputs?: CommonsEvidenceSection;
+    formats?: CommonsEvidenceSection;
+    integrations?: CommonsEvidenceSection;
+    installation?: CommonsEvidenceSection;
+    usage?: CommonsEvidenceSection;
+    license?: CommonsEvidenceSection;
+    maintenance?: { status: string; text: string; sourceUrl: string };
+    release?: CommonsReleaseEvidence;
   };
   repositoryEvidence?: {
     capturedAt: string;
@@ -193,6 +193,18 @@ export type CommonsResource = {
   } | null;
   automatedFields?: string[];
   manualFields?: string[];
+  entityKind: "resource";
+  profileId: string;
+  origin: "publisher_exact" | "publisher_normalized" | "publisher_derived" | "atlas_editorial" | "atlas_inferred";
+  sourceRefs: string[];
+  lifecycle: { status: string; evidenceRefs: string[]; replacedBy?: string[] };
+  claimEvidence: Array<{
+    fieldPath: string;
+    origin: "publisher_exact" | "publisher_normalized" | "publisher_derived" | "atlas_editorial" | "atlas_inferred";
+    evidenceRefs: string[];
+    transformation?: string;
+    reviewStatus: "reviewed" | "pending" | "rejected";
+  }>;
 };
 
 export type CommonsResourceDataset = {
@@ -219,7 +231,7 @@ export type CommonsSearchIndexDoc = {
   audiences: string[];
   artifactTypes: string[];
   accessType: CommonsAccessType;
-  costType: string;
+  costType?: string;
   maintenanceStatus: CommonsMaintenanceStatus;
   openSource: boolean;
   popularitySignals: CommonsPopularitySignals;

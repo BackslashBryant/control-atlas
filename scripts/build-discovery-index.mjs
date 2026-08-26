@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -8,10 +8,12 @@ import {
   deriveTags,
 } from "../src/shared/record-taxonomy.mjs";
 import { generatedAt } from "./lib/stable-generated-at.mjs";
+import { writeJsonAtomically } from "./lib/write-json-atomically.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const GENERATED = join(ROOT, "data", "generated");
+const OUT = join(GENERATED, "discovery-index.json");
 
 const resources = JSON.parse(
   readFileSync(join(ROOT, "data", "commons-resource-dataset.json"), "utf8"),
@@ -62,5 +64,5 @@ for (const template of templates) {
 }
 
 const output = { schema_version: "1.0", generated_at: generatedAt(), entries };
-writeFileSync(join(GENERATED, "discovery-index.json"), JSON.stringify(output, null, 2) + "\n");
+writeJsonAtomically(OUT, output);
 console.log(`Discovery index: ${entries.length} entries (${entries.filter((e) => e.content_type === "resource").length} resources, ${entries.filter((e) => e.content_type === "template").length} templates)`);

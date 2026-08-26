@@ -3,8 +3,15 @@ const ICS_SOURCE = 'mitre-attack-ics';
 
 function textValue(value) {
   if (value === undefined || value === null) return '';
-  if (typeof value === 'object' && value['#text'] !== undefined) return String(value['#text']).trim();
-  return String(value).trim();
+  const input = typeof value === 'object' && value['#text'] !== undefined ? value['#text'] : value;
+  return String(input)
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&#(\d+);/g, (_match, code) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([a-f0-9]+);/gi, (_match, code) => String.fromCodePoint(Number.parseInt(code, 16)))
+    .replace(/&(amp|lt|gt|quot|apos|nbsp);/gi, (_match, entity) => ({ amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' })[entity.toLowerCase()])
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function externalId(object, sourceName) {
@@ -69,7 +76,7 @@ function normalizeAttackRecord(object, options) {
     type: 'attack_technique',
     title: `${techniqueId} ${name}`,
     description,
-    status: object.revoked || object.x_mitre_deprecated ? 'deprecated' : 'active',
+    status: object.revoked ? 'withdrawn' : object.x_mitre_deprecated ? 'deprecated' : 'active',
     family: tactics[0] || '',
     metadata: {
       attack_domain: options.domain,
@@ -100,7 +107,6 @@ export function parseAttackStixBundle(stixDocument, options = {}) {
   const records = [];
   for (const object of objects) {
     if (object.type !== 'attack-pattern') continue;
-    if (object.revoked || object.x_mitre_deprecated) continue;
     const record = normalizeAttackRecord(object, { ...options, tacticLookup });
     if (record) records.push(record);
   }
@@ -116,6 +122,8 @@ export function buildAttackCatalogDocument(records, metadata) {
     source_version: metadata.version,
     snapshot_date: metadata.snapshotDate,
     checksum: metadata.checksum,
+    checksum_basis: metadata.checksumBasis || 'canonical_json',
+    source_artifact_byte_length: metadata.byteLength,
     provenance: metadata.provenance,
     records,
   };

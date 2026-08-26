@@ -46,7 +46,7 @@ test("Home Library discovery counts come directly from the Library browse artifa
       ["baselines-profiles", 30],
       ["process-methods", 1_152],
       ["technical-rules", 17_021],
-      ["threats-defenses", 1_065],
+      ["threats-defenses", 1_235],
     ],
   );
 
