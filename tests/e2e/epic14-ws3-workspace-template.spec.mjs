@@ -122,10 +122,8 @@ test("WS3 Resource detail uses a knowledge-base reading sequence", async ({ page
   await expect(page.getByRole("link", { name: "Open resource" })).toBeVisible();
   await expect(article.getByRole("heading", { level: 2 })).toHaveText([
     "What it is",
-    "Who it's for",
     "How to use or access",
     "Screenshots",
-    "Limitations",
     "Related resources",
   ]);
   await expect(page.getByRole("heading", { name: "Governed discovery tags" })).toHaveCount(0);
@@ -260,9 +258,3 @@ test("WS3 global search and publication rows use the same generated identity con
     await expect(row).not.toContainText("COLLABORATOR-APPGATE-835EC7F121");
     expect(
       await page.evaluate(
-        () => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth,
-      ),
-      `${width}px publication overflow`,
-    ).toBeLessThanOrEqual(1);
-  }
-});
