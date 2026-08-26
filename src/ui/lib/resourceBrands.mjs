@@ -502,18 +502,19 @@ export function resourceTypeLabel(resourceType) {
 
 export function resourceAccessLabel(resource) {
   const accessType = normalizedText(resource?.accessType);
+  if (!accessType) return "";
   if (
     accessType === "public" &&
     (resource?.accountRequired === true || resource?.authenticationRequired === true)
   ) {
     return "Access varies";
   }
-  return ACCESS_LABELS[accessType] || "Access varies";
+  return ACCESS_LABELS[accessType] || "";
 }
 
 export function resourceFieldLabel(value) {
   const normalized = normalizedText(value);
-  if (!normalized) return "Not documented";
+  if (!normalized) return "";
   if (FIELD_LABELS[normalized]) return FIELD_LABELS[normalized];
   return normalized
     .split(/([ _-]+)/)

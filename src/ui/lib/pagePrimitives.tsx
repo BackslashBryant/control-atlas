@@ -998,7 +998,7 @@ export function SourceProvenanceSummary(props: {
 }) {
   return (
     <div className={`source-provenance-summary ${props.compact ? "compact" : ""}`}>
-      <span className="source-provenance-owner">{props.owner || "Publisher not recorded"}</span>
+      {props.owner ? <span className="source-provenance-owner">{props.owner}</span> : null}
       {props.version ? <span className="source-provenance-version"> · {props.version}</span> : null}
       {props.lastChecked ? <span className="source-provenance-checked"> · Checked {props.lastChecked}</span> : null}
       {props.officialUrl ? (

@@ -23,6 +23,7 @@ import {
   OBJECT_LAYERS,
   resolveNativeType,
 } from '../src/shared/data-trust-contracts.mjs';
+import { recordPresentationProfile } from '../src/shared/record-presentation.mjs';
 
 const generated = (name) => readGeneratedCollection('.', name);
 // build-framework-data.mjs omits evidence_ids from an edge when it is
@@ -796,14 +797,8 @@ test('every blocked graph-health relationship has checked upstream provenance an
   }
 });
 
-test('every catalog stays within its documented description-completeness budget', () => {
+test('publisher prose is complete when required and omitted rather than fabricated when optional', () => {
   const nodes = generated('nodes').nodes;
-  // Regression guard for the source-first contract in docs/PAGE_CONTRACTS.md: a record
-  // whose primary publisher content ends in an ellipsis, or is blank, reads as partial
-  // where a visitor expects the whole thing. NIST Mobile threats use the publisher's
-  // Threat title as their primary field; their optional publisher fields render only
-  // when the catalogue provides them.
-  const EXCEPTIONS = {};
   const byCatalog = new Map();
   for (const node of nodes) {
     if (SYNTHETIC_STRUCTURE_NODE_TYPES.has(node.node_type) || node.metadata?.structural_group === true) continue;
@@ -815,33 +810,19 @@ test('every catalog stays within its documented description-completeness budget'
   }
   assert.ok(byCatalog.size > 10, 'expected many catalogs to be present');
   for (const [catalogId, records] of byCatalog) {
-    const budget = EXCEPTIONS[catalogId] || { truncated: 0, empty: 0 };
     const truncated = records.filter((node) => {
       const description = (node.metadata?.description || '').trim();
       return description.endsWith('...') || description.endsWith('…');
     });
-    const empty = records.filter((node) => {
-      if (catalogId === 'nist-mobile-threats' && node.node_type === 'mobile_threat') {
-        const title = String(node.metadata?.title || '').trim();
-        const threatFragment = (node.metadata?.source_fragments || []).find((fragment) => fragment.field === 'Threat');
-        return !title || threatFragment?.text !== JSON.stringify(title);
-      }
-      return !(node.metadata?.description || '').trim();
-    });
-    assert.ok(
-      truncated.length <= budget.truncated,
-      `${catalogId}: ${truncated.length} truncated descriptions exceed the budget of ${budget.truncated} (${truncated
-        .slice(0, 5)
-        .map((node) => node.id)
-        .join(', ')})`,
-    );
-    assert.ok(
-      empty.length <= budget.empty,
-      `${catalogId}: ${empty.length} empty descriptions exceed the budget of ${budget.empty} (${empty
-        .slice(0, 5)
-        .map((node) => node.id)
-        .join(', ')})`,
-    );
+    assert.equal(truncated.length, 0, `${catalogId} contains artificially truncated publisher prose`);
+    for (const node of records.filter((entry) => !(entry.metadata?.description || '').trim())) {
+      const profile = recordPresentationProfile(catalogId, node.node_type);
+      assert.equal(
+        profile.required.includes('description'),
+        false,
+        `${node.id} omits a profile-required publisher description`,
+      );
+    }
   }
 });
 

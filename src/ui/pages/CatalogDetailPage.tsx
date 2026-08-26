@@ -435,7 +435,7 @@ function CatalogInventory(props: {
           entry,
           profile,
           // Absent metadata is omitted from the row, not printed as a
-          // "Not recorded" placeholder (voice pass B.3).
+          // Omit absent metadata instead of turning it into public copy.
           publisher: source?.owner || "",
           lifecycle: source?.lifecycle_status || "",
         };

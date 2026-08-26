@@ -275,8 +275,8 @@ export function CommonsPage(props: {
                   <tbody>
                     <tr><th scope="row">Type</th>{selectedResources.map((resource) => <td key={resource.id}>{resourceTypeLabel(resource.resourceType)}</td>)}</tr>
                     <tr><th scope="row">Owner</th>{selectedResources.map((resource) => <td key={resource.id}>{resource.publisher}</td>)}</tr>
-                    <tr><th scope="row">Access</th>{selectedResources.map((resource) => <td key={resource.id}>{resourceAccessLabel(resource)}</td>)}</tr>
-                    <tr><th scope="row">Maintenance</th>{selectedResources.map((resource) => <td key={resource.id}>{resourceFieldLabel(resource.maintenanceStatus)}</td>)}</tr>
+                    {selectedResources.some((resource) => resourceAccessLabel(resource)) ? <tr><th scope="row">Access</th>{selectedResources.map((resource) => <td key={resource.id}>{resourceAccessLabel(resource)}</td>)}</tr> : null}
+                    {selectedResources.some((resource) => resource.maintenanceStatus) ? <tr><th scope="row">Maintenance</th>{selectedResources.map((resource) => <td key={resource.id}>{resourceFieldLabel(resource.maintenanceStatus)}</td>)}</tr> : null}
                   </tbody>
                 </table>
               </div>
@@ -328,10 +328,10 @@ export function CommonsPage(props: {
                         </div>
                         <h3>{resource.name}</h3>
                         <p className="workspace-result-row__snippet">{resource.cardPurpose || resource.summary}</p>
-                        <div className="workspace-result-row__signals">
-                          <span>{resourceAccessLabel(resource)}</span>
-                          <span>{resourceFieldLabel(resource.maintenanceStatus)}</span>
-                        </div>
+                        {resourceAccessLabel(resource) || resource.maintenanceStatus ? <div className="workspace-result-row__signals">
+                          {resourceAccessLabel(resource) ? <span>{resourceAccessLabel(resource)}</span> : null}
+                          {resource.maintenanceStatus ? <span>{resourceFieldLabel(resource.maintenanceStatus)}</span> : null}
+                        </div> : null}
                       </div>
                     </AppLink>
                   </article>

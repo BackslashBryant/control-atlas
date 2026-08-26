@@ -1049,10 +1049,10 @@ function FocusedAtlas(props: {
                     </section>
                   ) : null}
 
-                  <section>
-                    <h3>{relationshipExplanation(selectedRow.edge).label}</h3>
-                    <p>{relationshipExplanation(selectedRow.edge).text}</p>
-                  </section>
+                  {relationshipExplanation(selectedRow.edge) ? <section>
+                    <h3>{relationshipExplanation(selectedRow.edge)?.label}</h3>
+                    <p>{relationshipExplanation(selectedRow.edge)?.text}</p>
+                  </section> : null}
                   <section className="atlas-inspector-source">
                     <h3>Evidence</h3>
                     <p>

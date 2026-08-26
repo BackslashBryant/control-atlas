@@ -76,9 +76,6 @@ async function parseIoTWorkbook(bytes, source) {
       id: domainId,
       type: 'iot_capability_domain',
       title: domainTitle,
-      description: isTechnical
-        ? 'Device cybersecurity capabilities published for IoT devices.'
-        : 'Supporting capabilities published for IoT device manufacturers.',
       parent_id: 'CATALOG',
       source_fragments: [cellFragment(source.source_key, worksheet.sheet, 0, 0, 'domain', worksheet.sheet)],
     });

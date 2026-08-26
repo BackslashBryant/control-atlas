@@ -58,11 +58,18 @@ test('reviewed publication identity stays distinct from parser artifacts', () =>
   assert.equal(rai.version, null);
   assert.equal(
     rai.catalog_browse_url,
-    'https://www.ai.mil/Initiatives/About/Resources/Pathway-to-AI-Readiness/Responsible-AI/',
+    'https://www.ai.mil/Latest/Blog/Article-Display/Article/3940314/responsible-ai-toolkit/',
   );
-  assert.equal(rai.artifact_url, 'https://rai.acqbot.com/executive-summary');
+  assert.equal(
+    rai.artifact_url,
+    'https://www.ai.mil/Latest/Blog/Article-Display/Article/3940314/responsible-ai-toolkit/',
+  );
   assert.match(rai.metadata.version_unknown_reason, /do not expose a release version/);
-  assert.match(rai.metadata.provenance_note, /do not expose a release number/);
+  assert.match(rai.metadata.provenance_note, /official CDAO Responsible AI Toolkit article is canonical/);
+
+  const derivedCatalog = registry.sources.find((entry) => entry.id === 'dod-rai-toolkit');
+  assert.equal(derivedCatalog.provenance_class, 'control_atlas_derived');
+  assert.match(derivedCatalog.metadata.provenance_note, /not verbatim publisher records/);
 
   assert.match(
     byId.get('artifact-ai-mil-responsible-ai').metadata.version_unknown_reason,
@@ -72,6 +79,7 @@ test('reviewed publication identity stays distinct from parser artifacts', () =>
     byId.get('artifact-dod-rai-toolkit').metadata.version_unknown_reason,
     /does not expose a release version/,
   );
+  assert.equal(byId.get('artifact-dod-rai-toolkit').source_role, 'reference_only');
 
   const d3fend = byId.get('mitre-d3fend-ontology');
   assert.equal(d3fend.version, '1.5.0');

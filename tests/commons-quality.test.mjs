@@ -81,32 +81,19 @@ for (const r of dataset.resources) {
   assert.ok(!urlSet.has(r.canonicalUrl), `Duplicate canonical URL: ${r.canonicalUrl}`);
   urlSet.add(r.canonicalUrl);
 
-  assert.ok(r.whyIncluded && r.whyIncluded.trim().length > 10, `Resource ${r.id} missing valid whyIncluded statement`);
   assert.ok(r.resourceLane, `Resource ${r.id} missing resourceLane`);
   assert.ok(r.publisher, `Resource ${r.id} missing publisher`);
-  assert.ok(r.overview?.text?.trim().length >= 20, `Resource ${r.id} missing source-backed overview`);
-  assert.ok(r.overview?.sourceUrl?.startsWith("https://"), `Resource ${r.id} overview needs evidence URL`);
-  assert.ok(r.compatibility, `Resource ${r.id} missing compatibility disposition`);
-  assert.ok(
-    ["documented", "not_stated", "not_applicable"].includes(r.compatibility.status),
-    `Resource ${r.id} has invalid compatibility status`,
-  );
-  assert.ok(r.compatibility.sourceUrl?.startsWith("https://"), `Resource ${r.id} compatibility needs evidence URL`);
-  if (r.compatibility.status === "documented") {
+  if (r.overview) {
+    assert.ok(r.overview.text?.trim().length >= 20, `Resource ${r.id} source-backed overview has useful text`);
+    assert.ok(r.overview.sourceUrl?.startsWith("https://"), `Resource ${r.id} overview needs evidence URL`);
+  }
+  if (r.compatibility) {
+    assert.equal(r.compatibility.status, "documented", `Resource ${r.id} only serializes documented compatibility`);
+    assert.ok(r.compatibility.sourceUrl?.startsWith("https://"), `Resource ${r.id} compatibility needs evidence URL`);
     assert.ok(r.compatibility.note?.trim(), `Resource ${r.id} documented compatibility needs an evidence note`);
-  } else if (r.compatibility.status === "not_stated") {
-    assert.equal(r.compatibility.note, "", `Resource ${r.id} must not narrate absent compatibility`);
   }
-  assert.ok(r.media, `Resource ${r.id} missing media disposition`);
-  assert.equal(
-    r.media.status === "available",
-    r.media.items.length > 0,
-    `Resource ${r.id} media status must match its attributable media`,
-  );
-  if (r.media.status === "not_available") {
-    assert.ok(r.media.reason?.trim(), `Resource ${r.id} needs an explicit unavailable-media reason`);
-  }
-  for (const media of r.media.items) {
+  if (r.media) assert.equal(r.media.status, "available", `Resource ${r.id} only serializes available media`);
+  for (const media of r.media?.items || []) {
     assert.ok(media.url.startsWith("https://"), `Resource ${r.id} media URL must be HTTPS`);
     assert.ok(media.sourceUrl.startsWith("https://"), `Resource ${r.id} media needs publisher evidence`);
     assert.ok(media.alt.trim(), `Resource ${r.id} media needs alt text`);
@@ -121,7 +108,7 @@ for (const r of dataset.resources) {
     `Resource ${r.id} must not carry an editorial recommendation`,
   );
   assert.doesNotMatch(
-    r.whyIncluded,
+    r.whyIncluded || "",
     /\b(?:authoritative|essential|governing|leading|mandatory|popular|recommended|widely used|widely recognized|industry-standard|battle-tested|pioneering)\b/i,
     `Resource ${r.id} whyIncluded must state an observable inclusion reason`,
   );
@@ -136,7 +123,6 @@ for (const resource of dataset.resources) {
   assert.ok(resource.presentationProfile?.template, `${resource.id} presentation template`);
   for (const field of ["whatItDoes", "whoItIsFor", "limitations"]) {
     const section = resource.presentationProfile?.[field];
-    if (field === "whatItDoes") assert.ok(section, `${resource.id} ${field}`);
     if (!section) continue;
     assert.equal(section.status, "documented", `${resource.id} ${field} status`);
     assert.ok(section.text && section.sourceUrl, `${resource.id} ${field} evidence`);
@@ -180,9 +166,7 @@ for (const resource of dataset.resources) {
 }
 
 const paidProductEntries = dataset.resources.filter(
-  (resource) =>
-    resource.costType === "commercial" ||
-    (resource.publisherType === "commercial" && !["public", "free_account"].includes(resource.accessType)),
+  (resource) => resource.costType === "commercial",
 );
 assert.deepEqual(
   paidProductEntries.map((resource) => resource.id),

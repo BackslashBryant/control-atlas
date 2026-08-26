@@ -24,42 +24,34 @@ function presentationStage(resource) {
   const overview = resource.overview;
   const compatibility = resource.compatibility;
   const media = resource.media;
-  if (!overview?.text || !overview?.sourceUrl || !overview?.sourceType) {
-    return failed('source-backed overview is incomplete');
+  if (overview && (!overview.text || !overview.sourceUrl || !overview.sourceType)) {
+    return failed('serialized overview evidence is incomplete');
   }
-  if (!['documented', 'not_stated', 'not_applicable'].includes(compatibility?.status)) {
-    return failed('compatibility disposition is missing');
-  }
-  if (compatibility.status === 'documented' && (!compatibility.sourceUrl || !compatibility.note)) {
+  if (compatibility && (compatibility.status !== 'documented' || !compatibility.sourceUrl || !compatibility.note)) {
     return failed('documented compatibility evidence is incomplete');
   }
-  if (!['available', 'not_available'].includes(media?.status)) {
-    return failed('media disposition is missing');
-  }
-  if (media.status === 'available' && !(media.items || []).length) {
+  if (media && (media.status !== 'available' || !(media.items || []).length)) {
     return failed('media is marked available without an attributable item');
   }
-  if (media.status === 'not_available' && !media.reason) {
-    return failed('unavailable media lacks an explicit reason');
-  }
   if (resource.presentationProfile?.profileType !== resource.resourceType
-    || !resource.presentationProfile?.template
-    || !resource.presentationProfile?.whatItDoes?.sourceUrl
-    || resource.presentationProfile?.whoItIsFor?.status === 'not_documented'
-    || resource.presentationProfile?.limitations?.status === 'not_documented') {
+    || !resource.presentationProfile?.template) {
     return failed('type-specific presentation profile is incomplete');
   }
-  if (resource.resourceType === 'tool') {
-    if (!resource.toolProfile
-      || Object.values(resource.toolProfile).some((section) => section?.status === 'not_documented')) {
-      return failed('tool presentation profile is incomplete');
+  for (const section of Object.values(resource.presentationProfile || {})) {
+    if (section && typeof section === 'object'
+      && ('status' in section || 'text' in section)
+      && (section.status !== 'documented' || !section.text || !section.sourceUrl)) {
+      return failed('serialized presentation section lacks documented source evidence');
     }
   }
-  if ((media.items || []).some((item) => !/^sha256:[a-f0-9]{64}$/.test(item.sha256 || '')
+  if (resource.toolProfile && Object.values(resource.toolProfile).some((section) => section?.status === 'not_documented')) {
+    return failed('tool presentation profile contains an unsupported placeholder');
+  }
+  if ((media?.items || []).some((item) => !/^sha256:[a-f0-9]{64}$/.test(item.sha256 || '')
     || !item.byteLength || !item.width || !item.height || !item.license || !item.commitSha)) {
     return failed('published media lacks byte, dimension, license, or commit evidence');
   }
-  return complete('type-specific profile, compatibility, and media carry source evidence or an explicit unavailable disposition');
+  return complete('the type profile is assigned and every serialized optional section carries source evidence');
 }
 
 const resources = (dataset.resources || []).map((resource) => {

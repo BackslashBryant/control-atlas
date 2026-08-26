@@ -171,7 +171,7 @@ function descriptionFromControl(control, resolveInserts) {
   const chunks = [];
   collectProse(control.parts, chunks, resolveInserts);
   const text = chunks.filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
-  return text || control.title || control.id;
+  return text;
 }
 
 function discussionFromControl(control, resolveInserts) {

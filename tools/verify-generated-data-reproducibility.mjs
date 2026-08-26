@@ -24,6 +24,11 @@ function generatedFiles(directory) {
   while (pending.length) {
     const current = pending.pop();
     for (const entry of readdirSync(current, { withFileTypes: true })) {
+      // Editors, sync layers, and atomic writers may expose a short-lived
+      // dot-prefixed sibling while replacing a generated artifact. It is not
+      // part of the published contract and must not make the digest race the
+      // filesystem replacement.
+      if (entry.name.startsWith('.')) continue;
       const path = join(current, entry.name);
       if (entry.isDirectory()) pending.push(path);
       else if (entry.isFile()) files.push(path);

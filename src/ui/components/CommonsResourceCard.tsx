@@ -118,6 +118,7 @@ export function CommonsResourceCard({
   const cardPurpose =
     (resource as CommonsResource & { cardPurpose?: string }).cardPurpose?.trim() ||
     resource.summary;
+  const accessLabel = resourceAccessLabel(resource);
 
   const cardTagIds = (() => {
     if (!onNavigate) return [];
@@ -158,9 +159,7 @@ export function CommonsResourceCard({
           <span className="resource-card-type">
             {resourceTypeLabel(resource.resourceType)}
           </span>
-          <span className="resource-card-access">
-            {resourceAccessLabel(resource)}
-          </span>
+          {accessLabel ? <span className="resource-card-access">{accessLabel}</span> : null}
         </div>
 
         {cardTagIds.length > 0 ? (

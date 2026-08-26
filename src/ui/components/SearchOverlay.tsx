@@ -320,9 +320,9 @@ export function SearchOverlay(props: SearchOverlayProps) {
                                 ? identity.context
                                 : `${publishedName ? `${publishedName} · ` : ""}${displayNameFor("object_type", document.object_type)}`}
                             </span>
-                            <span className="search-overlay-result-summary">
+                            {searchPreviewText(document) ? <span className="search-overlay-result-summary">
                               <MarkedSearchText query={query} text={searchPreviewText(document)} />
-                            </span>
+                            </span> : null}
                           </AppLink>
                         </li>
                       );
@@ -416,7 +416,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                             <MarkedSearchText query={query} text={doc.name} />
                           </h3>
                           <span className="search-overlay-result-meta">
-                            {resourceTypeLabel(doc.resourceType)} · {resourceAccessLabel(doc)}
+                            {[resourceTypeLabel(doc.resourceType), resourceAccessLabel(doc)].filter(Boolean).join(" · ")}
                           </span>
                           <span className="search-overlay-result-summary">
                             <MarkedSearchText query={query} text={doc.summary} />
@@ -451,7 +451,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                             <MarkedSearchText query={query} text={doc.name} />
                           </h3>
                           <span className="search-overlay-result-meta">
-                            {resourceTypeLabel(doc.resourceType)} · {resourceAccessLabel(doc)}
+                            {[resourceTypeLabel(doc.resourceType), resourceAccessLabel(doc)].filter(Boolean).join(" · ")}
                           </span>
                           <span className="search-overlay-result-summary">
                             <MarkedSearchText query={query} text={doc.summary} />

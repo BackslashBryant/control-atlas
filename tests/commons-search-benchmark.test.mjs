@@ -46,7 +46,7 @@ function executeSearch(queryStr) {
     for (const term of terms) {
       if (doc.name.toLowerCase().includes(term)) score += 10;
       if (doc.summary.toLowerCase().includes(term)) score += 5;
-      if (doc.whyIncluded.toLowerCase().includes(term)) score += 5;
+      if ((doc.whyIncluded || "").toLowerCase().includes(term)) score += 5;
     }
 
     return { doc, score };

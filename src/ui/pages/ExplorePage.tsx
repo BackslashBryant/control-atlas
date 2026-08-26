@@ -697,10 +697,10 @@ export function ExplorePage(props: {
                     </div>
                     <h3><MarkedSearchText query={state.query} text={row.identity} /></h3>
                     {row.title ? <p className="workspace-result-row__official-name"><MarkedSearchText query={state.query} text={row.title} /></p> : null}
-                    {detailsReady ? <p className="workspace-result-row__snippet"><MarkedSearchText query={state.query} text={searchPreviewText(row.document)} /></p> : null}
+                    {detailsReady && searchPreviewText(row.document) ? <p className="workspace-result-row__snippet"><MarkedSearchText query={state.query} text={searchPreviewText(row.document)} /></p> : null}
                     {detailsReady ? (
                       <div className="workspace-result-row__signals">
-                        <span>{connectionSummary(row.crossFrameworkCount, row.crossFrameworkCatalogCount)}</span>
+                        {connectionSummary(row.crossFrameworkCount, row.crossFrameworkCatalogCount) ? <span>{connectionSummary(row.crossFrameworkCount, row.crossFrameworkCatalogCount)}</span> : null}
                         <BucketTag area={row.area.id}>{row.area.label}</BucketTag>
                         {(row.document.taxonomy_tags || [])
                           .filter((t: any) => ["organization", "framework", "program"].includes(t.kind))

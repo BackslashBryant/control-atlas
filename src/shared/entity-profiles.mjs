@@ -29,10 +29,21 @@ export function effectiveProfile(profileId, trail = new Set()) {
     ...profile,
     required_fields: profile.required_fields || parent.required_fields || [],
     optional_fields: profile.optional_fields || parent.optional_fields || [],
+    prohibited_fields: profile.prohibited_fields || parent.prohibited_fields || [],
+    conditional_fields: profile.conditional_fields || parent.conditional_fields || [],
     allowed_origins: profile.allowed_origins || parent.allowed_origins || [],
+    field_origins: { ...(parent.field_origins || {}), ...(profile.field_origins || {}) },
     evidence_required_fields: profile.evidence_required_fields || parent.evidence_required_fields || [],
+    evidence_rules: { ...(parent.evidence_rules || {}), ...(profile.evidence_rules || {}) },
+    lifecycle_rules: profile.lifecycle_rules || parent.lifecycle_rules,
+    source_expectations: profile.source_expectations || parent.source_expectations,
+    search_presentation: profile.search_presentation || parent.search_presentation,
     display_sections: profile.display_sections || parent.display_sections || [],
+    display_rules: profile.display_rules || parent.display_rules,
+    allowed_incoming_predicates: profile.allowed_incoming_predicates || parent.allowed_incoming_predicates || [],
+    allowed_outgoing_predicates: profile.allowed_outgoing_predicates || parent.allowed_outgoing_predicates || [],
     allowed_assertion_classes: profile.allowed_assertion_classes || parent.allowed_assertion_classes || [],
+    validation: profile.validation || parent.validation,
   };
 }
 

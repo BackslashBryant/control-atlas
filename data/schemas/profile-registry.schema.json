@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": ["schema_version", "origin_classes", "lifecycle_statuses", "profiles"],
   "properties": {
-    "schema_version": { "const": "1.0" },
+    "schema_version": { "const": "2.0" },
     "origin_classes": { "type": "array", "minItems": 5, "uniqueItems": true, "items": { "type": "string" } },
     "lifecycle_statuses": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
     "profiles": {
@@ -24,10 +24,96 @@
           "parent_profile_id": { "type": ["string", "null"] },
           "required_fields": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
           "optional_fields": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "prohibited_fields": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "conditional_fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["field", "when_field", "operator"],
+              "properties": {
+                "field": { "type": "string" },
+                "when_field": { "type": "string" },
+                "operator": { "enum": ["exists", "equals"] },
+                "value": {}
+              }
+            }
+          },
           "allowed_origins": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+          "field_origins": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            }
+          },
           "evidence_required_fields": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "evidence_rules": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["required", "locator_types"],
+              "properties": {
+                "required": { "type": "boolean" },
+                "locator_types": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+              }
+            }
+          },
+          "lifecycle_rules": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["allowed_statuses", "replacement_requires_evidence"],
+            "properties": {
+              "allowed_statuses": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+              "replacement_requires_evidence": { "type": "boolean" }
+            }
+          },
+          "source_expectations": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["accepted_source_types", "parser_required", "failure_policy"],
+            "properties": {
+              "accepted_source_types": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+              "parser_required": { "type": "boolean" },
+              "failure_policy": { "enum": ["fail_closed", "omit_optional_fields"] }
+            }
+          },
+          "search_presentation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["title_field", "subtitle_fields", "filter_fields", "badge_fields"],
+            "properties": {
+              "title_field": { "type": "string" },
+              "subtitle_fields": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+              "filter_fields": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+              "badge_fields": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+            }
+          },
           "display_sections": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "display_rules": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["omit_empty_sections", "label_atlas_content"],
+            "properties": {
+              "omit_empty_sections": { "type": "boolean" },
+              "label_atlas_content": { "type": "boolean" }
+            }
+          },
+          "allowed_incoming_predicates": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "allowed_outgoing_predicates": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
           "allowed_assertion_classes": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "validation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["severity", "review_required"],
+            "properties": {
+              "severity": { "enum": ["error", "warning"] },
+              "review_required": { "type": "boolean" }
+            }
+          },
           "notes": { "type": "string" }
         }
       }
