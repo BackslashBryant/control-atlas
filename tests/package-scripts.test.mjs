@@ -24,6 +24,8 @@ test('PR CI creates one change map from a shallow checkout and targeted base fet
   assert.match(ci, /git fetch --no-tags --depth=1 origin "\$base"/);
   assert.match(ci, /tools\/classify-change-scope\.mjs/);
   assert.match(ci, /name: ci-change-map/);
+  assert.match(ci, /automation_changed: \$\{\{ steps\.scope\.outputs\.automation_changed \}\}/);
+  assert.match(ci, /name: Automation contracts[\s\S]*?if: \$\{\{ needs\.changes\.outputs\.automation_changed == 'true' \}\}/);
   assert.doesNotMatch(ci, /fetch-depth: 0/);
 });
 

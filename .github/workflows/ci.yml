@@ -47,6 +47,7 @@ jobs:
     outputs:
       evidence_only: ${{ steps.scope.outputs.evidence_only }}
       content_changed: ${{ steps.scope.outputs.content_changed }}
+      automation_changed: ${{ steps.scope.outputs.automation_changed }}
       automation_only: ${{ steps.scope.outputs.automation_only }}
       build_mode: ${{ steps.scope.outputs.build_mode }}
       build_required: ${{ steps.scope.outputs.build_required }}
@@ -116,7 +117,7 @@ jobs:
   automation:
     name: Automation contracts
     needs: changes
-    if: ${{ needs.changes.outputs.automation_only == 'true' }}
+    if: ${{ needs.changes.outputs.automation_changed == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
