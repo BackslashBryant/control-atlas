@@ -9,5 +9,6 @@ export default defineConfig({
     "live-smoke.spec.mjs",
     "legacy-url-shim.spec.mjs",
     "publication-identity.spec.mjs",
+    "source-truth-presentation.spec.mjs",
   ],
 });

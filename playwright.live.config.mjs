@@ -8,7 +8,7 @@ if (!baseURL) {
 
 export default defineConfig({
   testDir: "./tests/e2e",
-  testMatch: "live-smoke.spec.mjs",
+  testMatch: ["live-smoke.spec.mjs", "source-truth-presentation.spec.mjs"],
   timeout: 120000,
   workers: 1,
   use: {

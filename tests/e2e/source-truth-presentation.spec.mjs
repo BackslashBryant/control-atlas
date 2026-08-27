@@ -28,7 +28,16 @@ test('sourced lifecycle and replacement history remain visible', async ({ page }
 
   await expect(page.getByText('Archived', { exact: true }).first()).toBeVisible();
   await expect(page.getByText('Replaced by', { exact: true })).toBeVisible();
-  await expect(page.getByRole('link', { name: /DoDI 8510\.01/ })).toBeVisible();
+  const replacementLink = page.getByRole('link', { name: /DoDI 8510\.01/ });
+  await expect(replacementLink).toBeVisible();
+  await replacementLink.click();
+  await expect(page).toHaveURL(/#\/sources\?.*source=authority-dodi-8510-01/);
+  const replacementInspector = page.locator('.sources-inspector-pane .source-inspector--inline');
+  await expect(replacementInspector).toContainText('DoDI 8510.01');
+  await expect(replacementInspector.getByRole('link', { name: 'Open official publication' })).toHaveAttribute(
+    'href',
+    'https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/851001p.pdf',
+  );
 });
 
 test('exact ATT&CK identifier search opens readable publisher text', async ({ page }) => {
