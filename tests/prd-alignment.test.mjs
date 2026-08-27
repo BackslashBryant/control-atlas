@@ -37,7 +37,7 @@ test('Learn contains the six launch-contract explanation topics', () => {
   );
 });
 
-test('template factory implements all conditional include flags and bug fixes', () => {
+test('template factory resolves framework context and keeps the SSP core compact', () => {
   const dataset = {
     nodes: [
       { id: 'nist-800-53:AC-2', node_type: 'control', label: 'AC-2 Account Management', plain_language_summary: 'Keep track of every account on the system: who gets one, who approves it, and when it gets disabled.', metadata: { catalog_id: 'nist-800-53', item_id: 'AC-2', title: 'Account Management', control_family: 'Access Control' } }
@@ -55,9 +55,10 @@ test('template factory implements all conditional include flags and bug fixes', 
 
   const resultFramework = generateTemplate(optionsWithFramework, dataset);
   assert.match(resultFramework.content, /AC-2/);
-  assert.match(resultFramework.content, /Account Management/);
-  // Markdown cell values escape pipes, so match the escaped form.
-  assert.ok(resultFramework.content.includes('[Planned \\| Implemented \\| Inherited \\| Not Applicable]'));
+  assert.match(resultFramework.content, /## Control Family Index/);
+  assert.match(resultFramework.content, /Access Control/);
+  assert.match(resultFramework.content, /Implementation Statement Worksheet/);
+  assert.doesNotMatch(resultFramework.content, /Implementation Narrative/);
 
   // Test optional flags - exclude placeholders
   const optionsNoPlaceholders = {
@@ -69,10 +70,11 @@ test('template factory implements all conditional include flags and bug fixes', 
   };
 
   const resultNoPlaceholders = generateTemplate(optionsNoPlaceholders, dataset);
-  assert.ok(!resultNoPlaceholders.content.includes('[Planned \\| Implemented \\| Inherited \\| Not Applicable]'));
-  assert.doesNotMatch(resultNoPlaceholders.content, /\[Artifact IDs, report names, paths, or links\]/);
+  assert.doesNotMatch(resultNoPlaceholders.content, /\[Control ID\]/);
+  assert.doesNotMatch(resultNoPlaceholders.content, /\[Provider\]/);
 
-  // Test including implementation prompts
+  // The narrative starter gives control-level drafting one stable handoff
+  // instead of repeating a prompt for every selected control.
   const optionsWithPrompts = {
     templateType: 'security_plan_starter',
     framework: 'nist-800-53',
@@ -83,11 +85,10 @@ test('template factory implements all conditional include flags and bug fixes', 
   };
 
   const resultWithPrompts = generateTemplate(optionsWithPrompts, dataset);
-  // Guidance renders once, as a section — never repeated per control row.
-  const guidanceMatches = resultWithPrompts.content.match(/## How to Complete the Control Rows/g) || [];
-  assert.equal(guidanceMatches.length, 1, 'fill guidance must render exactly once');
-  assert.match(resultWithPrompts.content, /Describe implementation in the Cloud SaaS environment/);
-  assert.match(resultWithPrompts.content, /AC-2 \| Account Management \| \[Planned/);
+  const handoffMatches = resultWithPrompts.content.match(/## Control Narrative Handoff/g) || [];
+  assert.equal(handoffMatches.length, 1, 'control drafting handoff must render exactly once');
+  assert.match(resultWithPrompts.content, /role, mechanism, location, trigger or cadence, and result/);
+  assert.doesNotMatch(resultWithPrompts.content, /Account Management \| \[Planned/);
 
   // Test including source footnotes
   const optionsWithFootnotes = {

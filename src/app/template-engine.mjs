@@ -872,38 +872,28 @@ function blankRows(count, width, ph, values = []) {
   );
 }
 
-function generateProfessionalSecurityPlan(options, controls, crossRef) {
+function generateProfessionalSecurityPlan(options, controls) {
   const ph = placeholder(options);
   const env = options.environment || "Not selected";
-  const baselineHeaders = ["Control ID", "Control Title", "Implementation Status", "Implementation Narrative", "Evidence References", "Responsible Role"];
-  const baselineRows = controls.map((c) => [
-    c.id,
-    c.title,
-    ph("[Planned | Implemented | Inherited | Not Applicable]"),
-    ph("[Who does what, using which mechanism, where, and how often?]"),
-    ph("[Artifact IDs, report names, paths, or links]"),
-    ph("[Accountable role]"),
-  ]);
-  const operatingHeaders = ["Control ID", "Control Designation", "Provider / Service", "Local Responsibility", "Review Cadence", "Notes / Gaps"];
-  const operatingRows = controls.map((c) => [
-    c.id,
-    ph("[Common | System-Specific | Hybrid]"),
-    ph("[Provider or N/A]"),
-    ph("[Residual implementation and validation duties]"),
-    ph("[Continuous | Monthly | Quarterly | Annual]"),
-    ph("[Assumptions, exceptions, planned work]"),
-  ]);
+  const controlsByFamily = new Map();
+  for (const control of controls) {
+    const family = control.family || String(control.id).split("-")[0] || "Unclassified";
+    const group = controlsByFamily.get(family) || [];
+    group.push(control);
+    controlsByFamily.set(family, group);
+  }
+  const familyRows = [...controlsByFamily.entries()].map(([family, familyControls]) => {
+    const visibleIds = familyControls.slice(0, 8).map((control) => control.id);
+    const remaining = familyControls.length - visibleIds.length;
+    return [
+      family,
+      String(familyControls.length),
+      `${visibleIds.join(", ")}${remaining > 0 ? `, plus ${remaining} more` : ""}`,
+      "Use the Implementation Statement Worksheet for control-by-control narratives, evidence, ownership, and status.",
+    ];
+  });
   const inheritanceHeaders = ["Control ID", "Inheritance Type", "Provider", "Provider Evidence", "Evidence Date", "Decision Basis"];
   const inheritanceRows = blankRows(10, inheritanceHeaders.length, ph, ["[Control ID]", "[Fully inherited | Hybrid]", "[Provider]", "[CRM/CIS, package, attestation]", "[YYYY-MM-DD]", "[Agreement or review basis]"]);
-  // Opt-in only: STIG/SRG tables add ~50 pages for full baselines.
-  const stigRows = [];
-  if (options.includeStigReferences === true && crossRef) {
-    for (const c of controls) {
-      if (!c.nodeId) continue;
-      const refs = crossRefForControl(crossRef, c.nodeId);
-      if (refs.stigIds.length) stigRows.push([c.id, refs.stigIds.join("; ")]);
-    }
-  }
   /** @type {DocSection[]} */
   const sections = [
     { type: "text", heading: "Document Purpose", content: "Use this companion to organize an SSP draft, expose missing decisions, and prepare content for the official system- or program-specific SSP." },
@@ -912,21 +902,13 @@ function generateProfessionalSecurityPlan(options, controls, crossRef) {
     { type: "text", heading: "Authorization Boundary", content: ph("Describe in-scope components, facilities, networks, cloud services, endpoints, external services, trust boundaries, and explicit exclusions. Reference current architecture and data-flow diagrams.") },
     { type: "text", heading: "Information and Data", content: ph("Information types | C-I-A impact values | CUI categories | PII/PHI | classification | data owners | retention and disposal") },
     { type: "text", heading: "Roles, Access, and Interconnections", content: ph("Roles and privileges | authentication | access approvals and reviews | separation of duties | connected systems | ports/protocols/services | data flows | agreements") },
-    { type: "text", heading: "How to Complete the Control Rows", content: [`- Describe implementation in the ${env} environment: role, mechanism, location, trigger or cadence, and result.`, `- Cite stable evidence names or identifiers. Useful evidence includes: ${EVIDENCE_TYPE_HINT}.`, "- Use Inherited only with a provider and residual local responsibility.", "- Use Not Applicable only with a reviewable rationale and approval basis.", "- Reconcile planned work and known gaps with the POA&M register."].join("\n") },
-    { type: "table", heading: "Control Baseline", headers: baselineHeaders, rows: baselineRows },
-    { type: "table", heading: "Control Operating Detail", headers: operatingHeaders, rows: operatingRows },
+    { type: "text", heading: "Selected Control Scope", content: `${controls.length} published control record${controls.length === 1 ? "" : "s"} are in the selected scope. This starter keeps the plan narrative compact and summarizes that selection by family. Use the separate Implementation Statement Worksheet for the complete control-by-control working register; do not treat this index as implementation evidence.` },
+    { type: "table", heading: "Control Family Index", headers: ["Control Family", "Selected Records", "Compact ID Index", "Detailed Work Location"], rows: familyRows },
+    { type: "text", heading: "Control Narrative Handoff", content: [`- Draft each selected control in the Implementation Statement Worksheet: role, mechanism, location, trigger or cadence, and result.`, `- Cite stable evidence names or identifiers. Useful evidence includes: ${EVIDENCE_TYPE_HINT}.`, "- Separate inherited provider behavior from residual local responsibility.", "- Record Not Applicable decisions with a reviewable rationale and approval basis.", "- Reconcile planned work and known gaps with the POA&M register, then bring approved summaries into the official SSP or package."].join("\n") },
     { type: "table", heading: "Inheritance Summary", headers: inheritanceHeaders, rows: inheritanceRows },
     { type: "text", heading: "Revision and Approval History", content: ph("Version | Date | Author role | Reviewer role | Approval status | Summary of changes | Next review") },
   ];
-  if (stigRows.length) {
-    sections.splice(sections.length - 1, 0, {
-      type: "table",
-      heading: "STIG/SRG References",
-      headers: ["Control ID", "STIG/SRG Rule IDs"],
-      rows: stigRows,
-    });
-  }
-  return appendSourceMetadata({ title: "System Security Plan (SSP) Starter", description: "Operational companion for organizing system context, control narratives, evidence, inheritance, and ownership before completing an official SSP.", sections }, options);
+  return appendSourceMetadata({ title: "System Security Plan (SSP) Starter", description: "Compact narrative companion for organizing system context, selected control scope, inheritance, and ownership before completing an official SSP.", sections }, options);
 }
 
 function generateProfessionalImplementationWorksheet(options, controls) {
@@ -1623,18 +1605,15 @@ export function buildTemplateDocument(options, dataset) {
     controls = [{ nodeId: null, id: "[Control ID]", title: "[Control Title]", family: "[Family]" }];
   }
 
-  // Cross-reference index (control → CCI → STIG/SRG) is only needed by the two
-  // templates that cite real rule/CCI IDs; build it lazily to avoid the edge
-  // scan for the other seven.
-  const needsCrossRef =
-    normalized.templateType === "evidence_expectation_matrix" ||
-    normalized.templateType === "security_plan_starter";
+  // Cross-reference data belongs in the dedicated evidence matrix, not the
+  // compact SSP narrative starter. Build it only for that working matrix.
+  const needsCrossRef = normalized.templateType === "evidence_expectation_matrix";
   const crossRef = needsCrossRef ? buildControlCrossRefIndex(dataset) : null;
 
   let doc;
   switch (normalized.templateType) {
     case "security_plan_starter":
-      doc = generateProfessionalSecurityPlan(normalized, controls, crossRef);
+      doc = generateProfessionalSecurityPlan(normalized, controls);
       break;
     case "implementation_statement_worksheet":
       doc = generateProfessionalImplementationWorksheet(normalized, controls);
@@ -1670,7 +1649,7 @@ export function buildTemplateDocument(options, dataset) {
       doc = generatePPSMPreparationWorksheet(normalized);
       break;
     default:
-      doc = generateProfessionalSecurityPlan(normalized, controls, crossRef);
+      doc = generateProfessionalSecurityPlan(normalized, controls);
   }
 
   return {

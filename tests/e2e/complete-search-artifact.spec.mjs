@@ -49,12 +49,12 @@ test("a failed complete search artifact uses the app retry path", async ({
   });
 
   await page.goto("/#/record/cmmc-2/LEVEL-2");
-  await expect(page.getByRole("button", { name: "Retry loading" })).toBeVisible({
+  await expect(page.getByRole("button", { name: "Try loading again" })).toBeVisible({
     timeout: 15000,
   });
 
   shouldFail = false;
-  await page.getByRole("button", { name: "Retry loading" }).click();
+  await page.getByRole("button", { name: "Try loading again" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     /LEVEL-2|Level 2/i,
     { timeout: 15000 },
@@ -68,7 +68,7 @@ test("shared search URLs keep position; submitted searches move focus to results
   await expect(page.locator("#library-results")).toBeVisible({
     timeout: 15000,
   });
-  expect(await page.evaluate(() => window.scrollY)).toBeLessThan(10);
+  expect(await page.evaluate(() => globalThis.window.scrollY)).toBeLessThan(10);
   await expect(page.locator("#library-results")).not.toBeFocused();
 
   await page.getByRole("button", { name: "Search", exact: true }).click();

@@ -593,11 +593,14 @@ test('template options use collapsed progressive disclosure and associated hints
   assert.doesNotMatch(templatesPage, /Search companions by name or purpose/);
 });
 
-test('Guides remain explanatory while product help is consolidated into About', () => {
+test('Guides remain source-bounded procedures while product help stays in About', () => {
   const playbooksPage = readFileSync('src/ui/pages/PlaybooksPage.tsx', 'utf8');
   assert.match(playbooksPage, /Control Atlas explanation/);
   assert.match(playbooksPage, /Official references/);
   assert.match(playbooksPage, /Limitations/);
+  assert.match(playbooksPage, /<h2>Goal<\/h2>/);
+  assert.match(playbooksPage, /<h2>Steps<\/h2>/);
+  assert.match(playbooksPage, /<h2>Output and checks<\/h2>/);
   assert.doesNotMatch(playbooksPage, /learnArticles\.map/);
   const glossary = readFileSync('src/ui/components/GlossaryDrawer.tsx', 'utf8');
   const about = readFileSync('src/ui/pages/AboutPage.tsx', 'utf8');

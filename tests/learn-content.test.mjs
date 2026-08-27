@@ -42,6 +42,15 @@ test("every practitioner guide answers a real work question with a verified cita
     assert.ok(article.whenItMatters, article.id);
     assert.ok(article.explanation, article.id);
     assert.ok(article.limitations, article.id);
+    assert.ok(article.goal, `${article.id} needs a procedural goal`);
+    assert.ok(article.prerequisites.length > 0, `${article.id} needs prerequisites`);
+    assert.ok(article.steps.length >= 3, `${article.id} needs an actionable sequence`);
+    for (const step of article.steps) {
+      assert.ok(step.title, `${article.id} step needs a title`);
+      assert.ok(step.action, `${article.id} step needs an action`);
+    }
+    assert.ok(article.output, `${article.id} needs an expected output`);
+    assert.ok(article.validation.length > 0, `${article.id} needs handoff checks`);
     assert.ok(article.nextAction?.label, article.id);
     assert.ok(article.nextAction?.view, article.id);
     assert.ok(article.citations.length > 0, article.id);

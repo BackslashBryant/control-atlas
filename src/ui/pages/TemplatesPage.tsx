@@ -392,7 +392,26 @@ function templateMeta(template: TemplateRecord, onNavigate?: (view: ViewState["v
   );
 }
 
+function templateDetails(template: TemplateRecord) {
+  const inputCount = template.required_input_options?.length || 0;
+  const formats = template.supported_formats || ["docx"];
+  const output = formats.length === 1
+    ? FORMAT_HELP[formats[0]] || `${FORMAT_LABELS[formats[0]] || formats[0]} file`
+    : `${formats.length} editable download formats`;
+  return (
+    <>
+      <span><strong>Setup:</strong> {inputCount ? `${inputCount} required input${inputCount === 1 ? "" : "s"}` : "no required inputs"}</span>
+      <span><strong>Output:</strong> {output}</span>
+    </>
+  );
+}
+
 function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) {
+  const sections = doc.sections || [];
+  const tableSections = sections.filter((section: any) => section.type === "table");
+  const representativeTable = tableSections.find((section: any) => section.rows?.length) || tableSections[0];
+  const totalRows = tableSections.reduce((sum: number, section: any) => sum + (section.rows?.length || 0), 0);
+  const visibleHeaders = representativeTable?.headers?.slice(0, 4) || [];
   return (
     <section aria-labelledby="document-preview-heading" className="template-document-preview">
       <header className="template-document-preview-header">
@@ -411,45 +430,44 @@ function TemplateDocumentPreview({ doc, format }: { doc: any; format: string }) 
         <p className="template-document-preview-disclaimer">
           {STARTER_DOCUMENT_REVIEW_NOTICE}
         </p>
-        {(doc.sections || []).map((section: any) => (
-          <section className="template-document-preview-section" key={section.heading}>
-            <h4>{section.heading}</h4>
-            {section.type === "text" ? (
-              <p>{section.content}</p>
-            ) : (
-              <>
-                <ScrollableRegion
-                  className="template-document-preview-table-wrap"
-                  label={`${section.heading} table, scrolls horizontally`}
-                >
-                  <table>
-                    <thead>
-                      <tr>
-                        {(section.headers || []).map((header: string) => (
-                          <th key={header}>{header}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {(section.rows || []).slice(0, 3).map((row: any[], index: number) => (
-                        <tr key={index}>
-                          {(section.headers || []).map((_: string, cellIndex: number) => (
-                            <td key={cellIndex}>{row[cellIndex] || ""}</td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </ScrollableRegion>
-                {section.rows?.length > 3 ? (
-                  <p className="template-document-preview-more">
-                    Plus {section.rows.length - 3} more rows in the downloaded document.
-                  </p>
-                ) : null}
-              </>
-            )}
+        <dl className="template-document-preview-summary">
+          <div><dt>Sections</dt><dd>{sections.length}</dd></div>
+          <div><dt>Working tables</dt><dd>{tableSections.length}</dd></div>
+          <div><dt>Prepared rows</dt><dd>{totalRows}</dd></div>
+        </dl>
+        <section className="template-document-preview-section">
+          <h4>Inside this file</h4>
+          <ol className="template-document-preview-outline">
+            {sections.map((section: any) => (
+              <li key={section.heading}>
+                <span>{section.heading}</span>
+                <small>{section.type === "table" ? `${section.rows?.length || 0} prepared row${section.rows?.length === 1 ? "" : "s"}` : "Guidance or narrative section"}</small>
+              </li>
+            ))}
+          </ol>
+        </section>
+        {representativeTable ? (
+          <section className="template-document-preview-section">
+            <h4>Representative table: {representativeTable.heading}</h4>
+            <p>This sample shows the working structure. The downloaded file contains every section, column, and prepared row listed above.</p>
+            <ScrollableRegion
+              className="template-document-preview-table-wrap"
+              label={`${representativeTable.heading} sample table, scrolls horizontally`}
+            >
+              <table>
+                <thead><tr>{visibleHeaders.map((header: string) => <th key={header}>{header}</th>)}</tr></thead>
+                <tbody>
+                  {(representativeTable.rows || []).slice(0, 3).map((row: any[], index: number) => (
+                    <tr key={index}>{visibleHeaders.map((_: string, cellIndex: number) => <td key={cellIndex}>{row[cellIndex] || ""}</td>)}</tr>
+                  ))}
+                </tbody>
+              </table>
+            </ScrollableRegion>
+            {(representativeTable.headers?.length || 0) > visibleHeaders.length ? (
+              <p className="template-document-preview-more">The downloaded table includes {representativeTable.headers.length - visibleHeaders.length} additional columns.</p>
+            ) : null}
           </section>
-        ))}
+        ) : null}
       </div>
     </section>
   );
@@ -474,7 +492,6 @@ export function TemplatesPage(props: {
   const workflowDetailRef = useRef<HTMLElement | null>(null);
   const categoryFilter = state.category;
   const queryFilter = state.query;
-  const [includeStigRefs, setIncludeStigRefs] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [generationStatus, setGenerationStatus] = useState("");
   const [generationTone, setGenerationTone] = useState<"trust" | "warning">(
@@ -680,14 +697,12 @@ export function TemplatesPage(props: {
       includeInheritancePrompts: true,
       includeReciprocityPrompts: true,
       includeSourceFootnotes: true,
-      includeStigReferences: includeStigRefs,
       sourceRefs,
       sources: bundle.runtime.dataset?.sources || [],
     };
   }, [
     bundle.runtime.dataset?.sources,
     generationSnapshot,
-    includeStigRefs,
     selectedFrameworkSourceId,
     selectedTemplate,
   ]);
@@ -1027,6 +1042,7 @@ export function TemplatesPage(props: {
                         icon={<IconFileDescription size={20} stroke={1.8} />}
                         key={template.name}
                         meta={templateMeta(template, onNavigate)}
+                        details={templateDetails(template)}
                         onNavigate={onNavigate}
                         patch={{ buildSection: "documents", task: "", templateType: template.name, framework: state.framework || "", format: template.supported_formats?.[0] || "docx", environment: state.environment || "", baseline: "", controlFamily: "" }}
                         title={template.display_name}
@@ -1048,6 +1064,7 @@ export function TemplatesPage(props: {
                       icon={<IconFileDescription size={20} stroke={1.8} />}
                       key={template.name}
                       meta={templateMeta(template, onNavigate)}
+                      details={templateDetails(template)}
                       onNavigate={onNavigate}
                       patch={{ buildSection: "documents", task: "", templateType: template.name, framework: state.framework || "", format: template.supported_formats?.[0] || "docx", environment: state.environment || "", baseline: "", controlFamily: "" }}
                       title={template.display_name}
@@ -1148,17 +1165,6 @@ export function TemplatesPage(props: {
                       />
                     ) : null}
                   </div>
-                  <label className="template-option-toggle">
-                    <input
-                      checked={includeStigRefs}
-                      onChange={(event) => setIncludeStigRefs(event.target.checked)}
-                      type="checkbox"
-                    />
-                    <span>
-                      Include STIG/SRG cross-reference table
-                      <span className="field-hint">Adds a reference table mapping controls to STIG and SRG rule identifiers. Adds approximately 50 pages for full baselines.</span>
-                    </span>
-                  </label>
                   {supportedFormats.length > 1 ? (
                     <ul className="format-help-list">
                       {supportedFormats.map((format: string) => (

@@ -42,12 +42,12 @@ test("load resilience surfaces retry after timeout", async ({ page }) => {
   });
 
   await gotoApp(page, "/#/search");
-  await expect(page.getByRole("button", { name: "Retry loading" })).toBeVisible(
+  await expect(page.getByRole("button", { name: "Try loading again" })).toBeVisible(
     {
       timeout: 15000,
     },
   );
-  await expect(page.getByText("Record data unavailable")).toBeVisible();
+  await expect(page.getByText("Unable to load data", { exact: true })).toBeVisible();
 });
 
 test("Atlas data failure replaces loading with a retry path", async ({
@@ -60,9 +60,9 @@ test("Atlas data failure replaces loading with a retry path", async ({
 
   await gotoApp(page, "/#/atlas");
   await expect(
-    page.getByRole("button", { name: "Retry loading" }),
+    page.getByRole("button", { name: "Try loading again" }),
   ).toBeVisible({ timeout: 15000 });
-  await expect(page.getByText("Record data unavailable")).toBeVisible();
+  await expect(page.getByText("Unable to load data", { exact: true })).toBeVisible();
 });
 
 test("Resources dataset failure is isolated from the rest of the product", async ({ page }) => {
@@ -97,9 +97,9 @@ test("retry clears a rejected artifact and succeeds on a fresh request", async (
   });
 
   await gotoApp(page, "/#/atlas");
-  await expect(page.getByRole("button", { name: "Retry loading" })).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole("button", { name: "Try loading again" })).toBeVisible({ timeout: 15000 });
   failing = false;
-  await page.getByRole("button", { name: "Retry loading" }).click();
+  await page.getByRole("button", { name: "Try loading again" }).click();
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible({ timeout: 15000 });
   expect(requests).toBeGreaterThanOrEqual(3);
 });

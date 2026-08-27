@@ -117,10 +117,14 @@ export function PlaybooksPage(props: {
   }
 
   const guideSections = [
+    { id: "guide-goal", label: "Goal" },
     ...(selected.whenItMatters
       ? [{ id: "guide-when-it-matters", label: "When it matters" }]
       : []),
     { id: "guide-what-this-means", label: "What this means" },
+    { id: "guide-before-you-start", label: "Before you start" },
+    { id: "guide-steps", label: "Steps" },
+    { id: "guide-output", label: "Output and checks" },
     { id: "guide-limitations", label: "Limitations" },
     { id: "guide-references", label: "Official references" },
   ];
@@ -149,6 +153,10 @@ export function PlaybooksPage(props: {
       />
       <div className="about-layout">
         <article className="learn-article">
+          <section id="guide-goal">
+            <h2>Goal</h2>
+            <p>{selected.goal}</p>
+          </section>
           {selected.whenItMatters ? (
             <section id="guide-when-it-matters">
               <h2>When it matters</h2>
@@ -158,6 +166,38 @@ export function PlaybooksPage(props: {
           <section id="guide-what-this-means">
             <h2>What this means</h2>
             <p>{selected.explanation}</p>
+          </section>
+          <section id="guide-before-you-start">
+            <h2>Before you start</h2>
+            <ul>
+              {selected.prerequisites.map((prerequisite) => (
+                <li key={prerequisite}>{prerequisite}</li>
+              ))}
+            </ul>
+          </section>
+          <section id="guide-steps">
+            <h2>Steps</h2>
+            <ol className="guide-procedure-steps">
+              {selected.steps.map((step, index) => (
+                <li key={step.title}>
+                  <span aria-hidden="true" className="guide-procedure-step-number">{index + 1}</span>
+                  <div>
+                    <h3>{step.title}</h3>
+                    <p>{step.action}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+          <section id="guide-output">
+            <h2>Output and checks</h2>
+            <p><strong>Expected output:</strong> {selected.output}</p>
+            <h3>Validate before handoff</h3>
+            <ul>
+              {selected.validation.map((check) => (
+                <li key={check}>{check}</li>
+              ))}
+            </ul>
           </section>
           <aside aria-labelledby="guide-limitations" className="summary-card tone-warning">
             <h2 className="summary-card-title" id="guide-limitations">Limitations</h2>

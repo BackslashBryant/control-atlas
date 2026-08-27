@@ -274,7 +274,7 @@ test('POA&M markdown preserves the schema-aligned field set without a wide table
   assert.ok(maxMarkdownTableColumns(result.content) <= 6, 'POA&M starter must not emit a wide pipe table');
 });
 
-test('ssp markdown renders one plain-language baseline table with guidance stated once', () => {
+test('ssp markdown renders one compact family index with a control-work handoff', () => {
   const result = generateTemplate(
     {
       templateType: 'security_plan_starter',
@@ -289,15 +289,14 @@ test('ssp markdown renders one plain-language baseline table with guidance state
   assert.ok(maxMarkdownTableColumns(result.content) <= 6, 'SSP markdown tables must stay at 6 columns or fewer');
   assert.match(
     result.content,
-    /\| Control ID \| Control Title \| Implementation Status \| Implementation Narrative \| Evidence References \| Responsible Role \|/,
-    'the control baseline must carry implementation, evidence, and ownership fields',
+    /\| Control Family \| Selected Records \| Compact ID Index \| Detailed Work Location \|/,
+    'the SSP core must summarize selected records by family',
   );
-  assert.match(result.content, /## How to Complete the Control Rows/, 'fill guidance must render as its own section');
-  // The old per-control madlib prompt ("How is <Title> (<ID>) implemented…")
-  // must never repeat across rows. The fill-in placeholder ("[How is this
-  // implemented for this system?]") has no (<ID>) and is exempt.
-  const madlibs = (result.content.match(/How is .+ \(.+\) implemented/g) || []).length;
-  assert.ok(madlibs <= 1, `madlib prompt sentence appears ${madlibs} times — it must not repeat per control`);
+  assert.match(result.content, /2 published control records are in the selected scope/);
+  assert.match(result.content, /AC-1, AC-2/);
+  assert.match(result.content, /## Control Narrative Handoff/, 'the companion handoff must render as its own section');
+  assert.match(result.content, /Implementation Statement Worksheet/);
+  assert.doesNotMatch(result.content, /Implementation Narrative|STIG\/SRG References/);
 });
 
 // ---------------------------------------------------------------------------

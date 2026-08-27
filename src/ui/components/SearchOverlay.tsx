@@ -248,7 +248,12 @@ export function SearchOverlay(props: SearchOverlayProps) {
           {!bundle ? (
             <p className="field-hint">Loading public data…</p>
           ) : !query.trim() ? (
-            <p className="field-hint">{GLOBAL_SEARCH_PLACEHOLDER}</p>
+            <div className="search-overlay-empty-hint">
+              <p className="field-hint">{GLOBAL_SEARCH_PLACEHOLDER}</p>
+              <p className="search-overlay-shortcut-hint">
+                <kbd>Ctrl</kbd><span>+</span><kbd>K</kbd> opens search from anywhere. <kbd>Esc</kbd> closes it.
+              </p>
+            </div>
           ) : results.libraryResults.length === 0 && results.resourceResults.length === 0 && results.communityResults.length === 0 && results.guideResults.length === 0 && results.sourceResults.length === 0 && results.matchingTags.length === 0 ? (
             <p className="field-hint">
               No records or resources match &quot;{query.trim()}&quot;.
