@@ -20,6 +20,9 @@ test('source refresh opens one human-reviewed draft PR after the full gate', () 
   assert.match(workflow, /contents: write/);
   assert.match(workflow, /pull-requests: write/);
   assert.match(workflow, /npm run refresh:data/);
+  assert.match(workflow, /name: Restore strict conditional source cache/);
+  assert.match(workflow, /path: \.local\/http-cache-v1/);
+  assert.match(workflow, /key: source-http-v1-\$\{\{ runner\.os \}\}-\$\{\{ github\.run_id \}\}/);
   assert.match(workflow, /GITHUB_TOKEN: \$\{\{ github\.token \}\}/);
   assert.match(workflow, /npm run resources:health/);
   assert.doesNotMatch(workflow, /npm run audit:deps/);

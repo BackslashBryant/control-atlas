@@ -5,6 +5,12 @@ const port = process.env.PLAYWRIGHT_PORT ?? '4317';
 const baseURL = `http://localhost:${port}`;
 const browserName = process.env.PLAYWRIGHT_BROWSER ?? 'chromium';
 
+export function resolveWorkerCount(environment = process.env) {
+  const requested = Number.parseInt(environment.PLAYWRIGHT_WORKERS ?? '', 10);
+  if (Number.isInteger(requested) && requested > 0) return requested;
+  return environment.CI ? 1 : 2;
+}
+
 export default defineConfig({
   captureGitInfo: {
     commit: false,
@@ -14,7 +20,7 @@ export default defineConfig({
   globalTeardown: './tools/playwright-global-teardown.mjs',
   fullyParallel: process.env.PLAYWRIGHT_FULLY_PARALLEL === '1',
   timeout: process.env.CI ? 45000 : 30000,
-  workers: Math.max(1, Number.parseInt(process.env.PLAYWRIGHT_WORKERS ?? '1', 10) || 1),
+  workers: resolveWorkerCount(),
   retries: process.env.CI ? 1 : 0,
   projects: [
     {

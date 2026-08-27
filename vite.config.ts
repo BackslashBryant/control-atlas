@@ -189,7 +189,7 @@ export default defineConfig({
   ],
   build: {
     outDir: resolve(rootDir, 'dist/site'),
-    emptyOutDir: true,
+    emptyOutDir: globalThis.process.env.CONTROL_ATLAS_REUSE_STAGED_DATA !== '1',
     sourcemap: false,
     assetsDir: 'assets',
   },

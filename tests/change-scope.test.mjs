@@ -38,13 +38,37 @@ test('data and dependency changes select the conservative build and relevant gat
   assert.equal(classifyChangedPaths(['package-lock.json']).securityRequired, true);
 });
 
-test('workflow-only changes run fast, security, and actionlint gates without a site build', () => {
+test('workflow-only changes run automation contracts and actionlint without product gates', () => {
   const result = classifyChangedPaths(['.github/workflows/ci.yml']);
   assert.equal(result.workflowsChanged, true);
+  assert.equal(result.automationOnly, true);
   assert.equal(result.workflowLintRequired, true);
-  assert.equal(result.securityRequired, true);
+  assert.equal(result.securityRequired, false);
   assert.equal(result.buildRequired, false);
   assert.equal(result.browserRequired, false);
+});
+
+test('automation-only changes select the sub-second contract path', () => {
+  const result = classifyChangedPaths([
+    'package.json',
+    'tools/wait-for-checks.mjs',
+    'tests/wait-for-checks.test.mjs',
+  ]);
+  assert.equal(result.automationChanged, true);
+  assert.equal(result.automationOnly, true);
+  assert.equal(result.dependenciesChanged, false);
+  assert.equal(result.buildRequired, false);
+  assert.equal(result.unitRequired, false);
+  assert.equal(result.browserRequired, false);
+});
+
+test('automation mixed with runtime changes keeps the affected runtime gates', () => {
+  const result = classifyChangedPaths(['package.json', 'src/ui/App.tsx']);
+  assert.equal(result.automationChanged, true);
+  assert.equal(result.automationOnly, false);
+  assert.equal(result.buildRequired, true);
+  assert.equal(result.unitRequired, true);
+  assert.equal(result.browserRequired, true);
 });
 
 test('browser-test changes build a fixture artifact but do not run unrelated unit tests', () => {

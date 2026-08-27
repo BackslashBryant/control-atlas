@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { fetchStigSourceObservations } from '../scripts/fetch-stig-source-observations.mjs';
+
 import {
   parseCyberMilLanding,
   parseGithubRepoSignals,
@@ -135,5 +137,38 @@ test('GitHub repo parser captures STIG Manager import and revision-management si
       supports_revision_management: true,
       supports_stigs_and_srgs: true,
     },
+  );
+});
+
+test('supplemental source outages are recorded without failing required DISA observations', async () => {
+  let request = 0;
+  const document = await fetchStigSourceObservations({
+    observedAt: '2026-08-27T12:00:00.000Z',
+    fetchImpl: async () => {
+      request += 1;
+      if (request === 4) return { ok: false, status: 403, text: async () => '' };
+      return { ok: true, status: 200, text: async () => cyberMilHtml };
+    },
+  });
+
+  assert.equal(document.observations.length, 7);
+  assert.equal(document.observations.slice(0, 3).every((entry) => entry.available), true);
+  assert.deepEqual(document.observations[3], {
+    source_id: 'stigviewer-catalog',
+    observed_at: '2026-08-27T12:00:00.000Z',
+    required: false,
+    available: false,
+    url: 'https://www.stigviewer.com/stigs',
+    kind: 'supplemental_unavailable',
+    error: 'fetch failed 403 for https://www.stigviewer.com/stigs',
+  });
+});
+
+test('required DISA source outages still fail closed', async () => {
+  await assert.rejects(
+    fetchStigSourceObservations({
+      fetchImpl: async () => ({ ok: false, status: 503, text: async () => '' }),
+    }),
+    /required STIG source cyber-mil-stig-compilations failed: fetch failed 503/,
   );
 });

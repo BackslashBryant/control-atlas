@@ -1,6 +1,15 @@
 #!/usr/bin/env node
 
-import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from "node:fs";
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { execFileSync } from "node:child_process";
 import { dirname, join, extname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -67,6 +76,16 @@ function assertGeneratedDataComplete() {
   }
 }
 
+function stagedGeneratedDataMatches() {
+  const sourceManifest = join(ROOT, "data/generated/build-manifest.json");
+  const stagedManifest = join(DIST, "data/generated/build-manifest.json");
+  if (!existsSync(sourceManifest) || !existsSync(stagedManifest)) return false;
+  if (!readFileSync(sourceManifest).equals(readFileSync(stagedManifest))) return false;
+  return REQUIRED_GENERATED_FILES.every((path) =>
+    existsSync(join(DIST, path.replace(/^data\//, "data/"))),
+  );
+}
+
 if (reuseGenerated) {
   console.log("Reusing the validated generated-data artifact.");
 } else {
@@ -85,6 +104,11 @@ if (reuseGenerated) {
 }
 
 assertGeneratedDataComplete();
+const reuseStagedData = reuseGenerated && stagedGeneratedDataMatches();
+if (reuseStagedData) {
+  rmSync(join(DIST, "assets"), { force: true, recursive: true });
+  console.log("Reusing unchanged staged data and rebuilding application assets only.");
+}
 
 const commitSha =
   process.env.CONTROL_ATLAS_COMMIT_SHA ||
@@ -113,6 +137,7 @@ runNodeSync([join(ROOT, "node_modules/vite/bin/vite.js"), "build"], {
     ...process.env,
     VITE_CONTROL_ATLAS_RELEASE_DATE: releaseDate,
     VITE_CONTROL_ATLAS_SOURCE_DATA_DATE: sourceDataGeneratedAt,
+    CONTROL_ATLAS_REUSE_STAGED_DATA: reuseStagedData ? "1" : "0",
   },
   stdio: "inherit",
 });
@@ -128,16 +153,20 @@ writeFileSync(
   "utf8",
 );
 
-for (const [sourceRelativePath, destRelativePath] of COPY_PATHS) {
-  copyIntoDist(sourceRelativePath, destRelativePath);
+if (reuseStagedData) {
+  console.log("Reusing the staged data, map, Atlas, and compressed JSON artifacts.");
+} else {
+  for (const [sourceRelativePath, destRelativePath] of COPY_PATHS) {
+    copyIntoDist(sourceRelativePath, destRelativePath);
+  }
+
+  runNodeSync(
+    ["--import", "tsx", join(ROOT, "scripts/build-atlas-network-artifact.ts"), "--output", "dist/site/data/generated/atlas-network.json"],
+    { cwd: ROOT, stdio: "inherit" },
+  );
 }
 
-runNodeSync(
-  ["--import", "tsx", join(ROOT, "scripts/build-atlas-network-artifact.ts"), "--output", "dist/site/data/generated/atlas-network.json"],
-  { cwd: ROOT, stdio: "inherit" },
-);
-
-console.log("Compressing JSON files with gzip...");
+console.log(reuseStagedData ? "Compressing changed JSON files with gzip..." : "Compressing JSON files with gzip...");
 function getFiles(dir) {
   const result = [];
   const entries = readdirSync(dir, { withFileTypes: true });
@@ -154,9 +183,17 @@ function getFiles(dir) {
 
 for (const file of getFiles(DIST)) {
   if (file.endsWith(".json")) {
+    const compressedPath = `${file}.gz`;
+    if (
+      reuseStagedData &&
+      existsSync(compressedPath) &&
+      statSync(compressedPath).mtimeMs >= statSync(file).mtimeMs
+    ) {
+      continue;
+    }
     const content = readFileSync(file);
     const compressed = gzipSync(content, { level: 9 });
-    writeFileSync(`${file}.gz`, compressed);
+    writeFileSync(compressedPath, compressed);
   }
 }
 
