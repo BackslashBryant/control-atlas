@@ -3,11 +3,11 @@
 /**
  * Direct ship to main without PRs.
  *
- * Branch protection requires the "checks" job (Public Repo Checks) to pass on
+ * Branch protection requires the "checks" job from Control Atlas CI to pass on
  * the commit before origin/main accepts a push. This script:
  * 1. Runs local precommit (optional)
  * 2. Requires and pushes the task branch so GitHub Actions runs checks on HEAD
- * 3. Waits for Public Repo Checks to succeed on that commit SHA
+ * 3. Waits for Control Atlas CI to succeed on that commit SHA
  * 4. Fast-forwards local main and pushes origin main
  *
  * Usage:
@@ -104,7 +104,7 @@ async function main() {
   run('node', ['tools/git-push-with-retry.mjs', taskBranch]);
 
   if (!noWait) {
-    console.log(`[ship] Waiting for Public Repo Checks on ${commitSha.slice(0, 7)}...`);
+    console.log(`[ship] Waiting for Control Atlas CI on ${commitSha.slice(0, 7)}...`);
     const checksRun = await waitForChecks(commitSha);
     console.log(`[ok] Remote checks passed: ${checksRun.url}`);
   } else {
