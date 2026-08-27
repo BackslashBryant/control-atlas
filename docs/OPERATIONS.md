@@ -2,7 +2,7 @@
 
 - **Owner:** Nexus and Pixel
 - **Status:** Canonical
-- **Last reviewed:** 2026-08-12
+- **Last reviewed:** 2026-08-27
 - **Supersession:** Update this contract and the corresponding package scripts or workflows in the same approved change.
 
 ## Local gates
@@ -15,13 +15,21 @@
 - `npm run test:a11y:smoke` checks representative accessibility paths.
 - `npm run test:e2e:smoke` checks representative product workflows.
 - `npm run precommit` is the complete local ship gate.
+- `npm run verify:affected` prints changed paths, selected checks, approximate
+  test count, workers, and runtime budget without executing them.
+- `npm run verify:affected -- --run` executes that bounded plan. Unknown data or
+  UI paths fail closed until a source-specific or route-family mapping exists.
 
-Use the cheapest faithful contract test during development. Run corpus rebuilds and browser suites at integration checkpoints and once at final verification.
+Use the cheapest faithful contract test during development. No routine
+iteration step may exceed 50 tests or two minutes; the affected runner enforces
+those per-step limits. Run corpus rebuilds and browser matrices only at final
+integration unless a changed input explicitly invalidates their evidence.
 
 ## Shipping contract
 
 1. Work on a feature branch and keep commits narrow.
-2. Pass the complete local ship gate.
+2. Pass the printed affected local gate for each phase. Run the complete local
+   ship gate once after final Epic inputs freeze.
 3. Push with `npm run git:push` and open a pull request to `main`.
 4. Require exact-head CI and security checks to pass.
 5. Verify a fresh checkout of the remote branch.

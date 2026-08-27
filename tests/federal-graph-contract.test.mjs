@@ -11,7 +11,7 @@ import {
   CATALOG_STRUCTURE_IDS,
   catalogStructureProfile,
 } from '../src/shared/catalog-structure.mjs';
-import { readGeneratedCollection } from '../scripts/lib/generated-graph-artifacts.mjs';
+import { createGeneratedFixtureReader } from './helpers/generated-fixture-cache.mjs';
 import {
   RELATIONSHIP_CLASSES,
   isValidatedStructuralEdge,
@@ -26,7 +26,7 @@ import {
 import { recordPresentationContract } from '../src/shared/record-presentation.mjs';
 import { repairKnownSourceEncoding } from '../src/shared/text-fidelity.mjs';
 
-const generated = (name) => readGeneratedCollection('.', name);
+const generated = createGeneratedFixtureReader();
 // build-framework-data.mjs omits evidence_ids from an edge when it is
 // exactly the mechanical `evidence:<edge-id-suffix>` pattern (a real ~2 MiB
 // budget win — see scripts/build-framework-data.mjs); derive it back here,

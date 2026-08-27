@@ -609,7 +609,25 @@ export function SourcesPage(props: {
         ? rememberedTrigger
         : document.getElementById(`source-trigger-${triggerId}`);
       if (trigger instanceof HTMLElement && !app?.hasAttribute("inert")) {
-        trigger.focus({ preventScroll: true });
+        // App route orientation also focuses on the next frame. Restore the
+        // originating control after that route-level focus has settled so the
+        // dialog contract remains deterministic under concurrent browser load.
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            const settledTrigger = rememberedTrigger?.isConnected
+              ? rememberedTrigger
+              : document.getElementById(`source-trigger-${triggerId}`);
+            if (
+              settledTrigger instanceof HTMLElement &&
+              !document.getElementById("app")?.hasAttribute("inert")
+            ) {
+              settledTrigger.focus({ preventScroll: true });
+            } else {
+              attempts += 1;
+              if (attempts < 20) window.setTimeout(restoreTriggerFocus, 50);
+            }
+          });
+        });
         return;
       }
       attempts += 1;

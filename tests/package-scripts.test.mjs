@@ -29,6 +29,8 @@ test('PR CI creates one change map from a shallow checkout and targeted base fet
 
 test('PR CI is an independent gate DAG around one immutable artifact', () => {
   for (const job of [
+    'Automation contracts',
+    'Documentation contracts',
     'Lint, types, and contracts',
     'Prepare reproducible generated data',
     'Unit and component tests',
@@ -48,7 +50,7 @@ test('PR CI is an independent gate DAG around one immutable artifact', () => {
   assert.match(ci, /--shard=\$\{\{ matrix\.shard \}\}\/2/);
   assert.match(ci, /npm run test:a11y:smoke/);
   assert.match(ci, /npm run test:performance:ci/);
-  assert.match(ci, /checks:\n\s+name: checks\n\s+if: \$\{\{ always\(\) \}\}\n\s+needs: required/);
+  assert.match(ci, /checks:\n\s+name: checks\n\s+if: \$\{\{ always\(\) && needs\.required\.result != 'skipped' \}\}\n\s+needs: required/);
   assert.doesNotMatch(ci, /npm run audit:deps/);
 });
 
@@ -56,6 +58,9 @@ test('nightly validation retains full cross-browser and data automation', () => 
   assert.match(ci, /browser: \[chromium, firefox, webkit\]/);
   assert.match(ci, /npm run test:e2e:run/);
   assert.match(ci, /npm run test:a11y:run/);
+  assert.match(ci, /PLAYWRIGHT_BLOB_OUTPUT_NAME: report-\$\{\{ matrix\.browser \}\}-\$\{\{ matrix\.shard \}\}\.zip/);
+  assert.match(ci, /PLAYWRIGHT_BLOB_OUTPUT_NAME: report-accessibility\.zip/);
+  assert.equal((ci.match(/--reporter=blob,github/g) ?? []).length, 2);
   assert.match(ci, /npm run resources:health/);
   assert.match(ci, /peter-evans\/create-pull-request@[0-9a-f]{40}/);
   assert.match(ci, /npm run test:oscal:independent/);
@@ -106,9 +111,11 @@ test('package scripts expose deterministic split gates and full local verificati
     'materialize:generated',
     'verify:generated-reproducibility',
     'lint:ci',
+    'lint:automation',
     'typecheck',
     'test',
     'test:ci-contracts',
+    'verify:affected',
     'test:e2e:smoke',
     'test:visual',
     'test:a11y:smoke',

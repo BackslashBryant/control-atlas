@@ -18,7 +18,24 @@ const WORKFLOW_PREFIXES = ['.github/'];
 const DOCUMENTATION_PREFIXES = ['docs/'];
 const RUNTIME_PREFIXES = ['src/', 'public/'];
 
-const DEPENDENCY_FILES = new Set(['package.json', 'package-lock.json']);
+const DEPENDENCY_FILES = new Set(['package-lock.json']);
+const AUTOMATION_FILES = new Set([
+  'package.json',
+  'tools/check-action-pins.mjs',
+  'tools/classify-change-scope.mjs',
+  'tools/git-push-with-retry.mjs',
+  'tools/ship-to-main.mjs',
+  'tools/verify-affected.mjs',
+  'tools/wait-for-checks.mjs',
+  'tests/build-layout-contract.test.mjs',
+  'tests/change-scope.test.mjs',
+  'tests/package-scripts.test.mjs',
+  'tests/process-runner.test.mjs',
+  'tests/release-evidence.test.mjs',
+  'tests/verification-topology.test.mjs',
+  'tests/verify-affected.test.mjs',
+  'tests/wait-for-checks.test.mjs',
+]);
 const BUILD_FILES = new Set([
   'index.html',
   'vite.config.ts',
@@ -80,6 +97,8 @@ export function fullChangeMap(reason = 'manual-or-base-unavailable') {
     dataChanged: true,
     testsChanged: true,
     workflowsChanged: true,
+    automationChanged: true,
+    automationOnly: false,
     dependenciesChanged: true,
     buildRequired: true,
     unitRequired: true,
@@ -110,6 +129,8 @@ export function classifyChangedPaths(rawPaths) {
       dataChanged: false,
       testsChanged: false,
       workflowsChanged: false,
+      automationChanged: false,
+      automationOnly: false,
       dependenciesChanged: false,
       buildRequired: false,
       unitRequired: false,
@@ -129,6 +150,7 @@ export function classifyChangedPaths(rawPaths) {
   let dataChanged = false;
   let testsChanged = false;
   let workflowsChanged = false;
+  let automationChanged = false;
   let dependenciesChanged = false;
   let buildConfigurationChanged = false;
   let browserTestsChanged = false;
@@ -137,11 +159,15 @@ export function classifyChangedPaths(rawPaths) {
   for (const path of paths) {
     if (hasPrefix(path, EVIDENCE_PREFIXES)) continue;
     if (DEPENDENCY_FILES.has(path)) dependenciesChanged = true;
+    else if (AUTOMATION_FILES.has(path)) automationChanged = true;
     else if (BUILD_FILES.has(path)) buildConfigurationChanged = true;
     else if (PLAYWRIGHT_FILES.has(path)) {
       testsChanged = true;
       browserTestsChanged = true;
-    } else if (hasPrefix(path, WORKFLOW_PREFIXES)) workflowsChanged = true;
+    } else if (hasPrefix(path, WORKFLOW_PREFIXES)) {
+      workflowsChanged = true;
+      automationChanged = true;
+    }
     else if (hasPrefix(path, TEST_PREFIXES)) {
       testsChanged = true;
       browserTestsChanged ||= path.startsWith('tests/e2e/');
@@ -159,6 +185,8 @@ export function classifyChangedPaths(rawPaths) {
   codeChanged ||= unknownChanged;
   const runtimeChanged = codeChanged || stylesChanged || dataChanged ||
     dependenciesChanged || buildConfigurationChanged;
+  const automationOnly = automationChanged && !runtimeChanged && !contentChanged &&
+    !testsChanged;
   const browserRequired = runtimeChanged || browserTestsChanged;
   const buildRequired = runtimeChanged || browserRequired;
   const unitRequired = codeChanged || dataChanged || dependenciesChanged ||
@@ -170,6 +198,7 @@ export function classifyChangedPaths(rawPaths) {
     dataChanged && 'data',
     testsChanged && 'tests',
     workflowsChanged && 'workflows',
+    automationChanged && 'automation',
     dependenciesChanged && 'dependencies',
     buildConfigurationChanged && 'build-config',
   ].filter(Boolean);
@@ -186,6 +215,8 @@ export function classifyChangedPaths(rawPaths) {
     dataChanged,
     testsChanged,
     workflowsChanged,
+    automationChanged,
+    automationOnly,
     dependenciesChanged,
     buildRequired,
     unitRequired,
@@ -193,7 +224,7 @@ export function classifyChangedPaths(rawPaths) {
     accessibilityRequired: runtimeChanged,
     lighthouseRequired: runtimeChanged,
     dataRequired: dataChanged,
-    securityRequired: codeChanged || dependenciesChanged || workflowsChanged,
+    securityRequired: codeChanged || dependenciesChanged,
     workflowLintRequired: workflowsChanged,
     changedPaths: paths,
   };
@@ -230,6 +261,8 @@ function writeOutputs(result) {
     data_changed: result.dataChanged,
     tests_changed: result.testsChanged,
     workflows_changed: result.workflowsChanged,
+    automation_changed: result.automationChanged,
+    automation_only: result.automationOnly,
     dependencies_changed: result.dependenciesChanged,
     build_required: result.buildRequired,
     unit_required: result.unitRequired,
