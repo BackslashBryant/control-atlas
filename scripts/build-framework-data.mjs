@@ -51,8 +51,9 @@ import { sourceNativeIdentityCategory } from "../src/shared/record-identity.mjs"
 import { isComparisonCapableEdge } from "../src/shared/compare-capability.mjs";
 import {
   missingRequiredRecordFields,
-  recordPresentationProfile,
+  recordPresentationContract,
   SUPPORTED_RECORD_TYPES,
+  undeclaredCapturedRecordFields,
 } from "../src/shared/record-presentation.mjs";
 import {
   assertionClassForEdge,
@@ -177,18 +178,27 @@ export function validateRecordPresentation(nodes) {
   const supported = new Set(SUPPORTED_RECORD_TYPES);
   const failures = [];
   for (const node of nodes) {
-    if (NON_RECORD_NODE_TYPES.has(node.node_type) || node.metadata?.structural_group === true) continue;
+    if (!supported.has(node.node_type) && (NON_RECORD_NODE_TYPES.has(node.node_type) || node.metadata?.structural_group === true)) continue;
     if (!supported.has(node.node_type)) {
-      failures.push(`${node.id}: missing presentation profile for ${node.node_type}`);
+      failures.push(`${node.id}: missing presentation contract for ${node.node_type}`);
       continue;
     }
-    const profile = recordPresentationProfile(node.metadata?.catalog_id || "", node.node_type);
+    const profile = recordPresentationContract(node.metadata?.catalog_id || "", node.node_type);
     const missing = missingRequiredRecordFields(profile, node.metadata || {});
-    if (!String(node.metadata?.family || "").trim()) missing.push("family");
+    const undeclared = undeclaredCapturedRecordFields(profile, node.metadata || {});
+    if (undeclared.length) missing.push(`field dispositions for ${undeclared.join(", ")}`);
+    if (
+      profile.hierarchy_fields.includes("family") &&
+      !String(node.metadata?.family || "").trim()
+    ) {
+      missing.push("family");
+    }
     for (const section of profile.sections.filter((entry) => entry.kind === "text")) {
+      if (!profile.field_dispositions[section.field]) missing.push(`${section.field} disposition`);
       const value = node.metadata?.[section.field];
       if (!String(value || "").trim()) continue;
       const fieldPresentation = node.metadata?.source_text_presentation?.[section.field];
+      if (!fieldPresentation && (node.metadata?.structural_group === true || node.node_type === "catalog" || node.node_type === "benchmark")) continue;
       if (!isValidSourceTextPresentation(value, fieldPresentation)) {
         missing.push(`${section.field} presentation`);
       }
@@ -849,10 +859,20 @@ function attachNodeProvenance(node, sourceId, registry) {
   const sourceLocator = node.metadata?.source_locator || `${sourceId}#${node.id}`;
   const sourceReference = `${primaryArtifactId}#${sourceLocator}`;
   node.source_refs = [sourceReference];
-  const presentationFields = recordPresentationProfile(
+  const presentationFields = recordPresentationContract(
     node.metadata?.catalog_id || "",
     node.node_type,
   ).sections.map((section) => section.field);
+  node.metadata.source_text_presentation ||= {};
+  for (const field of presentationFields) {
+    const value = node.metadata?.[field];
+    if (
+      String(value || "").trim() &&
+      !node.metadata.source_text_presentation[field]
+    ) {
+      node.metadata.source_text_presentation[field] = buildSourceTextPresentation(value);
+    }
+  }
   const materialFields = [...new Set(["title", ...presentationFields])];
   node.claim_evidence = materialFields
     .filter((field) => {
@@ -918,7 +938,7 @@ function pushEligibleNode(state, registry, node, sourceId) {
   if (node.metadata) {
     const presentation = {};
     if (SUPPORTED_RECORD_TYPE_SET.has(node.node_type)) {
-      const profile = recordPresentationProfile(node.metadata.catalog_id || "", node.node_type);
+      const profile = recordPresentationContract(node.metadata.catalog_id || "", node.node_type);
       for (const section of profile.sections.filter((entry) => entry.kind === "text")) {
         if (String(node.metadata[section.field] || "").trim()) {
           presentation[section.field] = buildSourceTextPresentation(node.metadata[section.field]);
@@ -1014,8 +1034,22 @@ function registerTierNode(
   ingestionSourceId,
   record,
 ) {
-  if (!resolved || tierNodes.has(resolved.nodeId)) return;
+  if (!resolved) return;
   const { tier, key, title, nodeId: tierNodeId, itemId } = resolved;
+  const existing = tierNodes.get(tierNodeId);
+  if (existing) {
+    existing.metadata.child_count = (existing.metadata.child_count || 0) + 1;
+    const severity = nodeSeverity(record);
+    if (severity) {
+      existing.metadata.severity_distribution ||= {};
+      existing.metadata.severity_distribution[severity] =
+        (existing.metadata.severity_distribution[severity] || 0) + 1;
+    }
+    return;
+  }
+  const initialSeverity = nodeSeverity(record);
+  const benchmarkVersion = record.source?.version || null;
+  const benchmarkStatusDate = record.source?.snapshot_date || null;
   tierNodes.set(tierNodeId, {
     id: tierNodeId,
     node_type: tier.nodeType,
@@ -1029,6 +1063,18 @@ function registerTierNode(
       title,
       ...(tier.description ? { description: tier.description(record, title) } : {}),
       ...(tier.descriptionProvenance ? { description_provenance: tier.descriptionProvenance } : {}),
+      ...(tier.nodeType === "benchmark"
+        ? {
+            benchmark_version: benchmarkVersion,
+            benchmark_status_date: benchmarkStatusDate,
+            field_absence_reasons: {
+              ...(benchmarkVersion ? {} : { benchmark_version: "The publisher source did not provide a benchmark version or release." }),
+              ...(benchmarkStatusDate ? {} : { benchmark_status_date: "The publisher source did not provide a benchmark status date." }),
+            },
+            child_count: 1,
+            severity_distribution: initialSeverity ? { [initialSeverity]: 1 } : {},
+          }
+        : {}),
       family: title,
       structural_group: true,
       baselines: null,
@@ -1170,6 +1216,24 @@ function buildNodes(registry) {
             references: record.references || null,
             check_text: record.check_text ? repairKnownSourceEncoding(record.check_text) : null,
             fix_text: record.fix_text ? repairKnownSourceEncoding(record.fix_text) : null,
+            vuln_id: record.vuln_id || null,
+            rule_id: record.rule_id || null,
+            stig_id: record.stig_id || null,
+            benchmark_id: record.metadata?.benchmark_id || null,
+            benchmark_title: record.metadata?.benchmark_title || null,
+            benchmark_version: record.source?.version || null,
+            benchmark_status_date: record.source?.snapshot_date || null,
+            published_cci_references: (record.metadata?.relationships || [])
+              .filter((relationship) => relationship.target_catalog === "disa-cci")
+              .map((relationship) => relationship.target_id),
+            field_absence_reasons: Object.fromEntries([
+              ["vuln_id", record.vuln_id, "The publisher source did not provide a Vuln ID."],
+              ["rule_id", record.rule_id, "The publisher source did not provide a Rule ID."],
+              ["stig_id", record.stig_id, "The publisher source did not provide a STIG ID."],
+              ["benchmark_title", record.metadata?.benchmark_title, "The publisher source did not provide a benchmark title."],
+              ["benchmark_version", record.source?.version, "The publisher source did not provide a benchmark version or release."],
+              ["benchmark_status_date", record.source?.snapshot_date, "The publisher source did not provide a benchmark status date."],
+            ].filter(([, value]) => !value).map(([field, , reason]) => [field, reason])),
             superseded_by: record.metadata?.superseded_by || null,
             discussion: record.metadata?.discussion || null,
             related_controls: record.metadata?.related_controls || null,

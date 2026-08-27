@@ -186,7 +186,6 @@ const DISPLAY_NAMES = {
     zt_activity: 'Zero Trust activity',
     zt_capability: 'Zero Trust capability',
     zt_document: 'Zero Trust document',
-    zt_overlay_section: 'Zero Trust overlay section',
     zt_overlay_catalog: 'Zero Trust overlay reference',
     zt_pillar: 'Zero Trust pillar',
     zt_tenet: 'Zero Trust tenet',

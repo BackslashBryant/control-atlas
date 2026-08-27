@@ -9,7 +9,6 @@ const SECTION_TYPES = new Set([
   "group",
   "section",
   "tactic",
-  "zt_overlay_section",
   "zt_pillar",
 ]);
 

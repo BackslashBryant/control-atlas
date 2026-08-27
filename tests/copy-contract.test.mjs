@@ -92,9 +92,9 @@ test("product-authored Resource collection summaries stay short and task-focused
   }
 });
 
-test("record page is profile-driven and contains no generic source or advice fallback", () => {
+test("record page is contract-driven and contains no generic source or advice fallback", () => {
   const recordPage = read("src/ui/pages/ObjectDetailPage.tsx");
-  assert.match(recordPage, /recordPresentationProfile/);
+  assert.match(recordPage, /recordPresentationContract/);
   assert.match(recordPage, /View official source/);
   assert.match(recordPage, /See connections/);
   assert.match(recordPage, /About This Record/);

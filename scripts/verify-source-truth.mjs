@@ -10,7 +10,11 @@ import {
   effectiveProfile,
   recordProfileId,
 } from "../src/shared/entity-profiles.mjs";
-import { missingRequiredRecordFields, recordPresentationProfile } from "../src/shared/record-presentation.mjs";
+import {
+  missingRequiredRecordFields,
+  recordPresentationContract,
+  undeclaredCapturedRecordFields,
+} from "../src/shared/record-presentation.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (relativePath) => JSON.parse(readFileSync(join(ROOT, relativePath), "utf8"));
@@ -245,9 +249,11 @@ for (const node of nodes) {
   if (!effectiveProfile(expectedProfile)) fail(`${node.id} resolves unknown profile ${expectedProfile}`);
   if (!manifestProfiles.has(expectedProfile)) fail(`${node.id} profile ${expectedProfile} is absent from the migration manifest`);
   if (!node.metadata?.origin) fail(`${node.id} lacks origin classification`);
-  const presentation = recordPresentationProfile(node.metadata?.catalog_id, node.node_type);
+  const presentation = recordPresentationContract(node.metadata?.catalog_id, node.node_type);
   const missingPresentationFields = missingRequiredRecordFields(presentation, node.metadata || {});
   if (missingPresentationFields.length) fail(`${node.id} lacks required presentation fields: ${missingPresentationFields.join(", ")}`);
+  const undeclaredPresentationFields = undeclaredCapturedRecordFields(presentation, node.metadata || {});
+  if (undeclaredPresentationFields.length) fail(`${node.id} lacks presentation dispositions for: ${undeclaredPresentationFields.join(", ")}`);
   const claimPaths = new Set();
   for (const claim of node.claim_evidence || []) {
     claimPaths.add(claim.field_path);

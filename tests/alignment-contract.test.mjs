@@ -11,6 +11,7 @@ const canonicalDocs = [
   "docs/PAGE_CONTRACTS.md",
   "docs/architecture/ARCHITECTURE.md",
   "docs/DATA_POLICY.md",
+  "docs/RECORD_TYPE_FIDELITY_AUDIT.md",
   "docs/TAXONOMY.md",
   "docs/OPERATIONS.md",
   "docs/CI_CD.md",

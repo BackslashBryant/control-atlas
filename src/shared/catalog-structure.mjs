@@ -25,7 +25,6 @@ export const CATALOG_STRUCTURE_PROFILES = Object.freeze({
     ["catalog", "zt_pillar", "zt_capability", "zt_activity"],
     ["catalog", "zt_tenet"],
     ["catalog", "zt_document"],
-    ["catalog", "zt_overlay_section"],
     ["catalog", "requirement"],
   ]),
   "nist-zt": profile("nist-zt", "NIST Zero Trust", [

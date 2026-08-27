@@ -30,17 +30,16 @@ The structural sidebar contains the current path, immediate parent, immediate ch
 
 ## D. Record detail
 
-Order is fixed:
+Every supported catalog/type resolves to one of six roles: atomic record, container, publication/document, entity/contributor, assessment/question, or implementation artifact. All roles share identity, official source action, source facts, publisher hierarchy, and a bounded relationship handoff; role composers control only the source-native middle of the page.
 
-1. Identity and primary source action.
-2. Complete official text in publisher order.
-3. Source and freshness facts.
-4. Publisher hierarchy.
-5. Supporting material.
-6. Related records.
-7. Advanced metadata only when genuinely useful.
+- Atomic records lead with official content, then implementation or assessment material and important governed relationships.
+- Containers lead with publisher description when one exists, hierarchy, child inventory, counts/facets, and an external relationship summary. Missing optional publisher prose is an honest absence, not a record error.
+- Publications/documents lead with publisher/version/status, summary, structure/content, contained objects, and related publications.
+- Entities/contributors lead with publisher context and participation.
+- Assessments/questions lead with subject, procedure/question, objectives/options, methods, and related requirement.
+- Implementation artifacts lead with what they implement, architecture/function, guidance, mappings, and source.
 
-Commands and exact configuration render as copyable snippets. Explicit sequences render as ordered lists; independent actions render as bullets; ambiguous source text remains prose. `Related records` is a full-width final section grouped by publication and relationship type. Its description is “Formal published links to other publications.” Structural parents never appear in it.
+Commands and exact configuration render as copyable snippets. Explicit sequences render as ordered lists; independent actions render as bullets; ambiguous source text remains prose. `Related records` is grouped by publication and relationship type. Structural parents and children never appear in it. Presentation policy may promote, summarize, collapse, or route valid relationships to Atlas only; the underlying graph remains exhaustive.
 
 Publisher-native identifiers remain identity-led in record headings and browse results. When Control Atlas generates a stable record key, the publisher-authored title becomes the primary identity and the human record type plus governed publication name supplies nearby context. The generated key remains unchanged in routes and data, and appears only as a labeled, copyable `Control Atlas stable ID` detail rather than primary or accessible copy.
 

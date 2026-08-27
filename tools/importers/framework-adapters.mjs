@@ -458,24 +458,6 @@ export function buildDodZeroTrustCatalog(snapshotDate, curatedRoot) {
     });
   }
 
-  for (const section of taxonomy.overlay_sections) {
-    records.push({
-      id: section.id,
-      type: 'zt_overlay_section',
-      framework: 'dod-zt',
-      title: section.title,
-      family: 'Zero Trust Overlays',
-      description: `Overlay section for ${section.title}.`,
-      locator: section.locator,
-      source: source(section.source_key || DOD_ZT_OVERLAYS_SOURCE, snapshotDate, section.locator),
-      metadata: {
-        pillar_id: section.pillar_id,
-        appendix: section.appendix,
-        relationships: [{ target_catalog: 'dod-zt', target_id: section.pillar_id, relationship_type: 'references' }],
-      },
-    });
-  }
-
   for (const doc of taxonomy.documents.filter((entry) => entry.atlas_role === 'primary_publication')) {
     records.push({
       id: doc.id,

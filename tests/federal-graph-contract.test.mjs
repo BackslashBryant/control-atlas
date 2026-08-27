@@ -23,7 +23,7 @@ import {
   OBJECT_LAYERS,
   resolveNativeType,
 } from '../src/shared/data-trust-contracts.mjs';
-import { recordPresentationProfile } from '../src/shared/record-presentation.mjs';
+import { recordPresentationContract } from '../src/shared/record-presentation.mjs';
 import { repairKnownSourceEncoding } from '../src/shared/text-fidelity.mjs';
 
 const generated = (name) => readGeneratedCollection('.', name);
@@ -830,9 +830,9 @@ test('publisher prose is complete when required and omitted rather than fabricat
     });
     assert.equal(truncated.length, 0, `${catalogId} contains artificially truncated publisher prose`);
     for (const node of records.filter((entry) => !(entry.metadata?.description || '').trim())) {
-      const profile = recordPresentationProfile(catalogId, node.node_type);
+      const profile = recordPresentationContract(catalogId, node.node_type);
       assert.equal(
-        profile.required.includes('description'),
+        profile.required_fields.includes('description'),
         false,
         `${node.id} omits a profile-required publisher description`,
       );

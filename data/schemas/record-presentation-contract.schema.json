@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:control-atlas:schema:record-presentation-contract",
+  "title": "Control Atlas Record Presentation Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "catalog_id",
+    "record_type",
+    "page_role",
+    "identity_fields",
+    "hierarchy_fields",
+    "sections",
+    "metadata_facts",
+    "required_fields",
+    "optional_fields",
+    "field_dispositions",
+    "relationship_policy",
+    "prohibited_synthetic_presentation"
+  ],
+  "properties": {
+    "catalog_id": { "type": "string", "minLength": 1 },
+    "record_type": { "type": "string", "minLength": 1 },
+    "page_role": {
+      "enum": [
+        "atomic_record",
+        "container",
+        "publication_document",
+        "entity_contributor",
+        "assessment_question",
+        "implementation_artifact"
+      ]
+    },
+    "identity_fields": { "$ref": "#/$defs/stringArray" },
+    "hierarchy_fields": { "$ref": "#/$defs/stringArray" },
+    "metadata_facts": { "$ref": "#/$defs/stringArray" },
+    "required_fields": { "$ref": "#/$defs/stringArray" },
+    "optional_fields": { "$ref": "#/$defs/stringArray" },
+    "prohibited_synthetic_presentation": { "$ref": "#/$defs/stringArray" },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field", "heading", "kind", "disposition"],
+        "properties": {
+          "field": { "type": "string", "minLength": 1 },
+          "heading": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["text", "list", "references", "structured", "publisher_mappings", "mapping_targets", "objectives", "methods", "countermeasures"] },
+          "disposition": { "$ref": "#/$defs/disposition" }
+        }
+      }
+    },
+    "field_dispositions": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["disposition", "origin"],
+        "properties": {
+          "disposition": { "$ref": "#/$defs/disposition" },
+          "origin": { "enum": ["publisher", "derived", "navigation", "relationship", "source_metadata"] },
+          "reason": { "type": "string", "minLength": 1 }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "disposition": { "const": "intentionally_hidden" } },
+              "required": ["disposition"]
+            },
+            "then": {
+              "properties": { "reason": { "type": "string", "minLength": 1 } },
+              "required": ["reason"]
+            }
+          }
+        ]
+      }
+    },
+    "relationship_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["structural_treatment", "same_catalog_treatment", "default_treatment"],
+      "properties": {
+        "structural_treatment": { "const": "ATLAS_ONLY" },
+        "same_catalog_treatment": { "const": "ATLAS_ONLY" },
+        "default_treatment": { "$ref": "#/$defs/relationshipTreatment" }
+      }
+    }
+  },
+  "$defs": {
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "disposition": {
+      "enum": ["rendered_primary", "rendered_secondary", "source_metadata", "relationship_evidence", "intentionally_hidden"]
+    },
+    "relationshipTreatment": {
+      "enum": ["PROMOTE", "SUMMARIZE", "COLLAPSE", "ATLAS_ONLY"]
+    }
+  }
+}
