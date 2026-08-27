@@ -9,8 +9,14 @@ const configDir = join(root, "config", "experience-guardian");
 const reportDir = join(root, "artifacts", "experience-guardian");
 const ownershipPath = join(configDir, "copy-ownership.json");
 const matrixPath = join(configDir, "route-matrix.json");
-const guardianPath = join(root, ".ai", "shared", "control-atlas-experience-guardian.md");
 const routeIdentityPath = join(root, "src", "ui", "lib", "routeIdentity.ts");
+const authorityPaths = [
+  "docs/PRD.md",
+  "docs/vision.md",
+  "docs/DESIGN_PRINCIPLES.md",
+  "docs/PAGE_CONTRACTS.md",
+  "docs/design/design-system.md",
+];
 
 async function filesUnder(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -26,7 +32,7 @@ async function filesUnder(directory) {
 
 const ownership = JSON.parse(await readFile(ownershipPath, "utf8"));
 const matrix = JSON.parse(await readFile(matrixPath, "utf8"));
-await readFile(guardianPath, "utf8");
+await Promise.all(authorityPaths.map((path) => readFile(join(root, path), "utf8")));
 
 const findings = [];
 function add(severity, rule, file, line, target, message) {
@@ -35,6 +41,39 @@ function add(severity, rule, file, line, target, message) {
 
 function clean(value) {
   return value.replace(/\s+/g, " ").trim();
+}
+
+const canonicalBreakpoints = [320, 375, 390, 768, 1024, 1440];
+if (JSON.stringify(matrix.canonicalBreakpoints) !== JSON.stringify(canonicalBreakpoints)) {
+  add("error", "responsive-breakpoints", "config/experience-guardian/route-matrix.json", 1, "canonicalBreakpoints", "Keep the canonical 320, 375, 390, 768, 1024, and 1440 pixel acceptance widths.");
+}
+const layoutFamilies = new Set(matrix.layoutFamilies || []);
+const stateIds = new Set();
+for (const state of matrix.states || []) {
+  if (stateIds.has(state.id)) {
+    add("error", "duplicate-state", "config/experience-guardian/route-matrix.json", 1, state.id, "Every rendered acceptance state needs a unique ID.");
+  }
+  stateIds.add(state.id);
+  if (!layoutFamilies.has(state.layoutFamily)) {
+    add("error", "layout-family", "config/experience-guardian/route-matrix.json", 1, state.id, "Rendered state must name a governed layout family.");
+  }
+  if (!matrix.keyboardContracts?.[state.keyboardContract]) {
+    add("error", "keyboard-contract", "config/experience-guardian/route-matrix.json", 1, state.id, "Rendered state must reference a defined keyboard contract.");
+  }
+  if (!matrix.recoveryContracts?.[state.recoveryContract]) {
+    add("error", "recovery-contract", "config/experience-guardian/route-matrix.json", 1, state.id, "Rendered state must reference a defined recovery contract.");
+  }
+  if (!state.primaryJourney?.trim()) {
+    add("error", "primary-journey", "config/experience-guardian/route-matrix.json", 1, state.id, "Rendered state must name the user journey being protected.");
+  }
+}
+for (const family of layoutFamilies) {
+  const representative = matrix.states.find((state) =>
+    state.layoutFamily === family &&
+    JSON.stringify(state.breakpointSample) === JSON.stringify(canonicalBreakpoints));
+  if (!representative) {
+    add("error", "family-breakpoint-sample", "config/experience-guardian/route-matrix.json", 1, family, "Every layout family needs one representative state sampled at all canonical widths.");
+  }
 }
 
 const copyPropertyNames = new Set([
@@ -199,19 +238,25 @@ const correctionContracts = [
   {
     file: "src/ui/pages/StartHerePage.tsx",
     rule: "wizard-route-integrity",
-    pattern: /start-here-progress(?=[\s\S]*Back to context)(?=[\s\S]*Next destination)/,
+    pattern: /StepIndicator(?=[\s\S]*Back to context)(?=[\s\S]*Then act)(?=[\s\S]*<strong>Next:)/,
     message: "Start Here must retain progressive steps, explicit back behavior, and a named final destination.",
   },
   {
     file: "src/ui/pages/ExplorePage.tsx",
     rule: "ranked-search-contract",
-    pattern: /search-filter-rail[\s\S]*search-result-list[\s\S]*unifiedResults\.slice\(0, visibleCount\)[\s\S]*setVisibleCount/,
+    pattern: /WorkspaceTemplate(?=[\s\S]*workspace-result-list)(?=[\s\S]*rows\.slice\(0, visibleCount\))(?=[\s\S]*setVisibleCount)/,
     message: "Search must expose visible filters, one ranked list, and bounded incremental rendering.",
   },
   {
-    file: "src/ui/components/AtlasUniverse.tsx",
+    file: "src/ui/components/WorkspaceTemplate.tsx",
+    rule: "responsive-filter-contract",
+    pattern: /workspace-mobile-filter-button[\s\S]*workspace-filter-sheet[\s\S]*workspace-facet-rail/,
+    message: "Browse workspaces must expose a compact filter sheet and a visible desktop filter rail.",
+  },
+  {
+    file: "src/ui/components/AtlasTree.tsx",
     rule: "atlas-promised-feature",
-    pattern: /atlasUniverseCollisions(?=[\s\S]*Authority roots)(?=[\s\S]*Cybersecurity)(?=[\s\S]*data-semantic-level)/,
+    pattern: /data-semantic-level[\s\S]*atlasTreeCollisions[\s\S]*data-layout-status[\s\S]*Cybersecurity areas/,
     message: "The Atlas route must deliver an authority-rooted, semantic-zoom, collision-checked tree immediately.",
   },
   {

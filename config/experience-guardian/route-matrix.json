@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "2.0",
+  "canonicalBreakpoints": [320, 375, 390, 768, 1024, 1440],
+  "viewports": {
+    "desktop": { "width": 1440, "height": 1000 },
+    "mobile": { "width": 390, "height": 844 }
+  },
+  "layoutFamilies": [
+    "shell-landing",
+    "browse-list",
+    "detail-inspector",
+    "staged-workflow",
+    "editorial",
+    "graph-canvas"
+  ],
+  "keyboardContracts": {
+    "route-standard": ["skip-to-main", "visible-focus", "heading-focus-after-push", "back-forward-context", "44px-targets"],
+    "browse-register": ["route-standard", "labeled-filters", "logical-tab-order", "filter-drawer-return", "result-action-name"],
+    "detail-source": ["route-standard", "official-source-action", "copy-control-name", "bounded-relationship-handoff"],
+    "staged-task": ["route-standard", "step-order", "back-without-loss", "result-focus", "download-action-name"],
+    "graph-with-list": ["route-standard", "list-first-mobile", "canvas-controls-named", "selection-focus", "list-fallback"],
+    "editorial-standard": ["route-standard", "landmark-order", "meaningful-link-names"]
+  },
+  "recoveryContracts": {
+    "route-reload-equivalent": ["loading", "slow", "error", "retry", "reload-equivalent"],
+    "browse-recovery": ["loading", "zero-results", "clear-filters", "invalid-query", "reload-equivalent"],
+    "detail-recovery": ["loading", "unknown-record", "official-source-fallback", "back-to-publication"],
+    "workflow-recovery": ["incomplete", "invalid-url", "generation-error", "retry-without-loss", "success"],
+    "graph-recovery": ["loading", "zero-connections", "invalid-focus", "list-fallback", "return-to-overview"],
+    "editorial-recovery": ["not-found", "retired-route", "named-next-destination"]
+  },
+  "activeRoutes": [
+    "home",
+    "start-here",
+    "atlas-map",
+    "search",
+    "catalog-detail",
+    "library-detail",
+    "matrix",
+    "patterns",
+    "templates",
+    "sources",
+    "commons",
+    "commons-detail",
+    "about",
+    "retired",
+    "not-found"
+  ],
+  "states": [
+    { "id": "home", "route": "home", "path": "/#/", "layoutFamily": "shell-landing", "viewports": ["desktop", "mobile"], "breakpointSample": [320, 375, 390, 768, 1024, 1440], "keyboardContract": "route-standard", "recoveryContract": "route-reload-equivalent", "expectedIdentity": "universal-front-door", "primaryJourney": "Understand the product and begin one search." },
+    { "id": "start-here", "route": "start-here", "path": "/#/start?goal=implement", "layoutFamily": "staged-workflow", "viewports": ["desktop", "mobile"], "breakpointSample": [320, 375, 390, 768, 1024, 1440], "keyboardContract": "staged-task", "recoveryContract": "workflow-recovery", "expectedIdentity": "task-intake-compass", "primaryJourney": "Choose context and receive a named next destination." },
+    { "id": "start-here-complete", "route": "start-here", "path": "/#/start?goal=implement&context=cui", "layoutFamily": "staged-workflow", "viewports": ["desktop", "mobile"], "keyboardContract": "staged-task", "recoveryContract": "workflow-recovery", "expectedIdentity": "task-intake-compass", "scenario": "success", "primaryJourney": "Review the recommendation and continue without losing context." },
+    { "id": "atlas-overview", "route": "atlas-map", "path": "/#/atlas", "layoutFamily": "graph-canvas", "viewports": ["desktop", "mobile"], "breakpointSample": [320, 375, 390, 768, 1024, 1440], "keyboardContract": "graph-with-list", "recoveryContract": "graph-recovery", "expectedIdentity": "technical-cartography", "primaryJourney": "Understand coverage and choose an authority-rooted area." },
+    { "id": "atlas-focused", "route": "atlas-map", "path": "/#/atlas/nist-800-53:AC-2", "layoutFamily": "graph-canvas", "viewports": ["desktop", "mobile"], "keyboardContract": "graph-with-list", "recoveryContract": "graph-recovery", "expectedIdentity": "technical-cartography", "primaryJourney": "Inspect bounded published connections with a list fallback." },
+    { "id": "library", "route": "search", "path": "/#/library", "layoutFamily": "browse-list", "viewports": ["desktop", "mobile"], "breakpointSample": [320, 375, 390, 768, 1024, 1440], "keyboardContract": "browse-register", "recoveryContract": "browse-recovery", "expectedTemplate": "workspace", "primaryJourney": "Search or browse records and understand result scope." },
+    { "id": "mixed-search", "route": "search", "path": "/#/library?q=supply%20chain", "layoutFamily": "browse-list", "viewports": ["desktop", "mobile"], "keyboardContract": "browse-register", "recoveryContract": "browse-recovery", "expectedTemplate": "workspace", "primaryJourney": "Refine a mixed result set and open a source-faithful record." },
+    { "id": "search-empty", "route": "search", "path": "/#/library?q=zzzz-no-result-zzzz", "layoutFamily": "browse-list", "viewports": ["desktop", "mobile"], "keyboardContract": "browse-register", "recoveryContract": "browse-recovery", "expectedTemplate": "workspace", "scenario": "empty", "primaryJourney": "Recover from zero results with clear filters or useful browse choices." },
+    { "id": "publication", "route": "catalog-detail", "path": "/#/library/publication/nist-800-53", "layoutFamily": "browse-list", "viewports": ["desktop", "mobile"], "keyboardContract": "browse-register", "recoveryContract": "browse-recovery", "expectedIdentity": "publisher-research-library", "primaryJourney": "Understand a publication and browse its bounded inventory." },
+    { "id": "control-rich", "route": "library-detail", "path": "/#/record/nist-800-53/AC-2", "layoutFamily": "detail-inspector", "viewports": ["desktop", "mobile"], "breakpointSample": [320, 375, 390, 768, 1024, 1440], "keyboardContract": "detail-source", "recoveryContract": "detail-recovery", "expectedTemplate": "E", "officialBeforeEditorial": true, "primaryJourney": "Read official control content before editorial help." },
+    { "id": "cci", "route": "library-detail", "path": "/#/record/disa-cci/CCI-000001", "layoutFamily": "detail-inspector", "viewports": ["desktop", "mobile"], "keyboardContract": "detail-source", "recoveryContract": "detail-recovery", "expectedTemplate": "E", "officialBeforeEditorial": true, "primaryJourney": "Trace a CCI to its publisher and governed relationships." },
+    { "id": "stig-rule", "route": "library-detail", "path": "/#/record/disa-stig/V-256609", "layoutFamily": "detail-inspector", "viewports": ["desktop", "mobile"], "keyboardContract": "detail-source", "recoveryContract": "detail-recovery", "expectedTemplate": "E", "officialBeforeEditorial": true, "primaryJourney": "Read Check and Fix content with source formatting preserved." },
+    { "id": "attack-technique", "route": "library-detail", "path": "/#/record/mitre-attack/T1195.002", "layoutFamily": "detail-inspector", "viewports": ["desktop", "mobile"], "keyboardContract": "detail-source", "recoveryContract": "detail-recovery", "expectedTemplate": "E", "officialBeforeEditorial": true, "primaryJourney": "Understand a technique and its source-published relationships." },
+    { "id": "supply-chain", "route": "library-detail", "path": "/#/record/nist-800-171/3.17.1", "layoutFamily": "detail-inspector", "viewports": ["desktop", "mobile"], "keyboardContract": "detail-source", "recoveryContract": "detail-recovery", "expectedTemplate": "E", "officialBeforeEditorial": true, "primaryJourney": "Read a requirement in publisher and publication context." },
+    { "id": "record-sparse", "route": "library-detail", "path": "/#/record/cmmc-2/LEVEL-2", "layoutFamily": "detail-inspector", "viewports": ["desktop", "mobile"], "keyboardContract": "detail-source", "recoveryContract": "detail-recovery", "expectedTemplate": "E", "officialBeforeEditorial": true, "primaryJourney": "Understand an honest source-text absence without invented prose." },
+    { "id": "record-unknown", "route": "library-detail", "path": "/#/record/nist-800-53/NOT-A-REAL-CONTROL", "layoutFamily": "detail-inspector", "viewports": ["desktop", "mobile"], "keyboardContract": "detail-source", "recoveryContract": "detail-recovery", "scenario": "error", "primaryJourney": "Recover to the owning publication or Library." },
+    { "id": "compare-empty", "route": "matrix", "path": "/#/compare", "layoutFamily": "staged-workflow", "viewports": ["desktop", "mobile"], "keyboardContract": "staged-task", "recoveryContract": "workflow-recovery", "expectedIdentity": "staged-crosswalk-flow", "scenario": "empty", "primaryJourney": "Choose a comparison intent and source." },
+    { "id": "compare-incomplete", "route": "matrix", "path": "/#/compare/relationships?source=nist-800-53", "layoutFamily": "staged-workflow", "viewports": ["desktop", "mobile"], "keyboardContract": "staged-task", "recoveryContract": "workflow-recovery", "expectedIdentity": "staged-crosswalk-flow", "scenario": "incomplete", "primaryJourney": "Understand the missing choice and complete setup." },
+    { "id": "compare", "route": "matrix", "path": "/#/compare/relationships?source=nist-800-53&items=AC-2&target=disa-cci&compareRun=true", "layoutFamily": "staged-workflow", "viewports": ["desktop", "mobile"], "keyboardContract": "staged-task", "recoveryContract": "workflow-recovery", "expectedIdentity": "staged-crosswalk-flow", "scenario": "success", "primaryJourney": "Inspect a bounded result while full counts and exports remain truthful." },
+    { "id": "guides", "route": "patterns", "path": "/#/guides?pattern=implementing-controls", "layoutFamily": "editorial", "viewports": ["desktop", "mobile"], "breakpointSample": [320, 375, 390, 768, 1024, 1440], "keyboardContract": "editorial-standard", "recoveryContract": "editorial-recovery", "expectedIdentity": "practitioner-field-manual", "primaryJourney": "Follow a guide with goal, prerequisites, steps, output, and next action." },
+    { "id": "templates", "route": "templates", "path": "/#/build", "layoutFamily": "staged-workflow", "viewports": ["desktop", "mobile"], "keyboardContract": "staged-task", "recoveryContract": "workflow-recovery", "expectedIdentity": "staged-production-workflow", "primaryJourney": "Choose a template by purpose, inputs, effort, and output." },
+    { "id": "sources", "route": "sources", "path": "/#/sources", "layoutFamily": "browse-list", "viewports": ["desktop", "mobile"], "keyboardContract": "browse-register", "recoveryContract": "browse-recovery", "expectedIdentity": "provenance-ledger", "primaryJourney": "Verify publisher, artifact, version, freshness, and source material." },
+    { "id": "sources-selected", "route": "sources", "path": "/#/sources?source=disa-stig", "layoutFamily": "detail-inspector", "viewports": ["desktop", "mobile"], "keyboardContract": "detail-source", "recoveryContract": "detail-recovery", "expectedIdentity": "provenance-ledger", "primaryJourney": "Inspect one publication and return focus to its register row." },
+    { "id": "sources-unknown", "route": "sources", "path": "/#/sources?source=not-a-source", "layoutFamily": "detail-inspector", "viewports": ["desktop", "mobile"], "keyboardContract": "detail-source", "recoveryContract": "detail-recovery", "scenario": "error", "primaryJourney": "Explain the unknown source and return to the register." },
+    { "id": "sources-empty", "route": "sources", "path": "/#/sources?q=zzzz-no-result-zzzz", "layoutFamily": "browse-list", "viewports": ["desktop", "mobile"], "keyboardContract": "browse-register", "recoveryContract": "browse-recovery", "scenario": "empty", "primaryJourney": "Clear the query and restore the publication register." },
+    { "id": "resources", "route": "commons", "path": "/#/resources?showAll=true", "layoutFamily": "browse-list", "viewports": ["desktop", "mobile"], "keyboardContract": "browse-register", "recoveryContract": "browse-recovery", "expectedTemplate": "workspace", "primaryJourney": "Find a resource and understand access, cost, and limitations." },
+    { "id": "resources-map", "route": "commons", "path": "/#/resources?showAll=true&viewMode=map", "layoutFamily": "graph-canvas", "viewports": ["desktop", "mobile"], "keyboardContract": "graph-with-list", "recoveryContract": "graph-recovery", "expectedTemplate": "workspace", "primaryJourney": "Explore resource groupings without losing the list fallback." },
+    { "id": "resource-detail", "route": "commons-detail", "path": "/#/resources/tool-syft-sbom-generator", "layoutFamily": "detail-inspector", "viewports": ["desktop", "mobile"], "keyboardContract": "detail-source", "recoveryContract": "detail-recovery", "primaryJourney": "Decide whether and how to use one external resource." },
+    { "id": "about", "route": "about", "path": "/#/about", "layoutFamily": "editorial", "viewports": ["desktop", "mobile"], "keyboardContract": "editorial-standard", "recoveryContract": "editorial-recovery", "primaryJourney": "Understand product scope, limits, attribution, and contribution paths." },
+    { "id": "retired", "route": "retired", "path": "/#/retired?q=AC-2%20(1)", "layoutFamily": "editorial", "viewports": ["desktop", "mobile"], "keyboardContract": "editorial-standard", "recoveryContract": "editorial-recovery", "scenario": "retired", "primaryJourney": "Replace a retired identifier with a current destination." },
+    { "id": "not-found", "route": "not-found", "path": "/#/not-a-real-page", "layoutFamily": "editorial", "viewports": ["desktop", "mobile"], "keyboardContract": "editorial-standard", "recoveryContract": "editorial-recovery", "scenario": "not-found", "primaryJourney": "Return to Home or Library from an invalid route." },
+    { "id": "loading", "route": "home", "path": "/#/library?q=access", "layoutFamily": "shell-landing", "viewports": ["desktop", "mobile"], "keyboardContract": "route-standard", "recoveryContract": "route-reload-equivalent", "scenario": "loading", "primaryJourney": "See honest pending feedback without a premature retry action." }
+  ]
+}

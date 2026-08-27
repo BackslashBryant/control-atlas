@@ -123,6 +123,9 @@ test('package scripts expose deterministic split gates and full local verificati
     'test:visual',
     'test:a11y:smoke',
     'test:performance:ci',
+    'review:experience:contracts',
+    'review:experience:family',
+    'review:experience:full',
     'verify:contracts',
     'verify:quality',
   ]) assert.equal(typeof packageJson.scripts[script], 'string', script);
@@ -131,6 +134,10 @@ test('package scripts expose deterministic split gates and full local verificati
   assert.match(packageJson.scripts['verify:quality'], /verify:contracts/);
   assert.match(packageJson.scripts['verify:quality'], /lint:ci/);
   assert.match(packageJson.scripts['verify:quality'], /npm test/);
+  assert.match(packageJson.scripts['review:experience:family'], /playwright\.guardian\.config\.mjs/);
+  assert.match(packageJson.scripts['review:experience:full'], /playwright\.guardian\.config\.mjs/);
+  assert.match(packageJson.scripts['review:experience:family'], /tests\/guardian\/experience-guardian\.spec\.mjs/);
+  assert.match(packageJson.scripts['review:experience:full'], /tests\/guardian\/experience-guardian\.spec\.mjs/);
   assert.ok(existsSync('.lighthouserc.ci.json'));
 });
 

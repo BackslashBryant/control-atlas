@@ -4,6 +4,37 @@
 **Surface audited:** Deployed GitHub Pages application at `https://rambulls.github.io/control-atlas/`  
 **Method:** Live-product inspection only. No repository or source-code inspection. Desktop and 375 × 812 mobile states, keyboard operation, production DOM/computed styles, route and failure-state behavior, every downloadable artifact, and the Orbital guide were inspected. Screen-reader speech was explicitly excluded.
 
+## Epic reconciliation — August 27, 2026
+
+This table is the current disposition of the August 21 observations. The
+original evidence below remains intact. `Resolved` means the observed defect is
+covered by current implementation and a focused contract. `Superseded` means
+the route was deliberately replaced by a different product composition.
+`Partial` and `Open` remain backlog for the active Product Trust and Surface
+Coherence Epic in `docs/Plan.md`.
+
+| Finding | Status | Current evidence or remaining gap |
+|---|---|---|
+| P1-01 Compare route corruption | Resolved | Staged runtime loading cancels route work and `tests/e2e/compare-cross-route-corruption.spec.mjs` protects Compare → Templates recovery. |
+| P1-02 unbounded full Compare | Open | Results are bounded during initial rendering, but the required fixed 100-row, URL-addressable page model and complete-result navigation remain Phase 3. |
+| P1-03 keyboard and focus | Resolved | Shared route orientation and navigation tests protect search activation, focus return, heading focus, and mobile-menu traversal. |
+| P1-04 mobile Sources and hidden controls | Resolved | Live 390 px proof has no page overflow or zero-size focusable controls; the desktop table becomes stacked records and the publisher strip is a named horizontal region. |
+| P1-05 document preview and oversized starter | Partial | Preview contrast, paper backgrounds, and named keyboard scrolling are protected by `tests/e2e/template-preview-contrast.spec.mjs`; the full semantic preview and compact-core/appendix content decision remain Phase 4. |
+| P1-06 Library Compare dead end | Resolved | The persistent tray names selections, supports remove/clear, preserves mobile width, and hands off runnable state; covered by `tests/e2e/library-compare-tray.spec.mjs`. |
+| P2-01 Guides are explainers | Open | Guides still need the governed goal, prerequisites, steps, output, validation, and next-action contract. |
+| P2-02 empty root Atlas topology | Superseded | Root Atlas is now a coverage decomposition that says `Not yet modeled` for empty areas and keeps populated areas and authority counts visible. |
+| P2-03 long record relationships | Resolved | Record detail groups and samples published relationships, collapses lower-priority groups, and hands the exhaustive set to Atlas. |
+| P2-04 repeated resource copy | Resolved | Resource detail suppresses overview and `what it does` text when either duplicates the hero summary. |
+| P2-05 missing dense-data contract | Partial | `docs/PAGE_CONTRACTS.md` and the tracked Guardian matrix now govern summary-first density, mobile transformation, and bounded rendering; fixed Compare pagination remains open. |
+| P2-06 route orientation primitive | Resolved | `src/ui/lib/routeOrientation.ts` owns focus, scroll, push, and Back/Forward behavior with navigation fidelity coverage. |
+| P2-07 template-card distinctions | Partial | Cards now expose format, compatibility basis, and governed context tags; effort and expected output still need a consistent scan line. |
+| P2-08 single-card grids | Resolved | Single-template groups use the deliberate `intent-grid--solo` composition. |
+| P3-01 mobile Home search | Resolved | The current 390 px composition gives search a full-width field and one full-width orange action without page overflow. |
+| P2-09 cinematic utility motion | Open | Motion ownership still needs a route-transition versus in-place-interaction contract and representative reduced-motion proof. |
+| P2-10 pending versus retry language | Partial | Shared pending, slow, failed, and recovery components exist; route-family copy and recovery actions remain in Phase 4 review. |
+| P3-02 shortcut teaching | Open | The Ctrl + Alt brand device still needs one restrained discovery moment tied to a successful search or help surface. |
+| P2-11 primitive ownership | Partial | Route/state, keyboard, recovery, breakpoint, copy-ownership, and representative-family contracts are now tracked; artifact-preview and final dense-workbench ownership remain open. |
+
 ## Executive Assessment
 
 **Verdict: useful and visually distinctive, but not yet flagship-ready.** Control Atlas already succeeds as a credible public research product and is recognizably Orbital. Its entry, home, Start workflow, publication browsing, record detail, focused Atlas experience, source register, and downloaded workbook system show unusually coherent product thinking for a first public release.

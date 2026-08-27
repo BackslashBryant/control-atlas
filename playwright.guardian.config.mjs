@@ -1,11 +1,12 @@
 import { defineConfig } from "@playwright/test";
-import baseConfig from "./playwright.config.mjs";
+import baseConfig, { resolveWorkerCount } from "./playwright.config.mjs";
 
 export default defineConfig({
   ...baseConfig,
   testDir: "./tests/guardian",
   testMatch: "**/experience-guardian.spec.mjs",
-  workers: 1,
+  fullyParallel: true,
+  workers: resolveWorkerCount(),
   retries: 0,
   reporter: [["list"]],
 });
