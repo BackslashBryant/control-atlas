@@ -56,7 +56,7 @@ const sourceBackedAccessNotes = new Map([
   ["service-virustotal", "Basic lookups are available publicly; account, quota, licensing, and sharing limits vary by feature."],
 ]);
 const sourceBackedLifecycle = new Map([
-  ["legacy-diacap-transition", { status: "archived", replacedBy: "official-dodi-8510-01" }],
+  ["legacy-diacap-transition", { status: "archived", replacedBy: "authority-dodi-8510-01" }],
   ["directory-dodin-apl", { status: "deprecated" }],
   ["reference-microsoft-stigrepo", { status: "archived" }],
   ["legacy-opencontrol-compliance-masonry", { status: "archived", replacedBy: "official-nist-oscal" }],

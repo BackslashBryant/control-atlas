@@ -19,6 +19,25 @@ test('source registry schema 5.0 validates the federal source contract', () => {
   assert.ok(registry.publications.every((pub) => pub.license_or_use));
 });
 
+test('DoDI 8510.01 is a canonical official publication rather than a Resource', () => {
+  const publication = registry.publications.find(
+    (entry) => entry.id === 'authority-dodi-8510-01',
+  );
+  assert.ok(publication);
+  assert.equal(publication.display_name, 'DoDI 8510.01');
+  assert.equal(publication.entity_kind, 'publication');
+  assert.equal(publication.lifecycle_status, 'active');
+  assert.equal(publication.version, 'July 19, 2022');
+  assert.equal(
+    publication.artifact_url,
+    'https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/851001p.pdf',
+  );
+  assert.equal(
+    publication.catalog_browse_url,
+    'https://www.esd.whs.mil/Directives/issuances/dodi/',
+  );
+});
+
 test('artifact publishers inherit from their declared parent publication', () => {
   const { artifacts, byId } = loadSourceRegistry(registry);
   for (const artifact of artifacts) {

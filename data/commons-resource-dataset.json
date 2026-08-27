@@ -7516,7 +7516,7 @@
           "resource:legacy-diacap-transition:lifecycle-notice"
         ],
         "replacedBy": [
-          "official-dodi-8510-01"
+          "authority-dodi-8510-01"
         ]
       },
       "claimEvidence": [
@@ -7584,7 +7584,7 @@
         }
       ],
       "maintenanceStatus": "archived",
-      "supersededBy": "official-dodi-8510-01"
+      "supersededBy": "authority-dodi-8510-01"
     },
     {
       "id": "service-disa-acas",
