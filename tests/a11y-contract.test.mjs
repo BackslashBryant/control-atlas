@@ -254,14 +254,17 @@ test("Template B Home exposes one search, governed destinations, and labelled go
   assert.doesNotMatch(homePage, /Choose a starting point/);
 });
 
-test("high-density task surfaces expose continuous results and name download actions", () => {
+test("high-density task surfaces expose bounded results and name complete download actions", () => {
   const comparePage = readFileSync("src/ui/pages/ComparePage.tsx", "utf8");
   const templatesPage = readFileSync("src/ui/pages/TemplatesPage.tsx", "utf8");
   const startHere = readFileSync("src/ui/pages/StartHerePage.tsx", "utf8");
   assert.match(comparePage, /data-continuous-results/);
   assert.match(comparePage, /Search results by ID or title/);
   assert.match(comparePage, /Evidence for \{targets\.length\.toLocaleString\(\)\} mapping/);
-  assert.doesNotMatch(comparePage, /relationshipPageSize|Mapping result pages/);
+  assert.match(comparePage, /Mapping result pages/);
+  assert.match(comparePage, /Previous page/);
+  assert.match(comparePage, /Next page/);
+  assert.match(comparePage, /Counts and exports cover all/);
   assert.match(templatesPage, /Download \$\{selectedTemplate\.display_name\}/);
   assert.match(templatesPage, /template-essential-options/);
   assert.match(startHere, /What are you trying to do\?/);

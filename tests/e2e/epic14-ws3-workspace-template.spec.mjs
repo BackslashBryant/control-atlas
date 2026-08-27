@@ -82,7 +82,7 @@ test("WS3 Library communicates visible, loaded, and total search scope", async (
   await expect(map).toContainText("Refine the query or filters to change this map.");
   await expect(map.locator('[data-map-node-id]')).toHaveCount(75);
   await page.setViewportSize({ width: 390, height: 844 });
-  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+  expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
 });
 
 test("WS3 Resources shares Template C with real list, map, and comparison modes", async ({ page }) => {
@@ -141,7 +141,7 @@ test("WS3 Resources shares Template C with real list, map, and comparison modes"
   await expect(page.getByRole("heading", { name: "Selected resources", level: 2 })).toBeVisible();
   await expect(page.getByRole("table")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
-  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+  expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
 });
 
 test("WS3 Resource detail uses a knowledge-base reading sequence", async ({ page }) => {

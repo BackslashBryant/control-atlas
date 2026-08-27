@@ -41,7 +41,7 @@ test("focused Atlas opens straight to Connections, not a structural page", async
   await expect(page.locator(".atlas-path-record")).toHaveCount(0);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(subject).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+  expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
 });
 
 test("Hierarchy panel shows real structural substance, not just breadcrumb lines", async ({ page }) => {
