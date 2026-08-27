@@ -86,6 +86,16 @@ test("route bootstrap loads only the smallest faithful artifact scope", () => {
   assert.equal(resources.librarySearch, false);
   assert.equal(resources.fullGraph, false);
 
+  const resourceDetail = runtimeArtifactPlan(
+    normalizeViewState("commons-detail", { id: "legacy-diacap-transition" }),
+  );
+  assert.equal(
+    resourceDetail.sources,
+    true,
+    "resource replacement links resolve publication targets from the source register",
+  );
+  assert.equal(resourceDetail.fullGraph, false);
+
   const recordDetail = runtimeArtifactPlan(
     normalizeViewState("library-detail"),
   );

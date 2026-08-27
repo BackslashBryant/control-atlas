@@ -5,6 +5,7 @@ import { execFileSync } from "node:child_process";
 import { dirname, join, extname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { gzipSync } from "node:zlib";
+import { runNodeSync } from "./lib/process-runner.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST_SEGMENT = "dist/site";
@@ -106,7 +107,7 @@ if (!/^\d{4}-\d{2}-\d{2}T/.test(sourceDataGeneratedAt || "")) {
   throw new Error("Generated sources are missing a valid generated_at timestamp");
 }
 
-execFileSync(process.execPath, [join(ROOT, "node_modules/vite/bin/vite.js"), "build"], {
+runNodeSync([join(ROOT, "node_modules/vite/bin/vite.js"), "build"], {
   cwd: ROOT,
   env: {
     ...process.env,
@@ -114,7 +115,6 @@ execFileSync(process.execPath, [join(ROOT, "node_modules/vite/bin/vite.js"), "bu
     VITE_CONTROL_ATLAS_SOURCE_DATA_DATE: sourceDataGeneratedAt,
   },
   stdio: "inherit",
-  shell: process.platform === "win32",
 });
 
 writeFileSync(
@@ -132,10 +132,9 @@ for (const [sourceRelativePath, destRelativePath] of COPY_PATHS) {
   copyIntoDist(sourceRelativePath, destRelativePath);
 }
 
-execFileSync(
-  process.execPath,
+runNodeSync(
   ["--import", "tsx", join(ROOT, "scripts/build-atlas-network-artifact.ts"), "--output", "dist/site/data/generated/atlas-network.json"],
-  { cwd: ROOT, stdio: "inherit", shell: process.platform === "win32" },
+  { cwd: ROOT, stdio: "inherit" },
 );
 
 console.log("Compressing JSON files with gzip...");

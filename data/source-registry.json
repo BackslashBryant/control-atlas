@@ -583,6 +583,35 @@
       "origin": "publisher_normalized"
     },
     {
+      "id": "authority-dodi-8510-01",
+      "name": "DoD Instruction 8510.01, Risk Management Framework for DoD Systems",
+      "display_name": "DoDI 8510.01",
+      "display_group": "DoD Issuances",
+      "owner": "Department of Defense",
+      "authority_class": "publisher",
+      "provenance_class": "mandated",
+      "mandate_basis": [
+        "DoD Directive 5144.02"
+      ],
+      "license_or_use": "Official DoD issuance",
+      "lifecycle_status": "active",
+      "eligibility_status": "eligible",
+      "access_status": "public",
+      "version": "July 19, 2022",
+      "retrieved_at": "2026-08-26",
+      "retrieval_method": "manual_review",
+      "artifact_url": "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/851001p.pdf",
+      "catalog_browse_url": "https://www.esd.whs.mil/Directives/issuances/dodi/",
+      "graph_eligible": true,
+      "metadata": {
+        "identity_kind": "publication",
+        "authority_node_id": "authority:DODI-8510.01"
+      },
+      "entity_kind": "publication",
+      "profile_id": "publication.publication",
+      "origin": "publisher_normalized"
+    },
+    {
       "id": "authority-eo-13556",
       "name": "Executive Order 13556, Controlled Unclassified Information",
       "display_name": "Executive Order 13556",

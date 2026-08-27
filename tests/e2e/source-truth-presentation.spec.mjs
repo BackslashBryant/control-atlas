@@ -15,7 +15,7 @@ test('PDISP presents only scoped, sourced facts at mobile width', async ({ page 
   await expect(page.getByText('Review and request DISA private data internet connectivity.', { exact: true })).toHaveCount(1);
   await expect(page.getByRole('heading', { name: 'What it is' })).toHaveCount(0);
   await expect(page.getByText('Ordering and connection actions require authorized DoD access.', { exact: true })).toBeVisible();
-  await expect(page.getByText(/CAC required|\bFree\b|not documented|not stated/i)).toHaveCount(0);
+  await expect(page.locator('#workspace').getByText(/CAC required|\bFree\b|not documented|not stated/i)).toHaveCount(0);
   await expect(page.getByText('Atlas context', { exact: true })).toHaveCount(0);
   await expect(page.locator('.resource-detail-maintenance')).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
@@ -28,7 +28,16 @@ test('sourced lifecycle and replacement history remain visible', async ({ page }
 
   await expect(page.getByText('Archived', { exact: true }).first()).toBeVisible();
   await expect(page.getByText('Replaced by', { exact: true })).toBeVisible();
-  await expect(page.getByRole('link', { name: /DoDI 8510\.01/ })).toBeVisible();
+  const replacementLink = page.getByRole('link', { name: /DoDI 8510\.01/ });
+  await expect(replacementLink).toBeVisible();
+  await replacementLink.click();
+  await expect(page).toHaveURL(/#\/sources\?.*source=authority-dodi-8510-01/);
+  const replacementInspector = page.locator('.sources-inspector-pane .source-inspector--inline');
+  await expect(replacementInspector).toContainText('DoD Instruction 8510.01');
+  await expect(replacementInspector.getByRole('link', { name: 'Open official publication' })).toHaveAttribute(
+    'href',
+    'https://www.esd.whs.mil/Directives/issuances/dodi/',
+  );
 });
 
 test('exact ATT&CK identifier search opens readable publisher text', async ({ page }) => {

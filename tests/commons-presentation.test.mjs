@@ -24,6 +24,33 @@ const dataset = JSON.parse(
   readFileSync(resolve("data/commons-resource-dataset.json"), "utf8"),
 );
 const resources = dataset.resources;
+const sourceRegistry = JSON.parse(
+  readFileSync(resolve("data/source-registry.json"), "utf8"),
+);
+
+test("Resource replacement IDs resolve to one canonical Resource or Publication", () => {
+  const resourceIds = new Set(resources.map((resource) => resource.id));
+  const publicationIds = new Set(
+    sourceRegistry.publications.map((publication) => publication.id),
+  );
+
+  for (const resource of resources) {
+    const replacements = resource.lifecycle?.replacedBy || [];
+    if (resource.supersededBy) {
+      assert.equal(resource.supersededBy, replacements[0], `${resource.id}/supersededBy`);
+    }
+    for (const replacementId of replacements) {
+      assert.ok(
+        resourceIds.has(replacementId) || publicationIds.has(replacementId),
+        `${resource.id} replacement ${replacementId} is unresolved`,
+      );
+    }
+  }
+
+  const diacap = resources.find((resource) => resource.id === "legacy-diacap-transition");
+  assert.deepEqual(diacap.lifecycle.replacedBy, ["authority-dodi-8510-01"]);
+  assert.equal(diacap.supersededBy, "authority-dodi-8510-01");
+});
 
 test("Resource dates use one human-readable UTC convention without inventing missing values", () => {
   assert.equal(resourceDateLabel("2026-08-10T16:48:29Z"), "August 10, 2026");

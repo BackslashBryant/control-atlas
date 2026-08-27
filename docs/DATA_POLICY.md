@@ -41,6 +41,8 @@ Four relationship classes remain distinct:
 
 Official published relationships are visually and semantically distinct from inferred suggestions or editorial guidance.
 
+Resource lifecycle replacements use globally unique canonical Atlas entity IDs. A replacement may resolve to another Resource or to a Publication in the source registry; the UI must preserve that distinction and route to the owning surface. The legacy top-level `supersededBy` field remains a synchronized compatibility alias for the first canonical `lifecycle.replacedBy` ID and must never disagree with it.
+
 ## Source presentation
 
 Presentation is a required ingestion stage, not a browser-only cleanup. Every generated record type has a declared presentation profile. Publisher strings remain untouched. `StructuredContentBlock` stores presentation-only offsets for paragraphs, ordered lists, unordered lists, and exact code or configuration. Explicit upstream markup wins. Deterministic detection is permitted only at high confidence; ambiguity stays prose. Copy operations use the exact source slice, not visually reconstructed text. Content without a record page must carry an explicit not-applicable presentation outcome in its ingestion ledger.

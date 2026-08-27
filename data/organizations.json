@@ -743,6 +743,7 @@
         "authority-dfars-252-204-7021",
         "authority-dodd-5144-02",
         "authority-dodi-8500-01",
+        "authority-dodi-8510-01",
         "resource:service-dod-rmf-knowledge-service:publisher-destination"
       ],
       "origin": "publisher_normalized",

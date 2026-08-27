@@ -53,6 +53,8 @@ const evidence = readShards("evidence");
 const nodeIds = new Set(nodes.map((node) => node.id));
 const evidenceById = new Map(evidence.map((entry) => [entry.id, entry]));
 const sourcesById = new Map([...(sourceRegistry.sources || []), ...(sourceRegistry.artifacts || []), ...(sourceRegistry.publications || [])].map((entry) => [entry.id, entry]));
+const resourceIds = new Set((dataset.resources || []).map((entry) => entry.id));
+const publicationIds = new Set((sourceRegistry.publications || []).map((entry) => entry.id));
 const resourceEvidenceById = new Map((dataset.evidenceCatalog || []).map((entry) => [entry.id, entry]));
 
 function validateEntityEnvelope(entity, label) {
@@ -149,8 +151,20 @@ for (const resource of dataset.resources || []) {
     if (resource[field] && !evidencePaths.has(path)) fail(`${resource.id} displays ${field} without claim evidence`);
   }
   if (resource.costType && !evidencePaths.has("/costType")) fail(`${resource.id} displays cost without field evidence`);
-  const replacements = resource.lifecycle?.replacedBy || resource.supersededBy || [];
-  if ((Array.isArray(replacements) ? replacements.length : Boolean(replacements)) && !evidencePaths.has("/lifecycle/replacedBy") && !evidencePaths.has("/supersededBy")) {
+  const lifecycleReplacements = resource.lifecycle?.replacedBy || [];
+  if (resource.supersededBy && lifecycleReplacements[0] !== resource.supersededBy) {
+    fail(`${resource.id} has mismatched lifecycle.replacedBy and supersededBy values`);
+  }
+  const replacements = [...new Set([
+    ...lifecycleReplacements,
+    ...(resource.supersededBy ? [resource.supersededBy] : []),
+  ])];
+  for (const replacementId of replacements) {
+    if (!resourceIds.has(replacementId) && !publicationIds.has(replacementId)) {
+      fail(`${resource.id} references unresolved replacement ${replacementId}`);
+    }
+  }
+  if (replacements.length && !evidencePaths.has("/lifecycle/replacedBy") && !evidencePaths.has("/supersededBy")) {
     fail(`${resource.id} names a replacement without explicit claim evidence`);
   }
   validateEntityEnvelope(entityEnvelope({

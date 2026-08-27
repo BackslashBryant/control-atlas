@@ -78,7 +78,21 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
     ...(resource.supersededBy ? [resource.supersededBy] : []),
   ])];
   const replacements = profileSections.has("replacement")
-    ? replacementIds.map((replacementId) => dataset?.resources.find((entry) => entry.id === replacementId)).filter(Boolean) as CommonsResource[]
+    ? replacementIds.map((replacementId) => {
+        const replacementResource = dataset?.resources.find((entry) => entry.id === replacementId) as CommonsResource | undefined;
+        if (replacementResource) {
+          return { id: replacementResource.id, kind: "resource" as const, name: replacementResource.name };
+        }
+        const replacementPublication = bundle?.runtime.getSource(replacementId);
+        if (replacementPublication?.entity_kind === "publication") {
+          return {
+            id: replacementPublication.id,
+            kind: "publication" as const,
+            name: replacementPublication.display_name || replacementPublication.name,
+          };
+        }
+        return null;
+      }).filter(Boolean) as Array<{ id: string; kind: "publication" | "resource"; name: string }>
     : [];
   const summary = resourceSummaryPresentation(resource);
   const heroSummary = summary.text;
@@ -189,7 +203,9 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
             ) : null}
             {hasLimitations ? <DetailSection id="limitations" title="Limitations"><EvidenceCopy section={resource.presentationProfile?.limitations} /></DetailSection> : null}
             {hasRelatedResources ? <DetailSection id="related-resources" title="Related resources">
-              {replacements.map((replacement) => <AppLink className="resource-context-link" key={replacement.id} onNavigate={onNavigate} patch={{ ...viewState, id: replacement.id }} view="commons-detail"><span>Replaced by</span><strong>{replacement.name}</strong></AppLink>)}
+              {replacements.map((replacement) => replacement.kind === "resource"
+                ? <AppLink className="resource-context-link" key={replacement.id} onNavigate={onNavigate} patch={{ ...viewState, id: replacement.id }} view="commons-detail"><span>Replaced by</span><strong>{replacement.name}</strong></AppLink>
+                : <AppLink className="resource-context-link" key={replacement.id} onNavigate={onNavigate} patch={{ source: replacement.id }} view="sources"><span>Replaced by</span><strong>{replacement.name}</strong></AppLink>)}
               {parent ? <AppLink className="resource-context-link" onNavigate={onNavigate} patch={{ ...viewState, id: parent.id }} view="commons-detail"><span>Part of</span><strong>{parent.name}</strong></AppLink> : null}
               {children.map((child) => <AppLink className="resource-context-link" key={child.id} onNavigate={onNavigate} patch={{ ...viewState, id: child.id }} view="commons-detail"><span>Related service</span><strong>{child.name}</strong></AppLink>)}
               {relatedResources.map((related) => <AppLink className="resource-context-link" key={related.id} onNavigate={onNavigate} patch={{ ...viewState, id: related.id }} view="commons-detail"><span>Companion</span><strong>{related.name}</strong></AppLink>)}
