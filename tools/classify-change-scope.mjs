@@ -20,10 +20,14 @@ const RUNTIME_PREFIXES = ['src/', 'public/'];
 
 const DEPENDENCY_FILES = new Set(['package-lock.json']);
 const AUTOMATION_FILES = new Set([
+  '.gitignore',
+  'config/experience-guardian/copy-ownership.json',
+  'config/experience-guardian/route-matrix.json',
   'package.json',
   'tools/check-action-pins.mjs',
   'tools/classify-change-scope.mjs',
   'tools/git-push-with-retry.mjs',
+  'tools/experience-guardian.mjs',
   'tools/lib/vale-extraction.mjs',
   'tools/run-vale.mjs',
   'tools/ship-to-main.mjs',
@@ -31,6 +35,9 @@ const AUTOMATION_FILES = new Set([
   'tools/wait-for-checks.mjs',
   'tests/build-layout-contract.test.mjs',
   'tests/change-scope.test.mjs',
+  'tests/experience-guardian.test.mjs',
+  'tests/guardian/experience-guardian.spec.mjs',
+  'playwright.guardian.config.mjs',
   'tests/package-scripts.test.mjs',
   'tests/process-runner.test.mjs',
   'tests/release-evidence.test.mjs',
@@ -180,6 +187,7 @@ export function classifyChangedPaths(rawPaths) {
       else codeChanged = true;
     } else if (
       hasPrefix(path, DOCUMENTATION_PREFIXES) ||
+      path === 'visual-audit-findings.md' ||
       /^(?:README|LICENSE|CONTRIBUTING|SECURITY)(?:\.|$)/i.test(path)
     ) contentChanged = true;
     else unknownChanged = true;

@@ -9,6 +9,7 @@ import { classifyNameStatus } from './classify-change-scope.mjs';
 const AUTOMATION_TESTS = new Set([
   'tests/build-layout-contract.test.mjs',
   'tests/change-scope.test.mjs',
+  'tests/experience-guardian.test.mjs',
   'tests/package-scripts.test.mjs',
   'tests/process-runner.test.mjs',
   'tests/release-evidence.test.mjs',
@@ -64,7 +65,7 @@ export function createVerificationPlan(paths, changeMap) {
     });
     addStep(steps, {
       id: 'automation-contracts', command: ['npm', 'run', 'test:ci-contracts'],
-      expectedTests: 45, workers: 1, budgetSeconds: 3,
+      expectedTests: 50, workers: 1, budgetSeconds: 5,
     });
   }
   if (changeMap.dependenciesChanged) {

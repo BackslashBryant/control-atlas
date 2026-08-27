@@ -5,7 +5,13 @@ import { classifyChangedPaths } from '../tools/classify-change-scope.mjs';
 import { createVerificationPlan } from '../tools/verify-affected.mjs';
 
 test('automation-only changes stay on the automation contract path', () => {
-  const paths = ['package.json', 'tools/wait-for-checks.mjs', 'tests/wait-for-checks.test.mjs'];
+  const paths = [
+    '.gitignore',
+    'config/experience-guardian/route-matrix.json',
+    'package.json',
+    'tools/wait-for-checks.mjs',
+    'tests/wait-for-checks.test.mjs',
+  ];
   const plan = createVerificationPlan(paths, classifyChangedPaths(paths));
   assert.equal(plan.blocked, false);
   assert.deepEqual(plan.steps.map((step) => step.id), [

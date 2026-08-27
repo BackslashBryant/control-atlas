@@ -21,6 +21,45 @@ test("every active route has desktop and mobile Guardian coverage", () => {
   }
 });
 
+test("every state names its layout family, primary journey, keyboard contract, and recovery contract", () => {
+  const stateIds = new Set();
+  for (const state of matrix.states) {
+    assert.ok(!stateIds.has(state.id), `Duplicate state ID ${state.id}`);
+    stateIds.add(state.id);
+    assert.ok(matrix.layoutFamilies.includes(state.layoutFamily), `${state.id} has an unknown layout family`);
+    assert.ok(matrix.keyboardContracts[state.keyboardContract], `${state.id} has no keyboard contract`);
+    assert.ok(matrix.recoveryContracts[state.recoveryContract], `${state.id} has no recovery contract`);
+    assert.ok(state.primaryJourney?.trim(), `${state.id} has no primary journey`);
+  }
+});
+
+test("one representative per layout family covers every canonical responsive width", () => {
+  assert.deepEqual(matrix.canonicalBreakpoints, [320, 375, 390, 768, 1024, 1440]);
+  for (const family of matrix.layoutFamilies) {
+    const representative = matrix.states.find(
+      (state) => state.layoutFamily === family && state.breakpointSample,
+    );
+    assert.ok(representative, `Missing breakpoint representative for ${family}`);
+    assert.deepEqual(representative.breakpointSample, matrix.canonicalBreakpoints);
+  }
+});
+
+test("trust, workbench, and recovery states are explicitly registered", () => {
+  for (const id of [
+    "sources-selected",
+    "sources-unknown",
+    "sources-empty",
+    "record-unknown",
+    "compare-empty",
+    "compare-incomplete",
+    "compare",
+    "not-found",
+    "loading",
+  ]) {
+    assert.ok(matrix.states.some((state) => state.id === id), `Missing ${id}`);
+  }
+});
+
 test("record review states cover the required object classes and responsive template", () => {
   for (const id of [
     "control-rich",
@@ -36,14 +75,16 @@ test("record review states cover the required object classes and responsive temp
     assert.ok(state.viewports.includes("desktop"));
     assert.ok(state.viewports.includes("mobile"));
   }
-});
-
-test("major feature identities pair color with words, structure, or icons", () => {
+  assert.equal(matrix.states.find((entry) => entry.id === "stig-rule").path, "/#/record/disa-stig/V-256609");
   const home = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
   const records = readFileSync("src/ui/pages/ObjectDetailPage.tsx", "utf8");
   assert.match(home, /data-visual-identity="universal-front-door"/);
-  assert.match(home, /Icon(?:FileSearch|ShieldLock|Radar|Tool)/);
+  assert.match(
+    home,
+    /DESTINATION_ICONS[\s\S]*IconRocket[\s\S]*IconTopologyStar3[\s\S]*IconBooks[\s\S]*IconUsersGroup/,
+  );
   assert.match(records, /data-template="E"/);
-  assert.match(records, /data-editorial-boundary="explicit"/);
+  assert.match(records, /data-claim-origin={claimOrigin}/);
+  assert.match(records, /data-source-text="published"/);
   assert.match(records, /displayNameFor\("object_type"/);
 });

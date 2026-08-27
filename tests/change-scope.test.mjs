@@ -13,6 +13,10 @@ test('audit evidence uses the narrow integrity path', () => {
   assert.equal(result.buildRequired, false);
   assert.equal(result.browserRequired, false);
   assert.equal(result.securityRequired, false);
+  const productResearch = classifyChangedPaths(['visual-audit-findings.md']);
+  assert.equal(productResearch.contentChanged, true);
+  assert.equal(productResearch.buildRequired, false);
+  assert.equal(productResearch.browserRequired, false);
 });
 
 test('styles trigger build, browser, accessibility, and Lighthouse without unit tests', () => {

@@ -94,6 +94,22 @@ Phase 0 measured improvements:
 - Identical atomic JSON output now preserves the existing file and mtime so
   unchanged generator stages do not invalidate downstream work.
 
+## Evidence ledger
+
+- Phase 0 exact release: merge `739d8b77253ee69e48c89c4beb149ec9c014467f`;
+  main CI and deployment run `33114882562` passed production smoke and three
+  Lighthouse passes.
+- Phase 1 live Sources baseline: desktop and 390 px inspected August 27. The
+  mobile route had no page overflow or zero-size focusable controls; the table
+  changed to stacked records and the named publisher strip remained scrollable.
+- Phase 1 fast acceptance: 50 automation and Guardian contracts passed in the
+  affected path; the matrix registers 32 states across all 15 routes and six
+  layout families.
+- Phase 1 rendered family sample: Home, Start, Atlas, Library, record detail,
+  and Guides passed at desktop and mobile. Six unchanged cases passed in the
+  first run; the six cases affected by stale contract reconciliation passed in
+  a focused rerun using two workers.
+
 Required Phase 0 acceptance:
 
 - A repository command prints the affected verification plan before running.
