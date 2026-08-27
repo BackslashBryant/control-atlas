@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import { createHash } from 'node:crypto';
-import { spawnSync } from 'node:child_process';
 import {
   existsSync,
   readdirSync,
@@ -12,6 +11,7 @@ import {
 } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { runNpmScriptSync } from './lib/process-runner.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const GENERATED = join(ROOT, 'data/generated');
@@ -67,13 +67,11 @@ function differingPaths(leftDirectory, rightDirectory) {
 }
 
 function generate() {
-  const command = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  const result = spawnSync(command, ['run', 'generate:data'], {
+  runNpmScriptSync('generate:data', [], {
     cwd: ROOT,
     env: process.env,
     stdio: 'inherit',
   });
-  if (result.status !== 0) throw new Error(`generate:data failed with exit ${result.status}`);
   if (!existsSync(GENERATED)) throw new Error('generate:data did not create data/generated');
 }
 
