@@ -3,7 +3,8 @@
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
-const CHECK_WORKFLOW = 'Public Repo Checks';
+export const CHECK_WORKFLOW_FILE = 'ci.yml';
+export const CHECK_WORKFLOW_NAME = 'Control Atlas CI';
 const DEFAULT_TIMEOUT_MS = 20 * 60 * 1000;
 const DEFAULT_POLL_MS = 15 * 1000;
 
@@ -33,12 +34,18 @@ export function resolveCommitSha(commitish = 'HEAD') {
 export async function waitForChecks(commitSha, options = {}) {
   const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const pollMs = options.pollMs ?? DEFAULT_POLL_MS;
-  const started = Date.now();
+  const runGh = options.runGh ?? gh;
+  const wait = options.sleep ?? sleep;
+  const now = options.now ?? Date.now;
+  const log = options.log ?? console.log;
+  const started = now();
 
-  while (Date.now() - started < timeoutMs) {
-    const raw = gh([
+  while (now() - started < timeoutMs) {
+    const raw = runGh([
       'run',
       'list',
+      '--workflow',
+      CHECK_WORKFLOW_FILE,
       '--commit',
       commitSha,
       '--json',
@@ -47,34 +54,34 @@ export async function waitForChecks(commitSha, options = {}) {
       '20',
     ]);
     const runs = JSON.parse(raw || '[]');
-    const checksRun = runs.find((entry) => entry.name === CHECK_WORKFLOW);
+    const checksRun = runs[0];
 
     if (checksRun?.status === 'completed') {
       if (checksRun.conclusion === 'success') {
         return checksRun;
       }
       throw new Error(
-        `${CHECK_WORKFLOW} failed (${checksRun.conclusion}). See ${checksRun.url}`,
+        `${CHECK_WORKFLOW_NAME} failed (${checksRun.conclusion}). See ${checksRun.url}`,
       );
     }
 
-    const elapsed = Math.round((Date.now() - started) / 1000);
-    console.log(
-      `[wait] ${CHECK_WORKFLOW} still running for ${commitSha.slice(0, 7)} (${elapsed}s)`,
+    const elapsed = Math.round((now() - started) / 1000);
+    log(
+      `[wait] ${CHECK_WORKFLOW_NAME} still running for ${commitSha.slice(0, 7)} (${elapsed}s)`,
     );
-    await sleep(pollMs);
+    await wait(pollMs);
   }
 
   throw new Error(
-    `Timed out waiting for ${CHECK_WORKFLOW} on ${commitSha.slice(0, 7)}`,
+    `Timed out waiting for ${CHECK_WORKFLOW_NAME} on ${commitSha.slice(0, 7)}`,
   );
 }
 
 async function main() {
   const commitSha = resolveCommitSha(process.argv[2] || 'HEAD');
-  console.log(`Waiting for ${CHECK_WORKFLOW} on ${commitSha}...`);
+  console.log(`Waiting for ${CHECK_WORKFLOW_NAME} on ${commitSha}...`);
   const run = await waitForChecks(commitSha);
-  console.log(`[ok] ${CHECK_WORKFLOW} passed: ${run.url}`);
+  console.log(`[ok] ${CHECK_WORKFLOW_NAME} passed: ${run.url}`);
 }
 
 const isCli = process.argv[1]
