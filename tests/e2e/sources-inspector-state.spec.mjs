@@ -29,15 +29,15 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
       "Publication",
       "Publisher",
       "Version / current through",
-      "Last checked",
+      "Source freshness",
       "Status",
     ]);
     await expect(page.locator(".sources-page")).not.toContainText("Catalog profile");
     await expect(page.locator(".sources-inspector-pane")).toHaveCount(0);
     await expect(page.locator(".sources-inspector-pane .source-inspector")).toHaveCount(0);
 
-    // Select DoD AI Assurance
-    const rowButton = page.getByRole("button", { name: "DoD AI Assurance" });
+    // Select the official CDAO publication identity.
+    const rowButton = page.getByRole("button", { name: "CDAO AI Assurance Toolkit" });
     await expect(rowButton).toBeVisible();
     await rowButton.click();
     await waitForAppReady(page);
@@ -46,6 +46,7 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await expect(table).toBeVisible();
     const inspector = page.locator(".sources-inspector-pane .source-inspector--inline");
     await expect(inspector).toBeVisible();
+    await expect(inspector.getByRole("button", { name: "Close publication details" })).toBeVisible();
 
     // The register measurement stays visible and is not covered.
     await expect(page.locator(".calibration-rail")).toBeVisible();
@@ -57,7 +58,7 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await gotoApp(page, "/#/sources");
     await waitForAppReady(page);
 
-    await page.getByRole("button", { name: "DoD AI Assurance" }).click();
+    await page.getByRole("button", { name: "CDAO AI Assurance Toolkit" }).click();
     await waitForAppReady(page);
 
     // The register remains visually present behind the modal, but the modal's
@@ -74,7 +75,7 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await gotoApp(page, "/#/sources");
     await waitForAppReady(page);
 
-    const rowButton = page.getByRole("button", { name: "DoD AI Assurance" });
+    const rowButton = page.getByRole("button", { name: "CDAO AI Assurance Toolkit" });
     await expect(rowButton).toBeVisible();
     await rowButton.click();
     await waitForAppReady(page);
@@ -112,8 +113,29 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
 
     await expect(page).toHaveURL(/q=DoD(?:%20|\+)AI(?:%20|\+)Assurance/);
     await expect(page.locator(".calibration-rail")).toHaveCount(1);
-    await expect(page.locator(".calibration-rail")).toContainText("SHOWING 1–1 / 1");
-    await expect(page.getByRole("button", { name: "DoD AI Assurance" })).toBeVisible();
+    await expect(page.locator(".calibration-rail")).toContainText("Showing 1–1 of 1");
+    await expect(page.getByRole("button", { name: "CDAO AI Assurance Toolkit" })).toBeVisible();
+  });
+
+  test("zero results use a truthful count and one primary recovery action", async ({ page }) => {
+    await gotoApp(page, "/#/sources?q=zzzz-no-publication");
+    await waitForAppReady(page);
+
+    await expect(page.locator(".calibration-rail")).toContainText("0 publications");
+    await expect(page.getByRole("heading", { name: "No publications match these filters." })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Clear publication filters" })).toHaveCount(1);
+  });
+
+  test("register rows use the same official publication name as the inspector", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await gotoApp(page, "/#/sources?q=DISA%20STIG");
+    await waitForAppReady(page);
+
+    const publication = page.getByRole("button", { name: "DISA Public STIG Library" });
+    await expect(publication).toBeVisible();
+    await publication.click();
+    await expect(page.getByRole("heading", { name: "DISA Public STIG Library", level: 2 })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Page context" })).toHaveCount(0);
   });
 
   test("768px keeps publication details in the modal inspector", async ({ page }) => {
@@ -121,7 +143,7 @@ test.describe("Sources Inspector State & Trust Workflow", () => {
     await gotoApp(page, "/#/sources");
     await waitForAppReady(page);
 
-    await page.getByRole("button", { name: "DoD AI Assurance" }).click();
+    await page.getByRole("button", { name: "CDAO AI Assurance Toolkit" }).click();
     await waitForAppReady(page);
 
     await expect(page.getByRole("dialog")).toBeVisible();

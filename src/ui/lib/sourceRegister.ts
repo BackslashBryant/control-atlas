@@ -1,6 +1,10 @@
 import { humanizeSlug } from "../../app/display-names.mjs";
 import { catalogDisplayNameFor } from "./catalogProfiles";
 import { sourceIdentityPresentationFor } from "./sourceIdentity";
+import {
+  sourcePublicationTitle,
+  sourcePublisherDisplayName,
+} from "./sourcePresentation";
 import publicationIdentityIndexArtifact from "../../../data/generated/publication-identity-index.json";
 
 export type SourceLayerId =
@@ -323,14 +327,16 @@ function publisherField(source: any, parent: any | null): SourceField<string> {
     isRecordedString(parent?.owner)
   ) {
     return derived(
-      parent.owner.trim(),
+      sourcePublisherDisplayName(parent.owner),
       parentPublicationReason(parent),
     );
   }
-  if (isRecordedString(source.owner)) return recorded(source.owner.trim());
+  if (isRecordedString(source.owner)) {
+    return recorded(sourcePublisherDisplayName(source.owner));
+  }
   if (isRecordedString(parent?.owner)) {
     return derived(
-      parent.owner.trim(),
+      sourcePublisherDisplayName(parent.owner),
       parentPublicationReason(parent),
     );
   }
@@ -620,10 +626,10 @@ export function buildPublicationRegister(
       id: identity.id,
       layer: "publication",
       displayTitle: identity.name || sourceTitle(source, null),
-      officialTitle:
-        (isRecordedString(source.name) ? source.name.trim() : null) ||
-        identity.name ||
-        sourceTitle(source, null),
+      officialTitle: sourcePublicationTitle(
+        source,
+        identity.name || sourceTitle(source, null),
+      ),
       familyName: identityPresentation.familyName,
       publicationSourceId: null,
       publisher,

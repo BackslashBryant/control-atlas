@@ -72,7 +72,7 @@ test("Sources preserves useful search and publisher state without legacy layers"
     page.getByRole("table", { name: "Control Atlas publication register" }),
   ).toBeVisible();
   await expect(page.getByRole("tablist", { name: "Source register layers" })).toHaveCount(0);
-  await expect(page.locator(".calibration-rail")).toContainText(/SHOWING 1–\d+ \/ \d+/);
+  await expect(page.locator(".calibration-rail")).toContainText(/Showing 1–\d+ of \d+/);
 });
 
 test("compact Sources opens a modal inspector without horizontal overflow", async ({ page }) => {
@@ -81,7 +81,7 @@ test("compact Sources opens a modal inspector without horizontal overflow", asyn
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await page.getByRole("button", { name: "DoD AI Assurance" }).click();
+  await page.getByRole("button", { name: "CDAO AI Assurance Toolkit" }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await expect(dialog).toHaveAttribute("aria-modal", "true");

@@ -21,6 +21,12 @@ import { AtlasTag } from "../components/AtlasTag";
 import { taxonomyTagsForRecord } from "../../shared/record-taxonomy.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import type { ViewState } from "../lib/viewState";
+import {
+  sourceFreshnessPresentation,
+  sourceLifecycleDisplayName,
+  sourcePublicationTitle,
+  sourcePublisherDisplayName,
+} from "../lib/sourcePresentation";
 
 const PAGE_SIZE = 100;
 const NON_LEAF_NODE_TYPES = new Set([
@@ -78,14 +84,13 @@ export function CatalogDetailPage(props: {
     || (catalog.source_id ? bundle.runtime.getSource(catalog.source_id) : null);
   const officialPublicationUrl = source?.artifact_url || source?.catalog_browse_url;
   const catalogName = catalogDisplayNameFor(catalog.id, catalog.name);
-  const publicationTitle = String(
-    source?.display_name || source?.name || catalogName,
-  ).trim();
-  const publisherName = recordPublisherName(
+  const publicationTitle = sourcePublicationTitle(source, catalogName);
+  const publisherName = sourcePublisherDisplayName(recordPublisherName(
     source?.owner,
     source?.publisher,
     catalog.display_group,
-  );
+  ));
+  const sourceFreshness = sourceFreshnessPresentation(source);
   const catalogAtlasTagIds = taxonomyTagsForRecord({ catalog_id: catalog.id })
     .filter((t: { kind?: string }) => ["organization", "framework", "program"].includes(t.kind ?? ""))
     .map((t: { id: string }) => t.id);
@@ -189,20 +194,41 @@ export function CatalogDetailPage(props: {
               Version <strong>{source.version}</strong>
             </span>
           ) : null}
+          <span>
+            Status <strong>{sourceLifecycleDisplayName(source?.lifecycle_status)}</strong>
+          </span>
+          <span>
+            {sourceFreshness.label} <strong>
+              {sourceFreshness.dateTime ? (
+                <time dateTime={sourceFreshness.dateTime}>{sourceFreshness.value}</time>
+              ) : sourceFreshness.value}
+            </strong>
+          </span>
         </div>
-        {officialPublicationUrl ? (
-          <ButtonLink
-            className="catalog-source-link"
-            data-route-primary-support="true"
-            href={officialPublicationUrl}
-            rel="noreferrer"
-            target="_blank"
-            variant="primary"
-          >
-            Open official publication
-            <IconExternalLink aria-hidden="true" size={16} />
-          </ButtonLink>
-        ) : null}
+        <div className="catalog-source-actions" data-route-primary-support="true">
+          {officialPublicationUrl ? (
+            <ButtonLink
+              className="catalog-source-link"
+              href={officialPublicationUrl}
+              rel="noreferrer"
+              target="_blank"
+              variant="primary"
+            >
+              Open official publication
+              <IconExternalLink aria-hidden="true" size={16} />
+            </ButtonLink>
+          ) : null}
+          {source?.id ? (
+            <AppLink
+              onNavigate={onNavigate}
+              patch={{ source: source.id }}
+              variant="secondary"
+              view="sources"
+            >
+              Review source details
+            </AppLink>
+          ) : null}
+        </div>
       </header>
 
       <section aria-labelledby="catalog-records-title" className="catalog-records">
@@ -431,13 +457,15 @@ function CatalogInventory(props: {
         const source =
           (entry.source_id ? bundle.runtime.getSource(entry.source_id) : null) ||
           publicationSourceForCatalog(bundle.runtime, entry.id);
+        const publicationTitle = sourcePublicationTitle(source, entry.name);
         return {
           entry,
           profile,
-          // Absent metadata is omitted from the row, not printed as a
+          publicationTitle,
           // Omit absent metadata instead of turning it into public copy.
-          publisher: source?.owner || "",
+          publisher: sourcePublisherDisplayName(source?.owner),
           lifecycle: source?.lifecycle_status || "",
+          lifecycleLabel: sourceLifecycleDisplayName(source?.lifecycle_status),
         };
       }),
     [bundle.runtime, catalogs],
@@ -446,7 +474,7 @@ function CatalogInventory(props: {
   const eligible = rows.filter(
     (row) =>
       (!query ||
-        [row.entry.id, row.entry.name, row.publisher, row.profile.recordLabel, row.profile.publicationKind]
+        [row.entry.id, row.entry.name, row.publicationTitle, row.publisher, row.profile.recordLabel, row.profile.publicationKind]
           .some((value) => String(value).toLowerCase().includes(query))) &&
       (!state.type || row.profile.recordLabel === state.type) &&
       (!state.area || row.profile.area === state.area) &&
@@ -524,7 +552,7 @@ function CatalogInventory(props: {
         <section className="catalog-index-group" key={group.label}>
           <h2 className="catalog-index-group-label">{group.label}</h2>
           <ul className="catalog-index-list">
-            {group.rows.map(({ entry, profile, publisher, lifecycle }) => (
+            {group.rows.map(({ entry, profile, publicationTitle, publisher, lifecycleLabel }) => (
               <li key={entry.id}><AppLink
                 className="catalog-index-row"
                 onNavigate={onNavigate}
@@ -532,11 +560,11 @@ function CatalogInventory(props: {
                 view="catalog-detail"
               >
                 <span>
-                  <h3>{entry.name}</h3>
+                  <h3>{publicationTitle}</h3>
                   {profile.synopsis ? <small>{profile.synopsis}</small> : null}
-                  {[publisher, profile.area, lifecycle].filter(Boolean).length ? (
+                  {[publisher, profile.area, lifecycleLabel].filter(Boolean).length ? (
                     <small className="catalog-index-row-meta">
-                      {[publisher, profile.area, lifecycle].filter(Boolean).join(" · ")}
+                      {[publisher, profile.area, lifecycleLabel].filter(Boolean).join(" · ")}
                     </small>
                   ) : null}
                 </span>

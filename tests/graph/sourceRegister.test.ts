@@ -11,6 +11,14 @@ import {
   sourceLayerOptions,
 } from "../../src/ui/lib/sourceRegister";
 import { sourceIdentityPresentationFor } from "../../src/ui/lib/sourceIdentity";
+import {
+  formatSourceDate,
+  sourceFieldAbsenceDisplayName,
+  sourceFreshnessPresentation,
+  sourceLifecycleDisplayName,
+  sourcePublicationTitle,
+  sourcePublisherDisplayName,
+} from "../../src/ui/lib/sourcePresentation";
 
 const catalogBootstrap = JSON.parse(
   readFileSync("data/generated/catalog-bootstrap.json", "utf8"),
@@ -45,6 +53,34 @@ test("source detail identity separates a specific name from shared family contex
       stableId: "source-without-human-name",
     },
   );
+});
+
+test("source presentation keeps official identity, freshness claims, and display labels consistent", () => {
+  const source = {
+    name: "DISA Public STIG Library",
+    display_name: "DISA STIG",
+    owner: "DoD",
+    retrieved_at: "2026-08-13",
+    lifecycle_status: "active",
+  };
+  assert.equal(sourcePublicationTitle(source, "Fallback"), "DISA Public STIG Library");
+  assert.equal(sourcePublisherDisplayName(source.owner), "Department of Defense");
+  assert.equal(sourceLifecycleDisplayName(source.lifecycle_status), "Active");
+  assert.equal(sourceFieldAbsenceDisplayName("missing"), "Not recorded");
+  assert.equal(sourceFieldAbsenceDisplayName("not_applicable", "Not versioned"), "Not versioned");
+  assert.equal(formatSourceDate(source.retrieved_at), "Aug 13, 2026");
+  assert.deepEqual(sourceFreshnessPresentation(source), {
+    label: "Source retrieved",
+    value: "Aug 13, 2026",
+    dateTime: "2026-08-13",
+    state: "retrieved",
+  });
+  assert.deepEqual(sourceFreshnessPresentation({}), {
+    label: "Source freshness",
+    value: "Not recorded",
+    dateTime: "",
+    state: "missing",
+  });
 });
 
 test("source layers preserve truthful nullable fields and exact layer counts", () => {
@@ -378,6 +414,7 @@ test("canonical publication register builds exactly 49 publication rows with rol
   const sp80053 = publications.find((pub) => pub.id === "nist-800-53");
   assert.ok(sp80053, "nist-800-53 must exist in publication register");
   assert.equal(sp80053.publisher.value, "NIST");
+  assert.equal(sp80053.officialTitle, "NIST SP 800-53 Rev. 5");
   assert.equal(sp80053.version.value, "Revision 5, Release 5.2.0");
   assert.equal(sp80053.verifiedAt.value, "2026-07-28");
   assert.ok(
@@ -388,6 +425,9 @@ test("canonical publication register builds exactly 49 publication rows with rol
       (e) => e.id === "artifact-nist-csf-53-supplemental" || e.id === "nist-csf-53-supplemental",
     ),
   );
+
+  const cmmc = publications.find((pub) => pub.id === "dod-cmmc-rule");
+  assert.equal(cmmc?.publisher.value, "Department of Defense");
 });
 
 test("publication register exposes truthful absence states for version and last checked", () => {

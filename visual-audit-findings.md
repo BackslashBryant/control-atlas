@@ -35,6 +35,13 @@ Coherence Epic in `docs/Plan.md`.
 | P3-02 shortcut teaching | Open | The Ctrl + Alt brand device still needs one restrained discovery moment tied to a successful search or help surface. |
 | P2-11 primitive ownership | Partial | Route/state, keyboard, recovery, breakpoint, copy-ownership, and representative-family contracts are now tracked; artifact-preview and final dense-workbench ownership remain open. |
 
+Phase 2 also reconciled a live source-trust inconsistency that was not isolated
+as its own August 21 finding: Sources, Catalog, and record detail mixed short
+aliases with official publication names, treated retrieval dates like completed
+checks, hid absent values, and duplicated selected/empty recovery controls.
+Those surfaces now share an evidence-backed identity and freshness presentation,
+with focused register, record, mobile, and WCAG contracts.
+
 ## Executive Assessment
 
 **Verdict: useful and visually distinctive, but not yet flagship-ready.** Control Atlas already succeeds as a credible public research product and is recognizably Orbital. Its entry, home, Start workflow, publication browsing, record detail, focused Atlas experience, source register, and downloaded workbook system show unusually coherent product thinking for a first public release.

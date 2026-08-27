@@ -297,7 +297,7 @@ test("WS2 exposes governed publication names, not raw catalog identifiers", asyn
   await expect(page.locator("[data-canonical-breadcrumb]")).toContainText("NIST Mobile Threat Catalogue");
   await expect(page.locator("[data-canonical-breadcrumb]")).not.toContainText("nist-mobile-threats");
   await openRecord(page, "/#/record/nist-zt/SP800-207");
-  await expect(page.locator(".record-source-facts")).toContainText("NIST Zero Trust");
+  await expect(page.locator(".record-source-facts")).toContainText("NIST SP 800-207 Zero Trust Architecture");
   await expect(page.locator(".record-source-facts")).not.toContainText("nist-zt");
   await expect(page.locator("[data-canonical-breadcrumb]")).toContainText("NIST Zero Trust");
   await expect(page.locator("[data-canonical-breadcrumb]")).not.toContainText("nist-zt");

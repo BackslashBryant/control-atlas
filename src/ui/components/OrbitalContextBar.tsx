@@ -121,13 +121,6 @@ export function orbitalRouteContext(state: ViewState, entityName = ""): RouteCon
         mode: "operational",
         label: state.source ? "Source" : "Sources",
         scope: "",
-        back: state.source
-          ? {
-              label: "Back to sources",
-              view: "sources",
-              patch: { ...state, source: "" },
-            }
-          : undefined,
       };
     case "commons":
       return {

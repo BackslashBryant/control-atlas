@@ -974,6 +974,19 @@
   font-size: var(--ca-text-sm);
 }
 
+.source-not-found-banner h2 {
+  margin: 0 0 var(--ca-space-1);
+  color: var(--ca-text);
+  font-family: var(--ca-font-display);
+  font-size: var(--ca-text-lg);
+}
+
+.source-field-absence {
+  color: var(--ca-text-muted);
+  font-style: italic;
+  font-weight: 400;
+}
+
 /* ── Inspector Drawer / Detail Surface ── */
 .inspector-drawer {
   display: flex;
@@ -1031,7 +1044,7 @@
 @media (min-width: 1200px) {
   .sources-workspace.queue-layout.sources-workspace--inspecting {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(20rem, 23rem);
+    grid-template-columns: minmax(0, 1fr) minmax(23rem, 26rem);
     gap: var(--ca-space-6);
     align-items: start;
   }

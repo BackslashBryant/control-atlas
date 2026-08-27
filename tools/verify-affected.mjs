@@ -35,8 +35,15 @@ export function createVerificationPlan(paths, changeMap) {
     path !== 'tests/strict-conditional-fetch.test.mjs' &&
     path !== 'tests/write-json-atomically.test.mjs');
   const graphTests = paths.filter((path) => path.startsWith('tests/graph/') && path.endsWith('.test.ts'));
-  const sourcesChanged = paths.some((path) =>
-    path === 'src/ui/pages/SourcesPage.tsx' || path.includes('source-truth'));
+  const sourceTrustChanged = paths.some((path) =>
+    path === 'src/ui/pages/SourcesPage.tsx' ||
+    path === 'src/ui/pages/CatalogDetailPage.tsx' ||
+    path === 'src/ui/pages/ObjectDetailPage.tsx' ||
+    path === 'src/ui/lib/sourceRegister.ts' ||
+    path === 'src/ui/lib/sourcePresentation.ts' ||
+    path === 'src/shared/source-text-presentation.mjs' ||
+    path.includes('source-truth') ||
+    path === 'tests/e2e/source-trust-surfaces.spec.mjs');
   const stigObservationChanged = paths.some((path) =>
     path === 'scripts/fetch-stig-source-observations.mjs' ||
     path === 'tests/stig-source-observer.test.mjs');
@@ -46,7 +53,7 @@ export function createVerificationPlan(paths, changeMap) {
     path === 'tests/strict-conditional-fetch.test.mjs' ||
     path === 'tests/write-json-atomically.test.mjs');
   const mappedData = stigObservationChanged || incrementalDataChanged;
-  const mappedRuntime = sourcesChanged || mappedData || e2ePaths.length > 0;
+  const mappedRuntime = sourceTrustChanged || mappedData || e2ePaths.length > 0;
 
   if (changeMap.evidenceOnly) {
     addStep(steps, {
@@ -133,13 +140,27 @@ export function createVerificationPlan(paths, changeMap) {
     });
   }
 
-  if (sourcesChanged) {
+  if (sourceTrustChanged) {
     addStep(steps, {
-      id: 'sources-browser',
+      id: 'source-truth-contract', command: ['npm', 'run', 'verify:source-truth'],
+      expectedTests: 0, workers: 1, budgetSeconds: 10,
+    });
+    addStep(steps, {
+      id: 'source-trust-browser',
       command: ['npm', 'run', 'test:e2e:run', '--',
         'tests/e2e/sources-inspector-state.spec.mjs',
-        'tests/e2e/source-truth-presentation.spec.mjs'],
-      expectedTests: 14, workers: 2, budgetSeconds: 30,
+        'tests/e2e/source-truth-presentation.spec.mjs',
+        'tests/e2e/source-trust-surfaces.spec.mjs'],
+      expectedTests: 21, workers: 2, budgetSeconds: 60,
+    });
+    addStep(steps, {
+      id: 'source-identity-compatibility-browser',
+      command: ['npm', 'run', 'test:e2e:run', '--',
+        'tests/e2e/publication-identity.spec.mjs',
+        'tests/e2e/epic14-ws2-record-template.spec.mjs',
+        '--grep',
+        'publication pages use|OSCAL-fed records|WS2 exposes governed'],
+      expectedTests: 3, workers: 2, budgetSeconds: 30,
     });
   } else if (e2ePaths.length > 0) {
     addStep(steps, {

@@ -19,7 +19,7 @@ test('automation-only changes stay on the automation contract path', () => {
     'automation-contracts',
   ]);
   assert.equal(plan.steps.some((step) => step.id === 'incremental-site-build'), false);
-  assert.equal(plan.steps.some((step) => step.id === 'sources-browser'), false);
+  assert.equal(plan.steps.some((step) => step.id === 'source-trust-browser'), false);
 });
 
 test('Sources changes select one bounded route family and the incremental build', () => {
@@ -29,10 +29,37 @@ test('Sources changes select one bounded route family and the incremental build'
   assert.deepEqual(plan.steps.map((step) => step.id), [
     'typecheck',
     'incremental-site-build',
-    'sources-browser',
+    'source-truth-contract',
+    'source-trust-browser',
+    'source-identity-compatibility-browser',
   ]);
-  assert.equal(plan.steps.at(-1).expectedTests, 14);
-  assert.equal(plan.steps.at(-1).workers, 2);
+  assert.equal(plan.steps.find((step) => step.id === 'source-trust-browser').expectedTests, 21);
+  assert.equal(plan.steps.find((step) => step.id === 'source-trust-browser').workers, 2);
+  const sharedPaths = [
+    'src/ui/lib/sourcePresentation.ts',
+    'src/ui/pages/CatalogDetailPage.tsx',
+    'src/ui/pages/ObjectDetailPage.tsx',
+  ];
+  const sharedPlan = createVerificationPlan(sharedPaths, classifyChangedPaths(sharedPaths));
+  assert.equal(sharedPlan.blocked, false);
+  assert.equal(sharedPlan.steps.some((step) => step.id === 'source-trust-browser'), true);
+  assert.deepEqual(
+    sharedPlan.steps.find((step) => step.id === 'source-trust-browser')?.command.slice(-3),
+    [
+      'tests/e2e/sources-inspector-state.spec.mjs',
+      'tests/e2e/source-truth-presentation.spec.mjs',
+      'tests/e2e/source-trust-surfaces.spec.mjs',
+    ],
+  );
+  assert.deepEqual(
+    sharedPlan.steps.find((step) => step.id === 'source-identity-compatibility-browser')?.command.slice(-4),
+    [
+      'tests/e2e/publication-identity.spec.mjs',
+      'tests/e2e/epic14-ws2-record-template.spec.mjs',
+      '--grep',
+      'publication pages use|OSCAL-fed records|WS2 exposes governed',
+    ],
+  );
 });
 
 test('dependency changes validate npm ci compatibility before product gates', () => {
