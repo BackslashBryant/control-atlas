@@ -2,7 +2,7 @@
 
 - **Owner:** Forge and Pixel
 - **Status:** Canonical record-presentation fidelity baseline
-- **Last reviewed:** 2026-08-24
+- **Last reviewed:** 2026-08-26
 - **Supersession:** A source, importer, normalized schema, runtime contract, or page-role change must update the affected row and its executable fixture in the same pull request.
 
 ## Purpose and method
@@ -66,14 +66,25 @@ Status precedence is `MODEL GAP` → `DATA LOSS` → `PRESENTATION LOSS` → `PA
 | NIST ZT | publication | `zt_publication` | SP 800-207 | official NIST publication | title, summary, source/version | all | all | all | publication identity, summary, contents | none | source fragments | stable ID | catalog → publication | structural | atomic | publication/document | MODEL GAP → remediated |
 | NIST ZT | reference component | `zt_reference_component` | Data Access Protection | SP 1800-35 reference architecture | component name, function, parent | all | all | all | function and hierarchy | none | source fragments | stable ID | publication → component | structural, correlation | atomic | implementation artifact | MODEL GAP → remediated |
 | NIST/DoD ZT | tenet | `zt_tenet` | SP800207-TENET-1 | official Zero Trust publication | tenet statement and publication | all | all | all | statement and hierarchy | none | source fragments | stable ID | publication/catalog → tenet | structural | atomic | atomic record | PASS |
+| FedRAMP 2026 | control context | `control_context` | CTL-AC-06-01 | official FedRAMP 2026 machine-readable rules | control identifier, parameter/guidance text, release version/date | all | all | all | control context and release facts | none | ingestion locator | source-text offsets and taxonomy tags | catalog → control family context | structural, correlation | atomic | atomic record | PASS |
+| FedRAMP 2026 | definition | `definition` | FRD-AAP | official FedRAMP 2026 machine-readable rules | term, definition, release version/date | all | all | all | term definition and release facts | none | ingestion locator | source-text offsets and taxonomy tags | catalog → definitions | structural, correlation | atomic | atomic record | PASS |
+| FedRAMP 2026 | key security indicator | `key_security_indicator` | KSI-CED-RAT | official FedRAMP 2026 machine-readable rules | indicator ID, title, statement, release version/date | all | all | all | indicator statement and release facts | none | ingestion locator | source-text offsets and taxonomy tags | catalog → KSI family | structural, correlation | atomic | atomic record | PASS |
+| Control Atlas | organizing area | `limb` | LIMB-GOVERNANCE | versioned Control Atlas structure record | stable ID, editorial title and description, root parent | all | all | all | area description and child inventory | none | publisher-only fields | source-text offsets | trunk → limb | structural, organizing | container | container | PASS |
+| Federal authority spine | policy directive | `policy_directive` | OMB-CIRCULAR-A-130 | canonical authority registry and official locator | stable ID, title, source-backed summary, locator | all | all | all | authority summary and source | none | ingestion source ID | source-text offsets | authority spine → directive | authority, structural | publication | publication/document | PASS |
+| Federal authority spine | regulation | `regulation` | 32-CFR-2002 | canonical authority registry and official locator | stable ID, title, source-backed summary, locator | all | all | all | authority summary and source | none | ingestion source ID | source-text offsets | authority spine → regulation | authority, structural | publication | publication/document | PASS |
+| FedRAMP 2026 | rule | `rule` | AFC-CSO-ACK | official FedRAMP 2026 machine-readable rules | rule ID, title, statement, family, release version/date | all | all | all | rule statement, hierarchy, release facts | none | ingestion locator | source-text offsets and taxonomy tags | catalog → rule family → rule | structural, correlation | atomic | atomic record | PASS |
+| Federal authority spine | statute | `statute` | USC-40-11331 | canonical authority registry and official locator | stable ID, title, source-backed summary, locator | all | all | all | authority summary and source | none | ingestion source ID | source-text offsets | authority spine → statute | authority, structural | publication | publication/document | PASS |
+| Control Atlas | organizing root | `trunk` | TRUNK | versioned Control Atlas structure record | stable ID, editorial title and description | all | all | all | scope description and area inventory | none | publisher-only fields | source-text offsets | trunk root | structural, organizing | container | container | PASS |
 | DoD ZT | overlay section | `zt_overlay_section` | none | overlay pages retained inside `DOC-OVERLAYS.document_sections` | nested page sections, not standalone publisher objects | obsolete adapter loop expected empty curated array | no records | no runtime nodes | nested document sections | none | none | prior adapter would have fabricated “Overlay section for …” prose | document section, not graph node | none | unsupported phantom | remove from supported registry | MODEL GAP → removed |
 
 ## Explicit catalog/type coverage
 
-The executable registry contains 89 final combinations and has no generic fallback:
+The executable registry contains 99 final combinations across 51 supported runtime types and has no generic fallback:
 
 | Catalog | Explicit runtime types |
 | --- | --- |
+| atlas-authority-spine | policy_directive, regulation, statute |
+| atlas-organizing-spine | limb, trunk |
 | cmmc-2 | catalog, program |
 | csf-2 | catalog, category, function, requirement |
 | cui-policy | catalog, policy |
@@ -82,6 +93,7 @@ The executable registry contains 89 final combinations and has no generic fallba
 | disa-stig | benchmark, catalog, stig_rule |
 | dod-rai | catalog, group, requirement |
 | dod-zt | catalog, zt_activity, zt_capability, zt_document, zt_pillar, zt_tenet |
+| fedramp-2026 | catalog, control_context, definition, key_security_indicator, rule |
 | fedramp-rev5 | baseline, catalog |
 | fips-199 | catalog, impact_category |
 | fips-200 | catalog, requirement |

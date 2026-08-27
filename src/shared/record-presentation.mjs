@@ -46,7 +46,15 @@ const commonFields = Object.freeze({
   },
 });
 
-const contract = ({ role, sections, required = [], optional = [], facts = [], fields = {} }) => {
+const contract = ({
+  role,
+  sections,
+  required = [],
+  optional = [],
+  facts = [],
+  fields = {},
+  hierarchy = ["parent_id", "family"],
+}) => {
   const sectionFields = Object.fromEntries(
     sections.map((entry) => [
       entry.field,
@@ -59,7 +67,7 @@ const contract = ({ role, sections, required = [], optional = [], facts = [], fi
   return Object.freeze({
     page_role: role,
     identity_fields: Object.freeze(["item_id", "title"]),
-    hierarchy_fields: Object.freeze(["parent_id", "family"]),
+    hierarchy_fields: Object.freeze(hierarchy),
     sections: Object.freeze(sections),
     metadata_facts: Object.freeze(facts),
     required_fields: Object.freeze(required),
@@ -81,7 +89,12 @@ const publication = (sections, required = [], optional = [], extra = {}) =>
   contract({ role: PAGE_ROLES.PUBLICATION_DOCUMENT, sections, required, optional, ...extra });
 
 const authorityPublication = (heading) =>
-  publication([section("description", heading)], ["title", "description"]);
+  contract({
+    role: PAGE_ROLES.PUBLICATION_DOCUMENT,
+    sections: [section("description", heading)],
+    required: ["title", "description"],
+    hierarchy: ["parent_id"],
+  });
 
 const BASE_CONTRACTS = {
   assessment_procedure: contract({
@@ -190,7 +203,12 @@ const BASE_CONTRACTS = {
   ),
   iot_subcapability: container([section("description", "Sub-Capability")], [], ["description"]),
   key_security_indicator: atomic([section("description", "Indicator Statement")], ["description"]),
-  limb: container([section("description", "Control Atlas Area")], ["title", "description"]),
+  limb: container(
+    [section("description", "Control Atlas Area")],
+    ["title", "description"],
+    [],
+    { hierarchy: ["parent_id"] },
+  ),
   mobile_threat: atomic(
     [
       section("threat_origin", "Published Origin"),
@@ -230,7 +248,12 @@ const BASE_CONTRACTS = {
   statute: authorityPublication("Authority Summary"),
   stig_rule: null,
   tactic: container([section("description", "Tactic Summary")], [], ["description"]),
-  trunk: container([section("description", "Control Atlas Scope")], ["title", "description"]),
+  trunk: container(
+    [section("description", "Control Atlas Scope")],
+    ["title", "description"],
+    [],
+    { hierarchy: [] },
+  ),
   zt_activity: atomic([section("description", "Activity")], ["description"], ["outcomes", "end_state", "predecessors", "successors"]),
   zt_assessment_question: contract({
     role: PAGE_ROLES.ASSESSMENT_QUESTION,
@@ -395,12 +418,23 @@ const CATALOG_OVERRIDES = Object.freeze({
   "nist-ssdf:requirement": [section("description", "Practice")],
 });
 
+const REQUIRED_FIELD_OVERRIDES = Object.freeze({
+  "nist-800-171:requirement": [],
+  "nist-800-172:requirement": [],
+});
+
 export function recordPresentationContract(catalogId, nodeType) {
-  const resolvedCatalogId = catalogId || PRESENTATION_SCOPE_BY_TYPE[nodeType];
+  const resolvedCatalogId = PRESENTATION_SCOPE_BY_TYPE[nodeType] || catalogId;
   const key = `${resolvedCatalogId || ""}:${nodeType}`;
   if (!supportedKeys.has(key)) throw new Error(`Missing record presentation contract for ${key}`);
   const base = BASE_CONTRACTS[nodeType];
   const sections = Object.freeze(CATALOG_OVERRIDES[key] || base.sections);
+  const requiredFields = Object.freeze(REQUIRED_FIELD_OVERRIDES[key] || base.required_fields);
+  const optionalFields = Object.freeze(
+    REQUIRED_FIELD_OVERRIDES[key]
+      ? [...new Set([...base.optional_fields, ...base.required_fields])]
+      : base.optional_fields,
+  );
   const fieldDispositions = Object.freeze({
     ...base.field_dispositions,
     ...Object.fromEntries(
@@ -418,6 +452,8 @@ export function recordPresentationContract(catalogId, nodeType) {
     catalog_id: resolvedCatalogId,
     record_type: nodeType,
     sections,
+    required_fields: requiredFields,
+    optional_fields: optionalFields,
     field_dispositions: fieldDispositions,
   });
 }

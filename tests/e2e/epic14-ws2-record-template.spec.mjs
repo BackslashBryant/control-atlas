@@ -146,9 +146,10 @@ test("WS2 related records exclude structural parents and public pages expose no 
   await expect(page.getByText("Developer details", { exact: true })).toHaveCount(0);
 });
 
-test("WS2 keeps governed related-record samples bounded at every governed width", async ({ page }) => {
+test("WS2 keeps governed related-record samples human-readable and bounded at every governed width", async ({ page }) => {
   test.setTimeout(120_000);
   const stableId = "PRODUCT-COMPONENT-APPGATE-APPGATE-HEADLESS-CLIENT-RESOURCE-PROTECTION-CL-E65DEBF0E8";
+  const accessibleName = /Open Appgate Headless Client.*Product component, NIST Zero Trust/;
 
   for (const width of [320, 375, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
@@ -157,10 +158,18 @@ test("WS2 keeps governed related-record samples bounded at every governed width"
     await related.scrollIntoViewIfNeeded();
     const groups = related.locator("details.record-relationship-disclosure");
     expect(await groups.count()).toBeGreaterThan(0);
+    let appgateGroup;
     for (const group of await groups.all()) {
       await expect(group).not.toHaveAttribute("open", "");
       expect(await group.locator("[data-record-connection-id]").count()).toBeLessThanOrEqual(5);
+      if (await group.locator('a[aria-label^="Open Appgate Headless Client"]').count()) appgateGroup = group;
     }
+    expect(appgateGroup).toBeTruthy();
+    await appgateGroup.locator(":scope > summary").click();
+    const link = appgateGroup.getByRole("link", { name: accessibleName });
+    await expect(link).toBeVisible();
+    await expect(link).toContainText("Appgate Headless Client");
+    await expect(link).toContainText("Product component · NIST Zero Trust");
     await expect(related).not.toContainText(stableId);
     await expect(related.getByRole("link", { name: "Explore all connections in Atlas", exact: true })).toBeVisible();
     expect(

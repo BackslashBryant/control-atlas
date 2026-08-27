@@ -1,6 +1,8 @@
 # Control Atlas Record Architecture & Source-Fidelity Epic
 
-Temporary active-plan authority for the record-fidelity epic. The source specification has SHA-256 `48f9d230e9d40604518c14a2d8f2bc452670b867f451084abcff7bc41f2fa9d5`. This plan must be reconciled against current `main` before implementation claims and deleted in the shipping change.
+Temporary active-plan authority for the record-fidelity epic. The source specification has SHA-256 `48f9d230e9d40604518c14a2d8f2bc452670b867f451084abcff7bc41f2fa9d5`. Reconcile it against current `main` before implementation claims, and delete it in the shipping change.
+
+**Status:** Active
 
 ## Objective
 

@@ -184,7 +184,12 @@ export function validateRecordPresentation(nodes) {
     }
     const profile = recordPresentationContract(node.metadata?.catalog_id || "", node.node_type);
     const missing = missingRequiredRecordFields(profile, node.metadata || {});
-    if (!String(node.metadata?.family || "").trim()) missing.push("family");
+    if (
+      profile.hierarchy_fields.includes("family") &&
+      !String(node.metadata?.family || "").trim()
+    ) {
+      missing.push("family");
+    }
     for (const section of profile.sections.filter((entry) => entry.kind === "text")) {
       if (!profile.field_dispositions[section.field]) missing.push(`${section.field} disposition`);
       const value = node.metadata?.[section.field];
@@ -851,10 +856,20 @@ function attachNodeProvenance(node, sourceId, registry) {
   const sourceLocator = node.metadata?.source_locator || `${sourceId}#${node.id}`;
   const sourceReference = `${primaryArtifactId}#${sourceLocator}`;
   node.source_refs = [sourceReference];
-  const presentationFields = recordPresentationProfile(
+  const presentationFields = recordPresentationContract(
     node.metadata?.catalog_id || "",
     node.node_type,
   ).sections.map((section) => section.field);
+  node.metadata.source_text_presentation ||= {};
+  for (const field of presentationFields) {
+    const value = node.metadata?.[field];
+    if (
+      String(value || "").trim() &&
+      !node.metadata.source_text_presentation[field]
+    ) {
+      node.metadata.source_text_presentation[field] = buildSourceTextPresentation(value);
+    }
+  }
   const materialFields = [...new Set(["title", ...presentationFields])];
   node.claim_evidence = materialFields
     .filter((field) => {
