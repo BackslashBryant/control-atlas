@@ -142,12 +142,25 @@ export function createVerificationPlan(paths, changeMap) {
 
   if (sourceTrustChanged) {
     addStep(steps, {
+      id: 'source-truth-contract', command: ['npm', 'run', 'verify:source-truth'],
+      expectedTests: 0, workers: 1, budgetSeconds: 10,
+    });
+    addStep(steps, {
       id: 'source-trust-browser',
       command: ['npm', 'run', 'test:e2e:run', '--',
         'tests/e2e/sources-inspector-state.spec.mjs',
         'tests/e2e/source-truth-presentation.spec.mjs',
         'tests/e2e/source-trust-surfaces.spec.mjs'],
       expectedTests: 21, workers: 2, budgetSeconds: 60,
+    });
+    addStep(steps, {
+      id: 'source-identity-compatibility-browser',
+      command: ['npm', 'run', 'test:e2e:run', '--',
+        'tests/e2e/publication-identity.spec.mjs',
+        'tests/e2e/epic14-ws2-record-template.spec.mjs',
+        '--grep',
+        'publication pages use|OSCAL-fed records|WS2 exposes governed'],
+      expectedTests: 3, workers: 2, budgetSeconds: 30,
     });
   } else if (e2ePaths.length > 0) {
     addStep(steps, {

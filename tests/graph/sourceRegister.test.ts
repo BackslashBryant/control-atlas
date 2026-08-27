@@ -13,6 +13,7 @@ import {
 import { sourceIdentityPresentationFor } from "../../src/ui/lib/sourceIdentity";
 import {
   formatSourceDate,
+  sourceFieldAbsenceDisplayName,
   sourceFreshnessPresentation,
   sourceLifecycleDisplayName,
   sourcePublicationTitle,
@@ -65,6 +66,8 @@ test("source presentation keeps official identity, freshness claims, and display
   assert.equal(sourcePublicationTitle(source, "Fallback"), "DISA Public STIG Library");
   assert.equal(sourcePublisherDisplayName(source.owner), "Department of Defense");
   assert.equal(sourceLifecycleDisplayName(source.lifecycle_status), "Active");
+  assert.equal(sourceFieldAbsenceDisplayName("missing"), "Not recorded");
+  assert.equal(sourceFieldAbsenceDisplayName("not_applicable", "Not versioned"), "Not versioned");
   assert.equal(formatSourceDate(source.retrieved_at), "Aug 13, 2026");
   assert.deepEqual(sourceFreshnessPresentation(source), {
     label: "Source retrieved",

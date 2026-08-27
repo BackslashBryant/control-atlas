@@ -24,7 +24,10 @@ import {
   type PublicationRegisterRow,
 } from "../lib/sourceRegister";
 import type { ViewState } from "../lib/viewState";
-import { formatSourceDate } from "../lib/sourcePresentation";
+import {
+  formatSourceDate,
+  sourceFieldAbsenceDisplayName,
+} from "../lib/sourcePresentation";
 
 const SOURCE_PAGE_SIZE = 25;
 
@@ -38,7 +41,7 @@ function VerificationDate(props: { field: { value: string | null; state: string;
   if (!field.value) {
     return (
       <span className="source-field-absence" title={field.reason}>
-        {field.state === "not_applicable" ? "Not applicable" : "Not recorded"}
+        {sourceFieldAbsenceDisplayName(field.state)}
       </span>
     );
   }
@@ -64,9 +67,7 @@ function SourceFieldText(props: {
   if (props.field.value) return <>{props.field.value}</>;
   return (
     <span className="source-field-absence" title={props.field.reason}>
-      {props.field.state === "not_applicable"
-        ? props.notApplicable || "Not applicable"
-        : "Not recorded"}
+      {sourceFieldAbsenceDisplayName(props.field.state, props.notApplicable)}
     </span>
   );
 }

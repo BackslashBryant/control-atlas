@@ -29,10 +29,12 @@ test('Sources changes select one bounded route family and the incremental build'
   assert.deepEqual(plan.steps.map((step) => step.id), [
     'typecheck',
     'incremental-site-build',
+    'source-truth-contract',
     'source-trust-browser',
+    'source-identity-compatibility-browser',
   ]);
-  assert.equal(plan.steps.at(-1).expectedTests, 21);
-  assert.equal(plan.steps.at(-1).workers, 2);
+  assert.equal(plan.steps.find((step) => step.id === 'source-trust-browser').expectedTests, 21);
+  assert.equal(plan.steps.find((step) => step.id === 'source-trust-browser').workers, 2);
   const sharedPaths = [
     'src/ui/lib/sourcePresentation.ts',
     'src/ui/pages/CatalogDetailPage.tsx',
@@ -47,6 +49,15 @@ test('Sources changes select one bounded route family and the incremental build'
       'tests/e2e/sources-inspector-state.spec.mjs',
       'tests/e2e/source-truth-presentation.spec.mjs',
       'tests/e2e/source-trust-surfaces.spec.mjs',
+    ],
+  );
+  assert.deepEqual(
+    sharedPlan.steps.find((step) => step.id === 'source-identity-compatibility-browser')?.command.slice(-4),
+    [
+      'tests/e2e/publication-identity.spec.mjs',
+      'tests/e2e/epic14-ws2-record-template.spec.mjs',
+      '--grep',
+      'publication pages use|OSCAL-fed records|WS2 exposes governed',
     ],
   );
 });

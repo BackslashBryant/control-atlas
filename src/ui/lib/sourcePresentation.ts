@@ -38,6 +38,13 @@ export function sourceLifecycleDisplayName(value: unknown): string {
   return recorded ? displayNameFor("lifecycle_status", recorded) : "Not recorded";
 }
 
+export function sourceFieldAbsenceDisplayName(
+  state: string,
+  notApplicable = "Not applicable",
+): string {
+  return state === "not_applicable" ? notApplicable : "Not recorded";
+}
+
 export function sourceFreshnessPresentation(source: any): SourceFreshnessPresentation {
   const lastChecked = String(source?.last_checked || "").trim();
   if (lastChecked) {

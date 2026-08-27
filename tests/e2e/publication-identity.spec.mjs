@@ -8,26 +8,26 @@ import {
 } from "./support.mjs";
 
 const publicationRecords = [
-  ["nist-800-53", "AC-1", "SP 800-53 Rev. 5", "NIST OSCAL Content"],
-  ["nist-800-53a", "AC-1", "SP 800-53A Rev. 5", "NIST OSCAL Content"],
-  ["nist-800-171", "3.1.1", "SP 800-171 Rev. 3", "NIST OSCAL Content"],
+  ["nist-800-53", "AC-1", "NIST SP 800-53 Rev. 5", "NIST OSCAL Content"],
+  ["nist-800-53a", "AC-1", "NIST SP 800-53A Assessment Procedures", "NIST OSCAL Content"],
+  ["nist-800-171", "3.1.1", "NIST SP 800-171 Rev. 3", "NIST OSCAL Content"],
   [
     "csf-2",
     "CATEGORY-DE.AE",
-    "Cybersecurity Framework 2.0",
+    "NIST Cybersecurity Framework 2.0",
     "NIST OSCAL Content",
   ],
   [
     "nist-ssdf",
     "GROUP-PREPARE-THE-ORGANIZATION",
-    "SP 800-218 SSDF Version 1.1",
+    "NIST SP 800-218 Secure Software Development Framework",
     "NIST SSDF OSCAL Content",
   ],
 ];
 
 const publicationRoutes = [
-  ["nist-800-53", "SP 800-53 Rev. 5", "NIST", "family", "families"],
-  ["csf-2", "Cybersecurity Framework 2.0", "NIST", "category", "categories"],
+  ["nist-800-53", "NIST SP 800-53 Rev. 5", "NIST", "family", "families"],
+  ["csf-2", "NIST Cybersecurity Framework 2.0", "NIST", "category", "categories"],
 ];
 
 test("publication pages use official human identity and publisher-native tiers", async ({

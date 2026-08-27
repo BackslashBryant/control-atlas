@@ -124,6 +124,10 @@ Phase 0 measured improvements:
   Atlas, and record workflows passed. The accessibility run caught a real
   3.18:1 Historical badge regression, which was corrected and re-proven with
   no serious or critical violations.
+- Phase 2 exact-head CI exposed page-local absence copy and three stale alias
+  assertions outside the initial affected path. The copy moved into the shared
+  trust primitive, the official-name contracts were reconciled, and affected
+  verification now selects those source-truth and compatibility checks locally.
 
 Required Phase 0 acceptance:
 
