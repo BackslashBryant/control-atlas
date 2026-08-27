@@ -116,6 +116,7 @@ test('package scripts expose deterministic split gates and full local verificati
     'test',
     'test:ci-contracts',
     'verify:affected',
+    'verify:lockfile',
     'test:e2e:smoke',
     'test:visual',
     'test:a11y:smoke',

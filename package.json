@@ -25,6 +25,7 @@
     "lint:ci": "npm run lint && eslint playwright.visual.config.mjs tests/e2e/visual-regression.spec.mjs --max-warnings=0 && npm run lint:operator-ecosystem && npm run lint:nist-ingestion && npm run lint:ingestion",
     "lint:automation": "eslint tools/check-action-pins.mjs tools/classify-change-scope.mjs tools/git-push-with-retry.mjs tools/lib/process-runner.mjs tools/ship-to-main.mjs tools/verify-affected.mjs tools/wait-for-checks.mjs tests/build-layout-contract.test.mjs tests/change-scope.test.mjs tests/package-scripts.test.mjs tests/process-runner.test.mjs tests/release-evidence.test.mjs tests/verification-topology.test.mjs tests/verify-affected.test.mjs tests/wait-for-checks.test.mjs playwright.config.mjs --max-warnings=0",
     "test:ci-contracts": "node --test tests/build-layout-contract.test.mjs tests/change-scope.test.mjs tests/package-scripts.test.mjs tests/process-runner.test.mjs tests/release-evidence.test.mjs tests/verification-topology.test.mjs tests/verify-affected.test.mjs tests/wait-for-checks.test.mjs && node tools/check-action-pins.mjs",
+    "verify:lockfile": "npm ci --dry-run --ignore-scripts --no-audit --no-fund",
     "verify:affected": "node ./tools/verify-affected.mjs",
     "test:affected:graph": "tsx --test",
     "lint:stig-observer": "eslint scripts/fetch-stig-source-observations.mjs tools/importers/stig-source-observer.mjs tests/stig-source-observer.test.mjs --max-warnings=0",

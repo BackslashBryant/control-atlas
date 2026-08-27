@@ -66,6 +66,12 @@ export function createVerificationPlan(paths, changeMap) {
       expectedTests: 42, workers: 1, budgetSeconds: 3,
     });
   }
+  if (changeMap.dependenciesChanged) {
+    addStep(steps, {
+      id: 'lockfile-integrity', command: ['npm', 'run', 'verify:lockfile'],
+      expectedTests: 0, workers: 1, budgetSeconds: 10,
+    });
+  }
 
   if (changeMap.contentChanged) {
     addStep(steps, {

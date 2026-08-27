@@ -29,6 +29,13 @@ test('Sources changes select one bounded route family and the incremental build'
   assert.equal(plan.steps.at(-1).workers, 2);
 });
 
+test('dependency changes validate npm ci compatibility before product gates', () => {
+  const paths = ['package-lock.json'];
+  const plan = createVerificationPlan(paths, classifyChangedPaths(paths));
+  assert.equal(plan.blocked, true, 'dependency browser proof remains explicitly unmapped');
+  assert.equal(plan.steps.some((step) => step.id === 'lockfile-integrity'), true);
+});
+
 test('unmapped runtime and data changes fail before an expensive fallback', () => {
   for (const paths of [['src/ui/pages/UnknownPage.tsx'], ['data/source-registry.json']]) {
     const plan = createVerificationPlan(paths, classifyChangedPaths(paths));
