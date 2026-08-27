@@ -36,7 +36,7 @@ test('sourced lifecycle and replacement history remain visible', async ({ page }
   await expect(replacementInspector).toContainText('DoD Instruction 8510.01');
   await expect(replacementInspector.getByRole('link', { name: 'Open official publication' })).toHaveAttribute(
     'href',
-    'https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/851001p.pdf',
+    'https://www.esd.whs.mil/Directives/issuances/dodi/',
   );
 });
 
