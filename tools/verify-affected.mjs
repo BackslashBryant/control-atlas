@@ -63,7 +63,7 @@ export function createVerificationPlan(paths, changeMap) {
     });
     addStep(steps, {
       id: 'automation-contracts', command: ['npm', 'run', 'test:ci-contracts'],
-      expectedTests: 42, workers: 1, budgetSeconds: 3,
+      expectedTests: 43, workers: 1, budgetSeconds: 3,
     });
   }
   if (changeMap.dependenciesChanged) {
@@ -75,8 +75,8 @@ export function createVerificationPlan(paths, changeMap) {
 
   if (changeMap.contentChanged) {
     addStep(steps, {
-      id: 'documentation-contracts', command: ['npm', 'run', 'test:style'],
-      expectedTests: 0, workers: 1, budgetSeconds: 5,
+      id: 'documentation-contracts', command: ['npm', 'run', 'test:documentation-contracts'],
+      expectedTests: 3, workers: 1, budgetSeconds: 5,
     });
   }
 

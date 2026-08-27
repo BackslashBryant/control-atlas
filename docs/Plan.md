@@ -1,5 +1,9 @@
 # Epic: Control Atlas Product Trust and Surface Coherence
 
+- **Owner:** Nexus, Muse, Forge, and Pixel
+- **Status:** Active
+- **Closeout:** Delete it in the shipping change after exact-SHA live proof.
+
 ## Outcome
 
 Ship a coherent, source-trustworthy Control Atlas experience across every public

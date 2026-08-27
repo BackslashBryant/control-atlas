@@ -45,6 +45,7 @@ test('PR CI is an independent gate DAG around one immutable artifact', () => {
   assert.equal((ci.match(/name: site-build/g) ?? []).length >= 4, true);
   assert.equal((ci.match(/npm run build:site:incremental/g) ?? []).length, 2);
   assert.match(ci, /npm run verify:generated-reproducibility/);
+  assert.match(ci, /name: Documentation contracts[\s\S]*?if: \$\{\{ needs\.changes\.outputs\.content_changed == 'true' \}\}[\s\S]*?npm run test:documentation-contracts/);
   assert.match(ci, /name: generated-data/);
   assert.match(ci, /shard: \[1, 2\]/);
   assert.match(ci, /--shard=\$\{\{ matrix\.shard \}\}\/2/);
@@ -115,6 +116,7 @@ test('package scripts expose deterministic split gates and full local verificati
     'typecheck',
     'test',
     'test:ci-contracts',
+    'test:documentation-contracts',
     'verify:affected',
     'verify:lockfile',
     'test:e2e:smoke',

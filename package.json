@@ -94,6 +94,7 @@
     "test:performance:ci": "node ./node_modules/@lhci/cli/src/cli.js autorun --config=.lighthouserc.ci.json",
     "style:check": "node ./tools/run-vale.mjs README.md docs/PRD.md docs/vision.md docs/DESIGN_PRINCIPLES.md",
     "test:style": "node ./tools/test-vale-style.mjs",
+    "test:documentation-contracts": "node --test tests/alignment-contract.test.mjs && npm run test:style",
     "test:oscal:independent": "node ./tools/oscal-cross-check.mjs",
     "test:e2e:live": "playwright test --config playwright.live.config.mjs",
     "test:e2e:live:full": "playwright test --config playwright.live-full.config.mjs",

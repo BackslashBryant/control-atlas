@@ -133,10 +133,7 @@ jobs:
   content:
     name: Documentation contracts
     needs: changes
-    if: >-
-      ${{ needs.changes.outputs.content_changed == 'true' &&
-          needs.changes.outputs.build_required != 'true' &&
-          needs.changes.outputs.automation_only != 'true' }}
+    if: ${{ needs.changes.outputs.content_changed == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
@@ -148,7 +145,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run hygiene:check
-      - run: npm run test:style
+      - run: npm run test:documentation-contracts
 
   fast:
     name: Lint, types, and contracts
