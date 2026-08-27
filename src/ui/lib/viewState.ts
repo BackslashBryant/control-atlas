@@ -131,6 +131,7 @@ export type ViewState =
       compareView: string;
       mappingSource: string;
       compareRun: string;
+      page: string;
     }
   | {
       view: "patterns";
@@ -268,6 +269,7 @@ function compareState(): Extract<ViewState, { view: "matrix" }> {
     compareView: "list",
     mappingSource: "",
     compareRun: "",
+    page: "",
   };
 }
 
@@ -397,6 +399,7 @@ export function parseViewState(search: string): ViewState {
         normalizeCompareView(params.get("compareView") || "") || "list",
       mappingSource: params.get("mappingSource") || "",
       compareRun: params.get("compareRun") === "true" ? "true" : "",
+      page: params.get("page") || "",
     };
   }
 
@@ -794,6 +797,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "intent", state.intent);
     setIfValue(params, "mappingSource", state.mappingSource);
     setIfValue(params, "compareRun", state.compareRun);
+    setIfValue(params, "page", state.page);
   } else if (state.view === "patterns") {
     params.set("view", "patterns");
     setIfValue(params, "pattern", state.pattern);

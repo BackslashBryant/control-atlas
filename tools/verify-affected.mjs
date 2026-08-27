@@ -44,6 +44,20 @@ export function createVerificationPlan(paths, changeMap) {
     path === 'src/shared/source-text-presentation.mjs' ||
     path.includes('source-truth') ||
     path === 'tests/e2e/source-trust-surfaces.spec.mjs');
+  const compareWorkbenchChanged = paths.some((path) =>
+    path === 'src/ui/pages/ComparePage.tsx' ||
+    path === 'src/ui/lib/comparePagination.ts' ||
+    path === 'tests/graph/comparePagination.test.ts' ||
+    path === 'tests/e2e/compare-map.spec.mjs' ||
+    path === 'tests/e2e/compare-pagination.spec.mjs' ||
+    path === 'tests/e2e/compare-cross-route-corruption.spec.mjs');
+  const boundedWorkbenchesChanged = paths.some((path) =>
+    path === 'src/ui/pages/AtlasMapPage.tsx' ||
+    path === 'src/ui/pages/ExplorePage.tsx' ||
+    path === 'src/ui/pages/CommonsPage.tsx' ||
+    path === 'src/ui/components/LibraryAtlasMap.tsx' ||
+    path === 'tests/e2e/atlas-map-focused-control.spec.mjs' ||
+    path === 'tests/e2e/epic14-ws3-workspace-template.spec.mjs');
   const stigObservationChanged = paths.some((path) =>
     path === 'scripts/fetch-stig-source-observations.mjs' ||
     path === 'tests/stig-source-observer.test.mjs');
@@ -53,7 +67,7 @@ export function createVerificationPlan(paths, changeMap) {
     path === 'tests/strict-conditional-fetch.test.mjs' ||
     path === 'tests/write-json-atomically.test.mjs');
   const mappedData = stigObservationChanged || incrementalDataChanged;
-  const mappedRuntime = sourceTrustChanged || mappedData || e2ePaths.length > 0;
+  const mappedRuntime = sourceTrustChanged || compareWorkbenchChanged || boundedWorkbenchesChanged || mappedData || e2ePaths.length > 0;
 
   if (changeMap.evidenceOnly) {
     addStep(steps, {
@@ -162,7 +176,31 @@ export function createVerificationPlan(paths, changeMap) {
         'publication pages use|OSCAL-fed records|WS2 exposes governed'],
       expectedTests: 3, workers: 2, budgetSeconds: 30,
     });
-  } else if (e2ePaths.length > 0) {
+  }
+  if (compareWorkbenchChanged) {
+    addStep(steps, {
+      id: 'compare-workbench-browser',
+        command: ['npm', 'run', 'test:e2e:run', '--',
+          'tests/e2e/compare-map.spec.mjs',
+          'tests/e2e/compare-pagination.spec.mjs',
+          'tests/e2e/compare-cross-route-corruption.spec.mjs',
+          '--grep',
+          'Frameworks reveals|large Compare results|Templates shows cards|evidence section content'],
+        expectedTests: 4, workers: 2, budgetSeconds: 45,
+      });
+  }
+  if (boundedWorkbenchesChanged) {
+    addStep(steps, {
+      id: 'bounded-workbench-browser',
+      command: ['npm', 'run', 'test:e2e:run', '--',
+        'tests/e2e/atlas-map-focused-control.spec.mjs',
+        'tests/e2e/epic14-ws3-workspace-template.spec.mjs',
+        '--grep',
+        'focused Atlas opens straight|WS3 Library communicates|WS3 Resources shares'],
+      expectedTests: 3, workers: 2, budgetSeconds: 45,
+    });
+  }
+  if (!sourceTrustChanged && !compareWorkbenchChanged && !boundedWorkbenchesChanged && e2ePaths.length > 0) {
     addStep(steps, {
       id: 'changed-browser-tests',
       command: ['npm', 'run', 'test:e2e:run', '--', ...e2ePaths],

@@ -367,6 +367,12 @@ export function ExplorePage(props: {
     group: row.publication,
     destination: { view: "library-detail" as const, patch: { node: row.document.id } },
   })), [rows, state.viewMode]);
+  const visibleResultCount = Math.min(visibleCount, rows.length);
+  const resultCountLabel = resultContext.result_count > rows.length
+    ? `${resultContext.result_count.toLocaleString()} matches · showing ${visibleResultCount.toLocaleString()} of the ${rows.length.toLocaleString()} most relevant`
+    : visibleResultCount < rows.length
+      ? `${rows.length.toLocaleString()} results · showing ${visibleResultCount.toLocaleString()}`
+      : `${rows.length.toLocaleString()} result${rows.length === 1 ? "" : "s"}`;
 
   const activeFilters = [
     state.filter && { key: "filter", label: catalogNames.get(state.filter) || state.filter },
@@ -577,9 +583,7 @@ export function ExplorePage(props: {
       purpose={SITE_COPY.routes.library.purpose}
       queryDraft={queryDraft}
       renderFacets={renderFacets}
-      resultCountLabel={resultContext.result_count > rows.length
-        ? `Showing ${rows.length.toLocaleString()} of ${resultContext.result_count.toLocaleString()} results`
-        : `${resultContext.result_count.toLocaleString()} result${resultContext.result_count === 1 ? "" : "s"}`}
+      resultCountLabel={resultCountLabel}
       resultsId="library-results"
       searchLabel="Filter results by ID, title, or topic"
       searchPlaceholder={SITE_COPY.product.searchPlaceholder}
@@ -638,7 +642,16 @@ export function ExplorePage(props: {
           </section>
         </section>
       ) : state.viewMode === "map" ? (
-        <LibraryAtlasMap items={mapItems} onNavigate={onNavigate} />
+        <LibraryAtlasMap
+          description={rows.length > mapItems.length
+            ? `Showing the ${mapItems.length.toLocaleString()} most relevant loaded records, grouped by publication. Refine the query or filters to change this map.`
+            : "The current Library query is grouped by publication. Open any record to see its details."}
+          heading={rows.length > mapItems.length
+            ? `${mapItems.length.toLocaleString()} of ${rows.length.toLocaleString()} loaded records mapped`
+            : undefined}
+          items={mapItems}
+          onNavigate={onNavigate}
+        />
       ) : (
         <>
         {kindGroups.length > 1 ? (
@@ -716,6 +729,11 @@ export function ExplorePage(props: {
           })}
           {visibleCount > 0 && rows.length > visibleCount ? (
             <li className="workspace-result-list__action"><Button onClick={() => setVisibleCount((count) => count + 25)} type="button" variant="secondary">Show 25 more</Button></li>
+          ) : null}
+          {visibleCount >= rows.length && resultContext.result_count > rows.length ? (
+            <li className="workspace-result-list__scope-note">
+              The {rows.length.toLocaleString()} most relevant matches are loaded. Narrow the query or filters to reach the remaining {(resultContext.result_count - rows.length).toLocaleString()}.
+            </li>
           ) : null}
           {rows.length === 0 ? (
             <li><section className="empty-state"><h2>{hasFilters ? "Nothing matches these filters." : "No records found."}</h2><p>{hasFilters ? "Clear one and try again." : "Try another identifier or keyword."}</p><Button onClick={() => onNavigate("search", { area: "", connectedOnly: "", filter: "", kind: "", publisher: "", query: "", sort: "relevance", viewMode: "list" })} type="button" variant="primary">{hasFilters ? "Clear filters" : "Clear search"}</Button></section></li>

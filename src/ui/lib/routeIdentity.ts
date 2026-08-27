@@ -130,7 +130,7 @@ const CATALOG_PARAMS = new Set(["q", "family", "browseAll", "type", "area", "pub
 const DETAIL_PARAMS = new Set<string>();
 const START_PARAMS = new Set(["goal", "context"]);
 const COMPARE_PARAMS = new Set([
-  "source", "target", "items", "relationshipType", "intent", "mappingSource", "compareRun",
+  "source", "target", "items", "relationshipType", "intent", "mappingSource", "compareRun", "page",
 ]);
 const COMPARE_MODES = new Set(["intent", "relationships"]);
 const RETIRED_COMPARE_MODES = new Set(["stig-chain", "baseline-compare", "threat-chain"]);

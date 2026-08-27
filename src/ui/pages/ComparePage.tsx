@@ -22,6 +22,7 @@ import {
   resolveMappingSource,
   type CompareModeId,
 } from "../lib/compareModeState";
+import { paginateCompareRows } from "../lib/comparePagination";
 import {
   Field,
   MissionPage,
@@ -284,8 +285,6 @@ function LazyEvidenceDetails({ targets }: { targets: any[] }) {
   );
 }
 
-const COMPARE_PAGE_SIZE = 200;
-
 export function ComparePage(props: {
   bundle: RuntimeBundle;
   state: CompareState;
@@ -294,7 +293,6 @@ export function ComparePage(props: {
 }) {
   const { bundle, state, onNavigate, onOpenNode } = props;
   const [resultQuery, setResultQuery] = useState("");
-  const [visibleLimit, setVisibleLimit] = useState(COMPARE_PAGE_SIZE);
   const catalogs = bundle.runtime.getCatalogs();
   const mode: CompareModeId =
     state.intent === "item-mapping" ? "item-mapping" : "frameworks";
@@ -469,13 +467,12 @@ export function ComparePage(props: {
   );
   const filteredMappingCount = countCompareMappings(aggregatedRelationshipRows);
   const visibleMappingCount = countCompareMappings(visibleAggregatedRows);
-  const pageRows = visibleAggregatedRows.slice(0, visibleLimit);
-  const hasMoreRows = visibleAggregatedRows.length > visibleLimit;
+  const pageWindow = paginateCompareRows(visibleAggregatedRows, state.page);
+  const pageRows = pageWindow.rows;
 
 
   useEffect(() => {
     setResultQuery("");
-    setVisibleLimit(COMPARE_PAGE_SIZE);
   }, [
     mode,
     state.items,
@@ -521,6 +518,7 @@ export function ComparePage(props: {
       crosswalk: "relationships",
       intent: mode,
       ...patch,
+      page: Object.hasOwn(patch, "page") ? patch.page || "" : "",
     });
 
   const changeMode = (nextMode: CompareModeId) => {
@@ -754,7 +752,10 @@ export function ComparePage(props: {
               <div className="compare-refine-fields compare-results-toolbar">
                 <Field label="Search results by ID or title">
                   <input
-                    onChange={(event) => setResultQuery(event.target.value)}
+                    onChange={(event) => {
+                      setResultQuery(event.target.value);
+                      if (state.page) patchCompare({ page: "" });
+                    }}
                     placeholder="Search source or target IDs and titles"
                     type="search"
                     value={resultQuery}
@@ -840,25 +841,38 @@ export function ComparePage(props: {
                       </tbody>
                     </table>
                   </div>
-                  {hasMoreRows ? (
-                    <div className="compare-show-more">
-                      <p className="compare-show-more-caption">
-                        Showing {visibleLimit.toLocaleString()} of {visibleAggregatedRows.length.toLocaleString()} source records.
-                        Use the export options above for the complete set.
+                  <nav aria-label="Mapping result pages" className="compare-pagination">
+                    {!pageWindow.valid ? (
+                      <p className="compare-page-recovery" role="alert">
+                        That result page is not available. Showing page {pageWindow.page.toLocaleString()} of {pageWindow.pageCount.toLocaleString()}.
                       </p>
+                    ) : null}
+                    <p className="compare-pagination-caption">
+                      Showing source records {pageWindow.start.toLocaleString()}–{pageWindow.end.toLocaleString()} of {visibleAggregatedRows.length.toLocaleString()}.
+                      Page {pageWindow.page.toLocaleString()} of {pageWindow.pageCount.toLocaleString()}.
+                    </p>
+                    <div className="compare-pagination-actions">
                       <Button
-                        onClick={() =>
-                          setVisibleLimit((n) =>
-                            Math.min(n + COMPARE_PAGE_SIZE, visibleAggregatedRows.length),
-                          )
-                        }
+                        disabled={pageWindow.page <= 1}
+                        onClick={() => patchCompare({ page: pageWindow.page <= 2 ? "" : String(pageWindow.page - 1) })}
                         type="button"
                         variant="secondary"
                       >
-                        Show {Math.min(COMPARE_PAGE_SIZE, visibleAggregatedRows.length - visibleLimit).toLocaleString()} more source records
+                        Previous page
+                      </Button>
+                      <Button
+                        disabled={pageWindow.page >= pageWindow.pageCount}
+                        onClick={() => patchCompare({ page: String(pageWindow.page + 1) })}
+                        type="button"
+                        variant="secondary"
+                      >
+                        Next page
                       </Button>
                     </div>
-                  ) : null}
+                    <small>
+                      Counts and exports cover all {visibleMappingCount.toLocaleString()} published mappings matching the current filters and search.
+                    </small>
+                  </nav>
                 </>
               ) : (
                 <section className="empty-state compare-results-empty">

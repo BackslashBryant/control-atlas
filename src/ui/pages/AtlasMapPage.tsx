@@ -776,6 +776,18 @@ function FocusedAtlas(props: {
 
   return (
     <div className="atlas-focused-shell">
+      <section aria-labelledby="atlas-focused-record-heading" className="atlas-focused-context">
+        <div>
+          <p className="eyebrow">Focused record</p>
+          <h2 id="atlas-focused-record-heading"><AcronymText>{centerIdentity.primary}</AcronymText></h2>
+          {centerIdentity.secondary ? <p><AcronymText>{centerIdentity.secondary}</AcronymText></p> : null}
+        </div>
+        <dl>
+          {centerPublication ? <div><dt>Publication</dt><dd>{centerPublication}</dd></div> : null}
+          <div><dt>Record type</dt><dd>{displayNameFor("object_type", record.center_node.node_type)}</dd></div>
+          <div><dt>Published connections</dt><dd>{rows.length.toLocaleString()} in {groups.length.toLocaleString()} categories</dd></div>
+        </dl>
+      </section>
       {/* One record workspace, not three competing modes. Connections is the
           product; Hierarchy and the complete list are supporting panels.
           relationshipView still round-trips through the URL so every existing
@@ -1069,10 +1081,10 @@ function FocusedAtlas(props: {
               ) : (
                 <>
                   <div className="atlas-inspector-heading">
-                    <p className="eyebrow">Selected item</p>
+                    <p className="eyebrow">How to use this view</p>
                   </div>
                   <p className="atlas-inspector-count">
-                    <strong>{rows.length}</strong> published connections in <strong>{groups.length}</strong> categories. Select an item to inspect details.
+                    Choose a connection category, then select a record to inspect its relationship and source evidence here.
                   </p>
                 </>
               )}

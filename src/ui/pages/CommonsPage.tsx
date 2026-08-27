@@ -34,6 +34,9 @@ import type { ViewState } from "../lib/viewState";
 
 type CommonsState = Extract<ViewState, { view: "commons" }>;
 
+const RESOURCE_LIST_STEP = 25;
+const RESOURCE_MAP_LIMIT = 75;
+
 const EMPTY_STATE: CommonsState = {
   view: "commons",
   query: "",
@@ -66,12 +69,14 @@ export function CommonsPage(props: {
   const [queryDraft, setQueryDraft] = useState(state.query);
   const [compareMode, setCompareMode] = useState(false);
   const [selectedResourceIds, setSelectedResourceIds] = useState<string[]>([]);
+  const [visibleCount, setVisibleCount] = useState(RESOURCE_LIST_STEP);
   const directoryAvailable = Boolean(bundle?.commonsDataset);
   const resources = (bundle?.commonsDataset?.resources || []) as CommonsResource[];
   const collections = (bundle?.commonsDataset?.collections || []) as CommonsCollection[];
   const update = (patch: Partial<CommonsState>) => onNavigate("commons", { ...state, ...patch });
 
   useEffect(() => setQueryDraft(state.query), [state.query]);
+  useEffect(() => setVisibleCount(RESOURCE_LIST_STEP), [state.collection, state.owner, state.query, state.resourceType, state.sort]);
 
   const filtered = useMemo(() => {
     const eligible = filterDirectoryResources(resources, {
@@ -92,7 +97,7 @@ export function CommonsPage(props: {
   const resultsVisible = Boolean(state.showAll || state.query.trim() || activeFilters.length);
   const selectedResources = resources.filter((resource) => selectedResourceIds.includes(resource.id));
   const collectionTitles = useMemo(() => new Map(collections.map((collection) => [collection.id, collection.title])), [collections]);
-  const mapItems: LibraryMapItem[] = useMemo(() => state.viewMode !== "map" ? [] : filtered.map((resource) => ({
+  const mapItems: LibraryMapItem[] = useMemo(() => state.viewMode !== "map" ? [] : filtered.slice(0, RESOURCE_MAP_LIMIT).map((resource) => ({
     id: resource.id,
     kind: resourceTypeLabel(resource.resourceType),
     label: resource.name,
@@ -112,6 +117,12 @@ export function CommonsPage(props: {
       },
     },
   })), [collectionTitles, filtered, state.collection, state.owner, state.query, state.resourceType, state.showAll, state.sort, state.viewMode]);
+  const visibleResourceCount = Math.min(visibleCount, filtered.length);
+  const resultCountLabel = state.viewMode === "map" && filtered.length > mapItems.length
+    ? `${filtered.length.toLocaleString()} results · mapping ${mapItems.length.toLocaleString()}`
+    : visibleResourceCount < filtered.length
+      ? `${filtered.length.toLocaleString()} results · showing ${visibleResourceCount.toLocaleString()}`
+      : `${filtered.length.toLocaleString()} result${filtered.length === 1 ? "" : "s"}`;
 
   const reset = () => {
     setQueryDraft("");
@@ -216,7 +227,7 @@ export function CommonsPage(props: {
       purpose={SITE_COPY.routes.resources.purpose}
       queryDraft={queryDraft}
       renderFacets={renderFacets}
-      resultCountLabel={`${filtered.length.toLocaleString()} result${filtered.length === 1 ? "" : "s"}`}
+      resultCountLabel={resultCountLabel}
       resultsId="resources-results"
       searchLabel="Find resources"
       searchPlaceholder="Search by name, topic, or owner"
@@ -257,10 +268,15 @@ export function CommonsPage(props: {
       ) : state.viewMode === "map" ? (
         <LibraryAtlasMap
           ariaLabel="Map of Resource results"
-          description="Results are grouped by collection or owner."
+          description={filtered.length > mapItems.length
+            ? `Showing the first ${mapItems.length.toLocaleString()} results, grouped by collection or owner. Refine the search or filters to change this map.`
+            : "Results are grouped by collection or owner."}
           emptyMessage="No resources match this view."
           eyebrow="Resource map"
           groupOverflowLabel="group"
+          heading={filtered.length > mapItems.length
+            ? `${mapItems.length.toLocaleString()} of ${filtered.length.toLocaleString()} resources mapped`
+            : "Resource map"}
           items={mapItems}
           onNavigate={onNavigate}
           overviewAction={null}
@@ -284,7 +300,7 @@ export function CommonsPage(props: {
             </section>
           ) : null}
           <ul aria-label="Resource results" className="workspace-result-list resource-catalog-grid">
-            {filtered.map((resource) => {
+            {filtered.slice(0, visibleCount).map((resource) => {
               const selected = selectedResourceIds.includes(resource.id);
               const summary = resourceSummaryPresentation(resource);
               return (
@@ -343,6 +359,13 @@ export function CommonsPage(props: {
                 </li>
               );
             })}
+            {filtered.length > visibleCount ? (
+              <li className="workspace-result-list__action">
+                <Button onClick={() => setVisibleCount((count) => count + RESOURCE_LIST_STEP)} type="button" variant="secondary">
+                  Show {Math.min(RESOURCE_LIST_STEP, filtered.length - visibleCount)} more
+                </Button>
+              </li>
+            ) : null}
           </ul>
         </>
       ) : (

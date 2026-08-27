@@ -60,6 +60,31 @@ test("WS3 Library uses Template C browse, facets, and fully linked record rows",
   await expect(page.getByRole("button", { name: /Open record/i })).toHaveCount(0);
 });
 
+test("WS3 Library communicates visible, loaded, and total search scope", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await gotoApp(page, "/#/library?q=supply%20chain");
+  await waitForAppReady(page, { allowPartial: true });
+
+  await expect(page.locator(".workspace-result-count")).toHaveText(
+    "206 matches · showing 25 of the 100 most relevant",
+  );
+  const rows = page.locator('[data-result-class="published-record"]');
+  await expect(rows).toHaveCount(25);
+  await page.getByRole("button", { name: "Show 25 more" }).click();
+  await expect(rows).toHaveCount(50);
+  await expect(page.locator(".workspace-result-count")).toHaveText(
+    "206 matches · showing 50 of the 100 most relevant",
+  );
+
+  await page.getByRole("button", { name: "Map", exact: true }).click();
+  const map = page.getByRole("region", { name: "Map of Library results" });
+  await expect(map.getByRole("heading", { name: "75 of 100 loaded records mapped" })).toBeVisible();
+  await expect(map).toContainText("Refine the query or filters to change this map.");
+  await expect(map.locator('[data-map-node-id]')).toHaveCount(75);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+});
+
 test("WS3 Resources shares Template C with real list, map, and comparison modes", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await gotoApp(page, "/#/resources");
@@ -90,6 +115,8 @@ test("WS3 Resources shares Template C with real list, map, and comparison modes"
 
   await workspace.getByRole("button", { name: /Browse all \d+ resources/ }).click();
   await expect(page.locator('[data-result-bar-order="count,sort,view,compare"]')).toBeVisible();
+  await expect(page.locator(".workspace-result-count")).toHaveText("202 results · showing 25");
+  await expect(page.locator('[data-result-class="resource"]')).toHaveCount(25);
   const firstRow = page.locator('[data-result-class="resource"]').first();
   await expect(firstRow).toBeVisible();
   await expect(firstRow.locator(".resource-type-icon")).toBeVisible();
@@ -98,7 +125,11 @@ test("WS3 Resources shares Template C with real list, map, and comparison modes"
   await expect(page.getByRole("link", { name: /Open resource/i })).toHaveCount(0);
 
   await workspace.getByRole("button", { name: "Map", exact: true }).click();
-  await expect(page.getByRole("region", { name: "Map of Resource results" })).toBeVisible();
+  const map = page.getByRole("region", { name: "Map of Resource results" });
+  await expect(map).toBeVisible();
+  await expect(map.getByRole("heading", { name: "75 of 202 resources mapped" })).toBeVisible();
+  await expect(map.locator('[data-map-node-id]')).toHaveCount(75);
+  await expect(page.locator(".workspace-result-count")).toHaveText("202 results · mapping 75");
   await workspace.getByRole("button", { name: "List", exact: true }).click();
   const compare = workspace.getByRole("button", { name: "Compare", exact: true });
   await expect(compare).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
@@ -109,6 +140,8 @@ test("WS3 Resources shares Template C with real list, map, and comparison modes"
   await selectors.nth(1).check();
   await expect(page.getByRole("heading", { name: "Selected resources", level: 2 })).toBeVisible();
   await expect(page.getByRole("table")).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
 });
 
 test("WS3 Resource detail uses a knowledge-base reading sequence", async ({ page }) => {

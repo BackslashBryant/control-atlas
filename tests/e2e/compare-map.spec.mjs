@@ -132,8 +132,20 @@ test("Frameworks reveals connected targets and a two-column published result", a
   await expect(table.locator("thead th")).toHaveText(["From", "Maps to"]);
   await expect(table.locator("tbody tr").first().locator("td")).toHaveCount(2);
   const allSourceRows = await table.locator("tbody tr").count();
-  expect(allSourceRows).toBeGreaterThan(25);
-  await expect(page.getByRole("navigation", { name: "Mapping result pages" })).toHaveCount(0);
+  expect(allSourceRows).toBe(100);
+  const pagination = page.getByRole("navigation", { name: "Mapping result pages" });
+  await expect(pagination).toContainText("Showing source records 1–100");
+  const firstPageSourceId = await table.locator("tbody tr").first().locator("td").first().locator("strong").innerText();
+  await pagination.getByRole("button", { name: "Next page" }).click();
+  await expect(page).toHaveURL(/page=2/);
+  await expect(pagination).toContainText("Showing source records 101–200");
+  await expect(table.locator("tbody tr")).toHaveCount(100);
+  expect(
+    await table.locator("tbody tr").first().locator("td").first().locator("strong").innerText(),
+  ).not.toBe(firstPageSourceId);
+  await pagination.getByRole("button", { name: "Previous page" }).click();
+  await expect(page).not.toHaveURL(/page=/);
+  await expect(table.locator("tbody tr")).toHaveCount(100);
   await expect(page.locator("[data-continuous-results] [data-continuous-scroll]")).toBeVisible();
 
   const sourceEvidence = page.locator(".compare-crosswalk-source");
