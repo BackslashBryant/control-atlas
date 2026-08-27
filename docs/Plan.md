@@ -128,6 +128,23 @@ Phase 0 measured improvements:
   assertions outside the initial affected path. The copy moved into the shared
   trust primitive, the official-name contracts were reconciled, and affected
   verification now selects those source-truth and compatibility checks locally.
+- Phase 3 live baseline: the largest Compare rendered 200 accumulating rows in
+  an 80,533 px document with no page navigation; Library claimed 100 visible
+  results while rendering 25; Resources rendered all 202 list rows in an
+  18,544 px document and all 202 map nodes in a 10,126 px document; focused
+  Atlas led with a generic title and a count-only inspector before record meaning.
+- Phase 3 workbench implementation: Compare now uses restorable 100-row pages
+  over the complete filtered matrix while CSV and Excel exports retain every
+  matching published mapping. Focused Atlas names the record, publication,
+  type, and connection scope before the diagram. Library distinguishes total,
+  loaded, and visible scope. Resources renders 25 rows at a time and maps a
+  clearly labeled 75-item window.
+- Phase 3 focused evidence: Compare pagination graph contracts passed; all eight
+  Compare browser journeys passed in 72 seconds as milestone proof; the
+  permanent four-case affected subset is budgeted at 45 seconds. Three
+  Atlas/Library/Resources desktop and 390 px journeys passed in 15.4 seconds
+  with no page-level horizontal overflow. Type checking, lint, the incremental
+  production build, and all 50 automation and Guardian contracts passed.
 
 Required Phase 0 acceptance:
 

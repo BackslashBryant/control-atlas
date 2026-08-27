@@ -5246,6 +5246,64 @@ a:focus-visible {
   max-width: 76rem;
 }
 
+.atlas-focused-context {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(28rem, auto);
+  gap: var(--ca-space-6);
+  align-items: end;
+  padding: var(--ca-space-5) var(--ca-space-6);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md);
+  background: var(--ca-surface);
+}
+
+.atlas-focused-context h2,
+.atlas-focused-context p,
+.atlas-focused-context dl {
+  margin: 0;
+}
+
+.atlas-focused-context > div,
+.atlas-focused-context dl > div {
+  display: grid;
+  gap: var(--ca-space-2);
+}
+
+.atlas-focused-context dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(8rem, 1fr));
+  gap: var(--ca-space-4);
+}
+
+.atlas-focused-context dt {
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.atlas-focused-context dd {
+  margin: 0;
+}
+
+.workspace-result-list__scope-note {
+  padding: var(--ca-space-4);
+  border: 1px solid var(--ca-border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--ca-text-muted);
+}
+
+@media (max-width: 767px) {
+  .atlas-focused-context {
+    grid-template-columns: 1fr;
+    padding: var(--ca-space-4);
+  }
+
+  .atlas-focused-context dl {
+    grid-template-columns: 1fr;
+  }
+}
+
 .atlas-focused-layout--board {
   grid-template-columns: minmax(0, 1fr);
 }
@@ -7965,20 +8023,15 @@ button.atlas-leverage-row:hover {
   margin-bottom: 8px;
 }
 
-/* Crosswalk results are one continuous working document. A capped inner
-   scroller trapped them in a pane inside the page's own scroll.
-   This wrapper must not become a scroll container at all: any overflow value
-   other than visible makes it the containing block for the sticky header,
-   which then pins 85px *inside* the table instead of to the viewport. The
-   table collapses to labelled cards below the table breakpoint, so no
-   horizontal scroller is needed here. */
+/* Crosswalk pages stay in the document flow. The fixed 100-row window bounds
+   the DOM without creating a nested scrolling region. */
 .compare-table-scroll {
   border: 1px solid var(--ca-border-strong);
   border-radius: 0;
   box-shadow: none;
 }
 
-.compare-show-more {
+.compare-pagination {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -7986,10 +8039,22 @@ button.atlas-leverage-row:hover {
   padding: var(--ca-space-4) 0;
 }
 
-.compare-show-more-caption {
+.compare-pagination-caption,
+.compare-page-recovery,
+.compare-pagination small {
   margin: 0;
   color: var(--ca-text-muted);
   font-size: var(--ca-text-sm);
+}
+
+.compare-page-recovery {
+  color: var(--ca-warning-text);
+}
+
+.compare-pagination-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ca-space-3);
 }
 
 .compare-table-scroll .detail-table {
@@ -8069,6 +8134,16 @@ button.atlas-leverage-row:hover {
 }
 
 @media (max-width: 767px) {
+  .compare-pagination-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .compare-pagination-actions button {
+    width: 100%;
+  }
+
   .compare-results-toolbar {
     grid-template-columns: minmax(0, 1fr);
     align-items: stretch;

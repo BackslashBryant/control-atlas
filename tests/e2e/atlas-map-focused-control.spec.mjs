@@ -22,6 +22,12 @@ test("focused Atlas opens straight to Connections, not a structural page", async
   await expect(page.getByRole("region", { name: "Page context" })).toContainText(
     "AC-2 — Account Management",
   );
+  const subject = page.locator(".atlas-focused-context");
+  await expect(subject.getByRole("heading", { name: "AC-2", level: 2 })).toBeVisible();
+  await expect(subject).toContainText("Account Management");
+  await expect(subject).toContainText("SP 800-53 Rev. 5");
+  await expect(subject).toContainText("143 in 7 categories");
+  await expect(page.getByText("Selected item", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Connections", level: 2 })).toBeVisible();
   await expect(page.getByRole("region", { name: "Relationship map" })).toBeVisible();
   const hierarchyToggle = page.getByRole("button", { name: "Hierarchy" });
@@ -33,6 +39,9 @@ test("focused Atlas opens straight to Connections, not a structural page", async
   await expect(page.getByRole("heading", { name: "Where this sits" })).toHaveCount(0);
   await expect(page.locator(".atlas-path-stage-option")).toHaveCount(0);
   await expect(page.locator(".atlas-path-record")).toHaveCount(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(subject).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
 });
 
 test("Hierarchy panel shows real structural substance, not just breadcrumb lines", async ({ page }) => {

@@ -22,7 +22,7 @@ test('automation-only changes stay on the automation contract path', () => {
   assert.equal(plan.steps.some((step) => step.id === 'source-trust-browser'), false);
 });
 
-test('Sources changes select one bounded route family and the incremental build', () => {
+test('trust and workbench changes select bounded route families and the incremental build', () => {
   const paths = ['src/ui/pages/SourcesPage.tsx'];
   const plan = createVerificationPlan(paths, classifyChangedPaths(paths));
   assert.equal(plan.blocked, false);
@@ -60,6 +60,35 @@ test('Sources changes select one bounded route family and the incremental build'
       'publication pages use|OSCAL-fed records|WS2 exposes governed',
     ],
   );
+
+  const comparePaths = [
+    'src/ui/pages/ComparePage.tsx',
+    'src/ui/lib/comparePagination.ts',
+    'tests/e2e/compare-pagination.spec.mjs',
+  ];
+  const comparePlan = createVerificationPlan(comparePaths, classifyChangedPaths(comparePaths));
+  assert.equal(comparePlan.blocked, false);
+  assert.deepEqual(comparePlan.steps.map((step) => step.id), [
+    'typecheck',
+    'incremental-site-build',
+    'compare-workbench-browser',
+  ]);
+    assert.equal(comparePlan.steps.at(-1).expectedTests, 4);
+    assert.equal(comparePlan.steps.at(-1).workers, 2);
+    assert.equal(comparePlan.steps.at(-1).budgetSeconds, 45);
+
+  const boundedPlan = createVerificationPlan([
+    'src/ui/pages/AtlasMapPage.tsx',
+    'src/ui/pages/ExplorePage.tsx',
+    'src/ui/pages/CommonsPage.tsx',
+  ], classifyChangedPaths([
+    'src/ui/pages/AtlasMapPage.tsx',
+    'src/ui/pages/ExplorePage.tsx',
+    'src/ui/pages/CommonsPage.tsx',
+  ]));
+  assert.equal(boundedPlan.blocked, false);
+  assert.equal(boundedPlan.steps.some((step) => step.id === 'bounded-workbench-browser'), true);
+  assert.equal(boundedPlan.steps.find((step) => step.id === 'bounded-workbench-browser')?.expectedTests, 3);
 });
 
 test('dependency changes validate npm ci compatibility before product gates', () => {
