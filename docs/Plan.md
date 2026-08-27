@@ -109,6 +109,21 @@ Phase 0 measured improvements:
   and Guides passed at desktop and mobile. Six unchanged cases passed in the
   first run; the six cases affected by stale contract reconciliation passed in
   a focused rerun using two workers.
+- Phase 2 live baseline: Sources root, selected, unknown, and zero-result states
+  were inspected at desktop and mobile. The live register mixed short aliases
+  with official publication names, conflated retrieval with checking, left
+  missing versions blank, duplicated recovery actions, and retained a cramped
+  inspector with no local close action.
+- Phase 2 trust implementation: register, inspector, catalog, and record routes
+  now use one official publication identity and distinguish publisher, source
+  lifecycle, version absence, retrieval, and checking without invented facts.
+  V-256609 preserves Check/Fix structure and mobile reading order.
+- Phase 2 focused evidence: lint and type checking passed; 47 source, route,
+  and accessibility contracts passed; 21 source-trust browser cases passed by
+  unchanged-evidence reuse plus focused reruns; and five connected Library,
+  Atlas, and record workflows passed. The accessibility run caught a real
+  3.18:1 Historical badge regression, which was corrected and re-proven with
+  no serious or critical violations.
 
 Required Phase 0 acceptance:
 

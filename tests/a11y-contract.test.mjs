@@ -360,7 +360,7 @@ test("connection transparency distinguishes inventory from completeness", () => 
   assert.match(sourcesPage, /buildPublicationRegister/);
   assert.match(sourcesPage, /Publisher/);
   assert.match(sourcesPage, /Version \/ current through/);
-  assert.match(sourcesPage, /Last checked/);
+  assert.match(sourcesPage, /Source freshness/);
   assert.match(sourcesPage, /Control Atlas coverage/);
   assert.doesNotMatch(sourcesPage, /Catalog profile/);
   assert.doesNotMatch(sourcesPage, /Publication currentness review/);

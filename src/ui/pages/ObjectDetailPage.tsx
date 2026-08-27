@@ -41,6 +41,11 @@ import { TAXONOMY_TAG_BY_ID } from "../../shared/taxonomy-contract.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
 import { normalizeViewState, type ViewState } from "../lib/viewState";
+import {
+  sourceFreshnessPresentation,
+  sourceLifecycleDisplayName,
+  sourcePublicationTitle,
+} from "../lib/sourcePresentation";
 
 const ATLAS_TAG_DIMENSIONS = new Set(["organization", "framework", "program", "tool", "artifact", "topic"]);
 const RECORD_FACT_LABELS: Record<string, string> = {
@@ -401,6 +406,8 @@ export function ObjectDetailPage(props: {
     source?.publisher,
     catalog?.display_group,
   );
+  const sourcePublicationName = sourcePublicationTitle(source, catalogName);
+  const sourceFreshness = sourceFreshnessPresentation(source);
   const identityPresentation = recordIdentityPresentationFor({
     publisher: publisherName,
     catalogId: document.catalog_id,
@@ -634,7 +641,7 @@ export function ObjectDetailPage(props: {
           ) : null}
           {source ? (
             <p className="support-meta" data-record-source-identity>
-              {sourceIdentityLabel} · {source.display_name || source.name}
+              {sourceIdentityLabel} · {sourcePublicationName}
             </p>
           ) : null}
           {!source ? (
@@ -777,14 +784,18 @@ export function ObjectDetailPage(props: {
               </div> : null}
               <div>
                 <dt>Publication</dt>
-                <dd>{catalogName}{source?.version ? ` · ${source.version}` : ""}</dd>
+                <dd>{sourcePublicationName}{source?.version ? ` · ${source.version}` : ""}</dd>
               </div>
-              {source?.last_checked ? (
-                <div>
-                  <dt>Current as of</dt>
-                  <dd>{source.last_checked}</dd>
-                </div>
-              ) : null}
+              <div>
+                <dt>Status</dt>
+                <dd>{sourceLifecycleDisplayName(source?.lifecycle_status)}</dd>
+              </div>
+              <div>
+                <dt>{sourceFreshness.label}</dt>
+                <dd>{sourceFreshness.dateTime ? (
+                  <time dateTime={sourceFreshness.dateTime}>{sourceFreshness.value}</time>
+                ) : sourceFreshness.value}</dd>
+              </div>
             </dl>
             <AppLink
               onNavigate={onNavigate}

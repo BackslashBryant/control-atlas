@@ -58,7 +58,7 @@ test("V1 workflow 04 — verify official record identity and source", async ({ p
   await expect(facts).toContainText(/Revision 5|Rev\. 5/);
   // Retrieval/currentness provenance now lives on the Sources page; the record
   // sidebar stays user-first (who published it, which publication, how current).
-  await expect(facts).toContainText("Current as of");
+  await expect(facts).toContainText("Source last checked");
   await expect(facts).not.toContainText("Publication currentness review");
 
   await open(page, "/#/record/nist-mobile-threats/CEL-1");
@@ -165,7 +165,7 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
   const iotDetail = page.getByRole("region", { name: "Source status summary" });
   await expect(iotDetail).toContainText("Version / current through");
   await expect(iotDetail).toContainText("Spring 2021");
-  await expect(iotDetail).toContainText("Last checked");
+  await expect(iotDetail).toContainText("Source freshness");
   // No verification check is recorded for this source. The register reports the
   // retrieval date and labels it as retrieval, so the cell is neither blank nor
   // a check date the evidence does not support.
@@ -174,13 +174,13 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
 
   await open(page, "/#/sources?source=nist-800-53");
   const checkedDetail = page.getByRole("region", { name: "Source status summary" });
-  await expect(checkedDetail).toContainText("Last checked");
-  await expect(checkedDetail).toContainText("2026-07-28");
+  await expect(checkedDetail).toContainText("Source freshness");
+  await expect(checkedDetail).toContainText(/Checked\s+Jul 28, 2026/);
 
   await open(page, "/#/sources?source=nist-800-53a-assessment-procedures");
   const assessmentDetail = page.getByRole("region", { name: "Source status summary" });
   await expect(assessmentDetail).toContainText("Revision 5, Release 5.2.0");
-  await expect(assessmentDetail).toContainText("2026-08-13");
+  await expect(assessmentDetail).toContainText("Aug 13, 2026");
   await expect(assessmentDetail).toContainText("1,014 normalized records");
 });
 
@@ -287,9 +287,9 @@ test("source detail has one return action and preserves the Sources workspace", 
       await expect(dialog).toBeVisible();
       await dialog.getByRole("button", { name: "Close inspector" }).click();
     } else {
-      const returnLink = page.getByRole("link", { name: "Back to sources", exact: true });
-      await expect(returnLink).toBeVisible();
-      await returnLink.click();
+      const closeDetails = page.getByRole("button", { name: "Close publication details" });
+      await expect(closeDetails).toBeVisible();
+      await closeDetails.click();
     }
     await waitForAppReady(page);
     await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
@@ -332,7 +332,7 @@ test("unknown Source detail links fail closed and preserve recovery state", asyn
     await expect(page).toHaveTitle("Source not found — Control Atlas");
     await expect(
       page.getByText(
-        "That publication is not in the public publication register.",
+        "This link points to a publication that is not in the current public register.",
       ),
     ).toBeVisible();
     await expect(page.locator(".source-not-found-banner")).not.toContainText(sourceId);
@@ -342,9 +342,9 @@ test("unknown Source detail links fail closed and preserve recovery state", asyn
     await expect(page.getByRole("table", { name: "Control Atlas publication register" })).toBeVisible();
     await expect(page.getByRole("tablist", { name: "Source register layers" })).toHaveCount(0);
 
-    const returnLink = page.getByRole("link", { name: "Back to sources", exact: true });
-    await expect(returnLink).toHaveCount(1);
-    const target = await returnLink.boundingBox();
+    const returnButton = page.getByRole("button", { name: "Return to the publication register" });
+    await expect(returnButton).toHaveCount(1);
+    const target = await returnButton.boundingBox();
     expect(target).not.toBeNull();
     if (width <= 390) expect(target.height).toBeGreaterThanOrEqual(44);
     expect(
@@ -354,7 +354,7 @@ test("unknown Source detail links fail closed and preserve recovery state", asyn
       ),
     ).toBeLessThanOrEqual(1);
 
-    await returnLink.click();
+    await returnButton.click();
     await waitForAppReady(page);
     await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
     await expect(page.locator("#source-search")).toHaveValue("DISA");
@@ -364,7 +364,7 @@ test("unknown Source detail links fail closed and preserve recovery state", asyn
     await waitForAppReady(page);
     await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
     await expect(page.locator(".source-not-found-banner")).toContainText(
-      "That publication is not in the public publication register.",
+      "This link points to a publication that is not in the current public register.",
     );
     await expect(page.locator(".source-not-found-banner")).not.toContainText(sourceId);
     await page.goForward();
@@ -385,7 +385,7 @@ test("source and record provenance stay distinct at every governed width", async
     );
     const facts = page.getByRole("region", { name: "Source status summary" });
     await expect(facts).toContainText("Version / current throughSpring 2021");
-    await expect(facts).toContainText("Last checkedRetrieved");
+    await expect(facts).toContainText("Source freshnessRetrieved");
     expect(
       await page.evaluate(
         () =>
@@ -401,7 +401,7 @@ test("source and record provenance stay distinct at every governed width", async
     await open(page, "/#/record/nist-800-53/AC-2");
     const recordFacts = page.locator(".record-source-facts");
     await expect(recordFacts).toContainText("Publisher");
-    await expect(recordFacts).toContainText("Current as of");
+    await expect(recordFacts).toContainText(/Source last checked|Source retrieved/);
     await expect(recordFacts).not.toContainText("Publication currentness review");
     expect(
       await page.evaluate(
@@ -422,11 +422,11 @@ test("source review presents lifecycle and version disposition honestly", async 
     "Version / current through2021-01",
   );
   await expect(page.getByRole("region", { name: "Source status summary" })).toContainText(
-    "Last checked2026-08-13",
+    /Source freshnessChecked\s+Aug 13, 2026/,
   );
 
   await open(page, "/#/record/nist-800-171-rev2/3.1.1");
-  await expect(page.locator(".record-source-facts")).toContainText("Current as of");
+  await expect(page.locator(".record-source-facts")).toContainText("Source last checked");
 
   for (const width of [320, 1440]) {
     await page.setViewportSize({ width, height: width === 320 ? 844 : 1024 });
@@ -436,7 +436,7 @@ test("source review presents lifecycle and version disposition honestly", async 
     );
     const facts = page.getByRole("region", { name: "Source status summary" });
     await expect(facts).toContainText("Revision 5, Release 5.2.0");
-    await expect(facts).toContainText("2026-08-13");
+    await expect(facts).toContainText("Aug 13, 2026");
     expect(
       await page.evaluate(
         () =>

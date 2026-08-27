@@ -19,7 +19,7 @@ test('automation-only changes stay on the automation contract path', () => {
     'automation-contracts',
   ]);
   assert.equal(plan.steps.some((step) => step.id === 'incremental-site-build'), false);
-  assert.equal(plan.steps.some((step) => step.id === 'sources-browser'), false);
+  assert.equal(plan.steps.some((step) => step.id === 'source-trust-browser'), false);
 });
 
 test('Sources changes select one bounded route family and the incremental build', () => {
@@ -29,10 +29,26 @@ test('Sources changes select one bounded route family and the incremental build'
   assert.deepEqual(plan.steps.map((step) => step.id), [
     'typecheck',
     'incremental-site-build',
-    'sources-browser',
+    'source-trust-browser',
   ]);
-  assert.equal(plan.steps.at(-1).expectedTests, 14);
+  assert.equal(plan.steps.at(-1).expectedTests, 21);
   assert.equal(plan.steps.at(-1).workers, 2);
+  const sharedPaths = [
+    'src/ui/lib/sourcePresentation.ts',
+    'src/ui/pages/CatalogDetailPage.tsx',
+    'src/ui/pages/ObjectDetailPage.tsx',
+  ];
+  const sharedPlan = createVerificationPlan(sharedPaths, classifyChangedPaths(sharedPaths));
+  assert.equal(sharedPlan.blocked, false);
+  assert.equal(sharedPlan.steps.some((step) => step.id === 'source-trust-browser'), true);
+  assert.deepEqual(
+    sharedPlan.steps.find((step) => step.id === 'source-trust-browser')?.command.slice(-3),
+    [
+      'tests/e2e/sources-inspector-state.spec.mjs',
+      'tests/e2e/source-truth-presentation.spec.mjs',
+      'tests/e2e/source-trust-surfaces.spec.mjs',
+    ],
+  );
 });
 
 test('dependency changes validate npm ci compatibility before product gates', () => {

@@ -226,7 +226,7 @@ test("DISA STIG publication entry points preserve the benchmark layer above V-ID
   await expect(publication).toBeVisible();
   await expect(publication).not.toHaveClass(/\bpanel\b/);
   await expect(publication.getByText("PUBLICATION", { exact: true })).toBeVisible();
-  await expect(publication.getByRole("heading", { name: "DISA STIG", level: 1 })).toBeVisible();
+  await expect(publication.getByRole("heading", { name: "DISA Public STIG Library", level: 1 })).toBeVisible();
   await expect(publication.locator(".catalog-publisher")).toHaveText("DISA");
   await expect(publication.getByRole("link", { name: "Open official publication", exact: true })).toBeVisible();
   const benchmarks = page.locator('[data-published-tier="benchmark"]');
@@ -234,7 +234,7 @@ test("DISA STIG publication entry points preserve the benchmark layer above V-ID
   expect(benchmarkCount).toBeGreaterThan(0);
   await expect(page.getByText(`${benchmarkCount} benchmarks`, { exact: true })).toBeVisible();
   await expect(page.locator(".catalog-record-title")).toHaveCount(0);
-  const benchmarkSearch = publication.getByRole("searchbox", { name: "Search DISA STIG benchmarks" });
+  const benchmarkSearch = publication.getByRole("searchbox", { name: "Search DISA Public STIG Library benchmarks" });
   await expect(benchmarkSearch).toBeVisible();
   await benchmarkSearch.fill("zzzz-no-benchmark");
   await publication.getByRole("button", { name: "Search benchmarks", exact: true }).click();

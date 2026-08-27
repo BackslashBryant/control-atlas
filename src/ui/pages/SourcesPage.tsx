@@ -24,6 +24,7 @@ import {
   type PublicationRegisterRow,
 } from "../lib/sourceRegister";
 import type { ViewState } from "../lib/viewState";
+import { formatSourceDate } from "../lib/sourcePresentation";
 
 const SOURCE_PAGE_SIZE = 25;
 
@@ -34,15 +35,40 @@ const SOURCE_PAGE_SIZE = 25;
  */
 function VerificationDate(props: { field: { value: string | null; state: string; reason: string } }) {
   const { field } = props;
-  if (!field.value) return null;
-  if (field.state === "derived") {
+  if (!field.value) {
     return (
-      <span className="source-checked-derived" title={field.reason}>
-        <span className="source-checked-qualifier">Retrieved</span> {field.value}
+      <span className="source-field-absence" title={field.reason}>
+        {field.state === "not_applicable" ? "Not applicable" : "Not recorded"}
       </span>
     );
   }
-  return <>{field.value}</>;
+  const date = <time dateTime={field.value}>{formatSourceDate(field.value)}</time>;
+  if (field.state === "derived") {
+    return (
+      <span className="source-checked-derived" title={field.reason}>
+        <span className="source-checked-qualifier">Retrieved</span> {date}
+      </span>
+    );
+  }
+  return (
+    <span className="source-checked-derived" title={field.reason}>
+      <span className="source-checked-qualifier">Checked</span> {date}
+    </span>
+  );
+}
+
+function SourceFieldText(props: {
+  field: { value: string | null; state: string; reason: string };
+  notApplicable?: string;
+}) {
+  if (props.field.value) return <>{props.field.value}</>;
+  return (
+    <span className="source-field-absence" title={props.field.reason}>
+      {props.field.state === "not_applicable"
+        ? props.notApplicable || "Not applicable"
+        : "Not recorded"}
+    </span>
+  );
 }
 
 /** Enough to show the register's shape without becoming a second filter list. */
@@ -132,39 +158,37 @@ function PublicationInspectorContent(props: {
         <div>
           <span className="label">SELECTED PUBLICATION</span>
           {heading}
-          {publication.publisher.value ? (
-            <p className="source-inspector-publisher">{publication.publisher.value}</p>
-          ) : null}
+          <p className="source-inspector-publisher">
+            <SourceFieldText field={publication.publisher} />
+          </p>
         </div>
         {close}
       </header>
 
       <div className="source-inspector-content">
         <section aria-label="Source status summary" className="source-status-overview">
-          {publication.version.value ? (
-            <div className="system-stat">
-              <span>Version / current through</span>
-              <strong>{publication.version.value}</strong>
-            </div>
-          ) : null}
+          <div className="system-stat">
+            <span>Version / current through</span>
+            <strong><SourceFieldText field={publication.version} notApplicable="Not versioned" /></strong>
+          </div>
 
-          {publication.lifecycle.value ? (
-            <div className="system-stat">
-              <span>Status</span>
-              <div>
+          <div className="system-stat">
+            <span>Status</span>
+            <div>
+              {publication.lifecycle.value ? (
                 <Badge tone={publication.lifecycle.value === "active" ? "success" : "warning"}>
                   {displayNameFor("lifecycle_status", publication.lifecycle.value)}
                 </Badge>
-              </div>
+              ) : (
+                <SourceFieldText field={publication.lifecycle} />
+              )}
             </div>
-          ) : null}
+          </div>
 
-          {publication.verifiedAt.value ? (
-            <div className="system-stat">
-              <span>Last checked</span>
-              <strong><VerificationDate field={publication.verifiedAt} /></strong>
-            </div>
-          ) : null}
+          <div className="system-stat">
+            <span>Source freshness</span>
+            <strong><VerificationDate field={publication.verifiedAt} /></strong>
+          </div>
 
           <div className="system-stat">
             <span>Control Atlas coverage</span>
@@ -220,7 +244,7 @@ function PublicationInspectorContent(props: {
                     {item.retrievedAt ? (
                       <span>
                         Retrieved{" "}
-                        <time dateTime={item.retrievedAt}>{item.retrievedAt}</time>
+                        <time dateTime={item.retrievedAt}>{formatSourceDate(item.retrievedAt)}</time>
                       </span>
                     ) : null}
                     {typeof item.recordCount === "number" && item.recordCount > 0 ? (
@@ -429,6 +453,16 @@ function PublicationInspector(props: {
       id="source-inspector-detail"
     >
       <PublicationInspectorContent
+        close={
+          <button
+            aria-label="Close publication details"
+            className="source-inspector-close"
+            onClick={props.onClose}
+            type="button"
+          >
+            Close
+          </button>
+        }
         heading={<h2 className="source-inspector-title">{title}</h2>}
         publication={props.publication}
       />
@@ -510,7 +544,7 @@ export function SourcesPage(props: {
     .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
 
   const [visibleLimit, setVisibleLimit] = useState(SOURCE_PAGE_SIZE);
-  const firstNewRowRef = useRef<HTMLTableRowElement | null>(null);
+  const firstNewRowRef = useRef<HTMLButtonElement | null>(null);
   const activeTriggerRef = useRef<HTMLButtonElement | null>(null);
   const activeTriggerIdRef = useRef<string | null>(null);
 
@@ -670,14 +704,15 @@ export function SourcesPage(props: {
       {state.source && !selectedPublicationRow ? (
         <div className="source-not-found-banner" role="alert">
           <div>
-            <p>That publication is not in the public publication register.</p>
+            <h2>Publication not found</h2>
+            <p>This link points to a publication that is not in the current public register.</p>
           </div>
           <Button
             onClick={handleCloseInspector}
             type="button"
             variant="secondary"
           >
-            Clear selection
+            Return to the publication register
           </Button>
         </div>
       ) : null}
@@ -734,7 +769,7 @@ export function SourcesPage(props: {
               </select>
             ) : null}
 
-            {hasActiveFilters ? (
+            {hasActiveFilters && filteredPublicationRows.length > 0 ? (
               <Button
                 onClick={handleResetFilters}
                 type="button"
@@ -776,7 +811,9 @@ export function SourcesPage(props: {
           {/* S3 Measurement rail */}
           <div aria-live="polite" className="calibration-rail">
             <span>
-              SHOWING 1–{Math.min(visibleLimit, filteredPublicationRows.length)} / {filteredPublicationRows.length}
+              {filteredPublicationRows.length === 0
+                ? "0 publications"
+                : `Showing 1–${Math.min(visibleLimit, filteredPublicationRows.length)} of ${filteredPublicationRows.length}`}
             </span>
           </div>
 
@@ -801,7 +838,7 @@ export function SourcesPage(props: {
                     <th scope="col">Publication</th>
                     <th scope="col">Publisher</th>
                     <th scope="col">Version / current through</th>
-                    <th scope="col">Last checked</th>
+                    <th scope="col">Source freshness</th>
                     <th scope="col">Status</th>
                   </tr>
                 </thead>
@@ -823,11 +860,6 @@ export function SourcesPage(props: {
                           isSelected ? " source-register-row--selected" : ""
                         }`}
                         key={row.id}
-                        ref={
-                          index === Math.max(0, visibleLimit - SOURCE_PAGE_SIZE)
-                            ? firstNewRowRef
-                            : undefined
-                        }
                       >
                         <td className="source-col-publication">
                           <div className="source-title-cell">
@@ -836,9 +868,14 @@ export function SourcesPage(props: {
                               className="source-title-link"
                               id={`source-trigger-${row.id}`}
                               onClick={(e) => handleSelectPublication(row.id, e)}
+                              ref={
+                                index === Math.max(0, visibleLimit - SOURCE_PAGE_SIZE)
+                                  ? firstNewRowRef
+                                  : undefined
+                              }
                               type="button"
                             >
-                              {row.displayTitle}
+                              {row.officialTitle}
                             </button>
                             {row.publisher.value ? (
                               <span className="source-mobile-publisher">{row.publisher.value}</span>
@@ -885,11 +922,11 @@ export function SourcesPage(props: {
                         </td>
 
                         <td className="source-col-publisher">
-                          {row.publisher.value || ""}
+                          <SourceFieldText field={row.publisher} />
                         </td>
 
                         <td className="source-col-version">
-                          {row.version.value || ""}
+                          <SourceFieldText field={row.version} notApplicable="Not versioned" />
                         </td>
 
                         <td className="source-col-checked">
@@ -901,7 +938,7 @@ export function SourcesPage(props: {
                             <Badge tone={row.lifecycle.value === "active" ? "success" : "warning"}>
                               {displayNameFor("lifecycle_status", row.lifecycle.value)}
                             </Badge>
-                          ) : null}
+                          ) : <SourceFieldText field={row.lifecycle} />}
                         </td>
                       </tr>
                     );

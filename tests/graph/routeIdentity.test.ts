@@ -12,7 +12,7 @@ import { parseHashLocation, serializeHashLocation } from "../../src/ui/lib/hashR
 import { normalizeViewState } from "../../src/ui/lib/viewState";
 import { orbitalRouteContext } from "../../src/ui/components/OrbitalContextBar";
 
-test("Source detail context preserves the active Sources workspace on return", () => {
+test("Source detail keeps recovery beside the inspector instead of duplicating a global return bar", () => {
   const state = normalizeViewState("sources", {
     view: "sources",
     layer: "ingestion",
@@ -21,11 +21,7 @@ test("Source detail context preserves the active Sources workspace on return", (
     publisher: "DISA",
     lifecycle: "active",
   });
-  assert.deepEqual(orbitalRouteContext(state).back, {
-    label: "Back to sources",
-    view: "sources",
-    patch: { ...state, source: "" },
-  });
+  assert.equal(orbitalRouteContext(state).back, undefined);
 });
 
 test("Resource detail context preserves the active Resources workspace on return", () => {
