@@ -24,6 +24,8 @@ const AUTOMATION_FILES = new Set([
   'tools/check-action-pins.mjs',
   'tools/classify-change-scope.mjs',
   'tools/git-push-with-retry.mjs',
+  'tools/lib/vale-extraction.mjs',
+  'tools/run-vale.mjs',
   'tools/ship-to-main.mjs',
   'tools/verify-affected.mjs',
   'tools/wait-for-checks.mjs',
@@ -34,6 +36,7 @@ const AUTOMATION_FILES = new Set([
   'tests/release-evidence.test.mjs',
   'tests/verification-topology.test.mjs',
   'tests/verify-affected.test.mjs',
+  'tests/vale-extraction.test.mjs',
   'tests/wait-for-checks.test.mjs',
 ]);
 const BUILD_FILES = new Set([

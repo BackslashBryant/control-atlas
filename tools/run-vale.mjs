@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { spawn } from 'node:child_process';
+import { valeExtractionCommand } from './lib/vale-extraction.mjs';
 
 const VERSION = '3.15.1';
 const RELEASE_ROOT = `https://github.com/vale-cli/vale/releases/download/v${VERSION}`;
@@ -12,13 +13,11 @@ const ASSETS = {
     archive: `vale_${VERSION}_Linux_64-bit.tar.gz`,
     sha256: 'c024d9c157874fb043d4f24a055d60050d1bb18755251f590593eed5bace1857',
     binary: 'vale',
-    tarArgs: ['-xzf'],
   },
   'win32-x64': {
     archive: `vale_${VERSION}_Windows_64-bit.zip`,
     sha256: '3395fca0ddfb10a9b6caa28e091d5df709b1d6b6579afb7dece852cad89b94f3',
     binary: 'vale.exe',
-    tarArgs: ['-xf'],
   },
 };
 
@@ -72,20 +71,8 @@ if (!(await exists(binaryPath))) {
   // a remote host:path spec ("Cannot connect to D:") and lacks zip-format
   // support, so extract the Windows zip asset with PowerShell's native
   // Expand-Archive instead of tar.
-  const extractCode = process.platform === 'win32'
-    ? await run('powershell.exe', [
-        '-NoProfile',
-        '-NonInteractive',
-        '-Command',
-        `Expand-Archive -LiteralPath '${archivePath}' -DestinationPath '${installDir}' -Force`,
-      ])
-    : await run('tar', [
-        ...asset.tarArgs,
-        '--no-same-owner',
-        archivePath,
-        '-C',
-        installDir,
-      ]);
+  const extraction = valeExtractionCommand(process.platform, archivePath, installDir);
+  const extractCode = await run(extraction.command, extraction.args);
   if (extractCode !== 0 || !(await exists(binaryPath))) {
     throw new Error(`Vale archive extraction failed with exit code ${extractCode}`);
   }

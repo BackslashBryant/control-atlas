@@ -14,6 +14,7 @@ const AUTOMATION_TESTS = new Set([
   'tests/release-evidence.test.mjs',
   'tests/verification-topology.test.mjs',
   'tests/verify-affected.test.mjs',
+  'tests/vale-extraction.test.mjs',
   'tests/wait-for-checks.test.mjs',
 ]);
 
@@ -63,7 +64,7 @@ export function createVerificationPlan(paths, changeMap) {
     });
     addStep(steps, {
       id: 'automation-contracts', command: ['npm', 'run', 'test:ci-contracts'],
-      expectedTests: 43, workers: 1, budgetSeconds: 3,
+      expectedTests: 45, workers: 1, budgetSeconds: 3,
     });
   }
   if (changeMap.dependenciesChanged) {
