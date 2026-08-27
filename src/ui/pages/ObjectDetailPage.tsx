@@ -44,11 +44,21 @@ import { normalizeViewState, type ViewState } from "../lib/viewState";
 
 const ATLAS_TAG_DIMENSIONS = new Set(["organization", "framework", "program", "tool", "artifact", "topic"]);
 const RECORD_FACT_LABELS: Record<string, string> = {
+  activity_type: "Activity type",
+  architecture_component: "Architecture component",
   benchmark_status_date: "Published status date",
   benchmark_title: "Benchmark",
   benchmark_version: "Version / release",
   child_count: "Contained records",
+  collaborator: "Collaborator",
+  component_class: "Component class",
+  duration: "Duration",
   is_subtechnique: "Sub-technique",
+  mapping_count: "Published mappings",
+  operational_technology: "Operational technology",
+  pillar: "Pillar",
+  product: "Product",
+  responsibility: "Responsibility",
   rule_id: "Rule ID",
   severity: "Severity",
   severity_distribution: "Severity distribution",

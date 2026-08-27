@@ -53,6 +53,7 @@ import {
   missingRequiredRecordFields,
   recordPresentationContract,
   SUPPORTED_RECORD_TYPES,
+  undeclaredCapturedRecordFields,
 } from "../src/shared/record-presentation.mjs";
 import {
   assertionClassForEdge,
@@ -184,6 +185,8 @@ export function validateRecordPresentation(nodes) {
     }
     const profile = recordPresentationContract(node.metadata?.catalog_id || "", node.node_type);
     const missing = missingRequiredRecordFields(profile, node.metadata || {});
+    const undeclared = undeclaredCapturedRecordFields(profile, node.metadata || {});
+    if (undeclared.length) missing.push(`field dispositions for ${undeclared.join(", ")}`);
     if (
       profile.hierarchy_fields.includes("family") &&
       !String(node.metadata?.family || "").trim()

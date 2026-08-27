@@ -12,6 +12,7 @@ import {
   recordPresentationContract,
   SUPPORTED_RECORD_CONTRACT_KEYS,
   SUPPORTED_RECORD_TYPES,
+  undeclaredCapturedRecordFields,
 } from "../../src/shared/record-presentation.mjs";
 import {
   buildSourceTextPresentation,
@@ -97,6 +98,7 @@ test("fixture manifest covers every final supported record type with a real runt
     assert.equal(node.node_type, entry.record_type);
     const profile = recordPresentationContract(entry.catalog_id, entry.record_type);
     assert.equal(profile.page_role, entry.page_role);
+    assert.deepEqual(undeclaredCapturedRecordFields(profile, node.metadata || {}), [], `${node.id} dispositions`);
     for (const field of entry.expected_fields || []) {
       assert.notEqual(node.metadata?.[field], null, `${node.id}:${field}`);
       assert.notEqual(node.metadata?.[field], undefined, `${node.id}:${field}`);

@@ -15,6 +15,7 @@
     "required_fields",
     "optional_fields",
     "field_dispositions",
+    "relationship_policy",
     "prohibited_synthetic_presentation"
   ],
   "properties": {
@@ -76,6 +77,16 @@
           }
         ]
       }
+    },
+    "relationship_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["structural_treatment", "same_catalog_treatment", "default_treatment"],
+      "properties": {
+        "structural_treatment": { "const": "ATLAS_ONLY" },
+        "same_catalog_treatment": { "const": "ATLAS_ONLY" },
+        "default_treatment": { "$ref": "#/$defs/relationshipTreatment" }
+      }
     }
   },
   "$defs": {
@@ -86,6 +97,9 @@
     },
     "disposition": {
       "enum": ["rendered_primary", "rendered_secondary", "source_metadata", "relationship_evidence", "intentionally_hidden"]
+    },
+    "relationshipTreatment": {
+      "enum": ["PROMOTE", "SUMMARIZE", "COLLAPSE", "ATLAS_ONLY"]
     }
   }
 }

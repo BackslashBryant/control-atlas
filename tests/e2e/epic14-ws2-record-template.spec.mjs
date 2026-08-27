@@ -153,6 +153,9 @@ test("WS2 keeps governed related-record samples human-readable and bounded at ev
 
   for (const width of [320, 375, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
+    // A same-hash page.goto() is a no-op after the first iteration, so isolate
+    // each viewport from the disclosure state opened by the previous sample.
+    await page.goto("about:blank");
     await openRecord(page, "/#/record/nist-800-53/SC-3");
     const related = page.locator('[data-record-section="related-records"]');
     await related.scrollIntoViewIfNeeded();

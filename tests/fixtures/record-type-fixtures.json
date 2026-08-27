@@ -37,7 +37,7 @@
     { "record_type": "stig_rule", "catalog_id": "disa-stig", "record_id": "V-256609", "page_role": "atomic_record", "expected_fields": ["vuln_id", "rule_id", "stig_id", "benchmark_title", "benchmark_version", "benchmark_status_date", "description", "check_text", "fix_text"] },
     { "record_type": "tactic", "catalog_id": "mitre-attack", "record_id": "TACTIC-TA0001", "page_role": "container" },
     { "record_type": "trunk", "catalog_id": "atlas", "record_id": "TRUNK", "page_role": "container" },
-    { "record_type": "zt_activity", "catalog_id": "dod-zt", "record_id": "ACT-1-1-1", "page_role": "atomic_record" },
+    { "record_type": "zt_activity", "catalog_id": "dod-zt", "record_id": "ACT-1-1-1", "page_role": "atomic_record", "expected_fields": ["description", "outcomes", "end_state", "pillar", "activity_type"] },
     { "record_type": "zt_assessment_question", "catalog_id": "microsoft-zt-maturity", "record_id": "MSZT-1-1", "page_role": "assessment_question" },
     { "record_type": "zt_build", "catalog_id": "nist-zt", "record_id": "SP180035-E1B1", "page_role": "implementation_artifact" },
     { "record_type": "zt_capability", "catalog_id": "dod-zt", "record_id": "CAP-1-1", "page_role": "container" },
@@ -48,7 +48,7 @@
     { "record_type": "zt_mapping_document", "catalog_id": "nist-zt", "record_id": "MAPPING-DOCUMENT-NIST-SP-1800-35-CRITICAL-SOFTWARE-MAPPINGS-F3ED12702F", "page_role": "publication_document" },
     { "record_type": "zt_mapping_contributor", "catalog_id": "nist-zt", "record_id": "MAPPING-CONTRIBUTOR-APPGATE-835EC7F121", "page_role": "entity_contributor" },
     { "record_type": "zt_pillar", "catalog_id": "dod-zt", "record_id": "PILLAR-1", "page_role": "container" },
-    { "record_type": "zt_product_component", "catalog_id": "nist-zt", "record_id": "PRODUCT-COMPONENT-APPGATE-APPGATE-HEADLESS-CLIENT-RESOURCE-PROTECTION-CL-E65DEBF0E8", "page_role": "implementation_artifact" },
+    { "record_type": "zt_product_component", "catalog_id": "nist-zt", "record_id": "PRODUCT-COMPONENT-APPGATE-APPGATE-HEADLESS-CLIENT-RESOURCE-PROTECTION-CL-E65DEBF0E8", "page_role": "implementation_artifact", "expected_fields": ["description", "mapping_targets", "collaborator", "product", "architecture_component"] },
     { "record_type": "zt_publication", "catalog_id": "nist-zt", "record_id": "SP800-207", "page_role": "publication_document" },
     { "record_type": "zt_reference_component", "catalog_id": "nist-zt", "record_id": "REFERENCE-COMPONENT-REFERENCE-DATA-SECURITY-DATA-ACCESS-PROTECTION-RESTRIC-AEEC740661", "page_role": "implementation_artifact" },
     { "record_type": "zt_tenet", "catalog_id": "nist-zt", "record_id": "SP800207-TENET-1", "page_role": "atomic_record" }

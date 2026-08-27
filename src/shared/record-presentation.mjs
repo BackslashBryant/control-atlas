@@ -26,6 +26,22 @@ export const RELATIONSHIP_TREATMENTS = Object.freeze({
 });
 
 const commonFields = Object.freeze({
+  catalog_id: {
+    disposition: "intentionally_hidden",
+    origin: "navigation",
+    reason: "The governed publication display name is rendered instead of the raw catalog key.",
+  },
+  ingestion_source_id: { disposition: "source_metadata", origin: "source_metadata" },
+  item_id: { disposition: "rendered_primary", origin: "navigation" },
+  type: {
+    disposition: "intentionally_hidden",
+    origin: "derived",
+    reason: "The semantic record type and page role replace the legacy adapter type token.",
+  },
+  object_layer: { disposition: "source_metadata", origin: "derived" },
+  origin: { disposition: "source_metadata", origin: "derived" },
+  native_type: { disposition: "source_metadata", origin: "publisher" },
+  publication_id: { disposition: "relationship_evidence", origin: "navigation" },
   title: { disposition: "rendered_primary", origin: "publisher" },
   description: { disposition: "rendered_primary", origin: "publisher" },
   family: { disposition: "rendered_secondary", origin: "publisher" },
@@ -34,6 +50,44 @@ const commonFields = Object.freeze({
   references: { disposition: "rendered_secondary", origin: "publisher" },
   parent_id: { disposition: "rendered_secondary", origin: "publisher" },
   field_absence_reasons: { disposition: "source_metadata", origin: "derived" },
+  benchmark_version: { disposition: "source_metadata", origin: "publisher" },
+  benchmark_status_date: { disposition: "source_metadata", origin: "publisher" },
+  description_provenance: { disposition: "source_metadata", origin: "source_metadata" },
+  identity_category: { disposition: "source_metadata", origin: "publisher" },
+  classification_provenance: { disposition: "source_metadata", origin: "source_metadata" },
+  related_categories: { disposition: "relationship_evidence", origin: "publisher" },
+  child_count: { disposition: "rendered_secondary", origin: "derived" },
+  contributing_artifact_ids: { disposition: "source_metadata", origin: "source_metadata" },
+  primary_artifact_id: { disposition: "source_metadata", origin: "source_metadata" },
+  source_fragments: { disposition: "source_metadata", origin: "source_metadata" },
+  source_refs: { disposition: "relationship_evidence", origin: "source_metadata" },
+  authority_source_refs: { disposition: "relationship_evidence", origin: "source_metadata" },
+  mandate: { disposition: "source_metadata", origin: "publisher" },
+  mandate_note: { disposition: "source_metadata", origin: "publisher" },
+  publication_type: { disposition: "source_metadata", origin: "publisher" },
+  primary_authority: { disposition: "relationship_evidence", origin: "publisher" },
+  also_required_by: { disposition: "relationship_evidence", origin: "publisher" },
+  source_pages: { disposition: "source_metadata", origin: "source_metadata" },
+  media: { disposition: "source_metadata", origin: "source_metadata" },
+  related_build_codes: { disposition: "relationship_evidence", origin: "publisher" },
+  superseded_by: { disposition: "relationship_evidence", origin: "publisher" },
+  publisher_status: { disposition: "source_metadata", origin: "publisher" },
+  publisher_mappings: { disposition: "relationship_evidence", origin: "publisher" },
+  is_subtechnique: {
+    disposition: "intentionally_hidden",
+    origin: "derived",
+    reason: "False adapter defaults are not presented; ATT&CK contracts override this with the publisher value.",
+  },
+  structural_group: {
+    disposition: "intentionally_hidden",
+    origin: "derived",
+    reason: "The semantic container role and publisher hierarchy render this classification.",
+  },
+  atlas_structure_role: {
+    disposition: "intentionally_hidden",
+    origin: "derived",
+    reason: "The trunk or limb page role and hierarchy render this organizing classification.",
+  },
   taxonomy_tags: {
     disposition: "intentionally_hidden",
     origin: "navigation",
@@ -73,6 +127,13 @@ const contract = ({
     required_fields: Object.freeze(required),
     optional_fields: Object.freeze(optional),
     field_dispositions: Object.freeze({ ...commonFields, ...sectionFields, ...fields }),
+    relationship_policy: Object.freeze({
+      structural_treatment: RELATIONSHIP_TREATMENTS.ATLAS_ONLY,
+      same_catalog_treatment: RELATIONSHIP_TREATMENTS.ATLAS_ONLY,
+      default_treatment: role === PAGE_ROLES.ATOMIC_RECORD
+        ? RELATIONSHIP_TREATMENTS.COLLAPSE
+        : RELATIONSHIP_TREATMENTS.SUMMARIZE,
+    }),
     prohibited_synthetic_presentation: Object.freeze([
       "relationship-count-derived importance",
       "invented implementation guidance",
@@ -178,6 +239,10 @@ const BASE_CONTRACTS = {
   definition: atomic([section("description", "Published Definition")], ["description"]),
   defend_countermeasure: atomic([section("description", "Countermeasure Description")], ["description"], [], {
     facts: ["tactic_title"],
+    fields: {
+      tactic_id: { disposition: "rendered_secondary", origin: "publisher" },
+      tactic_title: { disposition: "rendered_secondary", origin: "publisher" },
+    },
   }),
   family: container([section("description", "Family Summary")], [], ["description"]),
   function: container([section("description", "Function Summary")], [], ["description"]),
@@ -254,7 +319,21 @@ const BASE_CONTRACTS = {
     [],
     { hierarchy: [] },
   ),
-  zt_activity: atomic([section("description", "Activity")], ["description"], ["outcomes", "end_state", "predecessors", "successors"]),
+  zt_activity: atomic(
+    [section("description", "Activity")],
+    ["description"],
+    ["outcomes", "end_state", "predecessors", "successors", "pillar", "activity_type", "duration", "responsibility", "operational_technology"],
+    {
+      facts: ["pillar", "activity_type", "duration", "responsibility", "operational_technology"],
+      fields: {
+        pillar: { disposition: "rendered_secondary", origin: "publisher" },
+        activity_type: { disposition: "rendered_secondary", origin: "publisher" },
+        duration: { disposition: "rendered_secondary", origin: "publisher" },
+        responsibility: { disposition: "rendered_secondary", origin: "publisher" },
+        operational_technology: { disposition: "rendered_secondary", origin: "publisher" },
+      },
+    },
+  ),
   zt_assessment_question: contract({
     role: PAGE_ROLES.ASSESSMENT_QUESTION,
     sections: [section("description", "Assessment Guidance"), section("answer_options", "Answer Options", "list")],
@@ -262,7 +341,11 @@ const BASE_CONTRACTS = {
     fields: {
       publisher_default_answer: { disposition: "source_metadata", origin: "publisher" },
       question_number: { disposition: "rendered_primary", origin: "publisher" },
+      pillar: { disposition: "rendered_secondary", origin: "publisher" },
+      category: { disposition: "rendered_secondary", origin: "publisher" },
+      link_label: { disposition: "source_metadata", origin: "publisher" },
     },
+    facts: ["pillar", "category"],
   }),
   zt_build: contract({
     role: PAGE_ROLES.IMPLEMENTATION_ARTIFACT,
@@ -289,6 +372,9 @@ const BASE_CONTRACTS = {
     role: PAGE_ROLES.IMPLEMENTATION_ARTIFACT,
     sections: [section("description", "Logical Component")],
     required: ["description"],
+    optional: ["component_class"],
+    facts: ["component_class"],
+    fields: { component_class: { disposition: "rendered_secondary", origin: "publisher" } },
   }),
   zt_mapping_contributor: contract({
     role: PAGE_ROLES.ENTITY_CONTRIBUTOR,
@@ -304,13 +390,31 @@ const BASE_CONTRACTS = {
       section("mapping_targets", "Publisher Mapping Targets", "mapping_targets", "relationship_evidence"),
     ],
     required: ["description"],
-    optional: ["mapping_targets"],
+    optional: ["mapping_targets", "collaborator", "product", "architecture_component", "mapping_count"],
+    facts: ["collaborator", "product", "architecture_component", "mapping_count"],
+    fields: {
+      collaborator: { disposition: "rendered_secondary", origin: "publisher" },
+      product: { disposition: "rendered_secondary", origin: "publisher" },
+      architecture_component: { disposition: "rendered_secondary", origin: "publisher" },
+      mapping_count: { disposition: "rendered_secondary", origin: "derived" },
+    },
   }),
-  zt_publication: publication([section("description", "Publication Summary")], ["description"]),
+  zt_publication: publication([section("description", "Publication Summary")], ["description"], ["structured_content"], {
+    fields: { structured_content: { disposition: "source_metadata", origin: "publisher" } },
+  }),
   zt_reference_component: contract({
     role: PAGE_ROLES.IMPLEMENTATION_ARTIFACT,
-    sections: [section("description", "Reference Architecture Function")],
+    sections: [
+      section("description", "Reference Architecture Function"),
+      section("mapping_targets", "Publisher Mapping Targets", "mapping_targets", "relationship_evidence"),
+    ],
     required: ["description"],
+    optional: ["mapping_targets", "architecture_component", "mapping_count"],
+    facts: ["architecture_component", "mapping_count"],
+    fields: {
+      architecture_component: { disposition: "rendered_secondary", origin: "publisher" },
+      mapping_count: { disposition: "rendered_secondary", origin: "derived" },
+    },
   }),
   zt_tenet: atomic([section("description", "Tenet")], ["description"]),
 };
@@ -465,6 +569,21 @@ export function missingRequiredRecordFields(contractValue, metadata = {}) {
   });
 }
 
+function hasCapturedValue(value) {
+  if (value === null || value === undefined) return false;
+  if (Array.isArray(value)) return value.length > 0;
+  if (typeof value === "object") return Object.keys(value).length > 0;
+  if (typeof value === "string") return value.trim().length > 0;
+  return true;
+}
+
+export function undeclaredCapturedRecordFields(contractValue, metadata = {}) {
+  return Object.entries(metadata)
+    .filter(([field, value]) => hasCapturedValue(value) && !contractValue.field_dispositions[field])
+    .map(([field]) => field)
+    .sort();
+}
+
 export function relationshipTreatmentFor({
   recordContract,
   counterpartContract,
@@ -474,7 +593,9 @@ export function relationshipTreatmentFor({
   relationshipClass,
 }) {
   if (relationshipClass === "structural" || recordCatalogId === counterpartCatalogId) {
-    return RELATIONSHIP_TREATMENTS.ATLAS_ONLY;
+    return relationshipClass === "structural"
+      ? recordContract.relationship_policy.structural_treatment
+      : recordContract.relationship_policy.same_catalog_treatment;
   }
   if (recordCatalogId === "csf-2" && ["disa-stig", "disa-srg"].includes(counterpartCatalogId)) {
     return RELATIONSHIP_TREATMENTS.ATLAS_ONLY;
@@ -485,8 +606,5 @@ export function relationshipTreatmentFor({
   if (["disa-stig", "disa-srg"].includes(recordCatalogId) && counterpartCatalogId === "disa-cci") {
     return RELATIONSHIP_TREATMENTS.PROMOTE;
   }
-  if (recordContract.page_role === PAGE_ROLES.ATOMIC_RECORD) {
-    return RELATIONSHIP_TREATMENTS.COLLAPSE;
-  }
-  return RELATIONSHIP_TREATMENTS.SUMMARIZE;
+  return recordContract.relationship_policy.default_treatment;
 }
