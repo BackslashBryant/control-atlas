@@ -391,6 +391,7 @@ export function runtimeArtifactPlan(
       Boolean(options.searchOverlayOpen),
     sources:
       state.view === "sources" ||
+      state.view === "commons-detail" ||
       state.view === "catalog-detail" ||
       state.view === "library-detail" ||
       state.view === "matrix" ||

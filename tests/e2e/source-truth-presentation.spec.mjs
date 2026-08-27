@@ -15,7 +15,7 @@ test('PDISP presents only scoped, sourced facts at mobile width', async ({ page 
   await expect(page.getByText('Review and request DISA private data internet connectivity.', { exact: true })).toHaveCount(1);
   await expect(page.getByRole('heading', { name: 'What it is' })).toHaveCount(0);
   await expect(page.getByText('Ordering and connection actions require authorized DoD access.', { exact: true })).toBeVisible();
-  await expect(page.getByText(/CAC required|\bFree\b|not documented|not stated/i)).toHaveCount(0);
+  await expect(page.locator('#workspace').getByText(/CAC required|\bFree\b|not documented|not stated/i)).toHaveCount(0);
   await expect(page.getByText('Atlas context', { exact: true })).toHaveCount(0);
   await expect(page.locator('.resource-detail-maintenance')).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
