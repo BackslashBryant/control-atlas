@@ -47,6 +47,10 @@ Resource lifecycle replacements use globally unique canonical Atlas entity IDs. 
 
 Presentation is a required ingestion stage, not a browser-only cleanup. Every generated record type has a declared presentation profile. Publisher strings remain untouched. `StructuredContentBlock` stores presentation-only offsets for paragraphs, ordered lists, unordered lists, and exact code or configuration. Explicit upstream markup wins. Deterministic detection is permitted only at high confidence; ambiguity stays prose. Copy operations use the exact source slice, not visually reconstructed text. Content without a record page must carry an explicit not-applicable presentation outcome in its ingestion ledger.
 
+Every displayable `catalog_id:record_type` pair has an explicit semantic presentation contract; there is no generic fallback. Contracts classify each substantive captured field as `rendered_primary`, `rendered_secondary`, `source_metadata`, `relationship_evidence`, or `intentionally_hidden`. An intentionally hidden field requires a concrete reason. Required publisher fields, contract shape, and catalog/type coverage are build-time validation boundaries.
+
+Record pages apply `PROMOTE`, `SUMMARIZE`, `COLLAPSE`, or `ATLAS_ONLY` treatments to valid correlation edges. This policy governs practitioner relevance only. It never changes the stored edge, relationship direction/classification, provenance, or evidence. Structural containment remains a separate hierarchy and child-inventory input.
+
 ## Semantic and currentness review
 
 `data/source-review-manifest.json` is the governed human-review register for every publication profile. Its JSON Schema is validated with the repository's existing AJV 2020 runtime. The generator requires an exact match with the catalog coverage inventory, at least three source-linked samples per profile, official currentness sources, and explicit dispositions for semantic content, locator-only content, and upstream currency. A reviewed sample proves only the named comparison; it does not promote structural or count reconciliation into whole-corpus semantic proof.

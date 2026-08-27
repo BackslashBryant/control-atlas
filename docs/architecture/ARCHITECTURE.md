@@ -34,6 +34,8 @@ Public Sources
 
 All catalogs and Resources entries use this same ordered ingestion contract. Format-specific behavior is confined to source adapters inside a stage; an adapter cannot bypass a stage. Each stage records `complete`, `not_applicable` with a concrete reason, or `failed`. Presentation therefore runs as part of ingestion for every displayable source instead of being a page-specific cleanup pass.
 
+Record presentation is a validated semantic contract layer between runtime data and React composition. Each observed catalog/type key resolves explicitly to one of six page roles and declares field dispositions plus relationship-display policy. The UI uses one universal shell with role composers; it does not infer importance from graph degree or create a component per publisher type.
+
 ## Runtime Boundary
 
 - GitHub Pages serves static HTML, CSS, JavaScript, and generated public-data bundles.

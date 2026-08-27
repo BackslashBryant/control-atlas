@@ -3,7 +3,10 @@ import { Fragment, useState, type ReactNode } from "react";
 import { displayNameFor } from "../../app/display-names.mjs";
 import {
   missingRequiredRecordFields,
-  recordPresentationProfile,
+  PAGE_ROLES,
+  RELATIONSHIP_TREATMENTS,
+  recordPresentationContract,
+  relationshipTreatmentFor,
 } from "../../shared/record-presentation.mjs";
 import {
   isValidSourceTextPresentation,
@@ -40,6 +43,19 @@ import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
 import { normalizeViewState, type ViewState } from "../lib/viewState";
 
 const ATLAS_TAG_DIMENSIONS = new Set(["organization", "framework", "program", "tool", "artifact", "topic"]);
+const RECORD_FACT_LABELS: Record<string, string> = {
+  benchmark_status_date: "Published status date",
+  benchmark_title: "Benchmark",
+  benchmark_version: "Version / release",
+  child_count: "Contained records",
+  is_subtechnique: "Sub-technique",
+  rule_id: "Rule ID",
+  severity: "Severity",
+  severity_distribution: "Severity distribution",
+  stig_id: "STIG ID",
+  tactic_title: "Tactic",
+  vuln_id: "Finding / Vuln ID",
+};
 
 const ODP_PATTERN = /\[(?:Assignment|Selection)[^\]]*\]/g;
 
@@ -289,6 +305,34 @@ function SourceSectionContent(props: { kind: string; value: any; presentation?: 
   return <SourceTextBlocks value={String(props.value)} presentation={props.presentation} />;
 }
 
+function RecordNativeFacts(props: { fields: string[]; metadata: Record<string, any>; title: string }) {
+  const rows = props.fields.flatMap((field) => {
+    const value = props.metadata[field];
+    const absenceReason = props.metadata.field_absence_reasons?.[field];
+    if ((value == null || value === "" || (Array.isArray(value) && value.length === 0)) && !absenceReason) return [];
+    const displayValue = absenceReason
+      ? `Not published — ${absenceReason}`
+      : typeof value === "object"
+      ? Object.entries(value).map(([key, count]) => `${key}: ${count}`).join(" · ")
+      : String(value);
+    return [{ field, displayValue }];
+  });
+  if (!rows.length) return null;
+  return (
+    <section className="record-native-facts" data-record-section="native-facts">
+      <h2>{props.title}</h2>
+      <dl className="record-source-facts">
+        {rows.map(({ field, displayValue }) => (
+          <div key={field}>
+            <dt>{RECORD_FACT_LABELS[field] || field}</dt>
+            <dd>{displayValue}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
+
 export function ObjectDetailPage(props: {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: "library-detail" }>;
@@ -381,10 +425,6 @@ export function ObjectDetailPage(props: {
       return catalogDisplayNameFor(catalogId, relatedCatalog?.name || "");
     },
   );
-  const connectionCount = connectionGroups.reduce(
-    (total, group) => total + group.items.length,
-    0,
-  );
   let immediateConnectionsRemaining = 12;
   const immediateConnectionGroups = connectionGroups.flatMap((group) => {
     if (immediateConnectionsRemaining <= 0) return [];
@@ -422,8 +462,38 @@ export function ObjectDetailPage(props: {
     ...node.metadata,
     description: document.description || node.metadata?.description || "",
   };
-  const presentation = recordPresentationProfile(document.catalog_id, node.node_type || document.object_type);
+  const presentation = recordPresentationContract(document.catalog_id, node.node_type || document.object_type);
   const missingSourceFields = missingRequiredRecordFields(presentation, sourceMetadata);
+  const hasPublishedSectionContent = presentation.sections.some((section) => {
+    const value = sourceMetadata[section.field];
+    return Array.isArray(value) ? value.length > 0 : Boolean(String(value || "").trim());
+  });
+  const structuralChildren = edges
+    .filter((edge: any) => edge.relationship_class === "structural" && edge.source_node_id === node.id)
+    .map((edge: any) => bundle.runtime.getNode(edge.target_node_id))
+    .filter(Boolean);
+  const structuralTrace = displayedTrace.filter((entry) => entry.origin === "structural");
+  const governedConnectionGroups = relatedConnectionGroups.map((group) => {
+    const firstCounterpart = group.items[0] ? bundle.runtime.getNode(group.items[0].nodeId) : null;
+    const counterpartCatalogId = firstCounterpart?.metadata?.catalog_id || group.catalogId;
+    const counterpartType = firstCounterpart?.node_type || "catalog";
+    const counterpartContract = recordPresentationContract(counterpartCatalogId, counterpartType);
+    return {
+      ...group,
+      treatment: relationshipTreatmentFor({
+        recordContract: presentation,
+        counterpartContract,
+        recordCatalogId: document.catalog_id,
+        counterpartCatalogId,
+        relationshipType: group.relationshipType,
+        relationshipClass: "correlation",
+      }),
+    };
+  });
+  const visibleConnectionGroups = governedConnectionGroups.filter(
+    (group) => group.treatment !== RELATIONSHIP_TREATMENTS.ATLAS_ONLY,
+  );
+  const visibleConnectionCount = visibleConnectionGroups.reduce((total, group) => total + group.items.length, 0);
   const recordTags = recordTagsFor({
     area,
     category: family,
@@ -434,7 +504,7 @@ export function ObjectDetailPage(props: {
   });
 
   return (
-    <section className="detail-page record-template" data-template="E">
+    <section className="detail-page record-template" data-page-role={presentation.page_role} data-template="E">
       <CanonicalBreadcrumb bundle={bundle} nodeId={node.id} recordLabel={recordIdentity} />
 
       <header
@@ -548,11 +618,9 @@ export function ObjectDetailPage(props: {
                 </AppLink>
               </div>
             </section>
-          ) : node.metadata?.structural_group === true ? (
-            <section className="record-context-note" data-claim-origin="atlas_editorial">
-              <h2>Structural grouping</h2>
-              <p>This {kind.toLowerCase()} organizes records within {catalogName}.</p>
-            </section>
+          ) : null}
+          {["stig_rule", "srg_requirement"].includes(presentation.record_type) ? (
+            <RecordNativeFacts fields={presentation.metadata_facts} metadata={sourceMetadata} title="Overview" />
           ) : null}
           {source ? (
             <p className="support-meta" data-record-source-identity>
@@ -592,6 +660,45 @@ export function ObjectDetailPage(props: {
               })}
             </div>
           )}
+          {!missingSourceFields.length && !hasPublishedSectionContent ? (
+            <section className="record-source-absence" data-record-section="publisher-absence">
+              <h2>Publisher description</h2>
+              <p>The publisher did not publish a separate description for this {kind.toLowerCase()}.</p>
+            </section>
+          ) : null}
+          {presentation.metadata_facts.length && !["stig_rule", "srg_requirement"].includes(presentation.record_type) ? (
+            <RecordNativeFacts fields={presentation.metadata_facts} metadata={sourceMetadata} title="Published facts" />
+          ) : null}
+          {structuralTrace.length > 1 ? (
+            <section className="record-hierarchy" data-record-section="publisher-hierarchy">
+              <h2>Publisher hierarchy</h2>
+              <ol>
+                {structuralTrace.map((entry) => <li key={entry.id}>{entry.label}</li>)}
+              </ol>
+            </section>
+          ) : null}
+          {presentation.page_role === PAGE_ROLES.CONTAINER ? (
+            <section className="record-child-inventory" data-record-section="child-inventory">
+              <div className="section-header">
+                <div>
+                  <h2>Contained records</h2>
+                  <p>Objects published directly beneath this record.</p>
+                </div>
+                <Badge tone="info">{structuralChildren.length || sourceMetadata.child_count || 0}</Badge>
+              </div>
+              {structuralChildren.length ? (
+                <ul>
+                  {structuralChildren.slice(0, 25).map((child: any) => (
+                    <li key={child.id}>
+                      <AppLink onNavigate={onNavigate} patch={{ node: child.id }} view="library-detail">
+                        {child.metadata?.item_id || child.label} — {child.metadata?.title || child.label}
+                      </AppLink>
+                    </li>
+                  ))}
+                </ul>
+              ) : <p>No directly contained records are loaded for this publication object.</p>}
+            </section>
+          ) : null}
         </article>
 
         <aside
@@ -677,23 +784,24 @@ export function ObjectDetailPage(props: {
               View source details
             </AppLink>
           </section>
-          {connectionGroups.length ? (
+          {governedConnectionGroups.length ? (
             <section className="record-connections record-connections--related" data-record-section="related-records">
               <div className="section-header">
                 <div>
                   <h2>Related records</h2>
                   <p>Formal published links to other publications.</p>
                 </div>
-                <Badge tone="info">{connectionCount}</Badge>
+                <Badge tone="info">{visibleConnectionCount}</Badge>
               </div>
               <div className="record-connection-groups">
-                {relatedConnectionGroups.map((group) => {
+                {visibleConnectionGroups.map((group) => {
+                  const sampleLimit = group.treatment === RELATIONSHIP_TREATMENTS.SUMMARIZE ? 3 : RECORD_GROUP_SAMPLE;
                   const sample = document.catalog_id !== "disa-cci"
-                    ? group.items.slice(0, RECORD_GROUP_SAMPLE)
+                    ? group.items.slice(0, sampleLimit)
                     : group.items;
                   const overflow = group.items.length - sample.length;
-                  return (
-                    <section key={`${group.catalogId}:${group.relationshipType}`}>
+                  const content = (
+                    <section data-relationship-treatment={group.treatment} key={`${group.catalogId}:${group.relationshipType}`}>
                       <h3>{group.label} · {displayNameFor("relationship_type", group.relationshipType)} · {group.items.length}</h3>
                       <ul>
                         {sample.map((item) => {
@@ -791,8 +899,17 @@ export function ObjectDetailPage(props: {
                       ) : null}
                     </section>
                   );
+                  return group.treatment === RELATIONSHIP_TREATMENTS.COLLAPSE ? (
+                    <details className="record-relationship-disclosure" key={`${group.catalogId}:${group.relationshipType}`}>
+                      <summary>{group.label} · {group.items.length}</summary>
+                      {content}
+                    </details>
+                  ) : content;
                 })}
               </div>
+              {governedConnectionGroups.some((group) => group.treatment === RELATIONSHIP_TREATMENTS.ATLAS_ONLY) ? (
+                <p className="support-meta">Additional valid connections are available in Atlas.</p>
+              ) : null}
               <AppLink className="record-connections-explore" onNavigate={onNavigate} patch={{ node: node.id }} view="atlas-map">
                 Explore all connections in Atlas
               </AppLink>

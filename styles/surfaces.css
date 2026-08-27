@@ -8793,6 +8793,34 @@ button.atlas-leverage-row:hover {
   gap: var(--ca-space-4);
 }
 
+.record-native-facts,
+.record-hierarchy,
+.record-child-inventory,
+.record-source-absence {
+  display: grid;
+  gap: var(--ca-space-3);
+  padding: var(--ca-space-4);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--ca-radius-md);
+  background: var(--ca-surface-raised);
+}
+
+.record-native-facts > h2,
+.record-hierarchy > h2,
+.record-child-inventory h2,
+.record-source-absence > h2 {
+  margin: 0;
+  font-size: var(--ca-text-lg);
+}
+
+.record-hierarchy ol,
+.record-child-inventory ul {
+  display: grid;
+  gap: var(--ca-space-2);
+  margin: 0;
+  padding-left: var(--ca-space-6);
+}
+
 .record-official-text > section {
   padding: var(--ca-space-4);
   border: 1px solid var(--ca-border);
@@ -8913,6 +8941,23 @@ button.atlas-leverage-row:hover {
 .record-connection-groups {
   display: grid;
   gap: var(--ca-space-4);
+}
+
+.record-relationship-disclosure {
+  padding: var(--ca-space-3);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--ca-radius-sm);
+}
+
+.record-relationship-disclosure > summary {
+  min-height: var(--ca-touch-target);
+  cursor: pointer;
+  color: var(--ca-text);
+  font: 700 var(--ca-text-sm) / 1.4 var(--ca-font-mono);
+}
+
+.record-relationship-disclosure[open] > summary {
+  margin-bottom: var(--ca-space-3);
 }
 
 .source-boundary-label {

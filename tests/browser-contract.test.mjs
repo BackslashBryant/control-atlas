@@ -431,7 +431,7 @@ test('skip links focus the workspace without turning the target into an applicat
 test('mounted record surfaces render official descriptions rather than synthetic translations', () => {
   const detailPage = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
   const surfaces = [detailPage, readFileSync('src/ui/pages/CatalogDetailPage.tsx', 'utf8'), readFileSync('src/ui/pages/AtlasMapPage.tsx', 'utf8'), readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8'), readFileSync('src/ui/components/SearchOverlay.tsx', 'utf8')].join('\n');
-  assert.match(detailPage, /recordPresentationProfile/);
+  assert.match(detailPage, /recordPresentationContract/);
   assert.match(detailPage, /data-source-text="published"/);
   assert.match(detailPage, /data-claim-origin=\{claimOrigin\}/);
   assert.doesNotMatch(surfaces, /No narrative description was published for this record/);

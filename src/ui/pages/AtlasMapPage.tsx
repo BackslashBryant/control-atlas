@@ -18,7 +18,7 @@ import {
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import {
-  recordPresentationProfile,
+  recordPresentationContract,
   SUPPORTED_RECORD_TYPES,
 } from "../../shared/record-presentation.mjs";
 import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from "../../shared/site-copy.mjs";
@@ -623,7 +623,7 @@ function FocusedAtlas(props: {
   const inspectedOfficialName = inspectedIdentity.secondary;
   const inspectedType = inspectedDocument?.object_type || inspectedNode?.node_type || "";
   const inspectedPresentation = SUPPORTED_RECORD_TYPES.includes(inspectedType)
-    ? recordPresentationProfile(
+    ? recordPresentationContract(
         inspectedDocument?.catalog_id || inspectedNode?.metadata?.catalog_id || "",
         inspectedType,
       )

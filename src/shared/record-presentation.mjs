@@ -1,134 +1,456 @@
-const DESCRIPTION = Object.freeze({ field: "description", heading: "Requirement", kind: "text" });
+const section = (field, heading, kind = "text", disposition = "rendered_primary") =>
+  Object.freeze({ field, heading, kind, disposition });
 
-const BASE_PROFILES = Object.freeze({
-  assessment_procedure: Object.freeze({
-    sections: Object.freeze([
-      Object.freeze({ field: "procedure_text", heading: "Assessment Procedure", kind: "text" }),
-      Object.freeze({ field: "assessment_objectives", heading: "Objectives", kind: "objectives" }),
-      Object.freeze({ field: "assessment_method_details", heading: "Methods", kind: "methods" }),
-    ]),
-    required: Object.freeze(["procedure_text", "assessment_objectives", "assessment_method_details"]),
-  }),
-  attack_technique: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Technique Description", kind: "text" })]), required: Object.freeze(["description"]) }),
-  baseline: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Baseline", kind: "text" })]), required: Object.freeze(["description"]) }),
-  benchmark: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Benchmark Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
-  catalog: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Publication Summary", kind: "text" })]), required: Object.freeze([]) }),
-  category: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Category Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
-  control: Object.freeze({
-    sections: Object.freeze([
-      Object.freeze({ field: "description", heading: "Control Statement", kind: "text" }),
-      Object.freeze({ field: "discussion", heading: "Discussion", kind: "text" }),
-    ]),
-    required: Object.freeze(["description"]),
-  }),
-  control_enhancement: Object.freeze({
-    sections: Object.freeze([
-      Object.freeze({ field: "description", heading: "Control Statement", kind: "text" }),
-      Object.freeze({ field: "discussion", heading: "Discussion", kind: "text" }),
-    ]),
-    required: Object.freeze(["description"]),
-  }),
-  control_context: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Published Control Context", kind: "text" })]), required: Object.freeze(["description"]) }),
-  definition: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Published Definition", kind: "text" })]), required: Object.freeze(["description"]) }),
-  defend_countermeasure: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Countermeasure Description", kind: "text" })]), required: Object.freeze(["description"]) }),
-  family: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Family Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
-  function: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Function Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
-  group: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Group Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
-  impact_category: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Impact Category", kind: "text" })]), required: Object.freeze(["description"]) }),
-  key_security_indicator: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Indicator Statement", kind: "text" })]), required: Object.freeze(["description"]) }),
-  iot_capability_domain: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability Domain", kind: "text" })]), required: Object.freeze(["description"]) }),
-  iot_capability: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability", kind: "text" })]), required: Object.freeze(["description"]) }),
-  iot_subcapability: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Sub-Capability", kind: "text" })]), required: Object.freeze(["description"]) }),
-  iot_capability_element: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability Element", kind: "text" }), Object.freeze({ field: "publisher_mappings", heading: "Publisher Mappings", kind: "publisher_mappings" })]), required: Object.freeze(["description"]) }),
-  iot_capability_subelement: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability Sub-Element", kind: "text" }), Object.freeze({ field: "publisher_mappings", heading: "Publisher Mappings", kind: "publisher_mappings" })]), required: Object.freeze(["description"]) }),
-  limb: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Control Atlas Area", kind: "text" })]), required: Object.freeze(["title", "description"]) }),
-  mobile_threat_category: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Threat Category", kind: "text" })]), required: Object.freeze(["description"]) }),
-  mobile_threat: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "threat_origin", heading: "Published Origin", kind: "text" }), Object.freeze({ field: "exploit_examples", heading: "Exploit Examples", kind: "list" }), Object.freeze({ field: "cve_examples", heading: "CVE Examples", kind: "list" }), Object.freeze({ field: "countermeasures", heading: "Possible Countermeasures", kind: "countermeasures" }), Object.freeze({ field: "publisher_field_availability", heading: "Publisher Field Availability", kind: "text" })]), required: Object.freeze(["title"]) }),
-  policy: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Policy Statement", kind: "text" })]), required: Object.freeze(["description"]) }),
-  policy_directive: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Authority Summary", kind: "text" })]), required: Object.freeze(["title", "description"]) }),
-  program: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Program Level", kind: "text" })]), required: Object.freeze(["description"]) }),
-  requirement: Object.freeze({
-    sections: Object.freeze([
-      DESCRIPTION,
-      Object.freeze({ field: "discussion", heading: "Discussion", kind: "text" }),
-      Object.freeze({ field: "implementation_examples", heading: "Implementation Examples", kind: "list" }),
-    ]),
-    required: Object.freeze(["description"]),
-  }),
-  rule: Object.freeze({
-    sections: Object.freeze([
-      Object.freeze({ field: "description", heading: "Rule Statement", kind: "text" }),
-      Object.freeze({ field: "discussion", heading: "Following Information", kind: "text" }),
-    ]),
-    required: Object.freeze(["description"]),
-  }),
-  regulation: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Authority Summary", kind: "text" })]), required: Object.freeze(["title", "description"]) }),
-  rmf_step: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "RMF Step", kind: "text" })]), required: Object.freeze(["description"]) }),
-  srg_requirement: Object.freeze({
-    sections: Object.freeze([
-      Object.freeze({ field: "description", heading: "Discussion", kind: "text" }),
-      Object.freeze({ field: "check_text", heading: "Check", kind: "text" }),
-      Object.freeze({ field: "fix_text", heading: "Fix", kind: "text" }),
-    ]),
-    required: Object.freeze(["description", "check_text", "fix_text"]),
-  }),
-  statute: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Authority Summary", kind: "text" })]), required: Object.freeze(["title", "description"]) }),
-  stig_rule: Object.freeze({
-    sections: Object.freeze([
-      Object.freeze({ field: "description", heading: "Discussion", kind: "text" }),
-      Object.freeze({ field: "check_text", heading: "Check", kind: "text" }),
-      Object.freeze({ field: "fix_text", heading: "Fix", kind: "text" }),
-    ]),
-    required: Object.freeze(["description", "check_text", "fix_text"]),
-  }),
-  tactic: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Tactic Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
-  trunk: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Control Atlas Scope", kind: "text" })]), required: Object.freeze(["title", "description"]) }),
-  zt_activity: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Activity", kind: "text" })]), required: Object.freeze(["description"]) }),
-  zt_assessment_question: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Assessment Guidance", kind: "text" }), Object.freeze({ field: "answer_options", heading: "Answer Options", kind: "list" })]), required: Object.freeze(["description", "answer_options"]) }),
-  zt_build: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Implementation Summary", kind: "text" }), Object.freeze({ field: "architecture_sections", heading: "Architecture", kind: "structured" }), Object.freeze({ field: "implementation_sections", heading: "Implementation Guide", kind: "structured" })]), required: Object.freeze(["description", "architecture_sections", "implementation_sections"]) }),
-  zt_capability: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Capability", kind: "text" })]), required: Object.freeze(["description"]) }),
-  zt_collaborator: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "publisher_context", heading: "Participation Context", kind: "text" })]), required: Object.freeze(["title", "publisher_context"]) }),
-  zt_cloud_native_requirement: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Cloud-Native Zero Trust Requirement", kind: "text" })]), required: Object.freeze(["description"]) }),
-  zt_document: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Document Summary", kind: "text" }), Object.freeze({ field: "document_sections", heading: "Publisher Overview", kind: "structured" })]), required: Object.freeze(["description", "document_sections"]) }),
-  zt_overlay_section: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Overlay Section", kind: "text" })]), required: Object.freeze(["description"]) }),
-  zt_logical_component: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Logical Component", kind: "text" })]), required: Object.freeze(["description"]) }),
-  zt_mapping_document: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Mapping Workbook", kind: "text" })]), required: Object.freeze(["description"]) }),
-  zt_mapping_contributor: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "publisher_field", heading: "Mapping Workbook Field", kind: "text" })]), required: Object.freeze(["title", "publisher_field"]) }),
-  zt_pillar: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Pillar Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
-  zt_product_component: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Implemented Function", kind: "text" }), Object.freeze({ field: "mapping_targets", heading: "Publisher Mapping Targets", kind: "mapping_targets" })]), required: Object.freeze(["description"]) }),
-  zt_publication: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Publication Summary", kind: "text" })]), required: Object.freeze(["description"]) }),
-  zt_reference_component: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Reference Architecture Function", kind: "text" })]), required: Object.freeze(["description"]) }),
-  zt_tenet: Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Tenet", kind: "text" })]), required: Object.freeze(["description"]) }),
+export const PAGE_ROLES = Object.freeze({
+  ATOMIC_RECORD: "atomic_record",
+  CONTAINER: "container",
+  PUBLICATION_DOCUMENT: "publication_document",
+  ENTITY_CONTRIBUTOR: "entity_contributor",
+  ASSESSMENT_QUESTION: "assessment_question",
+  IMPLEMENTATION_ARTIFACT: "implementation_artifact",
 });
+
+export const FIELD_DISPOSITIONS = Object.freeze({
+  RENDERED_PRIMARY: "rendered_primary",
+  RENDERED_SECONDARY: "rendered_secondary",
+  SOURCE_METADATA: "source_metadata",
+  RELATIONSHIP_EVIDENCE: "relationship_evidence",
+  INTENTIONALLY_HIDDEN: "intentionally_hidden",
+});
+
+export const RELATIONSHIP_TREATMENTS = Object.freeze({
+  PROMOTE: "PROMOTE",
+  SUMMARIZE: "SUMMARIZE",
+  COLLAPSE: "COLLAPSE",
+  ATLAS_ONLY: "ATLAS_ONLY",
+});
+
+const commonFields = Object.freeze({
+  title: { disposition: "rendered_primary", origin: "publisher" },
+  description: { disposition: "rendered_primary", origin: "publisher" },
+  family: { disposition: "rendered_secondary", origin: "publisher" },
+  source_locator: { disposition: "source_metadata", origin: "source_metadata" },
+  publication_date: { disposition: "source_metadata", origin: "publisher" },
+  references: { disposition: "rendered_secondary", origin: "publisher" },
+  parent_id: { disposition: "rendered_secondary", origin: "publisher" },
+  field_absence_reasons: { disposition: "source_metadata", origin: "derived" },
+  taxonomy_tags: {
+    disposition: "intentionally_hidden",
+    origin: "navigation",
+    reason: "Rendered through governed classification chips.",
+  },
+  source_text_presentation: {
+    disposition: "intentionally_hidden",
+    origin: "navigation",
+    reason: "Exact source-text offsets are presentation metadata.",
+  },
+});
+
+const contract = ({ role, sections, required = [], optional = [], facts = [], fields = {} }) => {
+  const sectionFields = Object.fromEntries(
+    sections.map((entry) => [
+      entry.field,
+      {
+        disposition: entry.disposition,
+        origin: entry.field === "publisher_field_availability" ? "derived" : "publisher",
+      },
+    ]),
+  );
+  return Object.freeze({
+    page_role: role,
+    identity_fields: Object.freeze(["item_id", "title"]),
+    hierarchy_fields: Object.freeze(["parent_id", "family"]),
+    sections: Object.freeze(sections),
+    metadata_facts: Object.freeze(facts),
+    required_fields: Object.freeze(required),
+    optional_fields: Object.freeze(optional),
+    field_dispositions: Object.freeze({ ...commonFields, ...sectionFields, ...fields }),
+    prohibited_synthetic_presentation: Object.freeze([
+      "relationship-count-derived importance",
+      "invented implementation guidance",
+      "unverified official deep links",
+    ]),
+  });
+};
+
+const atomic = (sections, required = [], optional = [], extra = {}) =>
+  contract({ role: PAGE_ROLES.ATOMIC_RECORD, sections, required, optional, ...extra });
+const container = (sections, required = [], optional = [], extra = {}) =>
+  contract({ role: PAGE_ROLES.CONTAINER, sections, required, optional, ...extra });
+const publication = (sections, required = [], optional = [], extra = {}) =>
+  contract({ role: PAGE_ROLES.PUBLICATION_DOCUMENT, sections, required, optional, ...extra });
+
+const authorityPublication = (heading) =>
+  publication([section("description", heading)], ["title", "description"]);
+
+const BASE_CONTRACTS = {
+  assessment_procedure: contract({
+    role: PAGE_ROLES.ASSESSMENT_QUESTION,
+    sections: [
+      section("procedure_text", "Assessment Procedure"),
+      section("assessment_objectives", "Objectives", "objectives"),
+      section("assessment_method_details", "Methods", "methods"),
+    ],
+    required: ["procedure_text", "assessment_objectives", "assessment_method_details"],
+    fields: {
+      assessment_methods: {
+        disposition: "intentionally_hidden",
+        origin: "derived",
+        reason: "The complete method objects are rendered.",
+      },
+      assessment_objects: {
+        disposition: "intentionally_hidden",
+        origin: "derived",
+        reason: "Objects are rendered within method entries.",
+      },
+      nist_control: { disposition: "relationship_evidence", origin: "publisher" },
+    },
+  }),
+  attack_technique: atomic([section("description", "Technique Description")], ["description"], [], {
+    facts: ["tactic_title", "is_subtechnique"],
+    fields: {
+      tactic_id: { disposition: "rendered_secondary", origin: "publisher" },
+      tactic_title: { disposition: "rendered_secondary", origin: "publisher" },
+      tactic_memberships: { disposition: "rendered_secondary", origin: "publisher" },
+      is_subtechnique: { disposition: "source_metadata", origin: "publisher" },
+      parent_technique_id: { disposition: "rendered_secondary", origin: "publisher" },
+    },
+  }),
+  baseline: container([section("description", "Baseline")], ["description"]),
+  benchmark: container([section("description", "Benchmark Summary")], [], ["description"], {
+    facts: ["benchmark_version", "benchmark_status_date", "child_count", "severity_distribution"],
+    fields: {
+      benchmark_version: { disposition: "source_metadata", origin: "publisher" },
+      benchmark_status_date: { disposition: "source_metadata", origin: "publisher" },
+      child_count: { disposition: "rendered_secondary", origin: "derived" },
+      severity_distribution: { disposition: "rendered_secondary", origin: "derived" },
+    },
+  }),
+  catalog: publication([section("description", "Publication Summary")], [], ["description"]),
+  category: container([section("description", "Category Summary")], [], ["description"]),
+  control: atomic(
+    [
+      section("description", "Control Statement"),
+      section("discussion", "Discussion", "text", "rendered_secondary"),
+    ],
+    ["description"],
+    ["discussion"],
+    {
+      fields: {
+        related_controls: { disposition: "relationship_evidence", origin: "publisher" },
+        assessment_objectives: { disposition: "rendered_secondary", origin: "publisher" },
+        assessment_method_details: { disposition: "rendered_secondary", origin: "publisher" },
+        nist_800_53b_baselines: { disposition: "relationship_evidence", origin: "publisher" },
+        baselines: { disposition: "relationship_evidence", origin: "publisher" },
+      },
+    },
+  ),
+  control_context: atomic([section("description", "Published Control Context")], ["description"]),
+  control_enhancement: atomic(
+    [
+      section("description", "Control Statement"),
+      section("discussion", "Discussion", "text", "rendered_secondary"),
+    ],
+    ["description"],
+    ["discussion"],
+    {
+      fields: {
+        related_controls: { disposition: "relationship_evidence", origin: "publisher" },
+        assessment_objectives: { disposition: "rendered_secondary", origin: "publisher" },
+        assessment_method_details: { disposition: "rendered_secondary", origin: "publisher" },
+        nist_800_53b_baselines: { disposition: "relationship_evidence", origin: "publisher" },
+      },
+    },
+  ),
+  definition: atomic([section("description", "Published Definition")], ["description"]),
+  defend_countermeasure: atomic([section("description", "Countermeasure Description")], ["description"], [], {
+    facts: ["tactic_title"],
+  }),
+  family: container([section("description", "Family Summary")], [], ["description"]),
+  function: container([section("description", "Function Summary")], [], ["description"]),
+  group: container([section("description", "Group Summary")], [], ["description"]),
+  impact_category: container([section("description", "Impact Category")], ["description"]),
+  iot_capability: container([section("description", "Capability")], [], ["description"]),
+  iot_capability_domain: container([section("description", "Capability Domain")], [], ["description"]),
+  iot_capability_element: atomic(
+    [
+      section("description", "Capability Element"),
+      section("publisher_mappings", "Publisher Mappings", "publisher_mappings", "relationship_evidence"),
+    ],
+    [],
+    ["description", "publisher_mappings"],
+  ),
+  iot_capability_subelement: atomic(
+    [
+      section("description", "Capability Sub-Element"),
+      section("publisher_mappings", "Publisher Mappings", "publisher_mappings", "relationship_evidence"),
+    ],
+    [],
+    ["description", "publisher_mappings"],
+  ),
+  iot_subcapability: container([section("description", "Sub-Capability")], [], ["description"]),
+  key_security_indicator: atomic([section("description", "Indicator Statement")], ["description"]),
+  limb: container([section("description", "Control Atlas Area")], ["title", "description"]),
+  mobile_threat: atomic(
+    [
+      section("threat_origin", "Published Origin"),
+      section("exploit_examples", "Exploit Examples", "list"),
+      section("cve_examples", "CVE Examples", "list"),
+      section("countermeasures", "Possible Countermeasures", "countermeasures"),
+      section("publisher_field_availability", "Publisher Field Availability", "text", "rendered_secondary"),
+    ],
+    ["title"],
+    ["threat_origin", "exploit_examples", "cve_examples", "countermeasures", "publisher_field_availability"],
+  ),
+  mobile_threat_category: container([section("description", "Threat Category")], ["description"]),
+  policy: atomic([section("description", "Policy Statement")], ["description"]),
+  policy_directive: authorityPublication("Authority Summary"),
+  program: container([section("description", "Program Level")], ["description"]),
+  regulation: authorityPublication("Authority Summary"),
+  requirement: atomic(
+    [
+      section("description", "Requirement"),
+      section("discussion", "Discussion", "text", "rendered_secondary"),
+      section("implementation_examples", "Implementation Examples", "list", "rendered_secondary"),
+    ],
+    ["description"],
+    ["discussion", "implementation_examples"],
+    { fields: { informative_references: { disposition: "rendered_secondary", origin: "publisher" } } },
+  ),
+  rmf_step: atomic([section("description", "RMF Step")], ["description"]),
+  rule: atomic(
+    [
+      section("description", "Rule Statement"),
+      section("discussion", "Following Information", "text", "rendered_secondary"),
+    ],
+    ["description"],
+    ["discussion"],
+  ),
+  srg_requirement: null,
+  statute: authorityPublication("Authority Summary"),
+  stig_rule: null,
+  tactic: container([section("description", "Tactic Summary")], [], ["description"]),
+  trunk: container([section("description", "Control Atlas Scope")], ["title", "description"]),
+  zt_activity: atomic([section("description", "Activity")], ["description"], ["outcomes", "end_state", "predecessors", "successors"]),
+  zt_assessment_question: contract({
+    role: PAGE_ROLES.ASSESSMENT_QUESTION,
+    sections: [section("description", "Assessment Guidance"), section("answer_options", "Answer Options", "list")],
+    required: ["description", "answer_options"],
+    fields: {
+      publisher_default_answer: { disposition: "source_metadata", origin: "publisher" },
+      question_number: { disposition: "rendered_primary", origin: "publisher" },
+    },
+  }),
+  zt_build: contract({
+    role: PAGE_ROLES.IMPLEMENTATION_ARTIFACT,
+    sections: [
+      section("description", "Implementation Summary"),
+      section("architecture_sections", "Architecture", "structured"),
+      section("implementation_sections", "Implementation Guide", "structured"),
+    ],
+    required: ["description", "architecture_sections", "implementation_sections"],
+    fields: { implementation_guide_url: { disposition: "source_metadata", origin: "publisher" } },
+  }),
+  zt_capability: container([section("description", "Capability")], ["description"]),
+  zt_cloud_native_requirement: atomic([section("description", "Cloud-Native Zero Trust Requirement")], ["description"]),
+  zt_collaborator: contract({
+    role: PAGE_ROLES.ENTITY_CONTRIBUTOR,
+    sections: [section("publisher_context", "Participation Context")],
+    required: ["title", "publisher_context"],
+  }),
+  zt_document: publication(
+    [section("description", "Document Summary"), section("document_sections", "Publisher Overview", "structured")],
+    ["description", "document_sections"],
+  ),
+  zt_logical_component: contract({
+    role: PAGE_ROLES.IMPLEMENTATION_ARTIFACT,
+    sections: [section("description", "Logical Component")],
+    required: ["description"],
+  }),
+  zt_mapping_contributor: contract({
+    role: PAGE_ROLES.ENTITY_CONTRIBUTOR,
+    sections: [section("publisher_field", "Mapping Workbook Field")],
+    required: ["title", "publisher_field"],
+  }),
+  zt_mapping_document: publication([section("description", "Mapping Workbook")], ["description"]),
+  zt_pillar: container([section("description", "Pillar Summary")], [], ["description"]),
+  zt_product_component: contract({
+    role: PAGE_ROLES.IMPLEMENTATION_ARTIFACT,
+    sections: [
+      section("description", "Implemented Function"),
+      section("mapping_targets", "Publisher Mapping Targets", "mapping_targets", "relationship_evidence"),
+    ],
+    required: ["description"],
+    optional: ["mapping_targets"],
+  }),
+  zt_publication: publication([section("description", "Publication Summary")], ["description"]),
+  zt_reference_component: contract({
+    role: PAGE_ROLES.IMPLEMENTATION_ARTIFACT,
+    sections: [section("description", "Reference Architecture Function")],
+    required: ["description"],
+  }),
+  zt_tenet: atomic([section("description", "Tenet")], ["description"]),
+};
+
+const disaContract = atomic(
+  [section("description", "Discussion"), section("check_text", "Check"), section("fix_text", "Fix")],
+  ["description", "check_text", "fix_text"],
+  [],
+  {
+    facts: ["vuln_id", "rule_id", "stig_id", "benchmark_title", "benchmark_version", "benchmark_status_date", "severity"],
+    fields: Object.fromEntries(
+      [
+        "vuln_id",
+        "rule_id",
+        "stig_id",
+        "benchmark_id",
+        "benchmark_title",
+        "benchmark_version",
+        "benchmark_status_date",
+        "severity",
+      ]
+        .map((field) => [
+          field,
+          {
+            disposition: field.includes("version") || field.includes("date") ? "source_metadata" : "rendered_primary",
+            origin: "publisher",
+          },
+        ])
+        .concat([["published_cci_references", { disposition: "relationship_evidence", origin: "publisher" }]]),
+    ),
+  },
+);
+BASE_CONTRACTS.srg_requirement = disaContract;
+BASE_CONTRACTS.stig_rule = disaContract;
+Object.freeze(BASE_CONTRACTS);
+
+const CATALOG_RECORD_TYPES = Object.freeze({
+  "atlas-authority-spine": ["policy_directive", "regulation", "statute"],
+  "atlas-organizing-spine": ["limb", "trunk"],
+  "cmmc-2": ["catalog", "program"],
+  "csf-2": ["catalog", "category", "function", "requirement"],
+  "cui-policy": ["catalog", "policy"],
+  "disa-cci": ["catalog", "requirement"],
+  "disa-srg": ["benchmark", "catalog", "srg_requirement"],
+  "disa-stig": ["benchmark", "catalog", "stig_rule"],
+  "dod-rai": ["catalog", "group", "requirement"],
+  "dod-zt": ["catalog", "zt_activity", "zt_capability", "zt_document", "zt_pillar", "zt_tenet"],
+  "fedramp-2026": ["catalog", "control_context", "definition", "key_security_indicator", "rule"],
+  "fedramp-rev5": ["baseline", "catalog"],
+  "fips-199": ["catalog", "impact_category"],
+  "fips-200": ["catalog", "requirement"],
+  "microsoft-zt-maturity": ["catalog", "zt_assessment_question", "zt_pillar"],
+  "mitre-attack": ["attack_technique", "catalog", "tactic"],
+  "mitre-attack-ics": ["attack_technique", "catalog", "tactic"],
+  "mitre-d3fend": ["catalog", "defend_countermeasure", "tactic"],
+  "nist-800-171": ["catalog", "family", "requirement"],
+  "nist-800-171-rev2": ["catalog", "family", "requirement"],
+  "nist-800-172": ["catalog", "family", "requirement"],
+  "nist-800-37": ["catalog", "rmf_step"],
+  "nist-800-53": ["catalog", "control", "control_enhancement", "family"],
+  "nist-800-53a": ["assessment_procedure", "catalog", "family"],
+  "nist-800-53b": ["baseline", "catalog"],
+  "nist-ai-rmf": ["catalog", "group", "requirement"],
+  "nist-iot-cybersecurity": ["catalog", "iot_capability", "iot_capability_domain", "iot_capability_element", "iot_capability_subelement", "iot_subcapability"],
+  "nist-mobile-threats": ["catalog", "mobile_threat", "mobile_threat_category"],
+  "nist-ssdf": ["catalog", "group", "requirement"],
+  "nist-zt": ["catalog", "zt_build", "zt_cloud_native_requirement", "zt_collaborator", "zt_logical_component", "zt_mapping_contributor", "zt_mapping_document", "zt_product_component", "zt_publication", "zt_reference_component", "zt_tenet"],
+});
+
+const PRESENTATION_SCOPE_BY_TYPE = Object.freeze({
+  limb: "atlas-organizing-spine",
+  policy_directive: "atlas-authority-spine",
+  regulation: "atlas-authority-spine",
+  statute: "atlas-authority-spine",
+  trunk: "atlas-organizing-spine",
+});
+
+export const SUPPORTED_RECORD_TYPES = Object.freeze(Object.keys(BASE_CONTRACTS));
+export const SUPPORTED_RECORD_CONTRACT_KEYS = Object.freeze(
+  Object.entries(CATALOG_RECORD_TYPES).flatMap(([catalogId, types]) =>
+    types.map((recordType) => `${catalogId}:${recordType}`),
+  ),
+);
+const supportedKeys = new Set(SUPPORTED_RECORD_CONTRACT_KEYS);
 
 const CATALOG_OVERRIDES = Object.freeze({
-  "disa-cci:requirement": Object.freeze({ sections: Object.freeze([DESCRIPTION, Object.freeze({ field: "references", heading: "Publisher References", kind: "references" })]), required: Object.freeze(["description"]) }),
-  "csf-2:requirement": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Outcome", kind: "text" })]), required: Object.freeze(["description"]) }),
-  "dod-rai:requirement": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Guidance", kind: "text" })]), required: Object.freeze(["description"]) }),
-  "dod-zt:zt_activity": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Activity", kind: "text" }), Object.freeze({ field: "outcomes", heading: "Published Outcomes", kind: "text" }), Object.freeze({ field: "end_state", heading: "Published End State", kind: "text" }), Object.freeze({ field: "predecessors", heading: "Predecessor Activities", kind: "list" }), Object.freeze({ field: "successors", heading: "Successor Activities", kind: "list" })]), required: Object.freeze(["description"]) }),
-  "nist-ai-rmf:requirement": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Action", kind: "text" })]), required: Object.freeze(["description"]) }),
-  "nist-800-171:requirement": Object.freeze({ sections: Object.freeze([DESCRIPTION]), required: Object.freeze([]) }),
-  "nist-800-172:requirement": Object.freeze({ sections: Object.freeze([DESCRIPTION]), required: Object.freeze([]) }),
-  "nist-iot-cybersecurity:iot_capability_domain": Object.freeze({ sections: BASE_PROFILES.iot_capability_domain.sections, required: Object.freeze([]) }),
-  "nist-iot-cybersecurity:iot_capability": Object.freeze({ sections: BASE_PROFILES.iot_capability.sections, required: Object.freeze([]) }),
-  "nist-iot-cybersecurity:iot_subcapability": Object.freeze({ sections: BASE_PROFILES.iot_subcapability.sections, required: Object.freeze([]) }),
-  "nist-iot-cybersecurity:iot_capability_element": Object.freeze({ sections: BASE_PROFILES.iot_capability_element.sections, required: Object.freeze([]) }),
-  "nist-iot-cybersecurity:iot_capability_subelement": Object.freeze({ sections: BASE_PROFILES.iot_capability_subelement.sections, required: Object.freeze([]) }),
-  "nist-ssdf:requirement": Object.freeze({ sections: Object.freeze([Object.freeze({ field: "description", heading: "Practice", kind: "text" })]), required: Object.freeze(["description"]) }),
+  "csf-2:requirement": [
+    section("description", "Outcome"),
+    section("implementation_examples", "Implementation Examples", "list", "rendered_secondary"),
+    section("informative_references", "Informative References", "list", "rendered_secondary"),
+  ],
+  "disa-cci:requirement": [
+    section("description", "Requirement"),
+    section("references", "Publisher References", "references", "rendered_secondary"),
+  ],
+  "dod-rai:requirement": [section("description", "Guidance")],
+  "dod-zt:zt_activity": [
+    section("description", "Activity"),
+    section("outcomes", "Published Outcomes"),
+    section("end_state", "Published End State"),
+    section("predecessors", "Predecessor Activities", "list", "rendered_secondary"),
+    section("successors", "Successor Activities", "list", "rendered_secondary"),
+  ],
+  "nist-ai-rmf:requirement": [section("description", "Action")],
+  "nist-ssdf:requirement": [section("description", "Practice")],
 });
 
-export const SUPPORTED_RECORD_TYPES = Object.freeze(Object.keys(BASE_PROFILES));
-
-export function recordPresentationProfile(catalogId, nodeType) {
-  const profile = CATALOG_OVERRIDES[`${catalogId}:${nodeType}`] || BASE_PROFILES[nodeType];
-  if (!profile) throw new Error(`Missing record presentation profile for ${catalogId}:${nodeType}`);
-  return profile;
+export function recordPresentationContract(catalogId, nodeType) {
+  const resolvedCatalogId = catalogId || PRESENTATION_SCOPE_BY_TYPE[nodeType];
+  const key = `${resolvedCatalogId || ""}:${nodeType}`;
+  if (!supportedKeys.has(key)) throw new Error(`Missing record presentation contract for ${key}`);
+  const base = BASE_CONTRACTS[nodeType];
+  const sections = Object.freeze(CATALOG_OVERRIDES[key] || base.sections);
+  const fieldDispositions = Object.freeze({
+    ...base.field_dispositions,
+    ...Object.fromEntries(
+      sections.map((entry) => [
+        entry.field,
+        {
+          disposition: entry.disposition,
+          origin: "publisher",
+        },
+      ]),
+    ),
+  });
+  return Object.freeze({
+    ...base,
+    catalog_id: resolvedCatalogId,
+    record_type: nodeType,
+    sections,
+    field_dispositions: fieldDispositions,
+  });
 }
 
-export function missingRequiredRecordFields(profile, metadata = {}) {
-  return profile.required.filter((field) => {
-    if (metadata.structural_group === true && field === "description") return false;
+export function missingRequiredRecordFields(contractValue, metadata = {}) {
+  return contractValue.required_fields.filter((field) => {
     const value = metadata[field];
     return Array.isArray(value) ? value.length === 0 : !String(value || "").trim();
   });
+}
+
+export function relationshipTreatmentFor({
+  recordContract,
+  counterpartContract,
+  recordCatalogId,
+  counterpartCatalogId,
+  relationshipType,
+  relationshipClass,
+}) {
+  if (relationshipClass === "structural" || recordCatalogId === counterpartCatalogId) {
+    return RELATIONSHIP_TREATMENTS.ATLAS_ONLY;
+  }
+  if (recordCatalogId === "csf-2" && ["disa-stig", "disa-srg"].includes(counterpartCatalogId)) {
+    return RELATIONSHIP_TREATMENTS.ATLAS_ONLY;
+  }
+  if (relationshipType === "assesses" || counterpartContract.page_role === PAGE_ROLES.ASSESSMENT_QUESTION) {
+    return RELATIONSHIP_TREATMENTS.PROMOTE;
+  }
+  if (["disa-stig", "disa-srg"].includes(recordCatalogId) && counterpartCatalogId === "disa-cci") {
+    return RELATIONSHIP_TREATMENTS.PROMOTE;
+  }
+  if (recordContract.page_role === PAGE_ROLES.ATOMIC_RECORD) {
+    return RELATIONSHIP_TREATMENTS.COLLAPSE;
+  }
+  return RELATIONSHIP_TREATMENTS.SUMMARIZE;
 }

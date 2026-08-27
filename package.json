@@ -63,6 +63,7 @@
     "test:tokens": "node --test ./tests/orbital-token-drift.test.mjs",
     "test:copy-contract": "node --test ./tests/copy-contract.test.mjs",
     "test:record-presentation": "tsx --test ./tests/graph/recordPresentation.test.ts",
+    "test:record-fidelity:e2e": "playwright test --config playwright.e2e.config.mjs tests/e2e/record-source-fidelity.spec.mjs",
     "test:authority": "node --test ./tests/authority-spine.test.mjs",
     "test:atlas": "node --test ./tests/atlas-neighborhood.test.mjs",
     "test:correction:contracts": "tsx --test ./tests/graph/ancestorPath.test.ts ./tests/graph/atlasSearch.test.ts ./tests/graph/atlasModel.test.ts ./tests/graph/atlasDrilldown.test.ts ./tests/graph/routeIdentity.test.ts ./tests/graph/epic4-route-state.test.ts ./tests/graph/buildRouteState.test.ts ./tests/graph/brandRotation.test.ts ./tests/graph/catalogInventory.test.ts ./tests/graph/compareModeState.test.ts ./tests/graph/sourceRegister.test.ts ./tests/graph/templateGenerationState.test.ts ./tests/graph/runtimeLoader.test.ts ./tests/graph/chunkRecovery.test.ts ./tests/graph/librarySearchTransport.test.ts ./tests/graph/officialText.test.ts && node --test ./tests/resources-directory.test.mjs ./tests/resource-search.test.mjs ./tests/learn-content.test.mjs ./tests/browser-contract.test.mjs ./tests/catalog-publication-identity.test.mjs",

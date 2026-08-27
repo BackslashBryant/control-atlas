@@ -27,7 +27,6 @@ const CATEGORY_GROUPS = [
       "zt_capability",
       "zt_document",
       "zt_overlay_catalog",
-      "zt_overlay_section",
       "zt_pillar",
       "zt_tenet",
     ],
