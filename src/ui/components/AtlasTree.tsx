@@ -40,7 +40,10 @@ import {
   rankAtlasMappingOverlay,
 } from "../lib/atlasTreeOverlay";
 import type { AtlasNeighborhoodRecord } from "../lib/runtimeLoader";
-import type { RecordIdentityPresentation } from "../lib/recordTitle";
+import {
+  GENERATED_STABLE_ID_TYPES,
+  type RecordIdentityPresentation,
+} from "../lib/recordTitle";
 import { catalogMandateLabel } from "../lib/catalogMandate";
 import {
   AREA_IDS,
@@ -381,16 +384,20 @@ function AtlasStructuralExplorer(props: {
           <ul className="atlas-publisher-explorer__list">
             {visible.map((node) => {
               const identity = props.identityForNode(node.id);
+              // Structural rows come from the Atlas spine while their identity resolves
+              // from lazily loaded catalog records. Decide the label from the spine's
+              // own node type so a row never re-labels itself mid-load.
+              const identityLed = GENERATED_STABLE_ID_TYPES.has(node.nodeType);
               return (
               <li key={node.id}>
                 <button
-                  aria-label={identity.stableIdIsGenerated ? `Open ${identity.accessibleName}` : undefined}
+                  aria-label={identityLed ? `Open ${identity.accessibleName}` : undefined}
                   onClick={() => props.onOpen(node)}
                   type="button"
                 >
                   <span>
-                    <strong>{identity.stableIdIsGenerated ? identity.primary : node.itemId}</strong>
-                    {identity.stableIdIsGenerated && identity.context ? (
+                    <strong>{identityLed ? identity.primary : node.itemId}</strong>
+                    {identityLed && identity.context ? (
                       <small>{identity.context}</small>
                     ) : <small>{node.label}</small>}
                   </span>
@@ -763,14 +770,18 @@ export function AtlasTree(props: AtlasTreeProps) {
               <ul>
                 {sidebarChildren.map((node) => {
                   const identity = props.identityForNode(node.id);
+                  // Structural rows come from the Atlas spine while their identity resolves
+                  // from lazily loaded catalog records. Decide the label from the spine's
+                  // own node type so a row never re-labels itself mid-load.
+                  const identityLed = GENERATED_STABLE_ID_TYPES.has(node.nodeType);
                   return (
                   <li key={node.id}>
                     <button
-                      aria-label={identity.stableIdIsGenerated ? `Open ${identity.accessibleName}` : undefined}
+                      aria-label={identityLed ? `Open ${identity.accessibleName}` : undefined}
                       onClick={() => activateNode(node)}
                       type="button"
                     >
-                      <span>{identity.stableIdIsGenerated ? identity.primary : node.itemId}</span>
+                      <span>{identityLed ? identity.primary : node.itemId}</span>
                       <small>{node.descendantRecordCount.toLocaleString()}</small>
                     </button>
                   </li>
