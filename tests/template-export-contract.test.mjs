@@ -3,7 +3,8 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
-import { buildTemplateDocument, generateTemplate } from '../src/app/template-engine.mjs';
+import { parse as parseYaml } from 'yaml';
+import { buildTemplateDocument, escapeMarkdownTableCell, generateTemplate } from '../src/app/template-engine.mjs';
 import { renderOfficeDocument } from '../src/app/office-export.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -118,6 +119,17 @@ test('withdrawn controls are excluded from generated template output', () => {
 
   assert.match(result.content, /AC-2/, 'Expected active control AC-2 present');
   assert.doesNotMatch(result.content, /AC-13\b/, 'Withdrawn control AC-13 must not appear in output');
+
+  const specialOptions = {
+    templateType: 'security_plan_starter',
+    framework: 'nist-800-53',
+    environment: 'Windows C:\\secure "zone"\nnext',
+    sourceRefs: ['nist-oscal'],
+    sources: withdrawnDataset.sources,
+  };
+  const jsonDocument = JSON.parse(generateTemplate({ ...specialOptions, format: 'json' }, withdrawnDataset).content);
+  const yamlDocument = parseYaml(generateTemplate({ ...specialOptions, format: 'yaml' }, withdrawnDataset).content);
+  assert.deepEqual(yamlDocument, jsonDocument, 'YAML must round-trip the same document as JSON');
 });
 
 // ---------------------------------------------------------------------------
@@ -297,6 +309,10 @@ test('ssp markdown renders one compact family index with a control-work handoff'
   assert.match(result.content, /## Control Narrative Handoff/, 'the companion handoff must render as its own section');
   assert.match(result.content, /Implementation Statement Worksheet/);
   assert.doesNotMatch(result.content, /Implementation Narrative|STIG\/SRG References/);
+  assert.equal(
+    escapeMarkdownTableCell('C:\\secure | owner\nnext'),
+    'C:\\\\secure \\| owner<br>next',
+  );
 });
 
 // ---------------------------------------------------------------------------

@@ -3,6 +3,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
 
 import { isAllowedLicenseExpression } from '../tools/check-licenses.mjs';
+import { parseGitHubRemote } from '../tools/detection.mjs';
 
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 const ci = readFileSync('.github/workflows/ci.yml', 'utf8');
@@ -147,6 +148,14 @@ test('package scripts expose deterministic split gates and full local verificati
   assert.equal(isAllowedLicenseExpression('(MIT AND Zlib)'), true);
   assert.equal(isAllowedLicenseExpression('MIT AND GPL-3.0-or-later'), false);
   assert.equal(isAllowedLicenseExpression('LicenseRef-Unknown'), false);
+  assert.deepEqual(parseGitHubRemote('https://github.com/RAMBULLS/control-atlas.git'), {
+    owner: 'RAMBULLS', repo: 'control-atlas',
+  });
+  assert.deepEqual(parseGitHubRemote('git@github.com:RAMBULLS/control-atlas.git'), {
+    owner: 'RAMBULLS', repo: 'control-atlas',
+  });
+  assert.equal(parseGitHubRemote('https://github.com.evil.example/RAMBULLS/control-atlas'), null);
+  assert.equal(parseGitHubRemote('https://evil.example/?next=github.com/RAMBULLS/control-atlas'), null);
   assert.ok(existsSync('.lighthouserc.ci.json'));
 });
 

@@ -30,6 +30,7 @@ const AUTOMATION_FILES = new Set([
   'tools/check-action-pins.mjs',
   'tools/check-licenses.mjs',
   'tools/classify-change-scope.mjs',
+  'tools/detection.mjs',
   'tools/git-push-with-retry.mjs',
   'tools/experience-guardian.mjs',
   'tools/lib/vale-extraction.mjs',

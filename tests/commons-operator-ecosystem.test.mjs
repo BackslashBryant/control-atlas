@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { isGitHubUrl } from "../scripts/lib/url-classification.mjs";
 
 import { searchDirectoryResources } from "../src/ui/lib/resourcesDirectory.mjs";
 
@@ -59,8 +60,11 @@ test("Evaluate-STIG stays rejected while archived StigRepo remains discoverable"
   assert.match(stigRepo.legacyReason, /archived/);
   assert.equal(stigRepo.supersededBy, undefined);
   assert.ok(stigRepo.companionResources.includes("tool-powerstig"));
-  assert.ok(byId.get("tool-powerstig").communityLinks.includes("https://github.com/Microsoft/PowerStig/wiki/"));
-  assert.ok(byId.get("tool-powerstig").companionResources.includes("reference-microsoft-stigrepo"));
+  assert.equal(byId.get("tool-powerstig").communityLinks.some((url) => url === "https://github.com/Microsoft/PowerStig/wiki/"), true);
+  assert.equal(byId.get("tool-powerstig").companionResources.some((id) => id === "reference-microsoft-stigrepo"), true);
+  assert.equal(isGitHubUrl("https://github.com/Microsoft/PowerStig"), true);
+  assert.equal(isGitHubUrl("https://github.com.evil.example/Microsoft/PowerStig"), false);
+  assert.equal(isGitHubUrl("https://evil.example/?next=github.com"), false);
 });
 
 test("restricted resources disclose scoped access boundaries without classifying the public page", () => {
@@ -76,7 +80,7 @@ test("restricted resources disclose scoped access boundaries without classifying
   assert.equal(rejectedByName.has("Tenable Connect"), false);
   assert.equal(rejectedByName.has("Tenable Audit Files / Compliance Checks"), false);
   assert.equal(byId.get("reference-tenable-documentation")?.canonicalUrl, "https://docs.tenable.com/");
-  assert.ok(byId.get("community-tenable-connect")?.alternateUrls.includes("https://community.tenable.com/"));
+  assert.equal(byId.get("community-tenable-connect")?.alternateUrls.some((url) => url === "https://community.tenable.com/"), true);
 });
 
 test("community and topical metadata cannot become requirement authority", () => {
@@ -99,8 +103,8 @@ test("DoDIN APL and YARA lifecycles match publisher evidence", () => {
 
   const yaraX = byId.get("tool-yara-x");
   assert.ok(yaraX);
-  assert.ok(yaraX.searchAliases.includes("YARA"));
-  assert.ok(yaraX.communityLinks.includes("https://github.com/VirusTotal/yara"));
+  assert.equal(yaraX.searchAliases.some((alias) => alias === "YARA"), true);
+  assert.equal(yaraX.communityLinks.some((url) => url === "https://github.com/VirusTotal/yara"), true);
   assert.match(yaraX.warnings.join(" "), /maintenance mode/);
   assert.equal(byId.has("tool-yara"), false);
 });

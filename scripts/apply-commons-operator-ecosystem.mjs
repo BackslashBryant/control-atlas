@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { writeJsonAtomically } from "./lib/write-json-atomically.mjs";
+import { isGitHubUrl } from "./lib/url-classification.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DATASET_PATH = join(ROOT, "data", "commons-resource-dataset.json");
@@ -174,6 +175,7 @@ function makeResource(entry) {
   const restricted = accessType !== "public";
   const summary = `${entry.useCase}.`;
   const warnings = [...(entry.warnings || []), ...(isCommunity ? [COMMUNITY_WARNING] : [])];
+  const githubUrl = isGitHubUrl(entry.url);
   const resource = {
     id: entry.id,
     name: entry.name,
@@ -240,9 +242,9 @@ function makeResource(entry) {
     cardPurpose: summary,
     parentEcosystemId: entry.parent || null,
     childResourceIds: entry.children || [],
-    brandKey: entry.brandKey || (entry.url.includes("github.com") ? "github" : "generic"),
+    brandKey: entry.brandKey || (githubUrl ? "github" : "generic"),
     sourceEvidence: sourceUrl,
-    verificationMethod: restricted ? "manual_restricted" : entry.url.includes("github.com") ? "official_repository" : "public_url",
+    verificationMethod: restricted ? "manual_restricted" : githubUrl ? "official_repository" : "public_url",
     nextCheckReason: `${entry.resourceType} revalidation cadence`,
     overview: { text: summary, sourceUrl, sourceType: "publisher_source", exactPublisherText: false },
     compatibility: {

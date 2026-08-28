@@ -31256,6 +31256,40 @@
     },
     {
       "type": "library",
+      "name": "yaml",
+      "version": "2.9.0",
+      "bom-ref": "control-atlas@1.0.2|yaml@2.9.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/yaml@2.9.0",
+      "externalReferences": [
+        {
+          "url": "https://registry.npmjs.org/yaml/-/yaml-2.9.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "d80be1357de66fccdde99cbb20d4ed4a9975175e475ba5a7aa3d2cad696428b729625fe03083098b2b86ab629e236605c543e376507edcb735d2c78c2ed2f870"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/yaml"
+        }
+      ]
+    },
+    {
+      "type": "library",
       "name": "yargs-parser",
       "version": "13.1.2",
       "bom-ref": "control-atlas@1.0.2|yargs-parser@13.1.2",
@@ -32070,6 +32104,7 @@
         "control-atlas@1.0.2|tsx@4.23.12",
         "control-atlas@1.0.2|typescript@6.0.3",
         "control-atlas@1.0.2|vite@8.2.2",
+        "control-atlas@1.0.2|yaml@2.9.0",
         "control-atlas@1.0.2|yauzl@3.4.0"
       ]
     },
@@ -36440,7 +36475,8 @@
         "control-atlas@1.0.2|tinyglobby@0.2.17",
         "control-atlas@1.0.2|tsx@4.23.12",
         "control-atlas@1.0.2|vite@8.2.2|fsevents@2.3.3",
-        "control-atlas@1.0.2|vite@8.2.2|lightningcss@1.33.0"
+        "control-atlas@1.0.2|vite@8.2.2|lightningcss@1.33.0",
+        "control-atlas@1.0.2|yaml@2.9.0"
       ]
     },
     {
@@ -36645,6 +36681,9 @@
     },
     {
       "ref": "control-atlas@1.0.2|yallist@5.0.0"
+    },
+    {
+      "ref": "control-atlas@1.0.2|yaml@2.9.0"
     },
     {
       "ref": "control-atlas@1.0.2|yargs-parser@13.1.2",
