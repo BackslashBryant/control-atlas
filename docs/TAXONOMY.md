@@ -3,7 +3,7 @@
 - **Owner:** Control Atlas data stewardship
 - **Status:** Canonical contract; coverage remains partial
 - **Contract version:** 2.0.0
-- **Last reviewed:** 2026-08-23
+- **Last reviewed:** 2026-08-28
 - **Supersession:** A later contract version must migrate stable tag IDs and update the generated coverage report in the same change.
 
 ## Purpose and boundary
@@ -32,12 +32,12 @@ Assignment provenance remains explicit. A `publisher` assignment belongs to the 
 | `vendor_brand` | Vendor / Brand | record, resource, template, playbook, export | Active — rules in record-taxonomy.mjs |
 | `product` | Product | record, resource, template, playbook, export | Active — rules in record-taxonomy.mjs |
 | `domain` | Security Domain | record, resource, template, playbook, export | Active — rules in record-taxonomy.mjs |
-| `organization` | Organization | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
-| `tool` | Tool | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
-| `framework` | Framework | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
-| `program` | Program | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
-| `artifact` | Artifact | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
-| `topic` | Topic | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending (WS3) |
+| `organization` | Organization | record, resource, template, playbook, intel, export | Active — catalog-publisher rules in record-taxonomy.mjs |
+| `tool` | Tool | record, resource, template, playbook, intel, export | Active for resources and templates; no record-level rule yet |
+| `framework` | Framework | record, resource, template, playbook, intel, export | Active — catalog-scope rules in record-taxonomy.mjs |
+| `program` | Program | record, resource, template, playbook, intel, export | Active — catalog-scope and benchmark-title rules |
+| `artifact` | Artifact | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending |
+| `topic` | Topic | record, resource, template, playbook, intel, export | Seed terms defined; assignment rules pending |
 
 ## Taxonomy relationships
 
@@ -57,7 +57,7 @@ The identity registry (`data/curated/identity-registry.json`) maps taxonomy term
 - `verification_status` — `verified_official` (approved asset on file) or `fallback_only` (monogram/initials only)
 - `fallback` — always present; used when no verified asset exists
 
-The identity registry boundary: identity marks are decorative when text already names the entity. Marks never imply endorsement. The existing `resourceBrands.mjs` system coexists with the identity registry; migration is planned for WS4.
+The identity registry boundary: identity marks are decorative when text already names the entity. Marks never imply endorsement. Every current entry is `fallback_only`; no publisher asset has been verified, licensed, and committed yet, so tags render text-only wherever a monogram would merely repeat the label. The existing `resourceBrands.mjs` system coexists with the identity registry and still owns Commons card marks.
 
 The shared resolver lives at `src/shared/identity-registry.mjs` and exports `resolveIdentity(termId)`, `resolveIdentityByKey(key)`, and `IDENTITY_REGISTRY`.
 
@@ -88,18 +88,34 @@ Absence never means `not_applicable`. This prevents sparse metadata from being p
 - Record and Resource tags link back to the filtered Library. Relationship exports retain endpoint tag IDs.
 - Templates and Compare derive contextual tags from the current record-backed publication scope. Guides expose only explicitly declared editorial handoffs, labeled so they cannot be mistaken for record or guide applicability. Every handoff has a focused route contract; `entity_scope` alone is never proof of implementation.
 
+## Direct and derived assignments
+
+A **direct** assignment comes from the content itself: a publisher field, a catalog identity, or a reviewed structured resource field named in the tag's `source_basis`.
+
+A **derived** assignment comes from one approved taxonomy relationship applied to a direct tag. `deriveTags` in `src/shared/record-taxonomy.mjs` expands a direct tag across relationships in `data/curated/taxonomy-relationships.json` that carry `propagate_for_discovery: true` and an approved validation state. Propagation is limited to **one hop**; derived tags never propagate further and never become a second direct assignment.
+
+Example: a template tagged `tool.emass` gains `organization.disa` for discovery because `tool.emass operated_by organization.disa` is approved for propagation. The template still has no publisher evidence naming DISA, and the derived tag never establishes applicability.
+
+Derived tags retain the originating tag, relationship type, and rule. Only direct assignments count toward `applicable` decisions in the coverage report.
+
+## Lifecycle
+
+Taxonomy terms carry `status`: `active`, `deprecated`, `superseded`, or `retired`. A term that leaves `active` keeps its ID, aliases, and hierarchy so historical URLs resolve and past assignments stay auditable. Superseding a term never rewrites the source history that produced an assignment.
+
+Identity entries carry their own state through `verification_status` and `usage_status`. Removing an asset degrades an identity to its fallback; it never breaks the tag, its URL, or its filter behavior.
+
 ## Current coverage verdict
 
-The current generated corpus contains 30,365 records and twelve governed dimensions (six with active assignment rules, six with seed terms pending assignment rules in WS3). Coverage statistics below reflect the six active dimensions only; new dimensions contribute zero `applicable` decisions until WS3 adds assignment rules.
+The current generated corpus contains 30,979 records across twelve governed dimensions. Nine dimensions have active record-level assignment rules; `tool` is assigned on resources and templates only, and `artifact` and `topic` have seed terms with no assignment rule yet.
 
 | Measure | Count | Interpretation |
 | --- | ---: | --- |
-| Records with at least one governed tag | 22,663 | 74.6% of records have one or more positive decisions. |
-| `applicable` decisions | 36,331 | Positive source-backed evidence across the six active dimensions. |
+| Records with at least one governed tag | 30,798 | 99.4% of records have one or more positive decisions. |
+| `applicable` decisions | 90,634 | Positive source-backed evidence across the dimensions with active rules. |
 | `not_applicable` decisions | 0 | No explicit negative decision has yet been recorded. |
-| `unreviewed` decisions | 328,057 | Includes all record-dimension decisions for the six new dimensions. |
+| `unreviewed` decisions | 281,114 | Includes every record-dimension pair with no rule and no reviewed exclusion. |
 
-Dimension detail, all 27 publication rows, 40 record-type rows, source fields, assignment rules, and decision reconciliation are generated in `data/generated/taxonomy-coverage.json`. The taxonomy is therefore usable for the supported evidence-backed filters, but its overall applicability review is **partial**, not complete.
+High tag coverage is not high review coverage. Nearly every record carries a catalog-scope publisher tag, while the asset, environment, technology, product, and domain dimensions remain sparse and `not_applicable` has never been recorded. Dimension detail, all 28 publication rows, 44 record-type rows, source fields, assignment rules, and decision reconciliation are generated in `data/generated/taxonomy-coverage.json`. The taxonomy is usable for the supported evidence-backed filters, but its overall applicability review is **partial**, not complete.
 
 ## Change gate
 

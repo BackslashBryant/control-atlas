@@ -1,3 +1,4 @@
+import { identityMarkAddsSignal } from "../../shared/identity-registry.mjs";
 import { TAXONOMY_TAG_BY_ID } from "../../shared/taxonomy-contract.mjs";
 import { AppLink } from "./AppLink";
 import { IdentityMark } from "./IdentityMark";
@@ -20,7 +21,12 @@ export function AtlasTag(props: {
   if (!tag) return null;
 
   const size = props.size ?? "md";
-  const showIdentity = props.showIdentity !== false && tag.identity_key;
+  // A monogram that repeats the label reads as "NIST NIST"; suppress it until
+  // an approved official mark exists for the term.
+  const showIdentity =
+    props.showIdentity !== false &&
+    Boolean(tag.identity_key) &&
+    identityMarkAddsSignal(tag.id, tag.label);
   const dimensionLabel = tag.dimension.replace(/_/g, " ");
 
   return (

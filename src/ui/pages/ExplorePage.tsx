@@ -145,6 +145,13 @@ export function ExplorePage(props: {
   const connectedOnly = state.connectedOnly === "true";
   const hasFilters = Boolean(state.filter || state.publisher || state.kind || state.area || state.tags.length || connectedOnly);
   const searchStarted = Boolean(state.query.trim() || hasFilters);
+  // Tag-scoped results reach beyond publications, so the Library's own empty
+  // state must not report "nothing" while tagged resources and templates exist.
+  const crossContentEntries = useMemo(
+    () => (state.tags.length > 0 ? queryDiscoveryIndex(state.tags) : []),
+    [state.tags],
+  );
+  const crossContentCount = crossContentEntries.length;
   const runtimeCatalogs = useMemo(() => bundle.runtime.getCatalogs(), [bundle.runtime]);
   const libraryFacets = useMemo(() => bundle.runtime.getLibraryFacets(), [bundle.runtime]);
   const libraryBrowseCounts = useMemo(
@@ -736,11 +743,30 @@ export function ExplorePage(props: {
             </li>
           ) : null}
           {rows.length === 0 ? (
-            <li><section className="empty-state"><h2>{hasFilters ? "Nothing matches these filters." : "No records found."}</h2><p>{hasFilters ? "Clear one and try again." : "Try another identifier or keyword."}</p><Button onClick={() => onNavigate("search", { area: "", connectedOnly: "", filter: "", kind: "", publisher: "", query: "", sort: "relevance", viewMode: "list" })} type="button" variant="primary">{hasFilters ? "Clear filters" : "Clear search"}</Button></section></li>
+            <li>
+              <section className="empty-state">
+                {crossContentCount > 0 ? (
+                  <>
+                    <h2>No publications carry this tag yet.</h2>
+                    <p>
+                      {crossContentCount === 1
+                        ? "One resource or template below is tagged this way."
+                        : `${crossContentCount} resources and templates below are tagged this way.`}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h2>{hasFilters ? "Nothing matches these filters." : "No records found."}</h2>
+                    <p>{hasFilters ? "Clear one and try again." : "Try another identifier or keyword."}</p>
+                  </>
+                )}
+                <Button onClick={() => onNavigate("search", { area: "", connectedOnly: "", filter: "", kind: "", publisher: "", query: "", sort: "relevance", tags: [], viewMode: "list" })} type="button" variant="primary">{hasFilters ? "Clear filters" : "Clear search"}</Button>
+              </section>
+            </li>
           ) : null}
         </ul>
         {state.tags.length > 0 ? (() => {
-          const crossContent = queryDiscoveryIndex(state.tags);
+          const crossContent = crossContentEntries;
           const resources = crossContent.filter((e: any) => e.content_type === "resource");
           const templates = crossContent.filter((e: any) => e.content_type === "template");
           if (resources.length === 0 && templates.length === 0) return null;

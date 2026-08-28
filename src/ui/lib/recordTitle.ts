@@ -145,6 +145,39 @@ export const GENERATED_STABLE_ID_TYPES: ReadonlySet<string> = new Set([
   "mobile_threat_category",
 ]);
 
+/**
+ * Node types whose stable key is a Control Atlas scaffold ("CATEGORY-PR.AA",
+ * "BENCHMARK-VMW-...", "FAMILY-AC") rather than a publisher designation. The
+ * publisher's own title is the human identity for these records; the scaffold
+ * key stays routable and copyable but never leads a heading, breadcrumb, or
+ * browser title.
+ */
+export const SCAFFOLD_STABLE_ID_TYPES: ReadonlySet<string> = new Set([
+  "baseline",
+  "benchmark",
+  "catalog",
+  "category",
+  "family",
+  "function",
+  "group",
+  "impact_category",
+  "policy",
+  "program",
+  "rmf_step",
+  "tactic",
+  "zt_document",
+  "zt_pillar",
+  "zt_tenet",
+]);
+
+/** True when the record's item_id is a Control Atlas key rather than a published ID. */
+export function usesScaffoldStableId(objectType: string): boolean {
+  return (
+    SCAFFOLD_STABLE_ID_TYPES.has(objectType) ||
+    GENERATED_STABLE_ID_TYPES.has(objectType)
+  );
+}
+
 export type RecordIdentityPresentation = {
   primary: string;
   secondary: string;
@@ -171,7 +204,7 @@ export function recordIdentityPresentationFor(input: {
   metadata?: TitledNode["metadata"];
 }): RecordIdentityPresentation {
   const stableId = input.itemId.trim();
-  const stableIdIsGenerated = GENERATED_STABLE_ID_TYPES.has(input.objectType);
+  const stableIdIsGenerated = usesScaffoldStableId(input.objectType);
   const nativePrimary = recordIdentityFor(input);
   const publishedName = officialRecordName(stableId, input.title);
 
@@ -244,21 +277,6 @@ export function formatRecordTitle(itemId: string, officialTitle: string): string
   return `${identifier} — ${title}`;
 }
 
-// Node types whose item_id is an internal scaffold id, not an official
-// designation — for these the title alone is the official name.
-const INTERNAL_ID_TYPES = new Set([
-  "family",
-  "baseline",
-  "program",
-  "policy",
-  "impact_category",
-  "zt_document",
-  "zt_pillar",
-  "zt_tenet",
-  "rmf_step",
-  "catalog",
-]);
-
 export function recordDisplayTitle(node: TitledNode | null | undefined): string {
   if (!node) return "";
   const itemId = node.metadata?.item_id ?? "";
@@ -269,10 +287,7 @@ export function recordDisplayTitle(node: TitledNode | null | undefined): string 
     const familyCode = itemId.replace(/^FAMILY-/, "");
     return `${title} (${familyCode}) family`;
   }
-  if (INTERNAL_ID_TYPES.has(node.node_type ?? "")) {
-    return title;
-  }
-  if (GENERATED_STABLE_ID_TYPES.has(node.node_type ?? "")) {
+  if (usesScaffoldStableId(node.node_type ?? "")) {
     return title;
   }
   return formatRecordTitle(itemId, title);

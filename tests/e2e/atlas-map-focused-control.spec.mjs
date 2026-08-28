@@ -120,7 +120,9 @@ test("focused Hierarchy opens its publisher-declared parent without inventing an
   await expect(page.getByRole("region", { name: "Page context" })).toContainText(
     "Access Control",
   );
-  await expect(page.locator("#atlas-hierarchy-panel")).toContainText("FAMILY-AC");
+  // The panel names the family the publisher declared. FAMILY-AC is the Control
+  // Atlas routing key and stays in the URL below, never in reading text.
+  await expect(page.locator("#atlas-hierarchy-panel")).toContainText("Access Control");
   // Hierarchy re-opens on the newly focused record — relationshipView=path
   // survives the navigation, same as any other Atlas link.
   await expect(

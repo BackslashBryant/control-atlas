@@ -2,7 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { TAXONOMY_TAG_BY_ID } from "../../src/shared/taxonomy-contract.mjs";
-import { resolveIdentity, resolveIdentityByKey } from "../../src/shared/identity-registry.mjs";
+import {
+  identityMarkAddsSignal,
+  resolveIdentity,
+  resolveIdentityByKey,
+} from "../../src/shared/identity-registry.mjs";
 
 test("AtlasTag can resolve all existing and new tag IDs from the contract", () => {
   const existingIds = ["asset.application", "vendor.microsoft", "domain.access-control"];
@@ -67,4 +71,20 @@ test("identity registry cross-references are bidirectional", () => {
     assert.ok(resolved, `Term ${tid} should resolve back to identity`);
     assert.equal(resolved.key, "disa");
   }
+});
+
+test("a fallback monogram that repeats its own label is suppressed", () => {
+  // No publisher asset is verified yet, so DISA, NIST, and eMASS would render
+  // their label twice. Terms whose fallback differs still earn a mark.
+  for (const id of ["organization.disa", "organization.nist", "tool.emass"]) {
+    const tag = TAXONOMY_TAG_BY_ID.get(id)!;
+    assert.equal(identityMarkAddsSignal(id, tag.label), false, id);
+  }
+  const microsoft = resolveIdentityByKey("microsoft")!;
+  assert.equal(microsoft.fallback.value, "MS");
+  assert.equal(identityMarkAddsSignal(microsoft.term_ids[0], microsoft.label), true);
+});
+
+test("terms without an identity never claim a mark", () => {
+  assert.equal(identityMarkAddsSignal("domain.access-control", "Access Control"), false);
 });
