@@ -19,7 +19,7 @@ test("landing presents Template B search, four destinations, and governed tag br
 
   await expect(
     page.getByRole("heading", {
-      name: "Make federal cybersecurity compliance make sense.",
+      name: "Make federal cybersecurity make sense.",
     }),
   ).toBeVisible();
 
@@ -79,7 +79,7 @@ test("Ctrl + Alt brand signature rotates and native Home history remains coheren
   await waitForAppReady(page);
   await expect(
     page.getByRole("heading", {
-      name: "Make federal cybersecurity compliance make sense.",
+      name: "Make federal cybersecurity make sense.",
     }),
   ).toBeVisible();
 
@@ -106,7 +106,7 @@ test("landing search and brand-home flow work without legacy onboarding surfaces
     .click();
   await expect(
     page.getByRole("heading", {
-      name: "Make federal cybersecurity compliance make sense.",
+      name: "Make federal cybersecurity make sense.",
     }),
   ).toBeVisible({
     timeout: 15000,

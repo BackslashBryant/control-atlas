@@ -22,7 +22,7 @@ test("live smoke: current Home contract and AC-2 record path", async ({ page }) 
   }
   await expect(
     page.getByRole("heading", {
-      name: "Make federal cybersecurity compliance make sense.",
+      name: "Make federal cybersecurity make sense.",
     }),
   ).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "Search Control Atlas" })).toBeVisible();
