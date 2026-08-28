@@ -19,8 +19,8 @@ export function LoadingStatusPanel(props: {
       </p>
       {props.slow ? (
         <p className="text-[var(--ca-warning)] mb-[16px]">
-          This is taking longer than usual. If it continues, refresh the page or
-          check your network connection.
+          Still loading. Check your connection. You can keep waiting or use one
+          of the available pages below.
         </p>
       ) : null}
       <p className="text-[var(--ca-text-muted)] mb-[24px]">
@@ -38,15 +38,15 @@ export function LoadErrorPanel(props: {
   children?: ReactNode;
 }) {
   return (
-    <Panel className="max-w-[800px] mx-auto mt-[40px] border-[var(--ca-danger)]" title="Unable to load this record">
+    <Panel className="max-w-[800px] mx-auto mt-[40px] border-[var(--ca-danger)]" title="Unable to load data">
       <p className="mb-[16px] font-bold text-[var(--ca-danger)]">{props.message}</p>
       <p className="mb-[24px]">
-        Check your connection, then retry. Guides and About still work without
-        the record data.
+        Check your connection, then try loading the data again. Guides,
+        Templates, Start here, and About still work without it.
       </p>
       <div className="flex gap-[8px] mb-[24px]">
         <Button variant="destructive" onClick={props.onRetry}>
-          Retry loading
+          Try loading again
         </Button>
       </div>
       {props.children}
@@ -65,7 +65,7 @@ export function OfflineFallbackActions(props: {
         view="patterns"
       >
         <strong className="text-[var(--ca-text)] font-mono uppercase tracking-wider text-[11px] mb-[4px]">Read the guides</strong>
-        <span className="text-[var(--ca-text-muted)] text-[13px]">Short, cited explanations of how federal requirements fit together.</span>
+        <span className="text-[var(--ca-text-muted)] text-[13px]">Cited procedures with goals, prerequisites, steps, outputs, and handoff checks.</span>
       </AppLink>
       <AppLink
         className="flex flex-col items-start p-[16px] text-left border border-[var(--ca-border-strong)] rounded-[3px] bg-[var(--ca-surface-raised)] hover:border-[var(--ca-secondary)] transition-colors"
@@ -109,11 +109,11 @@ export function DataPendingNotice(props: {
       {props.slow ? (
         <>
           <p className="mb-[16px] text-[var(--ca-warning)]">
-            This is taking longer than usual. Check your connection and reload if it does not complete.
+            Still loading. Check your connection, then try loading the data again.
           </p>
           {props.onRetry ? (
             <Button variant="primary" onClick={props.onRetry}>
-              Retry loading
+              Try loading again
             </Button>
           ) : null}
         </>

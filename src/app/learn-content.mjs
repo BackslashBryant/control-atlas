@@ -7,7 +7,7 @@
  * publication already ingested as that concept's own Catalog entry, so the
  * guide never asserts anything beyond what the cited, published source says.
  */
-export const practitionerGuides = Object.freeze([
+const practitionerGuideArticles = [
   {
     id: "starting-an-authorization",
     kind: "practitioner",
@@ -188,7 +188,149 @@ export const practitionerGuides = Object.freeze([
     ],
     templates: [],
   },
-]);
+];
+
+const GUIDE_PROCEDURES = Object.freeze({
+  "starting-an-authorization": {
+    goal: "Leave preparation with a documented system context and a published baseline decision ready for implementation planning.",
+    prerequisites: ["A named system or service boundary and accountable roles", "The organization’s impact-categorization and authorization process"],
+    steps: [
+      { title: "Define the starting context", action: "Record the boundary, mission, owners, information types, and decisions that still need an accountable authority." },
+      { title: "Follow the published sequence", action: "Use SP 800-37’s Prepare, Categorize, and Select material to identify the inputs and outputs your process expects before implementation." },
+      { title: "Record the decision trail", action: "Capture the impact basis, selected published baseline, tailoring decisions, owners, and unresolved questions without presenting Control Atlas as the decision maker." },
+    ],
+    output: "A documented authorization starting context with source publication, baseline, decision owners, and open decisions.",
+    validation: ["The system boundary and decision owners are named", "The publication and baseline version are recorded", "Unknowns remain explicit instead of being guessed"],
+  },
+  "understanding-rmf": {
+    goal: "Place the team’s current work in the RMF sequence and identify the output needed for the next step.",
+    prerequisites: ["A defined system or organizational risk-management scope", "Access to the organization’s current authorization records"],
+    steps: [
+      { title: "Locate the current step", action: "Match the work underway to Prepare, Categorize, Select, Implement, Assess, Authorize, or Monitor." },
+      { title: "Identify the handoff", action: "Read the cited publication for the current step’s expected inputs, activities, and outputs." },
+      { title: "Name the next decision", action: "Record who accepts the current output, what remains incomplete, and which RMF step receives it next." },
+    ],
+    output: "A one-page RMF handoff note naming the current step, required output, next owner, and unresolved work.",
+    validation: ["The current step is supported by the cited publication", "The next owner and handoff artifact are named", "The note does not imply that Control Atlas runs or approves RMF decisions"],
+  },
+  "selecting-controls": {
+    goal: "Start from the applicable published baseline and preserve a reviewable record of every tailoring decision.",
+    prerequisites: ["A documented impact or program context", "An accountable owner for baseline and tailoring decisions"],
+    steps: [
+      { title: "Choose the source context", action: "Open the applicable published baseline or program catalog and record its publication and version." },
+      { title: "Review the selection", action: "Confirm baseline membership, overlays, scoping conditions, and control enhancements against the system context." },
+      { title: "Document tailoring", action: "Record additions, removals, compensating decisions, rationale, evidence, and approving role in the organization’s decision record." },
+    ],
+    output: "A source-traceable control selection with baseline membership and documented tailoring decisions.",
+    validation: ["Every selected control traces to a published source", "Every tailoring change has a rationale and owner", "The result is reviewed through the organization’s own approval process"],
+  },
+  "implementing-controls": {
+    goal: "Turn each selected requirement into a system-specific, testable implementation statement.",
+    prerequisites: ["A reviewed control selection", "Named technical or procedural owners for the affected system"],
+    steps: [
+      { title: "Read the requirement in context", action: "Open the control and its published implementation relationships, including a current STIG or SRG when one applies to the technology." },
+      { title: "Describe the mechanism", action: "State who performs the action, what mechanism is used, where it applies, when it runs, and what result it produces." },
+      { title: "Connect evidence and ownership", action: "Name the accountable role, stable evidence references, inherited responsibilities, gaps, and planned remediation." },
+    ],
+    output: "A control implementation statement that a reviewer can test and trace to evidence.",
+    validation: ["The statement names role, mechanism, scope, cadence or trigger, and result", "Inherited and local responsibilities are separated", "Evidence references identify real retrievable artifacts"],
+  },
+  "preparing-evidence": {
+    goal: "Build an evidence request that matches the published assessment objective instead of collecting generic screenshots.",
+    prerequisites: ["A selected control and its implementation statement", "Access to the applicable assessment procedure"],
+    steps: [
+      { title: "Read the objective", action: "Open the control’s assessment procedure and identify the published objectives, methods, and assessment objects." },
+      { title: "Map real artifacts", action: "List the configuration exports, records, interviews, observations, or tests that can address each objective." },
+      { title: "Assign collection work", action: "Record the artifact owner, covered period, collection method, location, freshness, and known gaps." },
+    ],
+    output: "An evidence request matrix tied to published assessment objectives and accountable artifact owners.",
+    validation: ["Each request maps to a stated assessment objective", "Artifact owner, period, location, and freshness are recorded", "Missing or insufficient evidence is marked as a gap"],
+  },
+  "conducting-assessments": {
+    goal: "Apply the published assessment methods consistently and preserve a reviewable result for each objective.",
+    prerequisites: ["Approved assessment scope and assessor roles", "Current implementation statements and requested evidence"],
+    steps: [
+      { title: "Confirm scope and procedure", action: "Record the controls, objectives, methods, objects, sampling approach, and system boundary being assessed." },
+      { title: "Perform and record", action: "Apply examine, interview, or test as specified and record the evidence, observation, result, and limitation for each objective." },
+      { title: "Route the result", action: "Separate satisfied objectives from findings, identify required follow-up, and send the assessment output to the accountable review process." },
+    ],
+    output: "A traceable assessment work record with objective-level results, evidence, limitations, and follow-up.",
+    validation: ["Every result names the method and evidence used", "Sampling and limitations are explicit", "Findings are routed for ownership and remediation"],
+  },
+  "managing-findings": {
+    goal: "Move each confirmed finding through owned remediation and re-assessment without losing its source or decision trail.",
+    prerequisites: ["A documented assessment finding or accepted weakness", "An accountable remediation owner and review process"],
+    steps: [
+      { title: "Create the record", action: "Capture the weakness, source, affected control, impact, owner, status, and stable external identifier in the working register." },
+      { title: "Plan remediation", action: "Define milestones, resources, target dates, corrective action, closure evidence, dependencies, and required approvals." },
+      { title: "Verify closure", action: "Collect the stated evidence, re-assess the affected condition, record the decision, and retain any risk acceptance or exception." },
+    ],
+    output: "An owned finding record with milestones, closure evidence, and a reviewable final disposition.",
+    validation: ["The finding traces to its assessment source", "Milestones have owners and dates", "Closure is supported by re-assessment evidence or a documented decision"],
+  },
+  "continuous-monitoring": {
+    goal: "Turn monitoring obligations into an operating calendar with owners, evidence, thresholds, and escalation paths.",
+    prerequisites: ["An authorized or operating system scope", "The organization’s continuous-monitoring strategy and reporting obligations"],
+    steps: [
+      { title: "Define the monitoring set", action: "List the controls, changes, vulnerabilities, and deliverables the organization monitors, with the governing source for each." },
+      { title: "Schedule ownership", action: "Assign collection cadence, evidence location, owner, reviewer, due date, and expected result or threshold." },
+      { title: "Operate the feedback loop", action: "Record completion and results, then route exceptions, material changes, and findings into the applicable risk and remediation process." },
+    ],
+    output: "A monitoring delivery calendar that connects recurring work to evidence, review, and escalation.",
+    validation: ["Every activity has an owner, reviewer, cadence, and evidence location", "Results and thresholds are stated", "Exceptions have a defined escalation path"],
+  },
+  "inheritance-and-common-controls": {
+    goal: "Separate provider assertions from the system team’s residual responsibilities and evidence.",
+    prerequisites: ["A selected control set", "Current provider or common-control documentation for the service in use"],
+    steps: [
+      { title: "Identify the provider claim", action: "Record the provider, service, control assertion, document version, date, scope, and evidence source." },
+      { title: "Separate responsibilities", action: "Classify each control as common, system-specific, or hybrid and state exactly what the local team still configures, operates, or verifies." },
+      { title: "Make the reliance decision", action: "Document evidence freshness, local deltas, validation method, gaps, decision owner, and next review date." },
+    ],
+    output: "An inheritance decision log that distinguishes provider evidence from residual local work.",
+    validation: ["Provider evidence has a version, date, and scope", "Residual local responsibility is explicit", "A named owner reviewed the reliance decision"],
+  },
+  reciprocity: {
+    goal: "Evaluate whether an existing package can support reuse in the receiving organization’s actual context.",
+    prerequisites: ["Access to the existing authorization or assessment package", "A defined receiving environment, impact, scope, and decision owner"],
+    steps: [
+      { title: "Inventory the package", action: "Record each artifact, decision, version, date, owner, authorization terms, and known limitations." },
+      { title: "Compare contexts", action: "Check scope, impact, boundary, architecture, control selection, inheritance, evidence freshness, and receiving-environment deltas." },
+      { title: "Record disposition", action: "Document gaps, required supplements, risk, conditions, accountable owner, and the receiving authority’s decision." },
+    ],
+    output: "A package-reuse review with explicit deltas, required actions, and receiving-organization disposition.",
+    validation: ["Every relied-on artifact has a source and date", "Receiving-environment differences are explicit", "The receiving authority owns the final disposition"],
+  },
+  "cloud-and-shared-responsibility": {
+    goal: "Assign each cloud control responsibility to the provider, customer, or both using offering-specific evidence.",
+    prerequisites: ["The exact cloud offering and service model", "Current provider responsibility and authorization documentation"],
+    steps: [
+      { title: "Define the offering", action: "Record the provider, service, deployment and service model, boundary, and version of the responsibility documentation." },
+      { title: "Allocate each responsibility", action: "For each selected control, identify provider behavior, customer configuration or operation, shared dependencies, and required evidence." },
+      { title: "Review gaps and changes", action: "Record unclear ownership, provider evidence age, local deltas, change triggers, and the owner who resolves each gap." },
+    ],
+    output: "An offering-specific responsibility matrix with provider evidence and residual customer actions.",
+    validation: ["Responsibilities cite the specific offering’s documentation", "Shared controls identify both sides’ duties", "Unknown ownership and stale evidence are flagged"],
+  },
+  "stig-lifecycle": {
+    goal: "Use the correct published STIG or SRG revision and keep implementation evidence tied to that revision.",
+    prerequisites: ["The product, platform, or technology class in scope", "Access to the current official DISA STIG library"],
+    steps: [
+      { title: "Identify the benchmark", action: "Match the in-scope technology to the applicable product STIG or technology-class SRG and record its version and release date." },
+      { title: "Work the rules", action: "For each applicable rule, record status, check result, implementation or fix context, target asset, and evidence reference." },
+      { title: "Maintain currency", action: "Check the official library for revisions, supersession, or retirement and preserve the benchmark version used for each result." },
+    ],
+    output: "A revision-specific STIG or SRG work record with rule status, target, result, and evidence.",
+    validation: ["The benchmark identifier, version, and release date are recorded", "Every result names the target and evidence", "Currency is checked against the official DISA library"],
+  },
+});
+
+export const practitionerGuides = Object.freeze(
+  practitionerGuideArticles.map((article) => Object.freeze({
+    ...article,
+    ...GUIDE_PROCEDURES[article.id],
+  })),
+);
 
 export const learnArticles = Object.freeze([
   {

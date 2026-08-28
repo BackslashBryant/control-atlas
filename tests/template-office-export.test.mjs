@@ -285,7 +285,7 @@ test('docx tables declare a fixed-width grid and a repeating header row', () => 
 
   assert.match(document, /w:pStyle w:val="Title"/, 'DOCX must use a real title style');
   assert.match(document, /w:pStyle w:val="Heading1"/, 'DOCX must use a heading hierarchy');
-  assert.match(document, /w:pStyle w:val="Heading2"/, 'control records must be navigable as second-level headings');
+  assert.match(document, /Control Family Index/, 'the compact control scope must remain navigable from the section hierarchy');
   assert.match(document, /w:pStyle w:val="TOC1"/, 'long Word templates must include a static contents map');
   assert.match(document, /Document Purpose/, 'the contents map must name major document sections');
   assert.doesNotMatch(document, /\*\*/, 'DOCX must not expose markdown emphasis markers');

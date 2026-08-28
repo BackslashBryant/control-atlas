@@ -5,7 +5,7 @@
       "template_id": "tpl-ssp-starter",
       "name": "security_plan_starter",
       "display_name": "Security Plan Starter",
-      "description": "Operational SSP planning workbook that connects system scope, control implementation, evidence, inheritance, and review ownership.",
+      "description": "Compact SSP narrative starter for system scope, selected control families, inheritance, and review ownership; use the implementation worksheet for control-by-control work.",
       "artifact_type": "security_plan_starter",
       "supported_formats": ["docx"],
       "input_options": ["framework", "baseline", "control_family", "environment_archetype"],

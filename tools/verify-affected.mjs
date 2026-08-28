@@ -58,6 +58,16 @@ export function createVerificationPlan(paths, changeMap) {
     path === 'src/ui/components/LibraryAtlasMap.tsx' ||
     path === 'tests/e2e/atlas-map-focused-control.spec.mjs' ||
     path === 'tests/e2e/epic14-ws3-workspace-template.spec.mjs');
+  const phase4SurfacesChanged = paths.some((path) =>
+    path === 'data/template-registry.json' ||
+    path === 'src/app/learn-content.mjs' ||
+    path === 'src/app/template-engine.mjs' ||
+    path === 'src/ui/components/LoadStatusPanel.tsx' ||
+    path === 'src/ui/components/QuickIntentCard.tsx' ||
+    path === 'src/ui/components/SearchOverlay.tsx' ||
+    path === 'src/ui/pages/PlaybooksPage.tsx' ||
+    path === 'src/ui/pages/TemplatesPage.tsx' ||
+    path === 'tests/e2e/phase4-content-coherence.spec.mjs');
   const stigObservationChanged = paths.some((path) =>
     path === 'scripts/fetch-stig-source-observations.mjs' ||
     path === 'tests/stig-source-observer.test.mjs');
@@ -66,8 +76,9 @@ export function createVerificationPlan(paths, changeMap) {
     path === 'scripts/lib/write-json-atomically.mjs' ||
     path === 'tests/strict-conditional-fetch.test.mjs' ||
     path === 'tests/write-json-atomically.test.mjs');
-  const mappedData = stigObservationChanged || incrementalDataChanged;
-  const mappedRuntime = sourceTrustChanged || compareWorkbenchChanged || boundedWorkbenchesChanged || mappedData || e2ePaths.length > 0;
+  const phase4DataChanged = paths.some((path) => path === 'data/template-registry.json');
+  const mappedData = stigObservationChanged || incrementalDataChanged || phase4DataChanged;
+  const mappedRuntime = sourceTrustChanged || compareWorkbenchChanged || boundedWorkbenchesChanged || phase4SurfacesChanged || mappedData || e2ePaths.length > 0;
 
   if (changeMap.evidenceOnly) {
     addStep(steps, {
@@ -200,7 +211,21 @@ export function createVerificationPlan(paths, changeMap) {
       expectedTests: 3, workers: 2, budgetSeconds: 45,
     });
   }
-  if (!sourceTrustChanged && !compareWorkbenchChanged && !boundedWorkbenchesChanged && e2ePaths.length > 0) {
+  if (phase4SurfacesChanged) {
+    addStep(steps, {
+      id: 'phase4-surface-browser',
+      command: ['npm', 'run', 'test:e2e:run', '--',
+        'tests/e2e/phase4-content-coherence.spec.mjs',
+        'tests/e2e/load-resilience.spec.mjs',
+        'tests/e2e/complete-search-artifact.spec.mjs',
+        '--grep',
+        'Phase 4|load resilience surfaces retry|a failed complete search artifact'],
+      expectedTests: 7,
+      workers: 2,
+      budgetSeconds: 60,
+    });
+  }
+  if (!sourceTrustChanged && !compareWorkbenchChanged && !boundedWorkbenchesChanged && !phase4SurfacesChanged && e2ePaths.length > 0) {
     addStep(steps, {
       id: 'changed-browser-tests',
       command: ['npm', 'run', 'test:e2e:run', '--', ...e2ePaths],

@@ -19,21 +19,21 @@ Coherence Epic in `docs/Plan.md`.
 | P1-02 unbounded full Compare | Resolved | Large matrices use fixed 100-row URL-addressable pages; navigation replaces the current window while counts, CSV, and Excel exports retain the complete filtered result. |
 | P1-03 keyboard and focus | Resolved | Shared route orientation and navigation tests protect search activation, focus return, heading focus, and mobile-menu traversal. |
 | P1-04 mobile Sources and hidden controls | Resolved | Live 390 px proof has no page overflow or zero-size focusable controls; the desktop table becomes stacked records and the publisher strip is a named horizontal region. |
-| P1-05 document preview and oversized starter | Partial | Preview contrast, paper backgrounds, and named keyboard scrolling are protected by `tests/e2e/template-preview-contrast.spec.mjs`; the full semantic preview and compact-core/appendix content decision remain Phase 4. |
+| P1-05 document preview and oversized starter | Resolved | Preview now reports purpose, section/table/row scope, a complete section outline, and one representative table instead of reproducing every table. The SSP starter is a compact narrative core with a control-family index and an explicit handoff to the control-by-control Implementation Statement Worksheet; dense STIG/SRG mappings are no longer embedded. |
 | P1-06 Library Compare dead end | Resolved | The persistent tray names selections, supports remove/clear, preserves mobile width, and hands off runnable state; covered by `tests/e2e/library-compare-tray.spec.mjs`. |
-| P2-01 Guides are explainers | Open | Guides still need the governed goal, prerequisites, steps, output, validation, and next-action contract. |
+| P2-01 Guides are explainers | Resolved | All 12 Guides now carry and render a goal, prerequisites, three actionable steps, expected output, validation checks, limitations, official references, and a governed next action; the content contract fails if any procedural field is absent. |
 | P2-02 empty root Atlas topology | Superseded | Root Atlas is now a coverage decomposition that says `Not yet modeled` for empty areas and keeps populated areas and authority counts visible. |
 | P2-03 long record relationships | Resolved | Record detail groups and samples published relationships, collapses lower-priority groups, and hands the exhaustive set to Atlas. |
 | P2-04 repeated resource copy | Resolved | Resource detail suppresses overview and `what it does` text when either duplicates the hero summary. |
 | P2-05 missing dense-data contract | Resolved | Shared page contracts and the Guardian matrix govern density and mobile transformation; Compare uses 100-row pages, Resources uses 25-row increments and a labeled 75-item map window, and Library distinguishes visible, loaded, and total scope. |
 | P2-06 route orientation primitive | Resolved | `src/ui/lib/routeOrientation.ts` owns focus, scroll, push, and Back/Forward behavior with navigation fidelity coverage. |
-| P2-07 template-card distinctions | Partial | Cards now expose format, compatibility basis, and governed context tags; effort and expected output still need a consistent scan line. |
+| P2-07 template-card distinctions | Resolved | Cards retain format, compatibility basis, and governed tags and now add an evidence-based scan line for required-input setup and editable output format without inventing time estimates. |
 | P2-08 single-card grids | Resolved | Single-template groups use the deliberate `intent-grid--solo` composition. |
 | P3-01 mobile Home search | Resolved | The current 390 px composition gives search a full-width field and one full-width orange action without page overflow. |
-| P2-09 cinematic utility motion | Open | Motion ownership still needs a route-transition versus in-place-interaction contract and representative reduced-motion proof. |
-| P2-10 pending versus retry language | Partial | Shared pending, slow, failed, and recovery components exist; route-family copy and recovery actions remain in Phase 4 review. |
-| P3-02 shortcut teaching | Open | The Ctrl + Alt brand device still needs one restrained discovery moment tied to a successful search or help surface. |
-| P2-11 primitive ownership | Partial | Route/state, keyboard, recovery, breakpoint, copy-ownership, and dense-workbench contracts are tracked; semantic artifact-preview ownership remains open for Phase 4. |
+| P2-09 cinematic utility motion | Resolved | Full route feedback remains reserved for meaningful route-scope changes; Library sort stays immediate with no transition event, and the route overlay and mark compute to no animation under reduced motion. |
+| P2-10 pending versus retry language | Resolved | Pending has no retry action; slow state says the request is still loading and offers `Try loading again`; failed state names the unavailable data, keeps static routes available, and uses the same recovery action. |
+| P3-02 shortcut teaching | Resolved | The Ctrl + Alt lockup remains explicitly a visual signature, not a false shortcut. The real Ctrl+K search shortcut is now taught quietly inside the opened Search surface alongside Escape. |
+| P2-11 primitive ownership | Resolved | Shared route/state, keyboard, recovery, breakpoint, copy, dense-workbench, and semantic artifact-preview contracts now own the cross-route behaviors identified by the audit. |
 
 Phase 2 also reconciled a live source-trust inconsistency that was not isolated
 as its own August 21 finding: Sources, Catalog, and record detail mixed short

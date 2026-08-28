@@ -109,6 +109,21 @@ test('evidence operations and dense control cross-references are separated', () 
   assert.deepEqual(references.headers, ['Control ID', 'Control Title', 'Related CCIs', 'Related STIG/SRG']);
 });
 
+test('the SSP starter stays compact and hands control-by-control work to its dedicated companion', () => {
+  const doc = build('security_plan_starter');
+  const familyIndex = doc.sections.find((section) => section.heading === 'Control Family Index');
+  const scope = doc.sections.find((section) => section.heading === 'Selected Control Scope');
+  assert.ok(familyIndex, 'SSP starter needs a compact control-family index');
+  assert.ok(scope, 'SSP starter needs an exact selected-scope summary');
+  assert.match(scope.content, /1 published control record/);
+  assert.match(scope.content, /Implementation Statement Worksheet/);
+  assert.deepEqual(familyIndex.headers, ['Control Family', 'Selected Records', 'Compact ID Index', 'Detailed Work Location']);
+  assert.equal(familyIndex.rows.length, 1);
+  assert.match(familyIndex.rows[0].join(' | '), /Access Control.*AC-2.*Implementation Statement Worksheet/);
+  assert.equal(doc.sections.some((section) => section.heading === 'Control Baseline'), false);
+  assert.equal(doc.sections.some((section) => section.heading === 'STIG/SRG References'), false);
+});
+
 test('FedRAMP-related companions state the current 2026 transition boundary', () => {
   const affected = [
     'security_plan_starter',

@@ -89,6 +89,20 @@ test('trust and workbench changes select bounded route families and the incremen
   assert.equal(boundedPlan.blocked, false);
   assert.equal(boundedPlan.steps.some((step) => step.id === 'bounded-workbench-browser'), true);
   assert.equal(boundedPlan.steps.find((step) => step.id === 'bounded-workbench-browser')?.expectedTests, 3);
+
+  const phase4Paths = [
+    'data/template-registry.json',
+    'src/app/learn-content.mjs',
+    'src/ui/pages/TemplatesPage.tsx',
+    'tests/e2e/phase4-content-coherence.spec.mjs',
+  ];
+  const phase4Plan = createVerificationPlan(phase4Paths, classifyChangedPaths(phase4Paths));
+  assert.equal(phase4Plan.blocked, false);
+  const phase4Browser = phase4Plan.steps.find((step) => step.id === 'phase4-surface-browser');
+  assert.ok(phase4Browser);
+  assert.equal(phase4Browser.expectedTests, 7);
+  assert.equal(phase4Browser.workers, 2);
+  assert.equal(phase4Browser.budgetSeconds, 60);
 });
 
 test('dependency changes validate npm ci compatibility before product gates', () => {
