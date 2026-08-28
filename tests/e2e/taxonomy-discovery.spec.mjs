@@ -130,13 +130,18 @@ test("Home exposes compact release, source, and contribution trust links", async
 
 test("Resources presents governed labels instead of raw enums", async ({ page }) => {
   await open(page, "/#/resources/official-cisa-kev-catalog");
-  await expect(page.getByText("General IT", { exact: true })).toBeVisible();
+  // The dataset profile publishes resource type, access status, and
+  // verification method. Each must reach the page as a governed label; the
+  // stored enum value must never surface.
+  await expect(page.locator(".resource-detail-brief").getByText("Dataset", { exact: true })).toBeVisible();
+  const access = page.getByRole("heading", { name: "How to use or access", exact: true }).locator("..");
+  await expect(access.getByText("Current", { exact: true })).toBeVisible();
   const maintenance = page.locator("details.resource-detail-maintenance");
   await maintenance.locator("summary").click();
-  await expect(page.getByText("Public URL", { exact: true })).toBeVisible();
-  await expect(page.getByText("Active", { exact: true })).toBeVisible();
-  const access = page.getByRole("heading", { name: "How to use or access", exact: true }).locator("..");
-  await expect(access.getByText("Access", { exact: true })).toBeVisible();
+  await expect(maintenance.getByText("Public URL", { exact: true })).toBeVisible();
+  for (const rawEnum of ["dataset", "current", "public_url"]) {
+    await expect(page.getByText(rawEnum, { exact: true })).toHaveCount(0);
+  }
 });
 
 test("Guide context hands governed tags to the Library", async ({ page }) => {

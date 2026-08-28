@@ -28,7 +28,14 @@ test("record connections retain distinct published assertions and citations", as
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  // Relationship-display governance summarises large groups behind a
+  // disclosure. Open every group so the assertions cover all published rows.
   const rows = page.locator("[data-record-connection-id]");
+  await expect(rows.first()).toBeAttached({ timeout: 20000 });
+  const groups = page.locator(".record-connections details, details:has([data-record-connection-id])");
+  for (const group of await groups.all()) {
+    await group.evaluate((element) => { element.setAttribute("open", ""); });
+  }
   await expect(rows.first()).toBeVisible({ timeout: 20000 });
   expect(await rows.count()).toBeGreaterThan(0);
   const ids = await rows.evaluateAll((elements) =>

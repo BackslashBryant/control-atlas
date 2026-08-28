@@ -152,7 +152,7 @@ test('full-page search fields wait for explicit submission', async ({ page }) =>
 
   await gotoApp(page, '/#/library/publication/nist-800-53?q=AC-2');
   await waitForAppReady(page);
-  const catalogSearch = page.getByRole('searchbox', { name: 'Search SP 800-53 Rev. 5' });
+  const catalogSearch = page.getByRole('searchbox', { name: 'Search NIST SP 800-53 Rev. 5' });
   await catalogSearch.fill('AC-3');
   await expect(page).toHaveURL(/q=AC-2/);
   await page.getByRole('button', { name: 'Search records' }).click();

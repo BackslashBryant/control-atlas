@@ -37,6 +37,7 @@ import {
   recordPublisherName,
 } from "../lib/recordTitle";
 import { recordTagsFor, tagProvenanceExplanation } from "../lib/recordTags";
+import { taxonomyTagsForRecord } from "../../shared/record-taxonomy.mjs";
 import { TAXONOMY_TAG_BY_ID } from "../../shared/taxonomy-contract.mjs";
 import type { RuntimeBundle } from "../lib/runtimeLoader";
 import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
@@ -48,6 +49,15 @@ import {
 } from "../lib/sourcePresentation";
 
 const ATLAS_TAG_DIMENSIONS = new Set(["organization", "framework", "program", "tool", "artifact", "topic"]);
+
+/**
+ * Lower-case a record-kind label only when it is an ordinary noun phrase.
+ * "Control family" becomes "control family"; "CSF category", "RMF step", and
+ * "Zero Trust pillar" keep the casing their publishers use.
+ */
+function sentenceCaseKind(kind: string): string {
+  return /[A-Z]/.test(kind.slice(1)) ? kind : kind.toLocaleLowerCase();
+}
 const RECORD_FACT_LABELS: Record<string, string> = {
   activity_type: "Activity type",
   architecture_component: "Architecture component",
@@ -680,7 +690,7 @@ export function ObjectDetailPage(props: {
           {!missingSourceFields.length && !hasPublishedSectionContent ? (
             <section className="record-source-absence" data-record-section="publisher-absence">
               <h2>Publisher description</h2>
-              <p>The publisher did not publish a separate description for this {kind.toLowerCase()}.</p>
+              <p>The publisher did not publish a separate description for this {sentenceCaseKind(kind)}.</p>
             </section>
           ) : null}
           {presentation.metadata_facts.length && !["stig_rule", "srg_requirement"].includes(presentation.record_type) ? (
@@ -705,13 +715,19 @@ export function ObjectDetailPage(props: {
               </div>
               {structuralChildren.length ? (
                 <ul>
-                  {structuralChildren.slice(0, 25).map((child: any) => (
-                    <li key={child.id}>
-                      <AppLink onNavigate={onNavigate} patch={{ node: child.id }} view="library-detail">
-                        {child.metadata?.item_id || child.label} — {child.metadata?.title || child.label}
-                      </AppLink>
-                    </li>
-                  ))}
+                  {structuralChildren.slice(0, 25).map((child: any) => {
+                    // CSF publishes the identifier as the subcategory title, so
+                    // "PR.AA-01 — PR.AA-01" is the same fact printed twice.
+                    const childId = child.metadata?.item_id || child.label;
+                    const childTitle = child.metadata?.title || child.label;
+                    return (
+                      <li key={child.id}>
+                        <AppLink onNavigate={onNavigate} patch={{ node: child.id }} view="library-detail">
+                          {childId === childTitle ? childId : `${childId} — ${childTitle}`}
+                        </AppLink>
+                      </li>
+                    );
+                  })}
                 </ul>
               ) : <p>No directly contained records are loaded for this publication object.</p>}
             </section>
@@ -723,9 +739,17 @@ export function ObjectDetailPage(props: {
           data-displayed-trace={displayedTrace.map((entry) => entry.id).join(">")}
         >
           {(() => {
-            const atlasTagIds = (node.metadata?.taxonomy_tags || [])
+            // Generated container nodes (families, categories, benchmarks) carry
+            // no per-record tags, so fall back to the same catalog-identity rule
+            // the publication page uses. Never a new claim: publisher, framework,
+            // and program follow from catalog_id alone.
+            const nodeTagIds = (node.metadata?.taxonomy_tags || [])
               .filter((t: { id?: string; kind?: string }) => t.id && ATLAS_TAG_DIMENSIONS.has(t.kind ?? ""))
               .map((t: { id: string }) => t.id);
+            const catalogTagIds = taxonomyTagsForRecord({ catalog_id: document.catalog_id })
+              .filter((t: { id?: string; kind?: string }) => t.id && ATLAS_TAG_DIMENSIONS.has(t.kind ?? ""))
+              .map((t: { id: string }) => t.id);
+            const atlasTagIds = [...new Set([...nodeTagIds, ...catalogTagIds])];
             return atlasTagIds.length > 0 ? (
               <section className="related-in-atlas">
                 <h2>Related in Control Atlas</h2>

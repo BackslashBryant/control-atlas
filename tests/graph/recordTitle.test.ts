@@ -377,3 +377,34 @@ test("record connections never infer missing relationship provenance", () => {
   );
   assert.deepEqual(groups, []);
 });
+
+test("Control Atlas scaffold keys never lead a container heading", () => {
+  const cases = [
+    { objectType: "category", itemId: "CATEGORY-PR.AA", title: "Identity Management, Authentication, and Access Control", family: "Identity Management, Authentication, and Access Control", catalogId: "csf-2", publicationName: "NIST Cybersecurity Framework 2.0" },
+    { objectType: "function", itemId: "FUNCTION-PR", title: "PROTECT", family: "PROTECT", catalogId: "csf-2", publicationName: "NIST Cybersecurity Framework 2.0" },
+    { objectType: "family", itemId: "FAMILY-AC", title: "Access Control", family: "Access Control", catalogId: "nist-800-53", publicationName: "SP 800-53 Rev. 5" },
+    { objectType: "tactic", itemId: "TACTIC-TA0001", title: "Initial Access", family: "Initial Access", catalogId: "mitre-attack", publicationName: "MITRE ATT&CK" },
+    { objectType: "benchmark", itemId: "BENCHMARK-VMW-VSPHERE-7-0-VCA-POSTGRESQL-STIG", title: "VMware vSphere 7.0 vCenter Appliance PostgreSQL Security Technical Implementation Guide", family: "VMware vSphere 7.0 vCenter Appliance PostgreSQL Security Technical Implementation Guide", catalogId: "disa-stig", publicationName: "DISA Public STIG Library" },
+    { objectType: "rmf_step", itemId: "RMF-ASSESS", title: "Assess", family: "Risk Management Framework", catalogId: "nist-800-37", publicationName: "SP 800-37 Rev. 2" },
+  ];
+  for (const input of cases) {
+    const presentation = recordIdentityPresentationFor({ publisher: "NIST", ...input });
+    assert.equal(presentation.primary, input.title, input.itemId);
+    assert.equal(presentation.stableId, input.itemId);
+    assert.equal(presentation.stableIdIsGenerated, true, input.itemId);
+    assert.equal(presentation.browserTitle.includes(input.itemId), false, input.itemId);
+  }
+});
+
+test("publisher-assigned identifiers still lead their heading", () => {
+  const control = recordIdentityPresentationFor({
+    publisher: "NIST",
+    catalogId: "nist-800-53",
+    family: "Access Control",
+    itemId: "AC-2",
+    title: "Account Management",
+    objectType: "control",
+  });
+  assert.equal(control.primary, "NIST AC-2");
+  assert.equal(control.stableIdIsGenerated, false);
+});
