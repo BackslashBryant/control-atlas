@@ -78,7 +78,7 @@ export function createVerificationPlan(paths, changeMap) {
     path === 'tests/write-json-atomically.test.mjs');
   const phase4DataChanged = paths.some((path) => path === 'data/template-registry.json');
   const mappedData = stigObservationChanged || incrementalDataChanged || phase4DataChanged;
-  const mappedRuntime = sourceTrustChanged || compareWorkbenchChanged || boundedWorkbenchesChanged || phase4SurfacesChanged || mappedData || e2ePaths.length > 0;
+  const mappedRuntime = changeMap.dependenciesChanged || sourceTrustChanged || compareWorkbenchChanged || boundedWorkbenchesChanged || phase4SurfacesChanged || mappedData || e2ePaths.length > 0;
 
   if (changeMap.evidenceOnly) {
     addStep(steps, {
@@ -105,6 +105,18 @@ export function createVerificationPlan(paths, changeMap) {
       id: 'lockfile-integrity', command: ['npm', 'run', 'verify:lockfile'],
       expectedTests: 0, workers: 1, budgetSeconds: 10,
     });
+    addStep(steps, {
+      id: 'dependency-audit', command: ['npm', 'run', 'audit:deps'],
+      expectedTests: 0, workers: 1, budgetSeconds: 20,
+    });
+    addStep(steps, {
+      id: 'dependency-licenses', command: ['npm', 'run', 'license:check'],
+      expectedTests: 0, workers: 1, budgetSeconds: 10,
+    });
+    addStep(steps, {
+      id: 'dependency-sbom', command: ['npm', 'run', 'sbom:generate'],
+      expectedTests: 0, workers: 1, budgetSeconds: 30,
+    });
   }
 
   if (changeMap.contentChanged) {
@@ -119,9 +131,41 @@ export function createVerificationPlan(paths, changeMap) {
       id: 'typecheck', command: ['npm', 'run', 'typecheck'],
       expectedTests: 0, workers: 1, budgetSeconds: 20,
     });
+    const fullBuild = changeMap.buildMode === 'full';
     addStep(steps, {
-      id: 'incremental-site-build', command: ['npm', 'run', 'build:site:incremental'],
-      expectedTests: 0, workers: 1, budgetSeconds: 10,
+      id: fullBuild ? 'full-site-build' : 'incremental-site-build',
+      command: ['npm', 'run', fullBuild ? 'build:site' : 'build:site:incremental'],
+      expectedTests: 0, workers: 1, budgetSeconds: fullBuild ? 120 : 10,
+    });
+  }
+
+  if (changeMap.dependenciesChanged) {
+    addStep(steps, {
+      id: 'dependency-runtime-contracts',
+      command: ['node', '--test', 'tests/graph-layout.test.mjs', 'tests/browser-contract.test.mjs'],
+      expectedTests: 33,
+      workers: 1,
+      budgetSeconds: 15,
+    });
+    addStep(steps, {
+      id: 'dependency-office-contracts',
+      command: ['npm', 'run', 'test:affected:graph', '--',
+        'tests/template-office-export.test.mjs',
+        'tests/graph/compareExport.test.ts'],
+      expectedTests: 14,
+      workers: 1,
+      budgetSeconds: 30,
+    });
+    addStep(steps, {
+      id: 'dependency-browser-smoke',
+      command: ['npm', 'run', 'test:e2e:run', '--',
+        'tests/e2e/v1-practitioner-workflows.spec.mjs',
+        'tests/e2e/atlas-map-focused-control.spec.mjs',
+        '--grep',
+        'V1 workflow 01|focused Atlas opens straight'],
+      expectedTests: 2,
+      workers: 2,
+      budgetSeconds: 45,
     });
   }
 

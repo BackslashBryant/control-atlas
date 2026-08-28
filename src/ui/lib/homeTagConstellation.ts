@@ -1,6 +1,6 @@
-import librarySearchArtifact from "../../../data/generated/library-search.json";
+import librarySearchArtifact from "../../../data/generated/library-search.json" with { type: "json" };
 
-import { rawTypesForKind } from "./informationArchitecture";
+import { rawTypesForKind } from "./informationArchitecture.ts";
 
 export type HomeLibraryDiscovery = {
   count: number;
