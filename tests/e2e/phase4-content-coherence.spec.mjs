@@ -53,6 +53,12 @@ test("Phase 4 Templates expose setup and output, then preview document structure
   await expect(preview.locator(".template-document-preview-outline li")).toHaveCount(15);
   await expect(preview.locator(".template-document-preview-outline")).toContainText("Selected Control Scope");
   await expect(preview.locator("table")).toHaveCount(1);
+  const context = page.getByRole("complementary", { name: "Current document" });
+  const controlSource = context.locator(".compare-scope-list > div").filter({ hasText: "Control source" });
+  const templateBasis = context.locator(".compare-scope-list > div").filter({ hasText: "Template basis" });
+  await expect(controlSource).toContainText("SP 800-53 Rev. 5");
+  await expect(templateBasis).toContainText("FedRAMP Consolidated Rules for 2026");
+  await expect(context).not.toContainText("Source publication");
   await expect(page.getByText("Include STIG/SRG cross-reference table")).toHaveCount(0);
 });
 

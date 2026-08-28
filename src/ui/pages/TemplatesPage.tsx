@@ -732,16 +732,17 @@ export function TemplatesPage(props: {
     : generationState?.downloadEnabled
       ? 3
       : 2;
-  const selectedSourceLabel = catalogSource
+  const controlSourceLabel = activeFramework
+    ? catalogOptions.find((option) => option.value === activeFramework)?.label || activeFramework
+    : "Select a catalog or program";
+  const templateBasisLabel = catalogSource
     ? `${catalogSource.display_name || catalogSource.name}${catalogSource.version ? ` · ${catalogSource.version}` : ""}`
     : selectedTemplateArtifacts.length
       ? selectedTemplateArtifacts
           .map((artifact) => artifact.publisher || artifact.title)
           .filter(Boolean)
           .join(", ")
-      : activeFramework
-        ? catalogOptions.find((option) => option.value === activeFramework)?.label || activeFramework
-        : "Select a catalog or program";
+      : "No separate template basis recorded";
 
   useEffect(() => {
     if (!documentSelectionMountedRef.current) {
@@ -1188,8 +1189,12 @@ export function TemplatesPage(props: {
                   <dd>{selectedTemplate.display_name}</dd>
                 </div>
                 <div>
-                  <dt>Source publication</dt>
-                  <dd>{selectedSourceLabel}</dd>
+                  <dt>Control source</dt>
+                  <dd>{controlSourceLabel}</dd>
+                </div>
+                <div>
+                  <dt>Template basis</dt>
+                  <dd>{templateBasisLabel}</dd>
                 </div>
                 <div>
                   <dt>Format</dt>
