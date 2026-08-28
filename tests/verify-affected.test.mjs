@@ -162,4 +162,16 @@ test('incremental fetch and writer changes use their focused data contracts', ()
     plan.steps.filter((step) => step.id.startsWith('incremental-data')).map((step) => step.id),
     ['incremental-data-lint', 'incremental-data-contracts'],
   );
+
+  const operatorPaths = [
+    'scripts/apply-commons-operator-ecosystem.mjs',
+    'scripts/lib/url-classification.mjs',
+    'tests/commons-operator-ecosystem.test.mjs',
+  ];
+  const operatorPlan = createVerificationPlan(operatorPaths, classifyChangedPaths(operatorPaths));
+  assert.equal(operatorPlan.blocked, false);
+  assert.deepEqual(
+    operatorPlan.steps.filter((step) => step.id.startsWith('operator-ecosystem')).map((step) => step.id),
+    ['operator-ecosystem-lint', 'operator-ecosystem-contracts'],
+  );
 });

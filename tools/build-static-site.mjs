@@ -82,7 +82,7 @@ function stagedGeneratedDataMatches() {
   if (!existsSync(sourceManifest) || !existsSync(stagedManifest)) return false;
   if (!readFileSync(sourceManifest).equals(readFileSync(stagedManifest))) return false;
   return REQUIRED_GENERATED_FILES.every((path) =>
-    existsSync(join(DIST, path.replace(/^data\//, "data/"))),
+    existsSync(join(DIST, path)),
   );
 }
 

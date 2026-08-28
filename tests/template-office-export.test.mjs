@@ -314,5 +314,5 @@ test('xml special characters in cell values are escaped, not injected', () => {
   const xlsx = strFromU8(unzipSync(docToXlsx(doc))['xl/worksheets/sheet2.xml']);
   assert.match(xlsx, /A &amp; B/);
   assert.match(xlsx, /&lt;script&gt;/);
-  assert.doesNotMatch(xlsx, /<script>/);
+  assert.equal(xlsx.indexOf('<script>'), -1);
 });

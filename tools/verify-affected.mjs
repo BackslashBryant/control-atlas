@@ -76,8 +76,12 @@ export function createVerificationPlan(paths, changeMap) {
     path === 'scripts/lib/write-json-atomically.mjs' ||
     path === 'tests/strict-conditional-fetch.test.mjs' ||
     path === 'tests/write-json-atomically.test.mjs');
+  const operatorEcosystemChanged = paths.some((path) =>
+    path === 'scripts/apply-commons-operator-ecosystem.mjs' ||
+    path === 'scripts/lib/url-classification.mjs' ||
+    path === 'tests/commons-operator-ecosystem.test.mjs');
   const phase4DataChanged = paths.some((path) => path === 'data/template-registry.json');
-  const mappedData = stigObservationChanged || incrementalDataChanged || phase4DataChanged;
+  const mappedData = stigObservationChanged || incrementalDataChanged || operatorEcosystemChanged || phase4DataChanged;
   const mappedRuntime = changeMap.dependenciesChanged || sourceTrustChanged || compareWorkbenchChanged || boundedWorkbenchesChanged || phase4SurfacesChanged || mappedData || e2ePaths.length > 0;
 
   if (changeMap.evidenceOnly) {
@@ -116,6 +120,17 @@ export function createVerificationPlan(paths, changeMap) {
     addStep(steps, {
       id: 'dependency-sbom', command: ['npm', 'run', 'sbom:generate'],
       expectedTests: 0, workers: 1, budgetSeconds: 30,
+    });
+  }
+
+  if (operatorEcosystemChanged) {
+    addStep(steps, {
+      id: 'operator-ecosystem-lint', command: ['npm', 'run', 'lint:operator-ecosystem'],
+      expectedTests: 0, workers: 1, budgetSeconds: 5,
+    });
+    addStep(steps, {
+      id: 'operator-ecosystem-contracts', command: ['npm', 'run', 'test:operator-ecosystem'],
+      expectedTests: 11, workers: 1, budgetSeconds: 5,
     });
   }
 

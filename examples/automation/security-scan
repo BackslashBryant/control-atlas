@@ -87,6 +87,14 @@ function ensureArtifactsDir() {
   }
 }
 
+function matchesWildcard(pattern, filename) {
+  const expression = pattern
+    .split('*')
+    .map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('.*');
+  return new RegExp(`^${expression}$`).test(filename);
+}
+
 function detectProjectStructure() {
   const projectRoot = path.join(__dirname, '..');
   const structure = {
@@ -167,8 +175,7 @@ function scanForSecrets() {
     // Skip binary files and allowed files
     if (config.allowedFiles.some(pattern => {
       if (pattern.includes('*')) {
-        const regex = new RegExp(pattern.replace('*', '.*'));
-        return regex.test(path.basename(relativePath));
+        return matchesWildcard(pattern, path.basename(relativePath));
       }
       return path.basename(relativePath) === pattern;
     })) {

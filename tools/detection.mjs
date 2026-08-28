@@ -10,10 +10,10 @@
  *   node tools/detection.mjs [--json]
  */
 
-import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -148,6 +148,14 @@ function detectProjectType(packageJson) {
   };
 }
 
+export function parseGitHubRemote(remote) {
+  const match = remote.match(
+    /^(?:(?:https?|git):\/\/github\.com\/|ssh:\/\/git@github\.com\/|git@github\.com:)([^/\s]+)\/([^/\s]+?)(?:\.git)?\/?$/i,
+  );
+  if (!match) return null;
+  return { owner: match[1], repo: match[2] };
+}
+
 function detectGitHubRepo() {
   try {
     const remote = execSync('git config --get remote.origin.url', {
@@ -156,17 +164,15 @@ function detectGitHubRepo() {
       stdio: ['ignore', 'pipe', 'ignore'],
     }).trim();
 
-    if (remote.includes('github.com')) {
-      const match = remote.match(/github\.com[:/]([^/]+)\/([^/]+?)(?:\.git)?$/);
-      if (match) {
-        return {
-          detected: true,
-          owner: match[1],
-          repo: match[2],
-          fullName: `${match[1]}/${match[2]}`,
-          url: remote,
-        };
-      }
+    const github = parseGitHubRemote(remote);
+    if (github) {
+      return {
+        detected: true,
+        owner: github.owner,
+        repo: github.repo,
+        fullName: `${github.owner}/${github.repo}`,
+        url: remote,
+      };
     }
     return { detected: false };
   } catch {
@@ -331,11 +337,13 @@ function main() {
   }
 }
 
-try {
-  main();
-} catch (error) {
-  console.error(
-    `Detection failed: ${error instanceof Error ? error.message : error}`,
-  );
-  process.exit(1);
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+  try {
+    main();
+  } catch (error) {
+    console.error(
+      `Detection failed: ${error instanceof Error ? error.message : error}`,
+    );
+    process.exit(1);
+  }
 }

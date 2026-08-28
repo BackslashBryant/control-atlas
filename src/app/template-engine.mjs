@@ -23,6 +23,7 @@ import {
   STARTER_DOCUMENT_REVIEW_NOTICE,
 } from '../shared/disclaimer.mjs';
 import { CROSS_REF_CAP } from '../shared/dense-data.mjs';
+import { stringify as stringifyYaml } from 'yaml';
 
 const EVIDENCE_TYPE_HINT = "Policy | Procedure | Config screenshot | System report | Access review | Scan output | Interview | Architecture diagram | Change record | Training record | Incident record | Log sample | Inventory export | Exception memo";
 
@@ -1090,8 +1091,11 @@ const MD_LONG_CELL_THRESHOLD = 80;
 const MD_LONG_CHUNK_COLUMNS = 4;
 
 /** Escape a value for use inside a markdown pipe-table cell. */
-function mdCell(value) {
-  return String(value ?? "").replace(/\|/g, "\\|").replace(/\n/g, "<br>");
+export function escapeMarkdownTableCell(value) {
+  return String(value ?? "")
+    .replaceAll("\\", "\\\\")
+    .replaceAll("|", "\\|")
+    .replaceAll("\n", "<br>");
 }
 
 /** Flatten a value to a single prose line. */
@@ -1100,10 +1104,10 @@ function mdProse(value) {
 }
 
 function mdTableBlock(headers, rows) {
-  let out = `| ${headers.map(mdCell).join(" | ")} |\n`;
+  let out = `| ${headers.map(escapeMarkdownTableCell).join(" | ")} |\n`;
   out += `| ${headers.map(() => "---").join(" | ")} |\n`;
   for (const row of rows) {
-    out += `| ${row.map(mdCell).join(" | ")} |\n`;
+    out += `| ${row.map(escapeMarkdownTableCell).join(" | ")} |\n`;
   }
   return `${out}\n`;
 }
@@ -1232,28 +1236,13 @@ function formatJson(doc) {
 }
 
 function formatYaml(doc) {
-  let out = `title: "${doc.title.replace(/"/g, '\\"')}"\n`;
-  out += `description: "${doc.description.replace(/"/g, '\\"')}"\n`;
-  out += `disclaimer: "${DISCLAIMER.replace(/"/g, '\\"')}"\n`;
-  out += `reviewStatus: "${STARTER_DOCUMENT_REVIEW_NOTICE.replace(/"/g, '\\"')}"\n`;
-  out += "sections:\n";
-  for (const sec of doc.sections) {
-    out += `  - heading: "${sec.heading.replace(/"/g, '\\"')}"\n`;
-    out += `    type: ${sec.type}\n`;
-    if (sec.type === "text") {
-      out += `    content: "${sec.content.replace(/"/g, '\\"').replace(/\n/g, "\\n")}"\n`;
-    } else if (sec.type === "table") {
-      out += "    headers:\n";
-      for (const h of sec.headers) {
-        out += `      - "${h.replace(/"/g, '\\"')}"\n`;
-      }
-      out += "    rows:\n";
-      for (const row of sec.rows) {
-        out += `      - [${row.map((c) => `"${String(c).replace(/"/g, '\\"')}"`).join(", ")}]\n`;
-      }
-    }
-  }
-  return out;
+  return stringifyYaml({
+    title: doc.title,
+    description: doc.description,
+    disclaimer: DISCLAIMER,
+    reviewStatus: STARTER_DOCUMENT_REVIEW_NOTICE,
+    sections: doc.sections,
+  });
 }
 
 /**
