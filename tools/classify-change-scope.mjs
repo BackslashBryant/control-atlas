@@ -18,13 +18,17 @@ const WORKFLOW_PREFIXES = ['.github/'];
 const DOCUMENTATION_PREFIXES = ['docs/'];
 const RUNTIME_PREFIXES = ['src/', 'public/'];
 
-const DEPENDENCY_FILES = new Set(['package-lock.json']);
+const DEPENDENCY_FILES = new Set([
+  'artifacts/sbom.cdx.json',
+  'package-lock.json',
+]);
 const AUTOMATION_FILES = new Set([
   '.gitignore',
   'config/experience-guardian/copy-ownership.json',
   'config/experience-guardian/route-matrix.json',
   'package.json',
   'tools/check-action-pins.mjs',
+  'tools/check-licenses.mjs',
   'tools/classify-change-scope.mjs',
   'tools/git-push-with-retry.mjs',
   'tools/experience-guardian.mjs',
@@ -32,6 +36,7 @@ const AUTOMATION_FILES = new Set([
   'tools/run-vale.mjs',
   'tools/ship-to-main.mjs',
   'tools/verify-affected.mjs',
+  'tools/verify-lockfile.mjs',
   'tools/wait-for-checks.mjs',
   'tests/build-layout-contract.test.mjs',
   'tests/change-scope.test.mjs',

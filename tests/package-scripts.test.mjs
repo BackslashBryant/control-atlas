@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
 
+import { isAllowedLicenseExpression } from '../tools/check-licenses.mjs';
+
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 const ci = readFileSync('.github/workflows/ci.yml', 'utf8');
 const security = readFileSync('.github/workflows/security.yml', 'utf8');
@@ -140,6 +142,11 @@ test('package scripts expose deterministic split gates and full local verificati
   assert.match(packageJson.scripts['review:experience:full'], /playwright\.guardian\.config\.mjs/);
   assert.match(packageJson.scripts['review:experience:family'], /tests\/guardian\/experience-guardian\.spec\.mjs/);
   assert.match(packageJson.scripts['review:experience:full'], /tests\/guardian\/experience-guardian\.spec\.mjs/);
+  assert.match(packageJson.scripts['verify:lockfile'], /tools\/verify-lockfile\.mjs/);
+  assert.equal(isAllowedLicenseExpression('EPL-2.0 OR GPL-3.0-or-later'), true);
+  assert.equal(isAllowedLicenseExpression('(MIT AND Zlib)'), true);
+  assert.equal(isAllowedLicenseExpression('MIT AND GPL-3.0-or-later'), false);
+  assert.equal(isAllowedLicenseExpression('LicenseRef-Unknown'), false);
   assert.ok(existsSync('.lighthouserc.ci.json'));
 });
 

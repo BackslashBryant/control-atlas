@@ -13,7 +13,7 @@ import {
   countLibraryTaxonomyTags,
   deriveAtlasScopeMetrics,
 } from './src/shared/brand-signals.mjs';
-import { HOME_LIBRARY_DISCOVERY } from './src/ui/lib/homeTagConstellation';
+import { HOME_LIBRARY_DISCOVERY } from './src/ui/lib/homeTagConstellation.ts';
 
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
 

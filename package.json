@@ -21,14 +21,14 @@
     "build:xref": "npm run build:data",
     "dev:guarded": "node ./tools/dev-guarded.mjs",
     "audit:deps": "node ./scripts/security/npm-audit.mjs",
-    "lint": "eslint src tests/graph tests/helpers tests/atlas-neighborhood.test.mjs tests/browser-contract.test.mjs tests/build-layout-contract.test.mjs tests/change-scope.test.mjs tests/commons-presentation.test.mjs tests/connection-inventory.test.mjs tests/fedramp-transition.test.mjs tests/framework-runtime.test.mjs tests/generated-data-cache.test.mjs tests/npm-audit-policy.test.mjs tests/package-scripts.test.mjs tests/process-runner.test.mjs tests/release-evidence.test.mjs tests/source-freshness.test.mjs tests/source-refresh-reconciliation.test.mjs tests/verification-topology.test.mjs tests/verify-affected.test.mjs tests/wait-for-checks.test.mjs tests/workflow-refresh.test.mjs tests/e2e/critical-path-matrix.spec.mjs tests/e2e/landing-performance.spec.mjs tests/e2e/accessibility.spec.mjs tests/e2e/frontend-responsive.spec.mjs tests/e2e/brand-header-stability.spec.mjs tests/e2e/sources-inspector-state.spec.mjs tests/e2e/source-truth-presentation.spec.mjs tests/e2e/v1-practitioner-workflows.spec.mjs tests/e2e/taxonomy-discovery.spec.mjs tests/e2e/atlas-map-source-hierarchy.spec.mjs tests/e2e/atlas-map-focused-control.spec.mjs tests/e2e/atlas-map-drilldown.spec.mjs tests/e2e/atlas-map-links.spec.mjs tests/e2e/epic1-atlas-correctness.spec.mjs tests/e2e/epic12-phase1-layout.spec.mjs tests/e2e/epic12-phase2-search-answers.spec.mjs tests/e2e/epic12-phase3-information-architecture.spec.mjs tests/e2e/epic12-phase4-plain-language.spec.mjs tests/e2e/epic12-phase5-links-semantics-touch.spec.mjs tests/e2e/epic12-phase7-atlas-skill-tree.spec.mjs tests/e2e/epic14-ws0-app-shell.spec.mjs tests/e2e/epic14-ws1-visual-language.spec.mjs tests/e2e/epic14-ws2-record-template.spec.mjs tests/e2e/epic14-ws3-workspace-template.spec.mjs tests/e2e/epic14-ws4-atlas-canvas.spec.mjs tests/e2e/epic14-ws5-home-guides.spec.mjs tests/e2e/epic14-ws7-url-hygiene.spec.mjs tests/e2e/navigation-fidelity.spec.mjs tests/e2e/release-readiness-visual.spec.mjs tests/e2e/epic5-source-first-records.spec.mjs tests/e2e/epic6-responsive-accessibility.spec.mjs tests/e2e/start-here.spec.mjs tests/e2e/live-smoke.spec.mjs tests/e2e/live-review-correction.spec.mjs playwright.config.mjs playwright.e2e.config.mjs playwright.live.config.mjs playwright.live-full.config.mjs scripts/build-source-semantic-audit.mjs scripts/security/npm-audit.mjs scripts/reconcile-source-freshness.mjs scripts/report-refresh-diff.mjs scripts/dom-smoke.mjs scripts/static-smoke.mjs scripts/audit-coverage.mjs tools/build-static-site.mjs tools/generated-data-cache-key.mjs tools/lib/process-runner.mjs tools/materialize-generated-data.mjs tools/verify-generated-data-reproducibility.mjs tools/playwright-global-teardown.mjs tools/verify-site-artifact.mjs tools/check-action-pins.mjs tools/check-licenses.mjs tools/classify-change-scope.mjs tools/dev-guarded.mjs tools/serve-static-site.mjs tools/sync-public.mjs tools/oscal-cross-check.mjs tools/ports-free-win.mjs tools/run-vale.mjs tools/summarize-lighthouse.mjs tools/test-vale-style.mjs vite.config.ts --ext .mjs,.ts,.tsx --max-warnings=0",
+    "lint": "eslint src tests/graph tests/helpers tests/atlas-neighborhood.test.mjs tests/browser-contract.test.mjs tests/build-layout-contract.test.mjs tests/change-scope.test.mjs tests/commons-presentation.test.mjs tests/connection-inventory.test.mjs tests/fedramp-transition.test.mjs tests/framework-runtime.test.mjs tests/generated-data-cache.test.mjs tests/npm-audit-policy.test.mjs tests/package-scripts.test.mjs tests/process-runner.test.mjs tests/release-evidence.test.mjs tests/source-freshness.test.mjs tests/source-refresh-reconciliation.test.mjs tests/verification-topology.test.mjs tests/verify-affected.test.mjs tests/wait-for-checks.test.mjs tests/workflow-refresh.test.mjs tests/e2e/critical-path-matrix.spec.mjs tests/e2e/landing-performance.spec.mjs tests/e2e/accessibility.spec.mjs tests/e2e/frontend-responsive.spec.mjs tests/e2e/brand-header-stability.spec.mjs tests/e2e/sources-inspector-state.spec.mjs tests/e2e/source-truth-presentation.spec.mjs tests/e2e/v1-practitioner-workflows.spec.mjs tests/e2e/taxonomy-discovery.spec.mjs tests/e2e/atlas-map-source-hierarchy.spec.mjs tests/e2e/atlas-map-focused-control.spec.mjs tests/e2e/atlas-map-drilldown.spec.mjs tests/e2e/atlas-map-links.spec.mjs tests/e2e/epic1-atlas-correctness.spec.mjs tests/e2e/epic12-phase1-layout.spec.mjs tests/e2e/epic12-phase2-search-answers.spec.mjs tests/e2e/epic12-phase3-information-architecture.spec.mjs tests/e2e/epic12-phase4-plain-language.spec.mjs tests/e2e/epic12-phase5-links-semantics-touch.spec.mjs tests/e2e/epic12-phase7-atlas-skill-tree.spec.mjs tests/e2e/epic14-ws0-app-shell.spec.mjs tests/e2e/epic14-ws1-visual-language.spec.mjs tests/e2e/epic14-ws2-record-template.spec.mjs tests/e2e/epic14-ws3-workspace-template.spec.mjs tests/e2e/epic14-ws4-atlas-canvas.spec.mjs tests/e2e/epic14-ws5-home-guides.spec.mjs tests/e2e/epic14-ws7-url-hygiene.spec.mjs tests/e2e/navigation-fidelity.spec.mjs tests/e2e/release-readiness-visual.spec.mjs tests/e2e/epic5-source-first-records.spec.mjs tests/e2e/epic6-responsive-accessibility.spec.mjs tests/e2e/start-here.spec.mjs tests/e2e/live-smoke.spec.mjs tests/e2e/live-review-correction.spec.mjs playwright.config.mjs playwright.e2e.config.mjs playwright.live.config.mjs playwright.live-full.config.mjs scripts/build-source-semantic-audit.mjs scripts/security/npm-audit.mjs scripts/reconcile-source-freshness.mjs scripts/report-refresh-diff.mjs scripts/dom-smoke.mjs scripts/static-smoke.mjs scripts/audit-coverage.mjs tools/build-static-site.mjs tools/generated-data-cache-key.mjs tools/lib/process-runner.mjs tools/materialize-generated-data.mjs tools/verify-generated-data-reproducibility.mjs tools/playwright-global-teardown.mjs tools/verify-site-artifact.mjs tools/check-action-pins.mjs tools/check-licenses.mjs tools/classify-change-scope.mjs tools/dev-guarded.mjs tools/serve-static-site.mjs tools/sync-public.mjs tools/oscal-cross-check.mjs tools/ports-free-win.mjs tools/run-vale.mjs tools/summarize-lighthouse.mjs tools/test-vale-style.mjs tools/verify-lockfile.mjs vite.config.ts --ext .mjs,.ts,.tsx --max-warnings=0",
     "lint:ci": "npm run lint && eslint playwright.visual.config.mjs tests/e2e/visual-regression.spec.mjs --max-warnings=0 && npm run lint:operator-ecosystem && npm run lint:nist-ingestion && npm run lint:ingestion",
-    "lint:automation": "eslint tools/check-action-pins.mjs tools/classify-change-scope.mjs tools/experience-guardian.mjs tools/git-push-with-retry.mjs tools/lib/process-runner.mjs tools/lib/vale-extraction.mjs tools/run-vale.mjs tools/ship-to-main.mjs tools/verify-affected.mjs tools/wait-for-checks.mjs tests/build-layout-contract.test.mjs tests/change-scope.test.mjs tests/experience-guardian.test.mjs tests/guardian/experience-guardian.spec.mjs tests/package-scripts.test.mjs tests/process-runner.test.mjs tests/release-evidence.test.mjs tests/vale-extraction.test.mjs tests/verification-topology.test.mjs tests/verify-affected.test.mjs tests/wait-for-checks.test.mjs playwright.config.mjs playwright.guardian.config.mjs --max-warnings=0",
+    "lint:automation": "eslint tools/check-action-pins.mjs tools/classify-change-scope.mjs tools/experience-guardian.mjs tools/git-push-with-retry.mjs tools/lib/process-runner.mjs tools/lib/vale-extraction.mjs tools/run-vale.mjs tools/ship-to-main.mjs tools/verify-affected.mjs tools/verify-lockfile.mjs tools/wait-for-checks.mjs tests/build-layout-contract.test.mjs tests/change-scope.test.mjs tests/experience-guardian.test.mjs tests/guardian/experience-guardian.spec.mjs tests/package-scripts.test.mjs tests/process-runner.test.mjs tests/release-evidence.test.mjs tests/vale-extraction.test.mjs tests/verification-topology.test.mjs tests/verify-affected.test.mjs tests/wait-for-checks.test.mjs playwright.config.mjs playwright.guardian.config.mjs --max-warnings=0",
     "test:ci-contracts": "node --test tests/build-layout-contract.test.mjs tests/change-scope.test.mjs tests/experience-guardian.test.mjs tests/package-scripts.test.mjs tests/process-runner.test.mjs tests/release-evidence.test.mjs tests/vale-extraction.test.mjs tests/verification-topology.test.mjs tests/verify-affected.test.mjs tests/wait-for-checks.test.mjs && node tools/check-action-pins.mjs && node tools/experience-guardian.mjs",
     "review:experience:contracts": "npm run lint:automation && node --test tests/experience-guardian.test.mjs && node tools/experience-guardian.mjs",
     "review:experience:family": "playwright test --config playwright.guardian.config.mjs tests/guardian/experience-guardian.spec.mjs --grep=family",
     "review:experience:full": "playwright test --config playwright.guardian.config.mjs tests/guardian/experience-guardian.spec.mjs",
-    "verify:lockfile": "npm ci --dry-run --ignore-scripts --no-audit --no-fund",
+    "verify:lockfile": "node ./tools/verify-lockfile.mjs",
     "verify:affected": "node ./tools/verify-affected.mjs",
     "test:affected:graph": "tsx --test",
     "lint:stig-observer": "eslint scripts/fetch-stig-source-observations.mjs tools/importers/stig-source-observer.mjs tests/stig-source-observer.test.mjs --max-warnings=0",
@@ -68,7 +68,7 @@
     "smoke:static": "node ./scripts/static-smoke.mjs",
     "refresh:data": "node ./scripts/refresh-data.mjs",
     "reconcile:source-freshness": "node ./scripts/reconcile-source-freshness.mjs",
-    "sbom:generate": "cyclonedx-npm --package-lock-only --output-format json --output-file artifacts/sbom.cdx.json",
+    "sbom:generate": "cyclonedx-npm --package-lock-only --spec-version 1.6 --output-reproducible --validate --output-format json --output-file artifacts/sbom.cdx.json",
     "test": "npm run test:tokens && npm run test:operator-ecosystem && npm run test:copy-contract && npm run test:authority && npm run test:atlas && npm run test:data && npm run test:runtime && npm run test:graph && npm run test:record-presentation && npm run test:nist-ingestion && npm run test:ingestion",
     "test:operator-ecosystem": "node --test ./tests/commons-operator-ecosystem.test.mjs",
     "test:tokens": "node --test ./tests/orbital-token-drift.test.mjs",
@@ -148,13 +148,14 @@
       "lighthouse": "13.4.1"
     },
     "exceljs": {
-      "uuid": "11.1.1"
+      "uuid": "11.1.1",
+      "unzipper": "0.12.3"
     },
     "nanoid": "^3.3.17"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
-    "@cyclonedx/cyclonedx-npm": "^5.0.0",
+    "@cyclonedx/cyclonedx-npm": "^6.0.1",
     "@eslint/js": "^10.0.1",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.61.1",
@@ -164,7 +165,7 @@
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.61.1",
     "@typescript-eslint/parser": "^8.61.1",
-    "@vitejs/plugin-react": "^6.0.2",
+    "@vitejs/plugin-react": "^6.1.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "eslint": "^10.5.0",
@@ -173,10 +174,11 @@
     "make-fetch-happen": "^14.0.3",
     "pdf-parse": "^2.4.5",
     "read-excel-file": "^9.2.0",
+    "spdx-expression-parse": "^5.0.0",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
-    "vite": "^8.0.16"
+    "vite": "^8.2.2"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.14",
@@ -185,7 +187,7 @@
     "@xyflow/react": "^12.11.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "elkjs": "^0.11.1",
+    "elkjs": "^0.12.0",
     "exceljs": "^4.4.0",
     "fflate": "^0.8.3",
     "graphology": "^0.26.0",

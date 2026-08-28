@@ -105,11 +105,26 @@ test('trust and workbench changes select bounded route families and the incremen
   assert.equal(phase4Browser.budgetSeconds, 60);
 });
 
-test('dependency changes validate npm ci compatibility before product gates', () => {
-  const paths = ['package-lock.json'];
+test('dependency changes select bounded supply-chain and product proof', () => {
+  const paths = ['package-lock.json', 'artifacts/sbom.cdx.json'];
   const plan = createVerificationPlan(paths, classifyChangedPaths(paths));
-  assert.equal(plan.blocked, true, 'dependency browser proof remains explicitly unmapped');
-  assert.equal(plan.steps.some((step) => step.id === 'lockfile-integrity'), true);
+  assert.equal(plan.blocked, false);
+  assert.deepEqual(plan.steps.map((step) => step.id), [
+    'lockfile-integrity',
+    'dependency-audit',
+    'dependency-licenses',
+    'dependency-sbom',
+    'typecheck',
+    'full-site-build',
+    'dependency-runtime-contracts',
+    'dependency-office-contracts',
+    'dependency-browser-smoke',
+  ]);
+  assert.equal(plan.steps.find((step) => step.id === 'dependency-runtime-contracts').expectedTests, 33);
+  assert.equal(plan.steps.find((step) => step.id === 'dependency-office-contracts').expectedTests, 14);
+  assert.equal(plan.steps.find((step) => step.id === 'dependency-browser-smoke').expectedTests, 2);
+  assert.equal(plan.steps.every((step) => step.expectedTests <= 50), true);
+  assert.equal(plan.steps.every((step) => step.budgetSeconds <= 120), true);
 });
 
 test('unmapped runtime and data changes fail before an expensive fallback', () => {
