@@ -17,7 +17,7 @@ import type { CommonsResource } from "../lib/commonsTypes";
 import type { ViewState } from "../lib/viewState";
 import { AppLink } from "./AppLink";
 import { AtlasTag } from "./AtlasTag";
-import { IdentityMark } from "./IdentityMark";
+import { DimensionGlyph } from "./DimensionGlyph";
 import {
   resourceAccessLabel,
   resourceTypeLabel,
@@ -94,7 +94,7 @@ export function ResourceIdentityMark({ resource }: { resource: CommonsResource }
     const identity = resolveIdentity(mark.termId)!;
     return (
       <span aria-label={identity.accessible_name} className="resource-brand-mark" role="img" title={identity.label}>
-        <IdentityMark size={22} termId={mark.termId} />
+        <DimensionGlyph decorative dimension="organization" size={22} />
       </span>
     );
   }

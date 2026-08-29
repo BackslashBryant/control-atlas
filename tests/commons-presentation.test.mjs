@@ -471,7 +471,7 @@ test("resource card uses the central identity seam and restrained anatomy", () =
 
   assert.match(card, /resolveIdentity/);
   assert.match(card, /taxonomyTagsForResource/);
-  assert.match(card, /IdentityMark/);
+  assert.match(card, /DimensionGlyph/);
   assert.match(card, /resourceAccessLabel\(resource\)/);
   assert.match(card, /resourceTypeLabel\(resource\.resourceType\)/);
   assert.match(card, /resourceSummaryPresentation\(resource\)/);

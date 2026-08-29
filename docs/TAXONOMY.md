@@ -3,7 +3,7 @@
 - **Owner:** Control Atlas data stewardship
 - **Status:** Canonical contract; coverage remains partial
 - **Contract version:** 2.0.0
-- **Last reviewed:** 2026-08-28
+- **Last reviewed:** 2026-08-29
 - **Supersession:** A later contract version must migrate stable tag IDs and update the generated coverage report in the same change.
 
 ## Purpose and boundary
@@ -47,19 +47,15 @@ Relationship types: `operated_by`, `developed_by`, `published_by`, `part_of`.
 
 Cycles in discovery-propagation edges are validated at build time and rejected.
 
-## Identity registry
+## Identity and type marks
 
-The identity registry (`data/curated/identity-registry.json`) maps taxonomy terms to verified source identity marks. Each entry records:
+Tags carry a **dimension glyph**, not a publisher mark. The glyph states what kind of thing a tag names — an organization, a tool, a framework — which is the one fact its label cannot carry. `DISA` and `eMASS` read as an agency and a system without either being mistaken for the other.
 
-- `key` — stable identity key
-- `term_ids` — linked taxonomy terms
-- `mark_kind` — current mark type (monogram, icon, or official)
-- `verification_status` — `verified_official` (approved asset on file) or `fallback_only` (monogram/initials only)
-- `fallback` — always present; used when no verified asset exists
+Publisher logos and seals are deliberately not used. A federal seal beside a tag implies the endorsement this contract disclaims, and the epic's own non-goals rule it out. The monogram fallback that preceded the glyphs simply repeated the tag's own label, so `DISA` rendered as "DISA DISA".
 
-The identity registry boundary: identity marks are decorative when text already names the entity. Marks never imply endorsement. Every current entry is `fallback_only`; no publisher asset has been verified, licensed, and committed yet, so tags render text-only wherever a monogram would merely repeat the label. The existing `resourceBrands.mjs` system coexists with the identity registry and still owns Commons card marks.
+Glyphs are decorative: they are `aria-hidden`, never separately focusable, and never the only carrier of meaning. The visible label remains the accessible name. `src/ui/components/DimensionGlyph.tsx` owns the mapping and exports `GLYPHED_DIMENSIONS`, so a new dimension without a glyph is detectable rather than silently blank.
 
-The shared resolver lives at `src/shared/identity-registry.mjs` and exports `resolveIdentity(termId)`, `resolveIdentityByKey(key)`, and `IDENTITY_REGISTRY`.
+The identity registry (`data/curated/identity-registry.json`) survives as governed metadata: it maps taxonomy terms to stable identity keys and accessible names such as "Defense Information Systems Agency", and Commons resource cards use it for publisher accent and accessible naming. It no longer resolves to any rendered mark. The shared resolver at `src/shared/identity-registry.mjs` exports `resolveIdentity(termId)`, `resolveIdentityByKey(key)`, and `IDENTITY_REGISTRY`.
 
 ## Source-text non-interference rule
 

@@ -1,7 +1,6 @@
-import { identityMarkAddsSignal } from "../../shared/identity-registry.mjs";
 import { TAXONOMY_TAG_BY_ID } from "../../shared/taxonomy-contract.mjs";
 import { AppLink } from "./AppLink";
-import { IdentityMark } from "./IdentityMark";
+import { DimensionGlyph } from "./DimensionGlyph";
 
 import type { ViewState } from "../lib/viewState";
 
@@ -21,21 +20,19 @@ export function AtlasTag(props: {
   if (!tag) return null;
 
   const size = props.size ?? "md";
-  // A monogram that repeats the label reads as "NIST NIST"; suppress it until
-  // an approved official mark exists for the term.
-  const showIdentity =
-    props.showIdentity !== false &&
-    Boolean(tag.identity_key) &&
-    identityMarkAddsSignal(tag.id, tag.label);
-  const dimensionLabel = tag.dimension.replace(/_/g, " ");
+  // The glyph names the kind of thing, which the label never can. It is not a
+  // publisher mark: showIdentity keeps its name for callers, but a tag now
+  // carries type, not identity.
+  const showGlyph = props.showIdentity !== false;
+  const typeLabel = tag.dimension.replace(/_/g, " ");
 
   return (
     <span
       className={`atlas-tag atlas-tag--${size}${props.selected ? " atlas-tag--selected" : ""}`}
       data-dimension={tag.dimension}
     >
-      {showIdentity ? (
-        <IdentityMark decorative termId={tag.id} size={size === "sm" ? 14 : 18} />
+      {showGlyph ? (
+        <DimensionGlyph decorative dimension={tag.dimension} size={size === "sm" ? 14 : 16} />
       ) : null}
       <AppLink
         className="atlas-tag__label"
@@ -46,7 +43,7 @@ export function AtlasTag(props: {
         {tag.label}
       </AppLink>
       {props.showType ? (
-        <span className="atlas-tag__type">{dimensionLabel}</span>
+        <span className="atlas-tag__type">{typeLabel}</span>
       ) : null}
       {props.removable && props.onRemove ? (
         <button
