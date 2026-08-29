@@ -5,7 +5,9 @@ on:
     branches: [main]
   pull_request:
   schedule:
-    - cron: '37 6 * * *'
+    # Weekly full browser and accessibility sweep. Running it daily re-tested
+    # unchanged code six days out of seven and buried real failures in noise.
+    - cron: '37 6 * * 0'
     - cron: '17 7 * * 3'
     - cron: '17 9 1 * *'
   workflow_dispatch:
@@ -497,7 +499,7 @@ jobs:
   nightly-build:
     name: Nightly build and contracts
     if: >-
-      ${{ github.event.schedule == '37 6 * * *' ||
+      ${{ github.event.schedule == '37 6 * * 0' ||
           (github.event_name == 'workflow_dispatch' && inputs.task == 'nightly') }}
     runs-on: ubuntu-latest
     steps:
@@ -590,11 +592,65 @@ jobs:
           if-no-files-found: error
           retention-days: 2
 
+  sweep-alert:
+    name: Weekly sweep alert
+    # One notification when the sweep turns red, one when it recovers, silence
+    # in between. A solo maintainer cannot triage a nightly digest, and a
+    # permanently red job is indistinguishable from a newly broken one.
+    if: >-
+      ${{ !cancelled() &&
+          (github.event.schedule == '37 6 * * 0' ||
+           (github.event_name == 'workflow_dispatch' && inputs.task == 'nightly')) }}
+    needs: [nightly-build, nightly-browser, nightly-accessibility]
+    permissions:
+      contents: read
+      issues: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open or resolve the sweep alert
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          BUILD_RESULT: ${{ needs.nightly-build.result }}
+          BROWSER_RESULT: ${{ needs.nightly-browser.result }}
+          ACCESSIBILITY_RESULT: ${{ needs.nightly-accessibility.result }}
+        run: |
+          set -euo pipefail
+          failed=0
+          for result in "$BUILD_RESULT" "$BROWSER_RESULT" "$ACCESSIBILITY_RESULT"; do
+            if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then failed=1; fi
+          done
+          open_issue="$(gh issue list --repo "$REPO" --label sweep-red --state open             --limit 1 --json number --jq '.[0].number // empty')"
+
+          if [ "$failed" -eq 1 ] && [ -z "$open_issue" ]; then
+            gh label create sweep-red --repo "$REPO" --color B60205               --description "Weekly sweep is failing" --force >/dev/null 2>&1 || true
+            gh issue create --repo "$REPO" --label sweep-red               --title "Weekly sweep is failing"               --body "The weekly browser and accessibility sweep failed.
+
+          Build: $BUILD_RESULT
+          Browser: $BROWSER_RESULT
+          Accessibility: $ACCESSIBILITY_RESULT
+
+          Run: $RUN_URL
+
+          This issue closes automatically when the sweep next passes. It will
+          not be reopened or duplicated while it stays red."
+            echo "Sweep turned red; alert issue opened."
+          elif [ "$failed" -eq 1 ]; then
+            echo "Sweep still red and issue #$open_issue is already open. No new alert."
+          elif [ -n "$open_issue" ]; then
+            gh issue comment "$open_issue" --repo "$REPO"               --body "The weekly sweep passed again. Run: $RUN_URL"
+            gh issue close "$open_issue" --repo "$REPO" --reason completed
+            echo "Sweep recovered; alert issue #$open_issue closed."
+          else
+            echo "Sweep green and no alert open. Nothing to do."
+          fi
+
   nightly-report:
     name: Nightly browser report
     if: >-
       ${{ !cancelled() &&
-          (github.event.schedule == '37 6 * * *' ||
+          (github.event.schedule == '37 6 * * 0' ||
            (github.event_name == 'workflow_dispatch' && inputs.task == 'nightly')) }}
     needs: [nightly-browser, nightly-accessibility]
     runs-on: ubuntu-latest
