@@ -111,10 +111,12 @@ test("Resource maintenance dates are semantic, consistent, and compact", async (
   await waitForAppReady(page);
   const maintenance = page.locator("details.resource-detail-maintenance");
   await maintenance.getByText("Source & maintenance details", { exact: true }).click();
-  const repositoryActivity = maintenance
-    .locator("dt", { hasText: "Last repository activity" })
-    .locator("xpath=following-sibling::dd[1]");
-  await expect(repositoryActivity).toHaveText("Not documented");
+  // A manually reviewed resource has no repository activity, and the panel
+  // omits absent facts rather than printing a placeholder for each one.
+  await expect(
+    maintenance.locator("dt", { hasText: "Last repository activity" }),
+  ).toHaveCount(0);
+  await expect(maintenance.locator("dt", { hasText: "Last checked" })).toBeVisible();
   await expect(maintenance.locator('time[datetime="2026-08-03"]')).toHaveText("August 3, 2026");
   await expect(maintenance.locator('time[datetime="2026-11-03"]')).toHaveText("November 3, 2026");
 });

@@ -28,6 +28,9 @@
   .compare-mode-tab,
   .atlas-decomp__orientation-button
 ) {
+  /* The contract needs a flex container: align-items and justify-content are
+     inert on a block-level control, which is how .compare-mode-tab drifted. */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1.2;

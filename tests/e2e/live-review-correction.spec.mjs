@@ -199,7 +199,7 @@ test("ranked search exposes desktop filters, sort, active chips, and mobile draw
   await page.goto("/#/search?q=access&kind=requirements&sort=identifier");
   await waitForReady(page);
   await expect(page.locator(".workspace-facet-rail")).toBeVisible();
-  await expect(page.locator(".workspace-result-count")).toContainText(/result/);
+  await expect(page.locator(".workspace-result-count")).toContainText(/match/);
   await expect(page.getByLabel("Sort Library results")).toHaveValue("identifier");
   await expect(page.locator(".search-result-groups")).toHaveCount(0);
   await expect(page.getByRole("button", { name: /Requirements/ }).first()).toBeVisible();
