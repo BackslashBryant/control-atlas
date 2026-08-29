@@ -60,9 +60,13 @@ import {
 import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
 import { nodeIdFromItemId, type ViewState } from "../lib/viewState";
 
-import { Button } from "../components/lsm";
+import { Button, ButtonLink } from "../components/lsm";
 import { AppLink, shouldInterceptAppLink } from "../components/AppLink";
 import { RecordLink } from "../components/RecordLink";
+import {
+  publishedSectionsWithContent,
+  RecordPublishedText,
+} from "../components/RecordPublishedText";
 
 type AtlasMapPageProps = {
   bundle: RuntimeBundle;
@@ -601,6 +605,39 @@ function FocusedAtlas(props: {
   );
   const centerTitle =
     record.center_node.metadata?.title || record.center_node.label || centerLabel;
+
+  // What the record actually says. The Atlas used to show a title, a
+  // publication, and a connection count — never the published statement —
+  // so drilling four columns deep landed on less than the search box already
+  // returns. The text and the routes out are both read from the same runtime
+  // the record page uses, so the two surfaces cannot drift.
+  const centerDocument = bundle.runtime.getLibraryDocument(record.center_node.id);
+  const centerSource = bundle.runtime.getSource(
+    centerDocument?.source_id || record.center_node.source_id,
+  );
+  const centerSourceUrl =
+    centerSource?.artifact_url || centerSource?.catalog_browse_url || "";
+  const centerClaimOrigin =
+    (record.center_node.metadata as { origin?: string } | undefined)?.origin ||
+    "publisher_normalized";
+  const centerMetadata = {
+    ...record.center_node.metadata,
+    description:
+      centerDocument?.description || record.center_node.metadata?.description || "",
+  };
+  const centerType = record.center_node.node_type || centerDocument?.object_type || "";
+  const centerPresentation = SUPPORTED_RECORD_TYPES.includes(centerType)
+    ? recordPresentationContract(centerCatalogId, centerType)
+    : null;
+  const centerPublishedSections = centerPresentation
+    ? publishedSectionsWithContent(centerPresentation.sections, centerMetadata)
+    : [];
+  // Only the first section renders here, so name the ones that did not. A
+  // reader who cannot see that a Discussion exists has no reason to open the
+  // full record.
+  const centerUnshownSections = centerPublishedSections
+    .slice(1)
+    .map((section) => section.heading);
   const inspectedId = selectedRow?.counterpart.id || record.center_node.id;
   const inspectedNode = bundle.runtime.getNode(inspectedId);
   const inspectedDocument = bundle.runtime.getLibraryDocument(inspectedId);
@@ -787,6 +824,44 @@ function FocusedAtlas(props: {
           <div><dt>Record type</dt><dd>{displayNameFor("object_type", record.center_node.node_type)}</dd></div>
           <div><dt>Published connections</dt><dd>{rows.length.toLocaleString()} in {groups.length.toLocaleString()} categories</dd></div>
         </dl>
+        {centerPresentation && centerPublishedSections.length ? (
+          <RecordPublishedText
+            claimOrigin={centerClaimOrigin}
+            headingLevel={3}
+            limit={1}
+            metadata={centerMetadata}
+            sections={centerPresentation.sections}
+          />
+        ) : null}
+        {centerUnshownSections.length ? (
+          <p className="atlas-focused-more-text">
+            Also on the full record: {centerUnshownSections.join(", ")}.
+          </p>
+        ) : null}
+        <div className="atlas-focused-exits">
+          <AppLink
+            onNavigate={onNavigate}
+            patch={{ node: record.center_node.id }}
+            variant="primary"
+            view="library-detail"
+          >
+            {centerPublishedSections.length
+              ? "Read the full record"
+              : "Open the full record"}
+          </AppLink>
+          {centerSourceUrl ? (
+            <ButtonLink
+              href={centerSourceUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+              variant="secondary"
+            >
+              {centerClaimOrigin === "atlas_editorial"
+                ? "View Atlas source"
+                : "View official source"}
+            </ButtonLink>
+          ) : null}
+        </div>
       </section>
       {/* One record workspace, not three competing modes. Connections is the
           product; Hierarchy and the complete list are supporting panels.

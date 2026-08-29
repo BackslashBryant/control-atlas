@@ -5385,6 +5385,42 @@ a:focus-visible {
   margin: 0;
 }
 
+/* The record's published text and its routes out span the full context card:
+   they answer "what does this say" and "where do I go next", which are not
+   secondary to the identity block beside them. */
+.atlas-focused-context > .record-official-text,
+.atlas-focused-context > .atlas-focused-exits {
+  grid-column: 1 / -1;
+}
+
+.atlas-focused-context > .record-official-text > section {
+  max-width: 68ch;
+}
+
+/* The section heading keeps its section-heading weight here even though the
+   Atlas renders it as an h3 under the record's h2. */
+.atlas-focused-context > .record-official-text > section > h3 {
+  margin: 0 0 var(--ca-space-2);
+  font-size: var(--ca-text-lg);
+}
+
+.atlas-focused-context > .atlas-focused-more-text {
+  grid-column: 1 / -1;
+  max-width: 68ch;
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+}
+
+/* Specificity note: `.atlas-focused-context > div` sets `display: grid` on
+   every direct div child, so this has to match with the parent to win. */
+.atlas-focused-context > .atlas-focused-exits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ca-space-3);
+  align-items: center;
+}
+
 .workspace-result-list__scope-note {
   padding: var(--ca-space-4);
   border: 1px solid var(--ca-border-subtle);

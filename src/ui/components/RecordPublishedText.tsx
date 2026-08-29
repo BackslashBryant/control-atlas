@@ -313,3 +313,62 @@ export function RecordNativeFacts(props: { fields: string[]; metadata: Record<st
     </section>
   );
 }
+
+type PublishedSection = { field: string; heading: string; kind: string };
+
+function sectionHasContent(value: unknown): boolean {
+  return Array.isArray(value) ? value.length > 0 : Boolean(String(value ?? "").trim());
+}
+
+/**
+ * The published sections that actually carry text for this record, in contract
+ * order. Callers use this both to decide whether there is anything to show and
+ * to take the first section when space is tight.
+ */
+export function publishedSectionsWithContent(
+  sections: PublishedSection[],
+  metadata: Record<string, any>,
+): PublishedSection[] {
+  return sections.filter((section) => sectionHasContent(metadata[section.field]));
+}
+
+/**
+ * Render a record's published text.
+ *
+ * `limit` caps how many sections render, for surfaces where the record's text
+ * is supporting context rather than the main event. The caller is responsible
+ * for telling the reader that more text exists — silently truncating published
+ * source text without a route to the rest is how the Atlas ended up looking
+ * like it had no text at all.
+ */
+export function RecordPublishedText(props: {
+  sections: PublishedSection[];
+  metadata: Record<string, any>;
+  claimOrigin?: string;
+  headingLevel?: 2 | 3;
+  limit?: number;
+}) {
+  const visible = publishedSectionsWithContent(props.sections, props.metadata);
+  const shown = typeof props.limit === "number" ? visible.slice(0, props.limit) : visible;
+  if (!shown.length) return null;
+  const Heading = (props.headingLevel === 3 ? "h3" : "h2") as "h2" | "h3";
+  return (
+    <div
+      className="record-official-text"
+      data-claim-origin={props.claimOrigin}
+      data-record-section="official-text"
+      data-source-text="published"
+    >
+      {shown.map((section) => (
+        <section data-source-field={section.field} key={section.field}>
+          <Heading>{section.heading}</Heading>
+          <SourceSectionContent
+            kind={section.kind}
+            presentation={props.metadata.source_text_presentation?.[section.field]}
+            value={props.metadata[section.field]}
+          />
+        </section>
+      ))}
+    </div>
+  );
+}

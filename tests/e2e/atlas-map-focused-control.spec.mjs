@@ -275,3 +275,52 @@ test("compact Hierarchy preserves structural position without horizontal overflo
   }));
   expect(overflow).toEqual({ body: 0, document: 0 });
 });
+
+// 2026-08-29: the focused Atlas record used to show a title, a publication,
+// and a connection count and nothing else — no published text, and not one
+// anchor in <main>. Drilling four columns deep landed on strictly less than
+// the search box already returns, with no route to the record or its source.
+test("a focused record shows what it says and where to read the rest", async ({ page }) => {
+  await page.goto("/#/explore?node=nist-800-53%3AAC-17.2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const subject = page.locator(".atlas-focused-context");
+  await expect(subject.getByRole("heading", { name: "Control Statement" })).toBeVisible();
+  await expect(subject).toContainText(
+    "Implement cryptographic mechanisms to protect the confidentiality and integrity of remote access sessions.",
+  );
+  // Sections that did not fit are named, so the reader knows what opening the
+  // full record actually gets them.
+  await expect(subject).toContainText("Also on the full record: Discussion.");
+
+  const fullRecord = subject.getByRole("link", { name: "Read the full record" });
+  await expect(fullRecord).toHaveAttribute("href", "#/record/nist-800-53/AC-17.2");
+  await expect(
+    subject.getByRole("link", { name: "View official source" }),
+  ).toHaveAttribute("href", /^https:\/\/csrc\.nist\.gov\//);
+
+  await fullRecord.click();
+  await expect(page).toHaveURL(/#\/record\/nist-800-53\/AC-17\.2/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: /AC-17\.2/ }),
+  ).toBeVisible();
+});
+
+test("a focused record with no published sections still offers both exits", async ({ page }) => {
+  await page.goto("/#/explore?node=csf-2%3ACATEGORY-PR.AA");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const subject = page.locator(".atlas-focused-context");
+  // No published text for this record, so no empty section and no dangling
+  // "also on the full record" line — but the routes out stay.
+  await expect(subject.locator(".record-official-text")).toHaveCount(0);
+  await expect(subject.locator(".atlas-focused-more-text")).toHaveCount(0);
+  await expect(
+    subject.getByRole("link", { name: "Open the full record" }),
+  ).toHaveAttribute("href", "#/record/csf-2/CATEGORY-PR.AA");
+  await expect(
+    subject.getByRole("link", { name: "View official source" }),
+  ).toBeVisible();
+});
