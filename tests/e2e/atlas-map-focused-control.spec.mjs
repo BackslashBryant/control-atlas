@@ -307,6 +307,43 @@ test("a focused record shows what it says and where to read the rest", async ({ 
   ).toBeVisible();
 });
 
+test("the focused record's text and exits survive every context breakpoint", async ({ page }) => {
+  // The context card is a two-column grid above 767px and one column below.
+  // The statement, the note, and the exits span the full width in both, so
+  // check the boundary rather than only the extremes.
+  for (const width of [390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/#/explore?node=nist-800-53%3AAC-17.2");
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+
+    const subject = page.locator(".atlas-focused-context");
+    await expect(subject.locator(".record-official-text")).toBeVisible();
+    await expect(subject.locator(".atlas-focused-more-text")).toBeVisible();
+    await expect(
+      subject.getByRole("link", { name: "Read the full record" }),
+    ).toBeVisible();
+    await expect(
+      subject.getByRole("link", { name: "View official source" }),
+    ).toBeVisible();
+
+    const overflow = await page.evaluate(
+      () =>
+        globalThis.document.documentElement.scrollWidth -
+        globalThis.document.documentElement.clientWidth,
+    );
+    expect(overflow, `horizontal overflow at ${width}px`).toBeLessThanOrEqual(1);
+
+    // Published source text stays at a readable measure instead of running
+    // the full width of a wide card.
+    const measure = await subject
+      .locator(".record-official-text > section")
+      .first()
+      .evaluate((element) => element.getBoundingClientRect().width);
+    expect(measure, `statement measure at ${width}px`).toBeLessThanOrEqual(620);
+  }
+});
+
 test("a focused record with no published sections still offers both exits", async ({ page }) => {
   await page.goto("/#/explore?node=csf-2%3ACATEGORY-PR.AA");
   await waitForAppReady(page);
