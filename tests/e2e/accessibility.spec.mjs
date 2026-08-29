@@ -143,8 +143,10 @@ for (const route of ROUTES) {
       await expect(
         page.getByRole("heading", { name: "Sources", level: 1 }),
       ).toBeVisible();
+      // The banner was rewritten to lead with a heading and an action. The
+      // contract is that it names the problem and never echoes the bad id.
       await expect(page.locator(".source-not-found-banner")).toContainText(
-        "That publication is not in the public publication register.",
+        "not in the current public register",
       );
       await expect(page.locator(".source-not-found-banner")).not.toContainText(
         "not-a-real-source",
