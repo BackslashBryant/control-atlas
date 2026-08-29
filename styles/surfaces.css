@@ -7978,6 +7978,8 @@ button.atlas-leverage-row:hover {
 }
 
 .compare-mode-tab {
+  /* The shared alignment contract needs a flex container to have any effect. */
+  display: inline-flex;
   min-height: 44px;
   padding: 8px 16px;
   border: 0;

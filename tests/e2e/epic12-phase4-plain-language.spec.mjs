@@ -175,7 +175,8 @@ test("Phase 4 keeps the product boundary contextual and reports freshness from v
   await gotoApp(page, FRESHNESS_RECORD);
   await waitForRenderedRoute(page, FRESHNESS_RECORD);
   const sourceSupport = page.locator(".record-template-sidebar");
-  await expect(sourceSupport).toContainText("2026-06-13");
+  // Source freshness renders as a reading date, not the stored ISO value.
+  await expect(sourceSupport).toContainText("Jun 13, 2026");
   await expect(sourceSupport).not.toContainText(/overdue|pipeline age/i);
   await expect(sourceSupport).toContainText("FIPS 200");
 });

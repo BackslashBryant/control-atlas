@@ -8,7 +8,7 @@ export const SITE_COPY = Object.freeze({
     searchPlaceholder: "Search by topic, title, or identifier.",
   }),
   home: Object.freeze({
-    headline: "Make federal cybersecurity compliance make sense.",
+    headline: "Make federal cybersecurity make sense.",
     definition:
       "Understand what applies, what it means, and what to do next.",
     breadth:
@@ -19,7 +19,7 @@ export const SITE_COPY = Object.freeze({
     // metadata aside.
     cover: Object.freeze({
       eyebrow: "Control Atlas",
-      headlineLead: "Make federal compliance",
+      headlineLead: "Make federal cybersecurity",
       headlineSignal: "make sense.",
       lead:
         "A free, public research tool that connects the requirements, controls, and guidance published by NIST, DISA, FedRAMP, MITRE, and CISA. Not a government system and not a GRC platform — a place to find what applies to your system and what to do next.",

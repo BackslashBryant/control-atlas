@@ -2,7 +2,7 @@
 
 - **Owner:** Forge and Sentinel
 - **Status:** Canonical
-- **Last reviewed:** 2026-08-12
+- **Last reviewed:** 2026-08-28
 - **Supersession:** Approved source or schema changes update this document, schemas, migration code, and reconciliation tests together.
 
 ## Boundary
@@ -42,6 +42,8 @@ Four relationship classes remain distinct:
 Official published relationships are visually and semantically distinct from inferred suggestions or editorial guidance.
 
 Resource lifecycle replacements use globally unique canonical Atlas entity IDs. A replacement may resolve to another Resource or to a Publication in the source registry; the UI must preserve that distinction and route to the owning surface. The legacy top-level `supersededBy` field remains a synchronized compatibility alias for the first canonical `lifecycle.replacedBy` ID and must never disagree with it.
+
+An archived or retired upstream project may stay in the directory only when it is represented as legacy: an explicit lifecycle status, an accurate maintenance and official status, and a warning that names what a practitioner must not rely on it for. Silence serves nobody, because a searcher who finds nothing assumes the project is still maintained. Microsoft StigRepo is the current example. The operator-ecosystem specification directed a flat reject; Control Atlas keeps it as `lifecycle.status: archived` with `officialStatus: publisher archived` and a do-not-rely warning, which is the same inclusion gate's legacy allowance. A legacy record must never carry an active lifecycle, a maintained status, or a default collection placement.
 
 ## Source presentation
 

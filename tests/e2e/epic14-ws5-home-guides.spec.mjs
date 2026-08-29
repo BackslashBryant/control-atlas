@@ -27,7 +27,7 @@ test("WS5 Home implements Template B with one search, four destinations, and Lib
     "Search the Library",
     "Browse Resources",
   ]);
-  await expect(template.getByRole("heading", { name: "Make federal cybersecurity compliance make sense.", level: 1 })).toBeVisible();
+  await expect(template.getByRole("heading", { name: "Make federal cybersecurity make sense.", level: 1 })).toBeVisible();
   await expect(template.getByText("Understand what applies, what it means, and what to do next.", { exact: true })).toBeVisible();
   await expect(template.getByText(/publisher|provenance|mapping/i)).toHaveCount(0);
   await expect(template.locator(".home-ecosystem, .home-primary-actions")).toHaveCount(0);

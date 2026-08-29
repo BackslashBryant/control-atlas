@@ -48,6 +48,12 @@ test("record detail keeps published connections in an accessible list", async ({
   await dismissOnboarding(page);
 
   await expect(page.locator('[data-template="E"]')).toBeVisible();
+  // Relationship-display governance summarises large groups behind a
+  // disclosure; open them before asserting the list is reachable.
+  const groups = page.locator("details:has([data-record-connection-id])");
+  for (const group of await groups.all()) {
+    await group.evaluate((element) => { element.setAttribute("open", ""); });
+  }
   await expect(page.locator('[data-record-section="related-records"] ul').first()).toBeVisible();
 });
 

@@ -135,6 +135,12 @@ export function CommonsDetailPage({ bundle, viewState, onNavigate }: Props) {
     || resource.lastCommitAt
     || resource.publisherUpdatedAt
     || resource.repositoryEvidence
+    // Verified freshness is maintenance information in its own right. A
+    // manually reviewed resource has no release or commit, and hiding the
+    // section hid when anyone last checked it.
+    || resource.lastCheckedAt
+    || resource.nextCheckAt
+    || resource.verificationMethod
   );
 
   const copyLink = async () => {

@@ -50,7 +50,7 @@ const PUBLIC_COPY_FILES = [
 ];
 
 test("site copy keeps every approved anchor exact", () => {
-  assert.equal(SITE_COPY.home.headline, "Make federal cybersecurity compliance make sense.");
+  assert.equal(SITE_COPY.home.headline, "Make federal cybersecurity make sense.");
   assert.equal(SITE_COPY.home.definition, "Understand what applies, what it means, and what to do next.");
   assert.equal(SITE_COPY.product.searchPlaceholder, "Search by topic, title, or identifier.");
   assert.equal(SITE_COPY.product.definition, "Control Atlas is a public research tool for federal cybersecurity requirements, controls, techniques, and guidance.");
@@ -110,8 +110,8 @@ test("generation excludes structural scaffolding from public records", () => {
 test("Home has one centralized React and first-paint copy source", () => {
   assert.match(read("src/ui/pages/HomePage.tsx"), /HOME_CONTENT/);
   assert.match(read("vite.config.ts"), /HOME_CONTENT/);
-  assert.doesNotMatch(read("src/ui/pages/HomePage.tsx"), /Make federal cybersecurity compliance make sense/);
-  assert.doesNotMatch(read("vite.config.ts"), /Make federal cybersecurity compliance make sense/);
+  assert.doesNotMatch(read("src/ui/pages/HomePage.tsx"), /Make federal cybersecurity make sense/);
+  assert.doesNotMatch(read("vite.config.ts"), /Make federal cybersecurity make sense/);
 });
 
 test("FIRST_PAINT_ROUTE_COPY omits duplicate eyebrows that match the title", () => {

@@ -19,7 +19,7 @@ test("critical path: Template B landing hero and four entry cards are visible", 
 
   await expect(
     page.getByRole("heading", {
-      name: "Make federal cybersecurity compliance make sense.",
+      name: "Make federal cybersecurity make sense.",
     }),
   ).toBeVisible();
 
@@ -122,6 +122,17 @@ test("critical path: Compare keeps evidence subordinate to the two-column crossw
   await expect(evidence.locator(".mapping-evidence-list")).not.toBeEmpty();
 });
 
+/**
+ * Relationship-display governance summarises large connection groups behind a
+ * disclosure. Open them so assertions cover every published row.
+ */
+async function openConnectionGroups(page) {
+  const groups = page.locator("details:has([data-record-connection-id])");
+  for (const group of await groups.all()) {
+    await group.evaluate((element) => { element.setAttribute("open", ""); });
+  }
+}
+
 test("critical path: library detail connections show meaning and source trust text", async ({
   page,
 }) => {
@@ -133,6 +144,8 @@ test("critical path: library detail connections show meaning and source trust te
     page.getByRole("heading", { name: "Related records" }).first(),
   ).toBeVisible();
   const relationshipCard = page.locator("[data-record-connection-id]").first();
+  await expect(relationshipCard).toBeAttached();
+  await openConnectionGroups(page);
   await expect(relationshipCard).toBeVisible();
   await expect(
     relationshipCard.locator(".relationship-meta"),
@@ -155,6 +168,7 @@ test("critical path: record reading page uses a list and keeps the graph in Atla
   const connections = page.locator('[data-record-section="related-records"]');
   await expect(connections).toBeVisible();
   expect(await connections.locator("ul").count()).toBeGreaterThan(0);
+  await openConnectionGroups(page);
   await expect(connections.locator("ul").first()).toBeVisible();
   await expect(page.locator(".record-template .react-flow")).toHaveCount(0);
   await expect(page.getByRole("link", { name: "See connections", exact: true })).toBeVisible();

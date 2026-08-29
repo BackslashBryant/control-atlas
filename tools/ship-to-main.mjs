@@ -1,14 +1,29 @@
 #!/usr/bin/env node
 
 /**
- * Direct ship to main without PRs.
+ * Ship a verified task branch to main.
  *
- * Branch protection requires the "checks" job from Control Atlas CI to pass on
- * the commit before origin/main accepts a push. This script:
- * 1. Runs local precommit (optional)
- * 2. Requires and pushes the task branch so GitHub Actions runs checks on HEAD
- * 3. Waits for Control Atlas CI to succeed on that commit SHA
- * 4. Fast-forwards local main and pushes origin main
+ * The repository rule `main-ship-gate` requires a passing `checks` status on
+ * the commit before origin/main accepts it. Two facts make a direct push
+ * impossible, and this script exists to work with them rather than around them:
+ *
+ * 1. No workflow triggers on a task-branch push. Control Atlas CI runs on
+ *    `push` to main, on `pull_request`, on schedule, and on dispatch. Pushing a
+ *    task branch therefore produces no run at all.
+ * 2. A check produced on the task branch is not accepted for a push to main.
+ *    Even after dispatching CI manually, the push is refused with
+ *    "Required status check \"checks\" is expected".
+ *
+ * A pull request satisfies the gate because CI runs in the `pull_request`
+ * context, which is the same path every recent change to main actually took.
+ * So this script:
+ *
+ * 1. Runs the local gate (optional)
+ * 2. Pushes the task branch
+ * 3. Opens a pull request, or reuses the open one
+ * 4. Waits for Control Atlas CI on that commit
+ * 5. Squash-merges and deletes the branch
+ * 6. Leaves the checkout on an up-to-date main
  *
  * Usage:
  *   node tools/ship-to-main.mjs [--skip-local] [--no-wait]
@@ -24,6 +39,10 @@ const noWait = args.has('--no-wait');
 
 function git(args) {
   return execFileSync('git', args, { encoding: 'utf8' }).trim();
+}
+
+function gh(args, options = {}) {
+  return execFileSync('gh', args, { encoding: 'utf8', ...options }).trim();
 }
 
 function run(command, commandArgs, options = {}) {
@@ -64,6 +83,32 @@ function classifyShipScope() {
   }
 }
 
+/** Reuse the branch's open pull request, or open one from its commit subjects. */
+function resolvePullRequest(taskBranch) {
+  const existing = gh([
+    'pr', 'list', '--head', taskBranch, '--state', 'open',
+    '--json', 'number,url', '--jq', '.[0].number // empty',
+  ]);
+  if (existing) {
+    console.log(`[ship] Reusing open pull request #${existing}.`);
+    return existing;
+  }
+
+  const subjects = git(['log', 'origin/main..HEAD', '--format=%s']).split('\n').filter(Boolean);
+  const title = subjects.at(-1) || `Ship ${taskBranch}`;
+  const body = subjects.length > 1
+    ? `${subjects.map((subject) => `- ${subject}`).join('\n')}\n`
+    : `${title}\n`;
+
+  gh(['pr', 'create', '--base', 'main', '--head', taskBranch, '--title', title, '--body', body]);
+  const created = gh([
+    'pr', 'list', '--head', taskBranch, '--state', 'open',
+    '--json', 'number', '--jq', '.[0].number // empty',
+  ]);
+  console.log(`[ship] Opened pull request #${created}.`);
+  return created;
+}
+
 async function main() {
   if (process.env.GITHUB_TOKEN) {
     console.log(
@@ -100,35 +145,31 @@ async function main() {
     run('npm', ['run', 'prepush:audit']);
   }
 
-  console.log(`[ship] Pushing ${taskBranch} to trigger remote checks...`);
+  console.log(`[ship] Pushing ${taskBranch}...`);
   run('node', ['tools/git-push-with-retry.mjs', taskBranch]);
 
-  if (!noWait) {
-    console.log(`[ship] Waiting for Control Atlas CI on ${commitSha.slice(0, 7)}...`);
-    const checksRun = await waitForChecks(commitSha);
-    console.log(`[ok] Remote checks passed: ${checksRun.url}`);
-  } else {
-    console.log('[ship] Skipping remote wait (--no-wait). Push main manually after checks pass.');
+  const pullRequest = resolvePullRequest(taskBranch);
+
+  if (noWait) {
+    console.log(`[ship] Skipping remote wait (--no-wait). Merge #${pullRequest} after checks pass.`);
     return;
   }
 
-  console.log(`[ship] Fast-forwarding main to ${taskBranch}...`);
+  console.log(`[ship] Waiting for Control Atlas CI on ${commitSha.slice(0, 7)}...`);
+  const checksRun = await waitForChecks(commitSha);
+  console.log(`[ok] Remote checks passed: ${checksRun.url}`);
+
+  console.log(`[ship] Squash-merging #${pullRequest}...`);
+  run('gh', ['pr', 'merge', String(pullRequest), '--squash', '--delete-branch']);
+
   git(['checkout', 'main']);
-  try {
-    git(['merge', '--ff-only', taskBranch]);
-  } catch {
-    console.error(
-      `[error] Could not fast-forward main to ${taskBranch}. Resolve locally, then rerun ship.`,
-    );
-    process.exit(1);
-  }
+  git(['pull', '--ff-only', 'origin', 'main']);
 
-  console.log('[ship] Pushing origin main...');
-  run('node', ['tools/git-push-with-retry.mjs', 'main']);
-
-  console.log('[ok] Direct ship complete.');
-  console.log(`     Branch: ${taskBranch}`);
-  console.log(`     Commit: ${commitSha.slice(0, 7)}`);
+  console.log('[ok] Ship complete.');
+  console.log(`     Pull request: #${pullRequest}`);
+  console.log(`     Branch:       ${taskBranch}`);
+  console.log(`     Commit:       ${commitSha.slice(0, 7)}`);
+  console.log(`     Main:         ${resolveCommitSha('HEAD').slice(0, 7)}`);
 }
 
 main().catch((error) => {

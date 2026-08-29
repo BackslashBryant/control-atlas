@@ -28,6 +28,10 @@
   .compare-mode-tab,
   .atlas-decomp__orientation-button
 ) {
+  /* Alignment only. Do not set display here: .search-mobile-filter-button and
+     .workspace-mobile-filter-button are display:none until a media query
+     reveals them, and this rule would override that at equal specificity.
+     A control that needs a flex box declares it in its own rule. */
   align-items: center;
   justify-content: center;
   line-height: 1.2;

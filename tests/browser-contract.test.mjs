@@ -372,7 +372,7 @@ test('landing page states what the product is before asking for action', () => {
   assert.match(homePage, /HOME_CONTENT\.breadth/);
   assert.match(homePage, /ATLAS_SCOPE_METRICS/);
   assert.match(homeContent, /SITE_COPY\.home/);
-  assert.equal(HOME_CONTENT.headline, 'Make federal cybersecurity compliance make sense.');
+  assert.equal(HOME_CONTENT.headline, 'Make federal cybersecurity make sense.');
   assert.equal(HOME_CONTENT.definition, 'Understand what applies, what it means, and what to do next.');
   assert.match(homePage, /aria-label="Search Control Atlas"/);
   assert.match(homePage, /data-template="B"/);
