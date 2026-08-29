@@ -291,8 +291,10 @@ test("a focused record shows what it says and where to read the rest", async ({ 
     "Implement cryptographic mechanisms to protect the confidentiality and integrity of remote access sessions.",
   );
   // Sections that did not fit are named, so the reader knows what opening the
-  // full record actually gets them.
-  await expect(subject).toContainText("Also on the full record: Discussion.");
+  // full record actually gets them. AC-17.2's statement is short enough to
+  // render whole, so the note must not claim the statement was cut.
+  await expect(subject).toContainText("On the full record: Discussion.");
+  await expect(subject.locator("[data-clamped]")).toHaveCount(0);
 
   const fullRecord = subject.getByRole("link", { name: "Read the full record" });
   await expect(fullRecord).toHaveAttribute("href", "#/record/nist-800-53/AC-17.2");
@@ -342,6 +344,34 @@ test("the focused record's text and exits survive every context breakpoint", asy
       .evaluate((element) => element.getBoundingClientRect().width);
     expect(measure, `statement measure at ${width}px`).toBeLessThanOrEqual(620);
   }
+});
+
+// SP 800-53 AC-2's control statement is 1,411 characters. Rendered whole it
+// was 568px tall and pushed the connection graph — the reason the Atlas
+// exists — nearly 400px below the fold on a 900px viewport.
+test("a long statement stays bounded and the graph stays above the fold", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const subject = page.locator(".atlas-focused-context");
+  const preview = subject.locator(".record-published-preview");
+  await expect(preview).toHaveAttribute("data-clamped", "true");
+  // The note names the cut, so the fade is never the only signal.
+  await expect(subject).toContainText(
+    "On the full record: the rest of the control statement, Discussion.",
+  );
+
+  const previewHeight = await preview.evaluate(
+    (element) => element.getBoundingClientRect().height,
+  );
+  expect(previewHeight).toBeLessThanOrEqual(240);
+
+  const graphTop = await page
+    .locator(".atlas-focused-main")
+    .evaluate((element) => element.getBoundingClientRect().top);
+  expect(graphTop, "connection graph must be visible without scrolling").toBeLessThan(900);
 });
 
 test("a focused record with no published sections still offers both exits", async ({ page }) => {

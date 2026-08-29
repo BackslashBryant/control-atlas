@@ -65,7 +65,7 @@ import { AppLink, shouldInterceptAppLink } from "../components/AppLink";
 import { RecordLink } from "../components/RecordLink";
 import {
   publishedSectionsWithContent,
-  RecordPublishedText,
+  RecordPublishedTextPreview,
 } from "../components/RecordPublishedText";
 
 type AtlasMapPageProps = {
@@ -391,11 +391,22 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         recordStatus === "loading" ? "false" : "true"
       }
     >
-      <header className="atlas-canvas-header" data-route-primary-header="true">
+      {/* The landing copy is a claim about the whole landscape, which stops
+          being true the moment a record is in focus — and its 148px of hero
+          was pushing that record's connection graph off the fold. With a
+          subject, the header shrinks to the route name and the search box;
+          the focused card below states everything this paragraph would. */}
+      <header
+        className="atlas-canvas-header"
+        data-atlas-header={record ? "focused" : "landing"}
+        data-route-primary-header="true"
+      >
         <div data-route-primary-copy="true">
-          <p className="eyebrow">{FIRST_PAINT_ROUTE_COPY.atlas.eyebrow}</p>
+          {record ? null : (
+            <p className="eyebrow">{FIRST_PAINT_ROUTE_COPY.atlas.eyebrow}</p>
+          )}
           <h1 id="atlas-page-title">Atlas</h1>
-          <p>{SITE_COPY.routes.atlas.purpose}</p>
+          {record ? null : <p>{SITE_COPY.routes.atlas.purpose}</p>}
         </div>
         <form className="atlas-map-command" onSubmit={submitSearch}>
           <label className="visually-hidden" htmlFor="atlas-search">
@@ -446,6 +457,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         <AtlasDecompositionMap
           artifact={bundle.atlasNetwork}
           onDrill={drillAtlas}
+          onNavigate={onNavigate}
           onTrail={trailAtlas}
           scope={atlasScope}
         />
@@ -632,12 +644,6 @@ function FocusedAtlas(props: {
   const centerPublishedSections = centerPresentation
     ? publishedSectionsWithContent(centerPresentation.sections, centerMetadata)
     : [];
-  // Only the first section renders here, so name the ones that did not. A
-  // reader who cannot see that a Discussion exists has no reason to open the
-  // full record.
-  const centerUnshownSections = centerPublishedSections
-    .slice(1)
-    .map((section) => section.heading);
   const inspectedId = selectedRow?.counterpart.id || record.center_node.id;
   const inspectedNode = bundle.runtime.getNode(inspectedId);
   const inspectedDocument = bundle.runtime.getLibraryDocument(inspectedId);
@@ -825,18 +831,13 @@ function FocusedAtlas(props: {
           <div><dt>Published connections</dt><dd>{rows.length.toLocaleString()} in {groups.length.toLocaleString()} categories</dd></div>
         </dl>
         {centerPresentation && centerPublishedSections.length ? (
-          <RecordPublishedText
+          <RecordPublishedTextPreview
             claimOrigin={centerClaimOrigin}
+            fullRecordLabel="the full record"
             headingLevel={3}
-            limit={1}
             metadata={centerMetadata}
             sections={centerPresentation.sections}
           />
-        ) : null}
-        {centerUnshownSections.length ? (
-          <p className="atlas-focused-more-text">
-            Also on the full record: {centerUnshownSections.join(", ")}.
-          </p>
         ) : null}
         <div className="atlas-focused-exits">
           <AppLink

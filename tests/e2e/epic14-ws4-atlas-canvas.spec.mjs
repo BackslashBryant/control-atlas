@@ -24,7 +24,14 @@ const AREAS_WITH_RECORDS = [
 ];
 
 /** Areas the source data leaves genuinely empty. */
-const EMPTY_AREAS = ["Knowledge", "Operations"];
+// Neither area is a published catalog, so neither is in the record graph.
+// tree-spine.json has always carried a destination for both; the Atlas now
+// honours it, so these rows are doors rather than the dead "Not yet modeled"
+// rows they used to be.
+const OFFSITE_AREAS = [
+  { label: "Knowledge", action: "Open the resource directory", href: "#/resources" },
+  { label: "Operations", action: "Open the operations tasks", href: "#/build" },
+];
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
@@ -75,14 +82,21 @@ test("Atlas opens as a labelled decomposition map, not an unlabelled canvas", as
   }
 });
 
-test("empty areas report nothing rather than counting themselves", async ({ page }) => {
+test("areas held on another route open it instead of reporting nothing", async ({ page }) => {
   await openAtlas(page);
   const areas = column(page, "area");
 
-  for (const label of EMPTY_AREAS) {
+  for (const { label, action, href } of OFFSITE_AREAS) {
     const row = areas.locator(".atlas-decomp__node", { hasText: label });
-    await expect(row).toHaveAttribute("data-state", "empty");
-    await expect(row).toContainText("Not yet modeled");
+    await expect(row).toHaveAttribute("data-state", "offsite");
+    // A real anchor, so the row opens in a new tab or copies like any other
+    // destination in the map.
+    await expect(row).toHaveAttribute("href", href);
+    await expect(row).toContainText(action);
+    // The old label was not merely unhelpful, it was false: both areas hold
+    // published content, just not in a catalog the record graph indexes.
+    await expect(row).not.toContainText("Not yet modeled");
+    await expect(row).not.toContainText(/\d[\d,]* records/);
   }
 
   // The projection counts a container as one of its own records, so an empty

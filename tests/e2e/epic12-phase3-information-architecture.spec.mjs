@@ -320,7 +320,9 @@ test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface lab
   const rows = areas.locator(".atlas-decomp__node");
   await expect(rows).toHaveCount(12);
   for (const row of await rows.all()) {
-    await expect(row).toContainText(/\d[\d,]* records|Not yet modeled/);
+    // Three honest forms: a count, a route to the surface that holds the area,
+    // or an admission that nothing is modelled yet. Never a bare label.
+    await expect(row).toContainText(/\d[\d,]* records|Open the \w+|Not yet modeled/);
   }
   for (const area of ["Architecture", "Assessment", "Compliance", "Governance", "Implementation", "Knowledge", "Operations", "Risk", "Threats & Defense"]) {
     await expect(rows.filter({ hasText: area }).first()).toBeVisible();

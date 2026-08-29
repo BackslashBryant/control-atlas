@@ -1,4 +1,4 @@
-import { Fragment, useState, type ReactNode } from "react";
+import { Fragment, useCallback, useState, type ReactNode } from "react";
 
 import { isValidSourceTextPresentation } from "../../shared/source-text-presentation.mjs";
 import { Button } from "./lsm";
@@ -370,5 +370,63 @@ export function RecordPublishedText(props: {
         </section>
       ))}
     </div>
+  );
+}
+
+/**
+ * A bounded preview of a record's published text, for surfaces where the text
+ * answers "what does this say" but must not take the stage.
+ *
+ * The Atlas needed this the moment it started showing real text: SP 800-53
+ * AC-2's control statement is 1,411 characters, which rendered 568px tall and
+ * pushed the connection graph — the reason the Atlas exists — nearly 400px
+ * below the fold. The preview clamps to a few lines and then says, in words,
+ * exactly what is not being shown, because a fade alone is not a claim a
+ * reader can act on.
+ */
+export function RecordPublishedTextPreview(props: {
+  sections: PublishedSection[];
+  metadata: Record<string, any>;
+  claimOrigin?: string;
+  headingLevel?: 2 | 3;
+  /** Where the reader gets the rest, named for the note. */
+  fullRecordLabel: string;
+}) {
+  const [clamped, setClamped] = useState(false);
+  const measure = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+    setClamped(node.scrollHeight - node.clientHeight > 4);
+  }, []);
+
+  const visible = publishedSectionsWithContent(props.sections, props.metadata);
+  if (!visible.length) return null;
+  const [lead, ...rest] = visible;
+  const remaining = rest.map((section) => section.heading);
+  const missing = [
+    clamped ? `the rest of the ${lead.heading.toLocaleLowerCase()}` : "",
+    ...remaining,
+  ].filter(Boolean);
+
+  return (
+    <>
+      <div
+        className="record-published-preview"
+        data-clamped={clamped ? "true" : undefined}
+        ref={measure}
+      >
+        <RecordPublishedText
+          claimOrigin={props.claimOrigin}
+          headingLevel={props.headingLevel}
+          limit={1}
+          metadata={props.metadata}
+          sections={props.sections}
+        />
+      </div>
+      {missing.length ? (
+        <p className="atlas-focused-more-text">
+          On {props.fullRecordLabel}: {missing.join(", ")}.
+        </p>
+      ) : null}
+    </>
   );
 }

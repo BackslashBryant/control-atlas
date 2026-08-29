@@ -1,3 +1,5 @@
+import treeSpine from "../../../data/curated/tree-spine.json";
+
 import type {
   AtlasGraphProjection,
   AtlasProjectionDrill,
@@ -32,7 +34,31 @@ export type AtlasTreeRow = {
   kind: string;
   /** Rows group under a heading when a column mixes two kinds of thing. */
   group: "" | "area" | "authority";
+  /**
+   * Where an area lives when its content is not a published catalog.
+   *
+   * Knowledge and Operations hold real content — the resource directory and
+   * the operations templates — but neither is a federal catalog, so neither
+   * is in the record graph. tree-spine.json has carried a destination for
+   * both since the spine was authored, with the note "so no area is ever
+   * shown empty". Nothing read it, so the Atlas fell back to a zero count and
+   * labelled them "Not yet modeled", which was never true.
+   */
+  destination?: AtlasAreaDestination;
 };
+
+export type AtlasAreaDestination = {
+  view: string;
+  actionLabel: string;
+  summary: string;
+};
+
+const AREA_DESTINATIONS = ((treeSpine as { areaDestinations?: Record<string, AtlasAreaDestination> })
+  .areaDestinations || {}) as Record<string, AtlasAreaDestination>;
+
+export function areaDestinationFor(id: string): AtlasAreaDestination | undefined {
+  return AREA_DESTINATIONS[id];
+}
 
 export type AtlasTreeColumn = {
   key: "area" | "publication" | "detail" | "record";
@@ -118,6 +144,7 @@ function toRow(node: AtlasProjectionNode): AtlasTreeRow {
     empty,
     leaf,
     kind: leaf ? readableKind(node) : "",
+    destination: empty ? areaDestinationFor(node.id) : undefined,
     group: groupOf(node),
   };
 }
