@@ -17,7 +17,12 @@ test('PDISP presents only scoped, sourced facts at mobile width', async ({ page 
   await expect(page.getByText('Ordering and connection actions require authorized DoD access.', { exact: true })).toBeVisible();
   await expect(page.locator('#workspace').getByText(/CAC required|\bFree\b|not documented|not stated/i)).toHaveCount(0);
   await expect(page.getByText('Atlas context', { exact: true })).toHaveCount(0);
-  await expect(page.locator('.resource-detail-maintenance')).toHaveCount(0);
+  // The panel carries Control Atlas's own dated verification record, which is
+  // the one trust signal available for a service the reader cannot open. It
+  // must still contain no unsourced or placeholder facts.
+  const maintenance = page.locator('.resource-detail-maintenance');
+  await expect(maintenance).toContainText('Last checked');
+  await expect(maintenance.getByText(/not documented|not stated|unknown/i)).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
