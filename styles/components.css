@@ -724,25 +724,11 @@
 }
 
 /* ── Identity mark ── */
-.identity-mark {
-  display: inline-flex;
+/* A type glyph sits quieter than the label it accompanies: it answers what
+   kind of thing this is, and the label answers which one. */
+.dimension-glyph {
   flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-}
-
-.identity-mark--monogram {
-  border-radius: var(--ca-radius-sm);
-  background: var(--ca-surface);
   color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono);
-  font-weight: 700;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.identity-mark--official {
-  object-fit: contain;
 }
 
 /* ── Confidence pip ── */
