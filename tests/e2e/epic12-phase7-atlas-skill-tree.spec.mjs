@@ -55,7 +55,10 @@ test("semantic Atlas hands off to explicit publisher-native navigation and prese
   await expect(explorer.getByRole("heading", { name: "DISA STIG Catalog" })).toBeVisible();
   await expect(tree.locator(".react-flow")).toHaveCount(0);
   await expect(tree.locator("select")).toHaveCount(0);
-  await explorer.getByRole("button", { name: /BENCHMARK-ACTIVE-DIRECTORY-DOMAIN/ }).click();
+  await explorer.getByRole("button", {
+    name: "Open Active_Directory_Domain — Active Directory Domain Security Technical Implementation Guide",
+    exact: true,
+  }).click();
   await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ACTIVE-DIRECTORY-DOMAIN\?/);
   await expect(page.locator(".atlas-workspace-heading")).toHaveText("Connections");
 
@@ -139,7 +142,10 @@ test("mobile Atlas keeps keyboard overview navigation and uses a structural Brow
   const browse = page.getByRole("navigation", { name: "Current publication structure" });
   await expect(browse).toBeVisible();
   await browse.getByLabel("Search this publication").fill("Oracle Linux 9");
-  await browse.getByRole("button", { name: /BENCHMARK-ORACLE-LINUX-9-STIG/ }).click();
+  await browse.getByRole("button", {
+    name: "Open Oracle_Linux_9_STIG — Oracle Linux 9 Security Technical Implementation Guide",
+    exact: true,
+  }).click();
   await expect(page).toHaveURL(/\/#\/atlas\/disa-stig:BENCHMARK-ORACLE-LINUX-9-STIG\?/);
   await expect(page.locator(".atlas-workspace-heading")).toHaveText("Connections");
   expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.document.documentElement.clientWidth)).toBe(0);

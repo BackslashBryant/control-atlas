@@ -1,3 +1,5 @@
+import { usesScaffoldStableId } from "./recordTitle";
+
 export const NIST_FRAMEWORK_ID = "nist-800-53";
 export const NIST_FRAMEWORK_LABEL = "NIST SP 800-53";
 export const NIST_BASELINE_IDS = [
@@ -112,6 +114,33 @@ export type AtlasDrilldownModel = {
   rmfSteps: AtlasRmfStepChoice[];
   frameworkGroups: AtlasFrameworkGroup[];
 };
+
+export type AtlasStructuralRowIdentity = {
+  primary: string;
+  secondary: string;
+  accessibleName: string;
+  usesPublisherLabel: boolean;
+};
+
+/** Use the initial projection for human identity while preserving stable route IDs. */
+export function atlasStructuralRowIdentity(
+  node: Pick<AtlasRecordChoice, "itemId" | "label" | "nodeType">,
+  projectedLabel = "",
+): AtlasStructuralRowIdentity {
+  const usesPublisherLabel = usesScaffoldStableId(node.nodeType);
+  const primary = usesPublisherLabel
+    ? projectedLabel.trim() || node.label.trim() || node.itemId.trim()
+    : node.itemId.trim() || projectedLabel.trim() || node.label.trim();
+  const secondary = usesPublisherLabel || node.label.trim() === primary
+    ? ""
+    : node.label.trim();
+  return {
+    primary,
+    secondary,
+    accessibleName: [primary, secondary].filter(Boolean).join(" \u2014 "),
+    usesPublisherLabel,
+  };
+}
 
 function spineItemId(entry: AtlasSpineEntry) {
   if (entry.node_type === "catalog" && entry.id.endsWith(":CATALOG")) {

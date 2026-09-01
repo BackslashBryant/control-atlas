@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  atlasStructuralRowIdentity,
   buildAtlasBootstrapModel,
   buildAtlasDrilldownModel,
   hydrateAtlasFrameworkRecords,
@@ -15,6 +16,38 @@ import {
   parseViewState,
   serializeViewState,
 } from "../../src/ui/lib/viewState";
+
+test("structural rows use immutable projected identity without changing atomic controls", () => {
+  const category = {
+    id: "csf-2:CATEGORY-PR.AA",
+    itemId: "CATEGORY-PR.AA",
+    label: "Identity Management, Authentication, and Access Control",
+    description: "",
+    nodeType: "category",
+  };
+  const projected = "PR.AA \u2014 Identity Management, Authentication, and Access Control";
+  const first = atlasStructuralRowIdentity(category, projected);
+  const settled = atlasStructuralRowIdentity(
+    { ...category, label: "Later catalog lookup must not relabel this row" },
+    projected,
+  );
+  assert.equal(first.primary, projected);
+  assert.equal(settled.primary, first.primary);
+  assert.equal(first.secondary, "");
+  assert.equal(first.usesPublisherLabel, true);
+
+  const atomic = atlasStructuralRowIdentity({
+    itemId: "AC-2",
+    label: "Account Management",
+    nodeType: "control",
+  }, "AC-2 \u2014 Account Management");
+  assert.deepEqual(atomic, {
+    primary: "AC-2",
+    secondary: "Account Management",
+    accessibleName: "AC-2 \u2014 Account Management",
+    usesPublisherLabel: false,
+  });
+});
 
 const nodes: AtlasDrillNode[] = [
   node("nist-800-53:FAMILY-AC", "family", "FAMILY-AC", "Access Control"),

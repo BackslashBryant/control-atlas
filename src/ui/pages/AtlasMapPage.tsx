@@ -25,7 +25,10 @@ import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from "../../shared/site-copy.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
 import { AtlasDecompositionMap } from "../components/AtlasDecompositionMap";
-import type { AtlasProjectionDrill } from "../lib/atlasGraphProjection";
+import {
+  atlasProjectionRecordLabels,
+  type AtlasProjectionDrill,
+} from "../lib/atlasGraphProjection";
 import {
   AtlasTree,
   structuralChildrenFromNeighborhood,
@@ -1281,6 +1284,10 @@ function AtlasGuidedPath(props: {
     () => atlasDrilldownModel(bundle),
     [bundle],
   );
+  const recordLabels = useMemo(
+    () => atlasProjectionRecordLabels(bundle.atlasNetwork),
+    [bundle.atlasNetwork],
+  );
   // Seeded from the URL so Start Here (and any shared link) can open straight
   // into one limb; further limb choices stay local to this page.
   const [openLimbId, setOpenLimbId] = useState(state.atlasLimb || "");
@@ -1348,7 +1355,6 @@ function AtlasGuidedPath(props: {
           benchmarkChildren={structuralChildrenFromNeighborhood(benchmarkRecord)}
           benchmarkId={state.atlasBenchmark}
           catalogSummaries={bundle.catalogSummaries || []}
-          identityForNode={(nodeId) => runtimeRecordIdentityFor(bundle, nodeId)}
           onOpenArea={(atlasLimb) => {
             setOpenLimbId(atlasLimb);
             resetDrill({ atlasAxis: "landscape", atlasLimb });
@@ -1370,6 +1376,7 @@ function AtlasGuidedPath(props: {
             patchAtlas({ atlasBenchmark, atlasFamily: "", node: "", atlasParent: "" })
           }
           publicationId={state.atlasFramework}
+          recordLabels={recordLabels}
           spine={bundle.atlasSpine}
           summaryId={state.atlasFamily}
         />

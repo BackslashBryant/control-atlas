@@ -4,7 +4,10 @@ import test from "node:test";
 import type { AtlasSpine } from "../../src/ui/lib/atlasDrilldown";
 import { buildAtlasTree } from "../../src/ui/lib/atlasDecomposition";
 import { buildAtlasGraphModel, type AtlasGraphModelInput } from "../../src/ui/lib/atlasGraphModel";
-import { buildAtlasSemanticProjections } from "../../src/ui/lib/atlasGraphProjection";
+import {
+  atlasProjectionRecordLabels,
+  buildAtlasSemanticProjections,
+} from "../../src/ui/lib/atlasGraphProjection";
 import { buildAtlasTreeModel } from "../../src/ui/lib/atlasTreeModel";
 
 const areaNames = [
@@ -129,4 +132,137 @@ test("semantic Atlas separates publisher truth, presentation, and edge provenanc
     detail.representedCanonicalNodeCount,
   );
   assert.equal(JSON.stringify(input), before);
+});
+
+test("semantic Atlas projects stable publisher-native structural labels", () => {
+  const records = [
+    {
+      id: "csf-2:CATEGORY-PR.AA",
+      node_type: "category",
+      label: "Identity Management, Authentication, and Access Control",
+      metadata: {
+        catalog_id: "csf-2",
+        item_id: "CATEGORY-PR.AA",
+        publisher_item_id: "PR.AA",
+        title: "Identity Management, Authentication, and Access Control",
+        family: "Test structure",
+      },
+    },
+    {
+      id: "csf-2:TACTIC-TA0001",
+      node_type: "tactic",
+      label: "Initial Access",
+      metadata: {
+        catalog_id: "csf-2",
+        item_id: "TACTIC-TA0001",
+        publisher_item_id: "TA0001",
+        title: "Initial Access",
+        family: "Test structure",
+      },
+    },
+    {
+      id: "csf-2:FAMILY-AC",
+      node_type: "family",
+      label: "Access Control",
+      metadata: {
+        catalog_id: "csf-2",
+        item_id: "FAMILY-AC",
+        publisher_item_id: "AC",
+        title: "Access Control",
+        family: "Test structure",
+      },
+    },
+    {
+      id: "csf-2:LEVEL-1",
+      node_type: "program",
+      label: "CMMC Level 1",
+      metadata: {
+        catalog_id: "csf-2",
+        item_id: "LEVEL-1",
+        title: "CMMC Level 1",
+        family: "Test structure",
+      },
+    },
+    {
+      id: "csf-2:AC-2",
+      node_type: "control",
+      label: "Account Management",
+      metadata: {
+        catalog_id: "csf-2",
+        item_id: "AC-2",
+        title: "Account Management",
+        family: "Test structure",
+      },
+    },
+    {
+      id: "csf-2:GOVERN-1",
+      node_type: "control",
+      label: "GOVERN-1",
+      metadata: {
+        catalog_id: "csf-2",
+        item_id: "GOVERN-1",
+        title: "GOVERN-1",
+        family: "Test structure",
+      },
+    },
+    {
+      id: "csf-2:FUNCTION-PR",
+      node_type: "function",
+      label: "PROTECT",
+      metadata: {
+        catalog_id: "csf-2",
+        item_id: "FUNCTION-PR",
+        publisher_item_id: "PR",
+        title: "PROTECT",
+        family: "Single-record group",
+      },
+    },
+  ];
+  const graph = buildAtlasGraphModel({
+    nodes: [
+      { id: "atlas:TRUNK", node_type: "trunk", label: "Cybersecurity", source_id: "control-atlas-structure", metadata: {} },
+      { id: "csf-2:CATALOG", node_type: "catalog", label: "NIST CSF 2.0", source_id: "nist-csf", metadata: { catalog_id: "csf-2" } },
+      ...records.map((record) => ({ ...record, source_id: "test-source" })),
+    ],
+    edges: [],
+  });
+  const artifact = buildAtlasSemanticProjections({
+    graph,
+    model: buildAtlasTreeModel(spine),
+    generatedAt: "2026-09-01T00:00:00.000Z",
+    catalogMemberships: [{
+      catalogId: "csf-2",
+      publicationSourceId: "nist-csf",
+      ecosystemId: "ecosystem:nist",
+      ecosystemLabel: "NIST",
+      ecosystemDescription: "NIST publications.",
+      publicationDescription: "Test publication.",
+      lifecycleStatus: "active",
+      version: "2.0",
+      publicationKind: "Outcome framework",
+    }],
+  });
+  const labels = atlasProjectionRecordLabels(artifact);
+  assert.deepEqual(
+    Object.fromEntries(records.map((record) => [record.id, labels.get(record.id)])),
+    {
+      "csf-2:CATEGORY-PR.AA": "PR.AA \u2014 Identity Management, Authentication, and Access Control",
+      "csf-2:TACTIC-TA0001": "TA0001 \u2014 Initial Access",
+      "csf-2:FAMILY-AC": "AC \u2014 Access Control",
+      "csf-2:LEVEL-1": "CMMC Level 1",
+      "csf-2:AC-2": "AC-2 \u2014 Account Management",
+      "csf-2:GOVERN-1": "GOVERN-1",
+      "csf-2:FUNCTION-PR": "PR \u2014 PROTECT",
+    },
+  );
+  assert.equal(
+    artifact.record_locations["csf-2:CATEGORY-PR.AA"]?.label,
+    "PR.AA \u2014 Identity Management, Authentication, and Access Control",
+  );
+  for (const detail of Object.values(artifact.details)) {
+    for (const node of detail.nodes) {
+      assert.equal(node.drill?.targetId, node.id, `${node.id} keeps its canonical drill target`);
+    }
+  }
+  assert.equal(artifact.schema_version, "2.2");
 });
