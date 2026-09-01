@@ -10815,7 +10815,7 @@ input[type="checkbox"] {
 
 .workspace-result-row:hover h3,
 .workspace-result-row:focus-within h3 {
-  color: var(--ca-primary);
+  color: var(--ca-accent-text);
   text-decoration: underline;
   text-underline-offset: 3px;
 }

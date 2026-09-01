@@ -155,6 +155,16 @@ function contrastRatio(foreground, background) {
   return (values[0] + 0.05) / (values[1] + 0.05);
 }
 
+function mixHex(foreground, background, foregroundWeight) {
+  const mixed = hexToRgb(foreground).map((channel, index) =>
+    Math.round(
+      channel * foregroundWeight
+      + hexToRgb(background)[index] * (1 - foregroundWeight),
+    ),
+  );
+  return `#${mixed.map((channel) => channel.toString(16).padStart(2, "0")).join("")}`;
+}
+
 function tokenValue(name, seen = new Set()) {
   assert.ok(!seen.has(name), `Circular token reference at ${name}`);
   seen.add(name);
@@ -189,6 +199,27 @@ test("primary actions use one authored AA contrast pair", () => {
   assert.match(
     componentsCss,
     /\.ca-button-primary\s*\{[^}]*background:\s*var\(--ca-action-primary\)[^}]*color:\s*var\(--ca-on-primary\)/s,
+  );
+});
+
+test("textual accent stays distinct from decorative teal and clears Resources hover contrast", () => {
+  assert.equal(tokenValue("--ca-accent").toLowerCase(), "#5ca3a6");
+  assert.equal(tokenValue("--ca-accent-text"), tokenValue("--lsm-teal-text"));
+  assert.notEqual(tokenValue("--ca-accent-text"), tokenValue("--ca-accent"));
+
+  const resourceHoverSurface = mixHex(
+    tokenValue("--ca-type-portal"),
+    tokenValue("--ca-surface-raised"),
+    0.05,
+  );
+  assert.equal(resourceHoverSurface, "#384c56");
+  assert.ok(
+    contrastRatio(tokenValue("--ca-accent-text"), resourceHoverSurface) >= 4.5,
+    "Textual accent must meet 4.5:1 on the Resources hover surface",
+  );
+  assert.match(
+    surfacesCss,
+    /\.workspace-result-row:hover h3,[\s\S]*?\.workspace-result-row:focus-within h3\s*\{[^}]*color:\s*var\(--ca-accent-text\)/,
   );
 });
 

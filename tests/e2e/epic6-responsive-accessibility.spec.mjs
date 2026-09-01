@@ -89,11 +89,6 @@ for (const viewport of [
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
-    test.fixme(
-      viewport.width === 768,
-      "A11Y-CONTRAST-001: resource headings render #5ca3a6 on #384c56 at 3.1:1, "
-      + "below the 4.5:1 WCAG AA minimum.",
-    );
     const collections = page.locator(".workspace-browse-card--collection");
     await expect(collections).toHaveCount(GOVERNED_COLLECTION_COUNT);
     await expectNoPageOverflow(page, `Resources at ${viewport.label}`);
