@@ -33,6 +33,7 @@ const commonFields = Object.freeze({
   },
   ingestion_source_id: { disposition: "source_metadata", origin: "source_metadata" },
   item_id: { disposition: "rendered_primary", origin: "navigation" },
+  publisher_item_id: { disposition: "rendered_primary", origin: "publisher" },
   type: {
     disposition: "intentionally_hidden",
     origin: "derived",
@@ -120,7 +121,7 @@ const contract = ({
   );
   return Object.freeze({
     page_role: role,
-    identity_fields: Object.freeze(["item_id", "title"]),
+    identity_fields: Object.freeze(["item_id", "publisher_item_id", "title"]),
     hierarchy_fields: Object.freeze(hierarchy),
     sections: Object.freeze(sections),
     metadata_facts: Object.freeze(facts),

@@ -33,7 +33,7 @@ const input: AtlasGraphModelInput = {
     { id: "atlas:TRUNK", node_type: "trunk", label: "Cybersecurity", source_id: "control-atlas-structure", metadata: {} },
     ...areaNames.map((label) => ({ id: `atlas:LIMB-${label.toUpperCase()}`, node_type: "limb", label, source_id: "control-atlas-structure", metadata: {} })),
     { id: "csf-2:CATALOG", node_type: "catalog", label: "NIST CSF 2.0", source_id: "nist-csf", metadata: { catalog_id: "csf-2" } },
-    { id: "csf-2:GV.OC-01", node_type: "requirement", label: "Mission is understood", source_id: "nist-csf", metadata: { catalog_id: "csf-2", type: "csf-subcategory", family: "GV.OC", atlas_class: "discovery-facet" } },
+    { id: "csf-2:GV.OC-01", node_type: "requirement", label: "Mission is understood", source_id: "nist-csf", metadata: { catalog_id: "csf-2", publisher_item_id: "GV.OC-01", type: "csf-subcategory", family: "GV.OC", atlas_class: "discovery-facet" } },
     { id: "csf-2:GV.OC-02", node_type: "requirement", label: "Stakeholders are understood", source_id: "nist-csf", metadata: { catalog_id: "csf-2", type: "csf-subcategory", family: "GV.OC" } },
     { id: "authority:USC-44-3554", node_type: "statute", label: "FISMA", source_id: "us-code", metadata: {} },
   ],
@@ -93,6 +93,8 @@ test("semantic Atlas separates publisher truth, presentation, and edge provenanc
   const detail = artifact.details[group.id]!;
   const record = detail.nodes.find((node) => node.id === "csf-2:GV.OC-01")!;
   assert.equal(record.nativeType, "csf-subcategory");
+  assert.equal(record.publisherItemId, "GV.OC-01");
+  assert.equal(artifact.schema_version, "2.2");
   // T4.1: an explicit metadata.atlas_class assertion wins over the node_type-based fallback.
   assert.equal(record.atlasClass, "discovery-facet");
   const fallbackRecord = detail.nodes.find((node) => node.id === "csf-2:GV.OC-02")!;

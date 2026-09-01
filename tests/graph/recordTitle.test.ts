@@ -408,3 +408,52 @@ test("publisher-assigned identifiers still lead their heading", () => {
   assert.equal(control.primary, "NIST AC-2");
   assert.equal(control.stableIdIsGenerated, false);
 });
+
+test("publisher-native container identifiers lead without replacing stable routes", () => {
+  const category = recordIdentityPresentationFor({
+    publisher: "NIST",
+    catalogId: "csf-2",
+    publicationName: "NIST Cybersecurity Framework 2.0",
+    family: "Identity Management, Authentication, and Access Control",
+    itemId: "CATEGORY-PR.AA",
+    title: "Identity Management, Authentication, and Access Control",
+    objectType: "category",
+    metadata: { publisher_item_id: "PR.AA" },
+  });
+  assert.equal(category.primary, "PR.AA — Identity Management, Authentication, and Access Control");
+  assert.equal(category.stableId, "CATEGORY-PR.AA");
+  assert.equal(category.stableIdIsGenerated, true);
+  assert.equal(category.browserTitle.includes("CATEGORY-"), false);
+
+  const tactic = recordIdentityPresentationFor({
+    publisher: "MITRE",
+    catalogId: "mitre-attack",
+    publicationName: "MITRE ATT&CK",
+    family: "Initial Access",
+    itemId: "TACTIC-TA0001",
+    title: "Initial Access",
+    objectType: "tactic",
+    metadata: { publisher_item_id: "TA0001" },
+  });
+  assert.equal(tactic.primary, "TA0001 — Initial Access");
+  assert.equal(tactic.stableId, "TACTIC-TA0001");
+
+  assert.equal(recordDisplayTitle({
+    id: "csf-2:CATEGORY-PR.AA",
+    node_type: "category",
+    metadata: {
+      item_id: "CATEGORY-PR.AA",
+      publisher_item_id: "PR.AA",
+      title: "Identity Management, Authentication, and Access Control",
+    },
+  }), "PR.AA — Identity Management, Authentication, and Access Control");
+  assert.equal(recordDisplayTitle({
+    id: "nist-ai-rmf:GROUP-GOVERN-1",
+    node_type: "group",
+    metadata: {
+      item_id: "GROUP-GOVERN-1",
+      publisher_item_id: "GOVERN-1",
+      title: "GOVERN-1",
+    },
+  }), "GOVERN-1");
+});

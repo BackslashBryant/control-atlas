@@ -25,6 +25,7 @@ export type AtlasProjectionNode = {
   lifecycleStatus: string;
   version: string;
   publicationKind: string;
+  publisherItemId: string;
   includesContainerRecord: boolean;
   canonicalNodeIds: string[];
   canonicalRecordCount: number;
@@ -70,7 +71,7 @@ export type AtlasRecordLocation = {
 };
 
 export type AtlasSemanticProjectionArtifact = {
-  schema_version: "2.1";
+  schema_version: "2.2";
   generated_at: string;
   canonical: { node_count: number; edge_count: number };
   landscape: AtlasGraphProjection;
@@ -247,6 +248,7 @@ function descriptor(options: {
   ecosystemId?: string; areaId?: string; publicationId?: string; layer?: AtlasProjectionNode["objectLayer"];
   lifecycleStatus?: string; version?: string;
   publicationKind?: string;
+  publisherItemId?: string;
   includesContainerRecord?: boolean;
   structureRole?: AtlasProjectionNode["atlasStructureRole"]; native?: string; atlasClass?: string; drill?: AtlasProjectionDrill;
 }): Descriptor {
@@ -257,6 +259,7 @@ function descriptor(options: {
     publisherEcosystemId: options.ecosystemId || "", areaId: options.areaId || "", publicationId: options.publicationId || "",
     lifecycleStatus: options.lifecycleStatus || "", version: options.version || "",
     publicationKind: options.publicationKind || "",
+    publisherItemId: options.publisherItemId || "",
     includesContainerRecord: options.includesContainerRecord === true,
     canonicalNodeIds: options.ids, drill: options.drill,
   };
@@ -270,6 +273,7 @@ function detailFor(graph: AtlasGraph, parent: AtlasProjectionNode) {
     descriptors: parent.canonicalNodeIds.map((id) => {
       const source = graph.getNodeAttribute(id, "source"); const layer = objectLayer(source);
       return descriptor({ id, label: recordLabel(source), description: asText(metadata(source).description), nodeType: asText(source.node_type),
+        publisherItemId: asText(metadata(source).publisher_item_id),
         native: nativeType(source), atlasClass: atlasClass(source), layer,
         structureRole: source.node_type === "trunk" ? "root" : source.node_type === "limb" ? "area" : "",
         ecosystemId: parent.publisherEcosystemId, areaId: parent.areaId,
@@ -434,5 +438,5 @@ export function buildAtlasSemanticProjections(options: {
     });
     publications[publicationId] = projection;
   }
-  return { schema_version: "2.1", generated_at: options.generatedAt, canonical: { node_count: graph.order, edge_count: graph.size }, landscape, ecosystems, areas, publications, details, record_locations: locations };
+  return { schema_version: "2.2", generated_at: options.generatedAt, canonical: { node_count: graph.order, edge_count: graph.size }, landscape, ecosystems, areas, publications, details, record_locations: locations };
 }

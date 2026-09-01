@@ -309,6 +309,7 @@ export const CATALOG_TIERS = {
     nodeType: "family",
     idPrefix: "FAMILY",
     key: (record) => familyCodeFromControlId(record.id),
+    publisherItemId: (record) => familyCodeFromControlId(record.id),
     title: (record) => record.family,
     label: (key, title) => `${key} ${title} Family`,
     edgeDataset: "800-53-family-membership",
@@ -319,6 +320,7 @@ export const CATALOG_TIERS = {
     nodeType: "family",
     idPrefix: "FAMILY",
     key: (record) => familyCodeFromControlId(record.id),
+    publisherItemId: (record) => familyCodeFromControlId(record.id),
     title: (record) => record.family,
     label: (key, title) => `${key} ${title} Family`,
     edgeDataset: "800-53a-family-membership",
@@ -358,6 +360,7 @@ export const CATALOG_TIERS = {
     nodeType: "benchmark",
     idPrefix: "BENCHMARK",
     key: (record) => slugKey(record.metadata?.benchmark_id),
+    publisherItemId: (record) => record.metadata?.benchmark_id,
     title: (record) => record.metadata?.benchmark_title,
     description: (record) => record.metadata?.benchmark_description,
     descriptionProvenance: "publisher",
@@ -369,6 +372,7 @@ export const CATALOG_TIERS = {
     nodeType: "benchmark",
     idPrefix: "BENCHMARK",
     key: (record) => slugKey(record.metadata?.benchmark_id),
+    publisherItemId: (record) => record.metadata?.benchmark_id,
     title: (record) => record.metadata?.benchmark_title,
     description: (record) => record.metadata?.benchmark_description,
     descriptionProvenance: "publisher",
@@ -386,6 +390,7 @@ export const CATALOG_TIERS = {
     nodeType: "category",
     idPrefix: "CATEGORY",
     key: (record) => record.category_id,
+    publisherItemId: (record) => record.category_id,
     title: (record) => record.category,
     edgeDataset: "csf-category-membership",
     rationale: (record, title) =>
@@ -394,6 +399,7 @@ export const CATALOG_TIERS = {
       nodeType: "function",
       idPrefix: "FUNCTION",
       key: (record) => record.function_id,
+      publisherItemId: (record) => record.function_id,
       title: (record) => record.function,
       edgeDataset: "csf-function-membership",
       rationale: (record, title) =>
@@ -415,6 +421,7 @@ export const CATALOG_TIERS = {
     nodeType: "tactic",
     idPrefix: "TACTIC",
     key: (record) => record.metadata?.tactic_id,
+    publisherItemId: (record, membership) => membership?.id || record.metadata?.tactic_id,
     title: (record) => record.metadata?.tactic_title,
     edgeDataset: "mitre-attack-tactic-membership",
     rationale: (record, title) =>
@@ -424,6 +431,7 @@ export const CATALOG_TIERS = {
     nodeType: "tactic",
     idPrefix: "TACTIC",
     key: (record) => record.metadata?.tactic_id,
+    publisherItemId: (record, membership) => membership?.id || record.metadata?.tactic_id,
     title: (record) => record.metadata?.tactic_title,
     edgeDataset: "mitre-attack-ics-tactic-membership",
     rationale: (record, title) =>
@@ -433,6 +441,7 @@ export const CATALOG_TIERS = {
     nodeType: "tactic",
     idPrefix: "TACTIC",
     key: (record) => record.metadata?.tactic_id,
+    publisherItemId: (record) => record.metadata?.tactic_id,
     title: (record) => record.metadata?.tactic_title,
     edgeDataset: "mitre-d3fend-tactic-membership",
     rationale: (record, title) =>
@@ -449,6 +458,7 @@ export const CATALOG_TIERS = {
     nodeType: "group",
     idPrefix: "GROUP",
     key: (record) => slugKey(record.family),
+    publisherItemId: (record) => record.family,
     title: (record) => record.family,
     edgeDataset: "nist-ai-rmf-group-membership",
     rationale: (record, title) =>
@@ -737,6 +747,7 @@ function tierFor(catalogId, record) {
     title,
     nodeId: nodeId(catalogId, `${tier.idPrefix}-${key}`),
     itemId: `${tier.idPrefix}-${key}`,
+    publisherItemId: tier.publisherItemId?.(record) || null,
   };
 }
 
@@ -751,6 +762,7 @@ function tierMembershipsFor(catalogId, record) {
       title: membership.title,
       nodeId: nodeId(catalogId, `${tier.idPrefix}-${membership.id}`),
       itemId: `${tier.idPrefix}-${membership.id}`,
+      publisherItemId: tier.publisherItemId?.(record, membership) || null,
     }));
   }
   const resolved = tierFor(catalogId, record);
@@ -774,6 +786,7 @@ function parentTierFor(catalogId, record, tier) {
     title,
     nodeId: nodeId(catalogId, `${parent.idPrefix}-${key}`),
     itemId: `${parent.idPrefix}-${key}`,
+    publisherItemId: parent.publisherItemId?.(record) || null,
   };
 }
 
@@ -1035,7 +1048,7 @@ function registerTierNode(
   record,
 ) {
   if (!resolved) return;
-  const { tier, key, title, nodeId: tierNodeId, itemId } = resolved;
+  const { tier, key, title, nodeId: tierNodeId, itemId, publisherItemId } = resolved;
   const existing = tierNodes.get(tierNodeId);
   if (existing) {
     existing.metadata.child_count = (existing.metadata.child_count || 0) + 1;
@@ -1060,6 +1073,7 @@ function registerTierNode(
       catalog_id: catalogId,
       ingestion_source_id: ingestionSourceId,
       item_id: itemId,
+      ...(publisherItemId ? { publisher_item_id: publisherItemId } : {}),
       title,
       ...(tier.description ? { description: tier.description(record, title) } : {}),
       ...(tier.descriptionProvenance ? { description_provenance: tier.descriptionProvenance } : {}),

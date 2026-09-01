@@ -190,6 +190,7 @@ export type AtlasNeighborhoodNode = {
   }>;
   metadata?: {
     item_id?: string;
+    publisher_item_id?: string;
     title?: string;
     description?: string;
     publication_date?: string;
