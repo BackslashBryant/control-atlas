@@ -56,6 +56,8 @@ for (const viewport of [
 
 test("CSF category is a bounded publisher-native container", async ({ page }) => {
   await openRecord(page, "/#/record/csf-2/CATEGORY-PR.AA");
+  await expect(page).toHaveURL(/#\/record\/csf-2\/CATEGORY-PR\.AA$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("PR.AA — Identity Management, Authentication, and Access Control");
   await expect(page.locator('[data-record-section="publisher-hierarchy"]')).toContainText("PROTECT");
   const inventory = page.locator('[data-record-section="child-inventory"]');
   await expect(inventory).toContainText("PR.AA-01");
@@ -63,6 +65,13 @@ test("CSF category is a bounded publisher-native container", async ({ page }) =>
   for (const group of await page.locator('[data-relationship-treatment="SUMMARIZE"]').all()) {
     expect(await group.locator("[data-record-connection-id]").count()).toBeLessThanOrEqual(3);
   }
+});
+
+test("ATT&CK tactic uses publisher identity without changing its stable route", async ({ page }) => {
+  await openRecord(page, "/#/record/mitre-attack/TACTIC-TA0001");
+  await expect(page).toHaveURL(/#\/record\/mitre-attack\/TACTIC-TA0001$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("TA0001 — Initial Access");
+  await expect(page.locator('[data-record-section="child-inventory"] li').first()).toBeVisible();
 });
 
 test("DISA rule and benchmark expose native identity, release, and inventory facts", async ({ page }) => {

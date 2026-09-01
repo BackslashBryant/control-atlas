@@ -574,6 +574,43 @@ test('CSF records retain the Reference Tool examples, informative references, an
   }
 });
 
+test('publisher-native containers separate publisher identifiers from stable graph IDs', () => {
+  const nodes = generated('nodes').nodes;
+  const byId = new Map(nodes.map((node) => [node.id, node]));
+  const expected = new Map([
+    ['csf-2:FUNCTION-PR', 'PR'],
+    ['csf-2:CATEGORY-PR.AA', 'PR.AA'],
+    ['mitre-attack:TACTIC-TA0001', 'TA0001'],
+    ['mitre-attack-ics:TACTIC-TA0100', 'TA0100'],
+    ['nist-800-53:FAMILY-AC', 'AC'],
+    ['nist-800-53a:FAMILY-AC', 'AC'],
+    ['nist-ai-rmf:GROUP-GOVERN-1', 'GOVERN-1'],
+    ['disa-stig:BENCHMARK-ACTIVE-DIRECTORY-DOMAIN', 'Active_Directory_Domain'],
+  ]);
+  for (const [nodeId, publisherItemId] of expected) {
+    const node = byId.get(nodeId);
+    assert.ok(node, `${nodeId} must keep its stable graph identity`);
+    assert.equal(node.metadata?.publisher_item_id, publisherItemId, nodeId);
+    assert.notEqual(node.metadata?.item_id, publisherItemId, `${nodeId} must not replace its stable item key`);
+  }
+
+  for (const nodeId of [
+    'cmmc-2:LEVEL-1',
+    'nist-ssdf:GROUP-PREPARE-THE-ORGANIZATION',
+    'microsoft-zt-maturity:PILLAR-DEVICES',
+    'dod-rai:GROUP-SHIELD-ACTIVITIES',
+    'csf-2:CATALOG',
+  ]) {
+    assert.equal(
+      byId.get(nodeId)?.metadata?.publisher_item_id,
+      undefined,
+      `${nodeId} must not fabricate a publisher identifier`,
+    );
+  }
+  assert.equal(byId.get('nist-800-53:AC-2')?.metadata?.publisher_item_id, undefined);
+  assert.equal(byId.get('nist-800-53:AC-2')?.metadata?.item_id, 'AC-2');
+});
+
 test('ATT&CK sub-techniques nest under their parent technique', () => {
   const nodes = generated('nodes').nodes;
   const edges = generated('edges').edges;

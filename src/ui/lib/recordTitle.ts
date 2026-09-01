@@ -18,6 +18,7 @@ type TitledNode = {
   label?: string;
   metadata?: {
     item_id?: string;
+    publisher_item_id?: string;
     title?: string;
     catalog_id?: string;
     family?: string;
@@ -205,8 +206,10 @@ export function recordIdentityPresentationFor(input: {
 }): RecordIdentityPresentation {
   const stableId = input.itemId.trim();
   const stableIdIsGenerated = usesScaffoldStableId(input.objectType);
-  const nativePrimary = recordIdentityFor(input);
-  const publishedName = officialRecordName(stableId, input.title);
+  const publisherItemId = input.metadata?.publisher_item_id?.trim() || "";
+  const displayId = publisherItemId || stableId;
+  const nativePrimary = recordIdentityFor({ ...input, itemId: displayId });
+  const publishedName = officialRecordName(displayId, input.title);
 
   if (!stableIdIsGenerated) {
     return {
@@ -220,7 +223,9 @@ export function recordIdentityPresentationFor(input: {
     };
   }
 
-  const primary = publishedName || input.title.trim() || stableId;
+  const primary = publisherItemId
+    ? formatRecordTitle(publisherItemId, input.title)
+    : publishedName || input.title.trim() || stableId;
   const recordType = displayNameFor("object_type", input.objectType);
   const publication = input.publicationName?.trim() || input.catalogId;
   const context = [recordType, publication].filter(Boolean).join(" · ");
@@ -280,8 +285,10 @@ export function formatRecordTitle(itemId: string, officialTitle: string): string
 export function recordDisplayTitle(node: TitledNode | null | undefined): string {
   if (!node) return "";
   const itemId = node.metadata?.item_id ?? "";
+  const publisherItemId = node.metadata?.publisher_item_id ?? "";
   const title = node.metadata?.title ?? "";
   if (!title) return node.label || itemId || node.id;
+  if (publisherItemId) return formatRecordTitle(publisherItemId, title);
   if (!itemId || title === itemId) return title;
   if (node.node_type === "family") {
     const familyCode = itemId.replace(/^FAMILY-/, "");

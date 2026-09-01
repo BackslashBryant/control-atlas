@@ -36,6 +36,7 @@ import {
   buildRecordConnectionGroups,
   humanReadableEvidenceLocator,
   recordIdentityPresentationFor,
+  recordDisplayTitle,
   recordPublisherName,
 } from "../lib/recordTitle";
 import { recordTagsFor, tagProvenanceExplanation } from "../lib/recordTags";
@@ -405,12 +406,10 @@ export function ObjectDetailPage(props: {
                   {structuralChildren.slice(0, 25).map((child: any) => {
                     // CSF publishes the identifier as the subcategory title, so
                     // "PR.AA-01 — PR.AA-01" is the same fact printed twice.
-                    const childId = child.metadata?.item_id || child.label;
-                    const childTitle = child.metadata?.title || child.label;
                     return (
                       <li key={child.id}>
                         <AppLink onNavigate={onNavigate} patch={{ node: child.id }} view="library-detail">
-                          {childId === childTitle ? childId : `${childId} — ${childTitle}`}
+                          {recordDisplayTitle(child)}
                         </AppLink>
                       </li>
                     );
