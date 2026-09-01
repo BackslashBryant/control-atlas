@@ -52,6 +52,11 @@ test('PR CI is an independent gate DAG around one immutable artifact', () => {
   assert.match(ci, /npm run verify:generated-reproducibility/);
   assert.match(ci, /name: Documentation contracts[\s\S]*?if: \$\{\{ needs\.changes\.outputs\.content_changed == 'true' \}\}[\s\S]*?npm run test:documentation-contracts/);
   assert.match(ci, /name: generated-data/);
+  assert.match(
+    ci,
+    /needs\.changes\.outputs\.build_required == 'true' \|\|\s+needs\.changes\.outputs\.unit_required == 'true'/,
+  );
+  assert.match(ci, /if: \$\{\{ needs\.generated\.result == 'success' \}\}/);
   assert.match(ci, /shard: \[1, 2\]/);
   assert.match(ci, /--shard=\$\{\{ matrix\.shard \}\}\/2/);
   assert.match(ci, /npm run test:a11y:smoke/);
@@ -136,6 +141,10 @@ test('package scripts expose deterministic split gates and full local verificati
   ]) assert.equal(typeof packageJson.scripts[script], 'string', script);
 
   assert.match(packageJson.scripts['test:data'], /--test-concurrency=1/);
+  assert.match(
+    packageJson.scripts['test:graph'],
+    /tests\/graph\/atlasExplorerReconciliation\.test\.ts/,
+  );
   assert.match(packageJson.scripts['verify:quality'], /verify:contracts/);
   assert.match(packageJson.scripts['verify:quality'], /lint:ci/);
   assert.match(packageJson.scripts['verify:quality'], /npm test/);

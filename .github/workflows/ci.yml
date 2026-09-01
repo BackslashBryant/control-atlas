@@ -172,7 +172,7 @@ jobs:
           cache: npm
       - run: npm ci
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-        if: ${{ needs.changes.outputs.build_required == 'true' }}
+        if: ${{ needs.generated.result == 'success' }}
         with:
           name: generated-data
           path: data/generated
@@ -183,7 +183,9 @@ jobs:
   generated:
     name: Prepare reproducible generated data
     needs: changes
-    if: ${{ needs.changes.outputs.build_required == 'true' }}
+    if: >-
+      ${{ needs.changes.outputs.build_required == 'true' ||
+          needs.changes.outputs.unit_required == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6

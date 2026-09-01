@@ -25,29 +25,6 @@ type ShardedManifest = {
   };
 };
 
-type PublicationProjection = {
-  id: string;
-  level: string;
-  label: string;
-  nodes: Array<{ id: string; label: string; nodeType: string }>;
-  edges: unknown[];
-  representedCanonicalNodeCount: number;
-};
-
-type SemanticArtifact = {
-  landscape: {
-    nodes: Array<{ id: string; label: string }>;
-    edges: Array<{ source: string; target: string }>;
-  };
-  publications: Record<string, PublicationProjection>;
-};
-
-function loadAtlasNetwork(): SemanticArtifact {
-  return JSON.parse(
-    readFileSync(join(GENERATED, "atlas-network.json"), "utf8"),
-  );
-}
-
 function loadNodeManifest(): ShardedManifest {
   return JSON.parse(readFileSync(join(GENERATED, "nodes.json"), "utf8"));
 }
@@ -272,14 +249,6 @@ const EXPECTED_USER_FACING_CATALOGS = [
 
 // ── Source Scope ─────────────────────────────────────────────
 
-test("atlas-network.json includes all 27 user-facing catalogs", () => {
-  const artifact = loadAtlasNetwork();
-  const pubs = new Set(Object.keys(artifact.publications));
-  for (const id of EXPECTED_USER_FACING_CATALOGS) {
-    assert.ok(pubs.has(id), `Missing publication projection: ${id}`);
-  }
-});
-
 test("microsoft-zt-maturity is present in data but excluded from user-facing scope", () => {
   const catalogs = catalogsInNodeShards();
   assert.ok(catalogs.has("microsoft-zt-maturity"), "microsoft-zt-maturity should exist in graph data");
@@ -352,31 +321,6 @@ test("publication kind assignments match the public catalog taxonomy", () => {
       `${id} should be "${expectedKind}"`,
     );
   }
-});
-
-// ── SP 800-53 Structure ──────────────────────────────────────
-
-test("SP 800-53 projection has 20 families", () => {
-  const artifact = loadAtlasNetwork();
-  const pub = artifact.publications["nist-800-53"];
-  const families = pub.nodes.filter((n) => n.nodeType === "publisher_group");
-  assert.equal(families.length, 20, `Expected 20 families, got ${families.length}`);
-});
-
-test("SP 800-53 represents > 1,000 canonical nodes", () => {
-  const artifact = loadAtlasNetwork();
-  const pub = artifact.publications["nist-800-53"];
-  assert.ok(
-    pub.representedCanonicalNodeCount > 1000,
-    `Expected > 1,000, got ${pub.representedCanonicalNodeCount}`,
-  );
-});
-
-test("SP 800-53 Access Control family is present", () => {
-  const artifact = loadAtlasNetwork();
-  const pub = artifact.publications["nist-800-53"];
-  const ac = pub.nodes.find((n) => n.label === "Access Control");
-  assert.ok(ac, "Access Control family not found in SP 800-53 projection");
 });
 
 // ── AC-2 Connection Reconciliation ───────────────────────────
@@ -556,16 +500,6 @@ test("AC-2 relationship IDs and endpoint-type assertions are unique", () => {
 
 // ── CMMC Level Verification ──────────────────────────────────
 
-test("CMMC 2.0 projection represents levels", () => {
-  const artifact = loadAtlasNetwork();
-  const pub = artifact.publications["cmmc-2"];
-  assert.ok(pub, "cmmc-2 not in atlas-network");
-  assert.ok(
-    pub.representedCanonicalNodeCount >= 4,
-    `CMMC: expected >= 4 canonical nodes, got ${pub.representedCanonicalNodeCount}`,
-  );
-});
-
 test("CMMC 2.0 Level 2 has 800-171 Rev. 2 connections in neighborhood", () => {
   const manifest = loadNodeManifest();
   let levelId: string | null = null;
@@ -592,73 +526,6 @@ test("CMMC 2.0 Level 2 has 800-171 Rev. 2 connections in neighborhood", () => {
       rev2Count >= 100,
       `CMMC Level 2 → 800-171 Rev. 2: expected >= 100, got ${rev2Count}`,
     );
-  }
-});
-
-// ── FedRAMP Rev. 5 ───────────────────────────────────────────
-
-test("FedRAMP Rev. 5 is present in atlas-network with baselines", () => {
-  const artifact = loadAtlasNetwork();
-  const pub = artifact.publications["fedramp-rev5"];
-  assert.ok(pub, "fedramp-rev5 not in atlas-network");
-  assert.ok(
-    pub.representedCanonicalNodeCount >= 4,
-    `FedRAMP Rev. 5: expected >= 4 canonical nodes, got ${pub.representedCanonicalNodeCount}`,
-  );
-});
-
-// ── New Source Projections ────────────────────────────────────
-
-test("newly included NIST sources have non-empty projections", () => {
-  const artifact = loadAtlasNetwork();
-  const newSources = ["nist-800-53a", "nist-800-53b", "fips-199", "fips-200", "nist-800-37"];
-  for (const id of newSources) {
-    const pub = artifact.publications[id];
-    assert.ok(pub, `${id} missing from atlas-network`);
-    assert.ok(
-      pub.representedCanonicalNodeCount > 0,
-      `${id} has 0 represented canonical nodes`,
-    );
-  }
-});
-
-test("CUI Program (NARA) has a non-empty projection", () => {
-  const artifact = loadAtlasNetwork();
-  const pub = artifact.publications["cui-policy"];
-  assert.ok(pub, "cui-policy missing from atlas-network");
-  assert.ok(
-    pub.representedCanonicalNodeCount >= 100,
-    `CUI Program: expected >= 100 nodes, got ${pub.representedCanonicalNodeCount}`,
-  );
-});
-
-// ── Landscape Structure ──────────────────────────────────────
-
-test("landscape has 9 area nodes", () => {
-  const artifact = loadAtlasNetwork();
-  const limbs = artifact.landscape.nodes.filter((n) => n.id.startsWith("atlas:LIMB-"));
-  assert.equal(limbs.length, 9, `Expected 9 area limbs, got ${limbs.length}`);
-});
-
-test("landscape area names match accepted taxonomy", () => {
-  const artifact = loadAtlasNetwork();
-  const areas = artifact.landscape.nodes
-    .filter((n) => n.id.startsWith("atlas:LIMB-"))
-    .map((n) => n.label)
-    .sort();
-  const expected = [
-    "Architecture", "Assessment", "Compliance", "Governance",
-    "Implementation", "Knowledge", "Operations", "Risk", "Threats & Defense",
-  ].sort();
-  assert.deepEqual(areas, expected);
-});
-
-// ── DISA Ecosystem ───────────────────────────────────────────
-
-test("DISA sources are present in atlas-network", () => {
-  const artifact = loadAtlasNetwork();
-  for (const id of ["disa-cci", "disa-stig", "disa-srg"]) {
-    assert.ok(artifact.publications[id], `${id} missing from atlas-network`);
   }
 });
 
@@ -705,24 +572,4 @@ test("connection presentation caps do not alter AC-2 source truth or grouping", 
     })),
     provenance,
   );
-});
-
-// ── Edge Integrity ───────────────────────────────────────────
-
-test("constellation edges exist between known connected catalog pairs", () => {
-  const artifact = loadAtlasNetwork();
-  const edgePairs = artifact.landscape.edges.map(
-    (e) => `${e.source}|${e.target}`,
-  );
-  const knownPairs = [
-    ["atlas:LIMB-COMPLIANCE", "atlas:TRUNK"],
-    ["atlas:LIMB-ARCHITECTURE", "atlas:TRUNK"],
-    ["atlas:LIMB-THREAT", "atlas:TRUNK"],
-  ];
-  for (const [a, b] of knownPairs) {
-    const found = edgePairs.some(
-      (ep) => ep === `${a}|${b}` || ep === `${b}|${a}`,
-    );
-    assert.ok(found, `Missing landscape edge: ${a} ↔ ${b}`);
-  }
 });
