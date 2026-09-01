@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import type { AtlasSpine } from "../../src/ui/lib/atlasDrilldown";
+import { buildAtlasTree } from "../../src/ui/lib/atlasDecomposition";
 import { buildAtlasGraphModel, type AtlasGraphModelInput } from "../../src/ui/lib/atlasGraphModel";
 import { buildAtlasSemanticProjections } from "../../src/ui/lib/atlasGraphProjection";
 import { buildAtlasTreeModel } from "../../src/ui/lib/atlasTreeModel";
@@ -98,5 +99,32 @@ test("semantic Atlas separates publisher truth, presentation, and edge provenanc
   assert.equal(fallbackRecord.atlasClass, "requirement");
   assert.equal(record.objectLayer, "publisher_content");
   assert.deepEqual(detail.edges[0]!.connectionSourceIds, ["artifact-nist-olir", "nist-olir-csf-800-53"]);
+
+  assert.equal(
+    buildAtlasTree(artifact, {
+      areaId: "ecosystem:nist",
+      publicationId: "",
+      detailId: "",
+    }).scopeCount,
+    artifact.ecosystems["ecosystem:nist"]!.representedCanonicalNodeCount,
+  );
+  assert.equal(
+    buildAtlasTree(artifact, {
+      areaId: "ecosystem:nist",
+      publicationId: "csf-2",
+      detailId: "",
+    }).scopeCount,
+    2,
+  );
+  assert.equal(detail.representedCanonicalNodeCount, 2);
+  assert.equal(detail.nodes.length, 2);
+  assert.equal(
+    buildAtlasTree(artifact, {
+      areaId: "ecosystem:nist",
+      publicationId: "csf-2",
+      detailId: group.id,
+    }).scopeCount,
+    detail.representedCanonicalNodeCount,
+  );
   assert.equal(JSON.stringify(input), before);
 });

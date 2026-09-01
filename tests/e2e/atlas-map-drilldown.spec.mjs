@@ -90,8 +90,33 @@ test("section drill stays scoped to the publication's real child records", async
   await open(page, "detail", /Access Control/);
   await expect(page).toHaveURL(/atlasFamily=group:nist-800-53:0/);
   await expect(atlas(page)).toHaveAttribute("data-scope-level", "detail");
+  await expect(atlas(page).locator(".atlas-decomp__scope-count")).toHaveText(
+    "148 records in view",
+  );
 
   await expect(
     level(page, "record").getByRole("button", { name: /^AC-2 — Account Management/ }),
   ).toBeVisible();
+});
+
+test("CMMC detail scope reports all three publisher-native levels", async ({ page }) => {
+  await gotoApp(page, "/#/atlas");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  await level(page, "area")
+    .locator(".atlas-decomp__label")
+    .getByText("DoD", { exact: true })
+    .click();
+  await open(page, "publication", /CMMC 2\.0 Catalog/);
+  await open(page, "detail", /CMMC 2\.0 Levels/);
+
+  const records = level(page, "record");
+  await expect(records).toHaveAttribute("data-row-count", "3");
+  for (const levelId of ["LEVEL-1", "LEVEL-2", "LEVEL-3"]) {
+    await expect(records.getByRole("button", { name: new RegExp(`^${levelId} —`) })).toBeVisible();
+  }
+  await expect(atlas(page).locator(".atlas-decomp__scope-count")).toHaveText(
+    "3 records in view",
+  );
 });

@@ -4,6 +4,7 @@ import { join } from "node:path";
 import test from "node:test";
 
 import type { AtlasSpine } from "../../src/ui/lib/atlasDrilldown";
+import { buildAtlasTree } from "../../src/ui/lib/atlasDecomposition";
 import { buildAtlasGraphModel } from "../../src/ui/lib/atlasGraphModel";
 import { buildAtlasSemanticProjections } from "../../src/ui/lib/atlasGraphProjection";
 import {
@@ -59,14 +60,36 @@ test("Atlas projection budgets hold on the real generated graph", () => {
   const sp80053Families = sp80053.nodes.filter((node) => !node.id.startsWith("context:"));
   assert.equal(sp80053Families.length, 20);
   const accessControl = sp80053Families.find((node) => node.label === "Access Control")!;
-  const accessControlRecords = artifact.details[accessControl.id]!.nodes.map((node) => node.id);
+  const accessControlDetail = artifact.details[accessControl.id]!;
+  const accessControlRecords = accessControlDetail.nodes.map((node) => node.id);
   assert.equal(accessControlRecords.filter((id) => /^nist-800-53:AC-\d+$/.test(id)).length, 25);
+  assert.equal(accessControlDetail.representedCanonicalNodeCount, 148);
+  assert.equal(accessControlDetail.nodes.length, 148);
+  assert.equal(
+    buildAtlasTree(artifact, {
+      areaId: "ecosystem:nist",
+      publicationId: "nist-800-53",
+      detailId: accessControl.id,
+    }).scopeCount,
+    148,
+  );
 
   const cmmc = artifact.publications["cmmc-2"]!;
   const cmmcLevels = cmmc.nodes.find((node) => node.label === "CMMC 2.0 Levels")!;
+  const cmmcDetail = artifact.details[cmmcLevels.id]!;
   assert.deepEqual(
-    artifact.details[cmmcLevels.id]!.nodes.map((node) => node.id).sort(),
+    cmmcDetail.nodes.map((node) => node.id).sort(),
     ["cmmc-2:LEVEL-1", "cmmc-2:LEVEL-2", "cmmc-2:LEVEL-3"],
+  );
+  assert.equal(cmmcDetail.representedCanonicalNodeCount, 3);
+  assert.equal(cmmcDetail.nodes.length, 3);
+  assert.equal(
+    buildAtlasTree(artifact, {
+      areaId: "ecosystem:dod",
+      publicationId: "cmmc-2",
+      detailId: cmmcLevels.id,
+    }).scopeCount,
+    3,
   );
 
   // Area: <=60 (enforced by enforceNodeBudget at build time); assert every generated area stays
@@ -87,6 +110,16 @@ test("Atlas projection budgets hold on the real generated graph", () => {
   // projection ever exceeded it.
   for (const [detailId, projection] of Object.entries(artifact.details)) {
     assert.ok(projection.nodes.length <= 250, `${detailId} detail budget violated: ${projection.nodes.length} nodes`);
+    const firstNode = projection.nodes[0]!;
+    assert.equal(
+      buildAtlasTree(artifact, {
+        areaId: firstNode.publisherEcosystemId || firstNode.areaId,
+        publicationId: firstNode.publicationId,
+        detailId,
+      }).scopeCount,
+      projection.representedCanonicalNodeCount,
+      `${detailId} detail scope count must equal its represented canonical count`,
+    );
   }
 
   // T4.7: every aggregate node's canonicalNodeIds resolve to real canonical IDs, and no canonical
