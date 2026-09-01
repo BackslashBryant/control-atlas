@@ -2152,7 +2152,7 @@
     {
       "id": "nist-800-171-oscal-mappings",
       "name": "NIST SP 800-171 Rev. 3 OSCAL Control References",
-      "display_name": "SP 800-53 Rev. 5",
+      "display_name": "SP 800-171 Rev. 3 OSCAL Control References",
       "display_group": "NIST",
       "owner": "NIST",
       "authority_class": "publisher",
@@ -2177,16 +2177,16 @@
           "nist-800-171"
         ],
         "parser": "oscal-json",
-        "identity_kind": "supplemental",
+        "identity_kind": "mapping",
         "canonical_publication_id": "nist-800-171"
       },
       "entity_kind": "publication",
-      "profile_id": "publication.supplemental",
+      "profile_id": "publication.mapping",
       "origin": "publisher_normalized"
     },
     {
       "id": "nist-800-171-rev2",
-      "name": "NIST SP 800-171 Rev. 2 Security Requirements CSV",
+      "name": "SP 800-171 Rev. 2",
       "display_name": "SP 800-171 Rev. 2",
       "display_group": "NIST",
       "owner": "NIST",
@@ -2220,7 +2220,7 @@
     },
     {
       "id": "nist-800-172-rev3",
-      "name": "NIST SP 800-172 Rev. 3 OSCAL Catalog",
+      "name": "SP 800-172 Rev. 3",
       "display_name": "SP 800-172 Rev. 3",
       "display_group": "NIST",
       "owner": "NIST",
@@ -7605,7 +7605,7 @@
     {
       "id": "nist-800-171-oscal-mappings",
       "name": "NIST SP 800-171 Rev. 3 OSCAL Control References",
-      "display_name": "SP 800-53 Rev. 5",
+      "display_name": "SP 800-171 Rev. 3 OSCAL Artifact",
       "display_group": "NIST",
       "owner": "NIST",
       "provenance_class": "federal_published",
