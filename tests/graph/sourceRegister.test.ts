@@ -87,7 +87,17 @@ test("source layers preserve truthful nullable fields and exact layer counts", (
   const layers = buildSourceLayers(sources.sources, catalogs);
   assert.deepEqual(
     Object.fromEntries(Object.entries(layers).map(([layer, rows]) => [layer, rows.length])),
-    { organization: 2, publication: 49, connection: 27, ingestion: 115 },
+    { organization: 2, publication: 49, connection: 28, ingestion: 114 },
+  );
+
+  const sp800171Mappings = layers.connection.find(
+    (row) => row.id === "nist-800-171-oscal-mappings",
+  );
+  assert.ok(sp800171Mappings, "SP 800-171 OSCAL control references must be connection evidence");
+  assert.equal(sp800171Mappings.displayTitle, "SP 800-171 Rev. 3 OSCAL Control References");
+  assert.ok(
+    !layers.ingestion.some((row) => row.id === "nist-800-171-oscal-mappings"),
+    "SP 800-171 OSCAL control references must not remain supplemental ingestion material",
   );
 
   // Phase 2 (T2.1-T2.3): the publication layer must be exactly the set of

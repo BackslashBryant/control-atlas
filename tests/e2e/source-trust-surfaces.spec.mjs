@@ -34,6 +34,28 @@ test("source register, inspector, catalog, and record use one official publicati
   await expect(facts).toContainText("Source last checkedAug 13, 2026");
 });
 
+test("NIST publication headings and OSCAL mapping evidence keep distinct identities", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+
+  for (const [route, heading] of [
+    ["/#/catalog/nist-800-171-rev2", "SP 800-171 Rev. 2"],
+    ["/#/catalog/nist-800-172", "SP 800-172 Rev. 3"],
+  ]) {
+    await open(page, route);
+    await expect(page.getByRole("heading", { name: heading, exact: true, level: 1 })).toBeVisible();
+  }
+
+  await open(page, "/#/sources?q=SP%20800-171%20Rev.%203");
+  const publication = page.getByRole("button", { name: "SP 800-171 Rev. 3" });
+  await expect(publication).toBeVisible();
+  await publication.click();
+  const crosswalks = page.locator("details.source-inspector-section").filter({
+    hasText: "Published crosswalks",
+  });
+  await expect(crosswalks).toContainText("SP 800-171 Rev. 3 OSCAL Artifact");
+  await expect(crosswalks).not.toContainText("SP 800-53 Rev. 5");
+});
+
 test("missing source fields and zero results are explicit instead of blank or contradictory", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await open(page, "/#/sources?q=DoD%20AI%20Assurance");

@@ -62,6 +62,19 @@ const sourceBackedLifecycle = new Map([
   ["legacy-opencontrol-compliance-masonry", { status: "archived", replacedBy: "official-nist-oscal" }],
   ["tool-terrascan", { status: "archived" }],
 ]);
+const sourceIdentityCorrections = new Map([
+  ["nist-800-171-rev2", {
+    name: "SP 800-171 Rev. 2",
+  }],
+  ["nist-800-172-rev3", {
+    name: "SP 800-172 Rev. 3",
+  }],
+  ["nist-800-171-oscal-mappings", {
+    name: "NIST SP 800-171 Rev. 3 OSCAL Control References",
+    displayName: "SP 800-171 Rev. 3 OSCAL Control References",
+    identityKind: "mapping",
+  }],
+]);
 const optionalUnknownFields = [
   "officialStatus",
   "maturity",
@@ -267,6 +280,19 @@ function migrateSourceRegistry() {
     if (kind === "source") entry.checksum = catalog.checksum;
   };
   for (const publication of registry.publications || []) {
+    const identityCorrection = sourceIdentityCorrections.get(publication.id);
+    if (identityCorrection) {
+      publication.name = identityCorrection.name;
+      if (identityCorrection.displayName) {
+        publication.display_name = identityCorrection.displayName;
+      }
+      if (identityCorrection.identityKind) {
+        publication.metadata = {
+          ...(publication.metadata || {}),
+          identity_kind: identityCorrection.identityKind,
+        };
+      }
+    }
     const mitreCatalog = mitreCatalogs.get(publication.id);
     if (mitreCatalog) syncMitreIdentity(publication, mitreCatalog, "publication");
     if (publication.id === "fedramp-rev5") publication.lifecycle_status = "historical";
@@ -351,6 +377,9 @@ function migrateSourceRegistry() {
       : artifact.authority_class === "publisher" ? "publisher_exact" : "publisher_normalized";
   }
   for (const source of registry.sources || []) {
+    if (source.id === "nist-800-171-oscal-mappings") {
+      source.display_name = "SP 800-171 Rev. 3 OSCAL Artifact";
+    }
     const mitreCatalog = mitreCatalogs.get(source.id);
     if (mitreCatalog) syncMitreIdentity(source, mitreCatalog, "source");
     if (source.id === "fedramp-rev5") source.lifecycle_status = "historical";

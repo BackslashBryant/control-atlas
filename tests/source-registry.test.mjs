@@ -123,6 +123,84 @@ test('reviewed publication identity stays distinct from parser artifacts', () =>
   assert.equal(byId.get('nist-800-53b-baselines').version, 'Revision 5, Release 5.2.0');
 });
 
+test('SP 800-171 and SP 800-172 publication identities stay distinct from source artifacts', () => {
+  const publicationById = new Map(registry.publications.map((entry) => [entry.id, entry]));
+  const artifactById = new Map(registry.artifacts.map((entry) => [entry.id, entry]));
+
+  const rev2 = publicationById.get('nist-800-171-rev2');
+  assert.equal(rev2.name, 'SP 800-171 Rev. 2');
+  assert.equal(rev2.display_name, 'SP 800-171 Rev. 2');
+  assert.equal(rev2.metadata.identity_kind, 'publication');
+  assert.equal(rev2.profile_id, 'publication.publication');
+
+  const rev3 = publicationById.get('nist-800-172-rev3');
+  assert.equal(rev3.name, 'SP 800-172 Rev. 3');
+  assert.equal(rev3.display_name, 'SP 800-172 Rev. 3');
+  assert.equal(rev3.metadata.identity_kind, 'publication');
+  assert.equal(rev3.profile_id, 'publication.publication');
+
+  const mapping = publicationById.get('nist-800-171-oscal-mappings');
+  assert.equal(mapping.name, 'NIST SP 800-171 Rev. 3 OSCAL Control References');
+  assert.equal(mapping.display_name, 'SP 800-171 Rev. 3 OSCAL Control References');
+  assert.equal(mapping.metadata.identity_kind, 'mapping');
+  assert.equal(mapping.metadata.canonical_publication_id, 'nist-800-171');
+  assert.equal(mapping.profile_id, 'publication.mapping');
+
+  const expectedArtifacts = {
+    'artifact-nist-800-171-rev2': {
+      name: 'NIST SP 800-171 Rev. 2 Security Requirements CSV Artifact',
+      publicationSourceId: 'nist-800-171-rev2',
+      sourceRole: 'primary_data',
+      format: 'csv',
+      artifactUrl: 'https://csrc.nist.gov/files/pubs/sp/800/171/r2/upd1/final/docs/sp800-171r2-security-reqs.csv',
+      parser: 'csv',
+      sha256: 'sha256:0f4d59413bbcc9998da80495ce46ebfe0475e392803c4d2ed38d9941d83f138d',
+      byteLength: 113309,
+      recordCount: 117,
+      relationshipCount: 125,
+    },
+    'artifact-nist-800-172-rev3': {
+      name: 'NIST SP 800-172 Rev. 3 OSCAL Catalog Artifact',
+      publicationSourceId: 'nist-800-172-rev3',
+      sourceRole: 'primary_data',
+      format: 'oscal_json',
+      artifactUrl: 'https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-172/rev3/json/NIST_SP800-172_rev3_catalog.json',
+      parser: 'oscal-json',
+      sha256: 'sha256:21c6df17c7ff1c8330f16334fdddd488ffc10f71051078dd73c18595a33da5ab',
+      byteLength: 980722,
+      recordCount: 115,
+      relationshipCount: 133,
+    },
+    'artifact-nist-800-171-oscal-mappings': {
+      name: 'NIST SP 800-171 Rev. 3 OSCAL Control References Artifact',
+      publicationSourceId: 'nist-800-171-oscal-mappings',
+      sourceRole: 'mapping',
+      format: 'oscal_json',
+      artifactUrl: 'https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json',
+      parser: 'oscal-json',
+      sha256: 'sha256:21b6f3b118b6e5b305aaed3a0e4b70fa5d1d9aa388a0b92e7d6ddfed69e93ac3',
+      byteLength: 905711,
+      recordCount: 130,
+      relationshipCount: 305,
+    },
+  };
+
+  for (const [id, expected] of Object.entries(expectedArtifacts)) {
+    const artifact = artifactById.get(id);
+    assert.ok(artifact, `${id} must remain registered`);
+    assert.equal(artifact.name, expected.name, id);
+    assert.equal(artifact.publication_source_id, expected.publicationSourceId, id);
+    assert.equal(artifact.source_role, expected.sourceRole, id);
+    assert.equal(artifact.format, expected.format, id);
+    assert.equal(artifact.artifact_url, expected.artifactUrl, id);
+    assert.equal(artifact.parser, expected.parser, id);
+    assert.equal(artifact.sha256, expected.sha256, id);
+    assert.equal(artifact.byte_length, expected.byteLength, id);
+    assert.equal(artifact.record_count, expected.recordCount, id);
+    assert.equal(artifact.relationship_count, expected.relationshipCount, id);
+  }
+});
+
 test('source registry rejects invalid or incomplete freshness metadata', () => {
   const invalid = structuredClone(registry);
   invalid.freshness.sources[0].last_checked = '2026-02-30';

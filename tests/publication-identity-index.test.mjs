@@ -93,4 +93,12 @@ test('the SP 800-171 canonical identity is the real publication, not its OSCAL i
   assert.ok(identity, 'nist-800-171 must be a canonical identity');
   assert.equal(identity.catalog_id, 'nist-800-171');
   assert.ok(identity.alias_source_ids.includes('nist-800-171-oscal-mappings'));
+  assert.ok(identity.connection_evidence.includes('artifact-nist-800-171-oscal-mappings'));
+  assert.ok(!identity.source_materials.other.includes('nist-800-171-oscal-mappings'));
+
+  const mapping = registry.publications.find(
+    (candidate) => candidate.id === 'nist-800-171-oscal-mappings',
+  );
+  assert.equal(mapping.metadata.identity_kind, 'mapping');
+  assert.equal(mapping.metadata.canonical_publication_id, 'nist-800-171');
 });
