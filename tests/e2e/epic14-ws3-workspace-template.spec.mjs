@@ -19,12 +19,12 @@ test("WS3 Library uses Template C browse, facets, and fully linked record rows",
 
   const rail = workspace.getByRole("complementary", { name: "Library filters" });
   await expect(rail).toBeVisible();
-  const facetControls = rail.locator('.workspace-facet-controls[data-facet-set="publication,kind,area"]');
+  const facetControls = rail.locator('.workspace-facet-controls[data-facet-set="publication,kind,area,asset_class,domain,vendor_brand,program"]');
   await expect(facetControls).toBeVisible();
   await expect(
     facetControls.locator(":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > summary > .workspace-facet-group__label"),
   ).toHaveText(["Publication", "Content kind", "Area"]);
-  const advanced = facetControls.locator('details[data-advanced-facet-set="publisher,topics,connections"]');
+  const advanced = facetControls.locator('details[data-advanced-facet-set="publisher,technology,product,framework,organization,environment,connections"]');
   await expect(advanced).not.toHaveAttribute("open", "");
   await expect(advanced.getByText("Publisher", { exact: true })).toBeHidden();
   await advanced.locator("summary").click();
@@ -177,7 +177,7 @@ test("WS3 facets move to a modal sheet below the desktop breakpoint", async ({ p
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
     if (route === "/#/library") {
-      const facetControls = dialog.locator('.workspace-facet-controls[data-facet-set="publication,kind,area"]');
+      const facetControls = dialog.locator('.workspace-facet-controls[data-facet-set="publication,kind,area,asset_class,domain,vendor_brand,program"]');
       await expect(
         facetControls.locator(":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > summary > .workspace-facet-group__label"),
       ).toHaveText(["Publication", "Content kind", "Area"]);

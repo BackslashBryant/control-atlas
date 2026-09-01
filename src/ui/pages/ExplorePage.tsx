@@ -45,6 +45,13 @@ import type { ViewState } from "../lib/viewState";
 
 type SearchState = Extract<ViewState, { view: "search" }>;
 
+const PRIMARY_TAXONOMY_DIMENSION_IDS = [
+  "asset_class",
+  "domain",
+  "vendor_brand",
+  "program",
+] as const;
+
 // The tray keeps its own label copy so a selected record stays legible after
 // the user changes the query or filters and its row leaves the result list.
 type SelectedRecord = {
@@ -366,6 +373,15 @@ export function ExplorePage(props: {
       state.tags,
     ],
   );
+  const primaryTagFacetOptions = PRIMARY_TAXONOMY_DIMENSION_IDS.flatMap((dimensionId) => {
+    const dimension = tagFacetOptions.find((candidate) => candidate.id === dimensionId);
+    return dimension ? [dimension] : [];
+  });
+  const advancedTagFacetOptions = tagFacetOptions.filter(
+    (dimension) => !PRIMARY_TAXONOMY_DIMENSION_IDS.includes(
+      dimension.id as (typeof PRIMARY_TAXONOMY_DIMENSION_IDS)[number],
+    ),
+  );
 
   const mapItems: LibraryMapItem[] = useMemo(() => state.viewMode !== "map" ? [] : rows.slice(0, 75).map((row: any) => ({
     id: row.document.id,
@@ -407,10 +423,32 @@ export function ExplorePage(props: {
     window.requestAnimationFrame(() => window.requestAnimationFrame(() => window.scrollTo({ top: scrollY, behavior: "auto" })));
   };
   const advancedFiltersActive = Boolean(
-    state.publisher || state.tags.length || connectedOnly,
+    state.publisher || connectedOnly || state.tags.some((tagId) => {
+      const dimensionId = TAXONOMY_TAG_BY_ID.get(tagId)?.dimension;
+      return advancedTagFacetOptions.some((dimension) => dimension.id === dimensionId);
+    }),
+  );
+  const renderTagFacet = (
+    dimension: (typeof tagFacetOptions)[number],
+    compact = false,
+  ) => (
+    <TagFacet
+      compact={compact}
+      dimensionId={dimension.id}
+      key={dimension.id}
+      label={dimension.label}
+      onChange={(tags) => onNavigate("search", {
+        tags: [
+          ...state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension !== dimension.id),
+          ...tags,
+        ].sort(),
+      })}
+      options={dimension.options}
+      selected={state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension === dimension.id)}
+    />
   );
   const renderFacets = (scope: "desktop" | "mobile") => (
-    <div className="workspace-facet-controls" data-facet-set="publication,kind,area">
+    <div className="workspace-facet-controls" data-facet-set="publication,kind,area,asset_class,domain,vendor_brand,program">
       <TypeaheadFacet
         id={`library-${scope}-publication`}
         label="Publication"
@@ -435,9 +473,12 @@ export function ExplorePage(props: {
         }))}
         value={state.area}
       />
+      <div aria-label="Primary taxonomy filters" className="workspace-primary-taxonomy-facets">
+        {primaryTagFacetOptions.map((dimension) => renderTagFacet(dimension, true))}
+      </div>
       <details
         className="workspace-advanced-facets"
-        data-advanced-facet-set="publisher,topics,connections"
+        data-advanced-facet-set="publisher,technology,product,framework,organization,environment,connections"
         open={advancedFiltersActive ? true : undefined}
       >
         <summary>Advanced filters</summary>
@@ -449,20 +490,7 @@ export function ExplorePage(props: {
             options={publishers.map((publisher) => ({ label: publisher, value: publisher }))}
             value={state.publisher}
           />
-          {tagFacetOptions.map((dimension) => (
-            <TagFacet
-              key={dimension.id}
-              label={dimension.label}
-              onChange={(tags) => onNavigate("search", {
-                tags: [
-                  ...state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension !== dimension.id),
-                  ...tags,
-                ].sort(),
-              })}
-              options={dimension.options}
-              selected={state.tags.filter((id) => TAXONOMY_TAG_BY_ID.get(id)?.dimension === dimension.id)}
-            />
-          ))}
+          {advancedTagFacetOptions.map((dimension) => renderTagFacet(dimension))}
           <label className="workspace-boolean-facet">
             <input
               checked={connectedOnly}
@@ -486,6 +514,7 @@ export function ExplorePage(props: {
         <div aria-label="Active filters" className="active-filter-row">
           {activeFilters.map((filter) => (
             <button
+              aria-label={`Remove ${filter.label} filter`}
               className="active-filter-chip"
               key={filter.tagId || filter.key}
               onClick={() => filter.tagId
@@ -499,6 +528,7 @@ export function ExplorePage(props: {
           <button className="clear-filter-link" onClick={clearFilters} type="button">Clear all</button>
         </div>
       ) : null}
+      mobilePrimaryFilters={primaryTagFacetOptions.map((dimension) => renderTagFacet(dimension, true))}
       compareControl={(
         <>
           <Button
