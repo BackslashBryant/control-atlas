@@ -47,11 +47,6 @@ test("publication rows reconcile their source-file count to the inspector", asyn
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  test.fixme(
-    true,
-    "SOURCE-MATERIAL-001: the row pill reports one source file while the "
-    + "inspector renders two entries, the second of them blank.",
-  );
   // The row and the inspector must agree. Assert that reconciliation rather
   // than a literal count, which drifts whenever a publisher's files change.
   const pill = page.locator(".source-register-row--selected .source-attached-pill");
@@ -62,7 +57,24 @@ test("publication rows reconcile their source-file count to the inspector", asyn
   const inspector = page.locator(
     ".sources-inspector-pane .source-inspector--inline",
   );
-  await expect(inspector.locator(".source-material-item")).toHaveCount(declaredFiles);
+  const sourceFiles = inspector
+    .locator("details.source-inspector-section")
+    .filter({ hasText: /^Source files \(\d+\)/ })
+    .locator(".source-material-item");
+  await expect(sourceFiles).toHaveCount(declaredFiles);
+  await expect(sourceFiles).toContainText("CDAO Responsible AI Resource Reconciliation Artifact");
+
+  const references = inspector
+    .locator("details.source-inspector-section")
+    .filter({ hasText: /^Reference material \(\d+\)/ });
+  await expect(references.locator(".source-material-item")).toHaveCount(1);
+  await expect(references).toContainText("DoD AI Assurance Toolkit Artifact");
+  await expect(references).toContainText("Reference only");
+  await references.locator("summary").click();
+  await expect(references.getByRole("link", { name: "View reference page" })).toHaveAttribute(
+    "href",
+    "https://rai.acqbot.com/executive-summary",
+  );
   const technicalDetails = inspector.locator(".source-inspector-provenance");
   await technicalDetails.locator("summary").click();
   await expect(technicalDetails).toContainText("Stable Source ID");
