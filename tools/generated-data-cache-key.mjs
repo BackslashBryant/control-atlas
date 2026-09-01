@@ -7,12 +7,8 @@ import { execFileSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRYPOINTS = [
-  "scripts/build-taxonomy-registry.mjs",
-  "scripts/build-framework-data.mjs",
-  "scripts/build-commons-index.mjs",
-  "scripts/build-discovery-index.mjs",
-];
+const PACKAGE_JSON = "package.json";
+const GENERATION_SCRIPT_ROOTS = ["build:data", "generate:data"];
 
 function normalize(path) {
   return path.replaceAll("\\", "/");
@@ -27,6 +23,52 @@ function trackedSourceData() {
     .filter(Boolean)
     .map(normalize)
     .filter((path) => !path.startsWith("data/generated/"));
+}
+
+export function discoverGenerationEntrypoints(
+  scripts,
+  roots = GENERATION_SCRIPT_ROOTS,
+) {
+  const pending = [...roots];
+  const visitedScripts = new Set();
+  const entrypoints = new Set();
+
+  while (pending.length) {
+    const scriptName = pending.pop();
+    if (!scriptName || visitedScripts.has(scriptName)) continue;
+    const command = scripts[scriptName];
+    if (typeof command !== "string" || !command.trim()) {
+      throw new Error(`Generated-data package script missing: ${scriptName}`);
+    }
+    visitedScripts.add(scriptName);
+
+    for (const segment of command.split(/\s*&&\s*/)) {
+      const npmRun = segment.match(/^npm(?:\.cmd)?\s+run\s+([^\s]+)$/);
+      if (npmRun) {
+        pending.push(npmRun[1]);
+        continue;
+      }
+
+      const localEntrypoint = segment.match(
+        /^(?:node|tsx)\s+(\.\/[\w./-]+\.(?:c?js|mjs|tsx?))$/,
+      );
+      if (localEntrypoint) {
+        entrypoints.add(normalize(localEntrypoint[1]).replace(/^\.\//, ""));
+        continue;
+      }
+
+      throw new Error(
+        `Unsupported generated-data command in ${scriptName}: ${segment}`,
+      );
+    }
+  }
+
+  return [...entrypoints].sort();
+}
+
+function generationEntrypoints() {
+  const packageJson = JSON.parse(readFileSync(resolve(ROOT, PACKAGE_JSON), "utf8"));
+  return discoverGenerationEntrypoints(packageJson.scripts || {});
 }
 
 function localDependencies(entrypoints) {
@@ -58,9 +100,10 @@ function localDependencies(entrypoints) {
 
 export function generatedDataCacheInputs() {
   return [...new Set([
+    PACKAGE_JSON,
     "package-lock.json",
     ...trackedSourceData(),
-    ...localDependencies(ENTRYPOINTS),
+    ...localDependencies(generationEntrypoints()),
   ])].sort();
 }
 
