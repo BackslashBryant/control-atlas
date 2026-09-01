@@ -26,7 +26,10 @@ test("focused Atlas opens straight to Connections, not a structural page", async
   await expect(subject.getByRole("heading", { name: "AC-2", level: 2 })).toBeVisible();
   await expect(subject).toContainText("Account Management");
   await expect(subject).toContainText("SP 800-53 Rev. 5");
-  await expect(subject).toContainText("143 in 7 categories");
+  const facts = subject.locator("dl");
+  await expect(facts.locator("div", { hasText: "Published neighborhood" })).toContainText("156 relationships");
+  await expect(facts.locator("div", { hasText: "Publisher-native structure" })).toContainText("14 relationships");
+  await expect(facts.locator("div", { hasText: "Cross-source" })).toContainText("142 relationships");
   await expect(page.getByText("Selected item", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Connections", level: 2 })).toBeVisible();
   await expect(page.getByRole("region", { name: "Relationship map" })).toBeVisible();
@@ -60,6 +63,8 @@ test("Hierarchy panel shows real structural substance, not just breadcrumb lines
   // Record type, publication, identifier, and the record's own published
   // children — the substance a single-heading panel never had.
   await expect(panel.getByText("Record type")).toBeVisible();
+  await expect(panel.getByText("Publisher-native relationships")).toBeVisible();
+  await expect(panel.getByText("14", { exact: true })).toBeVisible();
   await expect(panel.getByText("Publication")).toBeVisible();
   await expect(panel.getByText("Decomposes into")).toBeVisible();
   await expect(panel.getByRole("link", { name: "AC-2.1", exact: true })).toBeVisible();

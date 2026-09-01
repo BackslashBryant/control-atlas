@@ -35,9 +35,10 @@ import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import {
   ATLAS_RELATIONSHIP_LENSES,
   atlasFilterOptions,
-  buildAtlasGroups,
-  buildAtlasRows,
+  buildAtlasContextGroups,
+  buildAtlasContextRows,
   buildStructuralChildren,
+  summarizeAtlasRelationshipScopes,
   type AtlasFilterState,
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
@@ -163,8 +164,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     if (state.atlasFramework && artifact.publications[state.atlasFramework]) {
       return artifact.publications[state.atlasFramework];
     }
-    if (state.atlasLimb && artifact.areas[state.atlasLimb]) {
-      return artifact.areas[state.atlasLimb];
+    if (state.atlasLimb && (artifact.ecosystems[state.atlasLimb] || artifact.areas[state.atlasLimb])) {
+      return artifact.ecosystems[state.atlasLimb] || artifact.areas[state.atlasLimb];
     }
     return artifact.landscape;
   }, [bundle.atlasNetwork, state.atlasFamily, state.atlasFramework, state.atlasLimb]);
@@ -262,6 +263,17 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   }
 
   const drillAtlas = useCallback((drill: AtlasProjectionDrill) => {
+    if (drill.kind === "ecosystem") {
+      patchAtlas({
+        node: "",
+        atlasAxis: "",
+        atlasLimb: drill.targetId,
+        atlasFramework: "",
+        atlasFamily: "",
+        relationshipView: "",
+      });
+      return;
+    }
     if (drill.kind === "area") {
       patchAtlas({
         node: "",
@@ -274,7 +286,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       return;
     }
     if (drill.kind === "publication") {
-      const areaId = bundle.atlasNetwork?.record_locations[`${drill.targetId}:CATALOG`]?.areaId || state.atlasLimb;
+      const location = bundle.atlasNetwork?.record_locations[`${drill.targetId}:CATALOG`];
+      const areaId = location?.ecosystemId || location?.areaId || state.atlasLimb;
       patchAtlas({
         node: "",
         atlasLimb: areaId,
@@ -302,12 +315,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     });
   }
 
-  const trailAtlas = useCallback((level: "root" | "area" | "publication" | "detail", id: string) => {
+  const trailAtlas = useCallback((level: "root" | "ecosystem" | "area" | "publication" | "detail", id: string) => {
     if (level === "root") {
       atlasHome();
       return;
     }
-    if (level === "area") {
+    if (level === "ecosystem" || level === "area") {
       patchAtlas({ node: "", atlasFramework: "", atlasFamily: "", atlasLimb: id, relationshipView: "" });
       return;
     }
@@ -347,7 +360,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       patchAtlas({
         node: nodeId,
         atlasParent: "",
-        atlasLimb: location.areaId,
+        atlasLimb: location.ecosystemId || location.areaId,
         atlasFramework: location.publicationId,
         atlasFamily: location.detailId || "",
         relationshipSearch: "",
@@ -372,7 +385,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     patchAtlas({
       node: transition.nodeId,
       atlasParent: "",
-      atlasLimb: location?.areaId || "",
+      atlasLimb: location?.ecosystemId || location?.areaId || "",
       atlasFramework: location?.publicationId || "",
       atlasFamily: location?.detailId || "",
       relationshipSearch: "",
@@ -542,7 +555,7 @@ function FocusedAtlas(props: {
     search: state.relationshipSearch,
   };
   const groups = useMemo(
-    () => buildAtlasGroups(record, filters).filter((group) => group.lens !== "structure"),
+    () => buildAtlasContextGroups(record, filters),
     [record, state],
   );
   const connectionKeys = useMemo(
@@ -554,7 +567,7 @@ function FocusedAtlas(props: {
     [groups],
   );
   const rows = useMemo(
-    () => buildAtlasRows(record, filters).filter((row) =>
+    () => buildAtlasContextRows(record, filters).filter((row) =>
       connectionKeys.has(`${row.edge.id}\u0000${row.counterpart.id}`),
     ),
     [record, state, connectionKeys],
@@ -582,7 +595,14 @@ function FocusedAtlas(props: {
       })),
     [rows, lensLabelByEdgeId],
   );
-  const options = useMemo(() => atlasFilterOptions(record), [record]);
+  const relationshipScopes = useMemo(
+    () => summarizeAtlasRelationshipScopes(record),
+    [record],
+  );
+  const options = useMemo(
+    () => atlasFilterOptions(record, { excludeStructural: true }),
+    [record],
+  );
   const structuralChildren = useMemo(
     () => buildStructuralChildren(record),
     [record],
@@ -828,7 +848,24 @@ function FocusedAtlas(props: {
         <dl>
           {centerPublication ? <div><dt>Publication</dt><dd>{centerPublication}</dd></div> : null}
           <div><dt>Record type</dt><dd>{displayNameFor("object_type", record.center_node.node_type)}</dd></div>
-          <div><dt>Published connections</dt><dd>{rows.length.toLocaleString()} in {groups.length.toLocaleString()} categories</dd></div>
+          <div>
+            <dt>Published neighborhood</dt>
+            <dd>{relationshipScopes.publishedNeighborhood.toLocaleString()} relationships</dd>
+          </div>
+          <div>
+            <dt>Publisher-native structure</dt>
+            <dd>{relationshipScopes.nativeStructure.toLocaleString()} relationships</dd>
+          </div>
+          <div>
+            <dt>Cross-source</dt>
+            <dd>{relationshipScopes.crossSource.toLocaleString()} relationships</dd>
+          </div>
+          {relationshipScopes.sameSourceContext ? (
+            <div>
+              <dt>Other typed context</dt>
+              <dd>{relationshipScopes.sameSourceContext.toLocaleString()} relationships</dd>
+            </div>
+          ) : null}
         </dl>
         {centerPresentation && centerPublishedSections.length ? (
           <RecordPublishedTextPreview
@@ -879,8 +916,9 @@ function FocusedAtlas(props: {
             Connections
           </h2>
           <p className="atlas-workspace-orientation">
-            Choose a connection type to inspect a bounded set, open a record,
-            or switch to the evidence list.
+            Typed context is separate from publisher-native hierarchy. Choose
+            a relationship type to inspect a bounded preview or open the full
+            evidence list.
           </p>
         </div>
         <div className="atlas-workspace-controls">
@@ -934,6 +972,10 @@ function FocusedAtlas(props: {
                 {structuralPosition}
 
                 <dl className="atlas-path-facts">
+                  <div>
+                    <dt>Publisher-native relationships</dt>
+                    <dd>{relationshipScopes.nativeStructure.toLocaleString()}</dd>
+                  </div>
                   <div>
                     <dt>Record type</dt>
                     <dd>
@@ -1051,7 +1093,7 @@ function FocusedAtlas(props: {
                   onClick={() => patchAtlas({ relationshipView: "list" })}
                   type="button"
                 >
-                  View all {rows.length} connections
+                  View all {rows.length} typed connections
                 </button>
               )}
             </section> : null}

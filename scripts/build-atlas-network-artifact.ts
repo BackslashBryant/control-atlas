@@ -4,11 +4,16 @@ import { fileURLToPath } from "node:url";
 
 import { buildAtlasGraphModel, type AtlasGraphSourceEdge, type AtlasGraphSourceNode } from "../src/ui/lib/atlasGraphModel";
 import { buildAtlasSemanticProjections } from "../src/ui/lib/atlasGraphProjection";
+import {
+  buildAtlasCatalogMemberships,
+  type AtlasSourceRegistry,
+} from "../src/ui/lib/atlasPublisherHierarchy";
 import type { AtlasSpine } from "../src/ui/lib/atlasDrilldown";
 import { buildAtlasTreeModel } from "../src/ui/lib/atlasTreeModel";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED = join(ROOT, "data", "generated");
+const SOURCE_REGISTRY = join(ROOT, "data", "source-registry.json");
 
 type ShardedManifest = { generated_at: string; sharded_collection: { record_count: number; shards: Array<{ path: string }> } };
 
@@ -37,14 +42,16 @@ const edgeCollection = loadCollection<AtlasGraphSourceEdge>("edges.json", "edges
 const nodes = nodeCollection.records;
 const edges = edgeCollection.records;
 const spineArtifact = JSON.parse(readFileSync(join(GENERATED, "atlas-spine.json"), "utf8")) as { atlas_spine: AtlasSpine };
+const registry = JSON.parse(readFileSync(SOURCE_REGISTRY, "utf8")) as AtlasSourceRegistry;
 const graph = buildAtlasGraphModel({ nodes, edges });
 const artifact = buildAtlasSemanticProjections({
   graph,
   model: buildAtlasTreeModel(spineArtifact.atlas_spine),
   generatedAt: nodeCollection.generatedAt,
+  catalogMemberships: buildAtlasCatalogMemberships(registry),
 });
 
 const target = resolve(output);
 mkdirSync(dirname(target), { recursive: true });
 writeFileSync(target, `${JSON.stringify(artifact)}\n`, "utf8");
-console.log(`Built semantic Atlas: ${artifact.landscape.nodes.length} landscape landmarks, ${artifact.landscape.edges.length} landscape relationships, ${Object.keys(artifact.publications).length} publication projections.`);
+console.log(`Built semantic Atlas: ${Object.keys(artifact.ecosystems).length} publisher ecosystems, ${artifact.landscape.edges.length} landscape relationships, ${Object.keys(artifact.publications).length} publication projections.`);

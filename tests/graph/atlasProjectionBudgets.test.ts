@@ -6,6 +6,10 @@ import test from "node:test";
 import type { AtlasSpine } from "../../src/ui/lib/atlasDrilldown";
 import { buildAtlasGraphModel } from "../../src/ui/lib/atlasGraphModel";
 import { buildAtlasSemanticProjections } from "../../src/ui/lib/atlasGraphProjection";
+import {
+  buildAtlasCatalogMemberships,
+  type AtlasSourceRegistry,
+} from "../../src/ui/lib/atlasPublisherHierarchy";
 import { buildAtlasTreeModel } from "../../src/ui/lib/atlasTreeModel";
 import { readGeneratedCollection } from "../../scripts/lib/generated-graph-artifacts.mjs";
 
@@ -17,23 +21,52 @@ test("Atlas projection budgets hold on the real generated graph", () => {
   const spineArtifact = JSON.parse(
     readFileSync(join(".", "data", "generated", "atlas-spine.json"), "utf8"),
   ) as { atlas_spine: AtlasSpine };
+  const sourceRegistry = JSON.parse(
+    readFileSync(join(".", "data", "source-registry.json"), "utf8"),
+  ) as AtlasSourceRegistry;
 
   const artifact = buildAtlasSemanticProjections({
     graph: buildAtlasGraphModel({ nodes, edges }),
     model: buildAtlasTreeModel(spineArtifact.atlas_spine),
     generatedAt: "2026-08-16T00:00:00.000Z",
+    catalogMemberships: buildAtlasCatalogMemberships(sourceRegistry),
   });
 
-  // Landscape: exactly one Cybersecurity root + one landmark per Atlas area + 0-3 authority
-  // groups, within the 10-20 T4.3 budget. buildAtlasSemanticProjections already throws if this
-  // is violated (enforceNodeBudget); these assertions lock in the shape, not just "didn't throw".
+  // Landscape: one Cybersecurity root plus source-registry-backed publisher ecosystems and
+  // bounded authority context. Editorial work areas are retained only for legacy deep links.
   assert.equal(artifact.landscape.nodes.filter((node) => node.atlasStructureRole === "root").length, 1);
-  assert.equal(artifact.landscape.nodes.filter((node) => node.atlasStructureRole === "area").length, 9);
+  assert.equal(artifact.landscape.nodes.filter((node) => node.atlasStructureRole === "area").length, 0);
+  assert.ok(artifact.landscape.nodes.filter((node) => node.atlasStructureRole === "publisher_ecosystem").length >= 6);
   const authorityCount = artifact.landscape.nodes.filter((node) => node.objectLayer === "authority_document").length;
   assert.ok(authorityCount >= 0 && authorityCount <= 3, `authority group count: ${authorityCount}`);
   assert.ok(
-    artifact.landscape.nodes.length >= 10 && artifact.landscape.nodes.length <= 20,
+    artifact.landscape.nodes.length >= 2 && artifact.landscape.nodes.length <= 20,
     `landscape budget violated: ${artifact.landscape.nodes.length} nodes`,
+  );
+
+  assert.equal(Object.values(artifact.ecosystems).flatMap((projection) => projection.nodes).length, 27);
+  assert.equal(
+    Object.values(artifact.ecosystems).some((projection) =>
+      projection.nodes.some((node) => node.publicationId === "microsoft-zt-maturity"),
+    ),
+    false,
+  );
+  const fedramp = artifact.ecosystems["ecosystem:fedramp"]!;
+  assert.equal(fedramp.nodes.find((node) => node.publicationId === "fedramp-rev5")?.lifecycleStatus, "historical");
+  assert.equal(fedramp.nodes.find((node) => node.publicationId === "fedramp-2026")?.lifecycleStatus, "active");
+
+  const sp80053 = artifact.publications["nist-800-53"]!;
+  const sp80053Families = sp80053.nodes.filter((node) => !node.id.startsWith("context:"));
+  assert.equal(sp80053Families.length, 20);
+  const accessControl = sp80053Families.find((node) => node.label === "Access Control")!;
+  const accessControlRecords = artifact.details[accessControl.id]!.nodes.map((node) => node.id);
+  assert.equal(accessControlRecords.filter((id) => /^nist-800-53:AC-\d+$/.test(id)).length, 25);
+
+  const cmmc = artifact.publications["cmmc-2"]!;
+  const cmmcLevels = cmmc.nodes.find((node) => node.label === "CMMC 2.0 Levels")!;
+  assert.deepEqual(
+    artifact.details[cmmcLevels.id]!.nodes.map((node) => node.id).sort(),
+    ["cmmc-2:LEVEL-1", "cmmc-2:LEVEL-2", "cmmc-2:LEVEL-3"],
   );
 
   // Area: <=60 (enforced by enforceNodeBudget at build time); assert every generated area stays

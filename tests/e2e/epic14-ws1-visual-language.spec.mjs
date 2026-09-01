@@ -68,7 +68,7 @@ test("WS1 decorative surfaces resolve to one teal accent", async ({ page }) => {
   expect(new Set(cardAccentColors).size).toBe(1);
 });
 
-test("WS1 Atlas exposes nine governed areas as named, counted rows", async ({ page }) => {
+test("WS1 Atlas exposes publisher ecosystems and authorities as named, counted rows", async ({ page }) => {
   test.setTimeout(120_000);
   await gotoApp(page, "/#/atlas");
   await waitForAppReady(page, { allowPartial: true });
@@ -81,22 +81,24 @@ test("WS1 Atlas exposes nine governed areas as named, counted rows", async ({ pa
     meta: node.querySelector(".atlas-decomp__meta")?.textContent?.trim() || "",
   })));
 
-  for (const area of [
-    "Governance",
-    "Risk",
-    "Compliance",
-    "Architecture",
-    "Implementation",
-    "Assessment",
-    "Operations",
-    "Threats & Defense",
-    "Knowledge",
-  ]) {
-    expect(rows.some((row) => row.label === area), `${area} row`).toBe(true);
-  }
+  expect(rows.map((row) => row.label)).toEqual([
+    "DISA",
+    "NIST",
+    "MITRE",
+    "FedRAMP",
+    "DoD CIO",
+    "ISOO",
+    "CDAO",
+    "DoD",
+    "Policy & directives",
+    "Statutes",
+    "Regulations & clauses",
+  ]);
+  await expect(areas.getByRole("button")).toHaveCount(8);
+  await expect(areas.locator('.atlas-decomp__node[data-state="static"]')).toHaveCount(3);
 
-  // Magnitude and state carry the meaning; no area is distinguished by hue
-  // alone, which Orbital forbids.
+  // Magnitude and interaction state carry the meaning; no landmark depends on
+  // hue alone, which Orbital forbids.
   expect(rows.every((row) => row.meta.length > 0)).toBe(true);
 });
 

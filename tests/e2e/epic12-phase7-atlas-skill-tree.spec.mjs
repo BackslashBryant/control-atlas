@@ -34,14 +34,14 @@ test("semantic Atlas hands off to explicit publisher-native navigation and prese
   await openNetwork(page);
 
   const atlas = page.getByTestId("atlas-map");
-  await expect(page.getByText("Open any part of the landscape to see what is published inside it, and how much.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Open a publisher or source ecosystem to follow its publications and native structure.", { exact: true })).toBeVisible();
   await expect(atlas).toHaveAttribute("data-scope-level", "root");
   await atlas
     .locator('.atlas-decomp__column[data-column="area"]')
-    .getByRole("button", { name: /Implementation/ })
+    .getByRole("button", { name: /^DISA/ })
     .click();
-  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-IMPLEMENTATION/);
-  await expect(atlas).toHaveAttribute("data-scope-level", "area");
+  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)disa/);
+  await expect(atlas).toHaveAttribute("data-scope-level", "ecosystem");
   await atlas
     .locator('.atlas-decomp__column[data-column="publication"]')
     .getByRole("button", { name: /DISA STIG Catalog/ })

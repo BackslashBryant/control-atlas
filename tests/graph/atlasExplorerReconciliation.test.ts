@@ -7,7 +7,9 @@ import test from "node:test";
 import { catalogProfileFor } from "../../src/ui/lib/catalogProfiles";
 import {
   buildAtlasGroups,
+  buildAtlasContextGroups,
   selectAtlasOverviewGroups,
+  summarizeAtlasRelationshipScopes,
 } from "../../src/ui/lib/atlasModel";
 import type {
   AtlasNeighborhoodEdge,
@@ -333,7 +335,7 @@ function requireAc2Neighborhood(): NeighborhoodRecord {
   return record;
 }
 
-test("AC-2 has 156 published active relationships across ten catalogs", () => {
+test("AC-2 has 156 published relationship records across ten catalogs", () => {
   const neighborhood = requireAc2Neighborhood();
   const edges = loadFullEdgesForNode(AC2_ID);
   assert.equal(neighborhood.edges.length, 156);
@@ -543,6 +545,8 @@ test("connection presentation caps do not alter AC-2 source truth or grouping", 
     search: "",
   };
   const groups = buildAtlasGroups(decoded, filters);
+  const connectionGroups = buildAtlasContextGroups(decoded, filters);
+  const scopes = summarizeAtlasRelationshipScopes(decoded);
   const fullGroupCounts = Object.fromEntries(
     groups.map((group) => [group.id, group.items.length]),
   );
@@ -552,13 +556,20 @@ test("connection presentation caps do not alter AC-2 source truth or grouping", 
     sources: edge.source_refs,
   }));
 
-  const overview = selectAtlasOverviewGroups(groups, 6);
+  const overview = selectAtlasOverviewGroups(connectionGroups, 6);
   const previews = overview.map((group) => group.items.slice(0, 2));
 
   assert.equal(groups.reduce((total, group) => total + group.items.length, 0), 156);
+  assert.equal(connectionGroups.reduce((total, group) => total + group.items.length, 0), 142);
+  assert.deepEqual(scopes, {
+    publishedNeighborhood: 156,
+    nativeStructure: 14,
+    crossSource: 142,
+    sameSourceContext: 0,
+  });
   assert.equal(decoded.edges.length, 156);
   assert.equal(decoded.published_connection_count, 156);
-  assert.equal(overview.length, 6);
+  assert.ok(overview.length <= 6);
   assert.ok(previews.every((preview) => preview.length <= 2));
   assert.deepEqual(
     Object.fromEntries(groups.map((group) => [group.id, group.items.length])),

@@ -126,12 +126,12 @@ test("Atlas first paint is a semantic landscape with drill-down and history", as
   // Landmarks are rows in the map, each already labelled and counted, so no
   // disclosure has to be opened before the reader can see them.
   const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-  await expect(areas).toHaveAttribute("data-row-count", "12");
-  await expect(areas.locator(".atlas-decomp__node")).toHaveCount(12);
-  await areas.getByRole("button", { name: /Threats & Defense/ }).click();
-  await expect(atlas).toHaveAttribute("data-scope-level", "area");
+  await expect(areas).toHaveAttribute("data-row-count", "11");
+  await expect(areas.locator(".atlas-decomp__node")).toHaveCount(11);
+  await areas.getByRole("button", { name: /^MITRE/ }).click();
+  await expect(atlas).toHaveAttribute("data-scope-level", "ecosystem");
   await expect(page).not.toHaveURL(/atlasAxis=/);
-  await expect(page).toHaveURL(/atlasLimb=atlas(?::|%3A)LIMB-THREAT/);
+  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)mitre/);
 
   const publications = atlas.locator('.atlas-decomp__column[data-column="publication"]');
   await expect(publications.getByRole("button", { name: /MITRE ATT&CK Enterprise Catalog/ })).toBeVisible();

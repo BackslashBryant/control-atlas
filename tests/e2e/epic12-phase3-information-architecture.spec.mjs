@@ -316,15 +316,15 @@ test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface lab
   // The landmarks are rows in the map itself, not a disclosure beside it, and
   // each one states what it holds without being hovered.
   const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-  await expect(areas).toHaveAttribute("data-row-count", "12");
+  await expect(areas).toHaveAttribute("data-row-count", "11");
   const rows = areas.locator(".atlas-decomp__node");
-  await expect(rows).toHaveCount(12);
+  await expect(rows).toHaveCount(11);
   for (const row of await rows.all()) {
     // Three honest forms: a count, a route to the surface that holds the area,
     // or an admission that nothing is modelled yet. Never a bare label.
     await expect(row).toContainText(/\d[\d,]* records|Open the \w+|Not yet modeled/);
   }
-  for (const area of ["Architecture", "Assessment", "Compliance", "Governance", "Implementation", "Knowledge", "Operations", "Risk", "Threats & Defense"]) {
-    await expect(rows.filter({ hasText: area }).first()).toBeVisible();
+  for (const ecosystem of ["NIST", "DISA", "MITRE", "FedRAMP", "DoD CIO", "CDAO", "ISOO"]) {
+    await expect(rows.filter({ hasText: ecosystem }).first()).toBeVisible();
   }
 });

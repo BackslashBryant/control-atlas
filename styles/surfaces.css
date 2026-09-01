@@ -12479,13 +12479,44 @@ input[type="checkbox"] {
   pointer-events: none;
 }
 
-.atlas-decomp__label {
+.atlas-decomp__identity {
+  display: grid;
+  min-width: 0;
+}
+
+.atlas-decomp__label,
+.atlas-decomp__kind {
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.atlas-decomp__label {
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+}
+
+.atlas-decomp__kind {
+  color: var(--ca-text-subtle);
+  font-size: 0.625rem;
+  line-height: 1.15;
+}
+
+.atlas-decomp__lifecycle-notes {
+  display: grid;
+  gap: var(--ca-space-1);
+  margin: 0;
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border-left: 3px solid var(--ca-border-strong);
+  color: var(--ca-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  list-style: none;
+}
+
+.atlas-decomp__lifecycle-notes strong {
+  color: var(--ca-text);
 }
 
 .atlas-decomp__meta {

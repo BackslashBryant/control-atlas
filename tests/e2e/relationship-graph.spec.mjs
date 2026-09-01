@@ -35,7 +35,7 @@ test("Atlas default route is the semantic Atlas network, not an empty focused-re
   await expect(atlas).toHaveAttribute("data-scope-level", "root");
   await expect(
     atlas.locator('.atlas-decomp__column[data-column="area"]'),
-  ).toHaveAttribute("data-row-count", "12");
+  ).toHaveAttribute("data-row-count", "11");
   await expect(page.getByRole("region", { name: "Focused Atlas record" })).toHaveCount(0);
   await expect(page.locator(".ca-flow-wrap")).toHaveCount(0);
 });

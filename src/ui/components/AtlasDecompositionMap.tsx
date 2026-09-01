@@ -27,7 +27,7 @@ type AtlasDecompositionMapProps = {
   scope: AtlasDecompositionScope;
   onDrill: (drill: AtlasProjectionDrill) => void;
   /** Move the scope back to an ancestor. An empty id returns to the root. */
-  onTrail: (level: "root" | "area" | "publication" | "detail", id: string) => void;
+  onTrail: (level: "root" | "ecosystem" | "area" | "publication" | "detail", id: string) => void;
   /** Areas whose content lives on another route navigate instead of drilling. */
   onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 };
@@ -57,7 +57,13 @@ function rowMeta(row: AtlasTreeRow): string {
   // modelled somewhere the record graph does not reach. Say where to go.
   if (row.destination) return row.destination.actionLabel;
   if (row.count === 0) return "Not yet modeled";
-  return `${formatCount(row.count)} ${row.count === 1 ? "record" : "records"}`;
+  const lifecycle = row.lifecycleStatus === "historical"
+    ? "Historical"
+    : row.lifecycleStatus === "active"
+      ? "Active"
+      : "";
+  const count = `${formatCount(row.count)} ${row.count === 1 ? "record" : "records"}`;
+  return [lifecycle, count].filter(Boolean).join(" · ");
 }
 
 function TreeRow(props: {
@@ -95,7 +101,12 @@ function TreeRow(props: {
             type="button"
           >
             <span aria-hidden="true" className="atlas-decomp__bar" />
-            <span className="atlas-decomp__label">{row.label}</span>
+            <span className="atlas-decomp__identity">
+              <span className="atlas-decomp__label">{row.label}</span>
+              {row.publicationKind ? (
+                <span className="atlas-decomp__kind">{row.publicationKind}</span>
+              ) : null}
+            </span>
             <span className="atlas-decomp__meta">{meta}</span>
             <IconChevronRight
               aria-hidden="true"
@@ -114,7 +125,12 @@ function TreeRow(props: {
             view={row.destination.view as ViewState["view"]}
           >
             <span aria-hidden="true" className="atlas-decomp__bar" />
-            <span className="atlas-decomp__label">{row.label}</span>
+            <span className="atlas-decomp__identity">
+              <span className="atlas-decomp__label">{row.label}</span>
+              {row.publicationKind ? (
+                <span className="atlas-decomp__kind">{row.publicationKind}</span>
+              ) : null}
+            </span>
             <span className="atlas-decomp__meta">{meta}</span>
             <IconArrowUpRight
               aria-hidden="true"
@@ -130,7 +146,12 @@ function TreeRow(props: {
             title={`${row.label} — ${meta}`}
           >
             <span aria-hidden="true" className="atlas-decomp__bar" />
-            <span className="atlas-decomp__label">{row.label}</span>
+            <span className="atlas-decomp__identity">
+              <span className="atlas-decomp__label">{row.label}</span>
+              {row.publicationKind ? (
+                <span className="atlas-decomp__kind">{row.publicationKind}</span>
+              ) : null}
+            </span>
             <span className="atlas-decomp__meta">{meta}</span>
           </div>
         )}
@@ -253,6 +274,10 @@ export const AtlasDecompositionMap = memo(function AtlasDecompositionMap(
     () => buildAtlasTree(artifact, { areaId, publicationId, detailId }),
     [artifact, areaId, publicationId, detailId],
   );
+  const lifecycleNotes = model.columns
+    .flatMap((column) => column.rows)
+    .filter((row) => row.lifecycleStatus === "historical" && row.description)
+    .map((row) => ({ id: row.id, label: row.label, note: row.description }));
 
   return (
     <div
@@ -309,6 +334,16 @@ export const AtlasDecompositionMap = memo(function AtlasDecompositionMap(
 
       {model.scopeDescription ? (
         <p className="atlas-decomp__description">{model.scopeDescription}</p>
+      ) : null}
+
+      {lifecycleNotes.length > 0 ? (
+        <ul aria-label="Lifecycle guidance" className="atlas-decomp__lifecycle-notes">
+          {lifecycleNotes.map((entry) => (
+            <li key={entry.id}>
+              <strong>{entry.label}:</strong> {entry.note}
+            </li>
+          ))}
+        </ul>
       ) : null}
 
       <div className="atlas-decomp__levels">

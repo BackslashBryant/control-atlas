@@ -208,12 +208,82 @@ export function buildAtlasRows(
     .sort((left, right) => left.itemId.localeCompare(right.itemId));
 }
 
+function contextOnlyRecord(
+  record: AtlasNeighborhoodRecord,
+): AtlasNeighborhoodRecord {
+  return {
+    ...record,
+    edges: record.edges.filter(
+      (edge) => edge.relationship_class !== "structural",
+    ),
+  };
+}
+
+export function buildAtlasContextRows(
+  record: AtlasNeighborhoodRecord,
+  filters: AtlasFilterState,
+): AtlasRelationshipRow[] {
+  return buildAtlasRows(contextOnlyRecord(record), filters);
+}
+
 export type AtlasStructuralChild = {
   id: string;
   itemId: string;
   title: string;
   nodeType: string;
 };
+
+export type AtlasRelationshipScopeSummary = {
+  publishedNeighborhood: number;
+  nativeStructure: number;
+  crossSource: number;
+  sameSourceContext: number;
+};
+
+/**
+ * Source-truth relationship scopes for the focused record. These counts are
+ * computed from the complete published neighborhood before UI filtering or
+ * preview limits. Cross-source membership comes from endpoint metadata, not
+ * relationship labels or catalog-name heuristics.
+ */
+export function summarizeAtlasRelationshipScopes(
+  record: AtlasNeighborhoodRecord,
+): AtlasRelationshipScopeSummary {
+  const centerCatalogId = record.center_node.metadata?.catalog_id || "";
+  const nodeById = new Map(record.nodes.map((node) => [node.id, node]));
+  const published = new Map(
+    record.edges
+      .filter((edge) => edge.publication_status === "published")
+      .map((edge) => [edge.id, edge] as const),
+  );
+  let nativeStructure = 0;
+  let crossSource = 0;
+  let sameSourceContext = 0;
+
+  for (const edge of published.values()) {
+    if (edge.relationship_class === "structural") {
+      nativeStructure += 1;
+      continue;
+    }
+    const counterpartId =
+      edge.source_node_id === record.center_node.id
+        ? edge.target_node_id
+        : edge.source_node_id;
+    const counterpartCatalogId = nodeById.get(counterpartId)?.metadata?.catalog_id || "";
+    if (centerCatalogId && counterpartCatalogId && counterpartCatalogId !== centerCatalogId) {
+      crossSource += 1;
+    } else {
+      sameSourceContext += 1;
+    }
+  }
+
+  return {
+    publishedNeighborhood: published.size,
+    nativeStructure,
+    crossSource,
+    sameSourceContext,
+  };
+}
 
 /**
  * Published structural children of the focused record — the "decomposes into"
@@ -299,13 +369,24 @@ export function buildAtlasGroups(
     );
 }
 
-export function atlasFilterOptions(record: AtlasNeighborhoodRecord) {
+export function buildAtlasContextGroups(
+  record: AtlasNeighborhoodRecord,
+  filters: AtlasFilterState,
+): AtlasConnectionGroup[] {
+  return buildAtlasGroups(contextOnlyRecord(record), filters);
+}
+
+export function atlasFilterOptions(
+  record: AtlasNeighborhoodRecord,
+  options: { excludeStructural?: boolean } = {},
+) {
   const relationshipTypes = new Set<string>();
   const provenanceClasses = new Set<string>();
   const confidenceLevels = new Set<string>();
   const nodeTypes = new Set<string>();
 
   for (const edge of record.edges) {
+    if (options.excludeStructural && edge.relationship_class === "structural") continue;
     relationshipTypes.add(edge.relationship_type);
     provenanceClasses.add(edge.provenance_class);
     confidenceLevels.add(edge.confidence);

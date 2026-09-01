@@ -430,23 +430,26 @@ test('skip links focus the workspace without turning the target into an applicat
 
 test('mounted record surfaces render official descriptions rather than synthetic translations', () => {
   const detailPage = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
+  const publishedText = readFileSync('src/ui/components/RecordPublishedText.tsx', 'utf8');
   const surfaces = [detailPage, readFileSync('src/ui/pages/CatalogDetailPage.tsx', 'utf8'), readFileSync('src/ui/pages/AtlasMapPage.tsx', 'utf8'), readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8'), readFileSync('src/ui/components/SearchOverlay.tsx', 'utf8')].join('\n');
   assert.match(detailPage, /recordPresentationContract/);
-  assert.match(detailPage, /data-source-text="published"/);
-  assert.match(detailPage, /data-claim-origin=\{claimOrigin\}/);
+  assert.match(detailPage, /<RecordPublishedText/);
+  assert.match(publishedText, /data-source-text="published"/);
+  assert.match(publishedText, /data-claim-origin=\{props\.claimOrigin\}/);
   assert.doesNotMatch(surfaces, /No narrative description was published for this record/);
   assert.doesNotMatch(surfaces, /plain_language_summary|plain_action/);
 });
 
 test('concise DISA CCI records orient the user before the publisher requirement', () => {
   const detail = readFileSync('src/ui/pages/ObjectDetailPage.tsx', 'utf8');
+  const publishedText = readFileSync('src/ui/components/RecordPublishedText.tsx', 'utf8');
   const startHere = detail.indexOf('CCI records deliberately publish a concise requirement');
   const sourceExcerpt = detail.indexOf('data-record-source-identity');
   assert.ok(startHere >= 0, 'CCI records need an explicit source-first orientation');
   assert.ok(sourceExcerpt > startHere, 'CCI orientation must appear before the terse publisher requirement');
   assert.match(detail, /Explore connections/);
   assert.match(detail, /Compare this CCI/);
-  assert.match(detail, /props\.kind === "references"/);
+  assert.match(publishedText, /props\.kind === "references"/);
   assert.match(detail, />Related records</);
   assert.match(detail, />Source evidence</);
   assert.match(detail, /Explore all connections in Atlas/);
@@ -540,8 +543,8 @@ test('route interactions keep canonical context and synchronize visible state', 
   const explore = readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8');
   assert.match(searchOverlay, /onOpenNode\(nodeId\)/);
   assert.match(atlasMap, /loadAtlasNeighborhood\(nodeId\)/);
-  assert.match(atlasMap, /buildAtlasGroups\(record, filters\)/);
-  assert.match(atlasMap, /buildAtlasRows\(record, filters\)/);
+  assert.match(atlasMap, /buildAtlasContextGroups\(record, filters\)/);
+  assert.match(atlasMap, /buildAtlasContextRows\(record, filters\)/);
   // The Path/Map/List tabs were folded into one record workspace: Connections
   // is always rendered and relationshipView now decides which supporting panel
   // is open, so every existing deep link still resolves.

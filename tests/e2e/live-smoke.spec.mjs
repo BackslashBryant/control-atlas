@@ -74,8 +74,8 @@ test("live smoke: Resources and Atlas workbench are first-class routes", async (
   // Every node is a labelled row, so the smoke check reads names rather than
   // probing a canvas that carried none.
   await expect(atlas.locator("canvas")).toHaveCount(0);
-  await areas.getByRole("button", { name: /Compliance/ }).click();
-  await expect(atlas).toHaveAttribute("data-scope-level", "area");
+  await areas.getByRole("button", { name: /^NIST/ }).click();
+  await expect(atlas).toHaveAttribute("data-scope-level", "ecosystem");
   await expect(atlas.locator('.atlas-decomp__column[data-column="publication"]')).toBeVisible();
 });
 
