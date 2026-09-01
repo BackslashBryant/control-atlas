@@ -8,6 +8,7 @@ import {
   type FormEvent,
   type ReactNode,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -127,11 +128,14 @@ export function CheckboxFacet(props: {
 }
 
 export function TagFacet(props: {
+  compact?: boolean;
+  dimensionId: string;
   label: string;
   options: Array<{ aliases: string[]; count: number; label: string; value: string }>;
   selected: string[];
   onChange: (values: string[]) => void;
 }) {
+  const detailsRef = useRef<HTMLDetailsElement>(null);
   const [query, setQuery] = useState("");
   const visible = props.options.filter((option) => {
     const needle = query.trim().toLocaleLowerCase();
@@ -141,9 +145,12 @@ export function TagFacet(props: {
 
   if (!props.options.length) return null;
 
-  return (
-    <fieldset className="workspace-checkbox-facet workspace-tag-facet">
-      <legend>{props.label}</legend>
+  const facet = (
+    <fieldset
+      aria-label={props.compact ? props.label : undefined}
+      className="workspace-checkbox-facet workspace-tag-facet"
+    >
+      {props.compact ? null : <legend>{props.label}</legend>}
       <label className="workspace-tag-facet__search">
         <span className="visually-hidden">Search {props.label.toLocaleLowerCase()} tags</span>
         <input
@@ -175,6 +182,30 @@ export function TagFacet(props: {
       {!visible.length ? <p className="muted">No tags match.</p> : null}
     </fieldset>
   );
+
+  if (!props.compact) return facet;
+
+  return (
+    <details
+      className="workspace-compact-tag-facet"
+      data-taxonomy-dimension={props.dimensionId}
+      onKeyDown={(event) => {
+        if (event.key !== "Escape" || !detailsRef.current?.open) return;
+        event.preventDefault();
+        detailsRef.current.open = false;
+        detailsRef.current.querySelector("summary")?.focus();
+      }}
+      ref={detailsRef}
+    >
+      <summary>
+        <span>{props.label}</span>
+        {props.selected.length ? (
+          <small>{props.selected.length} selected</small>
+        ) : null}
+      </summary>
+      <div className="workspace-compact-tag-facet__panel">{facet}</div>
+    </details>
+  );
 }
 
 export function WorkspaceTemplate(props: {
@@ -192,6 +223,7 @@ export function WorkspaceTemplate(props: {
   onSearch: () => void;
   onSortChange: (value: string) => void;
   onViewChange?: (value: string) => void;
+  mobilePrimaryFilters?: ReactNode;
   purpose: string;
   queryDraft: string;
   resultCountLabel: string;
@@ -284,6 +316,18 @@ export function WorkspaceTemplate(props: {
       ) : null}
 
       {props.activeFilters}
+
+      {props.mobilePrimaryFilters ? (
+        <section aria-label="Primary taxonomy filters" className="workspace-mobile-primary-filters">
+          <div className="workspace-mobile-primary-filters__heading">
+            <strong>Filter by</strong>
+            <span>Asset, domain, vendor, or program</span>
+          </div>
+          <div className="workspace-mobile-primary-filters__grid">
+            {props.mobilePrimaryFilters}
+          </div>
+        </section>
+      ) : null}
 
       <Dialog.Root onOpenChange={setFiltersOpen} open={filtersOpen}>
         <Dialog.Trigger asChild>

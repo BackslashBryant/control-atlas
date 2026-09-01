@@ -10,18 +10,66 @@ async function open(page, route) {
 
 async function resultTotal(page) {
   const label = await page.locator(".workspace-result-count").innerText();
+  const matches = label.match(/([\d,]+) matches/i);
   const showing = label.match(/of ([\d,]+) results?/i);
   const exact = label.match(/([\d,]+) results?/i);
-  return Number((showing?.[1] || exact?.[1] || "0").replaceAll(",", ""));
+  return Number((matches?.[1] || showing?.[1] || exact?.[1] || "0").replaceAll(",", ""));
 }
+
+const primaryDimensions = [
+  ["asset_class", "Asset and system"],
+  ["domain", "Security domain"],
+  ["vendor_brand", "Vendor"],
+  ["program", "Program"],
+];
+
+test("primary taxonomy dimensions stay discoverable at every workspace breakpoint", async ({ page }) => {
+  for (const width of [1440, 1024, 768, 390]) {
+    await page.setViewportSize({ width, height: width <= 390 ? 844 : 900 });
+    await open(page, "/#/library");
+
+    const primary = width >= 1024
+      ? page.locator(".workspace-facet-rail .workspace-primary-taxonomy-facets")
+      : page.locator(".workspace-mobile-primary-filters");
+    await expect(primary).toBeVisible();
+    for (const [dimensionId, label] of primaryDimensions) {
+      const disclosure = primary.locator(`[data-taxonomy-dimension="${dimensionId}"]`);
+      await expect(disclosure.locator("summary")).toHaveText(label);
+      await expect(disclosure.locator("summary")).toBeVisible();
+    }
+
+    const overflow = await page.evaluate(() => ({
+      documentWidth: globalThis.document.documentElement.scrollWidth,
+      viewportWidth: globalThis.innerWidth,
+    }));
+    expect(overflow.documentWidth).toBeLessThanOrEqual(overflow.viewportWidth);
+  }
+});
+
+test("compact primary facets open by keyboard and Escape returns focus", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open(page, "/#/library");
+
+  const primary = page.locator(".workspace-mobile-primary-filters");
+  const assetDisclosure = primary.locator('[data-taxonomy-dimension="asset_class"]');
+  const summary = assetDisclosure.locator("summary");
+  await summary.focus();
+  await page.keyboard.press("Enter");
+  await expect(assetDisclosure).toHaveAttribute("open", "");
+  await expect(assetDisclosure.getByRole("checkbox", { name: /Server/ })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(assetDisclosure).not.toHaveAttribute("open", "");
+  await expect(summary).toBeFocused();
+});
 
 test("governed tags keep stable URL, OR/AND, alias, count, and unavailable-value behavior", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await open(page, "/#/library");
 
   const facets = page.locator(".workspace-facet-rail");
-  await facets.locator("details.workspace-advanced-facets > summary").click();
-  const assetFacet = facets.getByRole("group", { name: "Asset and system" });
+  const assetDisclosure = facets.locator('[data-taxonomy-dimension="asset_class"]');
+  await assetDisclosure.locator("summary").click();
+  const assetFacet = assetDisclosure.getByRole("group", { name: "Asset and system" });
   await assetFacet.getByPlaceholder("Find asset and system").fill("dbms");
   await expect(assetFacet.getByRole("checkbox", { name: /Database/ })).toBeVisible();
   await assetFacet.getByPlaceholder("Find asset and system").fill("");
@@ -29,20 +77,63 @@ test("governed tags keep stable URL, OR/AND, alias, count, and unavailable-value
   await assetFacet.getByRole("checkbox", { name: /Server/ }).click();
   await expect(page).toHaveURL(/tag=asset\.server/);
   const serverCount = await resultTotal(page);
+  expect(serverCount).toBe(2584);
+  await expect(page.getByRole("button", { name: "Remove Server filter" })).toBeVisible();
 
   await assetFacet.getByRole("checkbox", { name: /Workstation/ }).click();
   await expect(page).toHaveURL(/tag=asset\.server.*tag=asset\.workstation/);
-  const withinDimensionCount = await resultTotal(page);
-  expect(withinDimensionCount).toBeGreaterThanOrEqual(serverCount);
+  await expect.poll(() => resultTotal(page)).toBe(3000);
 
-  const vendorFacet = facets.getByRole("group", { name: "Vendor" });
+  const vendorDisclosure = facets.locator('[data-taxonomy-dimension="vendor_brand"]');
+  await vendorDisclosure.locator("summary").click();
+  const vendorFacet = vendorDisclosure.getByRole("group", { name: "Vendor" });
   await vendorFacet.getByRole("checkbox", { name: /Microsoft/ }).click();
   await expect(page).toHaveURL(/tag=asset\.server.*tag=asset\.workstation.*tag=vendor\.microsoft/);
-  await expect.poll(() => resultTotal(page)).toBeLessThanOrEqual(withinDimensionCount);
+  await expect.poll(() => resultTotal(page)).toBe(1316);
+
+  await page.goBack();
+  await expect(page).toHaveURL(/tag=asset\.server.*tag=asset\.workstation/);
+  await expect.poll(() => resultTotal(page)).toBe(3000);
+  await page.goForward();
+  await expect(page).toHaveURL(/tag=asset\.server.*tag=asset\.workstation.*tag=vendor\.microsoft/);
+  await expect.poll(() => resultTotal(page)).toBe(1316);
 
   await open(page, "/#/library?tag=asset.iot");
-  const contextualVendorFacet = page.locator(".workspace-facet-rail").getByRole("group", { name: "Vendor" });
-  await expect(contextualVendorFacet).toHaveCount(0);
+  const contextualVendorDisclosure = page.locator('.workspace-facet-rail [data-taxonomy-dimension="vendor_brand"]');
+  await expect(contextualVendorDisclosure).toHaveCount(0);
+});
+
+test("Advanced keeps secondary dimensions without duplicating promoted taxonomy", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page, "/#/library");
+
+  const advanced = page.locator(".workspace-facet-rail details.workspace-advanced-facets");
+  await advanced.locator(":scope > summary").click();
+  for (const [, label] of primaryDimensions) {
+    await expect(advanced.getByRole("group", { name: label })).toHaveCount(0);
+  }
+  for (const label of ["Publisher", "Technology", "Product", "Framework", "Organization", "Environment"] ) {
+    await expect(advanced.getByText(label, { exact: true }).first()).toBeVisible();
+  }
+  await expect(advanced.getByText("Has published connections", { exact: true })).toBeVisible();
+});
+
+test("clear-all preserves text search and zero-result recovery remains available", async ({ page }) => {
+  await open(page, "/#/library?q=account&tag=domain.access-control");
+  await expect.poll(() => resultTotal(page)).toBe(137);
+  await page.getByRole("button", { name: "Remove Access Control filter" }).click();
+  await expect(page).toHaveURL(/#\/library\?q=account$/);
+  await expect.poll(() => resultTotal(page)).toBe(2655);
+
+  await open(page, "/#/library?q=account&tag=domain.access-control");
+  await page.locator(".active-filter-row .clear-filter-link").click();
+  await expect(page).toHaveURL(/#\/library\?q=account$/);
+  await expect.poll(() => resultTotal(page)).toBe(2655);
+
+  await open(page, "/#/library?tag=asset.iot&tag=product.microsoft-windows");
+  await expect(page.locator(".workspace-result-count")).toHaveText("0 results");
+  await expect(page.getByText("Nothing matches these filters.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Clear filters" })).toBeVisible();
 });
 
 test("record and Resource governed tags hand off to the filtered Library", async ({ page }) => {
