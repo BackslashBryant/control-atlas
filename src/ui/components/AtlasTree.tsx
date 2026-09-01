@@ -14,7 +14,10 @@ import "@xyflow/react/dist/style.css";
 import { memo, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 
 import authoritySpine from "../../../data/curated/authority-spine.json";
-import type { AtlasSpine } from "../lib/atlasDrilldown";
+import {
+  atlasStructuralRowIdentity,
+  type AtlasSpine,
+} from "../lib/atlasDrilldown";
 import {
   renderedAtlasSet,
   type AtlasAggregateNode,
@@ -40,10 +43,6 @@ import {
   rankAtlasMappingOverlay,
 } from "../lib/atlasTreeOverlay";
 import type { AtlasNeighborhoodRecord } from "../lib/runtimeLoader";
-import {
-  GENERATED_STABLE_ID_TYPES,
-  type RecordIdentityPresentation,
-} from "../lib/recordTitle";
 import { catalogMandateLabel } from "../lib/catalogMandate";
 import {
   AREA_IDS,
@@ -88,7 +87,7 @@ export type AtlasTreeProps = {
   onOpenRecord: (nodeId: string, parentId: string) => void;
   onSelectBenchmark: (benchmarkId: string) => void;
   onOpenCompare: () => void;
-  identityForNode: (nodeId: string) => RecordIdentityPresentation;
+  recordLabels: ReadonlyMap<string, string>;
 };
 
 const nodeTypes = { atlasTree: memo(AtlasTreeNodeView) };
@@ -337,7 +336,7 @@ function AtlasStructuralExplorer(props: {
   query: string;
   setQuery: (value: string) => void;
   showConnections: boolean;
-  identityForNode: (nodeId: string) => RecordIdentityPresentation;
+  recordLabels: ReadonlyMap<string, string>;
 }) {
   const [visibleCount, setVisibleCount] = useState(40);
   useEffect(() => setVisibleCount(40), [props.node.id, props.query]);
@@ -383,23 +382,20 @@ function AtlasStructuralExplorer(props: {
           </div>
           <ul className="atlas-publisher-explorer__list">
             {visible.map((node) => {
-              const identity = props.identityForNode(node.id);
-              // Structural rows come from the Atlas spine while their identity resolves
-              // from lazily loaded catalog records. Decide the label from the spine's
-              // own node type so a row never re-labels itself mid-load.
-              const identityLed = GENERATED_STABLE_ID_TYPES.has(node.nodeType);
+              const identity = atlasStructuralRowIdentity(
+                node,
+                props.recordLabels.get(node.id),
+              );
               return (
               <li key={node.id}>
                 <button
-                  aria-label={identityLed ? `Open ${identity.accessibleName}` : undefined}
+                  aria-label={identity.usesPublisherLabel ? `Open ${identity.accessibleName}` : undefined}
                   onClick={() => props.onOpen(node)}
                   type="button"
                 >
                   <span>
-                    <strong>{identityLed ? identity.primary : node.itemId}</strong>
-                    {identityLed && identity.context ? (
-                      <small>{identity.context}</small>
-                    ) : <small>{node.label}</small>}
+                    <strong>{identity.primary}</strong>
+                    {identity.secondary ? <small>{identity.secondary}</small> : null}
                   </span>
                   <span>{node.descendantRecordCount.toLocaleString()}</span>
                 </button>
@@ -769,19 +765,18 @@ export function AtlasTree(props: AtlasTreeProps) {
               <p>{structuralChildren.length.toLocaleString()} child items</p>
               <ul>
                 {sidebarChildren.map((node) => {
-                  const identity = props.identityForNode(node.id);
-                  // Structural rows come from the Atlas spine while their identity resolves
-                  // from lazily loaded catalog records. Decide the label from the spine's
-                  // own node type so a row never re-labels itself mid-load.
-                  const identityLed = GENERATED_STABLE_ID_TYPES.has(node.nodeType);
+                  const identity = atlasStructuralRowIdentity(
+                    node,
+                    props.recordLabels.get(node.id),
+                  );
                   return (
                   <li key={node.id}>
                     <button
-                      aria-label={identityLed ? `Open ${identity.accessibleName}` : undefined}
+                      aria-label={identity.usesPublisherLabel ? `Open ${identity.accessibleName}` : undefined}
                       onClick={() => activateNode(node)}
                       type="button"
                     >
-                      <span>{identityLed ? identity.primary : node.itemId}</span>
+                      <span>{identity.primary}</span>
                       <small>{node.descendantRecordCount.toLocaleString()}</small>
                     </button>
                   </li>
@@ -875,11 +870,11 @@ export function AtlasTree(props: AtlasTreeProps) {
         {structuralExplorer && focusedNode ? (
           <AtlasStructuralExplorer
             children={structuralChildren}
-            identityForNode={props.identityForNode}
             node={focusedNode}
             onOpen={activateNode}
             onShowConnections={() => setOverlayEnabled((value) => !value)}
             query={technologyQuery}
+            recordLabels={props.recordLabels}
             setQuery={setTechnologyQuery}
             showConnections={Boolean(props.focusedRecord)}
           />

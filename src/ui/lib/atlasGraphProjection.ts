@@ -1,4 +1,5 @@
 import type { AtlasGraph, AtlasGraphSourceNode } from "./atlasGraphModel";
+import { recordDisplayTitle } from "./recordTitle";
 import { ATLAS_TRUNK_ID, type AtlasTreeModel } from "./atlasTreeModel";
 
 export type AtlasProjectionLevel = "landscape" | "ecosystem" | "area" | "publication" | "detail";
@@ -82,6 +83,22 @@ export type AtlasSemanticProjectionArtifact = {
   record_locations: Record<string, AtlasRecordLocation>;
 };
 
+/** Stable publisher-native record labels embedded in the initial Atlas projection. */
+export function atlasProjectionRecordLabels(
+  artifact: AtlasSemanticProjectionArtifact | null | undefined,
+): ReadonlyMap<string, string> {
+  const labels = new Map<string, string>();
+  for (const [id, location] of Object.entries(artifact?.record_locations || {})) {
+    labels.set(id, location.label);
+  }
+  for (const detail of Object.values(artifact?.details || {})) {
+    for (const node of detail.nodes) {
+      if (node.drill?.kind === "record") labels.set(node.id, node.label);
+    }
+  }
+  return labels;
+}
+
 export type AtlasCatalogMembership = {
   catalogId: string;
   publicationSourceId: string;
@@ -120,7 +137,6 @@ function asRecord(value: unknown) {
   return value && typeof value === "object" ? value as Record<string, unknown> : {};
 }
 function asText(value: unknown) { return typeof value === "string" ? value : ""; }
-function normalized(value: string) { return value.trim().toLocaleLowerCase().replace(/\s+/g, " "); }
 function metadata(node: AtlasGraphSourceNode) { return asRecord(node.metadata); }
 function catalogId(node: AtlasGraphSourceNode) { return asText(metadata(node).catalog_id) || asText(node.catalog_id); }
 function publicationCatalogId(publication: { id: string; itemId: string }) {
@@ -130,10 +146,17 @@ function publicationCatalogId(publication: { id: string; itemId: string }) {
 }
 function nodeLabel(node: AtlasGraphSourceNode) { return asText(metadata(node).title) || asText(node.label) || asText(metadata(node).item_id) || node.id; }
 function recordLabel(node: AtlasGraphSourceNode) {
-  const itemId = asText(metadata(node).item_id);
-  const title = asText(metadata(node).title);
-  if (itemId && title && normalized(itemId) !== normalized(title)) return `${itemId} \u2014 ${title}`;
-  return asText(node.label) || nodeLabel(node);
+  const values = metadata(node);
+  return recordDisplayTitle({
+    id: node.id,
+    node_type: asText(node.node_type),
+    label: asText(node.label),
+    metadata: {
+      item_id: asText(values.item_id),
+      publisher_item_id: asText(values.publisher_item_id),
+      title: asText(values.title),
+    },
+  }) || nodeLabel(node);
 }
 function nativeType(node: AtlasGraphSourceNode) {
   if (catalogId(node) === "disa-cci") return "cci";
@@ -318,7 +341,7 @@ export function buildAtlasSemanticProjections(options: {
       ecosystemId: ecosystem,
       areaId: area,
       publicationId: catalog,
-      label: nodeLabel(source),
+      label: recordLabel(source),
       nodeType: asText(source.node_type),
     };
   }
