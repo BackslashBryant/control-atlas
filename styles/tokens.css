@@ -100,6 +100,7 @@
      separate because they communicate state rather than decoration. */
   --ca-accent: var(--lsm-teal);
   --ca-accent-hover: color-mix(in srgb, var(--ca-accent) 84%, var(--lsm-bone));
+  --ca-accent-text: var(--lsm-teal-text);
   /* Mission Gold: the sparing v1.8 accent role. Used for occasional highlights
      only — never a surface fill (keeps it distinct from primary/state). */
   --ca-accent-gold: var(--lsm-gold);
