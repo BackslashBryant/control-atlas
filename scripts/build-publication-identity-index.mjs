@@ -59,15 +59,16 @@ const identities = canonicalPublications.map((pub) => {
     }
   }
 
-  // Alias publications carry their own kind: "supplemental" rows are source
-  // materials of this identity; "mapping" rows are connection evidence.
+  // Alias publications carry their own kind when no canonical artifact already
+  // represents the same material. Mapping aliases are connection evidence;
+  // other aliases are supplemental source materials.
   for (const alias of aliasPublications) {
     const hasCanonicalArtifact = attachedArtifacts.some(
       (artifact) => artifact.publication_source_id === alias.id,
     );
     if (alias.metadata?.identity_kind === 'mapping') {
       if (!hasCanonicalArtifact) connectionEvidence.push(alias.id);
-    } else {
+    } else if (!hasCanonicalArtifact) {
       sourceMaterials.other.push(alias.id);
     }
   }

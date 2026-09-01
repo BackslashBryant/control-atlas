@@ -26,6 +26,9 @@ const catalogBootstrap = JSON.parse(
 const sources = JSON.parse(
   readFileSync("data/generated/sources.json", "utf8"),
 );
+const publicationIdentityIndex = JSON.parse(
+  readFileSync("data/generated/publication-identity-index.json", "utf8"),
+);
 const catalogs = catalogBootstrap.catalog_bootstrap.catalogs;
 
 test("source detail identity separates a specific name from shared family context", () => {
@@ -410,9 +413,15 @@ test("canonical publication register builds exactly 49 publication rows with rol
     ),
   );
   assert.ok(
-    dodZt.sourceMaterials.supplemental.some(
-      (m) => m.id === "dod-zt-strategy-placemats" || m.id === "artifact-dod-zt-strategy-placemats",
+    dodZt.sourceMaterials.enrichment.some(
+      (m) => m.id === "artifact-dod-zt-strategy-placemats",
     ),
+  );
+  assert.ok(
+    !dodZt.sourceMaterials.supplemental.some(
+      (m) => m.id === "dod-zt-strategy-placemats",
+    ),
+    "a publication alias must not duplicate its canonical artifact",
   );
   assert.ok(
     dodZt.connectionEvidence.some(
@@ -438,6 +447,47 @@ test("canonical publication register builds exactly 49 publication rows with rol
 
   const cmmc = publications.find((pub) => pub.id === "dod-cmmc-rule");
   assert.equal(cmmc?.publisher.value, "Department of Defense");
+});
+
+test("publication register source-file memberships match the canonical identity index", () => {
+  const publications = buildPublicationRegister(sources.sources, catalogs);
+  const identitiesById = new Map(
+    publicationIdentityIndex.identities.map((identity: any) => [identity.id, identity]),
+  );
+
+  for (const publication of publications) {
+    const identity: any = identitiesById.get(publication.id);
+    assert.ok(identity, `${publication.id} is missing from the publication identity index`);
+    const canonicalFileIds = [
+      ...identity.source_materials.primary,
+      ...identity.source_materials.enrichment,
+      ...identity.source_materials.other,
+    ].sort();
+    const inspectorFileItems = [
+      ...publication.sourceMaterials.primary,
+      ...publication.sourceMaterials.enrichment,
+      ...publication.sourceMaterials.supplemental,
+    ];
+    const inspectorFileIds = inspectorFileItems.map((item) => item.id).sort();
+
+    assert.deepEqual(
+      inspectorFileIds,
+      canonicalFileIds,
+      `${publication.id} register and inspector source-file memberships differ`,
+    );
+    assert.equal(
+      new Set(inspectorFileIds).size,
+      inspectorFileIds.length,
+      `${publication.id} renders a duplicate source-file identity`,
+    );
+    for (const item of inspectorFileItems) {
+      assert.ok(item.displayTitle.trim(), `${publication.id} renders a source file without a title`);
+      assert.ok(
+        item.format.trim() || item.url.trim(),
+        `${publication.id} renders source file ${item.id} without a format or locator`,
+      );
+    }
+  }
 });
 
 test("publication register exposes truthful absence states for version and last checked", () => {
