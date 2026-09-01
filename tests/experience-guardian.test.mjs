@@ -78,13 +78,15 @@ test("record review states cover the required object classes and responsive temp
   assert.equal(matrix.states.find((entry) => entry.id === "stig-rule").path, "/#/record/disa-stig/V-256609");
   const home = readFileSync("src/ui/pages/HomePage.tsx", "utf8");
   const records = readFileSync("src/ui/pages/ObjectDetailPage.tsx", "utf8");
+  const publishedText = readFileSync("src/ui/components/RecordPublishedText.tsx", "utf8");
   assert.match(home, /data-visual-identity="universal-front-door"/);
   assert.match(
     home,
     /DESTINATION_ICONS[\s\S]*IconRocket[\s\S]*IconTopologyStar3[\s\S]*IconBooks[\s\S]*IconUsersGroup/,
   );
   assert.match(records, /data-template="E"/);
-  assert.match(records, /data-claim-origin={claimOrigin}/);
-  assert.match(records, /data-source-text="published"/);
+  assert.match(records, /<RecordPublishedText[\s\S]*claimOrigin={claimOrigin}/);
+  assert.match(publishedText, /data-claim-origin={props.claimOrigin}/);
+  assert.match(publishedText, /data-source-text="published"/);
   assert.match(records, /displayNameFor\("object_type"/);
 });

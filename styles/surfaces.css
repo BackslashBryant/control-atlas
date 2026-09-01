@@ -5385,6 +5385,73 @@ a:focus-visible {
   margin: 0;
 }
 
+/* The record's published text and its routes out span the full context card:
+   they answer "what does this say" and "where do I go next", which are not
+   secondary to the identity block beside them. */
+.atlas-focused-context > .record-official-text,
+.atlas-focused-context > .record-published-preview,
+.atlas-focused-context > .atlas-focused-exits {
+  grid-column: 1 / -1;
+}
+
+/* The section sits one level deeper inside the preview wrapper, so both
+   paths are matched: dropping the wrapper case let the measure run to 694px
+   at 768px wide. */
+.atlas-focused-context .record-official-text > section {
+  max-width: 68ch;
+}
+
+/* Bound the published text so it answers "what does this say" without pushing
+   the connection graph off the fold. SP 800-53 AC-2 is 1,411 characters; at
+   full height it put the graph nearly 400px below the viewport. The fade
+   signals continuation and RecordPublishedTextPreview says so in words. */
+.atlas-focused-context > .record-published-preview {
+  position: relative;
+  grid-column: 1 / -1;
+  max-height: 11.5em;
+  overflow: hidden;
+}
+
+/* The fade appears only when the text was actually cut, which the component
+   measures and reports as data-clamped. */
+.atlas-focused-context > .record-published-preview[data-clamped]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3.5em;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--ca-surface-raised) 85%
+  );
+  pointer-events: none;
+}
+
+/* The section heading keeps its section-heading weight here even though the
+   Atlas renders it as an h3 under the record's h2. */
+.atlas-focused-context .record-official-text > section > h3 {
+  margin: 0 0 var(--ca-space-2);
+  font-size: var(--ca-text-lg);
+}
+
+.atlas-focused-context > .atlas-focused-more-text {
+  grid-column: 1 / -1;
+  max-width: 68ch;
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: var(--ca-text-sm);
+}
+
+/* Specificity note: `.atlas-focused-context > div` sets `display: grid` on
+   every direct div child, so this has to match with the parent to win. */
+.atlas-focused-context > .atlas-focused-exits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ca-space-3);
+  align-items: center;
+}
+
 .workspace-result-list__scope-note {
   padding: var(--ca-space-4);
   border: 1px solid var(--ca-border-subtle);
@@ -11281,6 +11348,14 @@ input[type="checkbox"] {
 
 .atlas-canvas-header .atlas-map-command { margin: 0; }
 
+/* Focused: the route name stays for orientation and the h1 keeps its landmark
+   role, but at body scale — a display-size wordmark over a specific record is
+   shouting the wrong noun. */
+.atlas-canvas-header[data-atlas-header="focused"] h1 {
+  font-size: var(--ca-text-xl);
+}
+
+
 .atlas-tree {
   display: block;
   margin: 0;
@@ -12404,13 +12479,44 @@ input[type="checkbox"] {
   pointer-events: none;
 }
 
-.atlas-decomp__label {
+.atlas-decomp__identity {
+  display: grid;
+  min-width: 0;
+}
+
+.atlas-decomp__label,
+.atlas-decomp__kind {
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.atlas-decomp__label {
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+}
+
+.atlas-decomp__kind {
+  color: var(--ca-text-subtle);
+  font-size: 0.625rem;
+  line-height: 1.15;
+}
+
+.atlas-decomp__lifecycle-notes {
+  display: grid;
+  gap: var(--ca-space-1);
+  margin: 0;
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border-left: 3px solid var(--ca-border-strong);
+  color: var(--ca-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  list-style: none;
+}
+
+.atlas-decomp__lifecycle-notes strong {
+  color: var(--ca-text);
 }
 
 .atlas-decomp__meta {

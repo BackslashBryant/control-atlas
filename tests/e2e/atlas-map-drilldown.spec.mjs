@@ -25,7 +25,7 @@ async function open(page, key, name) {
   await row.click();
 }
 
-test("the Atlas landing shows nine honest areas and a populated area drills to its publications", async ({
+test("the Atlas landing starts with source ecosystems and NIST drills to its publications", async ({
   page,
 }) => {
   await gotoApp(page, "/#/atlas");
@@ -36,27 +36,17 @@ test("the Atlas landing shows nine honest areas and a populated area drills to i
   await expect(map).toBeVisible();
   await expect(map).toHaveAttribute("data-scope-level", "root");
 
-  // Nine areas plus three authority landmarks, each a named row with a count.
-  await expect(level(page, "area")).toHaveAttribute("data-row-count", "12");
+  // Eight publisher ecosystems plus three bounded authority landmarks.
+  await expect(level(page, "area")).toHaveAttribute("data-row-count", "11");
   const labels = await level(page, "area")
     .locator(".atlas-decomp__label")
     .allTextContents();
-  for (const area of [
-    "Governance",
-    "Risk",
-    "Compliance",
-    "Architecture",
-    "Implementation",
-    "Assessment",
-    "Operations",
-    "Threats & Defense",
-    "Knowledge",
-  ]) {
-    expect(labels, `${area} row`).toContain(area);
+  for (const ecosystem of ["NIST", "DISA", "MITRE", "FedRAMP", "DoD CIO"]) {
+    expect(labels, `${ecosystem} row`).toContain(ecosystem);
   }
 
-  await open(page, "area", /Compliance/);
-  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
+  await open(page, "area", /^NIST/);
+  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
   await expect(
     level(page, "publication").getByRole("button", { name: /SP 800-53 Rev\. 5 Catalog/ }),
   ).toBeVisible();
@@ -69,7 +59,7 @@ test("a drilled branch survives refresh and the breadcrumb steps back one genera
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await open(page, "area", /Compliance/);
+  await open(page, "area", /^NIST/);
   await open(page, "publication", /SP 800-53 Rev\. 5 Catalog/);
   await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
   await expect(atlas(page)).toHaveAttribute("data-scope-level", "publication");
@@ -79,8 +69,8 @@ test("a drilled branch survives refresh and the breadcrumb steps back one genera
   await expect(atlas(page)).toHaveAttribute("data-scope-level", "publication");
 
   const trail = page.getByRole("navigation", { name: "Atlas scope" });
-  await trail.getByRole("button", { name: "Compliance", exact: true }).click();
-  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
+  await trail.getByRole("button", { name: "NIST", exact: true }).click();
+  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
   await expect(page).not.toHaveURL(/atlasFramework=/);
 
   await page.goBack();
@@ -95,7 +85,7 @@ test("section drill stays scoped to the publication's real child records", async
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await open(page, "area", /Compliance/);
+  await open(page, "area", /^NIST/);
   await open(page, "publication", /SP 800-53 Rev\. 5 Catalog/);
   await open(page, "detail", /Access Control/);
   await expect(page).toHaveURL(/atlasFamily=group:nist-800-53:0/);

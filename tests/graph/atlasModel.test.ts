@@ -4,8 +4,10 @@ import test from "node:test";
 import {
   buildAtlasGroups,
   buildAtlasRows,
+  atlasFilterOptions,
   selectAtlasOverviewGroups,
   resolveAtlasRelationshipLens,
+  summarizeAtlasRelationshipScopes,
   type AtlasFilterState,
 } from "../../src/ui/lib/atlasModel";
 import type { AtlasNeighborhoodRecord } from "../../src/ui/lib/runtimeLoader";
@@ -14,23 +16,23 @@ const record: AtlasNeighborhoodRecord = {
   center_node: {
     id: "nist-800-53:AC-2",
     node_type: "control",
-    metadata: { item_id: "AC-2", title: "Account Management" },
+    metadata: { catalog_id: "nist-800-53", item_id: "AC-2", title: "Account Management" },
   },
   nodes: [
     {
       id: "nist-800-53:AC-2",
       node_type: "control",
-      metadata: { item_id: "AC-2", title: "Account Management" },
+      metadata: { catalog_id: "nist-800-53", item_id: "AC-2", title: "Account Management" },
     },
     {
       id: "csf-2:PR.AA-01",
       node_type: "requirement",
-      metadata: { item_id: "PR.AA-01", title: "Identity management" },
+      metadata: { catalog_id: "csf-2", item_id: "PR.AA-01", title: "Identity management" },
     },
     {
       id: "disa-cci:CCI-000001",
       node_type: "requirement",
-      metadata: { item_id: "CCI-000001", title: "CCI requirement" },
+      metadata: { catalog_id: "disa-cci", item_id: "CCI-000001", title: "CCI requirement" },
     },
   ],
   edges: [
@@ -94,6 +96,48 @@ test("candidate links appear only after the explicit toggle", () => {
     ).length,
     1,
   );
+});
+
+test("relationship scope totals stay independent of filters and structural filter options", () => {
+  const explicit: AtlasNeighborhoodRecord = {
+    ...record,
+    nodes: [
+      ...record.nodes,
+      {
+        id: "nist-800-53:AC-2.1",
+        node_type: "control_enhancement",
+        metadata: { catalog_id: "nist-800-53", item_id: "AC-2.1", title: "Automated system accounts" },
+      },
+    ],
+    edges: [
+      ...record.edges,
+      {
+        id: "edge:enhancement",
+        source_node_id: "nist-800-53:AC-2",
+        target_node_id: "nist-800-53:AC-2.1",
+        relationship_type: "contains",
+        relationship_class: "structural",
+        provenance_class: "federal_published",
+        publication_status: "published",
+        confidence: "direct",
+      },
+    ],
+    published_connection_count: 2,
+  };
+
+  assert.deepEqual(summarizeAtlasRelationshipScopes(explicit), {
+    publishedNeighborhood: 2,
+    nativeStructure: 1,
+    crossSource: 1,
+    sameSourceContext: 0,
+  });
+  assert.deepEqual(atlasFilterOptions(explicit, { excludeStructural: true }).relationshipTypes, ["maps_to", "related_to"]);
+  assert.equal(
+    buildAtlasGroups(explicit, { ...publishedOnly, relationshipType: "maps_to" })
+      .flatMap((group) => group.items).length,
+    1,
+  );
+  assert.equal(summarizeAtlasRelationshipScopes(explicit).publishedNeighborhood, 2);
 });
 
 test("bounded Map keeps every available direction before filling six slots", () => {

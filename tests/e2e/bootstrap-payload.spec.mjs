@@ -98,10 +98,24 @@ test("expanding an Atlas area uses the semantic network without monolithic graph
   ).toBeTruthy();
   expect(graphArtifactUrls(requested)).toEqual([]);
 
-  await atlas.locator('.atlas-decomp__column[data-column="area"]').getByRole("button", { name: /Compliance/ }).click();
-  await expect(page).toHaveURL(/atlasLimb=atlas(?::|%3A)LIMB-COMPLIANCE/);
-  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "area");
+  await atlas.locator('.atlas-decomp__column[data-column="area"]').getByRole("button", { name: /^NIST/ }).click();
+  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
+  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
   expect(graphArtifactUrls(requested)).toEqual([]);
+});
+
+test("Atlas reaches its first usable source map within the local render budget", async ({
+  page,
+}) => {
+  await page.goto("/#/atlas");
+  await waitForAppReady(page);
+  await expect(page.getByTestId("atlas-map")).toBeVisible();
+
+  const firstUsableMs = await page.evaluate(() =>
+    Math.round(globalThis.performance.now()),
+  );
+  console.log(`[atlas-perf] first usable source map: ${firstUsableMs} ms`);
+  expect(firstUsableMs).toBeLessThan(5_000);
 });
 
 test("focused Atlas loads one neighborhood without monolithic graph JSON", async ({

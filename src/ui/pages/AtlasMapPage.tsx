@@ -35,9 +35,10 @@ import { WhereThisSitsRail } from "../components/WhereThisSitsRail";
 import {
   ATLAS_RELATIONSHIP_LENSES,
   atlasFilterOptions,
-  buildAtlasGroups,
-  buildAtlasRows,
+  buildAtlasContextGroups,
+  buildAtlasContextRows,
   buildStructuralChildren,
+  summarizeAtlasRelationshipScopes,
   type AtlasFilterState,
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
@@ -60,9 +61,13 @@ import {
 import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
 import { nodeIdFromItemId, type ViewState } from "../lib/viewState";
 
-import { Button } from "../components/lsm";
+import { Button, ButtonLink } from "../components/lsm";
 import { AppLink, shouldInterceptAppLink } from "../components/AppLink";
 import { RecordLink } from "../components/RecordLink";
+import {
+  publishedSectionsWithContent,
+  RecordPublishedTextPreview,
+} from "../components/RecordPublishedText";
 
 type AtlasMapPageProps = {
   bundle: RuntimeBundle;
@@ -159,8 +164,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     if (state.atlasFramework && artifact.publications[state.atlasFramework]) {
       return artifact.publications[state.atlasFramework];
     }
-    if (state.atlasLimb && artifact.areas[state.atlasLimb]) {
-      return artifact.areas[state.atlasLimb];
+    if (state.atlasLimb && (artifact.ecosystems[state.atlasLimb] || artifact.areas[state.atlasLimb])) {
+      return artifact.ecosystems[state.atlasLimb] || artifact.areas[state.atlasLimb];
     }
     return artifact.landscape;
   }, [bundle.atlasNetwork, state.atlasFamily, state.atlasFramework, state.atlasLimb]);
@@ -258,6 +263,17 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   }
 
   const drillAtlas = useCallback((drill: AtlasProjectionDrill) => {
+    if (drill.kind === "ecosystem") {
+      patchAtlas({
+        node: "",
+        atlasAxis: "",
+        atlasLimb: drill.targetId,
+        atlasFramework: "",
+        atlasFamily: "",
+        relationshipView: "",
+      });
+      return;
+    }
     if (drill.kind === "area") {
       patchAtlas({
         node: "",
@@ -270,7 +286,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       return;
     }
     if (drill.kind === "publication") {
-      const areaId = bundle.atlasNetwork?.record_locations[`${drill.targetId}:CATALOG`]?.areaId || state.atlasLimb;
+      const location = bundle.atlasNetwork?.record_locations[`${drill.targetId}:CATALOG`];
+      const areaId = location?.ecosystemId || location?.areaId || state.atlasLimb;
       patchAtlas({
         node: "",
         atlasLimb: areaId,
@@ -298,12 +315,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     });
   }
 
-  const trailAtlas = useCallback((level: "root" | "area" | "publication" | "detail", id: string) => {
+  const trailAtlas = useCallback((level: "root" | "ecosystem" | "area" | "publication" | "detail", id: string) => {
     if (level === "root") {
       atlasHome();
       return;
     }
-    if (level === "area") {
+    if (level === "ecosystem" || level === "area") {
       patchAtlas({ node: "", atlasFramework: "", atlasFamily: "", atlasLimb: id, relationshipView: "" });
       return;
     }
@@ -343,7 +360,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       patchAtlas({
         node: nodeId,
         atlasParent: "",
-        atlasLimb: location.areaId,
+        atlasLimb: location.ecosystemId || location.areaId,
         atlasFramework: location.publicationId,
         atlasFamily: location.detailId || "",
         relationshipSearch: "",
@@ -368,7 +385,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     patchAtlas({
       node: transition.nodeId,
       atlasParent: "",
-      atlasLimb: location?.areaId || "",
+      atlasLimb: location?.ecosystemId || location?.areaId || "",
       atlasFramework: location?.publicationId || "",
       atlasFamily: location?.detailId || "",
       relationshipSearch: "",
@@ -387,11 +404,22 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         recordStatus === "loading" ? "false" : "true"
       }
     >
-      <header className="atlas-canvas-header" data-route-primary-header="true">
+      {/* The landing copy is a claim about the whole landscape, which stops
+          being true the moment a record is in focus — and its 148px of hero
+          was pushing that record's connection graph off the fold. With a
+          subject, the header shrinks to the route name and the search box;
+          the focused card below states everything this paragraph would. */}
+      <header
+        className="atlas-canvas-header"
+        data-atlas-header={record ? "focused" : "landing"}
+        data-route-primary-header="true"
+      >
         <div data-route-primary-copy="true">
-          <p className="eyebrow">{FIRST_PAINT_ROUTE_COPY.atlas.eyebrow}</p>
+          {record ? null : (
+            <p className="eyebrow">{FIRST_PAINT_ROUTE_COPY.atlas.eyebrow}</p>
+          )}
           <h1 id="atlas-page-title">Atlas</h1>
-          <p>{SITE_COPY.routes.atlas.purpose}</p>
+          {record ? null : <p>{SITE_COPY.routes.atlas.purpose}</p>}
         </div>
         <form className="atlas-map-command" onSubmit={submitSearch}>
           <label className="visually-hidden" htmlFor="atlas-search">
@@ -442,6 +470,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         <AtlasDecompositionMap
           artifact={bundle.atlasNetwork}
           onDrill={drillAtlas}
+          onNavigate={onNavigate}
           onTrail={trailAtlas}
           scope={atlasScope}
         />
@@ -526,7 +555,7 @@ function FocusedAtlas(props: {
     search: state.relationshipSearch,
   };
   const groups = useMemo(
-    () => buildAtlasGroups(record, filters).filter((group) => group.lens !== "structure"),
+    () => buildAtlasContextGroups(record, filters),
     [record, state],
   );
   const connectionKeys = useMemo(
@@ -538,7 +567,7 @@ function FocusedAtlas(props: {
     [groups],
   );
   const rows = useMemo(
-    () => buildAtlasRows(record, filters).filter((row) =>
+    () => buildAtlasContextRows(record, filters).filter((row) =>
       connectionKeys.has(`${row.edge.id}\u0000${row.counterpart.id}`),
     ),
     [record, state, connectionKeys],
@@ -566,7 +595,14 @@ function FocusedAtlas(props: {
       })),
     [rows, lensLabelByEdgeId],
   );
-  const options = useMemo(() => atlasFilterOptions(record), [record]);
+  const relationshipScopes = useMemo(
+    () => summarizeAtlasRelationshipScopes(record),
+    [record],
+  );
+  const options = useMemo(
+    () => atlasFilterOptions(record, { excludeStructural: true }),
+    [record],
+  );
   const structuralChildren = useMemo(
     () => buildStructuralChildren(record),
     [record],
@@ -601,6 +637,33 @@ function FocusedAtlas(props: {
   );
   const centerTitle =
     record.center_node.metadata?.title || record.center_node.label || centerLabel;
+
+  // What the record actually says. The Atlas used to show a title, a
+  // publication, and a connection count — never the published statement —
+  // so drilling four columns deep landed on less than the search box already
+  // returns. The text and the routes out are both read from the same runtime
+  // the record page uses, so the two surfaces cannot drift.
+  const centerDocument = bundle.runtime.getLibraryDocument(record.center_node.id);
+  const centerSource = bundle.runtime.getSource(
+    centerDocument?.source_id || record.center_node.source_id,
+  );
+  const centerSourceUrl =
+    centerSource?.artifact_url || centerSource?.catalog_browse_url || "";
+  const centerClaimOrigin =
+    (record.center_node.metadata as { origin?: string } | undefined)?.origin ||
+    "publisher_normalized";
+  const centerMetadata = {
+    ...record.center_node.metadata,
+    description:
+      centerDocument?.description || record.center_node.metadata?.description || "",
+  };
+  const centerType = record.center_node.node_type || centerDocument?.object_type || "";
+  const centerPresentation = SUPPORTED_RECORD_TYPES.includes(centerType)
+    ? recordPresentationContract(centerCatalogId, centerType)
+    : null;
+  const centerPublishedSections = centerPresentation
+    ? publishedSectionsWithContent(centerPresentation.sections, centerMetadata)
+    : [];
   const inspectedId = selectedRow?.counterpart.id || record.center_node.id;
   const inspectedNode = bundle.runtime.getNode(inspectedId);
   const inspectedDocument = bundle.runtime.getLibraryDocument(inspectedId);
@@ -785,8 +848,58 @@ function FocusedAtlas(props: {
         <dl>
           {centerPublication ? <div><dt>Publication</dt><dd>{centerPublication}</dd></div> : null}
           <div><dt>Record type</dt><dd>{displayNameFor("object_type", record.center_node.node_type)}</dd></div>
-          <div><dt>Published connections</dt><dd>{rows.length.toLocaleString()} in {groups.length.toLocaleString()} categories</dd></div>
+          <div>
+            <dt>Published neighborhood</dt>
+            <dd>{relationshipScopes.publishedNeighborhood.toLocaleString()} relationships</dd>
+          </div>
+          <div>
+            <dt>Publisher-native structure</dt>
+            <dd>{relationshipScopes.nativeStructure.toLocaleString()} relationships</dd>
+          </div>
+          <div>
+            <dt>Cross-source</dt>
+            <dd>{relationshipScopes.crossSource.toLocaleString()} relationships</dd>
+          </div>
+          {relationshipScopes.sameSourceContext ? (
+            <div>
+              <dt>Other typed context</dt>
+              <dd>{relationshipScopes.sameSourceContext.toLocaleString()} relationships</dd>
+            </div>
+          ) : null}
         </dl>
+        {centerPresentation && centerPublishedSections.length ? (
+          <RecordPublishedTextPreview
+            claimOrigin={centerClaimOrigin}
+            fullRecordLabel="the full record"
+            headingLevel={3}
+            metadata={centerMetadata}
+            sections={centerPresentation.sections}
+          />
+        ) : null}
+        <div className="atlas-focused-exits">
+          <AppLink
+            onNavigate={onNavigate}
+            patch={{ node: record.center_node.id }}
+            variant="primary"
+            view="library-detail"
+          >
+            {centerPublishedSections.length
+              ? "Read the full record"
+              : "Open the full record"}
+          </AppLink>
+          {centerSourceUrl ? (
+            <ButtonLink
+              href={centerSourceUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+              variant="secondary"
+            >
+              {centerClaimOrigin === "atlas_editorial"
+                ? "View Atlas source"
+                : "View official source"}
+            </ButtonLink>
+          ) : null}
+        </div>
       </section>
       {/* One record workspace, not three competing modes. Connections is the
           product; Hierarchy and the complete list are supporting panels.
@@ -803,8 +916,9 @@ function FocusedAtlas(props: {
             Connections
           </h2>
           <p className="atlas-workspace-orientation">
-            Choose a connection type to inspect a bounded set, open a record,
-            or switch to the evidence list.
+            Typed context is separate from publisher-native hierarchy. Choose
+            a relationship type to inspect a bounded preview or open the full
+            evidence list.
           </p>
         </div>
         <div className="atlas-workspace-controls">
@@ -858,6 +972,10 @@ function FocusedAtlas(props: {
                 {structuralPosition}
 
                 <dl className="atlas-path-facts">
+                  <div>
+                    <dt>Publisher-native relationships</dt>
+                    <dd>{relationshipScopes.nativeStructure.toLocaleString()}</dd>
+                  </div>
                   <div>
                     <dt>Record type</dt>
                     <dd>
@@ -975,7 +1093,7 @@ function FocusedAtlas(props: {
                   onClick={() => patchAtlas({ relationshipView: "list" })}
                   type="button"
                 >
-                  View all {rows.length} connections
+                  View all {rows.length} typed connections
                 </button>
               )}
             </section> : null}

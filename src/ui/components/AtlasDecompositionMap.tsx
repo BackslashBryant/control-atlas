@@ -1,5 +1,6 @@
 import { memo, useMemo, useState, type CSSProperties } from "react";
 import {
+  IconArrowUpRight,
   IconChevronRight,
   IconLayoutColumns,
   IconLayoutRows,
@@ -16,6 +17,8 @@ import {
   type AtlasTreeColumn,
   type AtlasTreeRow,
 } from "../lib/atlasDecomposition";
+import { AppLink } from "./AppLink";
+import type { ViewState } from "../lib/viewState";
 
 type AtlasOrientation = "across" | "down";
 
@@ -24,7 +27,9 @@ type AtlasDecompositionMapProps = {
   scope: AtlasDecompositionScope;
   onDrill: (drill: AtlasProjectionDrill) => void;
   /** Move the scope back to an ancestor. An empty id returns to the root. */
-  onTrail: (level: "root" | "area" | "publication" | "detail", id: string) => void;
+  onTrail: (level: "root" | "ecosystem" | "area" | "publication" | "detail", id: string) => void;
+  /** Areas whose content lives on another route navigate instead of drilling. */
+  onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 };
 
 /**
@@ -48,8 +53,17 @@ function formatCount(count: number): string {
 
 function rowMeta(row: AtlasTreeRow): string {
   if (row.leaf) return row.kind;
+  // An area whose content lives on another surface is not unmodelled; it is
+  // modelled somewhere the record graph does not reach. Say where to go.
+  if (row.destination) return row.destination.actionLabel;
   if (row.count === 0) return "Not yet modeled";
-  return `${formatCount(row.count)} ${row.count === 1 ? "record" : "records"}`;
+  const lifecycle = row.lifecycleStatus === "historical"
+    ? "Historical"
+    : row.lifecycleStatus === "active"
+      ? "Active"
+      : "";
+  const count = `${formatCount(row.count)} ${row.count === 1 ? "record" : "records"}`;
+  return [lifecycle, count].filter(Boolean).join(" · ");
 }
 
 function TreeRow(props: {
@@ -57,8 +71,9 @@ function TreeRow(props: {
   selected: boolean;
   groupHeading: string;
   onDrill: (drill: AtlasProjectionDrill) => void;
+  onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
-  const { row, selected, groupHeading, onDrill } = props;
+  const { row, selected, groupHeading, onDrill, onNavigate } = props;
   const style = { "--atlas-decomp-row-share": row.share } as CSSProperties;
   const meta = rowMeta(row);
   const drill = row.drill;
@@ -86,7 +101,12 @@ function TreeRow(props: {
             type="button"
           >
             <span aria-hidden="true" className="atlas-decomp__bar" />
-            <span className="atlas-decomp__label">{row.label}</span>
+            <span className="atlas-decomp__identity">
+              <span className="atlas-decomp__label">{row.label}</span>
+              {row.publicationKind ? (
+                <span className="atlas-decomp__kind">{row.publicationKind}</span>
+              ) : null}
+            </span>
             <span className="atlas-decomp__meta">{meta}</span>
             <IconChevronRight
               aria-hidden="true"
@@ -95,6 +115,30 @@ function TreeRow(props: {
               stroke={2}
             />
           </button>
+        ) : row.destination ? (
+          <AppLink
+            aria-label={`${row.label}: ${row.destination.actionLabel}`}
+            className="atlas-decomp__node"
+            data-state="offsite"
+            onNavigate={onNavigate}
+            title={row.destination.summary}
+            view={row.destination.view as ViewState["view"]}
+          >
+            <span aria-hidden="true" className="atlas-decomp__bar" />
+            <span className="atlas-decomp__identity">
+              <span className="atlas-decomp__label">{row.label}</span>
+              {row.publicationKind ? (
+                <span className="atlas-decomp__kind">{row.publicationKind}</span>
+              ) : null}
+            </span>
+            <span className="atlas-decomp__meta">{meta}</span>
+            <IconArrowUpRight
+              aria-hidden="true"
+              className="atlas-decomp__chevron"
+              size={15}
+              stroke={2}
+            />
+          </AppLink>
         ) : (
           <div
             className="atlas-decomp__node"
@@ -102,7 +146,12 @@ function TreeRow(props: {
             title={`${row.label} — ${meta}`}
           >
             <span aria-hidden="true" className="atlas-decomp__bar" />
-            <span className="atlas-decomp__label">{row.label}</span>
+            <span className="atlas-decomp__identity">
+              <span className="atlas-decomp__label">{row.label}</span>
+              {row.publicationKind ? (
+                <span className="atlas-decomp__kind">{row.publicationKind}</span>
+              ) : null}
+            </span>
             <span className="atlas-decomp__meta">{meta}</span>
           </div>
         )}
@@ -116,8 +165,9 @@ function TreeColumn(props: {
   expanded: boolean;
   onExpand: (expanded: boolean) => void;
   onDrill: (drill: AtlasProjectionDrill) => void;
+  onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 }) {
-  const { column, expanded, onExpand, onDrill } = props;
+  const { column, expanded, onExpand, onDrill, onNavigate } = props;
   const { visible, hidden } = splitColumnRows(column.rows, expanded);
   const headingId = `atlas-decomp-${column.key}`;
   const selectedId = column.selectedIndex >= 0 ? column.rows[column.selectedIndex]?.id : "";
@@ -146,6 +196,7 @@ function TreeColumn(props: {
             }
             key={row.id}
             onDrill={onDrill}
+            onNavigate={onNavigate}
             row={row}
             selected={row.id === selectedId}
           />
@@ -213,7 +264,7 @@ function TreeConnector(props: { fromIndex: number; targets: AtlasTreeRow[] }) {
 export const AtlasDecompositionMap = memo(function AtlasDecompositionMap(
   props: AtlasDecompositionMapProps,
 ) {
-  const { artifact, scope, onDrill, onTrail } = props;
+  const { artifact, scope, onDrill, onTrail, onNavigate } = props;
   const { areaId, publicationId, detailId } = scope;
   const [orientation, setOrientation] = useState<AtlasOrientation>("across");
   const [expandedColumns, setExpandedColumns] = useState<Record<string, boolean>>({});
@@ -223,6 +274,10 @@ export const AtlasDecompositionMap = memo(function AtlasDecompositionMap(
     () => buildAtlasTree(artifact, { areaId, publicationId, detailId }),
     [artifact, areaId, publicationId, detailId],
   );
+  const lifecycleNotes = model.columns
+    .flatMap((column) => column.rows)
+    .filter((row) => row.lifecycleStatus === "historical" && row.description)
+    .map((row) => ({ id: row.id, label: row.label, note: row.description }));
 
   return (
     <div
@@ -281,6 +336,16 @@ export const AtlasDecompositionMap = memo(function AtlasDecompositionMap(
         <p className="atlas-decomp__description">{model.scopeDescription}</p>
       ) : null}
 
+      {lifecycleNotes.length > 0 ? (
+        <ul aria-label="Lifecycle guidance" className="atlas-decomp__lifecycle-notes">
+          {lifecycleNotes.map((entry) => (
+            <li key={entry.id}>
+              <strong>{entry.label}:</strong> {entry.note}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
       <div className="atlas-decomp__levels">
         {model.columns.map((column, index) => {
           const previous = model.columns[index - 1];
@@ -304,6 +369,7 @@ export const AtlasDecompositionMap = memo(function AtlasDecompositionMap(
                 column={column}
                 expanded={expandedColumns[column.key] === true}
                 onDrill={onDrill}
+                onNavigate={onNavigate}
                 onExpand={(next) =>
                   setExpandedColumns((current) => ({ ...current, [column.key]: next }))
                 }

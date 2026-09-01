@@ -44,9 +44,9 @@ for (const viewport of VIEWPORTS) {
     await dismissOnboarding(page);
     await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "root");
 
-    await clickAtlasLandmark(page, /Compliance/);
-    await expect(page).toHaveURL(/atlasLimb=atlas(?::|%3A)LIMB-COMPLIANCE/);
-    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "area");
+    await clickAtlasLandmark(page, /^NIST/);
+    await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
+    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
     await clickAtlasLandmark(page, /SP\s+800-53 Rev\. 5 Catalog/);
     await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
     await expect(page).not.toHaveURL(/atlasBaseline=/);
@@ -110,7 +110,7 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
-test("Atlas root presents an authority-rooted interactive hierarchy", async ({
+test("Atlas root presents a source-ecosystem interactive hierarchy", async ({
   page,
 }) => {
   await page.goto("/#/atlas");
@@ -122,11 +122,11 @@ test("Atlas root presents an authority-rooted interactive hierarchy", async ({
   await expect(map).toHaveAttribute("data-scope-level", "root");
   await expect(
     map.locator('.atlas-decomp__column[data-column="area"]'),
-  ).toHaveAttribute("data-row-count", "12");
+  ).toHaveAttribute("data-row-count", "11");
   // The map is DOM, not a canvas, so every node keeps a readable label.
   await expect(map.locator("canvas")).toHaveCount(0);
   await expect(
-    page.getByText("Open any part of the landscape to see what is published inside it, and how much.", { exact: true }),
+    page.getByText("Open a publisher or source ecosystem to follow its publications and native structure.", { exact: true }),
   ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveCount(
     0,

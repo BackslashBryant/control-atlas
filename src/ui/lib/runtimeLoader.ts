@@ -345,6 +345,14 @@ export function runtimeArtifactPlan(
           Boolean(state.source) &&
           Boolean(state.items)))) ||
     (state.view === "templates" && Boolean(state.templateType));
+  // A real record is in focus on the Atlas route — not the landing board and
+  // not one of the synthetic structural nodes the drill-down uses.
+  const atlasRecordFocused =
+    state.view === "atlas-map" &&
+    Boolean(state.node) &&
+    state.node !== "foundation" &&
+    state.node !== "landscape" &&
+    !state.node.startsWith("hierarchy:");
   return {
     atlasNetwork: state.view === "atlas-map",
     atlasSpine: state.view === "atlas-map" || state.view === "library-detail",
@@ -377,14 +385,7 @@ export function runtimeArtifactPlan(
       state.view === "retired" ||
       Boolean(options.searchOverlayOpen),
     recordNodeId:
-      state.view === "library-detail" ||
-      (state.view === "atlas-map" &&
-        Boolean(state.node) &&
-        state.node !== "foundation" &&
-        state.node !== "landscape" &&
-        !state.node.startsWith("hierarchy:"))
-        ? state.node
-        : "",
+      state.view === "library-detail" || atlasRecordFocused ? state.node : "",
     registries:
       state.view === "search" ||
       buildDetailRequested ||
@@ -396,6 +397,10 @@ export function runtimeArtifactPlan(
       state.view === "library-detail" ||
       state.view === "matrix" ||
       state.view === "search" ||
+      // A focused Atlas record shows the publisher's own source link, which
+      // needs sources.json. The Atlas board (no focused record) still skips
+      // it — the landing and drill-down columns never name a source.
+      atlasRecordFocused ||
       buildDetailRequested ||
       Boolean(options.searchOverlayOpen),
   };

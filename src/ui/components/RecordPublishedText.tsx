@@ -1,4 +1,4 @@
-import { Fragment, useState, type ReactNode } from "react";
+import { Fragment, useCallback, useState, type ReactNode } from "react";
 
 import { isValidSourceTextPresentation } from "../../shared/source-text-presentation.mjs";
 import { Button } from "./lsm";
@@ -311,5 +311,122 @@ export function RecordNativeFacts(props: { fields: string[]; metadata: Record<st
         ))}
       </dl>
     </section>
+  );
+}
+
+type PublishedSection = { field: string; heading: string; kind: string };
+
+function sectionHasContent(value: unknown): boolean {
+  return Array.isArray(value) ? value.length > 0 : Boolean(String(value ?? "").trim());
+}
+
+/**
+ * The published sections that actually carry text for this record, in contract
+ * order. Callers use this both to decide whether there is anything to show and
+ * to take the first section when space is tight.
+ */
+export function publishedSectionsWithContent(
+  sections: PublishedSection[],
+  metadata: Record<string, any>,
+): PublishedSection[] {
+  return sections.filter((section) => sectionHasContent(metadata[section.field]));
+}
+
+/**
+ * Render a record's published text.
+ *
+ * `limit` caps how many sections render, for surfaces where the record's text
+ * is supporting context rather than the main event. The caller is responsible
+ * for telling the reader that more text exists — silently truncating published
+ * source text without a route to the rest is how the Atlas ended up looking
+ * like it had no text at all.
+ */
+export function RecordPublishedText(props: {
+  sections: PublishedSection[];
+  metadata: Record<string, any>;
+  claimOrigin?: string;
+  headingLevel?: 2 | 3;
+  limit?: number;
+}) {
+  const visible = publishedSectionsWithContent(props.sections, props.metadata);
+  const shown = typeof props.limit === "number" ? visible.slice(0, props.limit) : visible;
+  if (!shown.length) return null;
+  const Heading = (props.headingLevel === 3 ? "h3" : "h2") as "h2" | "h3";
+  return (
+    <div
+      className="record-official-text"
+      data-claim-origin={props.claimOrigin}
+      data-record-section="official-text"
+      data-source-text="published"
+    >
+      {shown.map((section) => (
+        <section data-source-field={section.field} key={section.field}>
+          <Heading>{section.heading}</Heading>
+          <SourceSectionContent
+            kind={section.kind}
+            presentation={props.metadata.source_text_presentation?.[section.field]}
+            value={props.metadata[section.field]}
+          />
+        </section>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * A bounded preview of a record's published text, for surfaces where the text
+ * answers "what does this say" but must not take the stage.
+ *
+ * The Atlas needed this the moment it started showing real text: SP 800-53
+ * AC-2's control statement is 1,411 characters, which rendered 568px tall and
+ * pushed the connection graph — the reason the Atlas exists — nearly 400px
+ * below the fold. The preview clamps to a few lines and then says, in words,
+ * exactly what is not being shown, because a fade alone is not a claim a
+ * reader can act on.
+ */
+export function RecordPublishedTextPreview(props: {
+  sections: PublishedSection[];
+  metadata: Record<string, any>;
+  claimOrigin?: string;
+  headingLevel?: 2 | 3;
+  /** Where the reader gets the rest, named for the note. */
+  fullRecordLabel: string;
+}) {
+  const [clamped, setClamped] = useState(false);
+  const measure = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+    setClamped(node.scrollHeight - node.clientHeight > 4);
+  }, []);
+
+  const visible = publishedSectionsWithContent(props.sections, props.metadata);
+  if (!visible.length) return null;
+  const [lead, ...rest] = visible;
+  const remaining = rest.map((section) => section.heading);
+  const missing = [
+    clamped ? `the rest of the ${lead.heading.toLocaleLowerCase()}` : "",
+    ...remaining,
+  ].filter(Boolean);
+
+  return (
+    <>
+      <div
+        className="record-published-preview"
+        data-clamped={clamped ? "true" : undefined}
+        ref={measure}
+      >
+        <RecordPublishedText
+          claimOrigin={props.claimOrigin}
+          headingLevel={props.headingLevel}
+          limit={1}
+          metadata={props.metadata}
+          sections={props.sections}
+        />
+      </div>
+      {missing.length ? (
+        <p className="atlas-focused-more-text">
+          On {props.fullRecordLabel}: {missing.join(", ")}.
+        </p>
+      ) : null}
+    </>
   );
 }

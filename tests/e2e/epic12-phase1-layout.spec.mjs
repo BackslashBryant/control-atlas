@@ -48,7 +48,7 @@ for (const viewport of VIEWPORTS) {
           const atlas = page.getByTestId("atlas-map");
           await expect(atlas).toHaveAttribute("data-scope-level", "root");
           const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-          await expect(areas).toHaveAttribute("data-row-count", "12");
+          await expect(areas).toHaveAttribute("data-row-count", "11");
           // Labelled rows at every width; there is no canvas and no
           // disclosure standing between the visitor and the map.
           await expect(atlas.locator("canvas")).toHaveCount(0);

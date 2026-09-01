@@ -1,3 +1,5 @@
+import treeSpine from "../../../data/curated/tree-spine.json";
+
 import type {
   AtlasGraphProjection,
   AtlasProjectionDrill,
@@ -30,9 +32,36 @@ export type AtlasTreeRow = {
   /** A leaf record. Reports a kind rather than a count. */
   leaf: boolean;
   kind: string;
+  lifecycleStatus: string;
+  version: string;
+  publicationKind: string;
   /** Rows group under a heading when a column mixes two kinds of thing. */
-  group: "" | "area" | "authority";
+  group: "" | "ecosystem" | "area" | "authority";
+  /**
+   * Where an area lives when its content is not a published catalog.
+   *
+   * Knowledge and Operations hold real content — the resource directory and
+   * the operations templates — but neither is a federal catalog, so neither
+   * is in the record graph. tree-spine.json has carried a destination for
+   * both since the spine was authored, with the note "so no area is ever
+   * shown empty". Nothing read it, so the Atlas fell back to a zero count and
+   * labelled them "Not yet modeled", which was never true.
+   */
+  destination?: AtlasAreaDestination;
 };
+
+export type AtlasAreaDestination = {
+  view: string;
+  actionLabel: string;
+  summary: string;
+};
+
+const AREA_DESTINATIONS = ((treeSpine as { areaDestinations?: Record<string, AtlasAreaDestination> })
+  .areaDestinations || {}) as Record<string, AtlasAreaDestination>;
+
+export function areaDestinationFor(id: string): AtlasAreaDestination | undefined {
+  return AREA_DESTINATIONS[id];
+}
 
 export type AtlasTreeColumn = {
   key: "area" | "publication" | "detail" | "record";
@@ -46,7 +75,7 @@ export type AtlasTreeColumn = {
 export type AtlasTreeStep = {
   id: string;
   label: string;
-  level: "root" | "area" | "publication" | "detail";
+  level: "root" | "ecosystem" | "area" | "publication" | "detail";
 };
 
 export type AtlasTreeModel = {
@@ -84,7 +113,10 @@ function isContextNode(node: AtlasProjectionNode): boolean {
  */
 function containedCount(node: AtlasProjectionNode): number {
   if (node.drill?.kind === "record") return 0;
-  return Math.max(0, (node.canonicalRecordCount || 0) - 1);
+  return Math.max(
+    0,
+    (node.canonicalRecordCount || 0) - (node.includesContainerRecord ? 1 : 0),
+  );
 }
 
 /** Turns a stored type token into ordinary product language. */
@@ -96,9 +128,15 @@ function readableKind(node: AtlasProjectionNode): string {
 
 const naturalOrder = new Intl.Collator("en", { numeric: true, sensitivity: "base" });
 
-const GROUP_ORDER: Record<AtlasTreeRow["group"], number> = { area: 0, authority: 1, "": 2 };
+const GROUP_ORDER: Record<AtlasTreeRow["group"], number> = {
+  ecosystem: 0,
+  area: 1,
+  authority: 2,
+  "": 3,
+};
 
 function groupOf(node: AtlasProjectionNode): AtlasTreeRow["group"] {
+  if (node.atlasStructureRole === "publisher_ecosystem") return "ecosystem";
   if (node.atlasStructureRole === "area") return "area";
   if (node.objectLayer === "authority_document") return "authority";
   return "";
@@ -118,6 +156,10 @@ function toRow(node: AtlasProjectionNode): AtlasTreeRow {
     empty,
     leaf,
     kind: leaf ? readableKind(node) : "",
+    lifecycleStatus: node.lifecycleStatus,
+    version: node.version,
+    publicationKind: node.publicationKind,
+    destination: empty ? areaDestinationFor(node.id) : undefined,
     group: groupOf(node),
   };
 }
@@ -171,7 +213,7 @@ export function buildAtlasTree(
   scope: AtlasDecompositionScope,
 ): AtlasTreeModel {
   const columns: AtlasTreeColumn[] = [];
-  const path: AtlasTreeStep[] = [{ id: "", label: "Everything", level: "root" }];
+  const path: AtlasTreeStep[] = [{ id: "", label: "Cybersecurity", level: "root" }];
 
   const areaRows = withShares(
     artifact.landscape.nodes
@@ -181,21 +223,28 @@ export function buildAtlasTree(
   );
   columns.push({
     key: "area",
-    title: "Areas of work",
-    caption: "Kinds of work, and the authorities behind them",
+    title: "Publishers & sources",
+    caption: "Authoritative ecosystems represented in Control Atlas",
     rows: areaRows,
     selectedIndex: areaRows.findIndex((row) => row.id === scope.areaId),
   });
 
-  const areaProjection = scope.areaId ? artifact.areas[scope.areaId] : undefined;
+  const ecosystemProjection = scope.areaId ? artifact.ecosystems[scope.areaId] : undefined;
+  const areaProjection = ecosystemProjection || (scope.areaId ? artifact.areas[scope.areaId] : undefined);
   if (areaProjection) {
     const rows = rowsFrom(areaProjection);
     const selectedId = scope.publicationId ? `${scope.publicationId}:CATALOG` : "";
-    path.push({ id: scope.areaId, label: areaProjection.label, level: "area" });
+    path.push({
+      id: scope.areaId,
+      label: areaProjection.label,
+      level: ecosystemProjection ? "ecosystem" : "area",
+    });
     columns.push({
       key: "publication",
       title: "Publications",
-      caption: `Published in ${areaProjection.label}`,
+      caption: ecosystemProjection
+        ? `Authoritative sources from ${areaProjection.label}`
+        : `Published in ${areaProjection.label}`,
       rows,
       selectedIndex: rows.findIndex((row) => row.id === selectedId),
     });
@@ -235,7 +284,9 @@ export function buildAtlasTree(
 
   const current = detailProjection || publicationProjection || areaProjection;
   const scopeCount = current
-    ? Math.max(0, (current.representedCanonicalNodeCount || 0) - 1)
+    ? ecosystemProjection && current === ecosystemProjection
+      ? current.representedCanonicalNodeCount || 0
+      : Math.max(0, (current.representedCanonicalNodeCount || 0) - 1)
     : areaRows.reduce((sum, row) => sum + row.count, 0);
 
   return {

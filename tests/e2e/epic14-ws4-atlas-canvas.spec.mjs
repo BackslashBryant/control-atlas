@@ -15,16 +15,16 @@ import {
  * surface was rebuilt to remove.
  */
 
-const AREAS_WITH_RECORDS = [
-  ["atlas:LIMB-COMPLIANCE", "Compliance"],
-  ["atlas:LIMB-IMPLEMENTATION", "Implementation"],
-  ["atlas:LIMB-ARCHITECTURE", "Architecture"],
-  ["atlas:LIMB-ASSESSMENT", "Assessment"],
-  ["atlas:LIMB-THREAT", "Threats & Defense"],
+const SOURCE_ECOSYSTEMS = [
+  ["ecosystem:nist", "NIST"],
+  ["ecosystem:disa", "DISA"],
+  ["ecosystem:mitre", "MITRE"],
+  ["ecosystem:fedramp", "FedRAMP"],
+  ["ecosystem:dod", "DoD"],
+  ["ecosystem:dod-cio", "DoD CIO"],
+  ["ecosystem:cdao", "CDAO"],
+  ["ecosystem:isoo", "ISOO"],
 ];
-
-/** Areas the source data leaves genuinely empty. */
-const EMPTY_AREAS = ["Knowledge", "Operations"];
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
@@ -61,11 +61,10 @@ test("Atlas opens as a labelled decomposition map, not an unlabelled canvas", as
   await expect(atlas.locator("canvas")).toHaveCount(0);
 
   const areas = column(page, "area");
-  await expect(areas).toHaveAttribute("data-row-count", "12");
-  // Seven of the twelve rows can be opened: the nine areas less the two that
-  // hold nothing, and none of the three authority landmarks, which carry a
-  // count but have no destination and so are never rendered as controls.
-  await expect(areas.getByRole("button")).toHaveCount(7);
+  await expect(areas).toHaveAttribute("data-row-count", "11");
+  // Eight source ecosystems open; three authority landmarks stay bounded
+  // context rather than pretending to be publisher containers.
+  await expect(areas.getByRole("button")).toHaveCount(8);
   await expect(areas.locator('.atlas-decomp__node[data-state="static"]')).toHaveCount(3);
 
   // Every visible row carries a name and a count — nothing is hover-only.
@@ -75,27 +74,21 @@ test("Atlas opens as a labelled decomposition map, not an unlabelled canvas", as
   }
 });
 
-test("empty areas report nothing rather than counting themselves", async ({ page }) => {
+test("FedRAMP publications expose active and historical lifecycle state", async ({ page }) => {
   await openAtlas(page);
-  const areas = column(page, "area");
-
-  for (const label of EMPTY_AREAS) {
-    const row = areas.locator(".atlas-decomp__node", { hasText: label });
-    await expect(row).toHaveAttribute("data-state", "empty");
-    await expect(row).toContainText("Not yet modeled");
-  }
-
-  // The projection counts a container as one of its own records, so an empty
-  // area used to advertise "1 records". No row may claim a plural one.
-  await expect(map(page)).not.toContainText(/\b1 records\b/);
+  await column(page, "area").getByRole("button", { name: /^FedRAMP/ }).click();
+  const publications = column(page, "publication");
+  await expect(publications.getByRole("button", { name: /FedRAMP Consolidated Rules.*Active/ })).toBeVisible();
+  await expect(publications.getByRole("button", { name: /FedRAMP Rev\. 5 Baselines.*Historical/ })).toBeVisible();
+  await expect(map(page)).toContainText("Use the Consolidated Rules for 2026");
 });
 
-test("the map drills area to publication to section and the breadcrumb reverses it", async ({ page }) => {
+test("the map drills ecosystem to publication to native section and the breadcrumb reverses it", async ({ page }) => {
   await openAtlas(page);
 
-  await column(page, "area").getByRole("button", { name: /Compliance/ }).click();
-  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
-  await expect(map(page)).toHaveAttribute("data-scope-level", "area");
+  await column(page, "area").getByRole("button", { name: /^NIST/ }).click();
+  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
+  await expect(map(page)).toHaveAttribute("data-scope-level", "ecosystem");
   await expect(column(page, "publication")).toBeVisible();
 
   await column(page, "publication")
@@ -109,36 +102,39 @@ test("the map drills area to publication to section and the breadcrumb reverses 
   await expect(sections.getByRole("button", { name: /Access Control/ })).toBeVisible();
 
   const trail = page.getByRole("navigation", { name: "Atlas scope" });
-  await expect(trail).toContainText("Compliance");
+  await expect(trail).toContainText("NIST");
   await expect(trail).toContainText("SP 800-53 Rev. 5 Catalog");
 
-  await trail.getByRole("button", { name: "Compliance", exact: true }).click();
-  await expect(page).toHaveURL(/atlasLimb=atlas:LIMB-COMPLIANCE/);
+  await trail.getByRole("button", { name: "NIST", exact: true }).click();
+  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
   await expect(page).not.toHaveURL(/atlasFramework=/);
 
-  await trail.getByRole("button", { name: "Everything", exact: true }).click();
+  await trail.getByRole("button", { name: "Cybersecurity", exact: true }).click();
   await expect(map(page)).toHaveAttribute("data-scope-level", "root");
 });
 
-test("every populated area opens directly from the first column", async ({ page }) => {
+test("every source ecosystem opens directly from the first column", async ({ page }) => {
   await openAtlas(page);
 
-  for (const [id, label] of AREAS_WITH_RECORDS) {
+  for (const [id, label] of SOURCE_ECOSYSTEMS) {
     await gotoApp(page, "/#/atlas");
     await waitForAppReady(page);
-    await column(page, "area").getByRole("button", { name: new RegExp(label) }).click();
-    await expect(page).toHaveURL(new RegExp(`atlasLimb=${id}`));
+    await column(page, "area")
+      .locator(".atlas-decomp__label")
+      .getByText(label, { exact: true })
+      .click();
+    await expect(page).toHaveURL(new RegExp(`atlasLimb=${id.replace(":", "(?::|%3A)")}`));
     await expect(page.getByRole("navigation", { name: "Atlas scope" })).toContainText(label);
   }
 });
 
 test("the opened row stays marked as current in its column", async ({ page }) => {
   await openAtlas(page);
-  await column(page, "area").getByRole("button", { name: /Compliance/ }).click();
+  await column(page, "area").getByRole("button", { name: /^NIST/ }).click();
 
   const selected = column(page, "area").locator('.atlas-decomp__node[data-state="selected"]');
   await expect(selected).toHaveCount(1);
-  await expect(selected).toContainText("Compliance");
+  await expect(selected).toContainText("NIST");
 });
 
 test("the layout switch offers both orientations above the stacking width", async ({ page }) => {
@@ -192,6 +188,7 @@ test("Atlas keeps generated identifiers out of visible and accessible copy", asy
   const atlas = map(page);
 
   await expect(atlas).not.toContainText(/atlas:LIMB-/);
+  await expect(atlas).not.toContainText(/ecosystem:/);
   await expect(atlas).not.toContainText(/:CATALOG\b/);
   await expect(atlas).not.toContainText(/\b(?:trunks?|limbs?|twigs?|acorns?)\b/i);
   await expect(atlas).not.toContainText(/nist-zt|nist-iot-cybersecurity|microsoft-zt-maturity/);

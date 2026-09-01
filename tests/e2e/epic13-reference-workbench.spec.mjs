@@ -39,16 +39,16 @@ test("Atlas overview aggregates the ecosystem and drills directly", async ({ pag
   await waitForAppReady(page);
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  await expect(page.getByText("Open any part of the landscape to see what is published inside it, and how much.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Open a publisher or source ecosystem to follow its publications and native structure.", { exact: true })).toBeVisible();
   const atlas = page.getByTestId("atlas-map");
   await expect(atlas).toHaveAttribute("data-scope-level", "root");
   const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-  await expect(areas).toHaveAttribute("data-row-count", "12");
+  await expect(areas).toHaveAttribute("data-row-count", "11");
   await page.screenshot({ path: testInfo.outputPath("epic13-atlas-graph-first.png"), fullPage: true });
 
-  await areas.getByRole("button", { name: /^Governance/ }).click();
-  await expect(page).toHaveURL(/atlasLimb=atlas(?::|%3A)LIMB-GOVERNANCE/);
-  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "area");
+  await areas.getByRole("button", { name: /^NIST/ }).click();
+  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
+  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
   await page.screenshot({ path: testInfo.outputPath("epic13-atlas-workbench.png"), fullPage: true });
 });
 

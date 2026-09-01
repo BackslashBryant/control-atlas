@@ -26,7 +26,10 @@ test("focused Atlas opens straight to Connections, not a structural page", async
   await expect(subject.getByRole("heading", { name: "AC-2", level: 2 })).toBeVisible();
   await expect(subject).toContainText("Account Management");
   await expect(subject).toContainText("SP 800-53 Rev. 5");
-  await expect(subject).toContainText("143 in 7 categories");
+  const facts = subject.locator("dl");
+  await expect(facts.locator("div", { hasText: "Published neighborhood" })).toContainText("156 relationships");
+  await expect(facts.locator("div", { hasText: "Publisher-native structure" })).toContainText("14 relationships");
+  await expect(facts.locator("div", { hasText: "Cross-source" })).toContainText("142 relationships");
   await expect(page.getByText("Selected item", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Connections", level: 2 })).toBeVisible();
   await expect(page.getByRole("region", { name: "Relationship map" })).toBeVisible();
@@ -60,6 +63,8 @@ test("Hierarchy panel shows real structural substance, not just breadcrumb lines
   // Record type, publication, identifier, and the record's own published
   // children — the substance a single-heading panel never had.
   await expect(panel.getByText("Record type")).toBeVisible();
+  await expect(panel.getByText("Publisher-native relationships")).toBeVisible();
+  await expect(panel.getByText("14", { exact: true })).toBeVisible();
   await expect(panel.getByText("Publication")).toBeVisible();
   await expect(panel.getByText("Decomposes into")).toBeVisible();
   await expect(panel.getByRole("link", { name: "AC-2.1", exact: true })).toBeVisible();
@@ -274,4 +279,120 @@ test("compact Hierarchy preserves structural position without horizontal overflo
       globalThis.document.documentElement.clientWidth,
   }));
   expect(overflow).toEqual({ body: 0, document: 0 });
+});
+
+// 2026-08-29: the focused Atlas record used to show a title, a publication,
+// and a connection count and nothing else — no published text, and not one
+// anchor in <main>. Drilling four columns deep landed on strictly less than
+// the search box already returns, with no route to the record or its source.
+test("a focused record shows what it says and where to read the rest", async ({ page }) => {
+  await page.goto("/#/explore?node=nist-800-53%3AAC-17.2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const subject = page.locator(".atlas-focused-context");
+  await expect(subject.getByRole("heading", { name: "Control Statement" })).toBeVisible();
+  await expect(subject).toContainText(
+    "Implement cryptographic mechanisms to protect the confidentiality and integrity of remote access sessions.",
+  );
+  // Sections that did not fit are named, so the reader knows what opening the
+  // full record actually gets them. AC-17.2's statement is short enough to
+  // render whole, so the note must not claim the statement was cut.
+  await expect(subject).toContainText("On the full record: Discussion.");
+  await expect(subject.locator("[data-clamped]")).toHaveCount(0);
+
+  const fullRecord = subject.getByRole("link", { name: "Read the full record" });
+  await expect(fullRecord).toHaveAttribute("href", "#/record/nist-800-53/AC-17.2");
+  await expect(
+    subject.getByRole("link", { name: "View official source" }),
+  ).toHaveAttribute("href", /^https:\/\/csrc\.nist\.gov\//);
+
+  await fullRecord.click();
+  await expect(page).toHaveURL(/#\/record\/nist-800-53\/AC-17\.2/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: /AC-17\.2/ }),
+  ).toBeVisible();
+});
+
+test("the focused record's text and exits survive every context breakpoint", async ({ page }) => {
+  // The context card is a two-column grid above 767px and one column below.
+  // The statement, the note, and the exits span the full width in both, so
+  // check the boundary rather than only the extremes.
+  for (const width of [390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/#/explore?node=nist-800-53%3AAC-17.2");
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+
+    const subject = page.locator(".atlas-focused-context");
+    await expect(subject.locator(".record-official-text")).toBeVisible();
+    await expect(subject.locator(".atlas-focused-more-text")).toBeVisible();
+    await expect(
+      subject.getByRole("link", { name: "Read the full record" }),
+    ).toBeVisible();
+    await expect(
+      subject.getByRole("link", { name: "View official source" }),
+    ).toBeVisible();
+
+    const overflow = await page.evaluate(
+      () =>
+        globalThis.document.documentElement.scrollWidth -
+        globalThis.document.documentElement.clientWidth,
+    );
+    expect(overflow, `horizontal overflow at ${width}px`).toBeLessThanOrEqual(1);
+
+    // Published source text stays at a readable measure instead of running
+    // the full width of a wide card.
+    const measure = await subject
+      .locator(".record-official-text > section")
+      .first()
+      .evaluate((element) => element.getBoundingClientRect().width);
+    expect(measure, `statement measure at ${width}px`).toBeLessThanOrEqual(620);
+  }
+});
+
+// SP 800-53 AC-2's control statement is 1,411 characters. Rendered whole it
+// was 568px tall and pushed the connection graph — the reason the Atlas
+// exists — nearly 400px below the fold on a 900px viewport.
+test("a long statement stays bounded and the graph stays above the fold", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/#/explore?node=nist-800-53%3AAC-2");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const subject = page.locator(".atlas-focused-context");
+  const preview = subject.locator(".record-published-preview");
+  await expect(preview).toHaveAttribute("data-clamped", "true");
+  // The note names the cut, so the fade is never the only signal.
+  await expect(subject).toContainText(
+    "On the full record: the rest of the control statement, Discussion.",
+  );
+
+  const previewHeight = await preview.evaluate(
+    (element) => element.getBoundingClientRect().height,
+  );
+  expect(previewHeight).toBeLessThanOrEqual(240);
+
+  const graphTop = await page
+    .locator(".atlas-focused-main")
+    .evaluate((element) => element.getBoundingClientRect().top);
+  expect(graphTop, "connection graph must be visible without scrolling").toBeLessThan(900);
+});
+
+test("a focused record with no published sections still offers both exits", async ({ page }) => {
+  await page.goto("/#/explore?node=csf-2%3ACATEGORY-PR.AA");
+  await waitForAppReady(page);
+  await dismissOnboarding(page);
+
+  const subject = page.locator(".atlas-focused-context");
+  // No published text for this record, so no empty section and no dangling
+  // "also on the full record" line — but the routes out stay.
+  await expect(subject.locator(".record-official-text")).toHaveCount(0);
+  await expect(subject.locator(".atlas-focused-more-text")).toHaveCount(0);
+  await expect(
+    subject.getByRole("link", { name: "Open the full record" }),
+  ).toHaveAttribute("href", "#/record/csf-2/CATEGORY-PR.AA");
+  await expect(
+    subject.getByRole("link", { name: "View official source" }),
+  ).toBeVisible();
 });
