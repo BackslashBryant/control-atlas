@@ -283,10 +283,14 @@ export function buildAtlasTree(
   }
 
   const current = detailProjection || publicationProjection || areaProjection;
+  // Context rows carry the opened container but are not part of the visible record column.
+  const hiddenContextRecordCount = current
+    ? current.nodes
+        .filter(isContextNode)
+        .reduce((sum, node) => sum + (node.canonicalRecordCount || 0), 0)
+    : 0;
   const scopeCount = current
-    ? ecosystemProjection && current === ecosystemProjection
-      ? current.representedCanonicalNodeCount || 0
-      : Math.max(0, (current.representedCanonicalNodeCount || 0) - 1)
+    ? Math.max(0, (current.representedCanonicalNodeCount || 0) - hiddenContextRecordCount)
     : areaRows.reduce((sum, row) => sum + row.count, 0);
 
   return {
