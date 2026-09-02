@@ -10,7 +10,6 @@
 | EXT-A11Y-001 | Hands-on NVDA plus VoiceOver or TalkBack verification | Human QA | Before any claim of assistive-technology conformance |
 | EXT-DEVICE-001 | Physical iOS and Android phone verification | Human QA | Before any claim of physical-device coverage |
 | EXT-SEC-001 | Independent penetration test | Product owner | Before a formal external security-assurance claim |
-| TAX-FACET-001 | Every taxonomy dimension with record coverage is collapsed behind the Library's `Advanced filters` disclosure, including the strongest signals (DISA 1,115; STIG 985). The standing no-buried-drawers rule puts workspace filtering in the header, not a drawer. | Product owner | Before claiming taxonomy filtering is discoverable |
 | TAX-RULES-001 | `tool`, `artifact`, and `topic` carry no record-level assignment rules, so they never appear as record facets. Closing this means writing governed source-backed rules, not UI work. | Product owner | Before presenting those dimensions as record filters |
 | TAX-RESULT-001 | Library and search result rows carry no tags. Add at most three high-signal clickable tags per row without hurting scan speed. | Product owner | Before claiming the taxonomy epic's search-surface acceptance criteria |
 | TAX-INDEX-001 | `data/generated/discovery-index.json` covers resources and templates only (100 entries). Extend to records, catalogs, guides, and the Intel contract so a tag opens genuinely cross-content results. | Product owner | Before claiming unified cross-content discovery |
