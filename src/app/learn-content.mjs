@@ -161,6 +161,7 @@ const practitionerGuideArticles = [
   {
     id: "cloud-and-shared-responsibility",
     kind: "practitioner",
+    taxonomyTagIds: ["environment.cloud"],
     title: "Cloud and shared responsibility",
     summary: "Who owns which control depends on the service model.",
     whereItSits: "FedRAMP is the federal program for authorizing cloud services and documenting each offering's shared-responsibility split.",

@@ -330,6 +330,35 @@ test("Guide context hands governed tags to the Library", async ({ page }) => {
   await expect(page).toHaveURL(/#\/library\?tag=/);
 });
 
+test("tag discovery reaches governed catalogs and guides without duplicating record rows", async ({ page }) => {
+  await open(page, "/#/library?tag=environment.cloud");
+  const related = page.getByRole("region", { name: "Related content across Control Atlas" });
+  await expect(related.getByRole("heading", { name: /Guides \(1\)/ })).toBeVisible();
+  await expect(related.getByRole("link", { name: "Cloud and shared responsibility" })).toBeVisible();
+  await expect(related.getByText(/Records \(/)).toHaveCount(0);
+
+  await open(page, "/#/library?tag=framework.rmf");
+  await expect(page.getByRole("region", { name: "Related content across Control Atlas" })
+    .getByRole("link", { name: "SP 800-53 Rev. 5" })).toBeVisible();
+});
+
+test("Compare shows shared and differing governed tags at desktop and narrow widths", async ({ page }) => {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
+    await open(page, "/#/compare/relationships?intent=frameworks&source=nist-800-53&target=csf-2&compareRun=true");
+    const context = page.getByRole("region", { name: "Taxonomy context" });
+    await expect(context.getByRole("heading", { name: "Shared tags" })).toBeVisible();
+    await expect(context.getByRole("heading", { name: "Only in SP 800-53 Rev. 5" })).toBeVisible();
+    await expect(context.getByRole("heading", { name: "Only in NIST CSF 2.0" })).toBeVisible();
+    await expect(context.getByRole("link", { name: "NIST" }).first()).toBeVisible();
+    const overflow = await page.evaluate(() => ({
+      documentWidth: globalThis.document.documentElement.scrollWidth,
+      viewportWidth: globalThis.innerWidth,
+    }));
+    expect(overflow.documentWidth).toBeLessThanOrEqual(overflow.viewportWidth);
+  }
+});
+
 test("starter-document context preserves the selected document and preview", async ({ page }) => {
   await open(page, "/#/build/documents/security_plan_starter?framework=nist-800-53&baseline=LOW");
   expect(await page.evaluate(() => globalThis.scrollY)).toBeLessThanOrEqual(1);

@@ -1,7 +1,9 @@
+import { resolveIdentityByKey } from "../../shared/identity-registry.mjs";
+
 const brand = ({
   key,
-  ownerLabel,
-  accessibleName,
+  ownerLabel = "",
+  accessibleName = "",
   iconKey = "",
   initials = "",
   accent = "neutral",
@@ -10,21 +12,24 @@ const brand = ({
   namePatterns = [],
   ownerPatterns = [],
   hosts = [],
-}) =>
-  Object.freeze({
+}) => {
+  const canonicalIdentity = resolveIdentityByKey(key);
+  return Object.freeze({
     key,
-    ownerLabel,
-    accessibleName,
+    ownerLabel: canonicalIdentity?.label || ownerLabel,
+    accessibleName: canonicalIdentity?.accessible_name || accessibleName,
     markKind: iconKey ? "icon" : "monogram",
     iconKey,
-    initials,
+    initials: initials || canonicalIdentity?.fallback?.value || "",
     accent,
     parentEcosystem,
+    canonicalIdentityKey: canonicalIdentity?.key || null,
     resourceIds: Object.freeze(resourceIds),
     namePatterns: Object.freeze(namePatterns),
     ownerPatterns: Object.freeze(ownerPatterns),
     hosts: Object.freeze(hosts),
   });
+};
 
 /**
  * One registry for the owner and ecosystem identities used across Resources.
@@ -44,8 +49,6 @@ export const RESOURCE_BRAND_REGISTRY = Object.freeze({
   }),
   fedramp: brand({
     key: "fedramp",
-    ownerLabel: "FedRAMP",
-    accessibleName: "FedRAMP",
     initials: "FR",
     accent: "federal",
     namePatterns: ["fedramp"],
@@ -54,9 +57,6 @@ export const RESOURCE_BRAND_REGISTRY = Object.freeze({
   }),
   nist: brand({
     key: "nist",
-    ownerLabel: "NIST",
-    accessibleName: "National Institute of Standards and Technology",
-    initials: "NIST",
     accent: "federal",
     namePatterns: ["nist ", "national institute of standards and technology"],
     ownerPatterns: ["nist", "national institute of standards and technology"],
@@ -64,9 +64,6 @@ export const RESOURCE_BRAND_REGISTRY = Object.freeze({
   }),
   cisa: brand({
     key: "cisa",
-    ownerLabel: "CISA",
-    accessibleName: "Cybersecurity and Infrastructure Security Agency",
-    initials: "CISA",
     accent: "federal",
     namePatterns: ["cisa "],
     ownerPatterns: ["cisa", "cybersecurity and infrastructure security agency"],
@@ -74,9 +71,6 @@ export const RESOURCE_BRAND_REGISTRY = Object.freeze({
   }),
   disa: brand({
     key: "disa",
-    ownerLabel: "DISA",
-    accessibleName: "Defense Information Systems Agency",
-    initials: "DISA",
     accent: "defense",
     namePatterns: ["disa ", "stig viewer", "scap compliance checker"],
     ownerPatterns: ["disa", "defense information systems agency"],
@@ -196,8 +190,6 @@ export const RESOURCE_BRAND_REGISTRY = Object.freeze({
   }),
   microsoft: brand({
     key: "microsoft",
-    ownerLabel: "Microsoft",
-    accessibleName: "Microsoft",
     iconKey: "microsoft",
     accent: "commercial",
     namePatterns: ["microsoft ", "powerstig"],
@@ -206,9 +198,6 @@ export const RESOURCE_BRAND_REGISTRY = Object.freeze({
   }),
   mitre: brand({
     key: "mitre",
-    ownerLabel: "MITRE",
-    accessibleName: "MITRE",
-    initials: "MITRE",
     accent: "research",
     namePatterns: ["mitre ", "heimdall", "security automation framework"],
     ownerPatterns: ["mitre"],
@@ -216,9 +205,6 @@ export const RESOURCE_BRAND_REGISTRY = Object.freeze({
   }),
   dcsa: brand({
     key: "dcsa",
-    ownerLabel: "DCSA",
-    accessibleName: "Defense Counterintelligence and Security Agency",
-    initials: "DCSA",
     accent: "defense",
     namePatterns: ["dcsa ", "nisp cybersecurity office"],
     ownerPatterns: ["dcsa", "defense counterintelligence and security agency"],

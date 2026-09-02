@@ -5,6 +5,7 @@ import { displayNameFor } from "../../app/display-names.mjs";
 import { aggregateRelationshipRows } from "../../app/runtime.mjs";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
 import { Button } from "../components/lsm";
+import { AtlasTag } from "../components/AtlasTag";
 import { RecordLink } from "../components/RecordLink";
 import { parseCatalogItemIds, SourceRefList } from "../lib/compareHelpers";
 import {
@@ -23,6 +24,7 @@ import {
   type CompareModeId,
 } from "../lib/compareModeState";
 import { paginateCompareRows } from "../lib/comparePagination";
+import { compareTaxonomyTags } from "../lib/compareTaxonomy.mjs";
 import {
   Field,
   MissionPage,
@@ -465,6 +467,10 @@ export function ComparePage(props: {
     () => filterCompareRows(aggregatedRelationshipRows, resultQuery),
     [aggregatedRelationshipRows, resultQuery],
   );
+  const taxonomyComparison = useMemo(
+    () => compareTaxonomyTags(aggregatedRelationshipRows),
+    [aggregatedRelationshipRows],
+  );
   const filteredMappingCount = countCompareMappings(aggregatedRelationshipRows);
   const visibleMappingCount = countCompareMappings(visibleAggregatedRows);
   const pageWindow = paginateCompareRows(visibleAggregatedRows, state.page);
@@ -790,6 +796,31 @@ export function ComparePage(props: {
                   ? `${visibleMappingCount.toLocaleString()} of ${filteredMappingCount.toLocaleString()} published mappings match`
                   : `${visibleMappingCount.toLocaleString()} published mapping${visibleMappingCount === 1 ? "" : "s"} across ${visibleAggregatedRows.length.toLocaleString()} source record${visibleAggregatedRows.length === 1 ? "" : "s"}`}
               </p>
+
+              <section aria-labelledby="compare-taxonomy-title" className="compare-taxonomy-context">
+                <div>
+                  <h3 id="compare-taxonomy-title">Taxonomy context</h3>
+                  <p>Tags summarize the mapped records in each publication; they do not add a new relationship.</p>
+                </div>
+                <div className="compare-taxonomy-groups">
+                  {[
+                    { id: "shared", label: "Shared tags", tags: taxonomyComparison.shared },
+                    { id: "source", label: `Only in ${sourceLabel}`, tags: taxonomyComparison.onlySource },
+                    { id: "target", label: `Only in ${targetLabel}`, tags: taxonomyComparison.onlyTarget },
+                  ].map((group) => (
+                    <section aria-labelledby={`compare-taxonomy-${group.id}`} key={group.id}>
+                      <h4 id={`compare-taxonomy-${group.id}`}>{group.label}</h4>
+                      {group.tags.length ? (
+                        <div className="compare-taxonomy-tags">
+                          {group.tags.map((tag: any) => (
+                            <AtlasTag key={tag.id} onNavigate={onNavigate} showType size="sm" tagId={tag.id} />
+                          ))}
+                        </div>
+                      ) : <p className="muted">None</p>}
+                    </section>
+                  ))}
+                </div>
+              </section>
 
               {visibleAggregatedRows.length ? (
                 <>

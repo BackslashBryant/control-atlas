@@ -22,10 +22,24 @@ test("discovery index builds without errors and has entries", () => {
   assert.ok(index.entries.length > 0, "should have entries");
 });
 
-test("discovery index contains both resources and templates", () => {
+test("discovery index contains governed cross-content classes", () => {
   const types = new Set(index.entries.map((e) => e.content_type));
-  assert.ok(types.has("resource"), "should have resources");
-  assert.ok(types.has("template"), "should have templates");
+  assert.deepEqual([...types].sort(), ["catalog", "guide", "resource", "template"]);
+  assert.ok(index.counts.record > 30_000);
+  assert.ok(index.counts.catalog >= 20);
+  assert.equal(index.counts.guide, 1);
+});
+
+test("records retain the existing governed runtime index without duplicating its payload", () => {
+  const records = index.collections.find((collection) => collection.content_type === "record");
+  assert.deepEqual(records, {
+    content_type: "record",
+    source_artifact: "library-search",
+    indexed_count: index.counts.record,
+    query_owner: "runtime-library-search",
+    route_template: "#/record/{catalog_id}/{item_id}",
+  });
+  assert.equal(index.entries.some((entry) => entry.content_type === "record"), false);
 });
 
 test("no duplicate content_ids", () => {
@@ -36,6 +50,8 @@ test("no duplicate content_ids", () => {
 test("tpl-impl-stmt has expected direct tags", () => {
   const entry = index.entries.find((e) => e.content_id === "tpl-impl-stmt");
   assert.ok(entry, "tpl-impl-stmt should be in index");
+  assert.equal(entry.template_name, "implementation_statement_worksheet");
+  assert.equal(entry.route, "#/build/documents/implementation_statement_worksheet");
   assert.ok(entry.direct_tags.includes("tool.emass"), "should have tool.emass");
   assert.ok(entry.direct_tags.includes("framework.fedramp"), "should have framework.fedramp");
 });
@@ -59,9 +75,26 @@ test("every entry has required shape", () => {
     assert.ok(entry.content_type, "content_type required");
     assert.ok(entry.title, "title required");
     assert.ok(entry.route, "route required");
+    assert.ok(Array.isArray(entry.source_refs), "source_refs must be an array");
+    assert.equal(typeof entry.publisher, "string", "publisher required");
+    assert.equal(typeof entry.catalog_id, "string", "catalog_id required");
     assert.ok(Array.isArray(entry.direct_tags), "direct_tags must be array");
     assert.ok(Array.isArray(entry.derived_tags), "derived_tags must be array");
   }
+});
+
+test("catalogs and guides retain governed identity, provenance, and routes", () => {
+  const catalog = index.entries.find((entry) => entry.content_id === "catalog:nist-800-53");
+  assert.equal(catalog?.content_type, "catalog");
+  assert.equal(catalog?.catalog_id, "nist-800-53");
+  assert.deepEqual(catalog?.source_refs, ["nist-800-53"]);
+  assert.equal(catalog?.route, "#/library/publication/nist-800-53");
+  assert.ok(catalog?.direct_tags.includes("framework.rmf"));
+
+  const guide = index.entries.find((entry) => entry.content_id === "guide:cloud-and-shared-responsibility");
+  assert.deepEqual(guide?.direct_tags, ["environment.cloud"]);
+  assert.deepEqual(guide?.source_refs, ["fedramp-rev5"]);
+  assert.equal(guide?.route, "#/guides?pattern=cloud-and-shared-responsibility");
 });
 
 test("derived tags do not duplicate direct tags", () => {
