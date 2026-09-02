@@ -3,7 +3,7 @@ import {
   IconExternalLink,
   IconSearch,
 } from "@tabler/icons-react";
-import { useEffect, useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 
 import { Button, ButtonLink } from "../components/lsm/Button";
 import { AppLink } from "../components/AppLink";
@@ -49,7 +49,7 @@ export function CatalogDetailPage(props: {
 }) {
   const { bundle, state, onNavigate, onOpenNode } = props;
   const [queryDraft, setQueryDraft] = useState(state.query);
-  useEffect(() => setQueryDraft(state.query), [state.query]);
+  useLayoutEffect(() => setQueryDraft(state.query), [state.query]);
   const catalogs =
     bundle.catalogSummaries?.length
       ? bundle.catalogSummaries

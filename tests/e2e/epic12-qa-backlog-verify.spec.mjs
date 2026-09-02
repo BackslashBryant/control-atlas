@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { waitForAppReady } from './support.mjs';
 
 // Regression guard for the epic-12 QA backlog fixes (2026-08-10):
 // B1/B2 Template-C browse + map, B3 tools reachability, B5/B6 landing,
@@ -80,8 +81,9 @@ test('B6: the Template B destination grid has four uniform cards', async ({ page
 });
 
 test('B9: overlay result descriptions clamp within their rows', async ({ page }) => {
-  await page.goto('/#/');
-  await page.keyboard.press('Control+k');
+  await page.goto('/#/about');
+  await waitForAppReady(page, { allowPartial: true });
+  await page.getByRole('button', { name: 'Open search' }).click();
   await expect(page.locator('.search-overlay')).toBeVisible({ timeout: 10000 });
   await page.locator('#global-search-query').fill('control');
   await expect(page.locator('.search-overlay-result').first()).toBeVisible({ timeout: 10000 });
@@ -93,8 +95,9 @@ test('B9: overlay result descriptions clamp within their rows', async ({ page })
 });
 
 test('B10: overlay header has one clear and one close affordance, distinct', async ({ page }) => {
-  await page.goto('/#/');
-  await page.keyboard.press('Control+k');
+  await page.goto('/#/about');
+  await waitForAppReady(page, { allowPartial: true });
+  await page.getByRole('button', { name: 'Open search' }).click();
   await expect(page.locator('.search-overlay')).toBeVisible({ timeout: 10000 });
   await page.locator('#global-search-query').fill('access');
   const header = page.locator('.search-overlay-header');

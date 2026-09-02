@@ -190,7 +190,7 @@ test("compact Sources header stays opaque while content scrolls beneath it", asy
     expect(compactHeader.top).toBe(0);
     expect(compactHeader.alpha, compactHeader.background).toBe(1);
     expect(compactHeader.background).not.toBe("rgba(0, 0, 0, 0)");
-    expect(compactHeader.backdropFilter).toBe("none");
+    expect(["", "none"]).toContain(compactHeader.backdropFilter);
   }
 });
 

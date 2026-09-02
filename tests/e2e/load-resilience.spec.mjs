@@ -125,8 +125,11 @@ test("retry clears a rejected artifact and succeeds on a fresh request", async (
   expect(requests).toBeGreaterThanOrEqual(3);
 });
 
-test("a lazy route crash preserves navigation and isolates the failed workspace", async ({ page }) => {
+test("a persistent lazy route crash preserves navigation and isolates the failed workspace", async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 900 });
+  await page.addInitScript(() => {
+    globalThis.sessionStorage.setItem("control-atlas:chunk-reload-at", String(Date.now()));
+  });
   await page.route("**/assets/AtlasMapPage-*.js", async (route) => {
     await route.fulfill({ status: 503, body: "route chunk unavailable" });
   });
