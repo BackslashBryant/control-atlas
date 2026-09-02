@@ -10,3 +10,4 @@
 *.zip binary
 
 data/curated/**/source-fragments/*.json -text
+tools/github-issue-complete.mjs -text

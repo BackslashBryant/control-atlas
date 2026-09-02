@@ -84,4 +84,5 @@ test('Repository line-ending policy is explicit and preserves attested binary so
     assert.match(attributes, new RegExp(`^\\*\\.${extension} binary$`, 'm'));
   }
   assert.match(attributes, /^data\/curated\/\*\*\/source-fragments\/\*\.json -text$/m);
+  assert.match(attributes, /^tools\/github-issue-complete\.mjs -text$/m);
 });
