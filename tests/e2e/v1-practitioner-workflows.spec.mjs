@@ -286,8 +286,8 @@ test("source detail has one return action and preserves the Sources workspace", 
       ),
     ).toBeLessThanOrEqual(1);
 
+    const dialog = page.getByRole("dialog");
     if (width < 1200) {
-      const dialog = page.getByRole("dialog");
       await expect(dialog).toBeVisible();
       await dialog.getByRole("button", { name: "Close inspector" }).click();
     } else {
@@ -295,6 +295,13 @@ test("source detail has one return action and preserves the Sources workspace", 
       await expect(closeDetails).toBeVisible();
       await closeDetails.click();
     }
+    await expect.poll(() =>
+      page.evaluate(() =>
+        new URLSearchParams(globalThis.location.hash.split("?")[1]).has("source"),
+      ),
+    ).toBe(false);
+    await expect(dialog).toHaveCount(0);
+    await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
     await waitForAppReady(page);
     await expect(page.getByRole("heading", { name: "Sources", level: 1 })).toBeVisible();
     await expect(page.locator("#source-search")).toHaveValue("DISA");
