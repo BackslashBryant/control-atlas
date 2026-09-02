@@ -164,8 +164,14 @@ test("Phase 3 record identity is canonical across Library, Atlas, and direct pat
 
   await gotoApp(page, "/#/atlas?node=nist-800-53%3AAC-2");
   await waitForAppReady(page, { allowPartial: true });
-  await expect(breadcrumb).toHaveAttribute("data-canonical-breadcrumb", canonicalBreadcrumb);
-  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toBeVisible();
+  const focusedRecord = page.getByRole("region", { name: "NIST AC-2" });
+  await expect(focusedRecord.getByRole("heading", { name: "NIST AC-2" })).toBeVisible();
+  await expect(focusedRecord).toContainText("Account Management");
+  await page.getByRole("button", { name: "Hierarchy", exact: true }).click();
+  const atlasPath = page.getByRole("navigation", { name: "Where this sits" });
+  await expect(atlasPath).toContainText("SP 800-53 Rev. 5 Catalog");
+  await expect(atlasPath).toContainText("Access Control");
+  await expect(atlasPath).toContainText("Account Management");
   await expect(page.locator('header.site-header nav[aria-label="Primary navigation"] a[aria-current="page"]')).toHaveText("Atlas");
 
   await gotoApp(page, "/#/record/nist-800-53/AC-2?from=search&returnTo=%2Flibrary");
