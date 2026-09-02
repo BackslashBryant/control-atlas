@@ -252,7 +252,7 @@ export function CatalogDetailPage(props: {
           <form
             aria-label="Catalog record controls"
             className="catalog-record-toolbar"
-            onSubmit={(event) => { event.preventDefault(); const query = queryDraft.trim(); if (query !== state.query) update({ query, browseAll: "true", page: "" }); }}
+            onSubmit={(event) => { event.preventDefault(); const query = queryDraft.trim(); if (query !== state.query) update({ query, browseAll: showTierBrowser ? "" : "true", page: "" }); }}
             role="search"
           >
             <div className="catalog-record-filters">

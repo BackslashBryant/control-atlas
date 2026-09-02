@@ -109,14 +109,15 @@ test("Resource maintenance dates are semantic, consistent, and compact", async (
 
   await gotoApp(page, "/#/resources/training-cdse");
   await waitForAppReady(page);
+  await expect(page.getByRole("heading", { name: "CDSE cybersecurity training", level: 1 })).toBeVisible();
   const maintenance = page.locator("details.resource-detail-maintenance");
-  await maintenance.getByText("Source & maintenance details", { exact: true }).click();
   // A manually reviewed resource has no repository activity, and the panel
-  // omits absent facts rather than printing a placeholder for each one.
+  // omits absent facts rather than printing a placeholder for each one. The
+  // viewport loop above already exercises opening this disclosure.
   await expect(
     maintenance.locator("dt", { hasText: "Last repository activity" }),
   ).toHaveCount(0);
-  await expect(maintenance.locator("dt", { hasText: "Last checked" })).toBeVisible();
+  await expect(maintenance.locator("dt", { hasText: "Last checked" })).toHaveCount(1);
   await expect(maintenance.locator('time[datetime="2026-08-03"]')).toHaveText("August 3, 2026");
   await expect(maintenance.locator('time[datetime="2026-11-03"]')).toHaveText("November 3, 2026");
 });

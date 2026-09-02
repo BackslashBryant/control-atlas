@@ -143,7 +143,7 @@ test("Atlas first paint is a semantic landscape with drill-down and history", as
   await waitForReady(page);
   await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "publication");
   await page.goBack();
-  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "area");
+  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
   await page.goForward();
   await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "publication");
 });

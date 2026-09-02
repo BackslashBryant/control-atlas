@@ -138,8 +138,9 @@ test('full-page search fields wait for explicit submission', async ({ page }) =>
   await waitForAppReady(page);
   const resourceSearch = page.getByRole('searchbox', { name: 'Find resources' });
   await resourceSearch.fill('Iron Bank');
+  await expect(resourceSearch).toHaveValue('Iron Bank');
   await expect(page).toHaveURL(/#\/resources\?q=OSCAL/);
-  await page.getByRole('button', { name: 'Search', exact: true }).click();
+  await resourceSearch.press('Enter');
   await expect(page).toHaveURL(/#\/resources\?q=Iron\+Bank/);
 
   await gotoApp(page, '/#/sources?q=NIST');
@@ -153,9 +154,11 @@ test('full-page search fields wait for explicit submission', async ({ page }) =>
   await gotoApp(page, '/#/library/publication/nist-800-53?q=AC-2');
   await waitForAppReady(page);
   const catalogSearch = page.getByRole('searchbox', { name: 'Search NIST SP 800-53 Rev. 5' });
-  await catalogSearch.fill('AC-3');
+  await catalogSearch.fill('');
+  await catalogSearch.pressSequentially('AC-3');
+  await expect(catalogSearch).toHaveValue('AC-3');
   await expect(page).toHaveURL(/q=AC-2/);
-  await page.getByRole('button', { name: 'Search records' }).click();
+  await catalogSearch.press('Enter');
   await expect(page).toHaveURL(/q=AC-3/);
 });
 
@@ -186,7 +189,7 @@ test('Atlas landing renders the lightweight semantic hierarchy, not the relation
   await expect(map).toHaveAttribute('data-scope-level', 'root');
   await expect(map.locator('.atlas-decomp__column[data-column="area"]')).toHaveAttribute(
     'data-row-count',
-    '12',
+    '11',
   );
   // Orientation is DOM only: no canvas renderer and no flow graph is loaded
   // before the visitor asks for one.

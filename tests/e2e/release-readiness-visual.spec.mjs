@@ -6,7 +6,7 @@ import {
   waitForAppReady,
 } from "./support.mjs";
 
-const FOCUSED_ATLAS = "/#/explore?node=nist-800-53%3AAC-2&relationshipView=map";
+const FOCUSED_ATLAS = "/#/atlas/nist-800-53:AC-2?relationshipView=map";
 
 test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
@@ -39,23 +39,23 @@ async function assertNoPageOverflow(page) {
   ).toBeLessThanOrEqual(dimensions.clientWidth + 1);
 }
 
-test("release evidence: focused Atlas stays bounded on desktop", async ({ page }) => {
+test("release evidence: focused Atlas keeps context above connections on desktop", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(FOCUSED_ATLAS);
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  const context = page.locator(".atlas-focused-context");
   const map = page.getByRole("region", { name: "Relationship map" });
-  const inspector = page.getByRole("complementary", { name: "Selected item" });
+  await expect(context).toBeVisible();
   await expect(map).toBeVisible();
-  await expect(inspector).toBeVisible();
   await assertNoPageOverflow(page);
 
+  const contextBox = await context.boundingBox();
   const mapBox = await map.boundingBox();
-  const inspectorBox = await inspector.boundingBox();
+  expect(contextBox).not.toBeNull();
   expect(mapBox).not.toBeNull();
-  expect(inspectorBox).not.toBeNull();
-  expect(mapBox.x + mapBox.width).toBeLessThanOrEqual(inspectorBox.x - 8);
+  expect(mapBox.y).toBeGreaterThanOrEqual(contextBox.y + contextBox.height - 1);
   await page.screenshot({
     fullPage: true,
     path: "artifacts/release-readiness/atlas-desktop-map.png",
@@ -68,17 +68,17 @@ test("release evidence: focused Atlas stacks safely on mobile", async ({ page })
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  const context = page.locator(".atlas-focused-context");
   const map = page.getByRole("region", { name: "Relationship map" });
-  const inspector = page.getByRole("complementary", { name: "Selected item" });
+  await expect(context).toBeVisible();
   await expect(map).toBeVisible();
-  await expect(inspector).toBeVisible();
   await assertNoPageOverflow(page);
 
+  const contextBox = await context.boundingBox();
   const mapBox = await map.boundingBox();
-  const inspectorBox = await inspector.boundingBox();
+  expect(contextBox).not.toBeNull();
   expect(mapBox).not.toBeNull();
-  expect(inspectorBox).not.toBeNull();
-  expect(inspectorBox.y).toBeGreaterThanOrEqual(mapBox.y + mapBox.height - 1);
+  expect(mapBox.y).toBeGreaterThanOrEqual(contextBox.y + contextBox.height - 1);
 
   await page.screenshot({
     fullPage: true,
@@ -141,15 +141,13 @@ test("release evidence: Atlas fits a 375 by 667 compact viewport", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  const context = page.locator(".atlas-focused-context");
   const map = page.getByRole("region", { name: "Relationship map" });
-  const inspector = page.getByRole("complementary", {
-    name: "Selected item",
-  });
+  const contextBox = await context.boundingBox();
   const mapBox = await map.boundingBox();
-  const inspectorBox = await inspector.boundingBox();
+  expect(contextBox).not.toBeNull();
   expect(mapBox).not.toBeNull();
-  expect(inspectorBox).not.toBeNull();
-  expect(inspectorBox.y).toBeGreaterThanOrEqual(mapBox.y + mapBox.height - 1);
+  expect(mapBox.y).toBeGreaterThanOrEqual(contextBox.y + contextBox.height - 1);
   await assertNoPageOverflow(page);
 });
 

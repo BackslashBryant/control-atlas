@@ -105,13 +105,13 @@ test("Phase 3 filters stay stable, bounded, and free of hierarchy node types", a
     await waitForAppReady(page);
     const rail = page.locator('[data-react-root] .workspace-facet-rail');
     await expect(rail).toBeVisible();
-    const facetControls = rail.locator('.workspace-facet-controls[data-facet-set="publication,kind,area"]');
+    const facetControls = rail.locator('.workspace-facet-controls[data-facet-set="publication,kind,area,asset_class,domain,vendor_brand,program"]');
     const primaryFacets = facetControls.locator(
       ":scope > .workspace-typeahead > span, :scope > .workspace-checkbox-facet > summary > .workspace-facet-group__label",
     );
     renderedSets.push(await primaryFacets.allTextContents());
     await expect(primaryFacets).toHaveText(["Publication", "Content kind", "Area"]);
-    const advanced = facetControls.locator('details[data-advanced-facet-set="publisher,topics,connections"]');
+    const advanced = facetControls.locator('details[data-advanced-facet-set="publisher,technology,product,framework,organization,environment,connections"]');
     if (!(await advanced.evaluate((element) => element instanceof globalThis.HTMLDetailsElement && element.open))) {
       await advanced.locator("summary").click();
     }

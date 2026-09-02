@@ -4,7 +4,7 @@ import {
 } from "@tabler/icons-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import type { MouseEvent, ReactNode } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { displayNameFor } from "../../app/display-names.mjs";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
@@ -571,7 +571,7 @@ export function SourcesPage(props: {
     state.query || state.publisher || state.lifecycle,
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setQueryDraft(state.query || "");
   }, [state.query]);
 
@@ -585,12 +585,12 @@ export function SourcesPage(props: {
     }, 200);
   };
 
-  const handleQueryCommit = () => {
+  const handleQueryCommit = (nextQuery = queryDraft) => {
     if (debounceTimerRef.current) {
       window.clearTimeout(debounceTimerRef.current);
       debounceTimerRef.current = null;
     }
-    onNavigate("sources", { ...state, query: queryDraft });
+    onNavigate("sources", { ...state, query: nextQuery });
   };
 
   useEffect(() => {
@@ -727,7 +727,10 @@ export function SourcesPage(props: {
               id="source-search"
               onChange={(event) => handleQueryChange(event.target.value)}
               onKeyDown={(event) => {
-                if (event.key === "Enter") handleQueryCommit();
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  handleQueryCommit(event.currentTarget.value);
+                }
               }}
               placeholder="Search title, publisher, version, or ID"
               type="search"

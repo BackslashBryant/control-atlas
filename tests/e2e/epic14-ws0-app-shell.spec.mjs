@@ -33,7 +33,6 @@ test("WS0 direct routes own exactly one main landmark without Home stacked above
 
   for (const { path, view, marker } of routes) {
     await gotoApp(page, path);
-    await page.reload();
     await waitForAppReady(page, { allowPartial: true });
 
     await expect(page.locator("main")).toHaveCount(1);

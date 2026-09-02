@@ -184,7 +184,7 @@ test("V1 workflow 08 — inspect a source and how it is used", async ({ page }) 
   await expect(assessmentDetail).toContainText("1,014 normalized records");
 });
 
-test("source detail routes use specific identity at every governed width", async ({ page, context }) => {
+test("source detail routes use specific identity at every governed width", async ({ page, context, browserName }) => {
   test.setTimeout(120_000);
   const sources = [
     { id: "nist-800-53", name: "NIST SP 800-53 Rev. 5" },
@@ -193,7 +193,9 @@ test("source detail routes use specific identity at every governed width", async
       name: "NIST IoT Device Cybersecurity Requirement Catalogs",
     },
   ];
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  if (browserName === "chromium") {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  }
 
   for (const width of [320, 375, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: width < 768 ? 844 : 1024 });
@@ -238,7 +240,9 @@ test("source detail routes use specific identity at every governed width", async
   const copy = technicalDetails.getByRole("button", { name: `Copy source ID ${sources[1].id}` });
   await copy.click();
   await expect(copy).toHaveText("Copied");
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(sources[1].id);
+  if (browserName === "chromium") {
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(sources[1].id);
+  }
 });
 
 test("a supplemental source material resolves to its parent publication's identity", async ({

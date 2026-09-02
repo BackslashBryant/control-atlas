@@ -57,7 +57,7 @@ test("Phase 2 search results answer access-control questions before the click", 
   expect(railBox).not.toBeNull();
   expect(railBox.y).toBeGreaterThanOrEqual(0);
   expect(railBox.y).toBeLessThan(900);
-  const advanced = rail.locator('details[data-advanced-facet-set="publisher,topics,connections"]');
+  const advanced = rail.locator('details[data-advanced-facet-set="publisher,technology,product,framework,organization,environment,connections"]');
   if (!(await advanced.evaluate((element) => element instanceof globalThis.HTMLDetailsElement && element.open))) {
     await advanced.locator("summary").click();
   }
@@ -124,6 +124,7 @@ test("Phase 2 overlay keeps symmetric input geometry and preserves both Enter pa
 
   await input.press("Enter");
   await expect(page).toHaveURL(/#\/library\?q=access(?:\+|%20)control/);
+  await waitForAppReady(page);
 
   await page.getByRole("button", { name: "Open search" }).click();
   const nextInput = page.getByRole("dialog", { name: "Search Control Atlas" })
