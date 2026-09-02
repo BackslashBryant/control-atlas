@@ -25,11 +25,13 @@
  * unparented is correct; guessing a parent for it is not.
  */
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import readXlsxFile from "read-excel-file/node";
 import { normalizeNistControlId } from "../tools/importers/cci-adapter.mjs";
+import { strictConditionalFetch } from "./lib/strict-conditional-fetch.mjs";
+import { writeJsonAtomically } from "./lib/write-json-atomically.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -66,7 +68,7 @@ function scanControlIds(text) {
 }
 
 async function download(url) {
-  const response = await fetch(url);
+  const response = await strictConditionalFetch(url);
   if (!response.ok) {
     throw new Error(`Download failed for ${url}: ${response.status} ${response.statusText}`);
   }
@@ -160,9 +162,9 @@ export function deriveCciRelationships({ ccis, controlIds, crosswalk }) {
       const legacyId = normalizeNistControlId(reference.index);
       if (!legacyId) continue;
 
-      let targets = [];
-      let why = "";
-      let basis = "";
+      let targets;
+      let why;
+      let basis;
 
       if (controlIds.has(legacyId)) {
         targets = [legacyId];
@@ -267,7 +269,7 @@ export async function buildCrosswalk(options = {}) {
 async function main() {
   const crosswalk = await buildCrosswalk();
   const crosswalkPath = join(ROOT, "data", "800-53-rev4-to-rev5-crosswalk.json");
-  writeFileSync(crosswalkPath, `${JSON.stringify(crosswalk, null, 2)}\n`, "utf8");
+  writeJsonAtomically(crosswalkPath, crosswalk);
 
   const ccis = readJson(join(ROOT, "data", "ccis.json"));
   const controls = readJson(join(ROOT, "data", "controls-800-53.json"));
@@ -275,25 +277,20 @@ async function main() {
 
   const derived = deriveCciRelationships({ ccis, controlIds, crosswalk });
   const mapPath = join(ROOT, "maps", "cci-to-800-53-rev4.json");
-  writeFileSync(
+  writeJsonAtomically(
     mapPath,
-    `${JSON.stringify(
-      {
-        schema_version: "2.0",
-        source_key: "nist-800-53-rev4-rev5-crosswalk",
-        source_artifact: COMPARISON_URL,
-        source_version: crosswalk.artifacts[0].checksum,
-        snapshot_date: new Date().toISOString().slice(0, 10),
-        checksum: crosswalk.artifacts[0].checksum,
-        provenance: crosswalk.provenance,
-        coverage: derived.stats,
-        unresolved_legacy_controls: derived.unresolved,
-        relationships: derived.relationships,
-      },
-      null,
-      2,
-    )}\n`,
-    "utf8",
+    {
+      schema_version: "2.0",
+      source_key: "nist-800-53-rev4-rev5-crosswalk",
+      source_artifact: COMPARISON_URL,
+      source_version: crosswalk.artifacts[0].checksum,
+      snapshot_date: new Date().toISOString().slice(0, 10),
+      checksum: crosswalk.artifacts[0].checksum,
+      provenance: crosswalk.provenance,
+      coverage: derived.stats,
+      unresolved_legacy_controls: derived.unresolved,
+      relationships: derived.relationships,
+    },
   );
 
   console.log(

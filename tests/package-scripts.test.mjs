@@ -72,6 +72,8 @@ test('nightly validation retains full cross-browser and data automation', () => 
   assert.match(ci, /PLAYWRIGHT_BLOB_OUTPUT_NAME: report-\$\{\{ matrix\.browser \}\}-\$\{\{ matrix\.shard \}\}\.zip/);
   assert.match(ci, /PLAYWRIGHT_BLOB_OUTPUT_NAME: report-accessibility\.zip/);
   assert.equal((ci.match(/--reporter=blob,github/g) ?? []).length, 2);
+  assert.match(ci, /issues_enabled="\$\(gh api "repos\/\$REPO" --jq '\.has_issues'\)"/);
+  assert.match(ci, /Repository Issues are disabled, so this workflow cannot open or resolve the persistent sweep alert/);
   assert.match(ci, /npm run resources:health/);
   assert.match(ci, /peter-evans\/create-pull-request@[0-9a-f]{40}/);
   assert.match(ci, /npm run test:oscal:independent/);
@@ -126,6 +128,7 @@ test('package scripts expose deterministic split gates and full local verificati
     'typecheck',
     'test',
     'test:ci-contracts',
+    'test:source-refresh',
     'test:documentation-contracts',
     'verify:affected',
     'verify:lockfile',
@@ -148,6 +151,8 @@ test('package scripts expose deterministic split gates and full local verificati
   assert.match(packageJson.scripts['verify:quality'], /verify:contracts/);
   assert.match(packageJson.scripts['verify:quality'], /lint:ci/);
   assert.match(packageJson.scripts['verify:quality'], /npm test/);
+  assert.match(packageJson.scripts.test, /test:source-refresh/);
+  assert.match(packageJson.scripts['lint:ci'], /lint:source-refresh/);
   assert.match(packageJson.scripts['review:experience:family'], /playwright\.guardian\.config\.mjs/);
   assert.match(packageJson.scripts['review:experience:full'], /playwright\.guardian\.config\.mjs/);
   assert.match(packageJson.scripts['review:experience:family'], /tests\/guardian\/experience-guardian\.spec\.mjs/);

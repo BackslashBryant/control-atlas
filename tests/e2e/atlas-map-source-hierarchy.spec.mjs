@@ -53,15 +53,16 @@ for (const viewport of VIEWPORTS) {
     await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "publication");
 
     await expectNoHorizontalOverflow(page);
-    // Wait for the drilled level to finish rendering before typing. The search
-    // box is a controlled input, so a keystroke delivered inside the route
-    // transition's commit window is overwritten by the in-flight render. A
-    // person cannot reach the field that fast; an automated fill can.
+    // Wait for both the drilled level and the shared navigation lock to settle
+    // before using the global jump field.
     await expect(
       page.locator('.atlas-decomp__column[data-column="detail"] .atlas-decomp__node').first(),
     ).toBeVisible();
+    await expect(page.locator("main#workspace")).not.toHaveAttribute("inert", "");
     const jumpToRecord = page.getByRole("searchbox", { name: "Jump to a record" });
-    await jumpToRecord.fill("nist-800-53:AC-1");
+    await expect(jumpToRecord).toBeEnabled();
+    await jumpToRecord.pressSequentially("nist-800-53:AC-1");
+    await expect(jumpToRecord).toHaveValue("nist-800-53:AC-1");
     await jumpToRecord.press("Enter");
     await waitForAppReady(page);
     await expect(page).toHaveURL(/\/#\/atlas\/nist-800-53:AC-1\?/);

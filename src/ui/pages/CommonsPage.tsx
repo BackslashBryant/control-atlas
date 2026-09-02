@@ -8,7 +8,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { SITE_COPY } from "../../shared/site-copy.mjs";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 
 import "../../../styles/resources.css";
 import { AppLink } from "../components/AppLink";
@@ -75,7 +75,7 @@ export function CommonsPage(props: {
   const collections = (bundle?.commonsDataset?.collections || []) as CommonsCollection[];
   const update = (patch: Partial<CommonsState>) => onNavigate("commons", { ...state, ...patch });
 
-  useEffect(() => setQueryDraft(state.query), [state.query]);
+  useLayoutEffect(() => setQueryDraft(state.query), [state.query]);
   useEffect(() => setVisibleCount(RESOURCE_LIST_STEP), [state.collection, state.owner, state.query, state.resourceType, state.sort]);
 
   const filtered = useMemo(() => {

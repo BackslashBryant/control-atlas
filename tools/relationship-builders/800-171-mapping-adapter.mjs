@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { strictConditionalFetch } from '../../scripts/lib/strict-conditional-fetch.mjs';
 import { normalize800171Id, normalize80053Id } from '../normalizers/oscal-normalize.mjs';
 
 export function checksum(value) {
@@ -63,7 +64,7 @@ export function parse800171OscalMappings(catalogJson) {
 export async function build80053To800171Map(options = {}) {
   const artifact = options.artifact
     || 'https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json';
-  const json = options.catalogJson || await (await fetch(artifact)).json();
+  const json = options.catalogJson || await (await strictConditionalFetch(artifact)).json();
   const body = JSON.stringify(json);
   const relationships = parse800171OscalMappings(json);
 

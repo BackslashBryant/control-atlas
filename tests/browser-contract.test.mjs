@@ -341,6 +341,7 @@ test('all route contexts and user-facing styles stay inside the Orbital system',
 
 test('shared shell exposes visible search access and valid intent-card markup', () => {
   const topNav = readFileSync('src/ui/components/TopNav.tsx', 'utf8');
+  const explorePage = readFileSync('src/ui/pages/ExplorePage.tsx', 'utf8');
   const surfaces = readFileSync('styles/surfaces.css', 'utf8');
   const templatesPage = readFileSync('src/ui/pages/TemplatesPage.tsx', 'utf8');
   const intentCard = readFileSync('src/ui/components/QuickIntentCard.tsx', 'utf8');
@@ -362,6 +363,8 @@ test('shared shell exposes visible search access and valid intent-card markup', 
   assert.match(templatesPage, /<BuildLocalNav/);
   assert.doesNotMatch(templatesPage, />\s*Choose a template\s*<\/AppLink>/);
   assert.doesNotMatch(intentCard, /<h[1-6]>/);
+  assert.match(intentCard, /text-\[var\(--ca-accent-text\)\]/);
+  assert.match(explorePage, /aria-label="Primary taxonomy filters"[^>]*role="group"/);
 });
 
 test('landing page states what the product is before asking for action', () => {

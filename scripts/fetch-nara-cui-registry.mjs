@@ -14,6 +14,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse as parseHtml } from 'node-html-parser';
 import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
+import { strictConditionalFetch } from './lib/strict-conditional-fetch.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const LIST_URL = 'https://www.archives.gov/cui/registry/category-list';
@@ -25,7 +26,7 @@ function sha256(buffer) {
 }
 
 async function fetchText(url) {
-  const response = await fetch(url);
+  const response = await strictConditionalFetch(url);
   if (!response.ok) throw new Error(`fetch failed (${response.status}): ${url}`);
   const buffer = Buffer.from(await response.arrayBuffer());
   return { text: buffer.toString('utf8'), buffer };
@@ -163,7 +164,7 @@ export async function fetchNaraCuiRegistry({ concurrency = 8 } = {}) {
   }
   await Promise.all(Array.from({ length: concurrency }, worker));
 
-  let changeLog = null;
+  let changeLog;
   try {
     const { buffer } = await fetchText(CHANGE_LOG_URL);
     changeLog = {

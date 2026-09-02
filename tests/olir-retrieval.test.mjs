@@ -22,9 +22,10 @@ test('GitHub blob XLSX is retrieved through the Contents API without a HEAD page
     throw new Error(`unexpected URL: ${url}`);
   };
   try {
-    const result = await retrieveStructuredOlirArtifact([
-      'https://github.com/example/mapping/blob/main/OLIR.xlsx',
-    ]);
+    const result = await retrieveStructuredOlirArtifact(
+      ['https://github.com/example/mapping/blob/main/OLIR.xlsx'],
+      { fetchImpl: globalThis.fetch },
+    );
     assert.ok(result.artifact, 'the GitHub XLSX must be downloaded, not quarantined');
     assert.equal(result.artifact.url, 'https://raw.githubusercontent.com/example/mapping/main/OLIR.xlsx');
     assert.equal(result.artifact.bytes.length, 4);
@@ -42,7 +43,10 @@ test('public Google Sheets submission resolves through its deterministic XLSX ex
     return new Response(Buffer.from([0x50, 0x4b, 0x03, 0x04]), { status: 200, headers: { 'content-type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' } });
   };
   try {
-    const result = await retrieveStructuredOlirArtifact(['https://docs.google.com/spreadsheets/d/public-sheet/edit']);
+    const result = await retrieveStructuredOlirArtifact(
+      ['https://docs.google.com/spreadsheets/d/public-sheet/edit'],
+      { fetchImpl: globalThis.fetch },
+    );
     assert.equal(result.artifact?.url, 'https://docs.google.com/spreadsheets/d/public-sheet/export?format=xlsx');
   } finally {
     globalThis.fetch = originalFetch;

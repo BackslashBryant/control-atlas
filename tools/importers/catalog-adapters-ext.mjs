@@ -1,5 +1,6 @@
 import { normalize80053Id } from '../normalizers/oscal-normalize.mjs';
 import readXlsxFile from 'read-excel-file/node';
+import { strictConditionalFetch } from '../../scripts/lib/strict-conditional-fetch.mjs';
 
 const FEDRAMP_BASELINE_WORKBOOK_URL = 'https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx';
 const FEDRAMP_BASELINE_SHEETS = {
@@ -30,7 +31,7 @@ export function parseFedrampBaselineWorkbookSheets(sheets) {
 }
 
 export async function fetchFedrampBaselineMembership() {
-  const response = await fetch(FEDRAMP_BASELINE_WORKBOOK_URL);
+  const response = await strictConditionalFetch(FEDRAMP_BASELINE_WORKBOOK_URL);
   if (!response.ok) {
     throw new Error(`FedRAMP baseline fetch returned status ${response.status} for ${FEDRAMP_BASELINE_WORKBOOK_URL}`);
   }
@@ -49,7 +50,7 @@ export async function fetch80053BBaselines() {
   const membership = {};
   for (const url of urls) {
     try {
-      const response = await fetch(url);
+      const response = await strictConditionalFetch(url);
       if (!response.ok) {
         console.warn(`NIST 800-53B baseline fetch returned status ${response.status} for ${url}, skipping.`);
         continue;

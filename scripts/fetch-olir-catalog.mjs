@@ -3,10 +3,12 @@
 // NIST detail, then download and parse every deterministically reachable
 // structured submission. Entries without an obtainable structured artifact
 // remain quarantined with their exact retrieval evidence.
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseOlirStructuredArtifact, retrieveStructuredOlirArtifact } from '../tools/relationship-builders/olir-retrieval.mjs';
+import { strictConditionalFetch } from './lib/strict-conditional-fetch.mjs';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CATALOG_URL =
@@ -73,7 +75,7 @@ async function mapWithConcurrency(items, limit, work) {
 async function retrieveDetail(id) {
   const url = `${OLIR_API_ROOT}/informative-reference-catalog/details/${id}`;
   try {
-    const response = await fetch(url, { signal: AbortSignal.timeout(15_000) });
+    const response = await strictConditionalFetch(url, { signal: AbortSignal.timeout(15_000) });
     const body = response.ok ? await response.json() : null;
     const detail = body?.response?.[0] || null;
     return {
@@ -107,7 +109,7 @@ async function retrieveEntry(entry) {
     }
     const mapFile = `maps/olir/${id}.json`;
     mkdirSync(join(ROOT, 'maps', 'olir'), { recursive: true });
-    writeFileSync(join(ROOT, mapFile), `${JSON.stringify({
+    writeJsonAtomically(join(ROOT, mapFile), {
       schema_version: '1.0',
       olir_id: id,
       source_artifact: retrieved.artifact.url,
@@ -115,7 +117,7 @@ async function retrieveEntry(entry) {
       byte_length: retrieved.artifact.bytes.length,
       parser: parsed.parser,
       relationships: parsed.relationships,
-    }, null, 2)}\n`, 'utf8');
+    });
     return {
       attempts,
       mapping: {
@@ -135,7 +137,7 @@ async function retrieveEntry(entry) {
 }
 
 export async function fetchOlirCatalog() {
-  const response = await fetch(CATALOG_URL);
+  const response = await strictConditionalFetch(CATALOG_URL);
   if (!response.ok) throw new Error(`OLIR catalog fetch failed (${response.status})`);
   const body = await response.json();
   const entries = body?.response?.searchResults;
@@ -218,11 +220,7 @@ export async function fetchOlirCatalog() {
     processed_items,
   };
 
-  writeFileSync(
-    join(ROOT, 'data', 'olir-catalog-manifest.json'),
-    `${JSON.stringify(manifest, null, 2)}\n`,
-    'utf8',
-  );
+  writeJsonAtomically(join(ROOT, 'data', 'olir-catalog-manifest.json'), manifest);
 
   return manifest;
 }

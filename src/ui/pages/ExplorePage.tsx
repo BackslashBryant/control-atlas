@@ -483,7 +483,7 @@ export function ExplorePage(props: {
         }))}
         value={state.area}
       />
-      <div aria-label="Primary taxonomy filters" className="workspace-primary-taxonomy-facets">
+      <div aria-label="Primary taxonomy filters" className="workspace-primary-taxonomy-facets" role="group">
         {primaryTagFacetOptions.map((dimension) => renderTagFacet(dimension, true))}
       </div>
       <details

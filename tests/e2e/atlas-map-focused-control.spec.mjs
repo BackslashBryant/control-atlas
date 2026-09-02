@@ -118,6 +118,15 @@ test("focused Hierarchy opens its publisher-declared parent without inventing an
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
+  // A visual transition marker can outlive its owning frame under browser
+  // load. It must not become an authorization gate for the real route change.
+  await page.evaluate(() => {
+    const root = globalThis.document.getElementById("root");
+    root.dataset.routeTransition = "pending";
+    root.dataset.routeTransitionDestination =
+      "/atlas/nist-800-53:FAMILY-AC?relationshipView=path";
+  });
+
   await page
     .getByRole("navigation", { name: "Where this sits" })
     .getByRole("link", { name: "Access Control" })

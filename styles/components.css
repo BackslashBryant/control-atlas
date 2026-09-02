@@ -1171,7 +1171,7 @@
   display: none;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 799px) {
   .source-mobile-meta {
     display: flex;
     flex-wrap: wrap;
@@ -1672,7 +1672,7 @@
   background: color-mix(in srgb, var(--ca-primary) 10%, var(--ca-surface));
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 800px) and (max-width: 1199px) {
   .sources-page .source-table {
     min-width: 48rem;
     table-layout: fixed;
@@ -1686,7 +1686,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 799px) {
   .sources-page .source-table td:not(.source-col-publication) {
     display: none;
   }

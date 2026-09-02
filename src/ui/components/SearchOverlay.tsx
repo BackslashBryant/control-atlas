@@ -151,6 +151,20 @@ export function SearchOverlay(props: SearchOverlayProps) {
     openCommonsResult(suggestion.id);
   }
 
+  function submitSearch() {
+    if (composingRef.current) return;
+    if (!query.trim()) {
+      setSubmitStatus("Enter an identifier, title, or topic to search.");
+      return;
+    }
+    const highlightedSuggestion = suggestions[highlightedIndex];
+    if (highlightedSuggestion) {
+      activateSuggestion(highlightedSuggestion);
+      return;
+    }
+    openExplore();
+  }
+
   function suggestionIndex(kind: string, id: string) {
     return suggestions.findIndex(
       (suggestion) => suggestion.kind === kind && suggestion.id === id,
@@ -180,17 +194,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
             className="search-overlay-header"
             onSubmit={(event) => {
               event.preventDefault();
-              if (composingRef.current) return;
-              if (!query.trim()) {
-                setSubmitStatus("Enter an identifier, title, or topic to search.");
-                return;
-              }
-              const highlightedSuggestion = suggestions[highlightedIndex];
-              if (highlightedSuggestion) {
-                activateSuggestion(highlightedSuggestion);
-                return;
-              }
-              openExplore();
+              submitSearch();
             }}
             role="search"
           >
@@ -211,8 +215,7 @@ export function SearchOverlay(props: SearchOverlayProps) {
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && !composingRef.current) {
                     event.preventDefault();
-                    const form = event.currentTarget.closest("form");
-                    if (form) form.requestSubmit();
+                    submitSearch();
                     return;
                   }
                   if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;

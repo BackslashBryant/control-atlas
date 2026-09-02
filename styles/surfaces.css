@@ -5398,7 +5398,7 @@ a:focus-visible {
    paths are matched: dropping the wrapper case let the measure run to 694px
    at 768px wide. */
 .atlas-focused-context .record-official-text > section {
-  max-width: 68ch;
+  max-width: 64ch;
 }
 
 /* Bound the published text so it answers "what does this say" without pushing
@@ -7916,7 +7916,7 @@ button.atlas-leverage-row:hover {
 .about-page .learn-article p,
 .guide-article .learn-article p,
 .guide-article .learn-article li {
-  max-width: 72ch;
+  max-width: 64ch;
   color: var(--ca-text-muted);
   line-height: 1.65;
 }

@@ -555,7 +555,7 @@ jobs:
           PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ matrix.browser }}-${{ matrix.shard }}.zip
           PLAYWRIGHT_FULLY_PARALLEL: '1'
           PLAYWRIGHT_WORKERS: '2'
-        run: npm run test:e2e:run -- --shard=${{ matrix.shard }}/2 --reporter=blob,github
+        run: npm run test:e2e:run -- --shard=${{ matrix.shard }}/2 --retries=0 --reporter=blob,github
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ !cancelled() }}
         with:
@@ -626,6 +626,29 @@ jobs:
           for result in "$BUILD_RESULT" "$BROWSER_RESULT" "$ACCESSIBILITY_RESULT" "$REFRESH_RESULT"; do
             if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then failed=1; fi
           done
+          issues_enabled="$(gh api "repos/$REPO" --jq '.has_issues')"
+
+          if [ "$issues_enabled" != "true" ]; then
+            {
+              echo "### Scheduled sweep notification"
+              echo
+              echo "Repository Issues are disabled, so this workflow cannot open or resolve the persistent sweep alert."
+              echo
+              echo "Build: $BUILD_RESULT"
+              echo "Browser: $BROWSER_RESULT"
+              echo "Accessibility: $ACCESSIBILITY_RESULT"
+              echo "Data refresh: $REFRESH_RESULT"
+              echo
+              echo "Run: $RUN_URL"
+            } >> "$GITHUB_STEP_SUMMARY"
+            if [ "$failed" -eq 1 ]; then
+              echo "::warning::Scheduled sweep failed, but repository Issues are disabled. See the job summary and failed upstream job."
+            else
+              echo "Sweep green. Repository Issues are disabled, so no persistent alert state was changed."
+            fi
+            exit 0
+          fi
+
           open_issue="$(gh issue list --repo "$REPO" --label sweep-red --state open             --limit 1 --json number --jq '.[0].number // empty')"
 
           if [ "$failed" -eq 1 ] && [ -z "$open_issue" ]; then

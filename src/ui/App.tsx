@@ -54,6 +54,7 @@ import {
   beginRouteTransition,
   completeRouteTransition,
   CLOSE_OVERLAYS_EVENT,
+  consumeSearchOverlayOpenRequest,
   notifyRouteCommitted,
   OPEN_SEARCH_OVERLAY_EVENT,
 } from "../shared/navigation-events";
@@ -577,9 +578,15 @@ export function App() {
     // The Home route boots without this component mounted at all (its
     // shortcuts are advertised on a static shell React hasn't rendered yet),
     // so main.tsx boots React on Ctrl+K and fires this once mounted instead.
-    const onOpenSearchOverlay = () => openSearchOverlay();
+    const onOpenSearchOverlay = () => {
+      consumeSearchOverlayOpenRequest();
+      openSearchOverlay();
+    };
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener(OPEN_SEARCH_OVERLAY_EVENT, onOpenSearchOverlay);
+    if (consumeSearchOverlayOpenRequest()) {
+      openSearchOverlay();
+    }
     return () => {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener(OPEN_SEARCH_OVERLAY_EVENT, onOpenSearchOverlay);
@@ -604,10 +611,11 @@ export function App() {
     const nextLocation = serializeHashLocation(nextState);
     if (nextLocation === serializeHashLocation(current)) return;
     const changesWorkspace = routeTransitionScope(current) !== routeTransitionScope(nextState);
-    if (
-      changesWorkspace &&
-      !beginRouteTransition("Opening the selected workspace", nextLocation)
-    ) return;
+    if (changesWorkspace) {
+      // The transition is presentation state. A stale or duplicate visual
+      // transition must never veto the underlying route change.
+      beginRouteTransition("Opening the selected workspace", nextLocation);
+    }
     if (changesWorkspace) pushNavigationRef.current = true;
     latestNavStateRef.current = nextState;
     routerNavigate(nextLocation);
@@ -650,11 +658,13 @@ export function App() {
   const canRenderWithoutBundle = isStaticViewWithoutBundle(viewState.view);
   const hasRequiredRouteArtifacts =
     viewState.view !== "atlas-map" || Boolean(bundle?.atlasSpine);
+  const hasRequiredSearchArtifacts =
+    viewState.view !== "atlas-map" || Boolean(bundle?.librarySearchReady);
   const readyState = loadError
     ? "error"
     : canRenderWithoutBundle && viewState.view !== "search"
       ? "true"
-    : bundle?.routeReady && hasRequiredRouteArtifacts &&
+    : bundle?.routeReady && hasRequiredRouteArtifacts && hasRequiredSearchArtifacts &&
         (!requiresFullGraph(viewState) || bundle.graphReady)
       ? "true"
       : bundle

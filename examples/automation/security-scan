@@ -4,7 +4,7 @@
  * security-scan - Security scanning wrapper script (Scaffold-Ready)
  * Wraps dependency vulnerability scans and secret detection
  * Usage: scripts/security-scan [--fix] [--verbose] [--format=json|text]
- * 
+ *
  * This script is scaffold-ready and will work with any project type:
  * - Detects project structure automatically
  * - Adapts scanning based on available package.json files
@@ -105,7 +105,7 @@ function detectProjectStructure() {
     isMonorepo: false,
     packageManagers: [],
   };
-  
+
   // Detect package managers
   if (fs.existsSync(path.join(projectRoot, 'package-lock.json'))) {
     structure.packageManagers.push('npm');
@@ -116,22 +116,22 @@ function detectProjectStructure() {
   if (fs.existsSync(path.join(projectRoot, 'pnpm-lock.yaml'))) {
     structure.packageManagers.push('pnpm');
   }
-  
+
   // Detect monorepo structure
   structure.isMonorepo = structure.hasFrontendPackageJson || structure.hasBackendPackageJson || structure.hasSharedPackageJson;
-  
+
   return structure;
 }
 
 function runCommand(command, description) {
   log(`\n🔍 ${description}...`, 'cyan');
-  
+
   try {
     const result = execSync(command, {
       stdio: config.verbose ? 'inherit' : 'pipe',
       encoding: 'utf8',
     });
-    
+
     log(`✅ ${description} completed`, 'green');
     return { success: true, output: result };
   } catch (error) {
@@ -142,22 +142,22 @@ function runCommand(command, description) {
 
 function scanForSecrets() {
   log('\n🕵️  Scanning for secrets and sensitive data...', 'cyan');
-  
+
   const findings = [];
   const projectRoot = path.join(__dirname, '..');
-  
+
   function scanDirectory(dir, relativePath = '') {
     if (config.excludePaths.some(exclude => relativePath.includes(exclude))) {
       return;
     }
-    
+
     try {
       const entries = fs.readdirSync(dir, { withFileTypes: true });
-      
+
       for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
         const relativeFilePath = path.join(relativePath, entry.name);
-        
+
         if (entry.isDirectory()) {
           scanDirectory(fullPath, relativeFilePath);
         } else if (entry.isFile()) {
@@ -170,7 +170,7 @@ function scanForSecrets() {
       }
     }
   }
-  
+
   function scanFile(filePath, relativePath) {
     // Skip binary files and allowed files
     if (config.allowedFiles.some(pattern => {
@@ -181,10 +181,10 @@ function scanForSecrets() {
     })) {
       return;
     }
-    
+
     try {
       const content = fs.readFileSync(filePath, 'utf8');
-      
+
       for (const pattern of config.secretPatterns) {
         const matches = content.match(pattern);
         if (matches) {
@@ -206,51 +206,51 @@ function scanForSecrets() {
       }
     }
   }
-  
+
   function getLineNumber(content, match) {
     const lines = content.substring(0, content.indexOf(match)).split('\n');
     return lines.length;
   }
-  
+
   scanDirectory(projectRoot);
-  
+
   return findings;
 }
 
 function checkDependencyVulnerabilities(projectStructure) {
   const results = [];
-  
+
   // Check root dependencies
   if (projectStructure.hasRootPackageJson) {
     const result = runCommand('npm audit --audit-level=moderate', 'Root dependency audit');
     results.push({ location: 'root', ...result });
   }
-  
+
   // Check frontend dependencies
   if (projectStructure.hasFrontendPackageJson) {
     const result = runCommand('cd frontend && npm audit --audit-level=moderate', 'Frontend dependency audit');
     results.push({ location: 'frontend', ...result });
   }
-  
+
   // Check backend dependencies
   if (projectStructure.hasBackendPackageJson) {
     const result = runCommand('cd backend && npm audit --audit-level=moderate', 'Backend dependency audit');
     results.push({ location: 'backend', ...result });
   }
-  
+
   // Check shared dependencies
   if (projectStructure.hasSharedPackageJson) {
     const result = runCommand('cd shared && npm audit --audit-level=moderate', 'Shared dependency audit');
     results.push({ location: 'shared', ...result });
   }
-  
+
   return results;
 }
 
 function generateReport(secretFindings, dependencyResults, projectStructure) {
   const timestamp = new Date().toISOString();
   const reportId = crypto.randomBytes(8).toString('hex');
-  
+
   const report = {
     id: reportId,
     timestamp,
@@ -263,11 +263,11 @@ function generateReport(secretFindings, dependencyResults, projectStructure) {
     secrets: secretFindings,
     dependencies: dependencyResults,
   };
-  
+
   // Save detailed report
   const reportFile = path.join(config.artifactsDir, `security-scan-${reportId}.json`);
   fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
-  
+
   return report;
 }
 
@@ -278,9 +278,9 @@ function displayReport(report) {
   log(`Timestamp: ${report.timestamp}`, 'blue');
   log(`Project Type: ${report.projectStructure.isMonorepo ? 'Monorepo' : 'Single Package'}`, 'blue');
   log(`Package Managers: ${report.projectStructure.packageManagers.join(', ') || 'None detected'}`, 'blue');
-  log(`Overall Status: ${report.summary.overallStatus}`, 
+  log(`Overall Status: ${report.summary.overallStatus}`,
       report.summary.overallStatus === 'PASS' ? 'green' : 'red');
-  
+
   // Secrets findings
   if (report.secrets.length > 0) {
     log(`\n🚨 Found ${report.secrets.length} potential secrets:`, 'red');
@@ -292,7 +292,7 @@ function displayReport(report) {
   } else {
     log('\n✅ No secrets detected', 'green');
   }
-  
+
   // Dependency vulnerabilities
   const failedAudits = report.dependencies.filter(r => !r.success);
   if (failedAudits.length > 0) {
@@ -303,20 +303,20 @@ function displayReport(report) {
   } else {
     log('\n✅ No dependency vulnerabilities found', 'green');
   }
-  
+
   if (config.format === 'json') {
     console.log('\n' + JSON.stringify(report, null, 2));
   }
-  
+
   log(`\n💾 Detailed report saved to: artifacts/security-scan-${report.id}.json`, 'blue');
 }
 
 async function main() {
   log('🛡️  Project Security Scanner (Scaffold-Ready)', 'cyan');
   log('==============================================', 'cyan');
-  
+
   ensureArtifactsDir();
-  
+
   // Detect project structure
   const projectStructure = detectProjectStructure();
   log(`\n📦 Project Structure:`, 'blue');
@@ -326,26 +326,26 @@ async function main() {
   log(`  - Shared package.json: ${projectStructure.hasSharedPackageJson ? '✅' : '❌'}`, 'blue');
   log(`  - Monorepo: ${projectStructure.isMonorepo ? '✅' : '❌'}`, 'blue');
   log(`  - Package Managers: ${projectStructure.packageManagers.join(', ') || 'None detected'}`, 'blue');
-  
+
   if (!projectStructure.hasRootPackageJson && !projectStructure.hasFrontendPackageJson && !projectStructure.hasBackendPackageJson) {
     log('\n⚠️  No package.json files found. This is a scaffold template.', 'yellow');
     log('💡 To use this script, initialize your project with: npm init', 'yellow');
     process.exit(0);
   }
-  
+
   // Run secret detection
   const secretFindings = scanForSecrets();
-  
+
   // Run dependency vulnerability checks
   const dependencyResults = checkDependencyVulnerabilities(projectStructure);
-  
+
   // Generate and display report
   const report = generateReport(secretFindings, dependencyResults, projectStructure);
   displayReport(report);
-  
+
   // Exit with appropriate code
   const hasIssues = secretFindings.length > 0 || dependencyResults.some(r => !r.success);
-  
+
   if (hasIssues) {
     log('\n⚠️  Security issues detected. Please review and address findings.', 'yellow');
     process.exit(1);

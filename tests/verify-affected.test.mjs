@@ -88,7 +88,7 @@ test('trust and workbench changes select bounded route families and the incremen
   ]));
   assert.equal(boundedPlan.blocked, false);
   assert.equal(boundedPlan.steps.some((step) => step.id === 'bounded-workbench-browser'), true);
-  assert.equal(boundedPlan.steps.find((step) => step.id === 'bounded-workbench-browser')?.expectedTests, 3);
+  assert.equal(boundedPlan.steps.find((step) => step.id === 'bounded-workbench-browser')?.expectedTests, 4);
 
   const phase4Paths = [
     'data/template-registry.json',
@@ -174,4 +174,27 @@ test('incremental fetch and writer changes use their focused data contracts', ()
     operatorPlan.steps.filter((step) => step.id.startsWith('operator-ecosystem')).map((step) => step.id),
     ['operator-ecosystem-lint', 'operator-ecosystem-contracts'],
   );
+});
+
+test('source refresh adapters and cadence metadata use one bounded contract path', () => {
+  const paths = [
+    'data/source-refresh-contract.json',
+    'scripts/fetch-ccis.mjs',
+    'scripts/lib/source-refresh-contract.mjs',
+    'tests/source-refresh-contract.test.mjs',
+    'tools/relationship-builders/olir-retrieval.mjs',
+  ];
+  const plan = createVerificationPlan(paths, classifyChangedPaths(paths));
+  assert.equal(plan.blocked, false);
+  assert.deepEqual(
+    plan.steps.filter((step) => step.id.startsWith('source-refresh')).map((step) => step.id),
+    ['source-refresh-lint', 'source-refresh-contracts'],
+  );
+});
+
+test('repository EOL policy uses automation and executable hygiene contracts', () => {
+  const paths = ['.gitattributes', 'src/ui/components/ExpandableRelationshipGroup.tsx'];
+  const plan = createVerificationPlan(paths, classifyChangedPaths(paths));
+  assert.equal(plan.blocked, false);
+  assert.ok(plan.steps.some((step) => step.id === 'eol-contracts'));
 });

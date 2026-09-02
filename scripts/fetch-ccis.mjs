@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
-import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { strFromU8, unzipSync } from 'fflate';
 import { parseCciXml } from '../tools/importers/cci-adapter.mjs';
 import { writeCciDiffReport } from '../tools/importers/cci-diff-report.mjs';
+import { strictConditionalFetch } from './lib/strict-conditional-fetch.mjs';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 
 const CCI_URL = 'https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip';
 
@@ -14,7 +15,7 @@ function checksum(value) {
 }
 
 async function fetchOfficialXml() {
-  const response = await fetch(CCI_URL);
+  const response = await strictConditionalFetch(CCI_URL);
   if (!response.ok) throw new Error(`CCI download failed: ${response.status} ${response.statusText}`);
   const buffer = new Uint8Array(await response.arrayBuffer());
   const archive = unzipSync(buffer);
@@ -65,8 +66,8 @@ export async function fetchCcis(options = {}) {
 async function main() {
   const root = join(dirname(fileURLToPath(import.meta.url)), '..');
   const result = await fetchCcis();
-  writeFileSync(join(root, 'data', 'ccis.json'), `${JSON.stringify(result.catalog, null, 2)}\n`, 'utf8');
-  writeFileSync(join(root, 'maps', 'cci-to-800-53.json'), `${JSON.stringify(result.mappings, null, 2)}\n`, 'utf8');
+  writeJsonAtomically(join(root, 'data', 'ccis.json'), result.catalog);
+  writeJsonAtomically(join(root, 'maps', 'cci-to-800-53.json'), result.mappings);
   const diff = writeCciDiffReport(result.catalog);
   console.log(`Wrote ${result.catalog.records.length} official CCI records and ${result.mappings.relationships.length} CCI-to-control references`);
   if (diff) {

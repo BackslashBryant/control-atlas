@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
+import { strictConditionalFetch } from './lib/strict-conditional-fetch.mjs';
 import { discoverNistBuilds, parseNistBuildPage, parseSp800207A, parseSp800207Core } from '../tools/importers/nist-zero-trust-adapter.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -31,7 +32,7 @@ function retrievedAtFor(previousSources, sourceKey, sha256, fetchedAt) {
 }
 
 async function fetchDocument(url) {
-  const response = await fetch(url, { headers: { 'User-Agent': 'Control-Atlas-source-integrity' }, signal: AbortSignal.timeout(45_000) });
+  const response = await strictConditionalFetch(url, { headers: { 'User-Agent': 'Control-Atlas-source-integrity' }, signal: AbortSignal.timeout(45_000) });
   if (!response.ok) throw new Error(`NIST ZT page fetch failed: ${response.status} ${url}`);
   const bytes = Buffer.from(await response.arrayBuffer());
   return {
@@ -42,7 +43,7 @@ async function fetchDocument(url) {
 }
 
 async function resolveOfficialSnapshot() {
-  const response = await fetch(BRANCH_API_URL, {
+  const response = await strictConditionalFetch(BRANCH_API_URL, {
     headers: { 'User-Agent': 'Control-Atlas-source-integrity', Accept: 'application/vnd.github+json' },
     signal: AbortSignal.timeout(45_000),
   });

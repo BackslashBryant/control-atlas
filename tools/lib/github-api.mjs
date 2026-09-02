@@ -2,10 +2,10 @@
 
 /**
  * GitHub API utilities
- * 
+ *
  * Provides token retrieval (inherited env first, then GitHub CLI fallback)
  * and REST API helpers for GitHub operations.
- * 
+ *
  * Uses REST API as primary method (more reliable than GraphQL).
  */
 
@@ -166,7 +166,7 @@ export async function listIssues(repo, options = {}) {
     sort = 'created',
     direction = 'desc',
   } = options;
-  
+
   const params = new URLSearchParams({
     state,
     per_page: per_page.toString(),
@@ -174,11 +174,11 @@ export async function listIssues(repo, options = {}) {
     sort,
     direction,
   });
-  
+
   if (labels) {
     params.append('labels', Array.isArray(labels) ? labels.join(',') : labels);
   }
-  
+
   const endpoint = `/repos/${repo}/issues?${params.toString()}`;
   return githubApiRequest(endpoint);
 }
@@ -245,11 +245,11 @@ export async function getHighestIssueNumber(repo) {
     sort: 'number',
     direction: 'desc',
   });
-  
+
   if (issues.length === 0) {
     return 0;
   }
-  
+
   return issues[0].number;
 }
 

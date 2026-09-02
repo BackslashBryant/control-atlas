@@ -8,6 +8,7 @@ export const ROUTE_TRANSITION_END_EVENT = "control-atlas:route-transition-end";
 
 const ROUTE_TRANSITION_MAX_MS = 4000;
 let transitionTimeout = 0;
+let searchOverlayOpenRequested = false;
 
 function transitionElements() {
   const root = document.getElementById("root");
@@ -78,7 +79,14 @@ export function requestSearchResultsFocus() {
 // boots React first, then fires this so App's own Ctrl+K handler finishes
 // the job the same way a click on the header search button would.
 export function requestSearchOverlayOpen() {
+  searchOverlayOpenRequested = true;
   window.dispatchEvent(new Event(OPEN_SEARCH_OVERLAY_EVENT));
+}
+
+export function consumeSearchOverlayOpenRequest() {
+  if (!searchOverlayOpenRequested) return false;
+  searchOverlayOpenRequested = false;
+  return true;
 }
 
 export function requestOverlayClose() {

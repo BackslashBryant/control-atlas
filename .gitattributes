@@ -1,0 +1,13 @@
+* text=auto eol=lf
+
+*.bat text eol=crlf
+
+*.gz binary
+*.ico binary
+*.png binary
+*.woff2 binary
+*.xlsx binary
+*.zip binary
+
+data/curated/**/source-fragments/*.json -text
+tools/github-issue-complete.mjs -text

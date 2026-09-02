@@ -2,10 +2,10 @@
 
 /**
  * MCP Monitor - Automatically restart problematic MCP servers (Scaffold-Ready)
- * 
+ *
  * This script monitors MCP server health and restarts them when they fail.
  * Run this in the background to keep your MCPs healthy.
- * 
+ *
  * This script is scaffold-ready and will work with any project type:
  * - Detects MCP configuration automatically
  * - Gracefully handles missing MCP configurations
@@ -30,13 +30,13 @@ class MCPMonitor {
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] ${message}\n`;
     console.log(logMessage.trim());
-    
+
     // Ensure artifacts directory exists
     const artifactsDir = path.dirname(this.logFile);
     if (!fs.existsSync(artifactsDir)) {
       fs.mkdirSync(artifactsDir, { recursive: true });
     }
-    
+
     fs.appendFileSync(this.logFile, logMessage);
   }
 
@@ -48,7 +48,7 @@ class MCPMonitor {
         this.log('📚 See docs/README.md for current project documentation.');
         return {};
       }
-      
+
       const config = JSON.parse(fs.readFileSync(this.mcpConfigPath, 'utf8'));
       return config.mcpServers || {};
     } catch (error) {
@@ -60,10 +60,10 @@ class MCPMonitor {
   async startMCPServer(name, config) {
     try {
       this.log(`Starting MCP server: ${name}`);
-      
+
       const args = config.args || [];
       const env = { ...process.env, ...config.env };
-      
+
       const server = spawn(config.command, args, {
         env,
         stdio: ['pipe', 'pipe', 'pipe'],
@@ -92,7 +92,7 @@ class MCPMonitor {
 
       this.runningServers.set(name, server);
       this.log(`MCP server ${name} started successfully`);
-      
+
       return server;
     } catch (error) {
       this.log(`Failed to start MCP server ${name}: ${error.message}`);
@@ -102,14 +102,14 @@ class MCPMonitor {
 
   handleServerFailure(name, reason) {
     const restartCount = this.restartCounts.get(name) || 0;
-    
+
     if (restartCount >= this.maxRestarts) {
       this.log(`MCP server ${name} has failed ${restartCount} times. Giving up.`);
       return;
     }
 
     this.log(`MCP server ${name} failed: ${reason}. Restarting... (${restartCount + 1}/${this.maxRestarts})`);
-    
+
     // Stop the current server
     const server = this.runningServers.get(name);
     if (server) {
@@ -131,15 +131,15 @@ class MCPMonitor {
 
   async startAllServers() {
     const config = await this.loadMCPConfig();
-    
+
     if (Object.keys(config).length === 0) {
       this.log('No MCP servers configured. Monitor will run but no servers will be started.');
       this.log('💡 Add MCP server configurations to .cursor/mcp.json to enable monitoring.');
       return;
     }
-    
+
     this.log(`Found ${Object.keys(config).length} MCP server configurations`);
-    
+
     for (const [name, serverConfig] of Object.entries(config)) {
       if (serverConfig.command && serverConfig.args) {
         await this.startMCPServer(name, serverConfig);
@@ -151,14 +151,14 @@ class MCPMonitor {
 
   async monitor() {
     this.log('MCP Monitor started');
-    
+
     // Start all servers initially
     await this.startAllServers();
-    
+
     // Monitor every 30 seconds
     setInterval(async () => {
       this.log('Performing health check...');
-      
+
       for (const [name, server] of this.runningServers) {
         if (server.killed || server.exitCode !== null) {
           this.log(`MCP server ${name} is not running. Restarting...`);
@@ -170,12 +170,12 @@ class MCPMonitor {
 
   stop() {
     this.log('Stopping MCP Monitor...');
-    
+
     for (const [name, server] of this.runningServers) {
       this.log(`Stopping MCP server: ${name}`);
       server.kill();
     }
-    
+
     this.runningServers.clear();
     this.log('MCP Monitor stopped');
   }

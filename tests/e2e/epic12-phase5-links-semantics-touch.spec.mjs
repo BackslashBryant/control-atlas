@@ -113,7 +113,7 @@ test("Phase 5 exposes one main, one h1, semantic result lists, and distinct comb
       }));
       expect(structure, route).toEqual({ h1: 1, main: 1, visibleMain: 1, workspaceMain: 1 });
 
-      const names = await page.locator('select, input[list], [role="combobox"]').evaluateAll((controls) =>
+      const names = await page.locator('select:visible, input[list]:visible, [role="combobox"]:visible').evaluateAll((controls) =>
         controls.map((control) => {
           const element = /** @type {HTMLInputElement | HTMLSelectElement} */ (control);
           const labels = element.labels
