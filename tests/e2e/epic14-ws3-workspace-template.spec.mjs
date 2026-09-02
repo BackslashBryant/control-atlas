@@ -192,10 +192,11 @@ test("WS3 compact Library rows preserve a readable vertical information hierarch
   await page.setViewportSize({ width: 390, height: 844 });
   await gotoApp(page, "/#/library?q=AC-2");
   await waitForAppReady(page, { allowPartial: true });
-  const row = page.locator(".workspace-result-row__link").first();
-  await expect(row).toBeVisible();
-  await expect(row.locator(".workspace-result-row__signals")).toBeVisible();
-  const layout = await row.evaluate((element) => {
+  const row = page.locator(".workspace-result-row").first();
+  const body = row.locator(".workspace-result-row__body");
+  await expect(row.locator(".workspace-result-row__link")).toBeVisible();
+  await expect(body.locator(".workspace-result-row__signals")).toBeVisible();
+  const layout = await body.evaluate((element) => {
     const selectors = [
       ".workspace-result-row__meta",
       "h3",

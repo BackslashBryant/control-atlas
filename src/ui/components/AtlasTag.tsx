@@ -7,8 +7,10 @@ import type { ViewState } from "../lib/viewState";
 type Navigate = (view: ViewState["view"], patch?: Partial<ViewState>) => void;
 
 export function AtlasTag(props: {
+  ariaLabel?: string;
   tagId: string;
   onNavigate: Navigate;
+  patch?: Partial<ViewState>;
   size?: "sm" | "md";
   showIdentity?: boolean;
   showType?: boolean;
@@ -35,9 +37,10 @@ export function AtlasTag(props: {
         <DimensionGlyph decorative dimension={tag.dimension} size={size === "sm" ? 14 : 16} />
       ) : null}
       <AppLink
+        aria-label={props.ariaLabel}
         className="atlas-tag__label"
         onNavigate={props.onNavigate}
-        patch={{ tags: [tag.id] }}
+        patch={props.patch ?? { tags: [tag.id] }}
         view="search"
       >
         {tag.label}

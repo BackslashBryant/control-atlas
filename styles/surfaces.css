@@ -10802,6 +10802,53 @@ input[type="checkbox"] {
   text-decoration: none;
 }
 
+.workspace-result-row__body {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.workspace-result-row__body > .workspace-result-row__link {
+  padding-block-end: 0;
+}
+
+.workspace-result-row__body > .workspace-result-row__link::after {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  content: "";
+}
+
+.workspace-result-row__body > .workspace-result-row__signals {
+  padding: var(--ca-space-2) var(--ca-space-4) var(--ca-space-4);
+}
+
+.workspace-result-row__taxonomy {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: var(--ca-space-2);
+}
+
+.workspace-result-row__signals .atlas-tag {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 40rem) {
+  .workspace-result-row__taxonomy {
+    flex-basis: 100%;
+  }
+
+  .workspace-result-row__taxonomy .atlas-tag {
+    padding-inline: var(--ca-space-2);
+  }
+}
+
 .workspace-result-row__link:focus-visible {
   border-radius: var(--ca-radius-sm);
   outline: 2px solid var(--ca-primary);
