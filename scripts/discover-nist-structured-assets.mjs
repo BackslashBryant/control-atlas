@@ -1,8 +1,10 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { extractStructuredAssets, selectStructuredAssetCandidatePages } from './lib/nist-pages-discovery.mjs';
+import { strictConditionalFetch } from './lib/strict-conditional-fetch.mjs';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PROJECTS_PATH = join(ROOT, 'data', 'nist-pages-discovery.json');
@@ -10,7 +12,7 @@ const OUT = join(ROOT, 'data', 'nist-structured-asset-discovery.json');
 const CONCURRENCY = 6;
 
 async function fetchPage(url) {
-  const response = await fetch(url, {
+  const response = await strictConditionalFetch(url, {
     headers: { 'User-Agent': 'ControlAtlas-ingestion/1.0 (+https://github.com/rambulls/control-atlas)' },
     redirect: 'follow',
     signal: AbortSignal.timeout(20_000),
@@ -109,9 +111,7 @@ async function main() {
     pages: pageEvidence,
     assets,
   };
-  const temporary = `${OUT}.tmp`;
-  writeFileSync(temporary, `${JSON.stringify(output, null, 2)}\n`, 'utf8');
-  renameSync(temporary, OUT);
+  writeJsonAtomically(OUT, output);
   console.log(`Discovered ${assets.length} structured assets across ${pageEvidence.length} NIST Pages pages.`);
 }
 

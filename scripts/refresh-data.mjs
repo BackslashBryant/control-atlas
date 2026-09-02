@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
@@ -8,6 +9,10 @@ import {
   INGESTION_TASKS,
   validateIngestionPipelineDefinition,
 } from './lib/ingestion-pipeline.mjs';
+import {
+  loadSourceRefreshContract,
+  validateSourceRefreshContract,
+} from './lib/source-refresh-contract.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const MANIFEST = join(ROOT, 'data', 'ingestion-pipeline-manifest.json');
@@ -79,6 +84,15 @@ function run(task) {
 async function main() {
   const definitionErrors = validateIngestionPipelineDefinition();
   if (definitionErrors.length) throw new Error(`Invalid ingestion pipeline:\n- ${definitionErrors.join('\n- ')}`);
+  const refreshContractErrors = validateSourceRefreshContract(
+    loadSourceRefreshContract(),
+    INGESTION_TASKS,
+    readFileSync(join(ROOT, '.github', 'workflows', 'ci.yml'), 'utf8'),
+    JSON.parse(readFileSync(join(ROOT, 'data', 'source-registry.json'), 'utf8')),
+  );
+  if (refreshContractErrors.length) {
+    throw new Error(`Invalid source refresh contract:\n- ${refreshContractErrors.join('\n- ')}`);
+  }
   saveManifest('running');
   for (const task of INGESTION_TASKS) run(task);
   saveManifest('complete');

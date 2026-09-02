@@ -65,6 +65,27 @@ test("Atlas data failure replaces loading with a retry path", async ({
   await expect(page.getByText("Unable to load data", { exact: true })).toBeVisible();
 });
 
+test("Atlas search waits for its complete compact index", async ({ page }) => {
+  /** @type {(value: unknown) => void} */
+  let releaseSearchArtifact = () => {};
+  const searchArtifactHeld = new Promise((resolve) => {
+    releaseSearchArtifact = resolve;
+  });
+  await page.route("**/data/generated/library-search.json**", async (route) => {
+    await searchArtifactHeld;
+    await route.continue();
+  });
+
+  await gotoApp(page, "/#/atlas");
+  const searchbox = page.getByRole("searchbox", { name: "Jump to a record" });
+  await expect(searchbox).toBeDisabled();
+  await expect(page.locator("#app")).toHaveAttribute("data-app-ready", "partial");
+
+  releaseSearchArtifact(undefined);
+  await expect(searchbox).toBeEnabled();
+  await expect(page.locator("#app")).toHaveAttribute("data-app-ready", "true");
+});
+
 test("Resources dataset failure is isolated from the rest of the product", async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 900 });
   await page.route("**/data/commons-resource-dataset.json*", async (route) => {

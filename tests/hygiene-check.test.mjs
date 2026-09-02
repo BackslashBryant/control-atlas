@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert';
 import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { checkFiles } from '../tools/hygiene-check.mjs';
 
 test('Hygiene Checker - Prohibited tracked paths', () => {
@@ -73,4 +74,14 @@ test('Hygiene Checker - .gitignore permits new legitimate source files', () => {
       assert.strictEqual(err.status, 1, `Path ${path} should not be ignored by .gitignore`);
     }
   }
+});
+
+test('Repository line-ending policy is explicit and preserves attested binary sources', () => {
+  const attributes = readFileSync('.gitattributes', 'utf8');
+  assert.match(attributes, /^\* text=auto eol=lf$/m);
+  assert.match(attributes, /^\*\.bat text eol=crlf$/m);
+  for (const extension of ['gz', 'ico', 'png', 'woff2', 'xlsx', 'zip']) {
+    assert.match(attributes, new RegExp(`^\\*\\.${extension} binary$`, 'm'));
+  }
+  assert.match(attributes, /^data\/curated\/\*\*\/source-fragments\/\*\.json -text$/m);
 });

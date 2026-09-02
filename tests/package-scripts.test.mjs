@@ -126,6 +126,7 @@ test('package scripts expose deterministic split gates and full local verificati
     'typecheck',
     'test',
     'test:ci-contracts',
+    'test:source-refresh',
     'test:documentation-contracts',
     'verify:affected',
     'verify:lockfile',
@@ -148,6 +149,8 @@ test('package scripts expose deterministic split gates and full local verificati
   assert.match(packageJson.scripts['verify:quality'], /verify:contracts/);
   assert.match(packageJson.scripts['verify:quality'], /lint:ci/);
   assert.match(packageJson.scripts['verify:quality'], /npm test/);
+  assert.match(packageJson.scripts.test, /test:source-refresh/);
+  assert.match(packageJson.scripts['lint:ci'], /lint:source-refresh/);
   assert.match(packageJson.scripts['review:experience:family'], /playwright\.guardian\.config\.mjs/);
   assert.match(packageJson.scripts['review:experience:full'], /playwright\.guardian\.config\.mjs/);
   assert.match(packageJson.scripts['review:experience:family'], /tests\/guardian\/experience-guardian\.spec\.mjs/);

@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
+import { strictConditionalFetch } from './lib/strict-conditional-fetch.mjs';
 
 import {
   parseEnterpriseAttackStix,
@@ -131,7 +132,7 @@ function committedArtifactsPresent() {
   return Object.values(COMMITTED).every((path) => existsSync(path));
 }
 
-async function fetchJson(url, fetchImpl = fetch) {
+async function fetchJson(url, fetchImpl = strictConditionalFetch) {
   const response = await fetchImpl(url);
   if (!response.ok) {
     throw new Error(`Fetch failed (${response.status}) for ${url}`);
@@ -140,7 +141,7 @@ async function fetchJson(url, fetchImpl = fetch) {
 }
 
 export async function fetchMitreData(options = {}) {
-  const fetchImpl = options.fetchImpl || fetch;
+  const fetchImpl = options.fetchImpl || strictConditionalFetch;
   const useCommittedOnly = options.committedOnly === true;
 
   if (useCommittedOnly && committedArtifactsPresent()) {

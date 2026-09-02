@@ -19,6 +19,33 @@ const AUTOMATION_TESTS = new Set([
   'tests/wait-for-checks.test.mjs',
 ]);
 
+const SOURCE_REFRESH_PATHS = new Set([
+  'data/source-refresh-contract.json',
+  'scripts/discover-nist-pages.mjs',
+  'scripts/discover-nist-structured-assets.mjs',
+  'scripts/enrich-commons-resources.mjs',
+  'scripts/fetch-800-53-rev4-rev5-crosswalk.mjs',
+  'scripts/fetch-ccis.mjs',
+  'scripts/fetch-fedramp-2026-rules.mjs',
+  'scripts/fetch-framework-catalogs.mjs',
+  'scripts/fetch-mitre-data.mjs',
+  'scripts/fetch-nara-cui-registry.mjs',
+  'scripts/fetch-nist-structured-catalogs.mjs',
+  'scripts/fetch-nist-zero-trust-pages.mjs',
+  'scripts/fetch-olir-catalog.mjs',
+  'scripts/fetch-zero-trust-workbooks.mjs',
+  'scripts/hydrate-artifacts.mjs',
+  'scripts/lib/ingestion-pipeline.mjs',
+  'scripts/lib/source-refresh-contract.mjs',
+  'scripts/refresh-data.mjs',
+  'tests/olir-retrieval.test.mjs',
+  'tests/source-refresh-contract.test.mjs',
+  'tools/importers/catalog-adapters-ext.mjs',
+  'tools/relationship-builders/800-171-mapping-adapter.mjs',
+  'tools/relationship-builders/olir-adapter.mjs',
+  'tools/relationship-builders/olir-retrieval.mjs',
+]);
+
 function addStep(steps, step) {
   if (!steps.some((candidate) => candidate.id === step.id)) steps.push(step);
 }
@@ -57,6 +84,7 @@ export function createVerificationPlan(paths, changeMap) {
     path === 'src/ui/pages/CommonsPage.tsx' ||
     path === 'src/ui/components/LibraryAtlasMap.tsx' ||
     path === 'tests/e2e/atlas-map-focused-control.spec.mjs' ||
+    path === 'tests/e2e/load-resilience.spec.mjs' ||
     path === 'tests/e2e/epic14-ws3-workspace-template.spec.mjs');
   const phase4SurfacesChanged = paths.some((path) =>
     path === 'data/template-registry.json' ||
@@ -76,13 +104,15 @@ export function createVerificationPlan(paths, changeMap) {
     path === 'scripts/lib/write-json-atomically.mjs' ||
     path === 'tests/strict-conditional-fetch.test.mjs' ||
     path === 'tests/write-json-atomically.test.mjs');
+  const sourceRefreshChanged = paths.some((path) => SOURCE_REFRESH_PATHS.has(path));
+  const eolPolicyChanged = paths.includes('.gitattributes');
   const operatorEcosystemChanged = paths.some((path) =>
     path === 'scripts/apply-commons-operator-ecosystem.mjs' ||
     path === 'scripts/lib/url-classification.mjs' ||
     path === 'tests/commons-operator-ecosystem.test.mjs');
   const phase4DataChanged = paths.some((path) => path === 'data/template-registry.json');
-  const mappedData = stigObservationChanged || incrementalDataChanged || operatorEcosystemChanged || phase4DataChanged;
-  const mappedRuntime = changeMap.dependenciesChanged || sourceTrustChanged || compareWorkbenchChanged || boundedWorkbenchesChanged || phase4SurfacesChanged || mappedData || e2ePaths.length > 0;
+  const mappedData = stigObservationChanged || incrementalDataChanged || sourceRefreshChanged || operatorEcosystemChanged || phase4DataChanged;
+  const mappedRuntime = changeMap.dependenciesChanged || sourceTrustChanged || compareWorkbenchChanged || boundedWorkbenchesChanged || phase4SurfacesChanged || mappedData || eolPolicyChanged || e2ePaths.length > 0;
 
   if (changeMap.evidenceOnly) {
     addStep(steps, {
@@ -220,7 +250,23 @@ export function createVerificationPlan(paths, changeMap) {
     });
     addStep(steps, {
       id: 'incremental-data-contracts', command: ['npm', 'run', 'test:incremental-data'],
-      expectedTests: 3, workers: 1, budgetSeconds: 5,
+      expectedTests: 7, workers: 1, budgetSeconds: 5,
+    });
+  }
+  if (sourceRefreshChanged) {
+    addStep(steps, {
+      id: 'source-refresh-lint', command: ['npm', 'run', 'lint:source-refresh'],
+      expectedTests: 0, workers: 1, budgetSeconds: 10,
+    });
+    addStep(steps, {
+      id: 'source-refresh-contracts', command: ['npm', 'run', 'test:source-refresh'],
+      expectedTests: 13, workers: 1, budgetSeconds: 10,
+    });
+  }
+  if (eolPolicyChanged) {
+    addStep(steps, {
+      id: 'eol-contracts', command: ['node', '--test', 'tests/hygiene-check.test.mjs'],
+      expectedTests: 4, workers: 1, budgetSeconds: 5,
     });
   }
 
@@ -264,10 +310,11 @@ export function createVerificationPlan(paths, changeMap) {
       id: 'bounded-workbench-browser',
       command: ['npm', 'run', 'test:e2e:run', '--',
         'tests/e2e/atlas-map-focused-control.spec.mjs',
+        'tests/e2e/load-resilience.spec.mjs',
         'tests/e2e/epic14-ws3-workspace-template.spec.mjs',
         '--grep',
-        'focused Atlas opens straight|WS3 Library communicates|WS3 Resources shares'],
-      expectedTests: 3, workers: 2, budgetSeconds: 45,
+        'focused Atlas opens straight|Atlas search waits|WS3 Library communicates|WS3 Resources shares'],
+      expectedTests: 4, workers: 2, budgetSeconds: 45,
     });
   }
   if (phase4SurfacesChanged) {

@@ -166,6 +166,7 @@ export type RuntimeBundle = {
   commonsSearchIndex?: CommonsSearchIndex;
   commonsDataset?: CommonsResourceDataset;
   mappingSources?: Record<string, Array<{ value: string; label: string }>>;
+  librarySearchReady: boolean;
   routeReady: boolean;
   graphReady: boolean;
 };
@@ -932,6 +933,7 @@ export async function loadLibrarySearchPhase(): Promise<RuntimeBundle> {
       fedrampTransitionIndexRaw as FedrampTransitionIndex,
     commonsSearchIndex: (commonsSearchIndexRaw as CommonsSearchIndex) || undefined,
     commonsDataset: (commonsDatasetRaw as CommonsResourceDataset) || undefined,
+    librarySearchReady: true,
     routeReady: true,
     graphReady: false,
   };
@@ -981,6 +983,7 @@ export async function loadFullGraphPhase(
     mappingSources,
     atlasNetwork,
     atlasSpine,
+    librarySearchReady: true,
     routeReady: true,
     graphReady: true,
   };
@@ -1224,6 +1227,7 @@ async function loadRouteScopedPhase(
       atlasSpine,
       catalogPublishedGroups,
       catalogRecordsReady: plan.catalogId ? true : undefined,
+      librarySearchReady: plan.librarySearch,
       routeReady: true,
       graphReady: false,
     },
@@ -1281,6 +1285,7 @@ async function loadCatalogShellPhase(
     atlasNetwork: atlasNetwork || undefined,
     atlasSpine,
     catalogRecordsReady: false,
+    librarySearchReady: false,
     routeReady: true,
     graphReady: false,
   };

@@ -1,0 +1,164 @@
+{
+  "schema_version": "1.0",
+  "schedule": {
+    "cadence": "weekly",
+    "cron_utc": "17 7 * * 3",
+    "workflow": ".github/workflows/ci.yml",
+    "stale_source_detection_independent": true
+  },
+  "conditional_request_contract": {
+    "implementation": "scripts/lib/strict-conditional-fetch.mjs",
+    "etag": true,
+    "last_modified": true,
+    "success_304": "return validated cached publisher bytes with x-local-cache-status=revalidated",
+    "stale_fallback": "reject",
+    "missing_validators": "perform a fresh request",
+    "unchanged_outputs": "compare bytes before atomic replacement"
+  },
+  "tasks": [
+    {
+      "task_id": "discover-nist-pages",
+      "script": "discover-nist-pages.mjs",
+      "source_ids": ["nist-pages-root"],
+      "catalog_ids": [],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "discover-nist-structured-assets",
+      "script": "discover-nist-structured-assets.mjs",
+      "source_ids": ["nist-pages-project-pages"],
+      "catalog_ids": [],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "observe-disa-sources",
+      "script": "fetch-stig-source-observations.mjs",
+      "source_ids": ["cyber-mil-stig-compilations", "cyber-mil-stig-downloads", "cyber-mil-stig-gpo", "stigviewer-catalog", "stigviewer-clkb-api", "nuwcdivnpt-github-org", "nuwcdivnpt-stig-manager"],
+      "catalog_ids": ["disa-stig", "disa-srg"],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "fetch-framework-catalogs",
+      "script": "fetch-framework-catalogs.mjs",
+      "source_ids": ["nist-oscal-catalogs", "nist-csf-reference-tool-export", "reviewed-publication-projections"],
+      "catalog_ids": ["nist-800-53", "csf-2", "nist-800-171", "nist-800-171-rev2", "nist-800-172", "nist-ai-rmf", "nist-ssdf", "fedramp-2026", "cmmc-2", "cui-policy", "dod-rai", "fips-199", "fips-200", "nist-800-37", "nist-800-53b", "dod-zt", "nist-zt", "microsoft-zt-maturity", "nist-iot-cybersecurity", "nist-mobile-threats"],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "fetch-fedramp-rules",
+      "script": "fetch-fedramp-2026-rules.mjs",
+      "source_ids": ["fedramp-consolidated-rules", "fedramp-consolidated-rules-schema", "fedramp-legacy-index"],
+      "catalog_ids": ["fedramp-2026", "fedramp-rev5"],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "fetch-nara-cui",
+      "script": "fetch-nara-cui-registry.mjs",
+      "source_ids": ["nara-cui-category-list", "nara-cui-category-details", "nara-cui-change-log"],
+      "catalog_ids": ["cui-policy"],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "fetch-olir-catalog",
+      "script": "fetch-olir-catalog.mjs",
+      "source_ids": ["nist-olir-catalog", "nist-olir-submission-artifacts"],
+      "catalog_ids": ["nist-800-53", "nist-800-171", "csf-2"],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "fetch-olir-mappings",
+      "script": "fetch-olir-mappings.mjs",
+      "source_ids": ["nist-800-171-oscal-mappings", "nist-olir-csf2-to-sp800-53", "nist-olir-csf2-to-sp800-171"],
+      "catalog_ids": ["nist-800-53", "nist-800-171", "csf-2"],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "fetch-ccis",
+      "script": "fetch-ccis.mjs",
+      "source_ids": ["disa-cci-list", "disa-cci-nist-references"],
+      "catalog_ids": ["disa-cci", "nist-800-53"],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "fetch-disa-library",
+      "script": "fetch-disa-stigs.mjs",
+      "source_ids": ["disa-stig-srg-compilation"],
+      "catalog_ids": ["disa-stig", "disa-srg"],
+      "cadence": "weekly",
+      "conditional_policy": "range_download_exception",
+      "exception_reason": "The publisher archive is verified and streamed with byte ranges plus a curl fallback; substituting an HTTP object cache would break range and total-length validation."
+    },
+    {
+      "task_id": "fetch-mitre",
+      "script": "fetch-mitre-data.mjs",
+      "source_ids": ["mitre-attack-enterprise", "mitre-attack-ics", "mitre-d3fend-ontology", "mitre-d3fend-mappings"],
+      "catalog_ids": ["mitre-attack", "mitre-attack-ics", "mitre-d3fend"],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "fetch-zero-trust-workbooks",
+      "script": "fetch-zero-trust-workbooks.mjs",
+      "source_ids": ["nist-sp-1800-35-csf2-mappings", "nist-sp-1800-35-critical-software-mappings", "nist-sp-1800-35-csf11-mappings", "nist-sp-1800-35-sp80053-mappings", "microsoft-zero-trust-maturity-questionnaire-v1-1"],
+      "catalog_ids": ["nist-zt", "microsoft-zt-maturity", "nist-800-53", "csf-2"],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "fetch-nist-zero-trust",
+      "script": "fetch-nist-zero-trust-pages.mjs",
+      "source_ids": ["nist-sp-800-207-fragments", "nist-sp-800-207a-fragments", "nist-sp-1800-35", "nist-sp-1800-35-build-pages", "nist-zero-trust-github-branch"],
+      "catalog_ids": ["nist-zt"],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "fetch-nist-structured-catalogs",
+      "script": "fetch-nist-structured-catalogs.mjs",
+      "source_ids": ["nist-iot-requirements-80053-mapping-draft", "nist-iot-requirements-csf11-mapping-draft", "nist-mobile-threat-catalogue", "nist-mobile-threat-catalogue-cve-list"],
+      "catalog_ids": ["nist-iot-cybersecurity", "nist-mobile-threats", "nist-800-53", "csf-2"],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "hydrate-artifacts",
+      "script": "hydrate-artifacts.mjs",
+      "source_ids": ["official-artifact-registry-downloads"],
+      "catalog_ids": [],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    },
+    {
+      "task_id": "enrich-commons-resources",
+      "script": "enrich-commons-resources.mjs",
+      "source_ids": ["commons-resource-canonical-pages", "github-resource-evidence"],
+      "catalog_ids": [],
+      "cadence": "weekly",
+      "conditional_policy": "strict"
+    }
+  ],
+  "other_remote_adapters": [
+    {
+      "script": "fetch-800-53-rev4-rev5-crosswalk.mjs",
+      "source_ids": ["nist-800-53-rev4-rev5-crosswalk", "nist-appendix-j-rev4-rev5-crosswalk"],
+      "cadence": "on_demand",
+      "conditional_policy": "strict"
+    },
+    {
+      "script": "check-commons-health.mjs",
+      "source_ids": ["commons-resource-live-health"],
+      "cadence": "on_demand",
+      "conditional_policy": "live_probe_exception",
+      "exception_reason": "HEAD and fallback GET requests measure current endpoint health and must not be satisfied from an HTTP object cache."
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import readXlsxFile from 'read-excel-file/node';
+import { strictConditionalFetch } from '../../scripts/lib/strict-conditional-fetch.mjs';
 
 const STRUCTURED_EXTENSIONS = /\.(xlsx|csv|json|xml)$/i;
 const TIMEOUT_MS = 20_000;
@@ -40,8 +41,8 @@ function isStructured({ url, contentType, bytes }) {
   return Buffer.from(bytes).subarray(0, 2).toString('utf8') === 'PK';
 }
 
-async function requestBytes(url) {
-  const response = await fetch(url, {
+async function requestBytes(url, fetchImpl) {
+  const response = await fetchImpl(url, {
     headers: { 'User-Agent': 'Control-Atlas-source-integrity' },
     redirect: 'follow',
     signal: AbortSignal.timeout(TIMEOUT_MS),
@@ -56,11 +57,11 @@ async function requestBytes(url) {
   };
 }
 
-async function githubCandidates(url) {
+async function githubCandidates(url, fetchImpl) {
   const target = urlForGitHubContents(url);
   if (!target) return [];
   const endpoint = `https://api.github.com/repos/${target.owner}/${target.repo}/contents/${target.path}${target.ref && target.ref !== 'HEAD' ? `?ref=${encodeURIComponent(target.ref)}` : ''}`;
-  const response = await fetch(endpoint, {
+  const response = await fetchImpl(endpoint, {
     headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'Control-Atlas-source-integrity' },
     signal: AbortSignal.timeout(TIMEOUT_MS),
   });
@@ -74,13 +75,14 @@ async function githubCandidates(url) {
     .filter(Boolean);
 }
 
-export async function retrieveStructuredOlirArtifact(candidates) {
+export async function retrieveStructuredOlirArtifact(candidates, options = {}) {
+  const fetchImpl = options.fetchImpl || strictConditionalFetch;
   const attempted = [];
   const queue = [...new Set(candidates.filter(Boolean))];
   for (let index = 0; index < queue.length; index += 1) {
     const candidate = queue[index];
     try {
-      const github = await githubCandidates(candidate);
+      const github = await githubCandidates(candidate, fetchImpl);
       if (github.length) {
         queue.splice(index + 1, 0, ...github.filter((url) => !queue.includes(url)));
         attempted.push({ kind: 'GitHub Contents API', url: candidate, status: 200, resolved_urls: github });
@@ -92,7 +94,7 @@ export async function retrieveStructuredOlirArtifact(candidates) {
         attempted.push({ kind: 'Google Drive export', url: candidate, status: 200, resolved_urls: drive });
         continue;
       }
-      const result = await requestBytes(candidate);
+      const result = await requestBytes(candidate, fetchImpl);
       attempted.push({ kind: 'artifact download', url: candidate, status: result.status, final_url: result.final_url, content_type: result.content_type, byte_length: result.bytes.length });
       if (result.status >= 200 && result.status < 300 && isStructured({ url: result.final_url, contentType: result.content_type, bytes: result.bytes })) {
         return { artifact: { url: result.final_url, content_type: result.content_type, bytes: result.bytes, sha256: sha256(result.bytes) }, attempted };

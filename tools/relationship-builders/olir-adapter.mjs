@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { strictConditionalFetch } from '../../scripts/lib/strict-conditional-fetch.mjs';
 import readXlsxFile from 'read-excel-file/node';
 import { normalize80053Id, normalize800171Id } from '../normalizers/oscal-normalize.mjs';
 
@@ -110,8 +111,8 @@ export function parseOlirCsv(text) {
   }).filter((item) => item.source_id && item.target_id);
 }
 
-export async function fetchBuffer(url) {
-  const response = await fetch(url);
+export async function fetchBuffer(url, fetchImpl = strictConditionalFetch) {
+  const response = await fetchImpl(url);
   if (!response.ok) throw new Error(`Download failed (${response.status}): ${url}`);
   return Buffer.from(await response.arrayBuffer());
 }

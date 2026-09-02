@@ -352,6 +352,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
 
   function submitSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!bundle.librarySearchReady) return;
     const query = mapSearchDraft.trim();
     if (!query) return;
     const exactSemanticRecord = Object.entries(bundle.atlasNetwork?.record_locations || {})
@@ -432,6 +433,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             <IconSearch aria-hidden="true" size={20} stroke={1.8} />
             <input
               aria-label="Jump to a record"
+              disabled={!bundle.librarySearchReady}
               id="atlas-search"
               name="query"
               onChange={(event) => setMapSearchDraft(event.target.value)}
@@ -443,7 +445,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           {/* Kept so the form has a submit control (implicit Enter submission),
               but out of the tab order: an invisible tab stop strands sighted
               keyboard users on a control they cannot see. */}
-          <button className="visually-hidden" tabIndex={-1} type="submit">Search</button>
+          <button className="visually-hidden" disabled={!bundle.librarySearchReady} tabIndex={-1} type="submit">Search</button>
         </form>
       </header>
       <span

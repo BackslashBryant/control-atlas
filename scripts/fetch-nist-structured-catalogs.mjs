@@ -3,6 +3,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdirSync, readFileSync } from 'node:fs';
 import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
+import { strictConditionalFetch } from './lib/strict-conditional-fetch.mjs';
 import {
   nistStructuredSha256,
   parseNistIoTRequirementWorkbooks,
@@ -38,7 +39,7 @@ const SOURCES = {
 };
 
 async function fetchBytes(source) {
-  const response = await fetch(source.url, {
+  const response = await strictConditionalFetch(source.url, {
     headers: { 'User-Agent': 'Control-Atlas-source-integrity' },
     signal: AbortSignal.timeout(45_000),
   });

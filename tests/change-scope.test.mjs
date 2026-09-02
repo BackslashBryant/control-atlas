@@ -66,6 +66,13 @@ test('automation-only changes select the sub-second contract path', () => {
   assert.equal(result.browserRequired, false);
 });
 
+test('repository text policy is classified as automation', () => {
+  const result = classifyChangedPaths(['.gitattributes']);
+  assert.equal(result.automationChanged, true);
+  assert.equal(result.automationOnly, true);
+  assert.equal(result.buildRequired, false);
+});
+
 test('automation mixed with runtime changes keeps the affected runtime gates', () => {
   const result = classifyChangedPaths(['package.json', 'src/ui/App.tsx']);
   assert.equal(result.automationChanged, true);

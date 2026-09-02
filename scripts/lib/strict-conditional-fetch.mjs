@@ -19,6 +19,9 @@ export function createStrictConditionalFetch(options = {}) {
     if (cacheStatus === 'stale') {
       throw new Error(`strict refresh rejected stale cached bytes for ${url}`);
     }
+    if (response.status === 304) {
+      throw new Error(`strict refresh received 304 without reusable cached bytes for ${url}`);
+    }
     return response;
   };
 }

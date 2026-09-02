@@ -650,11 +650,13 @@ export function App() {
   const canRenderWithoutBundle = isStaticViewWithoutBundle(viewState.view);
   const hasRequiredRouteArtifacts =
     viewState.view !== "atlas-map" || Boolean(bundle?.atlasSpine);
+  const hasRequiredSearchArtifacts =
+    viewState.view !== "atlas-map" || Boolean(bundle?.librarySearchReady);
   const readyState = loadError
     ? "error"
     : canRenderWithoutBundle && viewState.view !== "search"
       ? "true"
-    : bundle?.routeReady && hasRequiredRouteArtifacts &&
+    : bundle?.routeReady && hasRequiredRouteArtifacts && hasRequiredSearchArtifacts &&
         (!requiresFullGraph(viewState) || bundle.graphReady)
       ? "true"
       : bundle

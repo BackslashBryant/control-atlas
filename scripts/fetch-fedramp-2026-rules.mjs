@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv2020 from 'ajv/dist/2020.js';
 import addFormats from 'ajv-formats';
+import { strictConditionalFetch } from './lib/strict-conditional-fetch.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const RULES_URL = 'https://raw.githubusercontent.com/FedRAMP/rules/main/fedramp-consolidated-rules.json';
@@ -15,7 +16,7 @@ const SCHEMA_PATH = join(ROOT, 'data', 'fedramp-2026-rules.schema.json');
 const INDEX_PATH = join(ROOT, 'data', 'fedramp-transition-index.json');
 
 async function fetchRequired(url, responseType = 'json') {
-  const response = await fetch(url, {
+  const response = await strictConditionalFetch(url, {
     headers: { 'User-Agent': 'Control-Atlas-FedRAMP-refresh' },
   });
   if (!response.ok) throw new Error(`FedRAMP fetch failed: ${response.status} ${url}`);

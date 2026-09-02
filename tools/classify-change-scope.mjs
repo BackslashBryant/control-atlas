@@ -12,6 +12,7 @@ const DATA_PREFIXES = [
   'src/shared/',
   'tools/importers/',
   'tools/normalizers/',
+  'tools/relationship-builders/',
 ];
 const TEST_PREFIXES = ['tests/'];
 const WORKFLOW_PREFIXES = ['.github/'];
@@ -23,6 +24,7 @@ const DEPENDENCY_FILES = new Set([
   'package-lock.json',
 ]);
 const AUTOMATION_FILES = new Set([
+  '.gitattributes',
   '.gitignore',
   'config/experience-guardian/copy-ownership.json',
   'config/experience-guardian/route-matrix.json',

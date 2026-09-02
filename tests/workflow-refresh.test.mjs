@@ -16,6 +16,15 @@ test('source refresh runs weekly and remains manually dispatchable', () => {
   assert.match(workflow, /github\.event\.schedule \|\| inputs\.task \|\| github\.ref/);
 });
 
+test('nightly browser shards keep parallelism visible and disable retry masking', () => {
+  assert.match(workflow, /PLAYWRIGHT_FULLY_PARALLEL: '1'/);
+  assert.match(workflow, /PLAYWRIGHT_WORKERS: '2'/);
+  assert.match(
+    workflow,
+    /npm run test:e2e:run -- --shard=\$\{\{ matrix\.shard \}\}\/2 --retries=0 --reporter=blob,github/,
+  );
+});
+
 test('source refresh opens one human-reviewed draft PR after the full gate', () => {
   assert.match(workflow, /contents: write/);
   assert.match(workflow, /pull-requests: write/);

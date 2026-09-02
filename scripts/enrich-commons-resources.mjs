@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { markdownToPlainText } from "./lib/markdown-to-text.mjs";
+import { strictConditionalFetch } from "./lib/strict-conditional-fetch.mjs";
 import { writeJsonAtomically } from "./lib/write-json-atomically.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -109,7 +110,7 @@ function githubHeaders(accept = "application/vnd.github+json") {
 }
 
 async function githubJson(url, options = {}) {
-  const response = await fetch(url, { ...options, headers: githubHeaders() });
+  const response = await strictConditionalFetch(url, { ...options, headers: githubHeaders() });
   if (options.allowNotFound && response.status === 404) return null;
   if (!response.ok) throw new Error(`${url} returned ${response.status}`);
   return response.json();
@@ -180,7 +181,7 @@ async function validatedMediaItems(items, provenance) {
   const valid = [];
   for (const item of items || []) {
     try {
-      const response = await fetch(item.url, {
+      const response = await strictConditionalFetch(item.url, {
         headers: { "User-Agent": "control-atlas-resource-ingestion" },
         redirect: "follow",
       });

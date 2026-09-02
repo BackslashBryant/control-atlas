@@ -16,6 +16,8 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { unzipSync } from 'fflate';
+import { strictConditionalFetch } from './lib/strict-conditional-fetch.mjs';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 import readXlsxFile from 'read-excel-file/node';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -233,7 +235,7 @@ async function fetchBytes(url, options = {}) {
   for (let attempt = 0; attempt < 3; attempt += 1) {
     if (attempt > 0) await sleep(1500 * attempt);
     try {
-      const res = await fetch(url, { redirect: 'follow', headers });
+      const res = await strictConditionalFetch(url, { redirect: 'follow', headers });
       if (!res.ok) {
         lastError = new Error(`HTTP ${res.status}`);
         if (res.status >= 500) continue; // retry server errors
@@ -406,7 +408,7 @@ async function main() {
 
   if (!existsSync(dirname(OUT))) mkdirSync(dirname(OUT), { recursive: true });
   writeFileSync(OUT, JSON.stringify({ generated_at: new Date().toISOString(), hydrated: changed, removed_orphans: removed, results: log }, null, 2) + '\n', 'utf8');
-  writeFileSync(REGISTRY, JSON.stringify(registry, null, 2) + '\n', 'utf8');
+  writeJsonAtomically(REGISTRY, registry);
   console.log(`\nHydrated ${changed}/${selectedResolutions.length} selected artifacts (${RESOLUTIONS.length} registered resolutions). Execution log: data/artifact-hydration-manifest.json`);
 }
 

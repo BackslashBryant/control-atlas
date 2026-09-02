@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { extractNistPagesInventory } from './lib/nist-pages-discovery.mjs';
+import { strictConditionalFetch } from './lib/strict-conditional-fetch.mjs';
+import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'data', 'nist-pages-discovery.json');
 const SOURCE_URL = 'https://pages.nist.gov/pages-root/';
 
 async function main() {
-  const response = await fetch(SOURCE_URL, {
+  const response = await strictConditionalFetch(SOURCE_URL, {
     headers: { 'User-Agent': 'ControlAtlas-ingestion/1.0 (+https://github.com/rambulls/control-atlas)' },
   });
   if (!response.ok) throw new Error(`NIST Pages discovery failed: HTTP ${response.status}`);
@@ -42,9 +44,7 @@ async function main() {
     },
     entries,
   };
-  const temporary = `${OUT}.tmp`;
-  writeFileSync(temporary, `${JSON.stringify(output, null, 2)}\n`, 'utf8');
-  renameSync(temporary, OUT);
+  writeJsonAtomically(OUT, output);
   console.log(`Discovered ${entries.length} NIST Pages projects (${candidates} cybersecurity/governance candidates).`);
 }
 

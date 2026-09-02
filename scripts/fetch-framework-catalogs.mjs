@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { writeJsonAtomically } from './lib/write-json-atomically.mjs';
+import { strictConditionalFetch } from './lib/strict-conditional-fetch.mjs';
 import {
   buildCmmcPublicCatalog,
   buildCuiPolicyCatalog,
@@ -78,7 +79,7 @@ const REMOTE_CATALOGS = [
     outfile: 'csf-subcategories.json',
     parse: parseCsfCatalog,
     enrich: async (records) => {
-      const response = await fetch(CSF_REFERENCE_TOOL_EXPORT_URL);
+      const response = await strictConditionalFetch(CSF_REFERENCE_TOOL_EXPORT_URL);
       if (!response.ok) {
         throw new Error(`CSF Reference Tool export fetch failed: ${response.status} ${CSF_REFERENCE_TOOL_EXPORT_URL}`);
       }
@@ -168,7 +169,7 @@ export async function fetchFrameworkCatalogs(options = {}) {
   }
 
   for (const target of remoteTargets) {
-    const response = await fetch(target.url);
+    const response = await strictConditionalFetch(target.url);
     if (!response.ok) throw new Error(`${target.id} fetch failed: ${response.status} ${target.url}`);
     const payload = target.responseType === 'text'
       ? await response.text()
