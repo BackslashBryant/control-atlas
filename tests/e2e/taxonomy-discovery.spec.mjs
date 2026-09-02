@@ -103,6 +103,92 @@ test("governed tags keep stable URL, OR/AND, alias, count, and unavailable-value
   await expect(contextualVendorDisclosure).toHaveCount(0);
 });
 
+test("result rows select high-signal governed tags without redundant identity labels", async ({ page }) => {
+  await open(page, "/#/library?q=V-218786");
+  const disa = page.locator('[data-record-id="disa-stig:V-218786"]');
+  await expect(disa.locator(".atlas-tag__label")).toHaveText(["Server", "STIG", "Microsoft"]);
+
+  await open(page, "/#/library?q=AC-24");
+  const nist = page.locator('[data-record-id="nist-800-53:AC-24"]');
+  await expect(nist.locator(".atlas-tag__label")).toHaveText(["Access Control"]);
+
+  for (const [route, recordId] of [
+    ["/#/library?filter=mitre-attack", "mitre-attack:T1003.008"],
+    ["/#/library?filter=fedramp-rev5", "fedramp-rev5:HIGH"],
+    ["/#/library?filter=microsoft-zt-maturity", "microsoft-zt-maturity:PILLAR-APPLICATIONS"],
+  ]) {
+    await open(page, route);
+    await expect(page.locator(`[data-record-id="${recordId}"] .atlas-tag`)).toHaveCount(0);
+  }
+
+  await open(page, "/#/library?filter=cmmc-2");
+  const cmmc = page.locator('[data-record-id="cmmc-2:LEVEL-1"]');
+  await expect(cmmc.locator(".atlas-tag")).toHaveCount(0);
+});
+
+test("result taxonomy links preserve Library state without nesting or opening the record", async ({ page }) => {
+  await open(page, "/#/library?q=V-218786&filter=disa-stig&tag=vendor.microsoft");
+  const row = page.locator('[data-record-id="disa-stig:V-218786"]');
+  await expect(row.locator("a a")).toHaveCount(0);
+  await expect(row.getByRole("link", { name: "Open DISA Microsoft IIS 10.0 Server V-218786" })).toBeVisible();
+
+  const stig = row.getByRole("link", { name: "Filter by STIG" });
+  await expect(stig).toHaveAttribute("href", /q=V-218786/);
+  await expect(stig).toHaveAttribute("href", /filter=disa-stig/);
+  await stig.click();
+  await expect(page).toHaveURL(/#\/library\?/);
+  const activeState = await page.evaluate(() => {
+    const params = new URLSearchParams(globalThis.location.hash.split("?")[1] || "");
+    return {
+      filter: params.get("filter"),
+      query: params.get("q"),
+      tags: params.getAll("tag").sort(),
+    };
+  });
+  expect(activeState).toEqual({
+    filter: "disa-stig",
+    query: "V-218786",
+    tags: ["program.stig", "vendor.microsoft"],
+  });
+  await expect(page.locator('[data-record-id="disa-stig:V-218786"]')).toBeVisible();
+
+  await page.goBack();
+  await expect(page).toHaveURL(/q=V-218786/);
+  await expect(page).not.toHaveURL(/program\.stig/);
+  await page.goForward();
+  await expect(page).toHaveURL(/program\.stig/);
+
+  await open(page, "/#/library?q=V-218786");
+  await page.locator('[data-record-id="disa-stig:V-218786"]').getByRole("link", { name: "Open DISA Microsoft IIS 10.0 Server V-218786" }).click();
+  await expect(page).toHaveURL(/#\/record\/disa-stig\/V-218786$/);
+});
+
+test("result taxonomy tags remain bounded and independently usable at every breakpoint", async ({ page }) => {
+  for (const width of [1440, 1024, 768, 390]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
+    await open(page, "/#/library?q=V-218786");
+    const row = page.locator('[data-record-id="disa-stig:V-218786"]');
+    const metrics = await row.evaluate((element) => {
+      const rowRect = element.getBoundingClientRect();
+      const tags = [...element.querySelectorAll(".atlas-tag")].map((tag) => tag.getBoundingClientRect());
+      return {
+        documentWidth: globalThis.document.documentElement.scrollWidth,
+        lineCount: new Set(tags.map((tag) => Math.round(tag.top))).size,
+        rowHeight: rowRect.height,
+        tagsInsideRow: tags.every((tag) => tag.left >= rowRect.left && tag.right <= rowRect.right && tag.bottom <= rowRect.bottom),
+        viewportWidth: globalThis.innerWidth,
+      };
+    });
+    expect(await row.getByRole("link", { name: "Filter by Server" }).isVisible()).toBe(true);
+    expect(await row.getByRole("link", { name: "Filter by STIG" }).isVisible()).toBe(true);
+    expect(await row.getByRole("link", { name: "Filter by Microsoft" }).isVisible()).toBe(true);
+    expect(metrics.documentWidth).toBeLessThanOrEqual(metrics.viewportWidth);
+    expect(metrics.lineCount).toBeLessThanOrEqual(2);
+    expect(metrics.tagsInsideRow).toBe(true);
+    expect(metrics.rowHeight).toBeLessThanOrEqual(width === 390 ? 340 : 250);
+  }
+});
+
 test("Advanced keeps secondary dimensions without duplicating promoted taxonomy", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await open(page, "/#/library");

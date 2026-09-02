@@ -26,6 +26,7 @@ import {
 import { buildCatalogCoverageList, catalogCoverageForId, isLowCatalogCoverage } from "../lib/catalogCoverage";
 import { catalogDisplayNameFor } from "../lib/catalogProfiles";
 import { LIBRARY_KINDS, libraryKindForRawType, libraryKindLabel, rawTypesForKind } from "../lib/informationArchitecture";
+import { selectLibraryResultTags } from "../lib/libraryResultTags";
 import { queryDiscoveryIndex } from "../../shared/discovery-index.mjs";
 import {
   TAXONOMY_CONTRACT,
@@ -260,6 +261,12 @@ export function ExplorePage(props: {
         objectType: document.object_type || "",
         metadata: { identity_category: document.identity_category || "" },
       });
+      const resultTags = selectLibraryResultTags({
+        publication,
+        publisher,
+        taxonomyTags: document.taxonomy_tags || [],
+        title: String(document.title || ""),
+      });
       return {
         accessibleName: identity.accessibleName,
         area: areaPresentationForCatalog(document.catalog_id),
@@ -273,6 +280,7 @@ export function ExplorePage(props: {
         publication,
         publisher,
         relationshipCount,
+        resultTags,
         sortTitle: identity.secondary || identity.primary,
         title: identity.secondary,
       };
@@ -734,32 +742,49 @@ export function ExplorePage(props: {
                       />
                     </label>
                   ) : null}
-                  <AppLink
-                    aria-label={`Open ${row.accessibleName}`}
-                    className="workspace-result-row__link"
-                    onNavigate={onNavigate}
-                    patch={{ node: row.document.id }}
-                    view="library-detail"
-                  >
-                    <div className="workspace-result-row__meta">
-                      <span className="workspace-kind-tag">{recordType}</span>
-                      <span>{row.publication}</span>
-                    </div>
-                    <h3><MarkedSearchText query={state.query} text={row.identity} /></h3>
-                    {row.title ? <p className="workspace-result-row__official-name"><MarkedSearchText query={state.query} text={row.title} /></p> : null}
-                    {detailsReady && searchPreviewText(row.document) ? <p className="workspace-result-row__snippet"><MarkedSearchText query={state.query} text={searchPreviewText(row.document)} /></p> : null}
+                  <div className="workspace-result-row__body">
+                    <AppLink
+                      aria-label={`Open ${row.accessibleName}`}
+                      className="workspace-result-row__link"
+                      onNavigate={onNavigate}
+                      patch={{ node: row.document.id }}
+                      view="library-detail"
+                    >
+                      <div className="workspace-result-row__meta">
+                        <span className="workspace-kind-tag">{recordType}</span>
+                        <span>{row.publication}</span>
+                      </div>
+                      <h3><MarkedSearchText query={state.query} text={row.identity} /></h3>
+                      {row.title ? <p className="workspace-result-row__official-name"><MarkedSearchText query={state.query} text={row.title} /></p> : null}
+                      {detailsReady && searchPreviewText(row.document) ? <p className="workspace-result-row__snippet"><MarkedSearchText query={state.query} text={searchPreviewText(row.document)} /></p> : null}
+                    </AppLink>
                     {detailsReady ? (
                       <div className="workspace-result-row__signals">
                         {connectionSummary(row.crossFrameworkCount, row.crossFrameworkCatalogCount) ? <span>{connectionSummary(row.crossFrameworkCount, row.crossFrameworkCatalogCount)}</span> : null}
                         <BucketTag area={row.area.id}>{row.area.label}</BucketTag>
-                        {(row.document.taxonomy_tags || [])
-                          .filter((t: any) => ["organization", "framework", "program"].includes(t.kind))
-                          .slice(0, 3)
-                          .map((t: any) => <AtlasTag key={t.id} onNavigate={onNavigate} size="sm" tagId={t.id} />)}
+                        {row.resultTags.length > 0 ? (
+                          <span className="workspace-result-row__taxonomy">
+                            {row.resultTags.map((tag: any) => (
+                              <AtlasTag
+                                ariaLabel={`Filter by ${tag.label}`}
+                                key={tag.id}
+                                onNavigate={onNavigate}
+                                patch={{
+                                  ...state,
+                                  tags: state.tags.includes(tag.id)
+                                    ? state.tags.filter((id) => id !== tag.id)
+                                    : [...state.tags, tag.id],
+                                }}
+                                size="sm"
+                                tagId={tag.id}
+                              />
+                            ))}
+                          </span>
+                        ) : null}
                         {row.lowCoverage ? <span className="workspace-coverage-note">Limited coverage</span> : null}
                       </div>
                     ) : null}
-                  </AppLink>
+                  </div>
                 </article>
               </li>
             );
