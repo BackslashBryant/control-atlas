@@ -191,6 +191,13 @@ function includes(title, expression) {
   return expression.test(title);
 }
 
+const APPLE_IOS_PATTERN = /\bapple\s+(?:ios|ipados)\b|\bios\s*\/\s*ipados\b|\bipados\b/i;
+
+function addForMatchingField(tags, fields, expression, id, rule) {
+  const match = fields.find(([, value]) => includes(value, expression));
+  if (match) add(tags, id, match[0], rule);
+}
+
 /**
  * Derive only facets explicitly named by a structured publisher field or a
  * catalog's declared scope. Free-form descriptions, checks, fixes, and titles
@@ -203,26 +210,30 @@ export function taxonomyTagsForRecord(record) {
   const identityCategory = normalized(record.metadata?.identity_category);
   const family = normalized(record.family);
   const catalogId = normalized(record.catalog_id || record.metadata?.catalog_id);
-  const scope = `${benchmarkTitle} ${identityCategory} ${family}`.trim();
+  const scopeFields = [
+    ["metadata.benchmark_title", benchmarkTitle],
+    ["metadata.identity_category", identityCategory],
+    ["family", family],
+  ];
 
-  if (scope) {
-    if (includes(scope, /\b(?:server|domain controller)\b/i)) add(tags, "asset.server", "metadata.benchmark_title", "explicit-server-term");
-    if (includes(scope, /\b(?:workstation|windows (?:10|11)|macos)\b/i)) add(tags, "asset.workstation", "metadata.benchmark_title", "explicit-workstation-platform-term");
-    if (includes(scope, /\b(?:database|dbms|postgres(?:ql)?|mysql|mariadb|sql server)\b/i)) add(tags, "asset.database", "metadata.identity_category", "explicit-database-term");
-    if (includes(scope, /\b(?:router|switch|firewall|network (?:device|element)|network infrastructure)\b/i)) add(tags, "asset.network-device", "metadata.identity_category", "explicit-network-device-term");
-    if (includes(scope, /\b(?:application|web server|browser|agent)\b/i)) add(tags, "asset.application", "metadata.identity_category", "explicit-application-term");
-    if (includes(scope, /\b(?:container|kubernetes|openshift)\b/i)) add(tags, "asset.container", "metadata.identity_category", "explicit-container-term");
-    if (includes(scope, /\b(?:virtualization|virtual machine|hypervisor|vsphere|esxi)\b/i)) add(tags, "asset.virtualization", "metadata.identity_category", "explicit-virtualization-term");
-    if (includes(scope, /\b(?:active directory|identity|directory service|pki)\b/i)) add(tags, "asset.identity-system", "metadata.identity_category", "explicit-identity-term");
-    if (includes(scope, /\b(?:mobile|uem|mdm|android|ios)\b/i)) add(tags, "asset.mobile", "metadata.identity_category", "explicit-mobile-term");
-    if (includes(scope, /\b(?:cloud|azure|aws|iaas|saas)\b/i)) add(tags, "environment.cloud", "metadata.benchmark_title", "explicit-cloud-term");
-    if (includes(scope, /\b(?:windows|linux|macos|android|ios)\b/i)) add(tags, "technology.operating-system", "metadata.benchmark_title", "explicit-operating-system-term");
-    if (includes(scope, /\bactive directory\b/i)) add(tags, "technology.active-directory", "metadata.benchmark_title", "explicit-active-directory-term");
-    if (includes(scope, /\bandroid\b/i)) add(tags, "technology.android", "metadata.benchmark_title", "explicit-android-term");
-    if (includes(scope, /\b(?:apple )?ios\b/i)) add(tags, "technology.ios", "metadata.benchmark_title", "explicit-ios-term");
-    if (includes(scope, /\bmicrosoft windows\b/i)) add(tags, "product.microsoft-windows", "metadata.benchmark_title", "explicit-product-title");
-    if (includes(scope, /\bred hat enterprise linux\b/i)) add(tags, "product.red-hat-enterprise-linux", "metadata.benchmark_title", "explicit-product-title");
-    if (includes(scope, /\b(?:vmware )?(?:vsphere|esxi)\b/i)) add(tags, "product.vmware-vsphere", "metadata.benchmark_title", "explicit-product-title");
+  if (scopeFields.some(([, value]) => value)) {
+    addForMatchingField(tags, scopeFields, /\b(?:server|domain controller)\b/i, "asset.server", "explicit-server-term");
+    addForMatchingField(tags, scopeFields, /\b(?:workstation|windows (?:10|11)|macos)\b/i, "asset.workstation", "explicit-workstation-platform-term");
+    addForMatchingField(tags, scopeFields, /\b(?:database|dbms|postgres(?:ql)?|mysql|mariadb|sql server)\b/i, "asset.database", "explicit-database-term");
+    addForMatchingField(tags, scopeFields, /\b(?:router|switch|firewall|network (?:device|element)|network infrastructure)\b/i, "asset.network-device", "explicit-network-device-term");
+    addForMatchingField(tags, scopeFields, /\b(?:application|web server|browser|agent)\b/i, "asset.application", "explicit-application-term");
+    addForMatchingField(tags, scopeFields, /\b(?:container|kubernetes|openshift)\b/i, "asset.container", "explicit-container-term");
+    addForMatchingField(tags, scopeFields, /\b(?:virtualization|virtual machine|hypervisor|vsphere|esxi)\b/i, "asset.virtualization", "explicit-virtualization-term");
+    addForMatchingField(tags, scopeFields, /\b(?:active directory|identity|directory service|pki)\b/i, "asset.identity-system", "explicit-identity-term");
+    addForMatchingField(tags, scopeFields, /\b(?:mobile|uem|mdm|android)\b|\bapple\s+(?:ios|ipados)\b|\bios\s*\/\s*ipados\b|\bipados\b/i, "asset.mobile", "explicit-mobile-term");
+    addForMatchingField(tags, scopeFields, /\b(?:cloud|azure|aws|iaas|saas)\b/i, "environment.cloud", "explicit-cloud-term");
+    addForMatchingField(tags, scopeFields, /\b(?:windows|linux|macos|android|ios)\b/i, "technology.operating-system", "explicit-operating-system-term");
+    addForMatchingField(tags, scopeFields, /\bactive directory\b/i, "technology.active-directory", "explicit-active-directory-term");
+    addForMatchingField(tags, scopeFields, /\bandroid\b/i, "technology.android", "explicit-android-term");
+    addForMatchingField(tags, scopeFields, APPLE_IOS_PATTERN, "technology.ios", "explicit-ios-term");
+    addForMatchingField(tags, scopeFields, /\bmicrosoft windows\b/i, "product.microsoft-windows", "explicit-product-title");
+    addForMatchingField(tags, scopeFields, /\bred hat enterprise linux\b/i, "product.red-hat-enterprise-linux", "explicit-product-title");
+    addForMatchingField(tags, scopeFields, /\b(?:vmware )?(?:vsphere|esxi)\b/i, "product.vmware-vsphere", "explicit-product-title");
     for (const [prefix, id] of VENDOR_PREFIXES) {
       if (new RegExp(`^${prefix.replace(/ /g, "\\s+")}\\b`, "i").test(benchmarkTitle)) {
         add(tags, id, "metadata.benchmark_title", "explicit-publisher-title-prefix");

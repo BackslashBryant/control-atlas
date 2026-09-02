@@ -6,6 +6,28 @@ import {
   createFederalGraphRuntime,
 } from "../src/app/runtime.mjs";
 import { readGeneratedCollection } from "../scripts/lib/generated-graph-artifacts.mjs";
+import { compareTaxonomyTags } from "../src/ui/lib/compareTaxonomy.mjs";
+
+test("compareTaxonomyTags deduplicates and separates shared and differing governed tags", () => {
+  const result = compareTaxonomyTags([
+    {
+      from_taxonomy_tags: [
+        { id: "framework.rmf", kind: "framework", label: "RMF" },
+        { id: "organization.nist", kind: "organization", label: "NIST" },
+        { id: "organization.nist", kind: "organization", label: "NIST" },
+      ],
+      targets: [{
+        to_taxonomy_tags: [
+          { id: "organization.nist", kind: "organization", label: "NIST" },
+          { id: "framework.nist-csf", kind: "framework", label: "NIST CSF" },
+        ],
+      }],
+    },
+  ]);
+  assert.deepEqual(result.shared.map((tag) => tag.id), ["organization.nist"]);
+  assert.deepEqual(result.onlySource.map((tag) => tag.id), ["framework.rmf"]);
+  assert.deepEqual(result.onlyTarget.map((tag) => tag.id), ["framework.nist-csf"]);
+});
 
 test("aggregateRelationshipRows groups flat edges by source item and preserves all targets", () => {
   const flatRows = [
@@ -142,4 +164,3 @@ test("runtime.exportRelationshipRows handles aggregated rows across CSV, Markdow
   assert.equal(parsed.length, result.rows.length);
   assert.ok(parsed[0].targets.length > 0);
 });
-

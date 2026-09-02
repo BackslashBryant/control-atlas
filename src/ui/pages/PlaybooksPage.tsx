@@ -29,7 +29,7 @@ import type { ViewState } from "../lib/viewState";
 
 const GUIDE_PRESENTATION: Record<
   string,
-  { area: string; Icon: typeof IconFlag; tagIds?: string[] }
+  { area: string; Icon: typeof IconFlag }
 > = Object.freeze({
   "starting-an-authorization": { area: "Governance", Icon: IconFlag },
   "understanding-rmf": { area: "Governance", Icon: IconRoute },
@@ -41,7 +41,7 @@ const GUIDE_PRESENTATION: Record<
   "continuous-monitoring": { area: "Operations", Icon: IconActivityHeartbeat },
   "inheritance-and-common-controls": { area: "Architecture", Icon: IconHierarchy3 },
   reciprocity: { area: "Governance", Icon: IconArrowsExchange },
-  "cloud-and-shared-responsibility": { area: "Architecture", Icon: IconCloud, tagIds: ["environment.cloud"] },
+  "cloud-and-shared-responsibility": { area: "Architecture", Icon: IconCloud },
   "stig-lifecycle": { area: "Implementation", Icon: IconShieldCheck },
 });
 
@@ -219,13 +219,13 @@ export function PlaybooksPage(props: {
               ))}
             </ul>
           </section>
-          {selectedPresentation?.tagIds?.length ? (
+          {selected.taxonomyTagIds?.length ? (
             <section className="ca-contextual-taxonomy" aria-label={`Related Library tags for ${selected.title}`}>
               <h2>Explore related Library records</h2>
               <p>
                 These tags link to related records for this topic. They don't mean every one applies to your system.
               </p>
-              <TaxonomyTagLinks onNavigate={onNavigate} tagIds={selectedPresentation.tagIds} />
+              <TaxonomyTagLinks onNavigate={onNavigate} tagIds={selected.taxonomyTagIds} />
             </section>
           ) : null}
           <div className="actions">

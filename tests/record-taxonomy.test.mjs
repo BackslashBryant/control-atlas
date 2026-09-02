@@ -23,6 +23,32 @@ test("taxonomy distinguishes workstation, cloud, and Active Directory from expli
   ]);
 });
 
+test("Apple iOS remains distinct from Cisco IOS and records the field that matched", () => {
+  const apple = taxonomyTagsForRecord({
+    metadata: { benchmark_title: "Apple iOS/iPadOS 26 Security Technical Implementation Guide" },
+  });
+  assert.ok(apple.some((tag) => tag.id === "asset.mobile"));
+  assert.ok(apple.some((tag) => tag.id === "technology.ios"));
+  assert.ok(apple.some((tag) => tag.id === "technology.operating-system"));
+
+  for (const title of [
+    "Cisco IOS Router NDM Security Technical Implementation Guide",
+    "Cisco IOS XE Switch RTR Security Technical Implementation Guide",
+    "Cisco ios xr Router RTR Security Technical Implementation Guide",
+  ]) {
+    const cisco = taxonomyTagsForRecord({ metadata: { benchmark_title: title } });
+    assert.ok(!cisco.some((tag) => tag.id === "asset.mobile"), title);
+    assert.ok(!cisco.some((tag) => tag.id === "technology.ios"), title);
+    assert.ok(cisco.some((tag) => tag.id === "technology.operating-system"), title);
+  }
+
+  const fromFamily = taxonomyTagsForRecord({ family: "Cloud services" });
+  assert.equal(
+    fromFamily.find((tag) => tag.id === "environment.cloud")?.basis.source_field,
+    "family",
+  );
+});
+
 test("publisher security domains use exact NIST family fields and ignore incidental free text", () => {
   assert.deepEqual(taxonomyTagsForRecord({ family: "Physical and Environmental Protection" }).map((tag) => tag.label), ["Physical security", "Physical Security"]);
   assert.deepEqual(taxonomyTagsForRecord({ family: "Physical Protection" }).map((tag) => tag.label), ["Physical security", "Physical Security"]);

@@ -67,6 +67,7 @@ import {
   structurePathIsAllowed,
 } from "../src/shared/catalog-structure.mjs";
 import { TAXONOMY_CONTRACT } from "../src/shared/taxonomy-contract.mjs";
+import { IDENTITY_REGISTRY } from "../src/shared/identity-registry.mjs";
 import { taxonomyTagsForRecord } from "../src/shared/record-taxonomy.mjs";
 import { repairKnownSourceEncoding } from "../src/shared/text-fidelity.mjs";
 import {
@@ -2399,6 +2400,8 @@ function artifact(collection, values, generatedAt) {
 
 export function buildTaxonomyCoverage(nodes, catalogs) {
   const catalogNames = new Map(catalogs.map((catalog) => [catalog.id, catalog.name]));
+  const taxonomyTagById = new Map(TAXONOMY_CONTRACT.tags.map((tag) => [tag.id, tag]));
+  const identityByKey = new Map(IDENTITY_REGISTRY.map((identity) => [identity.key, identity]));
   const byCatalog = new Map();
   const byRecordType = new Map();
   const byDimension = new Map(
@@ -2417,7 +2420,15 @@ export function buildTaxonomyCoverage(nodes, catalogs) {
   );
   const bySourceField = new Map();
   const bySourceBasis = new Map();
+  const byAssignmentLayer = new Map();
+  const byRule = new Map();
   const byNotApplicableBasis = new Map();
+  const assignedTagIds = new Set();
+  const identityAssignedRecordIds = new Set();
+  const fallbackAssignedRecordIds = new Set();
+  const unresolvedLegacyLabels = new Map();
+  let identityTagAssignments = 0;
+  let fallbackTagAssignments = 0;
   const records = nodes.filter(
     (node) =>
       node.metadata?.catalog_id &&
@@ -2454,6 +2465,7 @@ export function buildTaxonomyCoverage(nodes, catalogs) {
     const dimensionsSeen = new Set();
     for (const tag of tags) {
       const dimension = tag.kind;
+      assignedTagIds.add(tag.id);
       const dimensionEntry = byDimension.get(dimension);
       if (dimensionEntry) {
         dimensionEntry.tag_assignments += 1;
@@ -2473,6 +2485,49 @@ export function buildTaxonomyCoverage(nodes, catalogs) {
 
       const assignmentProvenance = tag.provenance || "unrecorded";
       const taxonomyLayer = TAXONOMY_CONTRACT.assignment_provenance_layers[assignmentProvenance] || "unrecorded";
+      const assignmentLayerEntry = byAssignmentLayer.get(taxonomyLayer) || {
+        taxonomy_layer: taxonomyLayer,
+        record_ids: new Set(),
+        tag_assignments: 0,
+      };
+      assignmentLayerEntry.record_ids.add(node.id);
+      assignmentLayerEntry.tag_assignments += 1;
+      byAssignmentLayer.set(taxonomyLayer, assignmentLayerEntry);
+
+      const rule = tag.basis?.rule || "unrecorded";
+      const ruleEntry = byRule.get(rule) || {
+        rule,
+        record_ids: new Set(),
+        tag_assignments: 0,
+      };
+      ruleEntry.record_ids.add(node.id);
+      ruleEntry.tag_assignments += 1;
+      byRule.set(rule, ruleEntry);
+
+      const governedTag = taxonomyTagById.get(tag.id);
+      if (!governedTag || governedTag.label !== tag.label) {
+        const legacyKey = `${tag.id}|${tag.label || ""}`;
+        const legacyEntry = unresolvedLegacyLabels.get(legacyKey) || {
+          tag_id: tag.id,
+          observed_label: tag.label || "",
+          expected_label: governedTag?.label || null,
+          record_ids: new Set(),
+        };
+        legacyEntry.record_ids.add(node.id);
+        unresolvedLegacyLabels.set(legacyKey, legacyEntry);
+      }
+      const identity = governedTag?.identity_key
+        ? identityByKey.get(governedTag.identity_key)
+        : null;
+      if (identity) {
+        identityTagAssignments += 1;
+        identityAssignedRecordIds.add(node.id);
+        if (identity.verification_status === "fallback_only") {
+          fallbackTagAssignments += 1;
+          fallbackAssignedRecordIds.add(node.id);
+        }
+      }
+
       const basisKey = [taxonomyLayer, assignmentProvenance, sourceField, tag.basis?.rule || "unrecorded"].join("|");
       const basisEntry = bySourceBasis.get(basisKey) || {
         taxonomy_layer: taxonomyLayer,
@@ -2540,6 +2595,19 @@ export function buildTaxonomyCoverage(nodes, catalogs) {
     not_applicable: summary.not_applicable + dimension.not_applicable_record_count,
     unreviewed: summary.unreviewed + dimension.unreviewed_record_count,
   }), { applicable: 0, not_applicable: 0, unreviewed: 0 });
+  const totalTagAssignments = [...byDimension.values()]
+    .reduce((total, dimension) => total + dimension.tag_assignments, 0);
+  const percentage = (count, total) => total ? Number(((count / total) * 100).toFixed(2)) : 0;
+  const identityLinkedTerms = TAXONOMY_CONTRACT.tags.filter((tag) => tag.identity_key);
+  const unresolvedIdentityTerms = identityLinkedTerms.filter(
+    (tag) => !identityByKey.has(tag.identity_key),
+  );
+  const officialMarkIdentities = IDENTITY_REGISTRY.filter(
+    (identity) => identity.verification_status === "verified" && identity.asset_path,
+  );
+  const fallbackIdentities = IDENTITY_REGISTRY.filter(
+    (identity) => identity.verification_status === "fallback_only",
+  );
 
   return {
     contract_version: TAXONOMY_CONTRACT.version,
@@ -2547,6 +2615,49 @@ export function buildTaxonomyCoverage(nodes, catalogs) {
     tagged_record_count: records.filter((node) => (node.metadata?.taxonomy_tags || []).length > 0).length,
     record_dimension_decision_count: records.length * TAXONOMY_CONTRACT.dimensions.length,
     decision_counts: decisionCounts,
+    assignment_layers: [...byAssignmentLayer.values()]
+      .map((entry) => ({
+        taxonomy_layer: entry.taxonomy_layer,
+        record_count: entry.record_ids.size,
+        tag_assignments: entry.tag_assignments,
+        assignment_percentage: percentage(entry.tag_assignments, totalTagAssignments),
+      }))
+      .sort((left, right) => left.taxonomy_layer.localeCompare(right.taxonomy_layer)),
+    rules: [...byRule.values()]
+      .map((entry) => ({
+        rule: entry.rule,
+        record_count: entry.record_ids.size,
+        tag_assignments: entry.tag_assignments,
+      }))
+      .sort((left, right) => right.tag_assignments - left.tag_assignments || left.rule.localeCompare(right.rule)),
+    identity_coverage: {
+      taxonomy_term_count: TAXONOMY_CONTRACT.tags.length,
+      identity_linked_term_count: identityLinkedTerms.length,
+      unresolved_identity_term_count: unresolvedIdentityTerms.length,
+      unresolved_identity_term_ids: unresolvedIdentityTerms.map((tag) => tag.id).sort(),
+      assigned_term_count: assignedTagIds.size,
+      assigned_identity_term_count: [...assignedTagIds]
+        .filter((tagId) => taxonomyTagById.get(tagId)?.identity_key)
+        .length,
+      identity_tag_assignment_count: identityTagAssignments,
+      identity_record_count: identityAssignedRecordIds.size,
+    },
+    mark_coverage: {
+      identity_count: IDENTITY_REGISTRY.length,
+      official_mark_count: officialMarkIdentities.length,
+      fallback_identity_count: fallbackIdentities.length,
+      fallback_tag_assignment_count: fallbackTagAssignments,
+      fallback_record_count: fallbackAssignedRecordIds.size,
+      official_mark_percentage: percentage(officialMarkIdentities.length, IDENTITY_REGISTRY.length),
+    },
+    unresolved_legacy_labels: [...unresolvedLegacyLabels.values()]
+      .map((entry) => ({
+        tag_id: entry.tag_id,
+        observed_label: entry.observed_label,
+        expected_label: entry.expected_label,
+        record_count: entry.record_ids.size,
+      }))
+      .sort((left, right) => left.tag_id.localeCompare(right.tag_id)),
     catalogs: [...byCatalog.values()].sort((left, right) => left.catalog_id.localeCompare(right.catalog_id)),
     record_types: [...byRecordType.values()].sort((left, right) => left.record_type.localeCompare(right.record_type)),
     dimensions: [...byDimension.values()],

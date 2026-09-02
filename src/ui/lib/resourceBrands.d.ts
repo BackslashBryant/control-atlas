@@ -20,6 +20,7 @@ export type ResourceBrandIdentity = {
   initials: string;
   accent: ResourceBrandAccent;
   parentEcosystem: string | null;
+  canonicalIdentityKey?: string | null;
   variantKey?: string;
   source: "registry" | "fallback";
 };

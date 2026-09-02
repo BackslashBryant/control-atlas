@@ -156,7 +156,9 @@ export function ExplorePage(props: {
   // Tag-scoped results reach beyond publications, so the Library's own empty
   // state must not report "nothing" while tagged resources and templates exist.
   const crossContentEntries = useMemo(
-    () => (state.tags.length > 0 ? queryDiscoveryIndex(state.tags) : []),
+    () => (state.tags.length > 0
+      ? queryDiscoveryIndex(state.tags).filter((entry: any) => entry.content_type !== "record")
+      : []),
     [state.tags],
   );
   const crossContentCount = crossContentEntries.length;
@@ -805,8 +807,8 @@ export function ExplorePage(props: {
                     <h2>No publications carry this tag yet.</h2>
                     <p>
                       {crossContentCount === 1
-                        ? "One resource or template below is tagged this way."
-                        : `${crossContentCount} resources and templates below are tagged this way.`}
+                        ? "One related item below is tagged this way."
+                        : `${crossContentCount} related items below are tagged this way.`}
                     </p>
                   </>
                 ) : (
@@ -822,40 +824,39 @@ export function ExplorePage(props: {
         </ul>
         {state.tags.length > 0 ? (() => {
           const crossContent = crossContentEntries;
-          const resources = crossContent.filter((e: any) => e.content_type === "resource");
-          const templates = crossContent.filter((e: any) => e.content_type === "template");
-          if (resources.length === 0 && templates.length === 0) return null;
+          const groups = [
+            { type: "catalog", label: "Catalogs" },
+            { type: "guide", label: "Guides" },
+            { type: "resource", label: "Resources" },
+            { type: "template", label: "Templates" },
+          ].map((group) => ({
+            ...group,
+            entries: crossContent.filter((entry: any) => entry.content_type === group.type),
+          })).filter((group) => group.entries.length > 0);
+          if (groups.length === 0) return null;
           return (
             <section className="cross-content-discovery" aria-label="Related content across Control Atlas">
               <h2>Also in Control Atlas</h2>
-              {resources.length > 0 ? (
-                <div>
-                  <h3>Resources ({resources.length})</h3>
+              {groups.map((group) => (
+                <div key={group.type}>
+                  <h3>{group.label} ({group.entries.length})</h3>
                   <ul className="cross-content-list">
-                    {resources.slice(0, 8).map((entry: any) => (
+                    {group.entries.slice(0, 8).map((entry: any) => (
                       <li key={entry.content_id}>
-                        <AppLink onNavigate={onNavigate} patch={{ id: entry.content_id }} view="commons-detail">
-                          {entry.title}
-                        </AppLink>
+                        {entry.content_type === "resource" ? (
+                          <AppLink onNavigate={onNavigate} patch={{ id: entry.content_id }} view="commons-detail">{entry.title}</AppLink>
+                        ) : entry.content_type === "template" ? (
+                          <AppLink onNavigate={onNavigate} patch={{ templateType: entry.template_name, buildSection: "documents" }} view="templates">{entry.title}</AppLink>
+                        ) : entry.content_type === "catalog" ? (
+                          <AppLink onNavigate={onNavigate} patch={{ catalog: entry.catalog_id }} view="catalog-detail">{entry.title}</AppLink>
+                        ) : (
+                          <AppLink onNavigate={onNavigate} patch={{ pattern: entry.content_id.replace(/^guide:/, "") }} view="patterns">{entry.title}</AppLink>
+                        )}
                       </li>
                     ))}
                   </ul>
                 </div>
-              ) : null}
-              {templates.length > 0 ? (
-                <div>
-                  <h3>Templates ({templates.length})</h3>
-                  <ul className="cross-content-list">
-                    {templates.map((entry: any) => (
-                      <li key={entry.content_id}>
-                        <AppLink onNavigate={onNavigate} patch={{ templateType: entry.content_id.replace(/^tpl-/, ""), buildSection: "documents" }} view="templates">
-                          {entry.title}
-                        </AppLink>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
+              ))}
             </section>
           );
         })() : null}

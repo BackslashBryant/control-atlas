@@ -3,10 +3,10 @@ import registry from "../../data/generated/taxonomy-registry.json" with { type: 
 const RECORD_SOURCE_BASIS = {
   domain: ["family", "metadata.related_categories[]"],
   asset_class: ["metadata.benchmark_title", "metadata.identity_category", "family", "catalog_id"],
-  environment: ["metadata.benchmark_title"],
-  technology: ["metadata.benchmark_title"],
+  environment: ["metadata.benchmark_title", "metadata.identity_category", "family"],
+  technology: ["metadata.benchmark_title", "metadata.identity_category", "family"],
   vendor_brand: ["metadata.benchmark_title"],
-  product: ["metadata.benchmark_title"],
+  product: ["metadata.benchmark_title", "metadata.identity_category", "family"],
   organization: ["catalog_id"],
   framework: ["catalog_id"],
   program: ["catalog_id", "metadata.benchmark_title"],

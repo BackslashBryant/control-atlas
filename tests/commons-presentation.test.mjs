@@ -19,6 +19,7 @@ import {
   resourceBrandIdentity,
   resourceTypeLabel,
 } from "../src/ui/lib/resourceBrands.mjs";
+import { resolveIdentityByKey } from "../src/shared/identity-registry.mjs";
 
 const dataset = JSON.parse(
   readFileSync(resolve("data/commons-resource-dataset.json"), "utf8"),
@@ -325,6 +326,18 @@ test("brand resolution prefers the specific ecosystem over a generic host", () =
   const subreddit = resourceBrandIdentity(cases[0][0]);
   assert.equal(subreddit.ownerLabel, "r/NISTControls");
   assert.equal(subreddit.variantKey, "subreddit:nistcontrols");
+});
+
+test("overlapping Commons brands source canonical identity text from the identity registry", () => {
+  for (const key of ["fedramp", "nist", "cisa", "disa", "microsoft", "mitre", "dcsa"]) {
+    const canonical = resolveIdentityByKey(key);
+    const resourceBrand = RESOURCE_BRAND_REGISTRY[key];
+    assert.ok(canonical, key);
+    assert.equal(resourceBrand.canonicalIdentityKey, key);
+    assert.equal(resourceBrand.ownerLabel, canonical.label);
+    assert.equal(resourceBrand.accessibleName, canonical.accessible_name);
+  }
+  assert.equal(RESOURCE_BRAND_REGISTRY.reddit.canonicalIdentityKey, null);
 });
 
 test("registry recognizes future required identities without adding image assets", () => {
