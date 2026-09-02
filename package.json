@@ -141,7 +141,7 @@
     "verify:quality": "npm run verify:contracts && npm run lint:ci && npm run typecheck && npm test"
   },
   "engines": {
-    "node": ">=22.22.0"
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
   },
   "overrides": {
     "tmp": "0.2.7",
@@ -162,18 +162,18 @@
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.61.1",
     "@tailwindcss/vite": "^4.3.3",
-    "@types/node": "^26.1.1",
+    "@types/node": "^26.4.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@typescript-eslint/eslint-plugin": "^8.61.1",
-    "@typescript-eslint/parser": "^8.61.1",
+    "@typescript-eslint/eslint-plugin": "^8.69.0",
+    "@typescript-eslint/parser": "^8.69.0",
     "@vitejs/plugin-react": "^6.1.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "eslint": "^10.5.0",
-    "fast-xml-parser": "^5.10.1",
+    "fast-xml-parser": "^5.11.1",
     "globals": "^17.7.0",
-    "make-fetch-happen": "^14.0.3",
+    "make-fetch-happen": "^16.0.1",
     "pdf-parse": "^2.4.5",
     "read-excel-file": "^9.2.0",
     "spdx-expression-parse": "^5.0.0",
@@ -186,7 +186,7 @@
     "@radix-ui/react-accordion": "^1.2.14",
     "@radix-ui/react-dialog": "^1.1.17",
     "@tabler/icons-react": "^3.44.0",
-    "@xyflow/react": "^12.11.1",
+    "@xyflow/react": "^12.11.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "elkjs": "^0.12.0",
