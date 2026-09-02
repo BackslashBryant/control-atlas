@@ -11,7 +11,6 @@
 | EXT-DEVICE-001 | Physical iOS and Android phone verification | Human QA | Before any claim of physical-device coverage |
 | EXT-SEC-001 | Independent penetration test | Product owner | Before a formal external security-assurance claim |
 | TAX-RULES-001 | `tool`, `artifact`, and `topic` carry no record-level assignment rules, so they never appear as record facets. Closing this means writing governed source-backed rules, not UI work. | Product owner | Before presenting those dimensions as record filters |
-| TAX-RESULT-001 | Library and search result rows carry no tags. Add at most three high-signal clickable tags per row without hurting scan speed. | Product owner | Before claiming the taxonomy epic's search-surface acceptance criteria |
 | TAX-INDEX-001 | `data/generated/discovery-index.json` covers resources and templates only (100 entries). Extend to records, catalogs, guides, and the Intel contract so a tag opens genuinely cross-content results. | Product owner | Before claiming unified cross-content discovery |
 | TAX-COVER-001 | Coverage reporting omits the governed metrics the taxonomy contract requires: direct vs derived assignment counts, identity coverage, official-mark coverage, fallback usage, and unresolved legacy labels. | Product owner | Before publishing a taxonomy coverage claim |
 | TAX-COMPARE-001 | Compare shows no shared or differing tags between the two selected publications. | Product owner | Optional; the taxonomy epic marks this non-blocking |
