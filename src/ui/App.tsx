@@ -611,10 +611,11 @@ export function App() {
     const nextLocation = serializeHashLocation(nextState);
     if (nextLocation === serializeHashLocation(current)) return;
     const changesWorkspace = routeTransitionScope(current) !== routeTransitionScope(nextState);
-    if (
-      changesWorkspace &&
-      !beginRouteTransition("Opening the selected workspace", nextLocation)
-    ) return;
+    if (changesWorkspace) {
+      // The transition is presentation state. A stale or duplicate visual
+      // transition must never veto the underlying route change.
+      beginRouteTransition("Opening the selected workspace", nextLocation);
+    }
     if (changesWorkspace) pushNavigationRef.current = true;
     latestNavStateRef.current = nextState;
     routerNavigate(nextLocation);

@@ -434,9 +434,14 @@ function PublicationInspector(props: {
           >
             <PublicationInspectorContent
               close={
-                <Dialog.Close aria-label="Close inspector" className="source-inspector-close" type="button">
+                <button
+                  aria-label="Close inspector"
+                  className="source-inspector-close"
+                  onClick={props.onClose}
+                  type="button"
+                >
                   Close
-                </Dialog.Close>
+                </button>
               }
               heading={<Dialog.Title className="source-inspector-title">{title}</Dialog.Title>}
               publication={props.publication}
