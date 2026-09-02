@@ -484,10 +484,7 @@ function connectStaticHeader() {
       void bootReactApp().then((booted) => {
         if (!booted) return;
         completeRouteTransition();
-        // SearchOverlay attaches its event listener from a passive React effect.
-        // Give that effect the same short settling window as the keyboard path
-        // below so a cold Home boot cannot lose the open request.
-        window.setTimeout(() => requestSearchOverlayOpen(), 60);
+        requestSearchOverlayOpen();
       });
     });
 }
@@ -501,11 +498,7 @@ function onStaticSearchShortcut(event: KeyboardEvent) {
     event.preventDefault();
     void bootReactApp().then((booted) => {
       if (!booted) return;
-      // React's passive effects (which attach the listener this event needs)
-      // flush asynchronously after commit, not within this same microtask —
-      // a rAF landed before that flush and the event was lost. A short delay
-      // clears it reliably; it is imperceptible on a keypress.
-      window.setTimeout(() => requestSearchOverlayOpen(), 60);
+      requestSearchOverlayOpen();
     });
   }
 }
