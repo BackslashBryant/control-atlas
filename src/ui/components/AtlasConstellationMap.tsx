@@ -123,6 +123,11 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
     [frameworks.edges],
   );
 
+  const heaviest = useMemo(
+    () => [...frameworks.edges].sort((a, b) => b.relationshipCount - a.relationshipCount).slice(0, 8),
+    [frameworks.edges],
+  );
+
   const active = activeId ? nodeById.get(activeId) : undefined;
   const activeEdges = useMemo(() => {
     if (!activeId) return [] as AtlasProjectionEdge[];
@@ -348,6 +353,39 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
                   <dd>{formatCount(frameworks.edges.length)}</dd>
                 </div>
               </dl>
+              {/* The resting panel would otherwise be an empty column beside a
+                  dense picture. The heaviest pairings are the honest thing to
+                  put there: they answer "where is there actually something to
+                  see?" without the reader having to hunt for it. */}
+              <h4>Heaviest crosswalks</h4>
+              <ul className="atlas-constellation__crosswalks">
+                {heaviest.map((edge) => {
+                  const from = nodeById.get(edge.source);
+                  const to = nodeById.get(edge.target);
+                  if (!from || !to) return null;
+                  return (
+                    <li key={edge.id}>
+                      <button
+                        onClick={() => from.node.drill && onDrill(from.node.drill)}
+                        onFocus={() => setActiveId(from.node.id)}
+                        onMouseEnter={() => setActiveId(from.node.id)}
+                        style={
+                          { "--ca-area-color": `var(${from.areaToken})` } as CSSProperties
+                        }
+                        type="button"
+                      >
+                        <span aria-hidden="true" className="atlas-constellation__dot" />
+                        <span className="atlas-constellation__crosswalk-name">
+                          {from.shortName} ↔ {to.shortName}
+                        </span>
+                        <span className="atlas-constellation__crosswalk-count">
+                          {formatCount(edge.relationshipCount)}
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           )}
         </aside>

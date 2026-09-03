@@ -26,6 +26,7 @@ import { AcronymText } from "../components/AccessibleTerm";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
 import { AtlasConstellationMap } from "../components/AtlasConstellationMap";
 import { AtlasDecompositionMap } from "../components/AtlasDecompositionMap";
+import { AtlasLensBar } from "../components/AtlasLensBar";
 import { AtlasPivotTrailBar } from "../components/AtlasPivotTrailBar";
 import {
   atlasProjectionRecordLabels,
@@ -557,6 +558,23 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           </div>
         </div>
       ) : null}
+
+      <AtlasLensBar
+        activePublicationId={state.atlasFramework}
+        onPick={(entry) =>
+          patchAtlas({
+            node: "",
+            atlasAxis: "",
+            atlasLimb: entry.ecosystemId,
+            atlasFramework: entry.publicationId,
+            atlasFamily: "",
+            atlasPivotTrail: "",
+            relationshipView: "",
+          })
+        }
+        onWholeLandscape={atlasHome}
+        scoped={Boolean(state.atlasLimb || state.atlasFramework || state.atlasFamily || nodeId)}
+      />
 
       {/* With nothing chosen, the landing is the landscape itself — the
           frameworks and the crosswalks between them. Once a publisher or a
