@@ -68,6 +68,37 @@ export type AtlasGraphProjection = {
   suppressedRelationshipCount: number;
 };
 
+/**
+ * Two frameworks that land on the same records without anyone having published
+ * a mapping between them.
+ *
+ * NIST wrote a Zero Trust to 800-53 mapping and DoD wrote one too; neither
+ * wrote one to the other. Showing only published crosswalks therefore draws
+ * them as strangers, when 53 of the controls they select are the same control.
+ * That shared ground is the thing a practitioner is actually looking for, and
+ * it is derivable from published mappings without inventing one: the records in
+ * common are named, so the claim can be followed back to the source.
+ */
+export type AtlasSharedGroundEdge = {
+  id: string;
+  source: string;
+  target: string;
+  /** Records both frameworks map to. */
+  sharedCount: number;
+  /**
+   * Share of the narrower framework's selections *in the shared publications*
+   * that the wider one also makes, 0..1. Measured there rather than against
+   * everything each side maps to: NIST Zero Trust also maps into CSF, and
+   * counting those would dilute a statement that is only about the 800-53
+   * controls the two actually meet on.
+   */
+  overlapRatio: number;
+  /** Publications those shared records live in, most-shared first. */
+  viaPublicationIds: string[];
+  /** Enough shared records to show the reader what the overlap is made of. */
+  sampleNodeIds: string[];
+};
+
 export type AtlasRecordLocation = {
   ecosystemId: string;
   areaId: string;
@@ -92,6 +123,12 @@ export type AtlasSemanticProjectionArtifact = {
    * crosswalk set: 800-53 to CSF, CSF to 800-171, ATT&CK to D3FEND.
    */
   frameworks: AtlasGraphProjection;
+  /**
+   * Framework pairs with no published crosswalk that nonetheless select the
+   * same records. Kept apart from the projection's own edges so a derived
+   * overlap can never be counted or drawn as a published mapping.
+   */
+  framework_shared_ground: AtlasSharedGroundEdge[];
   ecosystems: Record<string, AtlasGraphProjection>;
   areas: Record<string, AtlasGraphProjection>;
   publications: Record<string, AtlasGraphProjection>;
@@ -474,6 +511,84 @@ function detailFor(graph: AtlasGraph, parent: AtlasProjectionNode) {
   });
 }
 
+/**
+ * Below this an overlap is coincidence rather than a finding, and saying so
+ * would add noise to the one picture that has to stay readable.
+ */
+const MIN_SHARED_GROUND = 3;
+
+/**
+ * Derives framework pairs that meet on the same records. Reads published edges
+ * only, and reports what the overlap is made of rather than asserting a
+ * mapping that no publisher wrote.
+ */
+function buildSharedGround(options: {
+  graph: AtlasGraph;
+  catalogOf: Map<string, string>;
+  nodeIdForCatalog: Map<string, string>;
+  publishedPairs: Set<string>;
+}): AtlasSharedGroundEdge[] {
+  const { graph, catalogOf, nodeIdForCatalog, publishedPairs } = options;
+  // Which outside records each catalog maps to.
+  const selects = new Map<string, Set<string>>();
+  graph.forEachEdge((_id, _attributes, sourceId, targetId) => {
+    const from = catalogOf.get(sourceId);
+    const to = catalogOf.get(targetId);
+    if (!from || !to || from === to) return;
+    if (!selects.has(from)) selects.set(from, new Set());
+    if (!selects.has(to)) selects.set(to, new Set());
+    selects.get(from)!.add(targetId);
+    selects.get(to)!.add(sourceId);
+  });
+  const catalogs = [...selects.keys()].filter((id) => nodeIdForCatalog.has(id)).sort();
+  const derived: AtlasSharedGroundEdge[] = [];
+  for (let left = 0; left < catalogs.length; left += 1) {
+    for (let right = left + 1; right < catalogs.length; right += 1) {
+      const a = catalogs[left]!;
+      const b = catalogs[right]!;
+      // A published mapping is the better answer; overlap only speaks where
+      // nobody has spoken.
+      if (publishedPairs.has(`${a}|${b}`)) continue;
+      const mine = selects.get(a)!;
+      const theirs = selects.get(b)!;
+      const [small, large] = mine.size <= theirs.size ? [mine, theirs] : [theirs, mine];
+      const shared: string[] = [];
+      for (const id of small) {
+        if (!large.has(id)) continue;
+        const owner = catalogOf.get(id);
+        if (owner === a || owner === b) continue;
+        shared.push(id);
+      }
+      if (shared.length < MIN_SHARED_GROUND) continue;
+      const byCatalog = new Map<string, number>();
+      for (const id of shared) {
+        const owner = catalogOf.get(id) || "";
+        if (owner) byCatalog.set(owner, (byCatalog.get(owner) || 0) + 1);
+      }
+      shared.sort();
+      const viaCatalogs = new Set(shared.map((id) => catalogOf.get(id) || ""));
+      const withinVia = (pool: Set<string>) => {
+        let count = 0;
+        for (const id of pool) if (viaCatalogs.has(catalogOf.get(id) || "")) count += 1;
+        return count;
+      };
+      const narrower = Math.min(withinVia(mine), withinVia(theirs)) || 1;
+      derived.push({
+        id: `shared:${a} ${b}`,
+        source: nodeIdForCatalog.get(a)!,
+        target: nodeIdForCatalog.get(b)!,
+        sharedCount: shared.length,
+        overlapRatio: Number((shared.length / narrower).toFixed(3)),
+        viaPublicationIds: [...byCatalog.entries()]
+          .sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]))
+          .map(([id]) => id),
+        sampleNodeIds: shared.slice(0, 8),
+      });
+    }
+  }
+  return derived.sort((x, y) => y.sharedCount - x.sharedCount || x.id.localeCompare(y.id));
+}
+
 /** Builds presentation-only graph projections; it never writes canonical graph attributes or relationships. */
 export function buildAtlasSemanticProjections(options: {
   graph: AtlasGraph; model: AtlasTreeModel; generatedAt: string; catalogMemberships: AtlasCatalogMembership[];
@@ -668,5 +783,21 @@ export function buildAtlasSemanticProjections(options: {
     });
     publications[publicationId] = projection;
   }
-  return { schema_version: "2.2", generated_at: options.generatedAt, canonical: { node_count: graph.order, edge_count: graph.size }, landscape, frameworks, ecosystems, areas, publications, details, record_locations: locations };
+  const catalogOf = new Map<string, string>();
+  for (const [catalog, ids] of idsForCatalog) {
+    for (const id of ids) catalogOf.set(id, catalog);
+  }
+  const nodeIdForCatalog = new Map(
+    frameworks.nodes.map((node) => [node.publicationId, node.id]),
+  );
+  const publishedPairs = new Set(
+    frameworks.edges.map((edge) => {
+      const from = frameworks.nodes.find((node) => node.id === edge.source)?.publicationId || "";
+      const to = frameworks.nodes.find((node) => node.id === edge.target)?.publicationId || "";
+      return [from, to].sort().join("|");
+    }),
+  );
+  const sharedGround = buildSharedGround({ graph, catalogOf, nodeIdForCatalog, publishedPairs });
+
+  return { schema_version: "2.2", generated_at: options.generatedAt, canonical: { node_count: graph.order, edge_count: graph.size }, landscape, frameworks, framework_shared_ground: sharedGround, ecosystems, areas, publications, details, record_locations: locations };
 }

@@ -13242,6 +13242,44 @@ input[type="checkbox"] {
   opacity: 0.34;
 }
 
+/* Derived overlap, never drawn like a published mapping. Dashed and unsaturated
+   so the eye reads it as the weaker claim it is, which is the whole point of
+   separating the two. */
+.atlas-constellation__node[data-state="shared"] {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--ca-area-color) 55%, transparent);
+  opacity: 0.85;
+}
+
+.atlas-constellation__wire--shared {
+  opacity: 0.6;
+  stroke: var(--ca-text-muted);
+  stroke-dasharray: 5 5;
+}
+
+.atlas-constellation__panel h4 span {
+  margin-left: var(--ca-space-2);
+  padding: 1px 6px;
+  border: 1px dashed var(--ca-border);
+  border-radius: 999px;
+  color: var(--ca-text-muted);
+  font-size: 0.5625rem;
+  letter-spacing: 0.08em;
+}
+
+.atlas-constellation__crosswalks--shared .atlas-constellation__dot {
+  background: none;
+  border: 1px dashed var(--ca-area-color);
+}
+
+.atlas-constellation__crosswalk-name em {
+  display: block;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  font-style: normal;
+}
+
 /* Everything on this diagram maps to the hub, so it is drawn as the thing
    everything points at rather than as one more equal box. */
 .atlas-constellation__node[data-hub="true"] {

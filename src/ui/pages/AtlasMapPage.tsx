@@ -612,6 +612,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           <AtlasConstellationMap
             compact={compact}
             frameworks={bundle.atlasNetwork.frameworks}
+            sharedGround={bundle.atlasNetwork.framework_shared_ground || []}
             onDrill={drillAtlas}
           />
         )

@@ -6,12 +6,15 @@ import type {
   AtlasProjectionDrill,
   AtlasProjectionEdge,
   AtlasProjectionNode,
+  AtlasSharedGroundEdge,
 } from "../lib/atlasGraphProjection";
 import { areaPresentationForCatalog } from "../lib/areaVisualLanguage";
 import { catalogProfileFor, catalogShortNameFor } from "../lib/catalogProfiles";
 
 type AtlasConstellationMapProps = {
   frameworks: AtlasGraphProjection;
+  /** Pairs that select the same records without a published mapping. */
+  sharedGround: AtlasSharedGroundEdge[];
   onDrill: (drill: AtlasProjectionDrill) => void;
   compact: boolean;
 };
@@ -91,7 +94,7 @@ function scaleFor(records: number): ConstellationNode["scale"] {
  * hub, these are its neighbours, that cluster over there is its own world.
  */
 export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
-  const { frameworks, onDrill, compact } = props;
+  const { frameworks, sharedGround, onDrill, compact } = props;
   const [activeId, setActiveId] = useState("");
 
   const nodes = useMemo<ConstellationNode[]>(() => {
@@ -188,6 +191,32 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
     [activeEdges, activeId],
   );
 
+  // Overlaps are revealed on demand, never at rest. Forty-eight more lines
+  // would bury the twenty-seven published ones, and the published mapping is
+  // the stronger claim — so the resting picture stays the map of what
+  // publishers have actually stated, and pointing at a framework adds what the
+  // records say underneath it.
+  const activeSharedGround = useMemo(() => {
+    if (!activeId) return [] as AtlasSharedGroundEdge[];
+    return sharedGround
+      .filter(
+        (edge) =>
+          (edge.source === activeId || edge.target === activeId)
+          && nodeById.has(edge.source)
+          && nodeById.has(edge.target),
+      )
+      .sort((a, b) => b.overlapRatio - a.overlapRatio || b.sharedCount - a.sharedCount);
+  }, [activeId, sharedGround, nodeById]);
+  const sharedIds = useMemo(
+    () =>
+      new Set(
+        activeSharedGround.map((edge) =>
+          edge.source === activeId ? edge.target : edge.source,
+        ),
+      ),
+    [activeSharedGround, activeId],
+  );
+
   function nodeStyle(entry: ConstellationNode): CSSProperties {
     return {
       left: `${entry.x}%`,
@@ -199,7 +228,8 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
   function nodeState(entry: ConstellationNode): string {
     if (!activeId) return "rest";
     if (entry.node.id === activeId) return "active";
-    return adjacentIds.has(entry.node.id) ? "adjacent" : "muted";
+    if (adjacentIds.has(entry.node.id)) return "adjacent";
+    return sharedIds.has(entry.node.id) ? "shared" : "muted";
   }
 
   const summary = (
@@ -291,6 +321,24 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
                   key={edge.id}
                   stroke={`var(${from.areaToken})`}
                   strokeWidth={edgeWeight(edge.relationshipCount)}
+                  vectorEffect="non-scaling-stroke"
+                />
+              );
+            })}
+            {activeSharedGround.map((edge) => {
+              const from = nodeById.get(edge.source);
+              const to = nodeById.get(edge.target);
+              if (!from || !to) return null;
+              const midX = (from.x + to.x) / 2;
+              const midY = (from.y + to.y) / 2;
+              const bowX = midX + (to.y - from.y) * 0.085;
+              const bowY = midY - (to.x - from.x) * 0.085;
+              return (
+                <path
+                  className="atlas-constellation__wire atlas-constellation__wire--shared"
+                  d={`M${from.x} ${from.y} Q${bowX} ${bowY} ${to.x} ${to.y}`}
+                  key={edge.id}
+                  strokeWidth={Math.max(1, 1 + edge.overlapRatio * 2)}
                   vectorEffect="non-scaling-stroke"
                 />
               );
@@ -402,6 +450,51 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
                   publication yet. Its records are still fully browsable.
                 </p>
               )}
+              {activeSharedGround.length ? (
+                <>
+                  <h4>
+                    Lands on the same records as
+                    <span title="Derived from published mappings, not a published mapping itself">
+                      derived
+                    </span>
+                  </h4>
+                  <ul className="atlas-constellation__crosswalks atlas-constellation__crosswalks--shared">
+                    {activeSharedGround.slice(0, 8).map((edge) => {
+                      const otherId =
+                        edge.source === active.node.id ? edge.target : edge.source;
+                      const other = nodeById.get(otherId);
+                      if (!other) return null;
+                      return (
+                        <li key={edge.id}>
+                          <button
+                            onClick={() => other.node.drill && onDrill(other.node.drill)}
+                            style={
+                              { "--ca-area-color": `var(${other.areaToken})` } as CSSProperties
+                            }
+                            title={`${edge.sharedCount} records in common, via ${edge.viaPublicationIds
+                              .map((id) => catalogShortNameFor(id))
+                              .join(", ")} — ${Math.round(edge.overlapRatio * 100)}% of the narrower framework's selections there`}
+                            type="button"
+                          >
+                            <span aria-hidden="true" className="atlas-constellation__dot" />
+                            <span className="atlas-constellation__crosswalk-name">
+                              {other.shortName}
+                              <em>
+                                via {catalogShortNameFor(edge.viaPublicationIds[0] || "")}
+                                {" · "}
+                                {Math.round(edge.overlapRatio * 100)}%
+                              </em>
+                            </span>
+                            <span className="atlas-constellation__crosswalk-count">
+                              {formatCount(edge.sharedCount)}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
+              ) : null}
               <button
                 className="atlas-constellation__open"
                 onClick={() => active.node.drill && onDrill(active.node.drill)}
