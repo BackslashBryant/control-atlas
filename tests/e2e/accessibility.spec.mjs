@@ -48,6 +48,11 @@ const ROUTES = [
   { label: "retired recovery", path: "/#/retired?q=old-control" },
   { label: "not found recovery", path: "/#/does-not-exist" },
   { label: "explore", path: "/#/explore" },
+  // Both surveys the unscoped Atlas offers. The landscape is a diagram built
+  // from positioned controls and coloured wires, so it is the one place in the
+  // product where meaning could slip into colour and position alone.
+  { label: "Atlas landscape", path: "/#/atlas" },
+  { label: "Atlas by publisher", path: "/#/atlas?atlasLanding=publishers" },
   {
     label: "focused Atlas Path",
     path: "/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",
