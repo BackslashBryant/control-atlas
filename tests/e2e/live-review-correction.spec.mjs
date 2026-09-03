@@ -63,7 +63,7 @@ for (const viewport of [
 ]) {
   test(`responsive Atlas shell is collision and overflow free at ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/#/atlas");
+    await page.goto("/#/atlas?atlasLanding=publishers");
     await waitForReady(page);
     const dimensions = await page.evaluate(() => ({
       clientWidth: globalThis.document.documentElement.clientWidth,
@@ -105,7 +105,7 @@ for (const zoom of [
 
 test("reduced motion keeps the complete Atlas visible without animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/#/atlas");
+  await page.goto("/#/atlas?atlasLanding=publishers");
   await waitForReady(page);
   const atlas = page.getByTestId("atlas-map");
   await expect(atlas).toHaveAttribute("data-scope-level", "root");
@@ -119,7 +119,7 @@ test("reduced motion keeps the complete Atlas visible without animation", async 
 
 test("Atlas first paint is a semantic landscape with drill-down and history", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/#/atlas");
+  await page.goto("/#/atlas?atlasLanding=publishers");
   await waitForReady(page);
   const atlas = page.getByTestId("atlas-map");
   await expect(atlas).toHaveAttribute("data-scope-level", "root");

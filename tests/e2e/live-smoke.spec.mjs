@@ -65,7 +65,7 @@ test("live smoke: Resources and Atlas workbench are first-class routes", async (
   await expect(page.getByRole("searchbox", { name: "Find resources" })).toHaveValue("OSCAL");
   await expect(page.locator(".workspace-result-row--resource").first()).toBeVisible();
 
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
   const atlas = page.getByTestId("atlas-map");
   await expect(atlas).toHaveAttribute("data-scope-level", "root");

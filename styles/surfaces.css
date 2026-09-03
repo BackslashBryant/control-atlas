@@ -13579,6 +13579,43 @@ input[type="checkbox"] {
   color: var(--ca-text);
 }
 
+.atlas-lens-bar__survey {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-sm, 3px);
+}
+
+.atlas-lens-bar__survey button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-1);
+  min-height: 34px;
+  padding: 0 var(--ca-space-3);
+  border: 0;
+  background: none;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.atlas-lens-bar__survey button + button {
+  border-left: 1px solid var(--ca-border);
+}
+
+.atlas-lens-bar__survey button:hover {
+  background: var(--ca-surface-lifted);
+  color: var(--ca-text);
+}
+
+.atlas-lens-bar__survey button[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--ca-accent) 18%, var(--ca-surface));
+  color: var(--ca-text);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .atlas-lens-bar__entry {
     transition: none;

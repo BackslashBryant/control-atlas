@@ -180,7 +180,7 @@ test('Atlas landing renders the lightweight semantic hierarchy, not the relation
   test.setTimeout(90000);
   const requests = [];
   page.on('request', (request) => requests.push(request.url()));
-  await gotoApp(page, '/#/atlas');
+  await gotoApp(page, '/#/atlas?atlasLanding=publishers');
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

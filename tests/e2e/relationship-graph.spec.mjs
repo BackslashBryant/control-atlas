@@ -30,14 +30,21 @@ test("Atlas default route is the semantic Atlas network, not an empty focused-re
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
+  // The default survey is the framework landscape drawn from the semantic
+  // network; the publisher inventory is the other survey of the same corpus.
+  const landscape = page.getByTestId("atlas-constellation");
+  await expect(landscape).toBeVisible();
+  await expect(landscape.getByRole("button", { name: /^800-53\b/ }).first()).toBeVisible();
+  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toHaveCount(0);
+  await expect(page.locator(".ca-flow-wrap")).toHaveCount(0);
+
+  await page.getByRole("button", { name: "By publisher" }).click();
   const atlas = page.getByTestId("atlas-map");
   await expect(atlas).toBeVisible();
   await expect(atlas).toHaveAttribute("data-scope-level", "root");
   await expect(
     atlas.locator('.atlas-decomp__column[data-column="area"]'),
   ).toHaveAttribute("data-row-count", "11");
-  await expect(page.getByRole("region", { name: "Focused Atlas record" })).toHaveCount(0);
-  await expect(page.locator(".ca-flow-wrap")).toHaveCount(0);
 });
 
 test("record detail keeps published connections in an accessible list", async ({ page }) => {

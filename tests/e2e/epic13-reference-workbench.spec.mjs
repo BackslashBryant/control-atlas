@@ -35,7 +35,7 @@ test("Resources is a first-class durable destination", async ({ page }) => {
 
 test("Atlas overview aggregates the ecosystem and drills directly", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1600, height: 1000 });
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();

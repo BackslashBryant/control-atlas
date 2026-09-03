@@ -33,7 +33,7 @@ test.beforeEach(async ({ page }) => {
 async function openAtlas(page, viewport = { width: 1440, height: 900 }) {
   await page.setViewportSize(viewport);
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 }
@@ -117,7 +117,7 @@ test("every source ecosystem opens directly from the first column", async ({ pag
   await openAtlas(page);
 
   for (const [id, label] of SOURCE_ECOSYSTEMS) {
-    await gotoApp(page, "/#/atlas");
+    await gotoApp(page, "/#/atlas?atlasLanding=publishers");
     await waitForAppReady(page);
     await column(page, "area")
       .locator(".atlas-decomp__label")

@@ -1,5 +1,5 @@
 import { type CSSProperties } from "react";
-import { IconMap2 } from "@tabler/icons-react";
+import { IconBuildingBank, IconMap2, IconTopologyStar3 } from "@tabler/icons-react";
 
 import { areaPresentationForCatalog } from "../lib/areaVisualLanguage";
 import { ATLAS_LENS_ENTRIES, type AtlasLensEntry } from "../lib/atlasLensEntries";
@@ -9,8 +9,11 @@ type AtlasLensBarProps = {
   activePublicationId: string;
   /** True once any scope is set, so the way back is offered. */
   scoped: boolean;
+  /** Which survey the unscoped Atlas is showing: "" or "publishers". */
+  landing: string;
   onPick: (entry: AtlasLensEntry) => void;
   onWholeLandscape: () => void;
+  onLandingChange: (landing: string) => void;
 };
 
 /**
@@ -23,7 +26,14 @@ type AtlasLensBarProps = {
  * "Whole landscape" appears only when there is something to come back from.
  */
 export function AtlasLensBar(props: AtlasLensBarProps) {
-  const { activePublicationId, scoped, onPick, onWholeLandscape } = props;
+  const {
+    activePublicationId,
+    scoped,
+    landing,
+    onPick,
+    onWholeLandscape,
+    onLandingChange,
+  } = props;
 
   return (
     <nav aria-label="Ways into the Atlas" className="atlas-lens-bar">
@@ -62,7 +72,30 @@ export function AtlasLensBar(props: AtlasLensBarProps) {
           <IconMap2 aria-hidden="true" size={15} stroke={1.9} />
           Whole landscape
         </button>
-      ) : null}
+      ) : (
+        // Two questions about the same corpus: how these frameworks relate,
+        // and who issues them. The publisher list is also where the statutes
+        // and directives live — authority carries no crosswalks, so it cannot
+        // appear on a map drawn from them.
+        <div aria-label="Survey the Atlas by" className="atlas-lens-bar__survey" role="group">
+          <button
+            aria-pressed={landing !== "publishers"}
+            onClick={() => onLandingChange("")}
+            type="button"
+          >
+            <IconTopologyStar3 aria-hidden="true" size={15} stroke={1.8} />
+            Landscape
+          </button>
+          <button
+            aria-pressed={landing === "publishers"}
+            onClick={() => onLandingChange("publishers")}
+            type="button"
+          >
+            <IconBuildingBank aria-hidden="true" size={15} stroke={1.8} />
+            By publisher
+          </button>
+        </div>
+      )}
     </nav>
   );
 }

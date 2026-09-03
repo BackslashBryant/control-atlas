@@ -70,7 +70,7 @@ test("WS1 decorative surfaces resolve to one teal accent", async ({ page }) => {
 
 test("WS1 Atlas exposes publisher ecosystems and authorities as named, counted rows", async ({ page }) => {
   test.setTimeout(120_000);
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page, { allowPartial: true });
 
   const areas = page.getByTestId("atlas-map").locator('.atlas-decomp__column[data-column="area"]');

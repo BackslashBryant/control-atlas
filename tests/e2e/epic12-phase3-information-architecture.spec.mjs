@@ -312,7 +312,7 @@ test("Phase 3 record actions and global footer expose the required hierarchy", a
 
 test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface label", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
   const atlas = page.getByTestId("atlas-map");
   await expect(atlas).toBeVisible();

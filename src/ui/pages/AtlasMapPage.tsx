@@ -394,7 +394,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     });
   }, [onNavigate, state.atlasPivotTrail]);
 
-  function atlasHome() {
+  /**
+   * Back to the unscoped Atlas. `landing` is preserved by default so the
+   * breadcrumb's root returns the reader to the survey they were actually
+   * using; only the explicit "Whole landscape" control switches survey.
+   */
+  function atlasHome(landing: string = state.atlasLanding) {
     patchAtlas({
       node: "",
       atlasAxis: "",
@@ -402,13 +407,17 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       atlasFramework: "",
       atlasFamily: "",
       atlasPivotTrail: "",
+      atlasLanding: landing,
       relationshipView: "",
     });
   }
 
   const trailAtlas = useCallback((level: "root" | "ecosystem" | "area" | "publication" | "detail", id: string) => {
     if (level === "root") {
-      atlasHome();
+      // The breadcrumb's root is the top of the survey the reader walked down
+      // from, so it returns them to that survey rather than switching them to
+      // the other one.
+      atlasHome("publishers");
       return;
     }
     if (level === "ecosystem" || level === "area") {
@@ -572,7 +581,9 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             relationshipView: "",
           })
         }
-        onWholeLandscape={atlasHome}
+        landing={state.atlasLanding}
+        onLandingChange={(atlasLanding) => patchAtlas({ atlasLanding })}
+        onWholeLandscape={() => atlasHome("")}
         scoped={Boolean(state.atlasLimb || state.atlasFramework || state.atlasFamily || nodeId)}
       />
 
@@ -585,6 +596,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         atlasScope.areaId
         || atlasScope.publicationId
         || atlasScope.detailId
+        || state.atlasLanding === "publishers"
         // An artifact built before the frameworks projection existed still
         // has to render something, so a cached bundle degrades to the columns
         // rather than to an empty page.

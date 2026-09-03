@@ -28,7 +28,7 @@ async function open(page, key, name) {
 test("the Atlas landing starts with source ecosystems and NIST drills to its publications", async ({
   page,
 }) => {
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -55,7 +55,7 @@ test("the Atlas landing starts with source ecosystems and NIST drills to its pub
 test("a drilled branch survives refresh and the breadcrumb steps back one generation", async ({
   page,
 }) => {
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -81,7 +81,7 @@ test("a drilled branch survives refresh and the breadcrumb steps back one genera
 test("section drill stays scoped to the publication's real child records", async ({
   page,
 }) => {
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
@@ -179,7 +179,7 @@ test("guided structural identity is identical before and after optional catalog 
 });
 
 test("CMMC detail scope reports all three publisher-native levels", async ({ page }) => {
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

@@ -66,6 +66,14 @@ export type ViewState =
        * `ecosystem|publication|node` triples joined by `~`.
        */
       atlasPivotTrail: string;
+      /**
+       * How the unscoped Atlas surveys itself: "" draws the framework
+       * landscape, "publishers" lists who publishes what. Two different
+       * questions about the same corpus — how these relate, versus who issues
+       * them — and the publisher list is also the only place the authority
+       * groups appear, since statutes and directives carry no crosswalks.
+       */
+      atlasLanding: string;
       relationshipView: string;
       relationshipType: string;
       provenance: string;
@@ -242,6 +250,7 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
     atlasFamily: "",
     atlasRmfStep: "",
     atlasPivotTrail: "",
+    atlasLanding: "",
     relationshipView: "",
     relationshipType: "",
     provenance: "",
@@ -331,6 +340,7 @@ export function parseViewState(search: string): ViewState {
       atlasFamily: params.get("atlasFamily") || "",
       atlasRmfStep: params.get("atlasRmfStep") || "",
       atlasPivotTrail: params.get("atlasPivotTrail") || "",
+      atlasLanding: params.get("atlasLanding") === "publishers" ? "publishers" : "",
       // Empty means "the default for this state" — Connections when a record
       // is focused, the board otherwise (AtlasMapPage.atlasView decides). It is
       // deliberately not forced to "path": serializing a default the user never
@@ -730,6 +740,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "atlasFamily", state.atlasFamily);
     setIfValue(params, "atlasRmfStep", state.atlasRmfStep);
     setIfValue(params, "atlasPivotTrail", state.atlasPivotTrail);
+    setIfValue(params, "atlasLanding", state.atlasLanding);
     if (state.relationshipView === "path") {
       params.set("relationshipView", "path");
     } else if (state.relationshipView === "map") {
@@ -883,6 +894,7 @@ export type AtlasMapUrlOptions = {
   atlasFamily?: string;
   atlasRmfStep?: string;
   atlasPivotTrail?: string;
+  atlasLanding?: string;
   sourceView?: "default" | "purpose" | "rmf";
   relationshipView?: RelationshipViewMode;
   relationshipType?: string;
@@ -924,6 +936,7 @@ export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
     atlasFamily: options.atlasFamily || "",
     atlasRmfStep: options.atlasRmfStep || "",
     atlasPivotTrail: options.atlasPivotTrail || "",
+    atlasLanding: options.atlasLanding || "",
     sourceView: options.sourceView || "default",
     relationshipView: options.relationshipView || "",
     relationshipType: options.relationshipType || "",

@@ -34,6 +34,21 @@ async function clickAtlasLandmark(page, name) {
   await node.click();
 }
 
+/**
+ * The landing is the framework constellation, which renders as positioned
+ * nodes on a canvas-sized screen and as a list on a phone. Both are labelled
+ * buttons carrying the framework's spoken name, so one selector reaches the
+ * landscape at every width.
+ */
+async function enterFrameworkFromLandscape(page, name) {
+  const node = page
+    .getByTestId("atlas-constellation")
+    .getByRole("button", { name })
+    .first();
+  await expect(node).toBeVisible();
+  await node.click();
+}
+
 for (const viewport of VIEWPORTS) {
   test(`NIST reaches a focused control with choices separate from structure at ${viewport.width}px`, async ({
     page,
@@ -42,14 +57,27 @@ for (const viewport of VIEWPORTS) {
     await page.goto("/#/atlas");
     await waitForAppReady(page);
     await dismissOnboarding(page);
-    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "root");
+    // Nothing is scoped yet, so the landing is the landscape rather than the
+    // columns: the question at this point is which framework, not where inside
+    // one.
+    await expect(page.getByTestId("atlas-constellation")).toBeVisible();
+    await expect(page.getByTestId("atlas-map")).toHaveCount(0);
 
+    // Entering a framework carries its publisher with it, so the columns open
+    // already placed in the publisher hierarchy rather than orphaned.
+    await enterFrameworkFromLandscape(page, /^800-53\b/);
+    await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
+    await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
+    await expect(page).not.toHaveURL(/atlasBaseline=/);
+    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "publication");
+
+    // The publisher level stays reachable from inside a framework: stepping up
+    // to NIST lists everything NIST publishes.
     await clickAtlasLandmark(page, /^NIST/);
     await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
     await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
     await clickAtlasLandmark(page, /SP\s+800-53 Rev\. 5 Catalog/);
     await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
-    await expect(page).not.toHaveURL(/atlasBaseline=/);
     await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "publication");
 
     await expectNoHorizontalOverflow(page);
@@ -114,7 +142,7 @@ for (const viewport of VIEWPORTS) {
 test("Atlas root presents a source-ecosystem interactive hierarchy", async ({
   page,
 }) => {
-  await page.goto("/#/atlas");
+  await page.goto("/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 

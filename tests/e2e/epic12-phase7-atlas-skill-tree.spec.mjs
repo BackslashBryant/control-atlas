@@ -23,7 +23,7 @@ async function openAtlas(page, path = "/#/atlas?relationshipView=path") {
 async function openNetwork(page) {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page.getByTestId("atlas-map")).toBeVisible();
