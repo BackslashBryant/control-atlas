@@ -58,6 +58,14 @@ export type ViewState =
       atlasBaseline: string;
       atlasFamily: string;
       atlasRmfStep: string;
+      /**
+       * Where the reader crossed from one framework into another, oldest
+       * first. Structural ancestry is already recoverable from the scope
+       * parameters; a pivot is not, because the framework left behind is not
+       * an ancestor of the one arrived at. Encoded as
+       * `ecosystem|publication|node` triples joined by `~`.
+       */
+      atlasPivotTrail: string;
       relationshipView: string;
       relationshipType: string;
       provenance: string;
@@ -233,6 +241,7 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
     atlasBaseline: "",
     atlasFamily: "",
     atlasRmfStep: "",
+    atlasPivotTrail: "",
     relationshipView: "",
     relationshipType: "",
     provenance: "",
@@ -321,6 +330,7 @@ export function parseViewState(search: string): ViewState {
       atlasBaseline: params.get("atlasBaseline") || "",
       atlasFamily: params.get("atlasFamily") || "",
       atlasRmfStep: params.get("atlasRmfStep") || "",
+      atlasPivotTrail: params.get("atlasPivotTrail") || "",
       // Empty means "the default for this state" — Connections when a record
       // is focused, the board otherwise (AtlasMapPage.atlasView decides). It is
       // deliberately not forced to "path": serializing a default the user never
@@ -719,6 +729,7 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "atlasBaseline", state.atlasBaseline);
     setIfValue(params, "atlasFamily", state.atlasFamily);
     setIfValue(params, "atlasRmfStep", state.atlasRmfStep);
+    setIfValue(params, "atlasPivotTrail", state.atlasPivotTrail);
     if (state.relationshipView === "path") {
       params.set("relationshipView", "path");
     } else if (state.relationshipView === "map") {
@@ -871,6 +882,7 @@ export type AtlasMapUrlOptions = {
   atlasBaseline?: string;
   atlasFamily?: string;
   atlasRmfStep?: string;
+  atlasPivotTrail?: string;
   sourceView?: "default" | "purpose" | "rmf";
   relationshipView?: RelationshipViewMode;
   relationshipType?: string;
@@ -911,6 +923,7 @@ export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
     atlasBaseline: options.atlasBaseline || "",
     atlasFamily: options.atlasFamily || "",
     atlasRmfStep: options.atlasRmfStep || "",
+    atlasPivotTrail: options.atlasPivotTrail || "",
     sourceView: options.sourceView || "default",
     relationshipView: options.relationshipView || "",
     relationshipType: options.relationshipType || "",

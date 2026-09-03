@@ -13473,3 +13473,123 @@ input[type="checkbox"] {
     transition: none;
   }
 }
+
+/* ==========================================================================
+   Crosswalk route — the path taken across frameworks.
+
+   Distinct from the scope breadcrumb, which walks down inside one framework.
+   Cross-framework colour marks every part of this journey: the badge on the
+   connection that offers the crossing, and the trail that records it.
+   ========================================================================== */
+.atlas-pivot-trail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-2) var(--ca-space-3);
+  margin-top: var(--ca-space-4);
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border: 1px solid color-mix(in srgb, var(--ca-lens-cross-framework) 32%, var(--ca-border));
+  border-left: 3px solid var(--ca-lens-cross-framework);
+  border-radius: var(--radius-sm, 3px);
+  background: color-mix(in srgb, var(--ca-lens-cross-framework) 6%, var(--ca-surface-raised));
+}
+
+.atlas-pivot-trail__lede {
+  margin: 0;
+  color: var(--ca-lens-cross-framework);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.atlas-pivot-trail ol {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-pivot-trail li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-1);
+}
+
+.atlas-pivot-trail ol button {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--ca-space-1);
+  padding: 2px var(--ca-space-1);
+  border: 0;
+  border-radius: var(--radius-sm, 3px);
+  background: none;
+  color: var(--ca-text);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.atlas-pivot-trail ol button:hover {
+  background: var(--ca-surface-lifted);
+  color: var(--ca-accent-hover);
+}
+
+.atlas-pivot-trail__name {
+  font-weight: 600;
+}
+
+.atlas-pivot-trail__record {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+}
+
+.atlas-pivot-trail__arrow {
+  color: var(--ca-lens-cross-framework);
+}
+
+.atlas-pivot-trail__current {
+  padding: 2px var(--ca-space-1);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.atlas-pivot-trail__clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px var(--ca-space-1);
+  border: 0;
+  background: none;
+  color: var(--ca-text-muted);
+  font: inherit;
+  font-size: 0.6875rem;
+  cursor: pointer;
+}
+
+.atlas-pivot-trail__clear:hover {
+  color: var(--ca-text);
+}
+
+/* The badge on a connection that leaves this framework. */
+.atlas-lens-detail__pivot {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 3px;
+  color: var(--ca-lens-cross-framework);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.atlas-lens-detail__open[data-crosses-framework="true"] {
+  border-left: 2px solid color-mix(in srgb, var(--ca-lens-cross-framework) 55%, transparent);
+}

@@ -1,9 +1,11 @@
 import { useMemo } from "react";
+import { IconArrowUpRight } from "@tabler/icons-react";
 
 import {
   type AtlasConnectionGroup,
   type AtlasRelationshipRow,
 } from "../lib/atlasModel";
+import { catalogShortNameFor } from "../lib/catalogProfiles";
 import { RELATIONSHIP_LENS_LEGEND, lensColor } from "../lib/graphTheme";
 import type { RecordIdentityPresentation } from "../lib/recordTitle";
 import type { AtlasNeighborhoodNode } from "../lib/runtimeLoader";
@@ -101,6 +103,7 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
   }, [groupsByLens]);
 
   const centerIdentity = identityForNode(center.id, center);
+  const centerCatalog = center.metadata?.catalog_id || "";
 
   return (
     <section className="atlas-relationship-map" aria-label="Relationship map">
@@ -214,12 +217,29 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
           <ul>
             {visibleRows.map((row) => {
               const identity = identityForNode(row.counterpart.id, row.counterpart);
+              // A connection that leaves this framework is a different kind of
+              // move from one that stays inside it: following it changes which
+              // framework you are reading. Saying so on the row means the
+              // reader chooses the crossing instead of discovering it after
+              // the page has already changed underneath them.
+              const targetCatalog = row.counterpart.metadata?.catalog_id || "";
+              const crossesFramework = Boolean(
+                centerCatalog && targetCatalog && targetCatalog !== centerCatalog,
+              );
+              const targetName = crossesFramework
+                ? catalogShortNameFor(targetCatalog)
+                : "";
               return (
               <li key={row.counterpart.id}>
                 <div className="atlas-lens-detail__item">
                   <button
-                    aria-label={`Open ${identity.stableIdIsGenerated ? identity.accessibleName : row.itemId}`}
+                    aria-label={
+                      crossesFramework
+                        ? `Open ${identity.stableIdIsGenerated ? identity.accessibleName : row.itemId} in ${targetName}`
+                        : `Open ${identity.stableIdIsGenerated ? identity.accessibleName : row.itemId}`
+                    }
                     className="atlas-lens-detail__open"
+                    data-crosses-framework={crossesFramework ? "true" : undefined}
                     onClick={() => onOpenRecord(row.counterpart.id)}
                     type="button"
                   >
@@ -228,6 +248,12 @@ export function AtlasConnectionMap(props: AtlasConnectionMapProps) {
                     {identity.stableIdIsGenerated && identity.context ? (
                       <small>{identity.context}</small>
                     ) : <small>{row.title}</small>}
+                    {crossesFramework ? (
+                      <span className="atlas-lens-detail__pivot">
+                        <IconArrowUpRight aria-hidden="true" size={12} stroke={2.2} />
+                        {targetName}
+                      </span>
+                    ) : null}
                   </button>
                   {onSelectItem ? (
                     <button

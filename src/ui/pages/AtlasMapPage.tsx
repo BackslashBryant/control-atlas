@@ -26,10 +26,17 @@ import { AcronymText } from "../components/AccessibleTerm";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
 import { AtlasConstellationMap } from "../components/AtlasConstellationMap";
 import { AtlasDecompositionMap } from "../components/AtlasDecompositionMap";
+import { AtlasPivotTrailBar } from "../components/AtlasPivotTrailBar";
 import {
   atlasProjectionRecordLabels,
   type AtlasProjectionDrill,
 } from "../lib/atlasGraphProjection";
+import {
+  describePivotTrail,
+  parsePivotTrail,
+  pushPivot,
+  truncatePivotTrail,
+} from "../lib/atlasPivotTrail";
 import {
   AtlasTree,
   structuralChildrenFromNeighborhood,
@@ -55,7 +62,7 @@ import {
 import { resolveAtlasSearchTransition } from "../lib/atlasSearch";
 import { scrollElementBelowHeader } from "../lib/pagePrimitives";
 import { relationshipExplanation } from "../lib/relationshipProvenance";
-import { catalogDisplayNameFor } from "../lib/catalogProfiles";
+import { catalogDisplayNameFor, catalogShortNameFor } from "../lib/catalogProfiles";
 import {
   loadAtlasNeighborhood,
   selectAtlasStructuralPath,
@@ -181,6 +188,18 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     }),
     [state.atlasLimb, state.atlasFramework, state.atlasFamily],
   );
+  const pivotSteps = useMemo(
+    () => describePivotTrail(state.atlasPivotTrail, bundle.atlasNetwork),
+    [state.atlasPivotTrail, bundle.atlasNetwork],
+  );
+  // Short names throughout the route bar: it is a compact record of a
+  // journey, and the full publication title already heads the page.
+  const currentFrameworkLabel = state.atlasFramework
+    ? catalogShortNameFor(
+        state.atlasFramework,
+        bundle.atlasNetwork?.publications?.[state.atlasFramework]?.label || "",
+      )
+    : "Cybersecurity";
   const [record, setRecord] = useState<AtlasNeighborhoodRecord | null>(null);
   const [recordStatus, setRecordStatus] = useState<
     "idle" | "loading" | "ready" | "missing" | "error"
@@ -308,6 +327,72 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     patchAtlas({ node: drill.targetId, atlasParent: "", relationshipSearch: "", relationshipView: "" });
   }, [bundle.atlasNetwork, onNavigate, state.atlasLimb]);
 
+  /**
+   * Opens a record in the framework it actually belongs to.
+   *
+   * Opening a connected record used to change only the node, leaving the
+   * scope pointing at the framework the reader came from — so following a
+   * crosswalk from 800-53 into CSF left the page claiming to be inside
+   * 800-53, with CSF's own structure unreachable. A crosswalk is a move
+   * between frameworks, so taking one moves the scope too, and the crossing
+   * is recorded on the trail because the framework left behind is not an
+   * ancestor of the one arrived at and nothing else would remember it.
+   */
+  const openRecordInContext = useCallback((targetNodeId: string) => {
+    const location = bundle.atlasNetwork?.record_locations[targetNodeId];
+    const shared = {
+      node: targetNodeId,
+      atlasParent: "",
+      atlasStage: "",
+      relationshipGroup: "",
+      relationshipSearch: "",
+    };
+    if (!location || !location.publicationId) {
+      patchAtlas(shared);
+      return;
+    }
+    const crossesFramework =
+      Boolean(state.atlasFramework) && location.publicationId !== state.atlasFramework;
+    patchAtlas({
+      ...shared,
+      atlasLimb: location.ecosystemId || location.areaId || state.atlasLimb,
+      atlasFramework: location.publicationId,
+      atlasFamily: location.detailId || "",
+      atlasPivotTrail: crossesFramework
+        ? pushPivot(state.atlasPivotTrail, {
+            ecosystemId: state.atlasLimb,
+            publicationId: state.atlasFramework,
+            nodeId: state.node,
+          })
+        : state.atlasPivotTrail,
+    });
+  }, [
+    bundle.atlasNetwork,
+    onNavigate,
+    state.atlasFramework,
+    state.atlasLimb,
+    state.atlasPivotTrail,
+    state.node,
+  ]);
+
+  /** Steps back to a framework the reader crossed from earlier. */
+  const returnToPivot = useCallback((index: number) => {
+    const steps = parsePivotTrail(state.atlasPivotTrail);
+    const step = steps[index];
+    if (!step) return;
+    patchAtlas({
+      node: step.nodeId,
+      atlasParent: "",
+      atlasLimb: step.ecosystemId,
+      atlasFramework: step.publicationId,
+      atlasFamily: "",
+      atlasStage: "",
+      relationshipGroup: "",
+      relationshipSearch: "",
+      atlasPivotTrail: truncatePivotTrail(state.atlasPivotTrail, index),
+    });
+  }, [onNavigate, state.atlasPivotTrail]);
+
   function atlasHome() {
     patchAtlas({
       node: "",
@@ -315,6 +400,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       atlasLimb: "",
       atlasFramework: "",
       atlasFamily: "",
+      atlasPivotTrail: "",
       relationshipView: "",
     });
   }
@@ -508,6 +594,13 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           dead-end that told the user to go choose a record. With no subject,
           this route's only job is helping them pick one. */}
 
+      <AtlasPivotTrailBar
+        currentLabel={currentFrameworkLabel}
+        onClear={() => patchAtlas({ atlasPivotTrail: "" })}
+        onReturn={returnToPivot}
+        steps={pivotSteps}
+      />
+
       <div className="atlas-view-panel" id="atlas-view-panel">
       {recordStatus === "loading" ? (
         <div className="atlas-loading" role="status">
@@ -530,6 +623,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           compact={compact}
           onNavigate={onNavigate}
           onOpenNode={onOpenNode}
+          onOpenRecordInContext={openRecordInContext}
           patchAtlas={patchAtlas}
           record={record}
           state={state}
@@ -569,8 +663,20 @@ function FocusedAtlas(props: {
   patchAtlas: (patch: Partial<AtlasMapPageProps["state"]>) => void;
   onNavigate: AtlasMapPageProps["onNavigate"];
   onOpenNode: AtlasMapPageProps["onOpenNode"];
+  /** Opens a record in its own framework, recording a crosswalk crossing. */
+  onOpenRecordInContext: (nodeId: string) => void;
 }) {
-  const { bundle, compact, record, state, view, patchAtlas, onNavigate, onOpenNode } = props;
+  const {
+    bundle,
+    compact,
+    record,
+    state,
+    view,
+    patchAtlas,
+    onNavigate,
+    onOpenNode,
+    onOpenRecordInContext,
+  } = props;
   const filters: AtlasFilterState = {
     relationshipType: state.relationshipType,
     provenance: state.provenance,
@@ -1086,15 +1192,7 @@ function FocusedAtlas(props: {
                 patchAtlas({ relationshipGroup })
               }
               onOpenList={() => patchAtlas({ relationshipView: "list" })}
-              onOpenRecord={(node) =>
-                patchAtlas({
-                  node,
-                  atlasParent: "",
-                  atlasStage: "",
-                  relationshipGroup: "",
-                  relationshipSearch: "",
-                })
-              }
+              onOpenRecord={onOpenRecordInContext}
               onSelectItem={setSelectedRow}
               selectedItemId={selectedRow?.counterpart.id || ""}
             /> : noConnections}
