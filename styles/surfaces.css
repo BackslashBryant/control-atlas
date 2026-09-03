@@ -13077,3 +13077,399 @@ input[type="checkbox"] {
   font-size: 0.9em;
   font-style: normal;
 }
+
+/* ==========================================================================
+   Atlas constellation — the framework landscape and its crosswalks.
+
+   Position and line weight already carry the reading, so the surface stays
+   quiet: one instrument field, area colour on the nodes and the wires, and no
+   decoration competing with the geometry.
+   ========================================================================== */
+.atlas-constellation {
+  display: grid;
+  gap: var(--ca-space-4);
+  margin-top: var(--ca-space-4);
+}
+
+.atlas-constellation__lede {
+  max-width: 72ch;
+  margin: 0;
+  color: var(--ca-text-muted);
+}
+
+.atlas-constellation__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  align-items: stretch;
+  gap: var(--ca-space-4);
+}
+
+@media (max-width: 1100px) {
+  .atlas-constellation__stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.atlas-constellation__canvas {
+  position: relative;
+  aspect-ratio: 1 / 0.78;
+  min-height: 30rem;
+  padding: var(--ca-space-3);
+  border: 1px solid var(--ca-border);
+  border-top-color: color-mix(in srgb, var(--ca-accent) 58%, transparent);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--ca-accent) 7%, transparent) 0%,
+      transparent 62%
+    ),
+    var(--ca-surface-raised);
+}
+
+/* Corner registration ticks, matching the Orbital instrument grammar. */
+.atlas-constellation__canvas::after {
+  position: absolute;
+  inset: 6px;
+  z-index: 0;
+  opacity: 0.3;
+  background:
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 0 / 13px 1px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 0 / 1px 13px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 0 / 13px 1px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 0 / 1px 13px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 100% / 13px 1px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 100% / 1px 13px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 100% / 13px 1px no-repeat,
+    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 100% / 1px 13px no-repeat;
+  content: "";
+  pointer-events: none;
+}
+
+.atlas-constellation__wires {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke-linecap: round;
+}
+
+.atlas-constellation__wire {
+  opacity: 0.34;
+  transition: opacity 140ms ease;
+}
+
+.atlas-constellation__wire[data-state="lit"] {
+  opacity: 0.82;
+}
+
+.atlas-constellation__wire[data-state="muted"] {
+  opacity: 0.07;
+}
+
+.atlas-constellation__node {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  min-width: 4.5rem;
+  max-width: 8.5rem;
+  padding: var(--ca-space-1) var(--ca-space-2);
+  border: 1px solid color-mix(in srgb, var(--ca-area-color) 55%, var(--ca-border));
+  border-radius: var(--radius-sm, 3px);
+  background: var(--ca-surface);
+  color: var(--ca-text);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    opacity 140ms ease;
+}
+
+.atlas-constellation__node-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.atlas-constellation__node-count {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+}
+
+/* Record volume, quantised to three steps rather than a continuous scale:
+   a 17,000-rule catalog beside a 4-record one needs to read as bigger without
+   making the small one unlabelable. */
+.atlas-constellation__node[data-scale="lg"] .atlas-constellation__node-label {
+  font-size: 0.875rem;
+}
+
+.atlas-constellation__node[data-scale="sm"] {
+  min-width: 3.75rem;
+}
+
+.atlas-constellation__node[data-scale="sm"] .atlas-constellation__node-label {
+  font-size: 0.6875rem;
+}
+
+.atlas-constellation__node:hover,
+.atlas-constellation__node[data-state="active"] {
+  z-index: 3;
+  border-color: var(--ca-area-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ca-area-color) 22%, transparent);
+}
+
+.atlas-constellation__node[data-state="adjacent"] {
+  z-index: 2;
+  border-color: color-mix(in srgb, var(--ca-area-color) 85%, transparent);
+}
+
+.atlas-constellation__node[data-state="muted"] {
+  opacity: 0.34;
+}
+
+.atlas-constellation__node:focus-visible {
+  outline: 2px solid var(--ca-accent);
+  outline-offset: 2px;
+}
+
+/* The canvas is fluid but the node boxes are not, so below full width the
+   inner rings start to touch. Nodes step down with the canvas to hold the
+   clearance the ring spacing assumes. */
+@media (max-width: 1400px) {
+  .atlas-constellation__node {
+    min-width: 3.6rem;
+    max-width: 6.75rem;
+    padding: 2px 5px;
+  }
+
+  .atlas-constellation__node-label {
+    font-size: 0.6875rem;
+  }
+
+  .atlas-constellation__node[data-scale="lg"] .atlas-constellation__node-label {
+    font-size: 0.75rem;
+  }
+
+  .atlas-constellation__node[data-scale="sm"] {
+    min-width: 3.1rem;
+  }
+
+  .atlas-constellation__node[data-scale="sm"] .atlas-constellation__node-label {
+    font-size: 0.625rem;
+  }
+
+  .atlas-constellation__node-count {
+    font-size: 0.5625rem;
+  }
+}
+
+/* --- Detail panel ------------------------------------------------------- */
+.atlas-constellation__panel {
+  display: grid;
+  align-content: start;
+  gap: var(--ca-space-2);
+  padding: var(--ca-space-4);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-lg);
+  background: var(--ca-surface-raised);
+}
+
+.atlas-constellation__panel h3 {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+}
+
+.atlas-constellation__panel h4 {
+  margin: var(--ca-space-2) 0 0;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.atlas-constellation__panel p {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: 0.875rem;
+}
+
+.atlas-constellation__panel-kind {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.atlas-constellation__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ca-space-4);
+  margin: var(--ca-space-2) 0 0;
+}
+
+.atlas-constellation__facts dt {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.atlas-constellation__facts dd {
+  margin: 2px 0 0;
+  font-size: 1.125rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.atlas-constellation__crosswalks {
+  display: grid;
+  gap: 2px;
+  margin: var(--ca-space-1) 0 0;
+  padding: 0;
+  list-style: none;
+  max-height: 15rem;
+  overflow-y: auto;
+}
+
+.atlas-constellation__crosswalks button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--ca-space-2);
+  width: 100%;
+  padding: var(--ca-space-1) var(--ca-space-2);
+  border: 0;
+  border-radius: var(--radius-sm, 3px);
+  background: none;
+  color: var(--ca-text);
+  font: inherit;
+  font-size: 0.8125rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.atlas-constellation__crosswalks button:hover {
+  background: var(--ca-surface-lifted);
+}
+
+.atlas-constellation__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ca-area-color);
+}
+
+.atlas-constellation__crosswalk-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.atlas-constellation__crosswalk-count {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-constellation__absence {
+  padding: var(--ca-space-2);
+  border-left: 2px solid var(--ca-border);
+}
+
+.atlas-constellation__open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ca-space-1);
+  margin-top: var(--ca-space-2);
+  min-height: 38px;
+  padding: 0 var(--ca-space-3);
+  border: 1px solid color-mix(in srgb, var(--ca-accent) 58%, var(--ca-border));
+  border-radius: var(--radius-sm, 3px);
+  background: color-mix(in srgb, var(--ca-accent) 14%, var(--ca-surface));
+  color: var(--ca-text);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.atlas-constellation__open:hover {
+  background: color-mix(in srgb, var(--ca-accent) 24%, var(--ca-surface));
+}
+
+/* --- Phone fallback ----------------------------------------------------- */
+.atlas-constellation__list {
+  display: grid;
+  gap: var(--ca-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-constellation__list-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--ca-space-3);
+  width: 100%;
+  padding: var(--ca-space-3);
+  border: 1px solid var(--ca-border);
+  border-left: 3px solid var(--ca-area-color);
+  border-radius: var(--radius-sm, 3px);
+  background: var(--ca-surface-raised);
+  color: var(--ca-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.atlas-constellation__list-identity {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.atlas-constellation__list-identity strong {
+  font-size: 0.9375rem;
+}
+
+.atlas-constellation__list-identity small,
+.atlas-constellation__list-meta {
+  color: var(--ca-text-muted);
+  font-size: 0.75rem;
+}
+
+.atlas-constellation__list-meta {
+  display: grid;
+  gap: 2px;
+  justify-items: end;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-constellation__list-meta em {
+  font-style: normal;
+  font-size: 0.6875rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-constellation__wire,
+  .atlas-constellation__node {
+    transition: none;
+  }
+}

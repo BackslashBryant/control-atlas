@@ -2,7 +2,13 @@ import type { AtlasGraph, AtlasGraphSourceNode } from "./atlasGraphModel";
 import { recordDisplayTitle } from "./recordTitle";
 import { ATLAS_TRUNK_ID, type AtlasTreeModel } from "./atlasTreeModel";
 
-export type AtlasProjectionLevel = "landscape" | "ecosystem" | "area" | "publication" | "detail";
+export type AtlasProjectionLevel =
+  | "landscape"
+  | "frameworks"
+  | "ecosystem"
+  | "area"
+  | "publication"
+  | "detail";
 export type AtlasProjectionDrill =
   | { kind: "ecosystem"; targetId: string }
   | { kind: "area"; targetId: string }
@@ -76,6 +82,16 @@ export type AtlasSemanticProjectionArtifact = {
   generated_at: string;
   canonical: { node_count: number; edge_count: number };
   landscape: AtlasGraphProjection;
+  /**
+   * Every publication as one node, with the crosswalks between them as edges.
+   *
+   * The landscape groups by publisher, which answers "who publishes this?" but
+   * never "how do these frameworks relate?" — the question the Atlas exists to
+   * answer. Collapsing each catalog to a single node turns every intra-catalog
+   * edge internal, so what survives here is exactly the cross-framework
+   * crosswalk set: 800-53 to CSF, CSF to 800-171, ATT&CK to D3FEND.
+   */
+  frameworks: AtlasGraphProjection;
   ecosystems: Record<string, AtlasGraphProjection>;
   areas: Record<string, AtlasGraphProjection>;
   publications: Record<string, AtlasGraphProjection>;
@@ -117,6 +133,12 @@ type EdgeBucket = Omit<AtlasProjectionEdge, "id" | "relationshipCount"> & { type
 /** Visible-node budgets per T4.3: exceeding one is a build-time failure, not a silent UX degradation. */
 const LANDSCAPE_NODE_BUDGET = { min: 2, max: 20 } as const;
 const AREA_NODE_BUDGET_MAX = 60;
+/**
+ * One node per published catalog. Past this the constellation stops being
+ * readable. There is no floor: a corpus carrying a single catalog is a valid
+ * corpus, and the landscape already fails closed on an empty build.
+ */
+const FRAMEWORK_NODE_BUDGET = { max: 40 } as const;
 
 const AUTHORITY_GROUPS = [
   ["authority:statutes", "Statutes", "Laws that establish federal cybersecurity duties.", "statute"],
@@ -188,12 +210,78 @@ function enforceNodeBudget(projection: AtlasGraphProjection, bounds: { min?: num
 }
 function projectionId(level: AtlasProjectionLevel, id: string) { return `${level}:${id}`; }
 function stable(value: number) { return Number(value.toFixed(4)); }
-function assignCoordinates(level: AtlasProjectionLevel, nodes: AtlasProjectionNode[]) {
+/**
+ * Places frameworks so the picture states the finding before anything is
+ * clicked: the catalog everything crosswalks to sits at the centre, the ones
+ * that connect to little sit at the rim, and a publisher's catalogs hold
+ * together as one angular sector. Radius is crosswalk rank, angle is
+ * publisher — both read off the canonical edges rather than being drawn in by
+ * hand, so the layout stays true as the corpus grows.
+ */
+function assignFrameworkCoordinates(nodes: AtlasProjectionNode[], edges: AtlasProjectionEdge[]) {
+  const weight = new Map(nodes.map((node) => [node.id, 0]));
+  const partners = new Map(nodes.map((node) => [node.id, new Set<string>()]));
+  for (const edge of edges) {
+    weight.set(edge.source, (weight.get(edge.source) || 0) + edge.relationshipCount);
+    weight.set(edge.target, (weight.get(edge.target) || 0) + edge.relationshipCount);
+    partners.get(edge.source)?.add(edge.target);
+    partners.get(edge.target)?.add(edge.source);
+  }
+  // Centrality is how many *different* frameworks a catalog crosswalks to, not
+  // how many edges it carries. By raw volume the CCI catalog would sit at the
+  // centre on the strength of one enormous pairing with the STIG rules, which
+  // is an implementation detail rather than a statement about the landscape.
+  // Counting distinct partners puts SP 800-53 at the centre, which is what the
+  // crosswalk data actually says.
+  const reach = (id: string) => partners.get(id)?.size || 0;
+  const ranked = [...nodes].sort((a, b) =>
+    reach(b.id) - reach(a.id)
+    || (weight.get(b.id) || 0) - (weight.get(a.id) || 0)
+    || a.id.localeCompare(b.id));
+  const hub = ranked[0];
+  if (hub) { hub.x = 0; hub.y = 0; }
+
+  // Concentric rings by reach rather than one spiral: a ring holds only as many
+  // catalogs as its circumference can label, and the rings themselves carry the
+  // reading — the inner ones are the connective tissue between frameworks, the
+  // rim is what nothing crosswalks to yet.
+  const RINGS = [
+    { radius: 0.78, holds: (value: number) => value >= 3 },
+    { radius: 1.24, holds: (value: number) => value === 2 },
+    { radius: 1.72, holds: (value: number) => value === 1 },
+    { radius: 2.18, holds: (value: number) => value <= 0 },
+  ];
+  for (const ring of RINGS) {
+    // Publisher order inside a ring keeps an ecosystem's catalogs adjacent, so
+    // the eye can still find "everything NIST publishes" on the picture.
+    const members = ranked
+      .slice(1)
+      .filter((node) => ring.holds(reach(node.id)))
+      .sort((a, b) =>
+        (a.publisherEcosystemId || "~").localeCompare(b.publisherEcosystemId || "~")
+        || a.id.localeCompare(b.id));
+    members.forEach((node, index) => {
+      const angle = -Math.PI / 2 + (Math.PI * 2 * index) / Math.max(1, members.length);
+      node.x = stable(Math.cos(angle) * ring.radius);
+      node.y = stable(Math.sin(angle) * ring.radius);
+    });
+  }
+}
+
+function assignCoordinates(
+  level: AtlasProjectionLevel,
+  nodes: AtlasProjectionNode[],
+  edges: AtlasProjectionEdge[],
+) {
   if (level === "landscape") {
     nodes.forEach((node, index) => {
       const point = LANDSCAPE_POSITIONS[node.id] || [Math.cos(index) * 1.5, Math.sin(index) * 1.2];
       node.x = point[0]; node.y = point[1];
     });
+    return;
+  }
+  if (level === "frameworks") {
+    assignFrameworkCoordinates(nodes, edges);
     return;
   }
   const context = nodes.find((node) => node.id.startsWith("context:"));
@@ -256,7 +344,7 @@ function buildProjection(options: {
     directedCount: bucket.directedCount, undirectedCount: bucket.undirectedCount,
   })).sort((a, b) => b.relationshipCount - a.relationshipCount || a.id.localeCompare(b.id));
   const edges = allEdges.slice(0, options.edgeLimit);
-  assignCoordinates(options.level, nodes);
+  assignCoordinates(options.level, nodes, edges);
   return {
     id: options.id, level: options.level, label: options.label, description: options.description,
     nodes: nodes.sort((a, b) => a.id.localeCompare(b.id)), edges,
@@ -365,6 +453,45 @@ export function buildAtlasSemanticProjections(options: {
       ...(unclassified.length ? [descriptor({ id: "derived:unclassified", label: "Unclassified published records", description: "An explicit presentation exception, not an Atlas taxonomy.", nodeType: "derived_aggregate", ids: unclassified })] : []),
     ],
   }), LANDSCAPE_NODE_BUDGET);
+  // One pass over the graph for every per-catalog membership below, instead of
+  // a full scan per publication.
+  const idsForCatalog = new Map<string, string[]>();
+  for (const id of graph.nodes()) {
+    const catalog = catalogId(graph.getNodeAttribute(id, "source"));
+    if (!catalog) continue;
+    const entries = idsForCatalog.get(catalog) || [];
+    entries.push(id);
+    idsForCatalog.set(catalog, entries);
+  }
+  const frameworks = enforceNodeBudget(buildProjection({
+    id: projectionId("frameworks", "control-atlas"), level: "frameworks", label: "Frameworks and their crosswalks",
+    description: "Every published framework, sized by how much it holds and joined by the crosswalks between them. Open one to follow its own structure.",
+    graph, edgeLimit: 160,
+    descriptors: model.publications
+      .map((publication) => {
+        const publicationId = publicationCatalogId(publication);
+        const membership = membershipByCatalog.get(publicationId);
+        const ids = idsForCatalog.get(publicationId) || [];
+        if (!ids.length) return null;
+        return descriptor({
+          id: publication.id,
+          label: publication.label,
+          description: membership?.publicationDescription || publication.blurb,
+          nodeType: "catalog",
+          native: "catalog",
+          ids,
+          ecosystemId: membership?.ecosystemId,
+          areaId: publication.parentId || "",
+          publicationId,
+          lifecycleStatus: membership?.lifecycleStatus,
+          version: membership?.version,
+          publicationKind: membership?.publicationKind,
+          includesContainerRecord: true,
+          drill: { kind: "publication", targetId: publicationId },
+        });
+      })
+      .filter((entry): entry is Descriptor => Boolean(entry)),
+  }), FRAMEWORK_NODE_BUDGET);
   const ecosystems: Record<string, AtlasGraphProjection> = {};
   const areas: Record<string, AtlasGraphProjection> = {};
   const publications: Record<string, AtlasGraphProjection> = {};
@@ -382,7 +509,7 @@ export function buildAtlasSemanticProjections(options: {
         .map((membership) => {
           const publication = model.publications.find((entry) => publicationCatalogId(entry) === membership.catalogId);
           if (!publication) return null;
-          const ids = graph.nodes().filter((id) => catalogId(graph.getNodeAttribute(id, "source")) === membership.catalogId);
+          const ids = idsForCatalog.get(membership.catalogId) || [];
           return descriptor({
             id: publication.id,
             label: publication.label,
@@ -410,7 +537,7 @@ export function buildAtlasSemanticProjections(options: {
         descriptor({ id: `context:${area.id}`, label: area.label, description: area.blurb, nodeType: "limb", ids: graph.hasNode(area.id) ? [area.id] : [], layer: "atlas_structure", structureRole: "area", areaId: area.id, includesContainerRecord: true }),
         ...publicationNodes.map((publication) => {
           const publicationId = publicationCatalogId(publication);
-          const ids = graph.nodes().filter((id) => catalogId(graph.getNodeAttribute(id, "source")) === publicationId);
+          const ids = idsForCatalog.get(publicationId) || [];
           const membership = membershipByCatalog.get(publicationId);
           return descriptor({ id: publication.id, label: publication.label, description: membership?.publicationDescription || publication.blurb, nodeType: "catalog", native: "catalog", ids,
             ecosystemId: membership?.ecosystemId, areaId: area.id, publicationId,
@@ -425,7 +552,7 @@ export function buildAtlasSemanticProjections(options: {
   for (const publication of model.publications) {
     const publicationId = publicationCatalogId(publication);
     const membership = membershipByCatalog.get(publicationId);
-    const publicationIds = graph.nodes().filter((id) => catalogId(graph.getNodeAttribute(id, "source")) === publicationId);
+    const publicationIds = idsForCatalog.get(publicationId) || [];
     const grouped = new Map<string, string[]>();
     for (const id of publicationIds) {
       if (id === publication.id) continue;
@@ -461,5 +588,5 @@ export function buildAtlasSemanticProjections(options: {
     });
     publications[publicationId] = projection;
   }
-  return { schema_version: "2.2", generated_at: options.generatedAt, canonical: { node_count: graph.order, edge_count: graph.size }, landscape, ecosystems, areas, publications, details, record_locations: locations };
+  return { schema_version: "2.2", generated_at: options.generatedAt, canonical: { node_count: graph.order, edge_count: graph.size }, landscape, frameworks, ecosystems, areas, publications, details, record_locations: locations };
 }

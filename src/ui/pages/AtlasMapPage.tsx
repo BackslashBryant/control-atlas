@@ -24,6 +24,7 @@ import {
 import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from "../../shared/site-copy.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
+import { AtlasConstellationMap } from "../components/AtlasConstellationMap";
 import { AtlasDecompositionMap } from "../components/AtlasDecompositionMap";
 import {
   atlasProjectionRecordLabels,
@@ -471,14 +472,33 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         </div>
       ) : null}
 
+      {/* With nothing chosen, the landing is the landscape itself — the
+          frameworks and the crosswalks between them. Once a publisher or a
+          framework is in scope, that question is answered and the columns take
+          over, because from there the job is walking a structure, not
+          surveying one. */}
       {bundle.atlasNetwork && atlasProjection && !hierarchyRequested && !nodeId ? (
-        <AtlasDecompositionMap
-          artifact={bundle.atlasNetwork}
-          onDrill={drillAtlas}
-          onNavigate={onNavigate}
-          onTrail={trailAtlas}
-          scope={atlasScope}
-        />
+        atlasScope.areaId
+        || atlasScope.publicationId
+        || atlasScope.detailId
+        // An artifact built before the frameworks projection existed still
+        // has to render something, so a cached bundle degrades to the columns
+        // rather than to an empty page.
+        || !bundle.atlasNetwork.frameworks?.nodes?.length ? (
+          <AtlasDecompositionMap
+            artifact={bundle.atlasNetwork}
+            onDrill={drillAtlas}
+            onNavigate={onNavigate}
+            onTrail={trailAtlas}
+            scope={atlasScope}
+          />
+        ) : (
+          <AtlasConstellationMap
+            compact={compact}
+            frameworks={bundle.atlasNetwork.frameworks}
+            onDrill={drillAtlas}
+          />
+        )
       ) : !bundle.atlasNetwork ? (
         <p className="atlas-load-inline-error" role="alert">The global Atlas network is unavailable. Reload the page to try again.</p>
       ) : null}
