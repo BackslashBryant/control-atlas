@@ -13110,6 +13110,13 @@ input[type="checkbox"] {
   }
 }
 
+.atlas-constellation__field {
+  display: grid;
+  align-content: start;
+  gap: var(--ca-space-2);
+  min-width: 0;
+}
+
 .atlas-constellation__canvas {
   position: relative;
   aspect-ratio: 1 / 0.78;
@@ -13235,6 +13242,96 @@ input[type="checkbox"] {
   opacity: 0.34;
 }
 
+/* Everything on this diagram maps to the hub, so it is drawn as the thing
+   everything points at rather than as one more equal box. */
+.atlas-constellation__node[data-hub="true"] {
+  z-index: 2;
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border-width: 2px;
+  border-color: var(--ca-area-color);
+  background: color-mix(in srgb, var(--ca-area-color) 16%, var(--ca-surface));
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--ca-area-color) 10%, transparent);
+}
+
+.atlas-constellation__node[data-hub="true"] .atlas-constellation__node-label {
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
+.atlas-constellation__node[data-hub="true"] .atlas-constellation__node-count {
+  color: var(--ca-text);
+}
+
+/* Catalogs with no crosswalks, named rather than drawn. Kept beside the map
+   and always visible: the absence is a real finding about the corpus, not a
+   detail to tuck away. */
+.atlas-constellation__unlinked {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-2) var(--ca-space-3);
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border: 1px dashed var(--ca-border);
+  border-radius: var(--radius-sm, 3px);
+}
+
+.atlas-constellation__unlinked > p {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.atlas-constellation__unlinked > p span {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--ca-surface-lifted);
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-constellation__unlinked ul {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: var(--ca-space-1) var(--ca-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-constellation__unlinked button {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--ca-space-1);
+  padding: 3px var(--ca-space-2);
+  border: 1px solid var(--ca-border);
+  border-left: 2px solid color-mix(in srgb, var(--ca-area-color) 70%, transparent);
+  border-radius: var(--radius-sm, 3px);
+  background: none;
+  color: var(--ca-text-muted);
+  font: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.atlas-constellation__unlinked button:hover {
+  border-color: var(--ca-area-color);
+  color: var(--ca-text);
+}
+
+.atlas-constellation__unlinked small {
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+}
+
 .atlas-constellation__node:focus-visible {
   outline: 2px solid var(--ca-accent);
   outline-offset: 2px;
@@ -13340,7 +13437,10 @@ input[type="checkbox"] {
   margin: var(--ca-space-1) 0 0;
   padding: 0;
   list-style: none;
-  max-height: 15rem;
+  /* Tall enough for the longest real list — the hub's twelve crosswalks — so
+     the panel never cuts a row in half, which reads as a broken layout rather
+     than as more content below. */
+  max-height: 25rem;
   overflow-y: auto;
 }
 

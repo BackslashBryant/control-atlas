@@ -17,14 +17,29 @@ type AtlasConstellationMapProps = {
 };
 
 /**
- * Projection coordinates run about -2.2..2.2. Mapping that to 10%..90% leaves
- * the outer ring a tenth of the box on every side to put its label in.
+ * The drawn tree is fitted to the canvas from its own bounding box rather than
+ * against a fixed coordinate range.
+ *
+ * A fixed range has to assume how far out the tree reaches, and this one is
+ * only as deep as the crosswalk data makes it — so most branches stopped two
+ * levels in and the whole diagram sat in a band across the middle with a third
+ * of the canvas empty above and below. Measuring what is actually there fills
+ * the space at any depth, and keeps filling it when the corpus changes.
  */
-const COORDINATE_EXTENT = 2.4;
-const USABLE_HALF_SPAN = 40;
+const SPAN_X = 45;
+const SPAN_Y = 44;
 
-function toPercent(value: number): number {
-  return 50 + (value / COORDINATE_EXTENT) * USABLE_HALF_SPAN;
+function fitToCanvas(points: Array<{ x: number; y: number }>) {
+  const xs = points.map((point) => point.x);
+  const ys = points.map((point) => point.y);
+  const minX = Math.min(...xs);
+  const minY = Math.min(...ys);
+  const rangeX = Math.max(...xs) - minX || 1;
+  const rangeY = Math.max(...ys) - minY || 1;
+  return (point: { x: number; y: number }) => ({
+    x: 50 - SPAN_X + ((point.x - minX) / rangeX) * SPAN_X * 2,
+    y: 50 - SPAN_Y + ((point.y - minY) / rangeY) * SPAN_Y * 2,
+  });
 }
 
 /**
@@ -45,6 +60,7 @@ type ConstellationNode = {
   node: AtlasProjectionNode;
   catalogId: string;
   shortName: string;
+  /** Percent of the canvas box; assigned once the drawn set is known. */
   x: number;
   y: number;
   areaToken: string;
@@ -97,8 +113,8 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
         node,
         catalogId,
         shortName: catalogShortNameFor(catalogId, node.label),
-        x: toPercent(node.x),
-        y: toPercent(node.y),
+        x: 0,
+        y: 0,
         areaToken: area?.token || "--ca-area-operations",
         areaLabel: area?.label || "",
         publicationKind: node.publicationKind || profile.publicationKind,
@@ -111,16 +127,45 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
     });
   }, [frameworks]);
 
+  // A catalog nothing crosswalks to has no place on a diagram of crosswalks.
+  // Drawing it anyway made six boxes float with no lines touching them, which
+  // reads as a rendering fault rather than as the true statement it is. They
+  // are named underneath instead, where the absence is the point.
+  const placed = useMemo(() => {
+    const drawn = nodes.filter((entry) => entry.reach > 0);
+    if (!drawn.length) return drawn;
+    const fit = fitToCanvas(drawn.map((entry) => ({ x: entry.node.x, y: entry.node.y })));
+    return drawn.map((entry) => ({ ...entry, ...fit({ x: entry.node.x, y: entry.node.y }) }));
+  }, [nodes]);
   const nodeById = useMemo(
-    () => new Map(nodes.map((entry) => [entry.node.id, entry])),
+    () => new Map(placed.map((entry) => [entry.node.id, entry])),
+    [placed],
+  );
+
+  const unlinked = useMemo(
+    () =>
+      nodes
+        .filter((entry) => entry.reach === 0)
+        .sort((a, b) => b.node.canonicalRecordCount - a.node.canonicalRecordCount),
     [nodes],
+  );
+  const hubId = useMemo(
+    () =>
+      placed.reduce(
+        (best, entry) => (entry.reach > (best?.reach || 0) ? entry : best),
+        placed[0],
+      )?.node.id || "",
+    [placed],
   );
 
   // Edges are drawn heaviest-last so a thin pairing is never buried under the
   // STIG-to-CCI band.
   const edges = useMemo(
-    () => [...frameworks.edges].sort((a, b) => a.relationshipCount - b.relationshipCount),
-    [frameworks.edges],
+    () =>
+      frameworks.edges
+        .filter((edge) => nodeById.has(edge.source) && nodeById.has(edge.target))
+        .sort((a, b) => a.relationshipCount - b.relationshipCount),
+    [frameworks.edges, nodeById],
   );
 
   const heaviest = useMemo(
@@ -213,6 +258,7 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
     <section className="atlas-constellation" data-testid="atlas-constellation">
       {summary}
       <div className="atlas-constellation__stage">
+        <div className="atlas-constellation__field">
         <div
           aria-label="Frameworks and the crosswalks between them"
           className="atlas-constellation__canvas"
@@ -251,9 +297,10 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
             })}
           </svg>
 
-          {nodes.map((entry) => (
+          {placed.map((entry) => (
             <button
               className="atlas-constellation__node"
+              data-hub={entry.node.id === hubId ? "true" : undefined}
               data-scale={entry.scale}
               data-state={nodeState(entry)}
               key={entry.node.id}
@@ -270,6 +317,34 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
               </span>
             </button>
           ))}
+        </div>
+
+        {unlinked.length ? (
+          <div className="atlas-constellation__unlinked">
+            <p>
+              No crosswalks mapped yet
+              <span>{unlinked.length}</span>
+            </p>
+            <ul>
+              {unlinked.map((entry) => (
+                <li key={entry.node.id}>
+                  <button
+                    onClick={() => entry.node.drill && onDrill(entry.node.drill)}
+                    style={
+                      { "--ca-area-color": `var(${entry.areaToken})` } as CSSProperties
+                    }
+                    type="button"
+                  >
+                    {entry.shortName}
+                    <small>
+                      {formatCount(Math.max(0, entry.node.canonicalRecordCount - 1))}
+                    </small>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
         </div>
 
         {/* The detail panel sits beside the map, never under it: a reader who

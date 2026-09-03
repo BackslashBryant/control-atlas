@@ -239,35 +239,115 @@ function assignFrameworkCoordinates(nodes: AtlasProjectionNode[], edges: AtlasPr
     || (weight.get(b.id) || 0) - (weight.get(a.id) || 0)
     || a.id.localeCompare(b.id));
   const hub = ranked[0];
-  if (hub) { hub.x = 0; hub.y = 0; }
+  if (!hub) return;
+  hub.x = 0;
+  hub.y = 0;
 
-  // Concentric rings by reach rather than one spiral: a ring holds only as many
-  // catalogs as its circumference can label, and the rings themselves carry the
-  // reading — the inner ones are the connective tissue between frameworks, the
-  // rim is what nothing crosswalks to yet.
-  const RINGS = [
-    { radius: 0.78, holds: (value: number) => value >= 3 },
-    { radius: 1.24, holds: (value: number) => value === 2 },
-    { radius: 1.72, holds: (value: number) => value === 1 },
-    { radius: 2.18, holds: (value: number) => value <= 0 },
-  ];
-  for (const ring of RINGS) {
-    // Publisher order inside a ring keeps an ecosystem's catalogs adjacent, so
-    // the eye can still find "everything NIST publishes" on the picture.
-    const members = ranked
-      .slice(1)
-      .filter((node) => ring.holds(reach(node.id)))
-      .sort((a, b) =>
-        (a.publisherEcosystemId || "~").localeCompare(b.publisherEcosystemId || "~")
-        || a.id.localeCompare(b.id));
-    members.forEach((node, index) => {
-      const angle = -Math.PI / 2 + (Math.PI * 2 * index) / Math.max(1, members.length);
-      node.x = stable(Math.cos(angle) * ring.radius);
-      node.y = stable(Math.sin(angle) * ring.radius);
-    });
+  // A radial tree outward from the hub, not concentric rings by reach.
+  //
+  // Rings placed a catalog by *how many* partners it had, which says nothing
+  // about *whose* neighbour it is — so a framework's own dependants landed on
+  // the far side of the diagram and every one of their edges had to cross the
+  // middle to get home. Following the crosswalks instead gives each branch a
+  // wedge of its own: the STIG and SRG catalogs sit outside the CCI catalog
+  // that carries them, ATT&CK and its ICS variant sit outside D3FEND, and a
+  // line only leaves its wedge when the data genuinely says two distant
+  // branches touch.
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+  const parent = new Map<string, string>();
+  const children = new Map<string, string[]>();
+  const depth = new Map<string, number>([[hub.id, 0]]);
+  const queue = [hub.id];
+  for (let cursor = 0; cursor < queue.length; cursor += 1) {
+    const id = queue[cursor]!;
+    // Heaviest crosswalk first, so a catalog hangs off the framework it is
+    // most bound to when several could claim it.
+    const next = [...(partners.get(id) || [])]
+      .filter((candidate) => !depth.has(candidate) && nodeById.has(candidate))
+      .sort((a, b) => (weight.get(b) || 0) - (weight.get(a) || 0) || a.localeCompare(b));
+    for (const child of next) {
+      if (depth.has(child)) continue;
+      depth.set(child, (depth.get(id) || 0) + 1);
+      parent.set(child, id);
+      children.set(id, [...(children.get(id) || []), child]);
+      queue.push(child);
+    }
+  }
+
+  // Siblings that crosswalk to each other are seated next to each other.
+  //
+  // The tree only decides who hangs off whom; two children of the same parent
+  // can still be joined, and if they land on opposite sides of the circle that
+  // one edge has to cross every branch between them. Chaining each run of
+  // connected siblings before laying them out keeps those edges short — it is
+  // why FIPS 199 ends up beside the 800-53B baselines and the 800-37 process
+  // it belongs with, instead of a diagram-width away from both.
+  for (const [id, kids] of children) {
+    if (kids.length < 3) continue;
+    const remaining = new Set(kids);
+    const ordered: string[] = [];
+    const heaviestOf = (pool: Iterable<string>) =>
+      [...pool].sort((a, b) => (weight.get(b) || 0) - (weight.get(a) || 0) || a.localeCompare(b))[0];
+    let current: string | undefined = kids[0];
+    while (remaining.size) {
+      if (!current || !remaining.has(current)) current = heaviestOf(remaining);
+      ordered.push(current!);
+      remaining.delete(current!);
+      const joined = [...remaining].filter((other) => partners.get(current!)?.has(other));
+      current = joined.length ? heaviestOf(joined) : undefined;
+    }
+    children.set(id, ordered);
+  }
+
+  // Angular space is shared out by how many leaves a branch ends in, so a wide
+  // branch is not squeezed into the same wedge as a single catalog.
+  const leaves = new Map<string, number>();
+  function countLeaves(id: string): number {
+    const kids = children.get(id) || [];
+    const total = kids.length ? kids.reduce((sum, kid) => sum + countLeaves(kid), 0) : 1;
+    leaves.set(id, total);
+    return total;
+  }
+  countLeaves(hub.id);
+
+  const RADIUS = [0, 1.05, 1.82, 2.42, 2.92];
+  function place(id: string, from: number, to: number) {
+    const level = depth.get(id) || 0;
+    const middle = (from + to) / 2;
+    const node = nodeById.get(id);
+    if (node && level > 0) {
+      const radius = RADIUS[Math.min(level, RADIUS.length - 1)]!;
+      node.x = stable(Math.cos(middle) * radius);
+      node.y = stable(Math.sin(middle) * radius);
+    }
+    const kids = children.get(id) || [];
+    if (!kids.length) return;
+    // Damped rather than proportional: a branch ending in four catalogs does
+    // need more of the circle than one ending in a single catalog, but not four
+    // times more, or the single ones are pinched into slivers their labels
+    // cannot sit in.
+    const share = (id: string) => Math.pow(leaves.get(id) || 1, 0.55);
+    const total = kids.reduce((sum, kid) => sum + share(kid), 0) || 1;
+    let cursor = from;
+    for (const kid of kids) {
+      const span = (to - from) * (share(kid) / total);
+      place(kid, cursor, cursor + span);
+      cursor += span;
+    }
+  }
+  // Start at twelve o'clock so the busiest branch reads top-first.
+  place(hub.id, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2);
+
+  // Catalogs nothing crosswalks to are not part of this picture and are listed
+  // beside it instead; parking them at the origin keeps them out of the way of
+  // a layout that has no place for them.
+  for (const node of nodes) {
+    if (!depth.has(node.id)) {
+      node.x = 0;
+      node.y = 0;
+    }
   }
 }
-
 function assignCoordinates(
   level: AtlasProjectionLevel,
   nodes: AtlasProjectionNode[],
