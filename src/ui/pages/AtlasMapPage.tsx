@@ -26,6 +26,7 @@ import { AcronymText } from "../components/AccessibleTerm";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
 import { AtlasConstellationMap } from "../components/AtlasConstellationMap";
 import { AtlasDecompositionMap } from "../components/AtlasDecompositionMap";
+import { AtlasFrameworkLinks } from "../components/AtlasFrameworkLinks";
 import { AtlasLensBar } from "../components/AtlasLensBar";
 import { AtlasPivotTrailBar } from "../components/AtlasPivotTrailBar";
 import {
@@ -601,13 +602,31 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         // has to render something, so a cached bundle degrades to the columns
         // rather than to an empty page.
         || !bundle.atlasNetwork.frameworks?.nodes?.length ? (
-          <AtlasDecompositionMap
-            artifact={bundle.atlasNetwork}
-            onDrill={drillAtlas}
-            onNavigate={onNavigate}
-            onTrail={trailAtlas}
-            scope={atlasScope}
-          />
+          // Inside a framework the columns answer "what is in this?" — the
+          // links panel keeps "what does it relate to?" on screen beside them,
+          // which is what the reader came in holding.
+          <div
+            className="atlas-scoped"
+            data-has-links={state.atlasFramework ? "true" : undefined}
+          >
+            <AtlasDecompositionMap
+              artifact={bundle.atlasNetwork}
+              onDrill={drillAtlas}
+              onNavigate={onNavigate}
+              onTrail={trailAtlas}
+              scope={atlasScope}
+            />
+            {state.atlasFramework && bundle.atlasNetwork.frameworks?.nodes?.length ? (
+              <AtlasFrameworkLinks
+                frameworks={bundle.atlasNetwork.frameworks}
+                onOpen={(targetPublicationId) =>
+                  drillAtlas({ kind: "publication", targetId: targetPublicationId })
+                }
+                publicationId={state.atlasFramework}
+                sharedGround={bundle.atlasNetwork.framework_shared_ground || []}
+              />
+            ) : null}
+          </div>
         ) : (
           <AtlasConstellationMap
             compact={compact}
