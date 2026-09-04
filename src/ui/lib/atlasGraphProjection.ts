@@ -1,6 +1,7 @@
 import type { AtlasGraph, AtlasGraphSourceNode } from "./atlasGraphModel";
 import { recordDisplayTitle } from "./recordTitle";
 import { ATLAS_TRUNK_ID, type AtlasTreeModel } from "./atlasTreeModel";
+import frameworkDependencySpine from "../../../data/curated/framework-dependency-spine.json";
 
 export type AtlasProjectionLevel =
   | "landscape"
@@ -247,123 +248,100 @@ function enforceNodeBudget(projection: AtlasGraphProjection, bounds: { min?: num
 }
 function projectionId(level: AtlasProjectionLevel, id: string) { return `${level}:${id}`; }
 function stable(value: number) { return Number(value.toFixed(4)); }
+
+type FrameworkDependencySpine = {
+  roots: Array<{ catalogId: string; rationale: string }>;
+  children: Record<string, { parentCatalogId: string; rationale: string }>;
+  unconnected: string[];
+};
+const FRAMEWORK_SPINE = frameworkDependencySpine as FrameworkDependencySpine;
+
 /**
- * Places frameworks so the picture states the finding before anything is
- * clicked: the catalog everything crosswalks to sits at the centre, the ones
- * that connect to little sit at the rim, and a publisher's catalogs hold
- * together as one angular sector. Radius is crosswalk rank, angle is
- * publisher — both read off the canonical edges rather than being drawn in by
- * hand, so the layout stays true as the corpus grows.
+ * Every catalog data/curated/framework-dependency-spine.json declares as a
+ * dependency root. Used so every root gets the same visual weight in the
+ * frameworks map — there is no single "hub" once position means depth rather
+ * than crosswalk rank.
  */
-function assignFrameworkCoordinates(nodes: AtlasProjectionNode[], edges: AtlasProjectionEdge[]) {
-  const weight = new Map(nodes.map((node) => [node.id, 0]));
-  const partners = new Map(nodes.map((node) => [node.id, new Set<string>()]));
-  for (const edge of edges) {
-    weight.set(edge.source, (weight.get(edge.source) || 0) + edge.relationshipCount);
-    weight.set(edge.target, (weight.get(edge.target) || 0) + edge.relationshipCount);
-    partners.get(edge.source)?.add(edge.target);
-    partners.get(edge.target)?.add(edge.source);
-  }
-  // Centrality is how many *different* frameworks a catalog crosswalks to, not
-  // how many edges it carries. By raw volume the CCI catalog would sit at the
-  // centre on the strength of one enormous pairing with the STIG rules, which
-  // is an implementation detail rather than a statement about the landscape.
-  // Counting distinct partners puts SP 800-53 at the centre, which is what the
-  // crosswalk data actually says.
-  const reach = (id: string) => partners.get(id)?.size || 0;
-  const ranked = [...nodes].sort((a, b) =>
-    reach(b.id) - reach(a.id)
-    || (weight.get(b.id) || 0) - (weight.get(a.id) || 0)
-    || a.id.localeCompare(b.id));
-  const hub = ranked[0];
-  if (!hub) return;
-  hub.x = 0;
-  hub.y = 0;
+export const FRAMEWORK_ROOT_CATALOG_IDS: ReadonlySet<string> = new Set(
+  FRAMEWORK_SPINE.roots.map((root) => root.catalogId),
+);
 
-  // A radial tree outward from the hub, not concentric rings by reach.
-  //
-  // Rings placed a catalog by *how many* partners it had, which says nothing
-  // about *whose* neighbour it is — so a framework's own dependants landed on
-  // the far side of the diagram and every one of their edges had to cross the
-  // middle to get home. Following the crosswalks instead gives each branch a
-  // wedge of its own: the STIG and SRG catalogs sit outside the CCI catalog
-  // that carries them, ATT&CK and its ICS variant sit outside D3FEND, and a
-  // line only leaves its wedge when the data genuinely says two distant
-  // branches touch.
-  const nodeById = new Map(nodes.map((node) => [node.id, node]));
-  const parent = new Map<string, string>();
-  const children = new Map<string, string[]>();
-  const depth = new Map<string, number>([[hub.id, 0]]);
-  const queue = [hub.id];
-  for (let cursor = 0; cursor < queue.length; cursor += 1) {
-    const id = queue[cursor]!;
-    // Heaviest crosswalk first, so a catalog hangs off the framework it is
-    // most bound to when several could claim it.
-    const next = [...(partners.get(id) || [])]
-      .filter((candidate) => !depth.has(candidate) && nodeById.has(candidate))
-      .sort((a, b) => (weight.get(b) || 0) - (weight.get(a) || 0) || a.localeCompare(b));
-    for (const child of next) {
-      if (depth.has(child)) continue;
-      depth.set(child, (depth.get(id) || 0) + 1);
-      parent.set(child, id);
-      children.set(id, [...(children.get(id) || []), child]);
-      queue.push(child);
-    }
+/** -1 if the catalog has no entry in the curated spine (no crosswalk in this corpus). */
+function resolveFrameworkDepth(catalogId: string, resolving: Set<string> = new Set()): number {
+  if (FRAMEWORK_ROOT_CATALOG_IDS.has(catalogId)) return 0;
+  const entry = FRAMEWORK_SPINE.children[catalogId];
+  if (!entry) return -1;
+  if (resolving.has(catalogId)) {
+    throw new Error(`framework-dependency-spine.json has a cycle involving "${catalogId}".`);
+  }
+  resolving.add(catalogId);
+  const parentDepth = resolveFrameworkDepth(entry.parentCatalogId, resolving);
+  if (parentDepth < 0) {
+    throw new Error(
+      `framework-dependency-spine.json: "${catalogId}"'s parentCatalogId "${entry.parentCatalogId}" is not a declared root or child.`,
+    );
+  }
+  return parentDepth + 1;
+}
+
+/**
+ * Places frameworks in a top-down dependency hierarchy: the frameworks
+ * nothing here depends on (framework-dependency-spine.json's declared roots)
+ * sit at the top, and everything that selects from, is assessed against,
+ * correlates to, or otherwise builds on one sits exactly one row below it —
+ * never beside it.
+ *
+ * Direction is deliberately not read off the crosswalk graph the way the
+ * retired radial-by-centrality layout was. Every framework-pair edge in the
+ * canonical graph is relationship_class "correlation" or "applicability", and
+ * docs/DATA_POLICY.md is explicit those classes cannot supply parent,
+ * ancestors, structural level, or depth — confirmed directly against the
+ * data besides: NIST Zero Trust's own edge to SP 800-53 carries both
+ * "supports" and "supported_by" in the same aggregated bucket, so
+ * relationship_type cannot mechanically supply direction either. The curated
+ * spine is a human editorial call, reviewed with the product owner, kept out
+ * of the canonical graph so it can never be presented as a published
+ * crosswalk.
+ */
+function assignFrameworkHierarchyCoordinates(nodes: AtlasProjectionNode[]) {
+  const depthByCatalog = new Map<string, number>();
+  for (const node of nodes) {
+    const depth = resolveFrameworkDepth(node.publicationId);
+    if (depth >= 0) depthByCatalog.set(node.publicationId, depth);
   }
 
-  // Siblings that crosswalk to each other are seated next to each other.
-  //
-  // The tree only decides who hangs off whom; two children of the same parent
-  // can still be joined, and if they land on opposite sides of the circle that
-  // one edge has to cross every branch between them. Chaining each run of
-  // connected siblings before laying them out keeps those edges short — it is
-  // why FIPS 199 ends up beside the 800-53B baselines and the 800-37 process
-  // it belongs with, instead of a diagram-width away from both.
-  for (const [id, kids] of children) {
-    if (kids.length < 3) continue;
-    const remaining = new Set(kids);
-    const ordered: string[] = [];
-    const heaviestOf = (pool: Iterable<string>) =>
-      [...pool].sort((a, b) => (weight.get(b) || 0) - (weight.get(a) || 0) || a.localeCompare(b))[0];
-    let current: string | undefined = kids[0];
-    while (remaining.size) {
-      if (!current || !remaining.has(current)) current = heaviestOf(remaining);
-      ordered.push(current!);
-      remaining.delete(current!);
-      const joined = [...remaining].filter((other) => partners.get(current!)?.has(other));
-      current = joined.length ? heaviestOf(joined) : undefined;
-    }
-    children.set(id, ordered);
+  const childrenOf = new Map<string, string[]>();
+  for (const [catalogId, entry] of Object.entries(FRAMEWORK_SPINE.children)) {
+    if (!depthByCatalog.has(catalogId)) continue; // declared in the spine, absent from this corpus build
+    const siblings = childrenOf.get(entry.parentCatalogId) || [];
+    siblings.push(catalogId);
+    childrenOf.set(entry.parentCatalogId, siblings);
   }
+  for (const siblings of childrenOf.values()) siblings.sort((a, b) => a.localeCompare(b));
 
-  // Angular space is shared out by how many leaves a branch ends in, so a wide
-  // branch is not squeezed into the same wedge as a single catalog.
-  const leaves = new Map<string, number>();
-  function countLeaves(id: string): number {
-    const kids = children.get(id) || [];
+  // Each root's horizontal share of the row is proportional to how many
+  // leaves its subtree ends in — damped the same way the retired radial
+  // layout shared out angular space, so a five-branch root is not squeezed to
+  // the same width as a childless one.
+  const leafCount = new Map<string, number>();
+  function countLeaves(catalogId: string): number {
+    const kids = childrenOf.get(catalogId) || [];
     const total = kids.length ? kids.reduce((sum, kid) => sum + countLeaves(kid), 0) : 1;
-    leaves.set(id, total);
+    leafCount.set(catalogId, total);
     return total;
   }
-  countLeaves(hub.id);
+  const roots = FRAMEWORK_SPINE.roots
+    .map((root) => root.catalogId)
+    .filter((catalogId) => depthByCatalog.has(catalogId))
+    .sort((a, b) => a.localeCompare(b));
+  for (const catalogId of roots) countLeaves(catalogId);
 
-  const RADIUS = [0, 1.05, 1.82, 2.42, 2.92];
-  function place(id: string, from: number, to: number) {
-    const level = depth.get(id) || 0;
-    const middle = (from + to) / 2;
-    const node = nodeById.get(id);
-    if (node && level > 0) {
-      const radius = RADIUS[Math.min(level, RADIUS.length - 1)]!;
-      node.x = stable(Math.cos(middle) * radius);
-      node.y = stable(Math.sin(middle) * radius);
-    }
-    const kids = children.get(id) || [];
+  const xByCatalog = new Map<string, number>();
+  function place(catalogId: string, from: number, to: number) {
+    xByCatalog.set(catalogId, (from + to) / 2);
+    const kids = childrenOf.get(catalogId) || [];
     if (!kids.length) return;
-    // Damped rather than proportional: a branch ending in four catalogs does
-    // need more of the circle than one ending in a single catalog, but not four
-    // times more, or the single ones are pinched into slivers their labels
-    // cannot sit in.
-    const share = (id: string) => Math.pow(leaves.get(id) || 1, 0.55);
+    const share = (id: string) => Math.pow(leafCount.get(id) || 1, 0.55);
     const total = kids.reduce((sum, kid) => sum + share(kid), 0) || 1;
     let cursor = from;
     for (const kid of kids) {
@@ -372,23 +350,73 @@ function assignFrameworkCoordinates(nodes: AtlasProjectionNode[], edges: AtlasPr
       cursor += span;
     }
   }
-  // Start at twelve o'clock so the busiest branch reads top-first.
-  place(hub.id, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2);
+  const rootShare = (id: string) => Math.pow(leafCount.get(id) || 1, 0.55);
+  const rootTotal = roots.reduce((sum, id) => sum + rootShare(id), 0) || 1;
+  let cursor = 0;
+  for (const catalogId of roots) {
+    const span = rootShare(catalogId) / rootTotal;
+    place(catalogId, cursor, cursor + span);
+    cursor += span;
+  }
 
-  // Catalogs nothing crosswalks to are not part of this picture and are listed
-  // beside it instead; parking them at the origin keeps them out of the way of
-  // a layout that has no place for them.
+  // Depth alone is not enough room: every root's children would otherwise
+  // share one literal horizontal line, and SP 800-53's eight plus ATT&CK's
+  // two plus CUI's three is thirteen boxes fighting for the same row. Each
+  // root gets its own thin lane around the row instead, so a wide subtree
+  // does not have to fit in the same line as everyone else's. Roots stay on
+  // a clean, unjittered top row.
+  const rootOf = new Map<string, string>(roots.map((id) => [id, id]));
+  const parentOf = new Map<string, string>();
+  for (const catalogId of roots) {
+    const queue = [...(childrenOf.get(catalogId) || [])];
+    for (let cursor = 0; cursor < queue.length; cursor += 1) {
+      const id = queue[cursor]!;
+      rootOf.set(id, catalogId);
+      queue.push(...(childrenOf.get(id) || []));
+    }
+  }
+  for (const [parent, kids] of childrenOf) {
+    for (const kid of kids) parentOf.set(kid, parent);
+  }
+  const LANE_STEP = 0.16;
+  const laneOf = new Map<string, number>(
+    roots.map((id, index) => [id, (index - (roots.length - 1) / 2) * LANE_STEP]),
+  );
+  // A sibling group past four members still will not fit one line at a
+  // readable width — CUI's three or ATT&CK's two do, SP 800-53's eight do
+  // not. Past that count the row interleaves into two, so a name's nearest
+  // horizontal neighbours are never the two names competing for the exact
+  // same strip.
+  const SIBLING_ROW_LIMIT = 4;
+  const ROW_STEP = 0.09;
+  function siblingRowOffset(catalogId: string): number {
+    const parent = parentOf.get(catalogId);
+    const siblings = parent ? childrenOf.get(parent) || [] : [];
+    if (siblings.length <= SIBLING_ROW_LIMIT) return 0;
+    const index = siblings.indexOf(catalogId);
+    return (index % 2 === 0 ? -1 : 1) * ROW_STEP;
+  }
+
   for (const node of nodes) {
-    if (!depth.has(node.id)) {
+    const depth = depthByCatalog.get(node.publicationId);
+    if (depth === undefined) {
+      // No entry in the curated spine — the same catalogs that carry no
+      // crosswalk edge in this corpus. Parked at the origin and listed beside
+      // the map instead, same as the retired layout.
       node.x = 0;
       node.y = 0;
+      continue;
     }
+    const root = rootOf.get(node.publicationId);
+    const lane = depth > 0 ? laneOf.get(root || "") || 0 : 0;
+    const row = depth > 0 ? siblingRowOffset(node.publicationId) : 0;
+    node.x = stable((xByCatalog.get(node.publicationId) || 0) * 2 - 1);
+    node.y = stable(depth + lane + row);
   }
 }
 function assignCoordinates(
   level: AtlasProjectionLevel,
   nodes: AtlasProjectionNode[],
-  edges: AtlasProjectionEdge[],
 ) {
   if (level === "landscape") {
     nodes.forEach((node, index) => {
@@ -398,7 +426,7 @@ function assignCoordinates(
     return;
   }
   if (level === "frameworks") {
-    assignFrameworkCoordinates(nodes, edges);
+    assignFrameworkHierarchyCoordinates(nodes);
     return;
   }
   const context = nodes.find((node) => node.id.startsWith("context:"));
@@ -461,7 +489,7 @@ function buildProjection(options: {
     directedCount: bucket.directedCount, undirectedCount: bucket.undirectedCount,
   })).sort((a, b) => b.relationshipCount - a.relationshipCount || a.id.localeCompare(b.id));
   const edges = allEdges.slice(0, options.edgeLimit);
-  assignCoordinates(options.level, nodes, edges);
+  assignCoordinates(options.level, nodes);
   return {
     id: options.id, level: options.level, label: options.label, description: options.description,
     nodes: nodes.sort((a, b) => a.id.localeCompare(b.id)), edges,

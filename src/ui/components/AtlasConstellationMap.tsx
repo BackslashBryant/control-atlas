@@ -8,6 +8,7 @@ import type {
   AtlasProjectionNode,
   AtlasSharedGroundEdge,
 } from "../lib/atlasGraphProjection";
+import { FRAMEWORK_ROOT_CATALOG_IDS } from "../lib/atlasGraphProjection";
 import { areaPresentationForCatalog } from "../lib/areaVisualLanguage";
 import { catalogProfileFor, catalogShortNameFor } from "../lib/catalogProfiles";
 
@@ -83,15 +84,18 @@ function scaleFor(records: number): ConstellationNode["scale"] {
 }
 
 /**
- * The landscape, drawn as what it is: every published framework, joined by the
- * crosswalks that actually exist between them.
+ * The landscape, drawn as a dependency hierarchy: the frameworks nothing here
+ * depends on sit at the top, and everything that selects from, is assessed
+ * against, correlates to, or otherwise builds on one sits exactly one row
+ * below it.
  *
- * Position is read off the data rather than arranged by hand — distance from
- * the centre is how many other frameworks a catalog crosswalks to, so 800-53
- * lands in the middle because everything maps to it, and the rim holds the
- * catalogs nothing maps to yet. Line weight is the size of each crosswalk. The
- * picture therefore states the finding before anything is clicked: this is the
- * hub, these are its neighbours, that cluster over there is its own world.
+ * Row is read off data/curated/framework-dependency-spine.json's curated
+ * roots and parents, not off crosswalk weight or connectivity — see that
+ * file's own doc comment for why the crosswalk data cannot supply direction.
+ * Line weight is still the size of each crosswalk. The picture states the
+ * finding before anything is clicked: these are the frameworks nothing here
+ * depends on, these build on them, and a line only crosses rows when the data
+ * genuinely says two frameworks meet.
  */
 export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
   const { frameworks, sharedGround, onDrill, compact } = props;
@@ -152,15 +156,6 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
         .sort((a, b) => b.node.canonicalRecordCount - a.node.canonicalRecordCount),
     [nodes],
   );
-  const hubId = useMemo(
-    () =>
-      placed.reduce(
-        (best, entry) => (entry.reach > (best?.reach || 0) ? entry : best),
-        placed[0],
-      )?.node.id || "",
-    [placed],
-  );
-
   // Edges are drawn heaviest-last so a thin pairing is never buried under the
   // STIG-to-CCI band.
   const edges = useMemo(
@@ -234,9 +229,10 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
 
   const summary = (
     <p className="atlas-constellation__lede">
-      Every published framework in Control Atlas, joined by the crosswalks
-      between them. The closer to the centre, the more other frameworks map to
-      it. Open one to follow its own structure.
+      Every published framework in Control Atlas, top to bottom by what
+      depends on what. Frameworks at the top are the ones nothing here selects
+      from, is assessed against, or otherwise builds on. Open one to follow
+      its own structure.
     </p>
   );
 
@@ -348,7 +344,7 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
           {placed.map((entry) => (
             <button
               className="atlas-constellation__node"
-              data-hub={entry.node.id === hubId ? "true" : undefined}
+              data-hub={FRAMEWORK_ROOT_CATALOG_IDS.has(entry.catalogId) ? "true" : undefined}
               data-scale={entry.scale}
               data-state={nodeState(entry)}
               key={entry.node.id}
@@ -360,6 +356,9 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
               type="button"
             >
               <span className="atlas-constellation__node-label">{entry.shortName}</span>
+              {entry.synopsis ? (
+                <span className="atlas-constellation__node-synopsis">{entry.synopsis}</span>
+              ) : null}
               <span className="atlas-constellation__node-count">
                 {formatCount(Math.max(0, entry.node.canonicalRecordCount - 1))}
               </span>

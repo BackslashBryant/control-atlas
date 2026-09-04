@@ -13204,6 +13204,14 @@ input[type="checkbox"] {
   text-align: center;
 }
 
+.atlas-constellation__node-synopsis {
+  color: var(--ca-text-muted);
+  font-size: 0.625rem;
+  line-height: 1.25;
+  text-align: center;
+  text-wrap: balance;
+}
+
 .atlas-constellation__node-count {
   color: var(--ca-text-muted);
   font-family: var(--ca-font-mono, monospace);
@@ -13280,8 +13288,9 @@ input[type="checkbox"] {
   font-style: normal;
 }
 
-/* Everything on this diagram maps to the hub, so it is drawn as the thing
-   everything points at rather than as one more equal box. */
+/* The frameworks nothing here depends on — data-hub covers every declared
+   root, not one single catalog, since position now means dependency depth
+   rather than crosswalk rank. */
 .atlas-constellation__node[data-hub="true"] {
   z-index: 2;
   padding: var(--ca-space-2) var(--ca-space-3);
@@ -13399,6 +13408,10 @@ input[type="checkbox"] {
 
   .atlas-constellation__node[data-scale="sm"] .atlas-constellation__node-label {
     font-size: 0.625rem;
+  }
+
+  .atlas-constellation__node-synopsis {
+    font-size: 0.5625rem;
   }
 
   .atlas-constellation__node-count {
