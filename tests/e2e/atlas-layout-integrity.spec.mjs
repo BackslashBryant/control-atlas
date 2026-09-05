@@ -61,7 +61,11 @@ for (const width of WIDTHS) {
   test(`Atlas landscape draws every framework without collision at ${width}px`, async ({ page }) => {
     attachPageDiagnostics(page);
     await page.setViewportSize({ width, height: 900 });
-    await page.goto("/#/atlas");
+    // The landing is the board of groups; the drawn hierarchy lives one level
+    // in, over the frameworks of a single group. Implementation and
+    // configuration is the widest of them (eight publications), so it is the
+    // one most likely to collide.
+    await page.goto("/#/atlas?atlasLensFamily=implementation");
     await waitForAppReady(page);
     await dismissOnboarding(page);
 
@@ -77,6 +81,28 @@ for (const width of WIDTHS) {
       const collisions = await overlappingPairs(page, ".atlas-constellation__node");
       expect(collisions, `overlapping framework cards at ${width}px`).toEqual([]);
     }
+
+    expect(await horizontalOverflow(page), `horizontal overflow at ${width}px`).toBeLessThanOrEqual(1);
+  });
+
+  test(`Atlas landing groups the corpus without collision at ${width}px`, async ({ page }) => {
+    attachPageDiagnostics(page);
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/#/atlas");
+    await waitForAppReady(page);
+    await dismissOnboarding(page);
+
+    const board = page.getByTestId("atlas-family-board");
+    await expect(board).toBeVisible();
+
+    const collisions = await overlappingPairs(page, ".atlas-family-board__card");
+    expect(collisions, `overlapping group cards at ${width}px`).toEqual([]);
+
+    // Every group names its members at rest. A card that opens to reveal what
+    // is inside it is a mystery box, and the whole point of grouping first is
+    // that the reader can choose without opening anything.
+    const named = await page.locator(".atlas-family-board__members button").count();
+    expect(named, `member names on the board at ${width}px`).toBeGreaterThan(20);
 
     expect(await horizontalOverflow(page), `horizontal overflow at ${width}px`).toBeLessThanOrEqual(1);
   });

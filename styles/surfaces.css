@@ -13124,9 +13124,12 @@ input[type="checkbox"] {
   color: var(--ca-text-muted);
 }
 
+/* Wide enough that a desktop lands on three columns, not four: five or six
+   groups over four columns leaves a short second row and three empty cells,
+   and the gap reads as something missing. */
 .atlas-family-board__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
   gap: var(--ca-space-3);
   margin: 0;
   padding: 0;
@@ -13318,7 +13321,9 @@ input[type="checkbox"] {
   display: grid;
   align-content: start;
   gap: clamp(var(--ca-space-5), 6vh, var(--ca-space-8));
-  min-height: 22rem;
+  /* Enough to read as a field rather than a stray row; not so much that a
+     six-framework group sits above a third of a screen of empty canvas. */
+  min-height: 15rem;
   padding: var(--ca-space-4) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-top-color: color-mix(in srgb, var(--ca-accent) 58%, transparent);

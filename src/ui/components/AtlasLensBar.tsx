@@ -1,5 +1,10 @@
 import { type CSSProperties } from "react";
-import { IconBuildingBank, IconMap2, IconTopologyStar3 } from "@tabler/icons-react";
+import {
+  IconBuildingBank,
+  IconMap2,
+  IconTargetArrow,
+  IconTopologyStar3,
+} from "@tabler/icons-react";
 
 import { areaPresentationForCatalog } from "../lib/areaVisualLanguage";
 import { ATLAS_LENS_ENTRIES, type AtlasLensEntry } from "../lib/atlasLensEntries";
@@ -78,29 +83,45 @@ export function AtlasLensBar(props: AtlasLensBarProps) {
           type="button"
         >
           <IconMap2 aria-hidden="true" size={15} stroke={1.9} />
-          Whole landscape
+          All groups
         </button>
       ) : (
-        // Two questions about the same corpus: how these frameworks relate,
-        // and who issues them. The publisher list is also where the statutes
-        // and directives live — authority carries no crosswalks, so it cannot
-        // appear on a map drawn from them.
-        <div aria-label="Survey the Atlas by" className="atlas-lens-bar__survey" role="group">
+        // Three questions about the same 28 publications: what each document
+        // is, who issues it, and what you are trying to get done. None of them
+        // ranks one framework above another, which the old single landscape
+        // did by accident — it drew all 28 at once and put whatever nothing
+        // else built on at the top.
+        //
+        // The publisher lens is also where the statutes and directives live:
+        // authority carries no crosswalks, so it cannot appear on a map drawn
+        // from them.
+        <div aria-label="Group the Atlas by" className="atlas-lens-bar__survey" role="group">
           <button
-            aria-pressed={landing !== "publishers"}
+            aria-pressed={landing === ""}
             onClick={() => onLandingChange("")}
+            title="Group by what each document is — control catalogs, risk frameworks, threat knowledge, and so on"
             type="button"
           >
             <IconTopologyStar3 aria-hidden="true" size={15} stroke={1.8} />
-            Landscape
+            By kind
           </button>
           <button
             aria-pressed={landing === "publishers"}
             onClick={() => onLandingChange("publishers")}
+            title="Group by who issues it — NIST, DISA, MITRE, DoD, and the rest"
             type="button"
           >
             <IconBuildingBank aria-hidden="true" size={15} stroke={1.8} />
             By publisher
+          </button>
+          <button
+            aria-pressed={landing === "job"}
+            onClick={() => onLandingChange("job")}
+            title="Group by what you are trying to get done — pick controls, assess, harden, and so on"
+            type="button"
+          >
+            <IconTargetArrow aria-hidden="true" size={15} stroke={1.8} />
+            By job
           </button>
         </div>
       )}

@@ -45,15 +45,15 @@ for (const viewport of VIEWPORTS) {
         await waitForAppReady(page, { allowPartial: true });
 
         if (route === "/#/explore") {
-          const landscape = page.getByTestId("atlas-constellation");
+          const landscape = page.getByTestId("atlas-family-board");
           await expect(landscape).toBeVisible();
           // Labelled controls at every width, and no canvas or disclosure
-          // standing between the visitor and the map: the diagram is SVG with
-          // a real button per framework above phone width, and the same
-          // frameworks as a list below it.
+          // standing between the visitor and the corpus: the landing is real
+          // buttons naming real publications, and every group names its
+          // members without being opened first.
           await expect(landscape.locator("canvas")).toHaveCount(0);
           await expect(
-            landscape.getByRole("button", { name: /^800-53\b/ }).first(),
+            landscape.getByRole("button", { name: /^800-53$/ }).first(),
           ).toBeVisible();
         }
 

@@ -30,11 +30,13 @@ test("Atlas default route is the semantic Atlas network, not an empty focused-re
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  // The default survey is the framework landscape drawn from the semantic
-  // network; the publisher inventory is the other survey of the same corpus.
-  const landscape = page.getByTestId("atlas-constellation");
+  // The default lens groups the corpus by what each document is, drawn from
+  // the same semantic network; publisher and job are the other two groupings
+  // of the same 28 publications. Every group names its members at rest, so
+  // 800-53 is reachable from the landing without opening anything.
+  const landscape = page.getByTestId("atlas-family-board");
   await expect(landscape).toBeVisible();
-  await expect(landscape.getByRole("button", { name: /^800-53\b/ }).first()).toBeVisible();
+  await expect(landscape.getByRole("button", { name: /^800-53$/ }).first()).toBeVisible();
   await expect(page.getByRole("region", { name: "Focused Atlas record" })).toHaveCount(0);
   await expect(page.locator(".ca-flow-wrap")).toHaveCount(0);
 

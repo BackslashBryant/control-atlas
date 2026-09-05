@@ -39,7 +39,7 @@ test("Atlas overview aggregates the ecosystem and drills directly", async ({ pag
   await waitForAppReady(page);
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  await expect(page.getByText("Open a publisher or source ecosystem to follow its publications and native structure.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Grouped by what each document is, who issues it, or what you're trying to get done.", { exact: true })).toBeVisible();
   const atlas = page.getByTestId("atlas-map");
   await expect(atlas).toHaveAttribute("data-scope-level", "root");
   const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');

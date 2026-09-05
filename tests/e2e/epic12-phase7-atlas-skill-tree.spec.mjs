@@ -34,7 +34,7 @@ test("semantic Atlas hands off to explicit publisher-native navigation and prese
   await openNetwork(page);
 
   const atlas = page.getByTestId("atlas-map");
-  await expect(page.getByText("Open a publisher or source ecosystem to follow its publications and native structure.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Grouped by what each document is, who issues it, or what you're trying to get done.", { exact: true })).toBeVisible();
   await expect(atlas).toHaveAttribute("data-scope-level", "root");
   await atlas
     .locator('.atlas-decomp__column[data-column="area"]')

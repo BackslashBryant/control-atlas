@@ -25,6 +25,12 @@ import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from "../../shared/site-copy.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
 import { AtlasConstellationMap } from "../components/AtlasConstellationMap";
+import { AtlasFamilyBoard } from "../components/AtlasFamilyBoard";
+import {
+  ATLAS_LENS_LABELS,
+  jobFamiliesFor,
+  kindFamiliesFor,
+} from "../lib/atlasLensFamilies";
 import { AtlasDecompositionMap } from "../components/AtlasDecompositionMap";
 import { AtlasFrameworkLinks } from "../components/AtlasFrameworkLinks";
 import { AtlasLensBar } from "../components/AtlasLensBar";
@@ -190,6 +196,58 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     }),
     [state.atlasLimb, state.atlasFramework, state.atlasFamily],
   );
+
+  // The groups the current lens offers, over whichever publications this
+  // artifact actually carries. Membership comes from the curated lens file;
+  // tests/graph/atlasLensFamilies asserts no publication falls out of either
+  // authored grouping.
+  const lensCatalogIds = useMemo(
+    () =>
+      (bundle.atlasNetwork?.frameworks?.nodes || []).map((node) => node.publicationId),
+    [bundle.atlasNetwork],
+  );
+  const lensFamilies = useMemo(
+    () =>
+      lensCatalogIds.length
+        ? state.atlasLanding === "job"
+          ? jobFamiliesFor(lensCatalogIds)
+          : kindFamiliesFor(lensCatalogIds)
+        : [],
+    [lensCatalogIds, state.atlasLanding],
+  );
+  const lensBlurb =
+    state.atlasLanding === "job"
+      ? ATLAS_LENS_LABELS.job.blurb
+      : ATLAS_LENS_LABELS.kind.blurb;
+
+  // One group opened: the same landscape drawing, over the handful of
+  // frameworks in that group rather than over all 28. Crosswalks that leave
+  // the group are dropped rather than drawn to nothing — the board names those
+  // connections, and the group's own page would otherwise show lines running
+  // off the edge.
+  const lensFamilyProjection = useMemo(() => {
+    const projection = bundle.atlasNetwork?.frameworks;
+    const family = lensFamilies.find((entry) => entry.id === state.atlasLensFamily);
+    if (!projection || !family) return null;
+    const wanted = new Set(family.catalogIds);
+    const nodes = projection.nodes.filter((node) => wanted.has(node.publicationId));
+    if (!nodes.length) return null;
+    const keep = new Set(nodes.map((node) => node.id));
+    return {
+      family,
+      frameworks: {
+        ...projection,
+        nodes,
+        edges: projection.edges.filter(
+          (edge) => keep.has(edge.source) && keep.has(edge.target),
+        ),
+      },
+      sharedGround: (bundle.atlasNetwork?.framework_shared_ground || []).filter(
+        (edge) => keep.has(edge.source) && keep.has(edge.target),
+      ),
+    };
+  }, [bundle.atlasNetwork, lensFamilies, state.atlasLensFamily]);
+
   const pivotSteps = useMemo(
     () => describePivotTrail(state.atlasPivotTrail, bundle.atlasNetwork),
     [state.atlasPivotTrail, bundle.atlasNetwork],
@@ -411,6 +469,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       atlasLimb: "",
       atlasFramework: "",
       atlasFamily: "",
+      atlasLensFamily: "",
       atlasPivotTrail: "",
       atlasLanding: landing,
       relationshipView: "",
@@ -447,6 +506,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     }
     if (state.atlasLimb) {
       patchAtlas({ atlasLimb: "", relationshipView: "" });
+      return;
+    }
+    // One step up from inside a group is the board of groups, not the top of
+    // the route — the lens is still the reader's choice.
+    if (state.atlasLensFamily) {
+      patchAtlas({ atlasLensFamily: "", relationshipView: "" });
       return;
     }
     atlasHome();
@@ -591,16 +656,29 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           })
         }
         landing={state.atlasLanding}
-        onLandingChange={(atlasLanding) => patchAtlas({ atlasLanding })}
-        onWholeLandscape={() => atlasHome("")}
-        scoped={Boolean(state.atlasLimb || state.atlasFramework || state.atlasFamily || nodeId)}
+        // Switching lens re-asks the question from the top: the group you had
+        // open belongs to the lens you just left.
+        onLandingChange={(atlasLanding) =>
+          patchAtlas({ atlasLanding, atlasLensFamily: "" })
+        }
+        onWholeLandscape={() => atlasHome(state.atlasLanding)}
+        scoped={Boolean(
+          state.atlasLimb
+            || state.atlasFramework
+            || state.atlasFamily
+            || state.atlasLensFamily
+            || nodeId,
+        )}
       />
 
-      {/* With nothing chosen, the landing is the landscape itself — the
-          frameworks and the crosswalks between them. Once a publisher or a
-          framework is in scope, that question is answered and the columns take
-          over, because from there the job is walking a structure, not
-          surveying one. */}
+      {/* Three steps, each showing a readable number of things: the groups in
+          the chosen lens, then the frameworks inside one group and how they
+          depend on each other, then the structure inside one framework.
+
+          The landing used to open on all 28 frameworks at once, which is more
+          than anyone can take in and which put SP 800-53 at the top of
+          everything — see viewState's atlasLanding for why that was a claim we
+          could not support. */}
       {bundle.atlasNetwork && atlasProjection && !hierarchyRequested && !nodeId ? (
         atlasScope.areaId
         || atlasScope.publicationId
@@ -635,12 +713,23 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
               />
             ) : null}
           </div>
-        ) : (
+        ) : lensFamilyProjection ? (
           <AtlasConstellationMap
             compact={compact}
-            frameworks={bundle.atlasNetwork.frameworks}
-            sharedGround={bundle.atlasNetwork.framework_shared_ground || []}
+            frameworks={lensFamilyProjection.frameworks}
+            sharedGround={lensFamilyProjection.sharedGround}
             onDrill={drillAtlas}
+            subject={`${lensFamilyProjection.family.label} — ${lensFamilyProjection.family.blurb.toLocaleLowerCase()}.`}
+          />
+        ) : (
+          <AtlasFamilyBoard
+            blurb={lensBlurb}
+            families={lensFamilies}
+            frameworks={bundle.atlasNetwork.frameworks}
+            onOpenFamily={(atlasLensFamily) => patchAtlas({ atlasLensFamily })}
+            onOpenFramework={(publicationId) =>
+              drillAtlas({ kind: "publication", targetId: publicationId })
+            }
           />
         )
       ) : !bundle.atlasNetwork ? (

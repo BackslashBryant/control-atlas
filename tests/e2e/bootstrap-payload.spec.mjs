@@ -91,17 +91,17 @@ test("expanding an Atlas area uses the semantic network without monolithic graph
   await page.goto("/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  const landscape = page.getByTestId("atlas-constellation");
+  const landscape = page.getByTestId("atlas-family-board");
   await expect(landscape).toBeVisible();
   expect(
     requested.some((url) => url.includes("atlas-network.json")),
   ).toBeTruthy();
   expect(graphArtifactUrls(requested)).toEqual([]);
 
-  // Entering a framework from the landscape, then stepping up to its
-  // publisher, both come out of the same semantic artifact — neither reaches
-  // for the monolithic node and edge JSON.
-  await landscape.getByRole("button", { name: /^800-53\b/ }).first().click();
+  // Entering a framework from the landing, then stepping up to its publisher,
+  // both come out of the same semantic artifact — neither reaches for the
+  // monolithic node and edge JSON.
+  await landscape.getByRole("button", { name: /^800-53$/ }).first().click();
   await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
   expect(graphArtifactUrls(requested)).toEqual([]);
 
@@ -117,7 +117,7 @@ test("Atlas reaches its first usable source map within the local render budget",
 }) => {
   await page.goto("/#/atlas");
   await waitForAppReady(page);
-  await expect(page.getByTestId("atlas-constellation")).toBeVisible();
+  await expect(page.getByTestId("atlas-family-board")).toBeVisible();
 
   const firstUsableMs = await page.evaluate(() =>
     Math.round(globalThis.performance.now()),

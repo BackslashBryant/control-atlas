@@ -35,14 +35,14 @@ async function clickAtlasLandmark(page, name) {
 }
 
 /**
- * The landing is the framework constellation, which renders as positioned
- * nodes on a canvas-sized screen and as a list on a phone. Both are labelled
- * buttons carrying the framework's spoken name, so one selector reaches the
- * landscape at every width.
+ * The landing is the board of groups, and every group names its members at
+ * rest as labelled buttons carrying the framework's spoken name. The board is
+ * one column on a phone and three on a desktop, so one selector reaches a
+ * framework at every width without opening anything first.
  */
 async function enterFrameworkFromLandscape(page, name) {
   const node = page
-    .getByTestId("atlas-constellation")
+    .getByTestId("atlas-family-board")
     .getByRole("button", { name })
     .first();
   await expect(node).toBeVisible();
@@ -57,15 +57,15 @@ for (const viewport of VIEWPORTS) {
     await page.goto("/#/atlas");
     await waitForAppReady(page);
     await dismissOnboarding(page);
-    // Nothing is scoped yet, so the landing is the landscape rather than the
-    // columns: the question at this point is which framework, not where inside
-    // one.
-    await expect(page.getByTestId("atlas-constellation")).toBeVisible();
+    // Nothing is scoped yet, so the landing is the board of groups rather than
+    // the columns: the question at this point is which framework, not where
+    // inside one.
+    await expect(page.getByTestId("atlas-family-board")).toBeVisible();
     await expect(page.getByTestId("atlas-map")).toHaveCount(0);
 
     // Entering a framework carries its publisher with it, so the columns open
     // already placed in the publisher hierarchy rather than orphaned.
-    await enterFrameworkFromLandscape(page, /^800-53\b/);
+    await enterFrameworkFromLandscape(page, /^800-53$/);
     await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
     await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
     await expect(page).not.toHaveURL(/atlasBaseline=/);
@@ -155,7 +155,7 @@ test("Atlas root presents a source-ecosystem interactive hierarchy", async ({
   // The map is DOM, not a canvas, so every node keeps a readable label.
   await expect(map.locator("canvas")).toHaveCount(0);
   await expect(
-    page.getByText("Open a publisher or source ecosystem to follow its publications and native structure.", { exact: true }),
+    page.getByText("Grouped by what each document is, who issues it, or what you're trying to get done.", { exact: true }),
   ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveCount(
     0,

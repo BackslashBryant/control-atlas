@@ -29,6 +29,12 @@ type AtlasConstellationMapProps = {
   sharedGround: AtlasSharedGroundEdge[];
   onDrill: (drill: AtlasProjectionDrill) => void;
   compact: boolean;
+  /**
+   * Names the set on screen when it is one group rather than the whole corpus.
+   * The sentence about how they are arranged is added here, because only this
+   * component knows whether anything in the set builds on anything else.
+   */
+  subject?: string;
 };
 
 /**
@@ -129,7 +135,7 @@ type ConstellationNode = {
  * genuinely says two frameworks meet.
  */
 export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
-  const { frameworks, sharedGround, onDrill, compact } = props;
+  const { frameworks, sharedGround, onDrill, compact, subject } = props;
   const [activeId, setActiveId] = useState("");
 
   const nodes = useMemo<ConstellationNode[]>(() => {
@@ -441,12 +447,23 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
     return sharedIds.has(entry.node.id) ? "shared" : "muted";
   }
 
+  // Saying "laid out by what builds on what" above a row of frameworks that
+  // build on nothing here is a small lie the reader can see. Several groups
+  // are genuinely flat — the publications in them are peers — and the honest
+  // sentence is more useful than the reassuring one.
   const summary = (
     <p className="atlas-constellation__lede">
-      Every published framework in Control Atlas, top to bottom by what
-      depends on what. Frameworks at the top are the ones nothing here selects
-      from, is assessed against, or otherwise builds on. Open one to follow
-      its own structure.
+      {subject ? (
+        <>
+          {subject}{" "}
+          {structuralEdges.length
+            ? "Arranged by what builds on what; open one to follow its own structure."
+            : "None of these builds on another, so they sit side by side. Open one to follow its own structure."}
+        </>
+      ) : (
+        `Every published framework in Control Atlas, top to bottom by what
+         depends on what. Open one to follow its own structure.`
+      )}
     </p>
   );
 
@@ -798,8 +815,17 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
               {/* The resting panel would otherwise be an empty column beside a
                   dense picture. The heaviest pairings are the honest thing to
                   put there: they answer "where is there actually something to
-                  see?" without the reader having to hunt for it. */}
-              <h4>Heaviest crosswalks</h4>
+                  see?" without the reader having to hunt for it. Inside a
+                  group there may be none, and a heading over an empty list
+                  reads as a failure rather than as the finding it is. */}
+              <h4>{heaviest.length ? "Heaviest crosswalks" : "Crosswalks here"}</h4>
+              {heaviest.length ? null : (
+                <p className="atlas-constellation__absence">
+                  Nobody has published a mapping between these frameworks. Each
+                  one still crosswalks to frameworks in other groups — the
+                  group board names those.
+                </p>
+              )}
               <ul className="atlas-constellation__crosswalks">
                 {heaviest.map((edge) => {
                   const from = nodeById.get(edge.source);
