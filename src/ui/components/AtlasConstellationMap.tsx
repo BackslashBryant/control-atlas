@@ -1,4 +1,11 @@
-import { useMemo, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { IconArrowRight, IconChevronRight } from "@tabler/icons-react";
 
 import type {
@@ -8,7 +15,11 @@ import type {
   AtlasProjectionNode,
   AtlasSharedGroundEdge,
 } from "../lib/atlasGraphProjection";
-import { FRAMEWORK_ROOT_CATALOG_IDS } from "../lib/atlasGraphProjection";
+import {
+  FRAMEWORK_ROOT_CATALOG_IDS,
+  frameworkDependencyDepth,
+  frameworkDependencyParent,
+} from "../lib/atlasGraphProjection";
 import { areaPresentationForCatalog } from "../lib/areaVisualLanguage";
 import { catalogProfileFor, catalogShortNameFor } from "../lib/catalogProfiles";
 
@@ -21,29 +32,59 @@ type AtlasConstellationMapProps = {
 };
 
 /**
- * The drawn tree is fitted to the canvas from its own bounding box rather than
- * against a fixed coordinate range.
+ * Where each drawn card actually landed, measured from the DOM after layout.
  *
- * A fixed range has to assume how far out the tree reaches, and this one is
- * only as deep as the crosswalk data makes it — so most branches stopped two
- * levels in and the whole diagram sat in a band across the middle with a third
- * of the canvas empty above and below. Measuring what is actually there fills
- * the space at any depth, and keeps filling it when the corpus changes.
+ * The hierarchy is laid out by the browser — rows of uniform cards that wrap
+ * on their own — so the only way to draw a line between two of them is to ask
+ * where they ended up. The previous version positioned cards at percentage
+ * coordinates baked in at build time, which cannot be responsive: one set of
+ * numbers stretched across every viewport put twenty-four pairs of cards on
+ * top of each other, and no choice of numbers would have fixed it.
  */
-const SPAN_X = 45;
-const SPAN_Y = 44;
+type CardGeometry = {
+  width: number;
+  height: number;
+  points: Record<string, { cx: number; top: number; bottom: number }>;
+  groups: Record<string, { cx: number; left: number; right: number; top: number }>;
+};
 
-function fitToCanvas(points: Array<{ x: number; y: number }>) {
-  const xs = points.map((point) => point.x);
-  const ys = points.map((point) => point.y);
-  const minX = Math.min(...xs);
-  const minY = Math.min(...ys);
-  const rangeX = Math.max(...xs) - minX || 1;
-  const rangeY = Math.max(...ys) - minY || 1;
-  return (point: { x: number; y: number }) => ({
-    x: 50 - SPAN_X + ((point.x - minX) / rangeX) * SPAN_X * 2,
-    y: 50 - SPAN_Y + ((point.y - minY) / rangeY) * SPAN_Y * 2,
-  });
+const EMPTY_GEOMETRY: CardGeometry = { width: 0, height: 0, points: {}, groups: {} };
+
+/**
+ * A connector with vertical tangents at both ends: it leaves the parent going
+ * straight down and arrives at the child going straight down, so a line reads
+ * as descent rather than as a wire strung across the picture. The retired
+ * version bowed each edge sideways by a fraction of its own vertical span,
+ * which is why long edges swung across unrelated frameworks.
+ */
+function descent(from: { cx: number; bottom: number }, to: { cx: number; top: number }) {
+  const midY = (from.bottom + to.top) / 2;
+  return `M ${from.cx} ${from.bottom} C ${from.cx} ${midY} ${to.cx} ${midY} ${to.cx} ${to.top}`;
+}
+
+/**
+ * Parent card down to the cluster holding its children. The landing point
+ * slides along the cluster's top edge to sit under the parent wherever it can,
+ * so the line stays as close to vertical as the layout allows.
+ */
+function descentToGroup(
+  from: { cx: number; bottom: number },
+  to: { left: number; right: number; top: number },
+) {
+  const inset = Math.min(28, (to.right - to.left) / 2);
+  const tx = Math.max(to.left + inset, Math.min(to.right - inset, from.cx));
+  return descent(from, { cx: tx, top: to.top });
+}
+
+/** Centre-to-centre, for the crosswalk layer that sits behind the hierarchy. */
+function link(
+  from: { cx: number; top: number; bottom: number },
+  to: { cx: number; top: number; bottom: number },
+) {
+  const fromY = (from.top + from.bottom) / 2;
+  const toY = (to.top + to.bottom) / 2;
+  const midY = (fromY + toY) / 2;
+  return `M ${from.cx} ${fromY} C ${from.cx} ${midY} ${to.cx} ${midY} ${to.cx} ${toY}`;
 }
 
 /**
@@ -64,9 +105,6 @@ type ConstellationNode = {
   node: AtlasProjectionNode;
   catalogId: string;
   shortName: string;
-  /** Percent of the canvas box; assigned once the drawn set is known. */
-  x: number;
-  y: number;
   areaToken: string;
   areaLabel: string;
   publicationKind: string;
@@ -74,14 +112,7 @@ type ConstellationNode = {
   recordLabel: string;
   reach: number;
   crosswalkTotal: number;
-  scale: "sm" | "md" | "lg";
 };
-
-function scaleFor(records: number): ConstellationNode["scale"] {
-  if (records >= 1000) return "lg";
-  if (records >= 120) return "md";
-  return "sm";
-}
 
 /**
  * The landscape, drawn as a dependency hierarchy: the frameworks nothing here
@@ -120,8 +151,6 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
         node,
         catalogId,
         shortName: catalogShortNameFor(catalogId, node.label),
-        x: 0,
-        y: 0,
         areaToken: area?.token || "--ca-area-operations",
         areaLabel: area?.label || "",
         publicationKind: node.publicationKind || profile.publicationKind,
@@ -129,32 +158,225 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
         recordLabel: profile.recordLabel,
         reach: reach.get(node.id)?.size || 0,
         crosswalkTotal: total.get(node.id) || 0,
-        scale: scaleFor(Math.max(0, node.canonicalRecordCount - 1)),
       };
     });
   }, [frameworks]);
 
-  // A catalog nothing crosswalks to has no place on a diagram of crosswalks.
-  // Drawing it anyway made six boxes float with no lines touching them, which
-  // reads as a rendering fault rather than as the true statement it is. They
-  // are named underneath instead, where the absence is the point.
-  const placed = useMemo(() => {
-    const drawn = nodes.filter((entry) => entry.reach > 0);
-    if (!drawn.length) return drawn;
-    const fit = fitToCanvas(drawn.map((entry) => ({ x: entry.node.x, y: entry.node.y })));
-    return drawn.map((entry) => ({ ...entry, ...fit({ x: entry.node.x, y: entry.node.y }) }));
-  }, [nodes]);
+  // A catalog the dependency spine does not place has no row to sit in, and
+  // on this corpus that is exactly the set carrying no crosswalk at all.
+  // Drawing them anyway made six boxes float with no lines touching them,
+  // which reads as a rendering fault rather than as the true statement it is.
+  // They are named underneath instead, where the absence is the point.
+  const placed = useMemo(
+    () => nodes.filter((entry) => frameworkDependencyDepth(entry.catalogId) >= 0),
+    [nodes],
+  );
   const nodeById = useMemo(
     () => new Map(placed.map((entry) => [entry.node.id, entry])),
     [placed],
   );
 
+  // Depth is read against the set actually on screen, not against the whole
+  // corpus. Drawn over all 28 publications this is identical to the curated
+  // spine's own depth; drawn over one family it lets a framework whose parent
+  // is in a different family stand as a root of what is here, instead of
+  // sitting at depth 3 with nothing above it.
+  const localTree = useMemo(() => {
+    const present = new Set(placed.map((entry) => entry.catalogId));
+    const parentOf = (catalogId: string) => {
+      const parent = frameworkDependencyParent(catalogId);
+      return parent && present.has(parent) ? parent : "";
+    };
+    const depthOf = (catalogId: string) => {
+      const seen = new Set<string>([catalogId]);
+      let depth = 0;
+      let cursor = catalogId;
+      for (;;) {
+        const parent = parentOf(cursor);
+        if (!parent || seen.has(parent)) return depth;
+        seen.add(parent);
+        cursor = parent;
+        depth += 1;
+      }
+    };
+    return { parentOf, depthOf };
+  }, [placed]);
+
+  const byCatalogId = useMemo(
+    () => new Map(placed.map((entry) => [entry.catalogId, entry])),
+    [placed],
+  );
+
+  // One row per depth, and inside each row one bounded cluster per parent.
+  //
+  // The previous version put every framework at a depth into a single wrapping
+  // row, which scattered a parent's children across three wrap lines and turned
+  // each of the seventeen parent-child lines into a long diagonal through the
+  // same band. Grouping does the work the lines were failing to do: children
+  // sit inside a box that says whose they are, so one short line per cluster
+  // replaces seventeen crossing ones.
+  //
+  // Clusters are ordered by where their parent landed on the row above, so the
+  // tree never crosses itself.
+  const rows = useMemo(() => {
+    const byDepth = new Map<number, ConstellationNode[]>();
+    for (const entry of placed) {
+      const depth = localTree.depthOf(entry.catalogId);
+      const bucket = byDepth.get(depth) || [];
+      bucket.push(entry);
+      byDepth.set(depth, bucket);
+    }
+    const order = new Map<string, number>();
+    let cursor = 0;
+    return [...byDepth.keys()]
+      .sort((left, right) => left - right)
+      .map((depth) => {
+        const byParent = new Map<string, ConstellationNode[]>();
+        for (const entry of byDepth.get(depth) || []) {
+          const parentCatalogId = localTree.parentOf(entry.catalogId);
+          const bucket = byParent.get(parentCatalogId) || [];
+          bucket.push(entry);
+          byParent.set(parentCatalogId, bucket);
+        }
+        const groups = [...byParent.entries()]
+          .map(([parentCatalogId, entries]) => ({
+            parentCatalogId,
+            parent: byCatalogId.get(parentCatalogId),
+            entries: entries.sort((a, b) => a.shortName.localeCompare(b.shortName)),
+          }))
+          .sort(
+            (a, b) =>
+              (order.get(a.parentCatalogId) ?? -1) - (order.get(b.parentCatalogId) ?? -1),
+          );
+        for (const group of groups) {
+          for (const entry of group.entries) order.set(entry.catalogId, cursor++);
+        }
+        return { depth, groups };
+      });
+  }, [placed, byCatalogId, localTree]);
+
   const unlinked = useMemo(
     () =>
       nodes
-        .filter((entry) => entry.reach === 0)
+        .filter((entry) => frameworkDependencyDepth(entry.catalogId) < 0)
         .sort((a, b) => b.node.canonicalRecordCount - a.node.canonicalRecordCount),
     [nodes],
+  );
+
+  // Cards are sized by the stylesheet and wrapped by the browser, so their
+  // positions are only knowable after layout. Measured here, and re-measured
+  // whenever the container resizes, which is what keeps the connectors
+  // attached at every width.
+  const fieldRef = useRef<HTMLDivElement | null>(null);
+  const [geometry, setGeometry] = useState<CardGeometry>(EMPTY_GEOMETRY);
+  const [remeasureToken, setRemeasureToken] = useState(0);
+
+  // Left to right by where each cluster's parent actually landed. Build-time
+  // sequence is not enough: a row wraps differently at every width, so the
+  // parent that renders third can end up leftmost, and its line then has to
+  // cross two other clusters to reach its children. Sorting on the measured
+  // position keeps every descent short and stops the tree crossing itself.
+  //
+  // This settles in one pass — a cluster's sort key comes from the row above,
+  // which reordering this row cannot move.
+  const orderedRows = useMemo(
+    () =>
+      rows.map((row) => ({
+        depth: row.depth,
+        groups: [...row.groups].sort((a, b) => {
+          const left = a.parent ? geometry.points[a.parent.node.id]?.cx : undefined;
+          const right = b.parent ? geometry.points[b.parent.node.id]?.cx : undefined;
+          if (left === undefined || right === undefined) return 0;
+          return left - right;
+        }),
+      })),
+    [rows, geometry.points],
+  );
+
+  useLayoutEffect(() => {
+    const container = fieldRef.current;
+    if (!container) return undefined;
+    const measure = () => {
+      const base = container.getBoundingClientRect();
+      const points: CardGeometry["points"] = {};
+      for (const card of container.querySelectorAll<HTMLElement>("[data-node-id]")) {
+        const rect = card.getBoundingClientRect();
+        const id = card.dataset.nodeId;
+        if (!id) continue;
+        points[id] = {
+          cx: rect.x - base.x + rect.width / 2,
+          top: rect.y - base.y,
+          bottom: rect.y - base.y + rect.height,
+        };
+      }
+      const groups: CardGeometry["groups"] = {};
+      for (const box of container.querySelectorAll<HTMLElement>("[data-group-id]")) {
+        const rect = box.getBoundingClientRect();
+        const id = box.dataset.groupId;
+        if (!id) continue;
+        groups[id] = {
+          cx: rect.x - base.x + rect.width / 2,
+          left: rect.x - base.x,
+          right: rect.x - base.x + rect.width,
+          top: rect.y - base.y,
+        };
+      }
+      setGeometry((previous) => {
+        const same =
+          previous.width === base.width
+          && previous.height === base.height
+          && Object.keys(points).length === Object.keys(previous.points).length
+          && Object.keys(groups).length === Object.keys(previous.groups).length
+          && Object.entries(points).every(([id, point]) => {
+            const before = previous.points[id];
+            return before && before.cx === point.cx && before.top === point.top;
+          })
+          && Object.entries(groups).every(([id, group]) => {
+            const before = previous.groups[id];
+            return before && before.left === group.left && before.top === group.top;
+          });
+        return same ? previous : { width: base.width, height: base.height, points, groups };
+      });
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [orderedRows, remeasureToken]);
+
+  // Fonts land after first paint and change card heights; re-run the measure
+  // once they do, so the connectors are not left attached to where the cards
+  // used to be.
+  useEffect(() => {
+    const fonts = (document as Document & { fonts?: { ready?: Promise<unknown> } }).fonts;
+    if (!fonts?.ready) return undefined;
+    let cancelled = false;
+    void fonts.ready.then(() => {
+      if (!cancelled) setRemeasureToken((token) => token + 1);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // The backbone: one line per cluster, from the parent card down to the box
+  // holding its children. Six lines where there were seventeen, none of them
+  // long enough to cross another.
+  const structuralEdges = useMemo(
+    () =>
+      rows.flatMap((row) =>
+        row.groups.flatMap((group) => {
+          if (!group.parent) return [];
+          return [{
+            id: `spine:${group.parentCatalogId}`,
+            groupId: group.parentCatalogId,
+            parentId: group.parent.node.id,
+            areaToken: group.parent.areaToken,
+            memberIds: group.entries.map((entry) => entry.node.id),
+          }];
+        }),
+      ),
+    [rows],
   );
   // Edges are drawn heaviest-last so a thin pairing is never buried under the
   // STIG-to-CCI band.
@@ -211,14 +433,6 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
       ),
     [activeSharedGround, activeId],
   );
-
-  function nodeStyle(entry: ConstellationNode): CSSProperties {
-    return {
-      left: `${entry.x}%`,
-      top: `${entry.y}%`,
-      "--ca-area-color": `var(${entry.areaToken})`,
-    } as CSSProperties;
-  }
 
   function nodeState(entry: ConstellationNode): string {
     if (!activeId) return "rest";
@@ -289,50 +503,67 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
           aria-label="Frameworks and the crosswalks between them"
           className="atlas-constellation__canvas"
           onMouseLeave={() => setActiveId("")}
+          ref={fieldRef}
           role="group"
         >
+          {/* Drawn from measured card positions, so it stays attached at any
+              width. Sized in real pixels rather than a stretched unit box:
+              a non-uniform scale would skew every curve. */}
           <svg
             aria-hidden="true"
             className="atlas-constellation__wires"
-            preserveAspectRatio="none"
-            viewBox="0 0 100 100"
+            height={geometry.height || undefined}
+            viewBox={`0 0 ${geometry.width || 1} ${geometry.height || 1}`}
+            width={geometry.width || undefined}
           >
             {edges.map((edge) => {
-              const from = nodeById.get(edge.source);
-              const to = nodeById.get(edge.target);
-              if (!from || !to) return null;
+              const from = geometry.points[edge.source];
+              const to = geometry.points[edge.target];
+              const source = nodeById.get(edge.source);
+              if (!from || !to || !source) return null;
               const touchesActive =
                 !activeId || edge.source === activeId || edge.target === activeId;
-              // A gentle bow away from the midpoint keeps two lines between the
-              // same neighbourhood from lying on top of one another.
-              const midX = (from.x + to.x) / 2;
-              const midY = (from.y + to.y) / 2;
-              const bowX = midX + (to.y - from.y) * 0.085;
-              const bowY = midY - (to.x - from.x) * 0.085;
               return (
                 <path
                   className="atlas-constellation__wire"
-                  d={`M${from.x} ${from.y} Q${bowX} ${bowY} ${to.x} ${to.y}`}
+                  d={link(from, to)}
                   data-state={touchesActive ? "lit" : "muted"}
                   key={edge.id}
-                  stroke={`var(${from.areaToken})`}
+                  stroke={`var(${source.areaToken})`}
                   strokeWidth={edgeWeight(edge.relationshipCount)}
                   vectorEffect="non-scaling-stroke"
                 />
               );
             })}
-            {activeSharedGround.map((edge) => {
-              const from = nodeById.get(edge.source);
-              const to = nodeById.get(edge.target);
+            {/* The hierarchy is drawn last so it sits above the crosswalk
+                layer: the backbone should never be the faint thing. */}
+            {structuralEdges.map((edge) => {
+              const from = geometry.points[edge.parentId];
+              const to = geometry.groups[edge.groupId];
               if (!from || !to) return null;
-              const midX = (from.x + to.x) / 2;
-              const midY = (from.y + to.y) / 2;
-              const bowX = midX + (to.y - from.y) * 0.085;
-              const bowY = midY - (to.x - from.x) * 0.085;
+              const touchesActive =
+                !activeId
+                || edge.parentId === activeId
+                || edge.memberIds.includes(activeId);
+              return (
+                <path
+                  className="atlas-constellation__spine"
+                  d={descentToGroup(from, to)}
+                  data-state={touchesActive ? "lit" : "muted"}
+                  key={edge.id}
+                  stroke={`var(${edge.areaToken})`}
+                  vectorEffect="non-scaling-stroke"
+                />
+              );
+            })}
+            {activeSharedGround.map((edge) => {
+              const from = geometry.points[edge.source];
+              const to = geometry.points[edge.target];
+              if (!from || !to) return null;
               return (
                 <path
                   className="atlas-constellation__wire atlas-constellation__wire--shared"
-                  d={`M${from.x} ${from.y} Q${bowX} ${bowY} ${to.x} ${to.y}`}
+                  d={link(from, to)}
                   key={edge.id}
                   strokeWidth={Math.max(1, 1 + edge.overlapRatio * 2)}
                   vectorEffect="non-scaling-stroke"
@@ -341,28 +572,72 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
             })}
           </svg>
 
-          {placed.map((entry) => (
-            <button
-              className="atlas-constellation__node"
-              data-hub={FRAMEWORK_ROOT_CATALOG_IDS.has(entry.catalogId) ? "true" : undefined}
-              data-scale={entry.scale}
-              data-state={nodeState(entry)}
-              key={entry.node.id}
-              onBlur={() => setActiveId("")}
-              onClick={() => entry.node.drill && onDrill(entry.node.drill)}
-              onFocus={() => setActiveId(entry.node.id)}
-              onMouseEnter={() => setActiveId(entry.node.id)}
-              style={nodeStyle(entry)}
-              type="button"
-            >
-              <span className="atlas-constellation__node-label">{entry.shortName}</span>
-              {entry.synopsis ? (
-                <span className="atlas-constellation__node-synopsis">{entry.synopsis}</span>
-              ) : null}
-              <span className="atlas-constellation__node-count">
-                {formatCount(Math.max(0, entry.node.canonicalRecordCount - 1))}
-              </span>
-            </button>
+          {orderedRows.map((row) => (
+            <div className="atlas-constellation__row" key={row.depth}>
+              {row.groups.map((group) => (
+                <div
+                  className="atlas-constellation__group"
+                  data-group-id={group.parent ? group.parentCatalogId : undefined}
+                  key={group.parentCatalogId || "roots"}
+                  style={
+                    group.parent
+                      ? ({ "--ca-area-color": `var(${group.parent.areaToken})` } as CSSProperties)
+                      : undefined
+                  }
+                >
+                  {/* Naming the parent on the box is what lets the reader see
+                      whose children these are without tracing a line back up
+                      — and it says it in words, so no legend is needed. */}
+                  {group.parent ? (
+                    <p className="atlas-constellation__group-label">
+                      {/* Only the lead-in is upper-cased. Running the parent's
+                          name through text-transform turned "CCIs" into
+                          "CCIS" and "800-171 r2" into "800-171 R2", which are
+                          not what those documents are called. */}
+                      <span>Builds on</span> <strong>{group.parent.shortName}</strong>
+                    </p>
+                  ) : null}
+                  <div className="atlas-constellation__group-cards">
+                    {group.entries.map((entry) => (
+                      <button
+                        className="atlas-constellation__node"
+                        data-hub={
+                          FRAMEWORK_ROOT_CATALOG_IDS.has(entry.catalogId) ? "true" : undefined
+                        }
+                        data-node-id={entry.node.id}
+                        data-state={nodeState(entry)}
+                        key={entry.node.id}
+                        onBlur={() => setActiveId("")}
+                        onClick={() => entry.node.drill && onDrill(entry.node.drill)}
+                        onFocus={() => setActiveId(entry.node.id)}
+                        onMouseEnter={() => setActiveId(entry.node.id)}
+                        style={
+                          { "--ca-area-color": `var(${entry.areaToken})` } as CSSProperties
+                        }
+                        title={
+                          entry.synopsis
+                            ? `${entry.shortName} — ${entry.synopsis}`
+                            : entry.shortName
+                        }
+                        type="button"
+                      >
+                        <span className="atlas-constellation__node-label">
+                          {entry.shortName}
+                        </span>
+                        {entry.synopsis ? (
+                          <span className="atlas-constellation__node-synopsis">
+                            {entry.synopsis}
+                          </span>
+                        ) : null}
+                        <span className="atlas-constellation__node-count">
+                          {formatCount(Math.max(0, entry.node.canonicalRecordCount - 1))}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           ))}
         </div>
 

@@ -211,6 +211,10 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   const [benchmarkStatus, setBenchmarkStatus] = useState<
     "idle" | "loading" | "ready" | "error"
   >(state.atlasBenchmark ? "loading" : "idle");
+  // Anything that gives the page a subject of its own: a focused record, or a
+  // framework the reader has opened. Either way the landscape-wide hero copy
+  // is no longer describing what they are looking at.
+  const hasSubject = Boolean(nodeId) || Boolean(state.atlasFramework);
   const [mapSearchDraft, setMapSearchDraft] = useState(
     state.relationshipSearch || "",
   );
@@ -510,18 +514,22 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           being true the moment a record is in focus — and its 148px of hero
           was pushing that record's connection graph off the fold. With a
           subject, the header shrinks to the route name and the search box;
-          the focused card below states everything this paragraph would. */}
+          the focused card below states everything this paragraph would.
+          Scoping into a framework is the same situation: "open a publisher to
+          follow its publications" is not what the reader is doing once they
+          have opened one, and leaving it there put ~469px of chrome between
+          the click and the thing it opened. */}
       <header
         className="atlas-canvas-header"
-        data-atlas-header={record ? "focused" : "landing"}
+        data-atlas-header={hasSubject ? "focused" : "landing"}
         data-route-primary-header="true"
       >
         <div data-route-primary-copy="true">
-          {record ? null : (
+          {hasSubject ? null : (
             <p className="eyebrow">{FIRST_PAINT_ROUTE_COPY.atlas.eyebrow}</p>
           )}
           <h1 id="atlas-page-title">Atlas</h1>
-          {record ? null : <p>{SITE_COPY.routes.atlas.purpose}</p>}
+          {hasSubject ? null : <p>{SITE_COPY.routes.atlas.purpose}</p>}
         </div>
         <form className="atlas-map-command" onSubmit={submitSearch}>
           <label className="visually-hidden" htmlFor="atlas-search">

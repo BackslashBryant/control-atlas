@@ -266,6 +266,23 @@ export const FRAMEWORK_ROOT_CATALOG_IDS: ReadonlySet<string> = new Set(
   FRAMEWORK_SPINE.roots.map((root) => root.catalogId),
 );
 
+/**
+ * The framework this one builds on, or "" for a declared root and for any
+ * catalog the spine does not cover.
+ */
+export function frameworkDependencyParent(catalogId: string): string {
+  return FRAMEWORK_SPINE.children[catalogId]?.parentCatalogId || "";
+}
+
+/**
+ * How many steps a framework sits below a root: 0 for the roots themselves,
+ * -1 for a catalog with no entry in the spine (the ones carrying no crosswalk
+ * in this corpus, which the map lists beside itself rather than drawing).
+ */
+export function frameworkDependencyDepth(catalogId: string): number {
+  return resolveFrameworkDepth(catalogId);
+}
+
 /** -1 if the catalog has no entry in the curated spine (no crosswalk in this corpus). */
 function resolveFrameworkDepth(catalogId: string, resolving: Set<string> = new Set()): number {
   if (FRAMEWORK_ROOT_CATALOG_IDS.has(catalogId)) return 0;
@@ -284,136 +301,6 @@ function resolveFrameworkDepth(catalogId: string, resolving: Set<string> = new S
   return parentDepth + 1;
 }
 
-/**
- * Places frameworks in a top-down dependency hierarchy: the frameworks
- * nothing here depends on (framework-dependency-spine.json's declared roots)
- * sit at the top, and everything that selects from, is assessed against,
- * correlates to, or otherwise builds on one sits exactly one row below it —
- * never beside it.
- *
- * Direction is deliberately not read off the crosswalk graph the way the
- * retired radial-by-centrality layout was. Every framework-pair edge in the
- * canonical graph is relationship_class "correlation" or "applicability", and
- * docs/DATA_POLICY.md is explicit those classes cannot supply parent,
- * ancestors, structural level, or depth — confirmed directly against the
- * data besides: NIST Zero Trust's own edge to SP 800-53 carries both
- * "supports" and "supported_by" in the same aggregated bucket, so
- * relationship_type cannot mechanically supply direction either. The curated
- * spine is a human editorial call, reviewed with the product owner, kept out
- * of the canonical graph so it can never be presented as a published
- * crosswalk.
- */
-function assignFrameworkHierarchyCoordinates(nodes: AtlasProjectionNode[]) {
-  const depthByCatalog = new Map<string, number>();
-  for (const node of nodes) {
-    const depth = resolveFrameworkDepth(node.publicationId);
-    if (depth >= 0) depthByCatalog.set(node.publicationId, depth);
-  }
-
-  const childrenOf = new Map<string, string[]>();
-  for (const [catalogId, entry] of Object.entries(FRAMEWORK_SPINE.children)) {
-    if (!depthByCatalog.has(catalogId)) continue; // declared in the spine, absent from this corpus build
-    const siblings = childrenOf.get(entry.parentCatalogId) || [];
-    siblings.push(catalogId);
-    childrenOf.set(entry.parentCatalogId, siblings);
-  }
-  for (const siblings of childrenOf.values()) siblings.sort((a, b) => a.localeCompare(b));
-
-  // Each root's horizontal share of the row is proportional to how many
-  // leaves its subtree ends in — damped the same way the retired radial
-  // layout shared out angular space, so a five-branch root is not squeezed to
-  // the same width as a childless one.
-  const leafCount = new Map<string, number>();
-  function countLeaves(catalogId: string): number {
-    const kids = childrenOf.get(catalogId) || [];
-    const total = kids.length ? kids.reduce((sum, kid) => sum + countLeaves(kid), 0) : 1;
-    leafCount.set(catalogId, total);
-    return total;
-  }
-  const roots = FRAMEWORK_SPINE.roots
-    .map((root) => root.catalogId)
-    .filter((catalogId) => depthByCatalog.has(catalogId))
-    .sort((a, b) => a.localeCompare(b));
-  for (const catalogId of roots) countLeaves(catalogId);
-
-  const xByCatalog = new Map<string, number>();
-  function place(catalogId: string, from: number, to: number) {
-    xByCatalog.set(catalogId, (from + to) / 2);
-    const kids = childrenOf.get(catalogId) || [];
-    if (!kids.length) return;
-    const share = (id: string) => Math.pow(leafCount.get(id) || 1, 0.55);
-    const total = kids.reduce((sum, kid) => sum + share(kid), 0) || 1;
-    let cursor = from;
-    for (const kid of kids) {
-      const span = (to - from) * (share(kid) / total);
-      place(kid, cursor, cursor + span);
-      cursor += span;
-    }
-  }
-  const rootShare = (id: string) => Math.pow(leafCount.get(id) || 1, 0.55);
-  const rootTotal = roots.reduce((sum, id) => sum + rootShare(id), 0) || 1;
-  let cursor = 0;
-  for (const catalogId of roots) {
-    const span = rootShare(catalogId) / rootTotal;
-    place(catalogId, cursor, cursor + span);
-    cursor += span;
-  }
-
-  // Depth alone is not enough room: every root's children would otherwise
-  // share one literal horizontal line, and SP 800-53's eight plus ATT&CK's
-  // two plus CUI's three is thirteen boxes fighting for the same row. Each
-  // root gets its own thin lane around the row instead, so a wide subtree
-  // does not have to fit in the same line as everyone else's. Roots stay on
-  // a clean, unjittered top row.
-  const rootOf = new Map<string, string>(roots.map((id) => [id, id]));
-  const parentOf = new Map<string, string>();
-  for (const catalogId of roots) {
-    const queue = [...(childrenOf.get(catalogId) || [])];
-    for (let cursor = 0; cursor < queue.length; cursor += 1) {
-      const id = queue[cursor]!;
-      rootOf.set(id, catalogId);
-      queue.push(...(childrenOf.get(id) || []));
-    }
-  }
-  for (const [parent, kids] of childrenOf) {
-    for (const kid of kids) parentOf.set(kid, parent);
-  }
-  const LANE_STEP = 0.16;
-  const laneOf = new Map<string, number>(
-    roots.map((id, index) => [id, (index - (roots.length - 1) / 2) * LANE_STEP]),
-  );
-  // A sibling group past four members still will not fit one line at a
-  // readable width — CUI's three or ATT&CK's two do, SP 800-53's eight do
-  // not. Past that count the row interleaves into two, so a name's nearest
-  // horizontal neighbours are never the two names competing for the exact
-  // same strip.
-  const SIBLING_ROW_LIMIT = 4;
-  const ROW_STEP = 0.09;
-  function siblingRowOffset(catalogId: string): number {
-    const parent = parentOf.get(catalogId);
-    const siblings = parent ? childrenOf.get(parent) || [] : [];
-    if (siblings.length <= SIBLING_ROW_LIMIT) return 0;
-    const index = siblings.indexOf(catalogId);
-    return (index % 2 === 0 ? -1 : 1) * ROW_STEP;
-  }
-
-  for (const node of nodes) {
-    const depth = depthByCatalog.get(node.publicationId);
-    if (depth === undefined) {
-      // No entry in the curated spine — the same catalogs that carry no
-      // crosswalk edge in this corpus. Parked at the origin and listed beside
-      // the map instead, same as the retired layout.
-      node.x = 0;
-      node.y = 0;
-      continue;
-    }
-    const root = rootOf.get(node.publicationId);
-    const lane = depth > 0 ? laneOf.get(root || "") || 0 : 0;
-    const row = depth > 0 ? siblingRowOffset(node.publicationId) : 0;
-    node.x = stable((xByCatalog.get(node.publicationId) || 0) * 2 - 1);
-    node.y = stable(depth + lane + row);
-  }
-}
 function assignCoordinates(
   level: AtlasProjectionLevel,
   nodes: AtlasProjectionNode[],
@@ -425,10 +312,11 @@ function assignCoordinates(
     });
     return;
   }
-  if (level === "frameworks") {
-    assignFrameworkHierarchyCoordinates(nodes);
-    return;
-  }
+  // The frameworks map carries no coordinates. Its hierarchy is laid out in
+  // the DOM from the curated spine's depth and parent, so it reflows with the
+  // viewport instead of stretching one set of baked-in positions across every
+  // width — which is what put twenty-four pairs of cards on top of each other.
+  if (level === "frameworks") return;
   const context = nodes.find((node) => node.id.startsWith("context:"));
   if (context) {
     context.x = 0;

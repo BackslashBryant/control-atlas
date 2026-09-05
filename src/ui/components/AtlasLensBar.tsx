@@ -53,11 +53,19 @@ export function AtlasLensBar(props: AtlasLensBarProps) {
                     "--ca-area-color": `var(${area?.token || "--ca-area-operations"})`,
                   } as CSSProperties
                 }
+                title={`${entry.label} — ${entry.blurb}`}
                 type="button"
               >
                 <span aria-hidden="true" className="atlas-lens-bar__dot" />
                 <span className="atlas-lens-bar__label">{entry.label}</span>
-                <span className="atlas-lens-bar__blurb">{entry.blurb}</span>
+                {/* The blurb is what turns "RMF" into a door on the way in.
+                    Once the reader is inside a framework these are the way
+                    across to another one, not a menu to be read — and spelling
+                    them all out wrapped the bar onto a second row, putting
+                    more chrome between the click and what it opened. */}
+                {scoped ? null : (
+                  <span className="atlas-lens-bar__blurb">{entry.blurb}</span>
+                )}
               </button>
             </li>
           );

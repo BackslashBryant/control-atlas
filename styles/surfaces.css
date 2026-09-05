@@ -12607,7 +12607,12 @@ input[type="checkbox"] {
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  /* The meta and chevron tracks must be able to give way. As plain `auto`
+     they resolve to minmax(auto, max-content), and a nowrap meta's min-content
+     equals its max-content — so grid satisfied them first and left the name
+     track absorbing the whole deficit at 0px. The name is the one thing on the
+     row that must never disappear, so it gets a floor and the meta yields. */
+  grid-template-columns: minmax(4.5rem, 1fr) minmax(0, auto) auto;
   align-items: center;
   gap: var(--ca-space-2);
   width: 100%;
@@ -12682,11 +12687,28 @@ input[type="checkbox"] {
 }
 
 .atlas-decomp__meta {
+  min-width: 0;
+  overflow: hidden;
   color: var(--ca-text-muted);
   font-family: var(--ca-font-mono, monospace);
   font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
+  text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Lifecycle is a dot rather than a word: "Historical" is the exception worth
+   flagging, and spelling it out is what made this column too wide to share. */
+.atlas-decomp__meta[data-lifecycle="historical"]::before {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: var(--ca-accent-gold, var(--lsm-gold));
+  content: "";
+  vertical-align: middle;
 }
 
 .atlas-decomp__chevron {
@@ -12801,8 +12823,11 @@ input[type="checkbox"] {
 }
 
 /* Narrow screens always stack: side-by-side columns cannot keep labels legible
-   below this width, and the page, not a nested pane, does the scrolling. */
-@media (max-width: 1099px) {
+   below this width, and the page, not a nested pane, does the scrolling.
+   Matched to the 1100px breakpoint where the crosswalks sidebar drops — at
+   1099 vs 1100 there was a one-pixel band where the sidebar had gone but the
+   columns were still side by side. */
+@media (max-width: 1100px) {
   .atlas-decomp__levels,
   .atlas-decomp__level {
     display: grid;
@@ -13079,6 +13104,174 @@ input[type="checkbox"] {
 }
 
 /* ==========================================================================
+   Atlas family board — the first screen of the landing.
+
+   Five or six groups instead of twenty-eight frameworks. Everything a reader
+   needs to choose between them is on the card at rest: what the group is, what
+   is in it by name, and which other groups it actually crosswalks to. Nothing
+   here is hover-gated, because the reader has not yet been given a reason to
+   point at anything.
+   ========================================================================== */
+.atlas-family-board {
+  display: grid;
+  gap: var(--ca-space-4);
+  margin-top: var(--ca-space-4);
+}
+
+.atlas-family-board__lede {
+  max-width: 60ch;
+  margin: 0;
+  color: var(--ca-text-muted);
+}
+
+.atlas-family-board__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--ca-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-family-board__card {
+  display: grid;
+  align-content: start;
+  gap: var(--ca-space-2);
+  min-width: 0;
+  padding: var(--ca-space-3);
+  border: 1px solid var(--ca-border);
+  border-top: 2px solid var(--ca-area-color);
+  border-radius: var(--radius-md, 6px);
+  background: var(--ca-surface-raised);
+}
+
+.atlas-family-board__card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.atlas-family-board__open {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ca-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The whole card is the target, not just the four words of the title. */
+.atlas-family-board__open::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+}
+
+.atlas-family-board__card {
+  position: relative;
+}
+
+.atlas-family-board__open:hover,
+.atlas-family-board__card:hover .atlas-family-board__open {
+  color: var(--ca-area-color);
+}
+
+.atlas-family-board__open svg {
+  flex: none;
+  margin-left: auto;
+  color: var(--ca-area-color);
+}
+
+.atlas-family-board__blurb {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.atlas-family-board__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ca-space-1) var(--ca-space-3);
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}
+
+.atlas-family-board__members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Above the card's own click target, so a chip opens its framework directly
+   rather than the group around it. */
+.atlas-family-board__members button,
+.atlas-family-board__links button {
+  position: relative;
+  z-index: 1;
+  padding: 2px 7px;
+  border: 1px solid color-mix(in srgb, var(--ca-area-color) 45%, var(--ca-border));
+  border-radius: var(--radius-sm, 3px);
+  background: var(--ca-surface);
+  color: var(--ca-text);
+  font: inherit;
+  font-size: 0.6875rem;
+  cursor: pointer;
+}
+
+.atlas-family-board__members button:hover,
+.atlas-family-board__links button:hover {
+  border-color: var(--ca-area-color);
+  background: color-mix(in srgb, var(--ca-area-color) 14%, var(--ca-surface));
+}
+
+.atlas-family-board__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-1);
+  margin: 0;
+  padding-top: var(--ca-space-2);
+  border-top: 1px dashed var(--ca-border);
+  color: var(--ca-text-muted);
+  font-size: 0.6875rem;
+}
+
+.atlas-family-board__links > span {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.atlas-family-board__links button em {
+  margin-left: 5px;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-style: normal;
+}
+
+.atlas-family-board__links--none {
+  display: block;
+  text-transform: none;
+}
+
+.atlas-family-board__open:focus-visible,
+.atlas-family-board__members button:focus-visible,
+.atlas-family-board__links button:focus-visible {
+  outline: 2px solid var(--ca-accent);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
    Atlas constellation — the framework landscape and its crosswalks.
 
    Position and line weight already carry the reading, so the surface stays
@@ -13119,9 +13312,14 @@ input[type="checkbox"] {
 
 .atlas-constellation__canvas {
   position: relative;
-  aspect-ratio: 1 / 0.78;
-  min-height: 30rem;
-  padding: var(--ca-space-3);
+  /* Height follows the rows. A fixed ratio forced the hierarchy into a box of
+     a shape it had no reason to match, and left it stretching or crushing as
+     the viewport changed. */
+  display: grid;
+  align-content: start;
+  gap: clamp(var(--ca-space-5), 6vh, var(--ca-space-8));
+  min-height: 22rem;
+  padding: var(--ca-space-4) var(--ca-space-3);
   border: 1px solid var(--ca-border);
   border-top-color: color-mix(in srgb, var(--ca-accent) 58%, transparent);
   border-radius: var(--radius-lg);
@@ -13163,34 +13361,118 @@ input[type="checkbox"] {
   stroke-linecap: round;
 }
 
+/* Crosswalks stay on screen at rest — they are published mappings and hiding
+   them would be a smaller truth — but faint, so they read as a second layer
+   under the hierarchy rather than competing with it. Pointing at a framework
+   brings its own back up to full strength. */
 .atlas-constellation__wire {
-  opacity: 0.34;
+  opacity: 0.12;
   transition: opacity 140ms ease;
 }
 
 .atlas-constellation__wire[data-state="lit"] {
-  opacity: 0.82;
+  opacity: 0.12;
 }
 
 .atlas-constellation__wire[data-state="muted"] {
-  opacity: 0.07;
+  opacity: 0.04;
+}
+
+.atlas-constellation__canvas:hover .atlas-constellation__wire[data-state="lit"],
+.atlas-constellation__canvas:focus-within .atlas-constellation__wire[data-state="lit"] {
+  opacity: 0.7;
+}
+
+/* The dependency backbone: solid, full strength, and always legible. This is
+   the line the reader is meant to follow. */
+.atlas-constellation__spine {
+  opacity: 0.85;
+  stroke-width: 1.5;
+  transition: opacity 140ms ease;
+}
+
+.atlas-constellation__spine[data-state="muted"] {
+  opacity: 0.3;
+}
+
+/* One row per dependency depth, holding one cluster per parent. The browser
+   wraps both levels on its own, which is what makes the map responsive: SP
+   800-53's eight children need more width than a 738px canvas has, and height
+   is the spare dimension.
+
+   The gap between clusters is deliberately wider than the gap between the cards
+   inside one, so a cluster reads as a single thing before anything is clicked. */
+.atlas-constellation__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: center;
+  gap: var(--ca-space-4) var(--ca-space-6);
+  width: 100%;
+}
+
+/* A parent's children, boxed and named. Containment is what carries membership
+   here: with the children of one framework held together, the tree needs one
+   short line per cluster instead of a diagonal per child crossing the band. */
+.atlas-constellation__group {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--ca-space-2);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.atlas-constellation__group[data-group-id] {
+  padding: var(--ca-space-2) var(--ca-space-3) var(--ca-space-3);
+  border: 1px solid color-mix(in srgb, var(--ca-area-color) 30%, var(--ca-border));
+  border-radius: var(--radius-md, 6px);
+  /* Barely-there tint: enough to bound the cluster, transparent enough that a
+     crosswalk passing underneath is still followed through it. */
+  background: color-mix(in srgb, var(--ca-area-color) 5%, transparent);
+}
+
+.atlas-constellation__group-label {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.atlas-constellation__group-label span {
+  text-transform: uppercase;
+}
+
+.atlas-constellation__group-label strong {
+  color: color-mix(in srgb, var(--ca-area-color) 70%, var(--ca-text));
+  font-weight: 600;
+}
+
+.atlas-constellation__group-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--ca-space-2);
 }
 
 .atlas-constellation__node {
-  position: absolute;
+  position: relative;
   z-index: 1;
+  /* Uniform width, and a synopsis clamped to two lines, so every card in a row
+     is the same size. Cards that size themselves to their text produced a
+     70-134px height spread that no amount of spacing could line up. */
+  flex: 0 0 clamp(8.5rem, 13vw, 11rem);
   display: grid;
+  align-content: start;
   justify-items: center;
-  gap: 1px;
-  min-width: 4.5rem;
-  max-width: 8.5rem;
-  padding: var(--ca-space-1) var(--ca-space-2);
+  gap: 2px;
+  padding: var(--ca-space-2);
   border: 1px solid color-mix(in srgb, var(--ca-area-color) 55%, var(--ca-border));
   border-radius: var(--radius-sm, 3px);
   background: var(--ca-surface);
   color: var(--ca-text);
   cursor: pointer;
-  transform: translate(-50%, -50%);
   transition:
     border-color 140ms ease,
     box-shadow 140ms ease,
@@ -13204,12 +13486,19 @@ input[type="checkbox"] {
   text-align: center;
 }
 
+/* Clamped by height rather than -webkit-line-clamp. The webkit box reports a
+   scrollWidth a few pixels past its own clientWidth, which the layout contract
+   in epic12-phase1-layout reads — correctly — as content overflowing its
+   container. Plain block layout with a two-line ceiling measures honestly, and
+   the full text is on the card's title either way. */
 .atlas-constellation__node-synopsis {
+  max-height: 2.5em;
+  overflow: hidden;
   color: var(--ca-text-muted);
   font-size: 0.625rem;
   line-height: 1.25;
+  overflow-wrap: anywhere;
   text-align: center;
-  text-wrap: balance;
 }
 
 .atlas-constellation__node-count {
@@ -13219,21 +13508,9 @@ input[type="checkbox"] {
   letter-spacing: 0.06em;
 }
 
-/* Record volume, quantised to three steps rather than a continuous scale:
-   a 17,000-rule catalog beside a 4-record one needs to read as bigger without
-   making the small one unlabelable. */
-.atlas-constellation__node[data-scale="lg"] .atlas-constellation__node-label {
-  font-size: 0.875rem;
-}
-
-.atlas-constellation__node[data-scale="sm"] {
-  min-width: 3.75rem;
-}
-
-.atlas-constellation__node[data-scale="sm"] .atlas-constellation__node-label {
-  font-size: 0.6875rem;
-}
-
+/* Cards are one size now. Sizing them by record volume is what produced the
+   70-134px height spread that made rows impossible to line up; volume is
+   carried by the count on the card instead. */
 .atlas-constellation__node:hover,
 .atlas-constellation__node[data-state="active"] {
   z-index: 3;
@@ -13384,30 +13661,26 @@ input[type="checkbox"] {
   outline-offset: 2px;
 }
 
-/* The canvas is fluid but the node boxes are not, so below full width the
-   inner rings start to touch. Nodes step down with the canvas to hold the
-   clearance the ring spacing assumes. */
+/* Card width is already fluid via clamp(), so narrower viewports need only
+   the type to step down — the row wraps on its own rather than the cards
+   being squeezed past legibility. */
 @media (max-width: 1400px) {
   .atlas-constellation__node {
-    min-width: 3.6rem;
-    max-width: 6.75rem;
-    padding: 2px 5px;
+    padding: var(--ca-space-1) var(--ca-space-2);
+  }
+
+  /* Give the gutters back to the clusters: at this width the room between them
+     is what decides whether a row holds three boxes or wraps to two. */
+  .atlas-constellation__row {
+    gap: var(--ca-space-3) var(--ca-space-4);
+  }
+
+  .atlas-constellation__group[data-group-id] {
+    padding: var(--ca-space-1) var(--ca-space-2) var(--ca-space-2);
   }
 
   .atlas-constellation__node-label {
     font-size: 0.6875rem;
-  }
-
-  .atlas-constellation__node[data-scale="lg"] .atlas-constellation__node-label {
-    font-size: 0.75rem;
-  }
-
-  .atlas-constellation__node[data-scale="sm"] {
-    min-width: 3.1rem;
-  }
-
-  .atlas-constellation__node[data-scale="sm"] .atlas-constellation__node-label {
-    font-size: 0.625rem;
   }
 
   .atlas-constellation__node-synopsis {
