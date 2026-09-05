@@ -106,7 +106,10 @@ test("expanding an Atlas area uses the semantic network without monolithic graph
   expect(graphArtifactUrls(requested)).toEqual([]);
 
   const atlas = page.getByTestId("atlas-map");
-  await atlas.locator('.atlas-decomp__column[data-column="area"]').getByRole("button", { name: /^NIST/ }).click();
+  await atlas
+    .getByRole("navigation", { name: "Atlas scope" })
+    .getByRole("button", { name: /^NIST/ })
+    .click();
   await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
   await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
   expect(graphArtifactUrls(requested)).toEqual([]);

@@ -73,33 +73,47 @@ test("WS1 Atlas exposes publisher ecosystems and authorities as named, counted r
   await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page, { allowPartial: true });
 
-  const areas = page.getByTestId("atlas-map").locator('.atlas-decomp__column[data-column="area"]');
-  await expect(areas).toBeVisible({ timeout: 60_000 });
+  const board = page.getByTestId("atlas-family-board");
+  await expect(board).toBeVisible({ timeout: 60_000 });
 
-  const rows = await areas.locator(".atlas-decomp__node").evaluateAll((nodes) => nodes.map((node) => ({
-    label: node.querySelector(".atlas-decomp__label")?.textContent?.trim() || "",
-    meta: node.querySelector(".atlas-decomp__meta")?.textContent?.trim() || "",
-  })));
-
-  expect(rows.map((row) => row.label)).toEqual([
-    "DISA",
+  // Ordered by how much each publisher issues, which is what the count on the
+  // card says — unlike the old landing, where position implied a dependency
+  // ranking the data could not support.
+  const publishers = await board
+    .locator(".atlas-family-board__card")
+    .evaluateAll((cards) => cards.map((card) => ({
+      label: card.querySelector(".atlas-family-board__open")?.textContent?.trim() || "",
+      facts: card.querySelector(".atlas-family-board__facts")?.textContent?.trim() || "",
+    })));
+  expect(publishers.map((entry) => entry.label)).toEqual([
     "NIST",
+    "DISA",
     "MITRE",
     "FedRAMP",
-    "DoD CIO",
-    "ISOO",
     "CDAO",
     "DoD",
-    "Policy & directives",
-    "Statutes",
-    "Regulations & clauses",
+    "DoD CIO",
+    "ISOO",
   ]);
-  await expect(areas.getByRole("button")).toHaveCount(8);
-  await expect(areas.locator('.atlas-decomp__node[data-state="static"]')).toHaveCount(3);
 
-  // Magnitude and interaction state carry the meaning; no landmark depends on
-  // hue alone, which Orbital forbids.
-  expect(rows.every((row) => row.meta.length > 0)).toBe(true);
+  // The authority landmarks are obligations rather than publishers and nobody
+  // crosswalks to them, so they are named and counted in a strip instead of
+  // given a card. They have never been openable, and still are not.
+  const strip = board.locator('.atlas-family-board__strip li');
+  const landmarks = await strip.evaluateAll((items) => items.map((item) => item.textContent?.trim() || ""));
+  for (const landmark of ["Statutes", "Regulations & clauses", "Policy & directives"]) {
+    expect(landmarks.some((entry) => entry.startsWith(landmark)), landmark).toBe(true);
+  }
+  await expect(board.locator(".atlas-family-board__open")).toHaveCount(8);
+  // The three authority landmarks render as text, not controls: they have
+  // never had a destination, and a button that does nothing is worse than a
+  // label. The one publication issued outside the ecosystems does open.
+  await expect(board.locator(".atlas-family-board__strip li > span")).toHaveCount(3);
+  await expect(board.locator(".atlas-family-board__strip li > button")).toHaveCount(1);
+
+  // Magnitude carries the meaning; no landmark depends on hue alone, which
+  // Orbital forbids.
+  expect(publishers.every((entry) => entry.facts.length > 0)).toBe(true);
 });
 
 test("WS1 no palette token lands in the purple range Orbital forbids", async ({ page }) => {

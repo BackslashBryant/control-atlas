@@ -49,6 +49,19 @@ type LensFile = {
       catalogIds: string[];
     }[];
   };
+  publisher: {
+    label: string;
+    blurb: string;
+    ecosystems: Record<string, string>;
+    strips: { id: string; heading: string; note: string; landmarkIds: string[] }[];
+  };
+};
+
+/** The shape the publisher lens needs from the built artifact. */
+export type PublisherEcosystem = {
+  id: string;
+  label: string;
+  catalogIds: string[];
 };
 
 const LENSES = frameworkLenses as unknown as LensFile;
@@ -123,7 +136,65 @@ export function unknownJobCatalogIds(catalogIds: string[]): string[] {
     .sort();
 }
 
+
+/**
+ * Publisher families, read from the artifact's own ecosystems.
+ *
+ * Membership is not authored here: who published a document is a fact the
+ * build already records, and re-stating it in a curated file would only create
+ * something to drift. The curated file supplies one line about who each
+ * publisher is, because the generated description is the same sentence with a
+ * different name in it for all eight.
+ *
+ * Ordered by how much they publish. That is a ranking, but an honest and
+ * useful one here — unlike dependency depth, "who has the most in the Atlas"
+ * is exactly what the number on the card says.
+ */
+export function publisherFamiliesFor(
+  ecosystems: PublisherEcosystem[],
+  catalogIds: string[],
+): AtlasLensFamily[] {
+  const present = new Set(catalogIds);
+  return ecosystems
+    .map((ecosystem) => ({
+      id: ecosystem.id,
+      label: ecosystem.label,
+      blurb: LENSES.publisher.ecosystems[ecosystem.id] || "",
+      rationale: "",
+      catalogIds: ecosystem.catalogIds.filter((catalogId) => present.has(catalogId)),
+    }))
+    .filter((family) => family.catalogIds.length > 0)
+    .sort(
+      (a, b) =>
+        b.catalogIds.length - a.catalogIds.length || a.label.localeCompare(b.label),
+    );
+}
+
+/**
+ * Publications no ecosystem claims. Not every publisher in this corpus is a
+ * federal one, and a board that quietly dropped what it could not file would
+ * be telling the reader they were looking at everything when they were not.
+ */
+export function publicationsWithoutPublisher(
+  ecosystems: PublisherEcosystem[],
+  catalogIds: string[],
+): string[] {
+  const claimed = new Set(ecosystems.flatMap((ecosystem) => ecosystem.catalogIds));
+  return catalogIds.filter((catalogId) => !claimed.has(catalogId)).sort();
+}
+
+/** The non-publisher landmarks the publisher board names beneath its groups. */
+export function publisherStrips(): {
+  id: string;
+  heading: string;
+  note: string;
+  landmarkIds: string[];
+}[] {
+  return LENSES.publisher.strips.map((strip) => ({ ...strip }));
+}
+
 export const ATLAS_LENS_LABELS: Record<string, { label: string; blurb: string }> = {
   kind: { label: LENSES.kind.label, blurb: LENSES.kind.blurb },
+  publishers: { label: LENSES.publisher.label, blurb: LENSES.publisher.blurb },
   job: { label: LENSES.job.label, blurb: LENSES.job.blurb },
 };

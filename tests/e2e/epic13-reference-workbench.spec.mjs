@@ -40,13 +40,13 @@ test("Atlas overview aggregates the ecosystem and drills directly", async ({ pag
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
   await expect(page.getByText("Grouped by what each document is, who issues it, or what you're trying to get done.", { exact: true })).toBeVisible();
-  const atlas = page.getByTestId("atlas-map");
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
-  const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-  await expect(areas).toHaveAttribute("data-row-count", "11");
+  const board = page.getByTestId("atlas-family-board");
+  await expect(board).toBeVisible();
+  await expect(board.locator(".atlas-family-board__card")).toHaveCount(8);
+  await expect(board.locator(".atlas-family-board__strip li")).toHaveCount(4);
   await page.screenshot({ path: testInfo.outputPath("epic13-atlas-graph-first.png"), fullPage: true });
 
-  await areas.getByRole("button", { name: /^NIST/ }).click();
+  await board.getByRole("button", { name: "NIST", exact: true }).click();
   await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
   await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
   await page.screenshot({ path: testInfo.outputPath("epic13-atlas-workbench.png"), fullPage: true });

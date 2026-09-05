@@ -66,7 +66,9 @@ for (const viewport of [
 ]) {
   test(`responsive Atlas shell is collision and overflow free at ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/#/atlas?atlasLanding=publishers");
+    // Scoped to a publisher: the toolbar this test measures belongs to the
+    // columns, which the board now sits above rather than replaces.
+    await page.goto("/#/atlas?atlasLanding=publishers&atlasLimb=ecosystem%3Anist");
     await waitForReady(page);
     const dimensions = await page.evaluate(() => ({
       clientWidth: globalThis.document.documentElement.clientWidth,
@@ -110,8 +112,8 @@ test("reduced motion keeps the complete Atlas visible without animation", async 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/#/atlas?atlasLanding=publishers");
   await waitForReady(page);
-  const atlas = page.getByTestId("atlas-map");
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
+  const atlas = page.getByTestId("atlas-family-board");
+  await expect(atlas).toBeVisible();
   const animatedDescendants = await atlas.locator("*").evaluateAll((elements) =>
     elements
       .filter((element) => globalThis.getComputedStyle(element).animationName !== "none")
@@ -124,22 +126,23 @@ test("Atlas first paint is a semantic landscape with drill-down and history", as
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/#/atlas?atlasLanding=publishers");
   await waitForReady(page);
-  const atlas = page.getByTestId("atlas-map");
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
-  // Landmarks are rows in the map, each already labelled and counted, so no
-  // disclosure has to be opened before the reader can see them.
-  const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-  await expect(areas).toHaveAttribute("data-row-count", "11");
-  await expect(areas.locator(".atlas-decomp__node")).toHaveCount(11);
-  await areas.getByRole("button", { name: /^MITRE/ }).click();
-  await expect(atlas).toHaveAttribute("data-scope-level", "ecosystem");
+  const atlas = page.getByTestId("atlas-family-board");
+  await expect(atlas).toBeVisible();
+  // Landmarks are cards and strip entries on the board, each already labelled
+  // and counted, so no disclosure has to be opened before the reader can see
+  // them.
+  await expect(atlas.locator(".atlas-family-board__card")).toHaveCount(8);
+  await expect(atlas.locator(".atlas-family-board__strip li")).toHaveCount(4);
+  await atlas.getByRole("button", { name: "MITRE", exact: true }).click();
+  const columns = page.getByTestId("atlas-map");
+  await expect(columns).toHaveAttribute("data-scope-level", "ecosystem");
   await expect(page).not.toHaveURL(/atlasAxis=/);
   await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)mitre/);
 
-  const publications = atlas.locator('.atlas-decomp__column[data-column="publication"]');
+  const publications = columns.locator('.atlas-decomp__column[data-column="publication"]');
   await expect(publications.getByRole("button", { name: /MITRE ATT&CK Enterprise Catalog/ })).toBeVisible();
   await publications.getByRole("button", { name: /MITRE ATT&CK Enterprise Catalog/ }).click();
-  await expect(atlas).toHaveAttribute("data-scope-level", "publication");
+  await expect(columns).toHaveAttribute("data-scope-level", "publication");
   await expect(page).toHaveURL(/atlasFramework=mitre-attack/);
   await expect(page.getByRole("navigation", { name: "Atlas scope" })).toBeVisible();
   await page.reload();

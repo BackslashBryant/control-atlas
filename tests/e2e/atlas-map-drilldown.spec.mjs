@@ -25,6 +25,19 @@ async function open(page, key, name) {
   await row.click();
 }
 
+/**
+ * Opens a publisher from the landing board. A publisher card leads to that
+ * publisher's own columns, because "what does NIST put out?" is an inventory
+ * question the columns already answer.
+ */
+async function openPublisher(page, label) {
+  const card = page
+    .getByTestId("atlas-family-board")
+    .getByRole("button", { name: label, exact: true });
+  await expect(card).toBeVisible();
+  await card.click();
+}
+
 test("the Atlas landing starts with source ecosystems and NIST drills to its publications", async ({
   page,
 }) => {
@@ -32,20 +45,21 @@ test("the Atlas landing starts with source ecosystems and NIST drills to its pub
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const map = atlas(page);
-  await expect(map).toBeVisible();
-  await expect(map).toHaveAttribute("data-scope-level", "root");
-
-  // Eight publisher ecosystems plus three bounded authority landmarks.
-  await expect(level(page, "area")).toHaveAttribute("data-row-count", "11");
-  const labels = await level(page, "area")
-    .locator(".atlas-decomp__label")
+  // The landing groups by publisher: eight publisher cards, plus the three
+  // authority landmarks named in a strip beneath them because obligations are
+  // not publishers and nobody crosswalks to them.
+  const board = page.getByTestId("atlas-family-board");
+  await expect(board).toBeVisible();
+  await expect(board.locator(".atlas-family-board__card")).toHaveCount(8);
+  await expect(board.locator(".atlas-family-board__strip li")).toHaveCount(4);
+  const labels = await board
+    .locator(".atlas-family-board__open")
     .allTextContents();
   for (const ecosystem of ["NIST", "DISA", "MITRE", "FedRAMP", "DoD CIO"]) {
-    expect(labels, `${ecosystem} row`).toContain(ecosystem);
+    expect(labels, `${ecosystem} card`).toContain(ecosystem);
   }
 
-  await open(page, "area", /^NIST/);
+  await openPublisher(page, "NIST");
   await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
   await expect(
     level(page, "publication").getByRole("button", { name: /SP 800-53 Rev\. 5 Catalog/ }),
@@ -59,7 +73,7 @@ test("a drilled branch survives refresh and the breadcrumb steps back one genera
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await open(page, "area", /^NIST/);
+  await openPublisher(page, "NIST");
   await open(page, "publication", /SP 800-53 Rev\. 5 Catalog/);
   await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
   await expect(atlas(page)).toHaveAttribute("data-scope-level", "publication");
@@ -85,7 +99,7 @@ test("section drill stays scoped to the publication's real child records", async
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await open(page, "area", /^NIST/);
+  await openPublisher(page, "NIST");
   await open(page, "publication", /SP 800-53 Rev\. 5 Catalog/);
   await open(page, "detail", /Access Control/);
   await expect(page).toHaveURL(/atlasFamily=group:nist-800-53:0/);
@@ -183,10 +197,7 @@ test("CMMC detail scope reports all three publisher-native levels", async ({ pag
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await level(page, "area")
-    .locator(".atlas-decomp__label")
-    .getByText("DoD", { exact: true })
-    .click();
+  await openPublisher(page, "DoD");
   await open(page, "publication", /CMMC 2\.0 Catalog/);
   await open(page, "detail", /CMMC 2\.0 Levels/);
 

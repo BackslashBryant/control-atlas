@@ -24,11 +24,12 @@ type AtlasLensBarProps = {
 /**
  * The doors into the landscape, named the way practitioners name them.
  *
- * These sit above the map rather than inside it because they are useful in
- * both states: on the landing they are a shortcut past the survey for someone
- * who already knows what they came for, and once the reader is deep inside a
- * framework they are the way across to another one without going home first.
- * "Whole landscape" appears only when there is something to come back from.
+ * These sit above the map rather than inside it, and only once the reader is
+ * inside something: from there they are the way across to another framework
+ * without going home first. On the landing they were a shortcut past a survey
+ * that now names every publication itself, so they were repeating what was
+ * already on screen and delaying it. "All groups" appears only when there is
+ * something to come back from.
  */
 export function AtlasLensBar(props: AtlasLensBarProps) {
   const {
@@ -42,40 +43,45 @@ export function AtlasLensBar(props: AtlasLensBarProps) {
 
   return (
     <nav aria-label="Ways into the Atlas" className="atlas-lens-bar">
-      <p className="atlas-lens-bar__lede">Start from</p>
-      <ul>
-        {ATLAS_LENS_ENTRIES.map((entry) => {
-          const area = areaPresentationForCatalog(entry.publicationId);
-          const active = entry.publicationId === activePublicationId;
-          return (
-            <li key={entry.id}>
-              <button
-                aria-current={active ? "true" : undefined}
-                className="atlas-lens-bar__entry"
-                onClick={() => onPick(entry)}
-                style={
-                  {
-                    "--ca-area-color": `var(${area?.token || "--ca-area-operations"})`,
-                  } as CSSProperties
-                }
-                title={`${entry.label} — ${entry.blurb}`}
-                type="button"
-              >
-                <span aria-hidden="true" className="atlas-lens-bar__dot" />
-                <span className="atlas-lens-bar__label">{entry.label}</span>
-                {/* The blurb is what turns "RMF" into a door on the way in.
-                    Once the reader is inside a framework these are the way
-                    across to another one, not a menu to be read — and spelling
-                    them all out wrapped the bar onto a second row, putting
-                    more chrome between the click and what it opened. */}
-                {scoped ? null : (
-                  <span className="atlas-lens-bar__blurb">{entry.blurb}</span>
-                )}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+      {/* On the landing the board already names every publication in the
+          corpus, so these seven shortcuts duplicated what was on screen a few
+          hundred pixels below and pushed it further down. They earn their room
+          once the reader is inside something: from there they are the way
+          across to another framework without going home first. */}
+      {scoped ? (
+        <>
+          <p className="atlas-lens-bar__lede">Start from</p>
+          <ul>
+            {ATLAS_LENS_ENTRIES.map((entry) => {
+              const area = areaPresentationForCatalog(entry.publicationId);
+              const active = entry.publicationId === activePublicationId;
+              return (
+                <li key={entry.id}>
+                  <button
+                    aria-current={active ? "true" : undefined}
+                    className="atlas-lens-bar__entry"
+                    onClick={() => onPick(entry)}
+                    style={
+                      {
+                        "--ca-area-color": `var(${area?.token || "--ca-area-operations"})`,
+                      } as CSSProperties
+                    }
+                    title={`${entry.label} — ${entry.blurb}`}
+                    type="button"
+                  >
+                    <span aria-hidden="true" className="atlas-lens-bar__dot" />
+                    {/* Label only. These render once the reader is inside
+                        something, where they are a way across rather than a
+                        menu to be read; spelling all seven out wrapped the bar
+                        onto a second row. The blurb stays on the title. */}
+                    <span className="atlas-lens-bar__label">{entry.label}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      ) : null}
       {scoped ? (
         <button
           className="atlas-lens-bar__reset"

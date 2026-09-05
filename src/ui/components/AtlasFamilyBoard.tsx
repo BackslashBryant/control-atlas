@@ -6,11 +6,35 @@ import type { AtlasLensFamily } from "../lib/atlasLensFamilies";
 import { areaPresentationForCatalog } from "../lib/areaVisualLanguage";
 import { catalogShortNameFor } from "../lib/catalogProfiles";
 
+/**
+ * Something the current grouping cannot file, named rather than dropped.
+ *
+ * The publisher lens has two: the statutes, regulations and directives, which
+ * are obligations rather than publishers and which nobody crosswalks to, and
+ * any publication issued outside the federal ecosystems. Both were visible in
+ * the view this board replaced, and a board that silently held fewer than 28
+ * publications would be telling the reader they were looking at everything.
+ */
+export type AtlasBoardStrip = {
+  id: string;
+  heading: string;
+  note: string;
+  entries: {
+    id: string;
+    label: string;
+    count: number;
+    /** Present when the entry opens something; absent entries stay read-only. */
+    publicationId?: string;
+  }[];
+};
+
 type AtlasFamilyBoardProps = {
   families: AtlasLensFamily[];
   frameworks: AtlasGraphProjection;
   /** What this grouping answers, shown once above the board. */
   blurb: string;
+  /** Landmarks this grouping cannot place. Rendered under the groups. */
+  strips?: AtlasBoardStrip[];
   onOpenFamily: (familyId: string) => void;
   onOpenFramework: (publicationId: string) => void;
 };
@@ -30,7 +54,7 @@ function formatCount(count: number): string {
  * level down, where they connect a handful of frameworks inside one group.
  */
 export function AtlasFamilyBoard(props: AtlasFamilyBoardProps) {
-  const { families, frameworks, blurb, onOpenFamily, onOpenFramework } = props;
+  const { families, frameworks, blurb, strips, onOpenFamily, onOpenFramework } = props;
 
   const board = useMemo(() => {
     const nodeByPublication = new Map(
@@ -163,6 +187,41 @@ export function AtlasFamilyBoard(props: AtlasFamilyBoardProps) {
           </li>
         ))}
       </ul>
+
+      {(strips || [])
+        .filter((strip) => strip.entries.length > 0)
+        .map((strip) => (
+          <div className="atlas-family-board__strip" key={strip.id}>
+            <p className="atlas-family-board__strip-heading">
+              {strip.heading}
+              <span>{strip.entries.length}</span>
+            </p>
+            <p className="atlas-family-board__strip-note">{strip.note}</p>
+            <ul>
+              {strip.entries.map((entry) => (
+                <li key={entry.id}>
+                  {/* Read-only where the landmark has nowhere to go. The
+                      authority groups have never been openable, and a button
+                      that does nothing is worse than a label. */}
+                  {entry.publicationId ? (
+                    <button
+                      onClick={() => onOpenFramework(entry.publicationId as string)}
+                      type="button"
+                    >
+                      {entry.label}
+                      <small>{formatCount(entry.count)}</small>
+                    </button>
+                  ) : (
+                    <span>
+                      {entry.label}
+                      <small>{formatCount(entry.count)}</small>
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
     </section>
   );
 }

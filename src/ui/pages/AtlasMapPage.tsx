@@ -30,6 +30,9 @@ import {
   ATLAS_LENS_LABELS,
   jobFamiliesFor,
   kindFamiliesFor,
+  publicationsWithoutPublisher,
+  publisherFamiliesFor,
+  publisherStrips,
 } from "../lib/atlasLensFamilies";
 import { AtlasDecompositionMap } from "../components/AtlasDecompositionMap";
 import { AtlasFrameworkLinks } from "../components/AtlasFrameworkLinks";
@@ -206,19 +209,73 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       (bundle.atlasNetwork?.frameworks?.nodes || []).map((node) => node.publicationId),
     [bundle.atlasNetwork],
   );
-  const lensFamilies = useMemo(
+  // Publisher membership comes from the artifact rather than the curated file:
+  // who issued a document is a fact the build already records.
+  const publisherEcosystems = useMemo(
     () =>
-      lensCatalogIds.length
-        ? state.atlasLanding === "job"
-          ? jobFamiliesFor(lensCatalogIds)
-          : kindFamiliesFor(lensCatalogIds)
-        : [],
-    [lensCatalogIds, state.atlasLanding],
+      Object.entries(bundle.atlasNetwork?.ecosystems || {}).map(([id, projection]) => ({
+        id,
+        label: projection.label,
+        catalogIds: projection.nodes.map((node) => node.publicationId),
+      })),
+    [bundle.atlasNetwork],
   );
+  const lensFamilies = useMemo(() => {
+    if (!lensCatalogIds.length) return [];
+    if (state.atlasLanding === "job") return jobFamiliesFor(lensCatalogIds);
+    if (state.atlasLanding === "publishers") {
+      return publisherFamiliesFor(publisherEcosystems, lensCatalogIds);
+    }
+    return kindFamiliesFor(lensCatalogIds);
+  }, [lensCatalogIds, publisherEcosystems, state.atlasLanding]);
   const lensBlurb =
-    state.atlasLanding === "job"
-      ? ATLAS_LENS_LABELS.job.blurb
-      : ATLAS_LENS_LABELS.kind.blurb;
+    ATLAS_LENS_LABELS[state.atlasLanding || "kind"]?.blurb
+    || ATLAS_LENS_LABELS.kind.blurb;
+
+  // Landmarks the publisher grouping cannot file. The statutes, regulations
+  // and directives are obligations rather than publishers and nobody
+  // crosswalks to them; the remainder is anything issued outside the federal
+  // ecosystems. Both were named in the view this board replaced, so both stay
+  // named here.
+  const lensStrips = useMemo(() => {
+    if (state.atlasLanding !== "publishers" || !bundle.atlasNetwork) return [];
+    const landmarks = new Map(
+      (bundle.atlasNetwork.landscape?.nodes || []).map((node) => [node.id, node]),
+    );
+    const orphaned = publicationsWithoutPublisher(publisherEcosystems, lensCatalogIds);
+    const byPublication = new Map(
+      (bundle.atlasNetwork.frameworks?.nodes || []).map((node) => [
+        node.publicationId,
+        node,
+      ]),
+    );
+    return publisherStrips().map((strip) => ({
+      id: strip.id,
+      heading: strip.heading,
+      note: strip.note,
+      entries:
+        strip.id === "no-publisher"
+          ? orphaned.flatMap((catalogId) => {
+            const node = byPublication.get(catalogId);
+            if (!node) return [];
+            return [{
+              id: catalogId,
+              label: catalogShortNameFor(catalogId, node.label),
+              count: Math.max(0, node.canonicalRecordCount - 1),
+              publicationId: catalogId,
+            }];
+          })
+          : strip.landmarkIds.flatMap((landmarkId) => {
+            const node = landmarks.get(landmarkId);
+            if (!node) return [];
+            return [{
+              id: landmarkId,
+              label: node.label,
+              count: Math.max(0, node.canonicalRecordCount - 1),
+            }];
+          }),
+    }));
+  }, [state.atlasLanding, bundle.atlasNetwork, publisherEcosystems, lensCatalogIds]);
 
   // One group opened: the same landscape drawing, over the handful of
   // frameworks in that group rather than over all 28. Crosswalks that leave
@@ -247,6 +304,18 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       ),
     };
   }, [bundle.atlasNetwork, lensFamilies, state.atlasLensFamily]);
+
+  // Blurbs differ in shape by lens: the kind and job ones are fragments, the
+  // publisher ones are whole sentences with their own capitals and full stop.
+  // Lower-casing them turned "Most of what the others build on" into "most",
+  // and appending a stop gave the publisher lens two.
+  const lensFamilySubject = useMemo(() => {
+    const family = lensFamilyProjection?.family;
+    if (!family) return "";
+    const blurb = family.blurb.trim();
+    if (!blurb) return `${family.label}.`;
+    return `${family.label} — ${blurb}${/[.!?]$/.test(blurb) ? "" : "."}`;
+  }, [lensFamilyProjection]);
 
   const pivotSteps = useMemo(
     () => describePivotTrail(state.atlasPivotTrail, bundle.atlasNetwork),
@@ -460,7 +529,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   /**
    * Back to the unscoped Atlas. `landing` is preserved by default so the
    * breadcrumb's root returns the reader to the survey they were actually
-   * using; only the explicit "Whole landscape" control switches survey.
+   * using; only the explicit "All groups" control switches survey.
    */
   function atlasHome(landing: string = state.atlasLanding) {
     patchAtlas({
@@ -683,7 +752,6 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         atlasScope.areaId
         || atlasScope.publicationId
         || atlasScope.detailId
-        || state.atlasLanding === "publishers"
         // An artifact built before the frameworks projection existed still
         // has to render something, so a cached bundle degrades to the columns
         // rather than to an empty page.
@@ -719,14 +787,24 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             frameworks={lensFamilyProjection.frameworks}
             sharedGround={lensFamilyProjection.sharedGround}
             onDrill={drillAtlas}
-            subject={`${lensFamilyProjection.family.label} — ${lensFamilyProjection.family.blurb.toLocaleLowerCase()}.`}
+            subject={lensFamilySubject}
           />
         ) : (
           <AtlasFamilyBoard
             blurb={lensBlurb}
             families={lensFamilies}
             frameworks={bundle.atlasNetwork.frameworks}
-            onOpenFamily={(atlasLensFamily) => patchAtlas({ atlasLensFamily })}
+            strips={lensStrips}
+            // What a group opens depends on what the grouping is about. Kind
+            // and job are about how documents relate, so they open the
+            // dependency picture over that group's frameworks. A publisher is
+            // an inventory question — "what does NIST put out?" — which the
+            // columns already answer better than a map would.
+            onOpenFamily={(familyId) =>
+              state.atlasLanding === "publishers"
+                ? patchAtlas({ atlasLimb: familyId, atlasLensFamily: "" })
+                : patchAtlas({ atlasLensFamily: familyId })
+            }
             onOpenFramework={(publicationId) =>
               drillAtlas({ kind: "publication", targetId: publicationId })
             }

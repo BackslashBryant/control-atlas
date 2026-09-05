@@ -314,23 +314,27 @@ test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface lab
   await page.setViewportSize({ width: 1440, height: 900 });
   await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
-  const atlas = page.getByTestId("atlas-map");
-  await expect(atlas).toBeVisible();
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
+  const board = page.getByTestId("atlas-family-board");
+  await expect(board).toBeVisible();
   await expect(page.locator("body")).not.toContainText("Connected work surface");
 
-  // The landmarks are rows in the map itself, not a disclosure beside it, and
-  // each one states what it holds without being hovered.
-  const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-  await expect(areas).toHaveAttribute("data-row-count", "11");
-  const rows = areas.locator(".atlas-decomp__node");
-  await expect(rows).toHaveCount(11);
-  for (const row of await rows.all()) {
-    // Three honest forms: a count, a route to the surface that holds the area,
-    // or an admission that nothing is modelled yet. Never a bare label.
-    await expect(row).toContainText(/\d[\d,]* records|Open the \w+|Not yet modeled/);
+  // The landmarks are cards and named strip entries on the board itself, not a
+  // disclosure beside it, and each one states what it holds without being
+  // hovered: eight publishers plus three authority landmarks and the one
+  // publication issued outside the federal ecosystems.
+  await expect(board.locator(".atlas-family-board__card")).toHaveCount(8);
+  await expect(board.locator(".atlas-family-board__strip li")).toHaveCount(4);
+  // Every landmark still states what it holds without being hovered: a
+  // publication and record count on a card, a record count on a strip entry.
+  // Never a bare label.
+  const cards = board.locator(".atlas-family-board__card");
+  for (const card of await cards.all()) {
+    await expect(card).toContainText(/\d[\d,]* records/);
+  }
+  for (const entry of await board.locator(".atlas-family-board__strip li").all()) {
+    await expect(entry).toContainText(/\d[\d,]*/);
   }
   for (const ecosystem of ["NIST", "DISA", "MITRE", "FedRAMP", "DoD CIO", "CDAO", "ISOO"]) {
-    await expect(rows.filter({ hasText: ecosystem }).first()).toBeVisible();
+    await expect(cards.filter({ hasText: ecosystem }).first()).toBeVisible();
   }
 });

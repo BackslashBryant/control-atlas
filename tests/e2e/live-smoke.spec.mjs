@@ -67,16 +67,17 @@ test("live smoke: Resources and Atlas workbench are first-class routes", async (
 
   await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
-  const atlas = page.getByTestId("atlas-map");
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
-  const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-  await expect(areas).toHaveAttribute("data-row-count", /^(?:[89]|1\d|2[0-5])$/);
-  // Every node is a labelled row, so the smoke check reads names rather than
-  // probing a canvas that carried none.
-  await expect(atlas.locator("canvas")).toHaveCount(0);
-  await areas.getByRole("button", { name: /^NIST/ }).click();
-  await expect(atlas).toHaveAttribute("data-scope-level", "ecosystem");
-  await expect(atlas.locator('.atlas-decomp__column[data-column="publication"]')).toBeVisible();
+  const board = page.getByTestId("atlas-family-board");
+  await expect(board).toBeVisible();
+  const cards = board.locator(".atlas-family-board__card");
+  await expect(cards).not.toHaveCount(0);
+  // Every landmark is a labelled card, so the smoke check reads names rather
+  // than probing a canvas that carried none.
+  await expect(board.locator("canvas")).toHaveCount(0);
+  await board.getByRole("button", { name: "NIST", exact: true }).click();
+  const columns = page.getByTestId("atlas-map");
+  await expect(columns).toHaveAttribute("data-scope-level", "ecosystem");
+  await expect(columns.locator('.atlas-decomp__column[data-column="publication"]')).toBeVisible();
 });
 
 test("live smoke: compare hub loads", async ({ page }) => {

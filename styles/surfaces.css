@@ -13267,6 +13267,89 @@ input[type="checkbox"] {
   text-transform: none;
 }
 
+/* Landmarks the grouping cannot file, kept beside the groups rather than
+   tucked below a fold. Read-only entries look like what they are: names and
+   counts, not controls. */
+.atlas-family-board__strip {
+  display: grid;
+  gap: var(--ca-space-2);
+  padding: var(--ca-space-3);
+  border: 1px dashed var(--ca-border);
+  border-radius: var(--radius-md, 6px);
+}
+
+.atlas-family-board__strip-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  margin: 0;
+  color: var(--ca-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.atlas-family-board__strip-heading span {
+  padding: 1px 7px;
+  border: 1px solid var(--ca-border);
+  border-radius: 999px;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.atlas-family-board__strip-note {
+  max-width: 78ch;
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.atlas-family-board__strip ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ca-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-family-board__strip li > * {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-2);
+  padding: 3px 9px;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-sm, 3px);
+  color: var(--ca-text);
+  font: inherit;
+  font-size: 0.75rem;
+}
+
+.atlas-family-board__strip li > button {
+  background: var(--ca-surface);
+  cursor: pointer;
+}
+
+.atlas-family-board__strip li > button:hover {
+  border-color: var(--ca-accent);
+}
+
+.atlas-family-board__strip li small {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+}
+
+.atlas-family-board__strip li > button:focus-visible {
+  outline: 2px solid var(--ca-accent);
+  outline-offset: 2px;
+}
+
 .atlas-family-board__open:focus-visible,
 .atlas-family-board__members button:focus-visible,
 .atlas-family-board__links button:focus-visible {
@@ -14009,9 +14092,7 @@ input[type="checkbox"] {
 
 .atlas-lens-bar__entry {
   display: grid;
-  grid-template-areas:
-    "dot label"
-    "dot blurb";
+  grid-template-areas: "dot label";
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 0 var(--ca-space-2);
@@ -14049,13 +14130,6 @@ input[type="checkbox"] {
   grid-area: label;
   font-size: 0.8125rem;
   font-weight: 600;
-  line-height: 1.25;
-}
-
-.atlas-lens-bar__blurb {
-  grid-area: blurb;
-  color: var(--ca-text-muted);
-  font-size: 0.6875rem;
   line-height: 1.25;
 }
 

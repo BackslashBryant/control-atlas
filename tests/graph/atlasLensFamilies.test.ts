@@ -4,9 +4,13 @@ import test from "node:test";
 import dependencySpine from "../../data/curated/framework-dependency-spine.json";
 import {
   ATLAS_LENS_GROUPING_IDS,
+  ATLAS_LENS_LABELS,
   isAtlasLensGroupingId,
   jobFamiliesFor,
   kindFamiliesFor,
+  publicationsWithoutPublisher,
+  publisherFamiliesFor,
+  publisherStrips,
   unclaimedPublicationKinds,
   unknownJobCatalogIds,
   unplacedByJob,
@@ -27,6 +31,62 @@ const CATALOG_IDS = [
 
 test("the corpus roster is the twenty-eight publications the Atlas draws", () => {
   assert.equal(CATALOG_IDS.length, 28);
+});
+
+/**
+ * The publisher ecosystems as the build emits them. Membership is not curated,
+ * so this mirrors the artifact rather than a file under data/curated.
+ */
+const ECOSYSTEMS = [
+  { id: "ecosystem:nist", label: "NIST", catalogIds: [
+    "csf-2", "fips-199", "fips-200", "nist-800-171-rev2", "nist-800-171",
+    "nist-800-172", "nist-800-37", "nist-800-53", "nist-800-53a",
+    "nist-800-53b", "nist-ai-rmf", "nist-iot-cybersecurity",
+    "nist-mobile-threats", "nist-ssdf", "nist-zt",
+  ] },
+  { id: "ecosystem:disa", label: "DISA", catalogIds: ["disa-cci", "disa-srg", "disa-stig"] },
+  { id: "ecosystem:mitre", label: "MITRE", catalogIds: ["mitre-attack-ics", "mitre-attack", "mitre-d3fend"] },
+  { id: "ecosystem:fedramp", label: "FedRAMP", catalogIds: ["fedramp-2026", "fedramp-rev5"] },
+  { id: "ecosystem:dod", label: "DoD", catalogIds: ["cmmc-2"] },
+  { id: "ecosystem:dod-cio", label: "DoD CIO", catalogIds: ["dod-zt"] },
+  { id: "ecosystem:isoo", label: "ISOO", catalogIds: ["cui-policy"] },
+  { id: "ecosystem:cdao", label: "CDAO", catalogIds: ["dod-rai"] },
+];
+
+test("the publisher lens names every publisher and drops no publication", () => {
+  const families = publisherFamiliesFor(ECOSYSTEMS, CATALOG_IDS);
+  assert.equal(families.length, 8);
+  // Ordered by how much each issues, which is what the card's count says.
+  assert.deepEqual(families.map((family) => family.label), [
+    "NIST", "DISA", "MITRE", "FedRAMP", "CDAO", "DoD", "DoD CIO", "ISOO",
+  ]);
+  for (const family of families) {
+    assert.ok(family.blurb.length > 10, `${family.id} has no description`);
+  }
+  const placed = families.flatMap((family) => family.catalogIds);
+  const orphaned = publicationsWithoutPublisher(ECOSYSTEMS, CATALOG_IDS);
+  // Every publication is either under a publisher or named as having none.
+  assert.deepEqual([...placed, ...orphaned].sort(), CATALOG_IDS);
+  assert.equal(new Set(placed).size, placed.length);
+});
+
+test("a publication with no federal publisher is named rather than dropped", () => {
+  assert.deepEqual(publicationsWithoutPublisher(ECOSYSTEMS, CATALOG_IDS), [
+    "microsoft-zt-maturity",
+  ]);
+  const strips = publisherStrips();
+  assert.deepEqual(strips.map((strip) => strip.id), ["authority", "no-publisher"]);
+  // The authority landmarks are obligations, not publishers, and nobody
+  // crosswalks to them — so the board names them instead of grouping them.
+  assert.deepEqual(strips[0].landmarkIds, [
+    "authority:statutes",
+    "authority:regulations",
+    "authority:directives",
+  ]);
+  for (const strip of strips) {
+    assert.ok(strip.heading.length > 3, `${strip.id} has no heading`);
+    assert.ok(strip.note.length > 30, `${strip.id} does not say why`);
+  }
 });
 
 // A lens that quietly drops a publication is worse than no lens: the reader is
@@ -69,8 +129,11 @@ test("every authored job family says why its members belong together", () => {
   }
 });
 
-test("the lens ids are the three the landing offers", () => {
+test("the lens ids are the three the landing offers, and each is labelled", () => {
   assert.deepEqual([...ATLAS_LENS_GROUPING_IDS], ["kind", "publishers", "job"]);
   assert.ok(isAtlasLensGroupingId("kind"));
   assert.ok(!isAtlasLensGroupingId("frameworks"));
+  for (const id of ATLAS_LENS_GROUPING_IDS) {
+    assert.ok(ATLAS_LENS_LABELS[id]?.blurb, `${id} has no blurb for the board`);
+  }
 });

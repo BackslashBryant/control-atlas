@@ -146,14 +146,14 @@ test("Atlas root presents a source-ecosystem interactive hierarchy", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const map = page.getByTestId("atlas-map");
-  await expect(map).toBeVisible();
-  await expect(map).toHaveAttribute("data-scope-level", "root");
-  await expect(
-    map.locator('.atlas-decomp__column[data-column="area"]'),
-  ).toHaveAttribute("data-row-count", "11");
-  // The map is DOM, not a canvas, so every node keeps a readable label.
-  await expect(map.locator("canvas")).toHaveCount(0);
+  const board = page.getByTestId("atlas-family-board");
+  await expect(board).toBeVisible();
+  // Eight publishers, plus the three authority landmarks and the one
+  // publication issued outside the federal ecosystems, named in strips.
+  await expect(board.locator(".atlas-family-board__card")).toHaveCount(8);
+  await expect(board.locator(".atlas-family-board__strip li")).toHaveCount(4);
+  // The board is DOM, not a canvas, so every landmark keeps a readable label.
+  await expect(board.locator("canvas")).toHaveCount(0);
   await expect(
     page.getByText("Grouped by what each document is, who issues it, or what you're trying to get done.", { exact: true }),
   ).toBeVisible();

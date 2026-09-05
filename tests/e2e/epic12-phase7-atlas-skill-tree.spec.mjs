@@ -23,7 +23,9 @@ async function openAtlas(page, path = "/#/atlas?relationshipView=path") {
 async function openNetwork(page) {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
+  // Straight to a publisher's own columns: this suite is about navigating
+  // publisher-native structure, which begins one level below the board.
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers&atlasLimb=ecosystem%3Anist");
   await waitForAppReady(page);
   await dismissOnboarding(page);
   await expect(page.getByTestId("atlas-map")).toBeVisible();
@@ -35,10 +37,12 @@ test("semantic Atlas hands off to explicit publisher-native navigation and prese
 
   const atlas = page.getByTestId("atlas-map");
   await expect(page.getByText("Grouped by what each document is, who issues it, or what you're trying to get done.", { exact: true })).toBeVisible();
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
-  await atlas
-    .locator('.atlas-decomp__column[data-column="area"]')
-    .getByRole("button", { name: /^DISA/ })
+  await expect(atlas).toHaveAttribute("data-scope-level", "ecosystem");
+  // Across to another publisher from inside one, via the board.
+  await page.getByRole("button", { name: "All groups" }).click();
+  await page
+    .getByTestId("atlas-family-board")
+    .getByRole("button", { name: "DISA", exact: true })
     .click();
   await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)disa/);
   await expect(atlas).toHaveAttribute("data-scope-level", "ecosystem");
