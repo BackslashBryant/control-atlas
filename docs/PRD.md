@@ -568,7 +568,7 @@ The complete canonical values and semantic provenance/status mappings live in `s
 | Layer | Decision | Rationale |
 |---|---|---|
 | Base | Vite + React + TypeScript static app | Keeps full app control while preserving static public-data deployment |
-| Atlas | React Flow + ELK for bounded area/publication overview; semantic DOM Adaptive Explorer below publication level | Preserves a useful spatial overview while respecting every publisher's native containment and mobile navigation |
+| Atlas | Semantic DOM throughout: a group board at the landing, a measured SVG dependency drawing inside a group, and publisher-native columns below that | Keeps every landmark labelled, focusable and readable at any width, and lets the browser lay out and wrap the hierarchy instead of baking coordinates that cannot be responsive |
 | Other relationship diagrams | React Flow + ELK.js, lazy | Retained for existing bounded detail and Compare surfaces pending separate review |
 | Search | MiniSearch | Field-weighted, static-bundle-friendly, handles mixed ID/keyword queries |
 | Validation | Zod (runtime) + JSON Schema export | TypeScript-native with schema portability |

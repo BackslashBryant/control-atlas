@@ -468,17 +468,26 @@ export function AtlasConstellationMap(props: AtlasConstellationMapProps) {
   );
 
   if (compact) {
-    // A twenty-eight node diagram is unreadable at phone width long before the
-    // labels are. The same reading — what connects to what, and how heavily —
-    // survives as a list ordered by reach.
-    const ordered = [...nodes].sort(
-      (a, b) => b.reach - a.reach || b.crosswalkTotal - a.crosswalkTotal,
+    // A drawn hierarchy is unreadable at phone width long before its labels
+    // are. The same reading survives as a list in hierarchy order — each root
+    // followed by what builds on it — so the phone and the desktop tell the
+    // reader the same thing about what depends on what. Ordering by crosswalk
+    // reach instead, as this did, put the frameworks in an order the desktop
+    // never shows and that nothing on the row explains.
+    const ordered = orderedRows.flatMap((row) =>
+      row.groups.flatMap((group) => group.entries),
     );
+    const listed = [
+      ...ordered,
+      ...unlinked.filter(
+        (entry) => !ordered.some((placed) => placed.node.id === entry.node.id),
+      ),
+    ];
     return (
       <section className="atlas-constellation atlas-constellation--stacked" data-testid="atlas-constellation">
         {summary}
         <ul className="atlas-constellation__list">
-          {ordered.map((entry) => (
+          {listed.map((entry) => (
             <li key={entry.node.id}>
               <button
                 className="atlas-constellation__list-item"
