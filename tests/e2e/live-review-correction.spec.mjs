@@ -48,7 +48,10 @@ test("primary clicks expose transition feedback before the route replaces stale 
   expect(probe.shownAt - probe.clickAt).toBeLessThanOrEqual(100);
   expect(probe.visible).toBe(true);
   expect(probe.inert).toBe(true);
-  await expect(page.getByTestId("atlas-map")).toBeVisible();
+  // The Atlas link lands on the unscoped landing, which is the board of
+  // groups. The assertion is that the destination's own content replaced the
+  // stale route, so it tracks whatever the landing actually renders.
+  await expect(page.getByTestId("atlas-family-board")).toBeVisible();
 });
 
 for (const viewport of [
