@@ -22,9 +22,13 @@
     "publicationKind value maps to a family, so adding a new kind fails loudly",
     "instead of silently dropping a catalog off the landing.",
     "",
-    "'job' is authored. No field in the corpus records what a reader is trying",
-    "to do, so these placements are a claim about practice and should be read",
-    "as one. Each grouping carries its reasoning.",
+    "'job' is authored and reviewed placement by placement. No field in the",
+    "corpus records what a reader is trying to do, so these are a claim about",
+    "practice and each carries its reasoning. The review moved one thing: SSDF",
+    "sat under a group named for configuring a product, but SP 800-218 is about",
+    "how software is written. The job is the same — making the thing itself",
+    "secure — so the group is named for building as well as hardening rather",
+    "than the publication being moved somewhere it does not belong.",
     "",
     "'publisher' takes its membership from the artifact's own ecosystems \u2014 the",
     "publisher of a document is a fact, not a judgement \u2014 and only supplies a",
@@ -88,13 +92,13 @@
   "job": {
     "label": "By job",
     "blurb": "What you are trying to get done",
-    "$comment": "Authored, not derived. See the file header.",
+    "$comment": "Authored, not derived, and reviewed placement by placement. The corpus records no field for what a reader is trying to do, so each grouping carries its reasoning.",
     "families": [
       {
         "id": "pick-controls",
         "label": "Pick the controls",
         "blurb": "Decide what protections a system has to have",
-        "rationale": "Everything that either states a requirement or tells you which requirements apply to your system.",
+        "rationale": "Everything that either states a requirement or decides which requirements apply. FIPS 199 categorises the system and FIPS 200 sets the floor, 800-53B selects the baseline, and the CUI policy is the obligation that makes the 800-171 line apply to you at all \u2014 so it belongs with choosing, not with the certification programs.",
         "catalogIds": [
           "nist-800-53",
           "nist-800-53b",
@@ -121,9 +125,9 @@
       },
       {
         "id": "harden-technology",
-        "label": "Harden a technology",
-        "blurb": "Configure a specific product or platform correctly",
-        "rationale": "Guidance written against actual technologies rather than against a control number, plus the identifiers that tie those settings back to controls.",
+        "label": "Build and harden",
+        "blurb": "Make the thing itself secure, as it is written and as it is configured",
+        "rationale": "Guidance written against real technology rather than against a control number: how software is built (SSDF), how a product or platform is configured (STIGs, SRGs), what a device has to be able to do (IoT), and the identifiers tying those settings back to controls (CCIs). Named for building as well as configuring because SSDF is about how code is written, not how a deployed product is set.",
         "catalogIds": [
           "disa-stig",
           "disa-srg",
