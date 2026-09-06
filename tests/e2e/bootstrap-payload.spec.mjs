@@ -91,16 +91,21 @@ test("expanding an Atlas area uses the semantic network without monolithic graph
   await page.goto("/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  const atlas = page.getByTestId("atlas-map");
-  await expect(atlas).toBeVisible();
+  const landscape = page.getByTestId("atlas-area-map");
+  await expect(landscape).toBeVisible();
   expect(
     requested.some((url) => url.includes("atlas-network.json")),
   ).toBeTruthy();
   expect(graphArtifactUrls(requested)).toEqual([]);
 
-  await atlas.locator('.atlas-decomp__column[data-column="area"]').getByRole("button", { name: /^NIST/ }).click();
-  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
-  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
+  // Opening a group and then a publication inside it both come out of the same
+  // semantic artifact — neither reaches for the monolithic node and edge JSON.
+  await landscape.getByRole("button", { name: /^Control catalogs/ }).click();
+  await expect(page).toHaveURL(/atlasLensFamily=control-catalogs/);
+  expect(graphArtifactUrls(requested)).toEqual([]);
+
+  await landscape.getByRole("button", { name: /^800-53 / }).first().click();
+  await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
   expect(graphArtifactUrls(requested)).toEqual([]);
 });
 
@@ -109,7 +114,7 @@ test("Atlas reaches its first usable source map within the local render budget",
 }) => {
   await page.goto("/#/atlas");
   await waitForAppReady(page);
-  await expect(page.getByTestId("atlas-map")).toBeVisible();
+  await expect(page.getByTestId("atlas-area-map")).toBeVisible();
 
   const firstUsableMs = await page.evaluate(() =>
     Math.round(globalThis.performance.now()),

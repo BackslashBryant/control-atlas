@@ -34,6 +34,21 @@ async function clickAtlasLandmark(page, name) {
   await node.click();
 }
 
+/**
+ * The landing draws the groups; a framework is one step inside one of them.
+ * Every cell is a real button named for what it is and how much it holds, so
+ * the same two clicks reach a publication at any width.
+ */
+async function enterFrameworkFromLandscape(page, group, name) {
+  const map = page.getByTestId("atlas-area-map");
+  const groupCell = map.getByRole("button", { name: group }).first();
+  await expect(groupCell).toBeVisible();
+  await groupCell.click();
+  const node = map.getByRole("button", { name }).first();
+  await expect(node).toBeVisible();
+  await node.click();
+}
+
 for (const viewport of VIEWPORTS) {
   test(`NIST reaches a focused control with choices separate from structure at ${viewport.width}px`, async ({
     page,
@@ -42,22 +57,28 @@ for (const viewport of VIEWPORTS) {
     await page.goto("/#/atlas");
     await waitForAppReady(page);
     await dismissOnboarding(page);
-    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "root");
+    // Nothing is scoped yet, so the landing is the board of groups rather than
+    // the columns: the question at this point is which framework, not where
+    // inside one.
+    await expect(page.getByTestId("atlas-area-map")).toBeVisible();
+    await expect(page.getByTestId("atlas-map")).toHaveCount(0);
 
-    await clickAtlasLandmark(page, /^NIST/);
-    await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
-    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
-    await clickAtlasLandmark(page, /SP\s+800-53 Rev\. 5 Catalog/);
+    // Two clicks reach a publication: its group, then it. The map stays put
+    // and the panel becomes what was opened.
+    await enterFrameworkFromLandscape(page, /^Control catalogs/, /^800-53 /);
     await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
     await expect(page).not.toHaveURL(/atlasBaseline=/);
-    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "publication");
+    await expect(
+      page.getByTestId("atlas-detail").getByRole("heading", { level: 3 }),
+    ).toContainText("800-53");
+
+    // The group stays one step back, never a return to the top of the route.
+    const trail = page.getByRole("navigation", { name: "Map depth" });
+    await expect(trail.getByRole("button", { name: /^Control catalogs/ })).toBeVisible();
 
     await expectNoHorizontalOverflow(page);
-    // Wait for both the drilled level and the shared navigation lock to settle
-    // before using the global jump field.
-    await expect(
-      page.locator('.atlas-decomp__column[data-column="detail"] .atlas-decomp__node').first(),
-    ).toBeVisible();
+    // Wait for the shared navigation lock to settle before using the global
+    // jump field.
     await expect(page.locator("main#workspace")).not.toHaveAttribute("inert", "");
     const jumpToRecord = page.getByRole("searchbox", { name: "Jump to a record" });
     await expect(jumpToRecord).toBeEnabled();
@@ -114,20 +135,20 @@ for (const viewport of VIEWPORTS) {
 test("Atlas root presents a source-ecosystem interactive hierarchy", async ({
   page,
 }) => {
-  await page.goto("/#/atlas");
+  await page.goto("/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const map = page.getByTestId("atlas-map");
-  await expect(map).toBeVisible();
-  await expect(map).toHaveAttribute("data-scope-level", "root");
+  const board = page.getByTestId("atlas-area-map");
+  await expect(board).toBeVisible();
+  // Eight publishers, plus the three authority landmarks and the one
+  // publication issued outside the federal ecosystems, named in strips.
+  await expect(board.locator("button.atlas-area__cell")).toHaveCount(8);
+  await expect(page.locator(".atlas-mapcol__aside em")).toHaveCount(4);
+  // The board is DOM, not a canvas, so every landmark keeps a readable label.
+  await expect(board.locator("canvas")).toHaveCount(0);
   await expect(
-    map.locator('.atlas-decomp__column[data-column="area"]'),
-  ).toHaveAttribute("data-row-count", "11");
-  // The map is DOM, not a canvas, so every node keeps a readable label.
-  await expect(map.locator("canvas")).toHaveCount(0);
-  await expect(
-    page.getByText("Open a publisher or source ecosystem to follow its publications and native structure.", { exact: true }),
+    page.getByText("Grouped by what each document is, who issues it, or what you're trying to get done.", { exact: true }),
   ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Map", exact: true })).toHaveCount(
     0,

@@ -21,12 +21,65 @@ Library and Resources share search, visible desktop facets, a compact responsive
 
 ## C. Adaptive Explorer
 
-Atlas has two modes over one route and one navigation state:
+Atlas is one map over one route and one navigation state, all semantic DOM. No
+canvas renderer and no flow-graph bundle loads before a visitor asks for a
+relationship view.
 
-- Overview: React Flow and ELK render only the bounded area and publication map.
-- Publisher structure: semantic DOM renders publication-native levels and immediate children.
+The map column is roughly seventy per cent of the width and the detail panel
+thirty, stacking below 1100px. Everything is drawn the same way at every depth:
+a cell per thing, its area the quantity it holds, a trail above it for the way
+back. Opening something never leaves the page — the map goes a level deeper and
+the panel becomes about what was opened.
 
-The structural sidebar contains the current path, immediate parent, immediate children with counts, and publication-scoped search. It is open by default at 1200 pixels and wider, collapsible from 768 through 1199 pixels, and a slide-over Browse drawer below 768 pixels. Mobile shows one structural level at a time with a sticky path control. The main pane contains selected details and immediate children. A local-connections view is optional and never changes structural ancestry. It must be a visible workspace destination or immediately focused after navigation; no task-critical connection result may begin below an unexplained Atlas canvas. Do not render a permanent right inspector below publication level or a native select containing a large catalog.
+- Groups: the landing. Three lenses group the same frameworks by what each
+  document is (`atlasLanding=""`), who issues it (`publishers`), or what the
+  reader is trying to get done (`job`), five to eight groups each. Anything a
+  lens cannot file is named beneath the map rather than dropped.
+- Frameworks: the members of one group.
+- Families: what one framework contains.
+- Records: where every child holds one record, area says nothing, so the panel
+  lists them and each one opens.
+
+Three rules the drawing must keep:
+
+- Area may only encode a quantity whose units are the same across the cells
+  being compared. What frameworks hold is not comparable between them — a STIG
+  rule is not an 800-53 control — so groups are sized by how many frameworks
+  they hold, and contents take over one level down.
+- Layout may not assert a claim the data cannot support. The curated dependency
+  spine is hand-written because crosswalks carry no direction, so it appears as
+  a sentence in the panel and never as the shape of the map. Relationship is
+  shown by selection: choosing a cell lights the ones it genuinely crosswalks
+  to and dims the rest.
+- Every count is stated in the word its publisher uses — controls in SP 800-53,
+  techniques in ATT&CK, rules in a STIG, baselines in FedRAMP — taken from
+  `catalogProfiles`' `recordLabel`. "Records" and "publications" are this
+  repository's vocabulary, not the reader's, and never reach a cell or a panel
+  heading. `tests/graph/atlasUnits` fails if a catalog arrives without a noun.
+
+The map is columns of a fixed width, never narrower than a family name, each
+cell as tall as its share. Width is constant, so height carries the quantity
+and area still reads true, without the aspect-ratio lottery a squarified
+treemap runs — that lottery dealt half the cells inside SP 800-53 narrower than
+the word "Maintenance" while giving the largest 500px of empty paint. Nothing
+is ever cut mid-word.
+
+Two consequences the drawing owns:
+
+- A cell is never shorter than its own name or than a 44px touch target. Below
+  that floor its height is a minimum, not a quantity, so those cells are drawn
+  flat with a dotted edge — the same way a dashed edge already means "nothing
+  published beneath this". Read the number on a floored cell, not its size.
+- Room the encoding buys gets spent. A cell with height to spare names what is
+  inside it, so a reader can see that "Control catalogs" means 800-53, 800-53A
+  and 800-171 without opening it.
+
+The map's height is what the viewport has left below it, so the whole picture
+is on screen rather than running past the fold.
+
+Publisher-native columns remain addressable by URL beneath the map
+(`atlasLimb`, `atlasFramework`, `atlasFamily` without a lens group) and render
+publication-native levels and immediate children.
 
 ## D. Record detail
 

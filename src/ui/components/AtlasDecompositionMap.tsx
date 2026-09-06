@@ -66,6 +66,23 @@ function rowMeta(row: AtlasTreeRow): string {
   return [lifecycle, count].filter(Boolean).join(" · ");
 }
 
+/**
+ * What the meta column actually draws.
+ *
+ * The full sentence — "Active · 1,216 records" — measures about 155px, and a
+ * column at drill-down width only has ~158px to share between the name, the
+ * meta and the chevron. Spending it all here starved the name track to zero,
+ * so every row rendered as its count with no name at all. The number carries
+ * the same ranking on its own; the sentence stays in the title and in the
+ * screen-reader text, where it costs no width.
+ */
+function rowMetaVisual(row: AtlasTreeRow): string {
+  if (row.leaf) return row.kind;
+  if (row.destination) return row.destination.actionLabel;
+  if (row.count === 0) return "None yet";
+  return formatCount(row.count);
+}
+
 function TreeRow(props: {
   row: AtlasTreeRow;
   selected: boolean;
@@ -76,6 +93,7 @@ function TreeRow(props: {
   const { row, selected, groupHeading, onDrill, onNavigate } = props;
   const style = { "--atlas-decomp-row-share": row.share } as CSSProperties;
   const meta = rowMeta(row);
+  const metaVisual = rowMetaVisual(row);
   const drill = row.drill;
 
   return (
@@ -107,7 +125,10 @@ function TreeRow(props: {
                 <span className="atlas-decomp__kind">{row.publicationKind}</span>
               ) : null}
             </span>
-            <span className="atlas-decomp__meta">{meta}</span>
+            <span className="atlas-decomp__meta" data-lifecycle={row.lifecycleStatus || undefined}>
+              <span className="visually-hidden">{meta}</span>
+              <span aria-hidden="true">{metaVisual}</span>
+            </span>
             <IconChevronRight
               aria-hidden="true"
               className="atlas-decomp__chevron"
@@ -131,7 +152,10 @@ function TreeRow(props: {
                 <span className="atlas-decomp__kind">{row.publicationKind}</span>
               ) : null}
             </span>
-            <span className="atlas-decomp__meta">{meta}</span>
+            <span className="atlas-decomp__meta" data-lifecycle={row.lifecycleStatus || undefined}>
+              <span className="visually-hidden">{meta}</span>
+              <span aria-hidden="true">{metaVisual}</span>
+            </span>
             <IconArrowUpRight
               aria-hidden="true"
               className="atlas-decomp__chevron"
@@ -152,7 +176,10 @@ function TreeRow(props: {
                 <span className="atlas-decomp__kind">{row.publicationKind}</span>
               ) : null}
             </span>
-            <span className="atlas-decomp__meta">{meta}</span>
+            <span className="atlas-decomp__meta" data-lifecycle={row.lifecycleStatus || undefined}>
+              <span className="visually-hidden">{meta}</span>
+              <span aria-hidden="true">{metaVisual}</span>
+            </span>
           </div>
         )}
       </li>

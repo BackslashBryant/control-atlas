@@ -120,7 +120,7 @@ export type CanonicalRoute = {
 
 const ATLAS_PARAMS = new Set([
   "node", "atlasAxis", "atlasLimb", "atlasFramework", "atlasBenchmark", "atlasBaseline", "atlasFamily",
-  "atlasRmfStep", "atlasParent", "relationshipView", "relationshipType", "provenance",
+  "atlasRmfStep", "atlasPivotTrail", "atlasLanding", "atlasLensFamily", "atlasParent", "relationshipView", "relationshipType", "provenance",
   "confidence", "type", "nodeType", "includeCandidates", "relationshipSearch",
   "atlasStage", "relationshipGroup", "sourceView", "showSupportingReferences",
   "showDraftOrLegacy", "showRegistryOnly",

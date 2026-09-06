@@ -9859,13 +9859,17 @@ input[type="checkbox"] {
   margin: 0 0 var(--ca-space-2);
 }
 
+/* No margin of its own: .atlas-focused-shell is a grid with a 16px gap and
+   spaces every other child that way. A fourth copy of this selector further
+   down the file used to add 32px on top of that gap, which put 48px of white
+   space between the record and its connection graph — and pushed the graph,
+   the thing this route exists to show, past the fold at 1440x900. */
 .atlas-focused-toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--ca-space-3);
-  margin-block-end: var(--ca-space-4);
 }
 
 .atlas-workspace-heading {
@@ -11460,10 +11464,13 @@ input[type="checkbox"] {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(20rem, 34rem);
   align-items: end;
-  gap: var(--ca-space-6);
+  gap: var(--ca-space-4) var(--ca-space-6);
   width: 100%;
   margin-inline: auto;
-  margin-bottom: var(--ca-space-5);
+  /* The border already separates the head from what follows, so a full
+     padding and a full margin at the same seam is spending the fold twice.
+     Every pixel here is a pixel of map. */
+  margin-bottom: var(--ca-space-2);
   padding-block: 0 var(--ca-space-5);
   border-bottom: 1px solid var(--ca-border);
 }
@@ -12065,10 +12072,6 @@ input[type="checkbox"] {
   box-shadow: none;
 }
 
-.atlas-focused-toolbar {
-  margin-block: var(--ca-space-8) var(--ca-space-4);
-}
-
 .atlas-workspace-orientation {
   max-width: 62ch;
   margin: var(--ca-space-1) 0 0;
@@ -12607,7 +12610,12 @@ input[type="checkbox"] {
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  /* The meta and chevron tracks must be able to give way. As plain `auto`
+     they resolve to minmax(auto, max-content), and a nowrap meta's min-content
+     equals its max-content — so grid satisfied them first and left the name
+     track absorbing the whole deficit at 0px. The name is the one thing on the
+     row that must never disappear, so it gets a floor and the meta yields. */
+  grid-template-columns: minmax(4.5rem, 1fr) minmax(0, auto) auto;
   align-items: center;
   gap: var(--ca-space-2);
   width: 100%;
@@ -12682,11 +12690,28 @@ input[type="checkbox"] {
 }
 
 .atlas-decomp__meta {
+  min-width: 0;
+  overflow: hidden;
   color: var(--ca-text-muted);
   font-family: var(--ca-font-mono, monospace);
   font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
+  text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Lifecycle is a dot rather than a word: "Historical" is the exception worth
+   flagging, and spelling it out is what made this column too wide to share. */
+.atlas-decomp__meta[data-lifecycle="historical"]::before {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: var(--ca-accent-gold, var(--lsm-gold));
+  content: "";
+  vertical-align: middle;
 }
 
 .atlas-decomp__chevron {
@@ -12801,8 +12826,11 @@ input[type="checkbox"] {
 }
 
 /* Narrow screens always stack: side-by-side columns cannot keep labels legible
-   below this width, and the page, not a nested pane, does the scrolling. */
-@media (max-width: 1099px) {
+   below this width, and the page, not a nested pane, does the scrolling.
+   Matched to the 1100px breakpoint where the crosswalks sidebar drops — at
+   1099 vs 1100 there was a one-pixel band where the sidebar had gone but the
+   columns were still side by side. */
+@media (max-width: 1100px) {
   .atlas-decomp__levels,
   .atlas-decomp__level {
     display: grid;
@@ -13076,4 +13104,900 @@ input[type="checkbox"] {
   color: var(--ca-text-muted);
   font-size: 0.9em;
   font-style: normal;
+}
+
+/* ==========================================================================
+   Atlas workbench — the map and the words, side by side.
+
+   One feature: roughly seventy per cent map, thirty per cent detail. Clicking
+   anything at any depth changes what the panel is about and leaves the map
+   where it is. Nothing here loads another page.
+   ========================================================================== */
+.atlas-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+  align-items: start;
+  gap: var(--ca-space-4);
+  margin-top: var(--ca-space-2);
+}
+
+/* With a subject the panel is a sticky column that stays put while the reader
+   works down a long list, so it must be free to be shorter than the map. At
+   rest it has one short prompt to show, and starting it at the top left 445px
+   of reserved column below it reading as something that failed to load. Given
+   the map's height to fill, the same prompt reads as a waiting space. */
+.atlas-workbench:has(.atlas-detail[data-resting="true"]) {
+  align-items: stretch;
+}
+
+.atlas-detail[data-resting="true"] {
+  align-content: center;
+  max-height: none;
+}
+
+/* The map column: a depth trail, one drawing, and whatever the grouping could
+   not file named underneath it. */
+.atlas-mapcol {
+  display: grid;
+  gap: var(--ca-space-2);
+  min-width: 0;
+}
+
+.atlas-mapcol__trail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-1);
+  font-size: 0.75rem;
+}
+
+.atlas-mapcol__trail button {
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm, 3px);
+  background: none;
+  color: var(--ca-text-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.atlas-mapcol__trail button:hover {
+  color: var(--ca-text);
+}
+
+.atlas-mapcol__trail button[aria-current="true"] {
+  border-color: var(--ca-border);
+  background: var(--ca-surface);
+  color: var(--ca-text);
+  font-weight: 600;
+}
+
+/* The separator is real markup, hidden from assistive tech. As CSS generated
+   content it landed inside each button's accessible name, so screen readers
+   announced "slash NIST" and name-based queries stopped matching. */
+.atlas-mapcol__trail span {
+  color: var(--ca-text-muted);
+}
+
+.atlas-mapcol__aside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ca-space-1) var(--ca-space-2);
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: 0.6875rem;
+}
+
+.atlas-mapcol__aside > span {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.atlas-mapcol__aside em {
+  font-family: var(--ca-font-mono, monospace);
+  font-style: normal;
+}
+
+/* One drawing, one idiom: a cell per thing, area for how much it holds. */
+.atlas-area {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md, 6px);
+  background: var(--ca-surface);
+}
+
+/* Phone width: area has nothing to say in a 340px column, so the same cells
+   become a list in size order. */
+.atlas-area--stacked {
+  position: static;
+  display: grid;
+  gap: 4px;
+  height: auto;
+  padding: var(--ca-space-2);
+}
+
+.atlas-area__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ca-space-2);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--ca-space-2);
+  border: 1px solid color-mix(in srgb, var(--ca-area-color) 50%, transparent);
+  border-left-width: 4px;
+  border-radius: var(--radius-sm, 3px);
+  background: color-mix(in srgb, var(--ca-area-color) 18%, var(--ca-surface));
+  color: var(--ca-text);
+  font: inherit;
+  text-align: left;
+}
+
+button.atlas-area__row {
+  cursor: pointer;
+}
+
+.atlas-area__row[data-static="true"] {
+  border-style: dashed;
+  background: color-mix(in srgb, var(--ca-area-color) 8%, var(--ca-surface));
+}
+
+.atlas-area__row[data-selected="true"] {
+  border-color: var(--ca-area-color);
+}
+
+.atlas-area__row:focus-visible {
+  outline: 2px solid var(--ca-accent);
+  outline-offset: 2px;
+}
+
+/* A cell is a piece of ground, not a table row: lit from the top, carrying a
+   horizon rule in its own area colour. The gradient runs from the tint the
+   flat fill used down to half of it, so the top of a cell is exactly as light
+   as the version axe measured and the bottom is darker — the shape gains
+   depth without costing any contrast against the label sitting on it. */
+.atlas-area__cell {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--ca-area-color) 38%, transparent);
+  border-radius: 4px;
+  background:
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--ca-area-color) 24%, var(--ca-surface)) 0%,
+      color-mix(in srgb, var(--ca-area-color) 12%, var(--ca-surface)) 100%
+    );
+  box-shadow: inset 0 2px 0 color-mix(in srgb, var(--ca-area-color) 62%, transparent);
+  color: var(--ca-text);
+  font: inherit;
+  text-align: left;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    opacity 140ms ease;
+}
+
+button.atlas-area__cell {
+  cursor: pointer;
+}
+
+button.atlas-area__cell:hover,
+.atlas-area__cell[data-selected="true"] {
+  border-color: var(--ca-area-color);
+  background:
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--ca-area-color) 46%, var(--ca-surface)) 0%,
+      color-mix(in srgb, var(--ca-area-color) 26%, var(--ca-surface)) 100%
+    );
+  box-shadow:
+    inset 0 2px 0 var(--ca-area-color),
+    0 6px 20px -10px color-mix(in srgb, var(--ca-area-color) 80%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-area__cell {
+    transition: none;
+  }
+}
+
+/* Not part of what the selected cell crosswalks to. Recessed, not erased: at
+   0.28 the dimmed names were unreadable, which turns "these do not connect"
+   into "these are gone". */
+.atlas-area__cell[data-dim="true"] {
+  opacity: 0.45;
+}
+
+/* Smaller than the drawing can show. Below the floor a cell's height is a
+   minimum rather than a quantity, so comparing it by eye with a cell drawn
+   true would mislead — inside SP 800-53 the 22-control PII family needs three
+   lines for its name and would otherwise stand taller than the 57-control
+   Contingency Planning. Flat fill and a dotted horizon say "read the number
+   here", the same way a dashed edge already says "nothing beneath this". */
+.atlas-area__cell[data-floored="true"] {
+  background: color-mix(in srgb, var(--ca-area-color) 15%, var(--ca-surface));
+  box-shadow: none;
+  border-top: 1px dotted color-mix(in srgb, var(--ca-area-color) 70%, transparent);
+}
+
+button.atlas-area__cell[data-floored="true"]:hover,
+.atlas-area__cell[data-floored="true"][data-selected="true"] {
+  background: color-mix(in srgb, var(--ca-area-color) 34%, var(--ca-surface));
+  box-shadow: none;
+  border-color: var(--ca-area-color);
+  border-top-style: dotted;
+}
+
+/* Nothing published beneath it: drawn at its true size, never a control. */
+.atlas-area__cell[data-static="true"] {
+  border-style: dashed;
+  background: color-mix(in srgb, var(--ca-area-color) 9%, var(--ca-surface));
+  color: var(--ca-text-muted);
+}
+
+.atlas-area__cell:focus-visible {
+  outline: 2px solid var(--ca-accent);
+  outline-offset: -3px;
+}
+
+/* Three amounts of room, one object. A strip has the name and the number side
+   by side because that is all that fits on one line; anything taller stacks
+   them and sets the name larger. Columns are never narrower than a family
+   name, so nothing here is ever cut mid-word. */
+.atlas-area__head {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.atlas-area__cell[data-band="strip"] {
+  justify-content: center;
+  padding: 6px 12px;
+}
+
+.atlas-area__cell[data-band="strip"] .atlas-area__head {
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--ca-space-2);
+}
+
+/* No `text-wrap: balance` here. On a four-line name in a 236px cell it evened
+   the lines out to one word each and pushed the tail out of the box. It earns
+   its keep on a plate headline and nowhere else. */
+.atlas-area__name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 17px;
+  overflow-wrap: break-word;
+}
+
+.atlas-area__cell[data-band="strip"] .atlas-area__name {
+  min-width: 0;
+  flex: 1 1 auto;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  font-size: 0.8125rem;
+}
+
+.atlas-area__cell[data-band="plate"] .atlas-area__name {
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  font-family: var(--ca-font-display, inherit);
+  font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+/* Full-strength text. Dimming the count to 74% put it at 4.13:1 on the tinted
+   cell against a 4.5:1 requirement — 198 serious contrast violations on the
+   landing alone. Size and the mono face separate it from the name instead. */
+.atlas-area__count {
+  color: var(--ca-text);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.atlas-area__cell[data-band="strip"] .atlas-area__count {
+  flex: 0 0 auto;
+}
+
+.atlas-area__note {
+  color: var(--ca-text);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* What is in it, named. This is the point of giving a big cell the room: the
+   reader can see which frameworks a group holds before deciding to open it,
+   instead of reading a count over an acre of empty paint. */
+.atlas-area__members {
+  display: flex;
+  min-height: 0;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 4px;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.atlas-area__members em {
+  padding: 2px 7px;
+  border: 1px solid color-mix(in srgb, var(--ca-area-color) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ca-surface) 55%, transparent);
+  font-size: 0.6875rem;
+  font-style: normal;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.atlas-area__members em[data-more="true"] {
+  border-style: dashed;
+  color: var(--ca-text-muted);
+}
+
+
+/* The panel is a column beside the map, not a slab under it, so it stays on
+   screen while the reader works down through the map. */
+.atlas-detail {
+  position: sticky;
+  top: var(--ca-space-4);
+  display: grid;
+  align-content: start;
+  gap: var(--ca-space-2);
+  max-height: calc(100vh - 6rem);
+  padding: var(--ca-space-3);
+  overflow-y: auto;
+  border: 1px solid var(--ca-border);
+  border-top: 2px solid var(--ca-area-color, var(--ca-accent));
+  border-radius: var(--radius-md, 6px);
+  background: var(--ca-surface-raised);
+}
+
+.atlas-detail__eyebrow {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atlas-detail h3 {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.25;
+}
+
+.atlas-detail__blurb,
+.atlas-detail__rest p,
+.atlas-detail__note {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.atlas-detail__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ca-space-3);
+  margin: var(--ca-space-1) 0 0;
+}
+
+.atlas-detail__facts dt {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.5625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atlas-detail__facts dd {
+  margin: 2px 0 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-detail__section {
+  display: grid;
+  gap: var(--ca-space-1);
+  padding-top: var(--ca-space-2);
+  border-top: 1px dashed var(--ca-border);
+}
+
+.atlas-detail__section h4 {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atlas-detail__links {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-detail__links li > * {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--ca-space-2);
+  width: 100%;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: var(--radius-sm, 3px);
+  background: none;
+  color: var(--ca-text);
+  font: inherit;
+  font-size: 0.75rem;
+  text-align: left;
+}
+
+.atlas-detail__links li > button {
+  cursor: pointer;
+}
+
+.atlas-detail__links li > button:hover {
+  background: color-mix(in srgb, var(--ca-area-color, var(--ca-accent)) 14%, transparent);
+}
+
+.atlas-detail__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ca-area-color, var(--ca-accent));
+}
+
+.atlas-detail__link-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.atlas-detail__link-name em {
+  display: block;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  font-style: normal;
+}
+
+.atlas-detail__link-count {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-detail__open {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ca-space-2);
+  margin-top: var(--ca-space-1);
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border: 1px solid var(--ca-area-color, var(--ca-accent));
+  border-radius: var(--radius-sm, 3px);
+  background: color-mix(in srgb, var(--ca-area-color, var(--ca-accent)) 16%, var(--ca-surface));
+  color: var(--ca-text);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.atlas-detail__links li > button:focus-visible,
+.atlas-detail__open:focus-visible {
+  outline: 2px solid var(--ca-accent);
+  outline-offset: 2px;
+}
+
+/* Below the split, the panel follows the map rather than squeezing beside it. */
+@media (max-width: 1100px) {
+  .atlas-workbench {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .atlas-detail {
+    position: static;
+    max-height: none;
+  }
+}
+
+/* ==========================================================================
+   Scoped Atlas — the columns, with what the framework connects to beside them.
+   ========================================================================== */
+.atlas-scoped {
+  display: grid;
+  gap: var(--ca-space-4);
+  min-width: 0;
+}
+
+.atlas-scoped[data-has-links="true"] {
+  grid-template-columns: minmax(0, 1fr) 17rem;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .atlas-scoped[data-has-links="true"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.atlas-framework-links {
+  display: grid;
+  align-content: start;
+  gap: var(--ca-space-1);
+  margin-top: var(--ca-space-4);
+  padding: var(--ca-space-3);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-lg);
+  background: var(--ca-surface-raised);
+}
+
+.atlas-framework-links h3 {
+  margin: var(--ca-space-2) 0 var(--ca-space-1);
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.atlas-framework-links h3:first-child {
+  margin-top: 0;
+}
+
+.atlas-framework-links h3 span {
+  margin-left: var(--ca-space-2);
+  padding: 1px 6px;
+  border: 1px dashed var(--ca-border);
+  border-radius: 999px;
+  font-size: 0.5625rem;
+  letter-spacing: 0.08em;
+}
+
+/* The crosswalk list this component used to borrow from the constellation,
+   which no longer exists. Same rules, owned here. */
+.atlas-framework-links__list {
+  display: grid;
+  gap: 2px;
+  margin: var(--ca-space-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-framework-links__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ca-area-color);
+}
+
+.atlas-framework-links__list--shared .atlas-framework-links__dot {
+  background: none;
+  border: 1px dashed var(--ca-area-color);
+}
+
+.atlas-framework-links__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.atlas-framework-links__name em {
+  display: block;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  font-style: normal;
+}
+
+.atlas-framework-links__count {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-framework-links button {
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+}
+
+.atlas-framework-links button svg {
+  color: var(--ca-text-muted);
+  opacity: 0;
+}
+
+.atlas-framework-links button:hover svg {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Lens bar — the doors into the landscape, named the way people name them.
+   ========================================================================== */
+.atlas-lens-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-2) var(--ca-space-3);
+  margin-top: var(--ca-space-2);
+  padding-bottom: var(--ca-space-3);
+  border-bottom: 1px solid var(--ca-border);
+}
+
+.atlas-lens-bar__lede {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.atlas-lens-bar ul {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: var(--ca-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-lens-bar__entry {
+  display: grid;
+  grid-template-areas: "dot label";
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0 var(--ca-space-2);
+  min-height: 44px;
+  padding: var(--ca-space-1) var(--ca-space-3) var(--ca-space-1) var(--ca-space-2);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-sm, 3px);
+  background: var(--ca-surface-raised);
+  color: var(--ca-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.atlas-lens-bar__entry:hover {
+  border-color: var(--ca-area-color);
+  background: var(--ca-surface-lifted);
+}
+
+.atlas-lens-bar__entry[aria-current="true"] {
+  border-color: var(--ca-area-color);
+  background: color-mix(in srgb, var(--ca-area-color) 14%, var(--ca-surface-raised));
+}
+
+.atlas-lens-bar__dot {
+  grid-area: dot;
+  width: 3px;
+  align-self: stretch;
+  border-radius: 2px;
+  background: var(--ca-area-color);
+}
+
+.atlas-lens-bar__label {
+  grid-area: label;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.atlas-lens-bar__reset {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-1);
+  min-height: 34px;
+  padding: 0 var(--ca-space-3);
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-sm, 3px);
+  background: none;
+  color: var(--ca-text-muted);
+  font: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.atlas-lens-bar__reset:hover {
+  border-color: color-mix(in srgb, var(--ca-accent) 58%, var(--ca-border));
+  color: var(--ca-text);
+}
+
+.atlas-lens-bar__survey {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-sm, 3px);
+}
+
+.atlas-lens-bar__survey button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-1);
+  min-height: 34px;
+  padding: 0 var(--ca-space-3);
+  border: 0;
+  background: none;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.atlas-lens-bar__survey button + button {
+  border-left: 1px solid var(--ca-border);
+}
+
+.atlas-lens-bar__survey button:hover {
+  background: var(--ca-surface-lifted);
+  color: var(--ca-text);
+}
+
+.atlas-lens-bar__survey button[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--ca-accent) 18%, var(--ca-surface));
+  color: var(--ca-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-lens-bar__entry {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Crosswalk route — the path taken across frameworks.
+
+   Distinct from the scope breadcrumb, which walks down inside one framework.
+   Cross-framework colour marks every part of this journey: the badge on the
+   connection that offers the crossing, and the trail that records it.
+   ========================================================================== */
+.atlas-pivot-trail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-2) var(--ca-space-3);
+  margin-top: var(--ca-space-4);
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border: 1px solid color-mix(in srgb, var(--ca-lens-cross-framework) 32%, var(--ca-border));
+  border-left: 3px solid var(--ca-lens-cross-framework);
+  border-radius: var(--radius-sm, 3px);
+  background: color-mix(in srgb, var(--ca-lens-cross-framework) 6%, var(--ca-surface-raised));
+}
+
+.atlas-pivot-trail__lede {
+  margin: 0;
+  color: var(--ca-lens-cross-framework);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.atlas-pivot-trail ol {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-pivot-trail li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ca-space-1);
+}
+
+.atlas-pivot-trail ol button {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--ca-space-1);
+  padding: 2px var(--ca-space-1);
+  border: 0;
+  border-radius: var(--radius-sm, 3px);
+  background: none;
+  color: var(--ca-text);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.atlas-pivot-trail ol button:hover {
+  background: var(--ca-surface-lifted);
+  color: var(--ca-accent-hover);
+}
+
+.atlas-pivot-trail__name {
+  font-weight: 600;
+}
+
+.atlas-pivot-trail__record {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
+}
+
+.atlas-pivot-trail__arrow {
+  color: var(--ca-lens-cross-framework);
+}
+
+.atlas-pivot-trail__current {
+  padding: 2px var(--ca-space-1);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.atlas-pivot-trail__clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px var(--ca-space-1);
+  border: 0;
+  background: none;
+  color: var(--ca-text-muted);
+  font: inherit;
+  font-size: 0.6875rem;
+  cursor: pointer;
+}
+
+.atlas-pivot-trail__clear:hover {
+  color: var(--ca-text);
+}
+
+/* The badge on a connection that leaves this framework. */
+.atlas-lens-detail__pivot {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 3px;
+  color: var(--ca-lens-cross-framework);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.atlas-lens-detail__open[data-crosses-framework="true"] {
+  border-left: 2px solid color-mix(in srgb, var(--ca-lens-cross-framework) 55%, transparent);
 }

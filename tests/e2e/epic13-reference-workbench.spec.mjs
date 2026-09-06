@@ -35,20 +35,21 @@ test("Resources is a first-class durable destination", async ({ page }) => {
 
 test("Atlas overview aggregates the ecosystem and drills directly", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1600, height: 1000 });
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  await expect(page.getByText("Open a publisher or source ecosystem to follow its publications and native structure.", { exact: true })).toBeVisible();
-  const atlas = page.getByTestId("atlas-map");
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
-  const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-  await expect(areas).toHaveAttribute("data-row-count", "11");
+  await expect(page.getByText("Grouped by what each document is, who issues it, or what you're trying to get done.", { exact: true })).toBeVisible();
+  const board = page.getByTestId("atlas-area-map");
+  await expect(board).toBeVisible();
+  await expect(board.locator("button.atlas-area__cell")).toHaveCount(8);
+  await expect(page.locator(".atlas-mapcol__aside em")).toHaveCount(4);
   await page.screenshot({ path: testInfo.outputPath("epic13-atlas-graph-first.png"), fullPage: true });
 
-  await areas.getByRole("button", { name: /^NIST/ }).click();
-  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
-  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
+  // Opening a publisher stays on the map and shows what it publishes.
+  await board.getByRole("button", { name: /^NIST / }).click();
+  await expect(page).toHaveURL(/atlasLensFamily=ecosystem(?::|%3A)nist/);
+  await expect(board.getByRole("button", { name: /^800-53 / }).first()).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("epic13-atlas-workbench.png"), fullPage: true });
 });
 

@@ -568,7 +568,7 @@ The complete canonical values and semantic provenance/status mappings live in `s
 | Layer | Decision | Rationale |
 |---|---|---|
 | Base | Vite + React + TypeScript static app | Keeps full app control while preserving static public-data deployment |
-| Atlas | React Flow + ELK for bounded area/publication overview; semantic DOM Adaptive Explorer below publication level | Preserves a useful spatial overview while respecting every publisher's native containment and mobile navigation |
+| Atlas | Semantic DOM throughout: one area map at every depth — fixed-width columns of cells whose height is what they hold, absolutely positioned buttons rather than SVG shapes, sized to the viewport with a detail panel beside it | One way of seeing from the landing to a record, every cell focusable and readable by a screen reader, area only ever encoding a quantity whose units are the same across the cells being compared, and every count named in its publisher's own word rather than in "records" |
 | Other relationship diagrams | React Flow + ELK.js, lazy | Retained for existing bounded detail and Compare surfaces pending separate review |
 | Search | MiniSearch | Field-weighted, static-bundle-friendly, handles mixed ID/keyword queries |
 | Validation | Zod (runtime) + JSON Schema export | TypeScript-native with schema portability |

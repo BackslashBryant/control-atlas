@@ -45,14 +45,15 @@ for (const viewport of VIEWPORTS) {
         await waitForAppReady(page, { allowPartial: true });
 
         if (route === "/#/explore") {
-          const atlas = page.getByTestId("atlas-map");
-          await expect(atlas).toHaveAttribute("data-scope-level", "root");
-          const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-          await expect(areas).toHaveAttribute("data-row-count", "11");
-          // Labelled rows at every width; there is no canvas and no
-          // disclosure standing between the visitor and the map.
-          await expect(atlas.locator("canvas")).toHaveCount(0);
-          await expect(areas.locator(".atlas-decomp__label").first()).toBeVisible();
+          const landscape = page.getByTestId("atlas-area-map");
+          await expect(landscape).toBeVisible();
+          // Labelled controls at every width, and no canvas or disclosure
+          // standing between the visitor and the corpus: every cell is a real
+          // button naming what it is and how much it holds.
+          await expect(landscape.locator("canvas")).toHaveCount(0);
+          await expect(
+            landscape.getByRole("button", { name: /^Control catalogs/ }).first(),
+          ).toBeVisible();
         }
 
         await expect(page.locator(".static-route-shell")).toHaveCount(0);

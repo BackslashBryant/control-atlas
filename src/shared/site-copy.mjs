@@ -65,7 +65,7 @@ export const SITE_COPY = Object.freeze({
   routes: Object.freeze({
     atlas: Object.freeze({
       title: "Atlas",
-      purpose: "Open a publisher or source ecosystem to follow its publications and native structure.",
+      purpose: "Grouped by what each document is, who issues it, or what you're trying to get done.",
     }),
     library: Object.freeze({
       title: "Library",

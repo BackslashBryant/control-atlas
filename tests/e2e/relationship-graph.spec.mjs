@@ -30,14 +30,28 @@ test("Atlas default route is the semantic Atlas network, not an empty focused-re
   await dismissOnboarding(page);
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
-  const atlas = page.getByTestId("atlas-map");
-  await expect(atlas).toBeVisible();
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
-  await expect(
-    atlas.locator('.atlas-decomp__column[data-column="area"]'),
-  ).toHaveAttribute("data-row-count", "11");
+  // The default lens groups the corpus by what each document is, drawn from
+  // the same semantic network; publisher and job are the other two groupings
+  // of the same 28 publications. The landing is the groups; a publication is
+  // one step in.
+  const landscape = page.getByTestId("atlas-area-map");
+  await expect(landscape).toBeVisible();
+  await landscape.getByRole("button", { name: /^Control catalogs/ }).click();
+  await expect(landscape.getByRole("button", { name: /^800-53 / }).first()).toBeVisible();
+  await page
+    .getByRole("navigation", { name: "Map depth" })
+    .getByRole("button", { name: "All groups" })
+    .click();
   await expect(page.getByRole("region", { name: "Focused Atlas record" })).toHaveCount(0);
   await expect(page.locator(".ca-flow-wrap")).toHaveCount(0);
+
+  // The same corpus, regrouped: switching lens keeps the board and changes
+  // what the groups are.
+  await page.getByRole("button", { name: "By publisher" }).click();
+  const publishers = page.getByTestId("atlas-area-map");
+  await expect(publishers).toBeVisible();
+  await expect(publishers.locator("button.atlas-area__cell")).toHaveCount(8);
+  await expect(publishers.getByRole("button", { name: /^NIST / })).toBeVisible();
 });
 
 test("record detail keeps published connections in an accessible list", async ({ page }) => {

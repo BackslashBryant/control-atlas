@@ -312,25 +312,30 @@ test("Phase 3 record actions and global footer expose the required hierarchy", a
 
 test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface label", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
-  const atlas = page.getByTestId("atlas-map");
-  await expect(atlas).toBeVisible();
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
+  const board = page.getByTestId("atlas-area-map");
+  await expect(board).toBeVisible();
   await expect(page.locator("body")).not.toContainText("Connected work surface");
 
-  // The landmarks are rows in the map itself, not a disclosure beside it, and
-  // each one states what it holds without being hovered.
-  const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-  await expect(areas).toHaveAttribute("data-row-count", "11");
-  const rows = areas.locator(".atlas-decomp__node");
-  await expect(rows).toHaveCount(11);
-  for (const row of await rows.all()) {
-    // Three honest forms: a count, a route to the surface that holds the area,
-    // or an admission that nothing is modelled yet. Never a bare label.
-    await expect(row).toContainText(/\d[\d,]* records|Open the \w+|Not yet modeled/);
+  // The landmarks are cards and named strip entries on the board itself, not a
+  // disclosure beside it, and each one states what it holds without being
+  // hovered: eight publishers plus three authority landmarks and the one
+  // publication issued outside the federal ecosystems.
+  await expect(board.locator("button.atlas-area__cell")).toHaveCount(8);
+  await expect(page.locator(".atlas-mapcol__aside em")).toHaveCount(4);
+  // Every landmark still states what it holds without being hovered, and says
+  // what the number counts. Groups are measured in frameworks because a STIG
+  // rule and an 800-53 control are not the same unit; one level down each
+  // framework counts in its own publisher's word instead.
+  const cards = board.locator("button.atlas-area__cell");
+  for (const card of await cards.all()) {
+    await expect(card).toContainText(/\d[\d,]* frameworks?/);
+  }
+  for (const entry of await page.locator(".atlas-mapcol__aside em").all()) {
+    await expect(entry).toContainText(/\d[\d,]*/);
   }
   for (const ecosystem of ["NIST", "DISA", "MITRE", "FedRAMP", "DoD CIO", "CDAO", "ISOO"]) {
-    await expect(rows.filter({ hasText: ecosystem }).first()).toBeVisible();
+    await expect(cards.filter({ hasText: ecosystem }).first()).toBeVisible();
   }
 });

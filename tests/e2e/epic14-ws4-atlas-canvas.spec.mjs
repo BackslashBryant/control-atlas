@@ -30,12 +30,27 @@ test.beforeEach(async ({ page }) => {
   attachPageDiagnostics(page);
 });
 
-async function openAtlas(page, viewport = { width: 1440, height: 900 }) {
+/**
+ * Opens the columns. The publisher lens lands on a board of publisher cards,
+ * and the columns this suite is about begin one level in, inside a publisher.
+ */
+async function openAtlas(page, viewport = { width: 1440, height: 900 }, ecosystem = "ecosystem%3Anist") {
   await page.setViewportSize(viewport);
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await gotoApp(page, "/#/atlas");
+  await gotoApp(page, `/#/atlas?atlasLanding=publishers&atlasLimb=${ecosystem}`);
   await waitForAppReady(page);
   await dismissOnboarding(page);
+}
+
+/** Opens a publisher from the landing board, which is where the columns start. */
+async function openPublisherFromBoard(page, label) {
+  const card = page
+    .getByTestId("atlas-area-map")
+    // In a plain string "\+" is just "+", so this escaped nothing and a label
+    // containing one would have reached the regex as a quantifier.
+    .getByRole("button", { name: new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} —`) });
+  await expect(card).toBeVisible();
+  await card.click();
 }
 
 function map(page) {
@@ -55,17 +70,15 @@ test("Atlas opens as a labelled decomposition map, not an unlabelled canvas", as
   await expect(page.getByRole("searchbox", { name: "Jump to a record" })).toBeVisible();
 
   const atlas = map(page);
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
-  await expect(atlas).toHaveAttribute("data-level-count", "1");
+  await expect(atlas).toHaveAttribute("data-scope-level", "ecosystem");
   // No canvas: the map is DOM, so every node is readable and focusable.
   await expect(atlas.locator("canvas")).toHaveCount(0);
 
-  const areas = column(page, "area");
-  await expect(areas).toHaveAttribute("data-row-count", "11");
-  // Eight source ecosystems open; three authority landmarks stay bounded
-  // context rather than pretending to be publisher containers.
-  await expect(areas.getByRole("button")).toHaveCount(8);
-  await expect(areas.locator('.atlas-decomp__node[data-state="static"]')).toHaveCount(3);
+  // Inside a publisher the first column is that publisher's publications.
+  // Every one of NIST's fifteen opens; none is a bounded label.
+  const areas = column(page, "publication");
+  await expect(areas).toHaveAttribute("data-row-count", "15");
+  await expect(areas.getByRole("button")).toHaveCount(15);
 
   // Every visible row carries a name and a count — nothing is hover-only.
   for (const row of await areas.locator(".atlas-decomp__node").all()) {
@@ -86,7 +99,6 @@ test("FedRAMP publications expose active and historical lifecycle state", async 
 test("the map drills ecosystem to publication to native section and the breadcrumb reverses it", async ({ page }) => {
   await openAtlas(page);
 
-  await column(page, "area").getByRole("button", { name: /^NIST/ }).click();
   await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
   await expect(map(page)).toHaveAttribute("data-scope-level", "ecosystem");
   await expect(column(page, "publication")).toBeVisible();
@@ -109,21 +121,27 @@ test("the map drills ecosystem to publication to native section and the breadcru
   await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
   await expect(page).not.toHaveURL(/atlasFramework=/);
 
+  // The top of the trail is the survey the reader walked down from, which is
+  // the board of publishers rather than a column of them.
   await trail.getByRole("button", { name: "Cybersecurity", exact: true }).click();
-  await expect(map(page)).toHaveAttribute("data-scope-level", "root");
+  await expect(page.getByTestId("atlas-area-map")).toBeVisible();
 });
 
 test("every source ecosystem opens directly from the first column", async ({ page }) => {
   await openAtlas(page);
 
+  // Every publisher opens on the map, and its own columns stay addressable by
+  // URL underneath it.
   for (const [id, label] of SOURCE_ECOSYSTEMS) {
-    await gotoApp(page, "/#/atlas");
+    await gotoApp(page, "/#/atlas?atlasLanding=publishers");
     await waitForAppReady(page);
-    await column(page, "area")
-      .locator(".atlas-decomp__label")
-      .getByText(label, { exact: true })
-      .click();
-    await expect(page).toHaveURL(new RegExp(`atlasLimb=${id.replace(":", "(?::|%3A)")}`));
+    await openPublisherFromBoard(page, label);
+    await expect(page).toHaveURL(
+      new RegExp(`atlasLensFamily=${id.replace(":", "(?::|%3A)")}`),
+    );
+
+    await gotoApp(page, `/#/atlas?atlasLimb=${encodeURIComponent(id)}`);
+    await waitForAppReady(page);
     await expect(page.getByRole("navigation", { name: "Atlas scope" })).toContainText(label);
   }
 });

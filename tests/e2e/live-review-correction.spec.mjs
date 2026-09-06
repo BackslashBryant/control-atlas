@@ -48,7 +48,10 @@ test("primary clicks expose transition feedback before the route replaces stale 
   expect(probe.shownAt - probe.clickAt).toBeLessThanOrEqual(100);
   expect(probe.visible).toBe(true);
   expect(probe.inert).toBe(true);
-  await expect(page.getByTestId("atlas-map")).toBeVisible();
+  // The Atlas link lands on the unscoped landing, which is the board of
+  // groups. The assertion is that the destination's own content replaced the
+  // stale route, so it tracks whatever the landing actually renders.
+  await expect(page.getByTestId("atlas-area-map")).toBeVisible();
 });
 
 for (const viewport of [
@@ -63,7 +66,9 @@ for (const viewport of [
 ]) {
   test(`responsive Atlas shell is collision and overflow free at ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/#/atlas");
+    // Scoped to a publisher: the toolbar this test measures belongs to the
+    // columns, which the board now sits above rather than replaces.
+    await page.goto("/#/atlas?atlasLanding=publishers&atlasLimb=ecosystem%3Anist");
     await waitForReady(page);
     const dimensions = await page.evaluate(() => ({
       clientWidth: globalThis.document.documentElement.clientWidth,
@@ -105,10 +110,10 @@ for (const zoom of [
 
 test("reduced motion keeps the complete Atlas visible without animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/#/atlas");
+  await page.goto("/#/atlas?atlasLanding=publishers");
   await waitForReady(page);
-  const atlas = page.getByTestId("atlas-map");
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
+  const atlas = page.getByTestId("atlas-area-map");
+  await expect(atlas).toBeVisible();
   const animatedDescendants = await atlas.locator("*").evaluateAll((elements) =>
     elements
       .filter((element) => globalThis.getComputedStyle(element).animationName !== "none")
@@ -117,35 +122,34 @@ test("reduced motion keeps the complete Atlas visible without animation", async 
   expect(animatedDescendants).toEqual([]);
 });
 
-test("Atlas first paint is a semantic landscape with drill-down and history", async ({ page }) => {
+test("Atlas first paint is a semantic map with drill-down and history", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/#/atlas");
+  await page.goto("/#/atlas?atlasLanding=publishers");
   await waitForReady(page);
-  const atlas = page.getByTestId("atlas-map");
-  await expect(atlas).toHaveAttribute("data-scope-level", "root");
-  // Landmarks are rows in the map, each already labelled and counted, so no
-  // disclosure has to be opened before the reader can see them.
-  const areas = atlas.locator('.atlas-decomp__column[data-column="area"]');
-  await expect(areas).toHaveAttribute("data-row-count", "11");
-  await expect(areas.locator(".atlas-decomp__node")).toHaveCount(11);
-  await areas.getByRole("button", { name: /^MITRE/ }).click();
-  await expect(atlas).toHaveAttribute("data-scope-level", "ecosystem");
-  await expect(page).not.toHaveURL(/atlasAxis=/);
-  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)mitre/);
+  const atlas = page.getByTestId("atlas-area-map");
+  await expect(atlas).toBeVisible();
+  // Every landmark is on screen at first paint, labelled and counted: eight
+  // publishers drawn, and the four the grouping cannot place named beneath.
+  await expect(atlas.locator("button.atlas-area__cell")).toHaveCount(8);
+  await expect(page.locator(".atlas-mapcol__aside em")).toHaveCount(4);
 
-  const publications = atlas.locator('.atlas-decomp__column[data-column="publication"]');
-  await expect(publications.getByRole("button", { name: /MITRE ATT&CK Enterprise Catalog/ })).toBeVisible();
-  await publications.getByRole("button", { name: /MITRE ATT&CK Enterprise Catalog/ }).click();
-  await expect(atlas).toHaveAttribute("data-scope-level", "publication");
+  await atlas.getByRole("button", { name: /^MITRE / }).click();
+  await expect(page).not.toHaveURL(/atlasAxis=/);
+  await expect(page).toHaveURL(/atlasLensFamily=ecosystem(?::|%3A)mitre/);
+  await expect(atlas.getByRole("button", { name: /^ATT&CK / }).first()).toBeVisible();
+
+  await atlas.getByRole("button", { name: /^ATT&CK / }).first().click();
   await expect(page).toHaveURL(/atlasFramework=mitre-attack/);
-  await expect(page.getByRole("navigation", { name: "Atlas scope" })).toBeVisible();
+  await expect(page.getByTestId("atlas-detail").getByRole("heading", { level: 3 }))
+    .toContainText("ATT&CK");
+
+  // History still walks back out of the map one level at a time.
   await page.reload();
   await waitForReady(page);
-  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "publication");
+  await expect(page).toHaveURL(/atlasFramework=mitre-attack/);
   await page.goBack();
-  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
-  await page.goForward();
-  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "publication");
+  await expect(page).not.toHaveURL(/atlasFramework=/);
+  await expect(page).toHaveURL(/atlasLensFamily=ecosystem(?::|%3A)mitre/);
 });
 
 test("focused Atlas record stays collision and overflow free across desktop and compact layouts", async ({ page }) => {

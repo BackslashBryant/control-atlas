@@ -48,6 +48,14 @@ const ROUTES = [
   { label: "retired recovery", path: "/#/retired?q=old-control" },
   { label: "not found recovery", path: "/#/does-not-exist" },
   { label: "explore", path: "/#/explore" },
+  // All three lenses the unscoped Atlas offers, plus one group opened. The
+  // group view is a diagram built from positioned controls and coloured wires,
+  // so it is the one place in the product where meaning could slip into colour
+  // and position alone.
+  { label: "Atlas by kind", path: "/#/atlas" },
+  { label: "Atlas by publisher", path: "/#/atlas?atlasLanding=publishers" },
+  { label: "Atlas by job", path: "/#/atlas?atlasLanding=job" },
+  { label: "Atlas group landscape", path: "/#/atlas?atlasLensFamily=implementation" },
   {
     label: "focused Atlas Path",
     path: "/#/explore?node=nist-800-53%3AAC-2&relationshipView=path",

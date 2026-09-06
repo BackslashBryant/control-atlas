@@ -58,6 +58,33 @@ export type ViewState =
       atlasBaseline: string;
       atlasFamily: string;
       atlasRmfStep: string;
+      /**
+       * Where the reader crossed from one framework into another, oldest
+       * first. Structural ancestry is already recoverable from the scope
+       * parameters; a pivot is not, because the framework left behind is not
+       * an ancestor of the one arrived at. Encoded as
+       * `ecosystem|publication|node` triples joined by `~`.
+       */
+      atlasPivotTrail: string;
+      /**
+       * How the unscoped Atlas groups itself: "" by what each document is,
+       * "publishers" by who issues it, "job" by what you are trying to get
+       * done. Three questions about the same 28 publications, none of which
+       * claims one framework outranks another.
+       *
+       * The landing used to draw all 28 at once as a dependency hierarchy,
+       * which put SP 800-53 at the top of everything — five unlike documents
+       * placed as peers because nothing else here happens to build on them.
+       * Grouping first shows five or six things and says something true on
+       * every screen; the dependency picture moves one level down, inside a
+       * group, where it is honest.
+       *
+       * The publisher lens is also the only place the authority groups appear,
+       * since statutes and directives carry no crosswalks.
+       */
+      atlasLanding: string;
+      /** The group opened within the current lens, if any. */
+      atlasLensFamily: string;
       relationshipView: string;
       relationshipType: string;
       provenance: string;
@@ -233,6 +260,9 @@ function atlasMapState(): Extract<ViewState, { view: "atlas-map" }> {
     atlasBaseline: "",
     atlasFamily: "",
     atlasRmfStep: "",
+    atlasPivotTrail: "",
+    atlasLanding: "",
+    atlasLensFamily: "",
     relationshipView: "",
     relationshipType: "",
     provenance: "",
@@ -279,6 +309,17 @@ function normalizeCompareView(value: string): CompareViewMode | "" {
   return "";
 }
 
+/**
+ * "" is the kind lens. It is the default rather than a named value so that
+ * links written before the other two lenses existed still open on a survey,
+ * and so the common case leaves no parameter in the URL at all.
+ */
+function normalizeAtlasLanding(value: string): string {
+  if (value === "publishers") return "publishers";
+  if (value === "job") return "job";
+  return "";
+}
+
 function normalizeRelationshipView(value: string): RelationshipViewMode | "" {
   if (value === "path") return "path";
   if (value === "list" || value === "table") return "list";
@@ -321,6 +362,12 @@ export function parseViewState(search: string): ViewState {
       atlasBaseline: params.get("atlasBaseline") || "",
       atlasFamily: params.get("atlasFamily") || "",
       atlasRmfStep: params.get("atlasRmfStep") || "",
+      atlasPivotTrail: params.get("atlasPivotTrail") || "",
+      // Which of the three lenses the landing is grouped by. "" is the kind
+      // lens and stays the default, so every URL written before the other two
+      // existed still opens on a survey rather than on nothing.
+      atlasLanding: normalizeAtlasLanding(params.get("atlasLanding") || ""),
+      atlasLensFamily: params.get("atlasLensFamily") || "",
       // Empty means "the default for this state" — Connections when a record
       // is focused, the board otherwise (AtlasMapPage.atlasView decides). It is
       // deliberately not forced to "path": serializing a default the user never
@@ -719,6 +766,9 @@ export function serializeViewState(state: ViewState): string {
     setIfValue(params, "atlasBaseline", state.atlasBaseline);
     setIfValue(params, "atlasFamily", state.atlasFamily);
     setIfValue(params, "atlasRmfStep", state.atlasRmfStep);
+    setIfValue(params, "atlasPivotTrail", state.atlasPivotTrail);
+    setIfValue(params, "atlasLanding", state.atlasLanding);
+    setIfValue(params, "atlasLensFamily", state.atlasLensFamily);
     if (state.relationshipView === "path") {
       params.set("relationshipView", "path");
     } else if (state.relationshipView === "map") {
@@ -871,6 +921,9 @@ export type AtlasMapUrlOptions = {
   atlasBaseline?: string;
   atlasFamily?: string;
   atlasRmfStep?: string;
+  atlasPivotTrail?: string;
+  atlasLanding?: string;
+  atlasLensFamily?: string;
   sourceView?: "default" | "purpose" | "rmf";
   relationshipView?: RelationshipViewMode;
   relationshipType?: string;
@@ -911,6 +964,9 @@ export function buildAtlasMapUrl(options: AtlasMapUrlOptions = {}): string {
     atlasBaseline: options.atlasBaseline || "",
     atlasFamily: options.atlasFamily || "",
     atlasRmfStep: options.atlasRmfStep || "",
+    atlasPivotTrail: options.atlasPivotTrail || "",
+    atlasLanding: normalizeAtlasLanding(options.atlasLanding || ""),
+    atlasLensFamily: options.atlasLensFamily || "",
     sourceView: options.sourceView || "default",
     relationshipView: options.relationshipView || "",
     relationshipType: options.relationshipType || "",
