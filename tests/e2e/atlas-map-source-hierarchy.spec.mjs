@@ -35,16 +35,16 @@ async function clickAtlasLandmark(page, name) {
 }
 
 /**
- * The landing is the board of groups, and every group names its members at
- * rest as labelled buttons carrying the framework's spoken name. The board is
- * one column on a phone and three on a desktop, so one selector reaches a
- * framework at every width without opening anything first.
+ * The landing draws the groups; a framework is one step inside one of them.
+ * Every cell is a real button named for what it is and how much it holds, so
+ * the same two clicks reach a publication at any width.
  */
-async function enterFrameworkFromLandscape(page, name) {
-  const node = page
-    .getByTestId("atlas-family-board")
-    .getByRole("button", { name })
-    .first();
+async function enterFrameworkFromLandscape(page, group, name) {
+  const map = page.getByTestId("atlas-area-map");
+  const groupCell = map.getByRole("button", { name: group }).first();
+  await expect(groupCell).toBeVisible();
+  await groupCell.click();
+  const node = map.getByRole("button", { name }).first();
   await expect(node).toBeVisible();
   await node.click();
 }
@@ -60,32 +60,25 @@ for (const viewport of VIEWPORTS) {
     // Nothing is scoped yet, so the landing is the board of groups rather than
     // the columns: the question at this point is which framework, not where
     // inside one.
-    await expect(page.getByTestId("atlas-family-board")).toBeVisible();
+    await expect(page.getByTestId("atlas-area-map")).toBeVisible();
     await expect(page.getByTestId("atlas-map")).toHaveCount(0);
 
-    // Entering a framework carries its publisher with it, so the columns open
-    // already placed in the publisher hierarchy rather than orphaned.
-    await enterFrameworkFromLandscape(page, /^800-53$/);
+    // Two clicks reach a publication: its group, then it. The map stays put
+    // and the panel becomes what was opened.
+    await enterFrameworkFromLandscape(page, /^Control catalogs/, /^800-53 /);
     await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
-    await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
     await expect(page).not.toHaveURL(/atlasBaseline=/);
-    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "publication");
+    await expect(
+      page.getByTestId("atlas-detail").getByRole("heading", { level: 3 }),
+    ).toContainText("800-53");
 
-    // The publisher level stays reachable from inside a framework: stepping up
-    // to NIST lists everything NIST publishes.
-    await clickAtlasLandmark(page, /^NIST/);
-    await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
-    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
-    await clickAtlasLandmark(page, /SP\s+800-53 Rev\. 5 Catalog/);
-    await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
-    await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "publication");
+    // The group stays one step back, never a return to the top of the route.
+    const trail = page.getByRole("navigation", { name: "Map depth" });
+    await expect(trail.getByRole("button", { name: /^Control catalogs/ })).toBeVisible();
 
     await expectNoHorizontalOverflow(page);
-    // Wait for both the drilled level and the shared navigation lock to settle
-    // before using the global jump field.
-    await expect(
-      page.locator('.atlas-decomp__column[data-column="detail"] .atlas-decomp__node').first(),
-    ).toBeVisible();
+    // Wait for the shared navigation lock to settle before using the global
+    // jump field.
     await expect(page.locator("main#workspace")).not.toHaveAttribute("inert", "");
     const jumpToRecord = page.getByRole("searchbox", { name: "Jump to a record" });
     await expect(jumpToRecord).toBeEnabled();
@@ -146,12 +139,12 @@ test("Atlas root presents a source-ecosystem interactive hierarchy", async ({
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const board = page.getByTestId("atlas-family-board");
+  const board = page.getByTestId("atlas-area-map");
   await expect(board).toBeVisible();
   // Eight publishers, plus the three authority landmarks and the one
   // publication issued outside the federal ecosystems, named in strips.
-  await expect(board.locator(".atlas-family-board__card")).toHaveCount(8);
-  await expect(board.locator(".atlas-family-board__strip li")).toHaveCount(4);
+  await expect(board.locator("button.atlas-area__cell")).toHaveCount(8);
+  await expect(page.locator(".atlas-mapcol__aside em")).toHaveCount(4);
   // The board is DOM, not a canvas, so every landmark keeps a readable label.
   await expect(board.locator("canvas")).toHaveCount(0);
   await expect(

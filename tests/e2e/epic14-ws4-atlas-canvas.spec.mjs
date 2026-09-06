@@ -45,8 +45,8 @@ async function openAtlas(page, viewport = { width: 1440, height: 900 }, ecosyste
 /** Opens a publisher from the landing board, which is where the columns start. */
 async function openPublisherFromBoard(page, label) {
   const card = page
-    .getByTestId("atlas-family-board")
-    .getByRole("button", { name: label, exact: true });
+    .getByTestId("atlas-area-map")
+    .getByRole("button", { name: new RegExp(`^${label.replace("+", "\+")} —`) });
   await expect(card).toBeVisible();
   await card.click();
 }
@@ -122,17 +122,24 @@ test("the map drills ecosystem to publication to native section and the breadcru
   // The top of the trail is the survey the reader walked down from, which is
   // the board of publishers rather than a column of them.
   await trail.getByRole("button", { name: "Cybersecurity", exact: true }).click();
-  await expect(page.getByTestId("atlas-family-board")).toBeVisible();
+  await expect(page.getByTestId("atlas-area-map")).toBeVisible();
 });
 
 test("every source ecosystem opens directly from the first column", async ({ page }) => {
   await openAtlas(page);
 
+  // Every publisher opens on the map, and its own columns stay addressable by
+  // URL underneath it.
   for (const [id, label] of SOURCE_ECOSYSTEMS) {
     await gotoApp(page, "/#/atlas?atlasLanding=publishers");
     await waitForAppReady(page);
     await openPublisherFromBoard(page, label);
-    await expect(page).toHaveURL(new RegExp(`atlasLimb=${id.replace(":", "(?::|%3A)")}`));
+    await expect(page).toHaveURL(
+      new RegExp(`atlasLensFamily=${id.replace(":", "(?::|%3A)")}`),
+    );
+
+    await gotoApp(page, `/#/atlas?atlasLimb=${encodeURIComponent(id)}`);
+    await waitForAppReady(page);
     await expect(page.getByRole("navigation", { name: "Atlas scope" })).toContainText(label);
   }
 });

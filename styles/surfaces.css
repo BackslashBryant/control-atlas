@@ -13104,815 +13104,304 @@ input[type="checkbox"] {
 }
 
 /* ==========================================================================
-   Atlas family board — the first screen of the landing.
+   Atlas workbench — the map and the words, side by side.
 
-   Five or six groups instead of twenty-eight frameworks. Everything a reader
-   needs to choose between them is on the card at rest: what the group is, what
-   is in it by name, and which other groups it actually crosswalks to. Nothing
-   here is hover-gated, because the reader has not yet been given a reason to
-   point at anything.
+   One feature: roughly seventy per cent map, thirty per cent detail. Clicking
+   anything at any depth changes what the panel is about and leaves the map
+   where it is. Nothing here loads another page.
    ========================================================================== */
-.atlas-family-board {
+.atlas-workbench {
   display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+  align-items: start;
   gap: var(--ca-space-4);
   margin-top: var(--ca-space-4);
 }
 
-.atlas-family-board__lede {
-  max-width: 60ch;
-  margin: 0;
+/* The map column: a depth trail, one drawing, and whatever the grouping could
+   not file named underneath it. */
+.atlas-mapcol {
+  display: grid;
+  gap: var(--ca-space-2);
+  min-width: 0;
+}
+
+.atlas-mapcol__trail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ca-space-1);
+  font-size: 0.75rem;
+}
+
+.atlas-mapcol__trail button {
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm, 3px);
+  background: none;
+  color: var(--ca-text-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.atlas-mapcol__trail button:hover {
+  color: var(--ca-text);
+}
+
+.atlas-mapcol__trail button[aria-current="true"] {
+  border-color: var(--ca-border);
+  background: var(--ca-surface);
+  color: var(--ca-text);
+  font-weight: 600;
+}
+
+/* The separator is real markup, hidden from assistive tech. As CSS generated
+   content it landed inside each button's accessible name, so screen readers
+   announced "slash NIST" and name-based queries stopped matching. */
+.atlas-mapcol__trail span {
   color: var(--ca-text-muted);
 }
 
-/* Wide enough that a desktop lands on three columns, not four: five or six
-   groups over four columns leaves a short second row and three empty cells,
-   and the gap reads as something missing. */
-.atlas-family-board__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
-  gap: var(--ca-space-3);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.atlas-family-board__card {
-  display: grid;
-  align-content: start;
-  gap: var(--ca-space-2);
-  min-width: 0;
-  padding: var(--ca-space-3);
-  border: 1px solid var(--ca-border);
-  border-top: 2px solid var(--ca-area-color);
-  border-radius: var(--radius-md, 6px);
-  background: var(--ca-surface-raised);
-}
-
-.atlas-family-board__card h3 {
-  margin: 0;
-  font-size: 1rem;
-}
-
-.atlas-family-board__open {
+.atlas-mapcol__aside {
   display: flex;
-  align-items: center;
-  gap: var(--ca-space-2);
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ca-space-1) var(--ca-space-2);
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: 0.6875rem;
+}
+
+.atlas-mapcol__aside > span {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.atlas-mapcol__aside em {
+  font-family: var(--ca-font-mono, monospace);
+  font-style: normal;
+}
+
+/* One drawing, one idiom: a cell per thing, area for how much it holds. */
+.atlas-area {
+  position: relative;
   width: 100%;
-  padding: 0;
-  border: 0;
-  background: none;
+  overflow: hidden;
+  border: 1px solid var(--ca-border);
+  border-radius: var(--radius-md, 6px);
+  background: var(--ca-surface);
+}
+
+.atlas-area__cell {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: hidden;
+  padding: 7px 9px;
+  border: 1px solid color-mix(in srgb, var(--ca-area-color) 50%, transparent);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--ca-area-color) 24%, var(--ca-surface));
   color: var(--ca-text);
   font: inherit;
   text-align: left;
+  transition: background 130ms ease, border-color 130ms ease, opacity 130ms ease;
+}
+
+button.atlas-area__cell {
   cursor: pointer;
 }
 
-/* The whole card is the target, not just the four words of the title. */
-.atlas-family-board__open::after {
-  position: absolute;
-  inset: 0;
-  content: "";
-}
-
-.atlas-family-board__card {
-  position: relative;
-}
-
-.atlas-family-board__open:hover,
-.atlas-family-board__card:hover .atlas-family-board__open {
-  color: var(--ca-area-color);
-}
-
-.atlas-family-board__open svg {
-  flex: none;
-  margin-left: auto;
-  color: var(--ca-area-color);
-}
-
-.atlas-family-board__blurb {
-  margin: 0;
-  color: var(--ca-text-muted);
-  font-size: 0.8125rem;
-  line-height: 1.4;
-}
-
-.atlas-family-board__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--ca-space-1) var(--ca-space-3);
-  margin: 0;
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono, monospace);
-  font-size: 0.6875rem;
-  letter-spacing: 0.04em;
-}
-
-.atlas-family-board__members {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* Above the card's own click target, so a chip opens its framework directly
-   rather than the group around it. */
-.atlas-family-board__members button,
-.atlas-family-board__links button {
-  position: relative;
-  z-index: 1;
-  padding: 2px 7px;
-  border: 1px solid color-mix(in srgb, var(--ca-area-color) 45%, var(--ca-border));
-  border-radius: var(--radius-sm, 3px);
-  background: var(--ca-surface);
-  color: var(--ca-text);
-  font: inherit;
-  font-size: 0.6875rem;
-  cursor: pointer;
-}
-
-.atlas-family-board__members button:hover,
-.atlas-family-board__links button:hover {
+button.atlas-area__cell:hover,
+.atlas-area__cell[data-selected="true"] {
   border-color: var(--ca-area-color);
-  background: color-mix(in srgb, var(--ca-area-color) 14%, var(--ca-surface));
+  background: color-mix(in srgb, var(--ca-area-color) 46%, var(--ca-surface));
 }
 
-.atlas-family-board__links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--ca-space-1);
-  margin: 0;
-  padding-top: var(--ca-space-2);
-  border-top: 1px dashed var(--ca-border);
+/* Not part of what the selected cell crosswalks to. */
+.atlas-area__cell[data-dim="true"] {
+  opacity: 0.28;
+}
+
+/* Nothing published beneath it: drawn at its true size, never a control. */
+.atlas-area__cell[data-static="true"] {
+  border-style: dashed;
+  background: color-mix(in srgb, var(--ca-area-color) 9%, var(--ca-surface));
   color: var(--ca-text-muted);
-  font-size: 0.6875rem;
 }
 
-.atlas-family-board__links > span {
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.atlas-family-board__links button em {
-  margin-left: 5px;
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono, monospace);
-  font-style: normal;
-}
-
-.atlas-family-board__links--none {
-  display: block;
-  text-transform: none;
-}
-
-/* Landmarks the grouping cannot file, kept beside the groups rather than
-   tucked below a fold. Read-only entries look like what they are: names and
-   counts, not controls. */
-.atlas-family-board__strip {
-  display: grid;
-  gap: var(--ca-space-2);
-  padding: var(--ca-space-3);
-  border: 1px dashed var(--ca-border);
-  border-radius: var(--radius-md, 6px);
-}
-
-.atlas-family-board__strip-heading {
-  display: flex;
-  align-items: center;
-  gap: var(--ca-space-2);
-  margin: 0;
-  color: var(--ca-text);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.atlas-family-board__strip-heading span {
-  padding: 1px 7px;
-  border: 1px solid var(--ca-border);
-  border-radius: 999px;
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono, monospace);
-  font-size: 0.625rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-}
-
-.atlas-family-board__strip-note {
-  max-width: 78ch;
-  margin: 0;
-  color: var(--ca-text-muted);
-  font-size: 0.75rem;
-  line-height: 1.45;
-}
-
-.atlas-family-board__strip ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--ca-space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.atlas-family-board__strip li > * {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ca-space-2);
-  padding: 3px 9px;
-  border: 1px solid var(--ca-border);
-  border-radius: var(--radius-sm, 3px);
-  color: var(--ca-text);
-  font: inherit;
-  font-size: 0.75rem;
-}
-
-.atlas-family-board__strip li > button {
-  background: var(--ca-surface);
-  cursor: pointer;
-}
-
-.atlas-family-board__strip li > button:hover {
-  border-color: var(--ca-accent);
-}
-
-.atlas-family-board__strip li small {
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono, monospace);
-  font-size: 0.6875rem;
-}
-
-.atlas-family-board__strip li > button:focus-visible {
+.atlas-area__cell:focus-visible {
   outline: 2px solid var(--ca-accent);
-  outline-offset: 2px;
+  outline-offset: -3px;
 }
 
-.atlas-family-board__open:focus-visible,
-.atlas-family-board__members button:focus-visible,
-.atlas-family-board__links button:focus-visible {
-  outline: 2px solid var(--ca-accent);
-  outline-offset: 2px;
-}
-
-/* ==========================================================================
-   Atlas constellation — the framework landscape and its crosswalks.
-
-   Position and line weight already carry the reading, so the surface stays
-   quiet: one instrument field, area colour on the nodes and the wires, and no
-   decoration competing with the geometry.
-   ========================================================================== */
-.atlas-constellation {
-  display: grid;
-  gap: var(--ca-space-4);
-  margin-top: var(--ca-space-4);
-}
-
-.atlas-constellation__lede {
-  max-width: 72ch;
-  margin: 0;
-  color: var(--ca-text-muted);
-}
-
-.atlas-constellation__stage {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 20rem;
-  align-items: stretch;
-  gap: var(--ca-space-4);
-}
-
-@media (max-width: 1100px) {
-  .atlas-constellation__stage {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.atlas-constellation__field {
-  display: grid;
-  align-content: start;
-  gap: var(--ca-space-2);
-  min-width: 0;
-}
-
-.atlas-constellation__canvas {
-  position: relative;
-  /* Height follows the rows. A fixed ratio forced the hierarchy into a box of
-     a shape it had no reason to match, and left it stretching or crushing as
-     the viewport changed. */
-  display: grid;
-  align-content: start;
-  gap: clamp(var(--ca-space-5), 6vh, var(--ca-space-8));
-  /* Enough to read as a field rather than a stray row; not so much that a
-     six-framework group sits above a third of a screen of empty canvas. */
-  min-height: 15rem;
-  padding: var(--ca-space-4) var(--ca-space-3);
-  border: 1px solid var(--ca-border);
-  border-top-color: color-mix(in srgb, var(--ca-accent) 58%, transparent);
-  border-radius: var(--radius-lg);
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      color-mix(in srgb, var(--ca-accent) 7%, transparent) 0%,
-      transparent 62%
-    ),
-    var(--ca-surface-raised);
-}
-
-/* Corner registration ticks, matching the Orbital instrument grammar. */
-.atlas-constellation__canvas::after {
-  position: absolute;
-  inset: 6px;
-  z-index: 0;
-  opacity: 0.3;
-  background:
-    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 0 / 13px 1px no-repeat,
-    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 0 / 1px 13px no-repeat,
-    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 0 / 13px 1px no-repeat,
-    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 0 / 1px 13px no-repeat,
-    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 100% / 13px 1px no-repeat,
-    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 0 100% / 1px 13px no-repeat,
-    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 100% / 13px 1px no-repeat,
-    linear-gradient(var(--lsm-grid-line), var(--lsm-grid-line)) 100% 100% / 1px 13px no-repeat;
-  content: "";
-  pointer-events: none;
-}
-
-.atlas-constellation__wires {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  fill: none;
-  stroke-linecap: round;
-}
-
-/* Crosswalks stay on screen at rest — they are published mappings and hiding
-   them would be a smaller truth — but faint, so they read as a second layer
-   under the hierarchy rather than competing with it. Pointing at a framework
-   brings its own back up to full strength. */
-.atlas-constellation__wire {
-  opacity: 0.12;
-  transition: opacity 140ms ease;
-}
-
-.atlas-constellation__wire[data-state="lit"] {
-  opacity: 0.12;
-}
-
-.atlas-constellation__wire[data-state="muted"] {
-  opacity: 0.04;
-}
-
-.atlas-constellation__canvas:hover .atlas-constellation__wire[data-state="lit"],
-.atlas-constellation__canvas:focus-within .atlas-constellation__wire[data-state="lit"] {
-  opacity: 0.7;
-}
-
-/* The dependency backbone: solid, full strength, and always legible. This is
-   the line the reader is meant to follow. */
-.atlas-constellation__spine {
-  opacity: 0.85;
-  stroke-width: 1.5;
-  transition: opacity 140ms ease;
-}
-
-.atlas-constellation__spine[data-state="muted"] {
-  opacity: 0.3;
-}
-
-/* One row per dependency depth, holding one cluster per parent. The browser
-   wraps both levels on its own, which is what makes the map responsive: SP
-   800-53's eight children need more width than a 738px canvas has, and height
-   is the spare dimension.
-
-   The gap between clusters is deliberately wider than the gap between the cards
-   inside one, so a cluster reads as a single thing before anything is clicked. */
-.atlas-constellation__row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: start;
-  justify-content: center;
-  gap: var(--ca-space-4) var(--ca-space-6);
-  width: 100%;
-}
-
-/* A parent's children, boxed and named. Containment is what carries membership
-   here: with the children of one framework held together, the tree needs one
-   short line per cluster instead of a diagonal per child crossing the band. */
-.atlas-constellation__group {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: var(--ca-space-2);
-  min-width: 0;
-  max-width: 100%;
-}
-
-.atlas-constellation__group[data-group-id] {
-  padding: var(--ca-space-2) var(--ca-space-3) var(--ca-space-3);
-  border: 1px solid color-mix(in srgb, var(--ca-area-color) 30%, var(--ca-border));
-  border-radius: var(--radius-md, 6px);
-  /* Barely-there tint: enough to bound the cluster, transparent enough that a
-     crosswalk passing underneath is still followed through it. */
-  background: color-mix(in srgb, var(--ca-area-color) 5%, transparent);
-}
-
-.atlas-constellation__group-label {
-  margin: 0;
-  color: var(--ca-text-muted);
-  font-size: 0.625rem;
-  letter-spacing: 0.06em;
-  text-align: center;
-}
-
-.atlas-constellation__group-label span {
-  text-transform: uppercase;
-}
-
-.atlas-constellation__group-label strong {
-  color: color-mix(in srgb, var(--ca-area-color) 70%, var(--ca-text));
-  font-weight: 600;
-}
-
-.atlas-constellation__group-cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--ca-space-2);
-}
-
-.atlas-constellation__node {
-  position: relative;
-  z-index: 1;
-  /* Uniform width, and a synopsis clamped to two lines, so every card in a row
-     is the same size. Cards that size themselves to their text produced a
-     70-134px height spread that no amount of spacing could line up. */
-  flex: 0 0 clamp(8.5rem, 13vw, 11rem);
-  display: grid;
-  align-content: start;
-  justify-items: center;
-  gap: 2px;
-  padding: var(--ca-space-2);
-  border: 1px solid color-mix(in srgb, var(--ca-area-color) 55%, var(--ca-border));
-  border-radius: var(--radius-sm, 3px);
-  background: var(--ca-surface);
-  color: var(--ca-text);
-  cursor: pointer;
-  transition:
-    border-color 140ms ease,
-    box-shadow 140ms ease,
-    opacity 140ms ease;
-}
-
-.atlas-constellation__node-label {
-  font-size: 0.75rem;
+.atlas-area__name {
+  overflow: hidden;
+  font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.2;
-  text-align: center;
-}
-
-/* Clamped by height rather than -webkit-line-clamp. The webkit box reports a
-   scrollWidth a few pixels past its own clientWidth, which the layout contract
-   in epic12-phase1-layout reads — correctly — as content overflowing its
-   container. Plain block layout with a two-line ceiling measures honestly, and
-   the full text is on the card's title either way. */
-.atlas-constellation__node-synopsis {
-  max-height: 2.5em;
-  overflow: hidden;
-  color: var(--ca-text-muted);
-  font-size: 0.625rem;
-  line-height: 1.25;
   overflow-wrap: anywhere;
-  text-align: center;
 }
 
-.atlas-constellation__node-count {
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono, monospace);
-  font-size: 0.625rem;
-  letter-spacing: 0.06em;
-}
-
-/* Cards are one size now. Sizing them by record volume is what produced the
-   70-134px height spread that made rows impossible to line up; volume is
-   carried by the count on the card instead. */
-.atlas-constellation__node:hover,
-.atlas-constellation__node[data-state="active"] {
-  z-index: 3;
-  border-color: var(--ca-area-color);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ca-area-color) 22%, transparent);
-}
-
-.atlas-constellation__node[data-state="adjacent"] {
-  z-index: 2;
-  border-color: color-mix(in srgb, var(--ca-area-color) 85%, transparent);
-}
-
-.atlas-constellation__node[data-state="muted"] {
-  opacity: 0.34;
-}
-
-/* Derived overlap, never drawn like a published mapping. Dashed and unsaturated
-   so the eye reads it as the weaker claim it is, which is the whole point of
-   separating the two. */
-.atlas-constellation__node[data-state="shared"] {
-  border-style: dashed;
-  border-color: color-mix(in srgb, var(--ca-area-color) 55%, transparent);
-  opacity: 0.85;
-}
-
-.atlas-constellation__wire--shared {
-  opacity: 0.6;
-  stroke: var(--ca-text-muted);
-  stroke-dasharray: 5 5;
-}
-
-.atlas-constellation__panel h4 span {
-  margin-left: var(--ca-space-2);
-  padding: 1px 6px;
-  border: 1px dashed var(--ca-border);
-  border-radius: 999px;
-  color: var(--ca-text-muted);
-  font-size: 0.5625rem;
-  letter-spacing: 0.08em;
-}
-
-.atlas-constellation__crosswalks--shared .atlas-constellation__dot {
-  background: none;
-  border: 1px dashed var(--ca-area-color);
-}
-
-.atlas-constellation__crosswalk-name em {
-  display: block;
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono, monospace);
-  font-size: 0.625rem;
-  font-style: normal;
-}
-
-/* The frameworks nothing here depends on — data-hub covers every declared
-   root, not one single catalog, since position now means dependency depth
-   rather than crosswalk rank. */
-.atlas-constellation__node[data-hub="true"] {
-  z-index: 2;
-  padding: var(--ca-space-2) var(--ca-space-3);
-  border-width: 2px;
-  border-color: var(--ca-area-color);
-  background: color-mix(in srgb, var(--ca-area-color) 16%, var(--ca-surface));
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--ca-area-color) 10%, transparent);
-}
-
-.atlas-constellation__node[data-hub="true"] .atlas-constellation__node-label {
-  font-size: 1rem;
-  letter-spacing: 0.01em;
-}
-
-.atlas-constellation__node[data-hub="true"] .atlas-constellation__node-count {
+/* Full-strength text. Dimming the count to 74% put it at 4.13:1 on the tinted
+   cell against a 4.5:1 requirement — 198 serious contrast violations on the
+   landing alone. Size and the mono face separate it from the name instead. */
+.atlas-area__count {
   color: var(--ca-text);
-}
-
-/* Catalogs with no crosswalks, named rather than drawn. Kept beside the map
-   and always visible: the absence is a real finding about the corpus, not a
-   detail to tuck away. */
-.atlas-constellation__unlinked {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--ca-space-2) var(--ca-space-3);
-  padding: var(--ca-space-2) var(--ca-space-3);
-  border: 1px dashed var(--ca-border);
-  border-radius: var(--radius-sm, 3px);
-}
-
-.atlas-constellation__unlinked > p {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ca-space-2);
-  margin: 0;
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono, monospace);
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.atlas-constellation__unlinked > p span {
-  padding: 1px 6px;
-  border-radius: 999px;
-  background: var(--ca-surface-lifted);
-  font-variant-numeric: tabular-nums;
-}
-
-.atlas-constellation__unlinked ul {
-  display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  gap: var(--ca-space-1) var(--ca-space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.atlas-constellation__unlinked button {
-  display: inline-flex;
-  align-items: baseline;
-  gap: var(--ca-space-1);
-  padding: 3px var(--ca-space-2);
-  border: 1px solid var(--ca-border);
-  border-left: 2px solid color-mix(in srgb, var(--ca-area-color) 70%, transparent);
-  border-radius: var(--radius-sm, 3px);
-  background: none;
-  color: var(--ca-text-muted);
-  font: inherit;
-  font-size: 0.75rem;
-  cursor: pointer;
-}
-
-.atlas-constellation__unlinked button:hover {
-  border-color: var(--ca-area-color);
-  color: var(--ca-text);
-}
-
-.atlas-constellation__unlinked small {
   font-family: var(--ca-font-mono, monospace);
   font-size: 0.6875rem;
   font-variant-numeric: tabular-nums;
-  opacity: 0.75;
 }
 
-.atlas-constellation__node:focus-visible {
-  outline: 2px solid var(--ca-accent);
-  outline-offset: 2px;
-}
-
-/* Card width is already fluid via clamp(), so narrower viewports need only
-   the type to step down — the row wraps on its own rather than the cards
-   being squeezed past legibility. */
-@media (max-width: 1400px) {
-  .atlas-constellation__node {
-    padding: var(--ca-space-1) var(--ca-space-2);
-  }
-
-  /* Give the gutters back to the clusters: at this width the room between them
-     is what decides whether a row holds three boxes or wraps to two. */
-  .atlas-constellation__row {
-    gap: var(--ca-space-3) var(--ca-space-4);
-  }
-
-  .atlas-constellation__group[data-group-id] {
-    padding: var(--ca-space-1) var(--ca-space-2) var(--ca-space-2);
-  }
-
-  .atlas-constellation__node-label {
-    font-size: 0.6875rem;
-  }
-
-  .atlas-constellation__node-synopsis {
-    font-size: 0.5625rem;
-  }
-
-  .atlas-constellation__node-count {
-    font-size: 0.5625rem;
-  }
-}
-
-/* --- Detail panel ------------------------------------------------------- */
-.atlas-constellation__panel {
+/* The panel is a column beside the map, not a slab under it, so it stays on
+   screen while the reader works down through the map. */
+.atlas-detail {
+  position: sticky;
+  top: var(--ca-space-4);
   display: grid;
   align-content: start;
   gap: var(--ca-space-2);
-  padding: var(--ca-space-4);
+  max-height: calc(100vh - 6rem);
+  padding: var(--ca-space-3);
+  overflow-y: auto;
   border: 1px solid var(--ca-border);
-  border-radius: var(--radius-lg);
+  border-top: 2px solid var(--ca-area-color, var(--ca-accent));
+  border-radius: var(--radius-md, 6px);
   background: var(--ca-surface-raised);
 }
 
-.atlas-constellation__panel h3 {
+.atlas-detail__eyebrow {
   margin: 0;
-  font-size: 1.0625rem;
-  line-height: 1.3;
-}
-
-.atlas-constellation__panel h4 {
-  margin: var(--ca-space-2) 0 0;
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono, monospace);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.atlas-constellation__panel p {
-  margin: 0;
-  color: var(--ca-text-muted);
-  font-size: 0.875rem;
-}
-
-.atlas-constellation__panel-kind {
-  color: var(--ca-text-muted);
-  font-family: var(--ca-font-mono, monospace);
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.atlas-constellation__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--ca-space-4);
-  margin: var(--ca-space-2) 0 0;
-}
-
-.atlas-constellation__facts dt {
   color: var(--ca-text-muted);
   font-family: var(--ca-font-mono, monospace);
   font-size: 0.625rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.atlas-constellation__facts dd {
-  margin: 2px 0 0;
-  font-size: 1.125rem;
-  font-variant-numeric: tabular-nums;
-  font-weight: 600;
+.atlas-detail h3 {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.25;
 }
 
-.atlas-constellation__crosswalks {
-  display: grid;
-  gap: 2px;
+.atlas-detail__blurb,
+.atlas-detail__rest p,
+.atlas-detail__note {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.atlas-detail__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ca-space-3);
   margin: var(--ca-space-1) 0 0;
+}
+
+.atlas-detail__facts dt {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.5625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atlas-detail__facts dd {
+  margin: 2px 0 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-detail__section {
+  display: grid;
+  gap: var(--ca-space-1);
+  padding-top: var(--ca-space-2);
+  border-top: 1px dashed var(--ca-border);
+}
+
+.atlas-detail__section h4 {
+  margin: 0;
+  color: var(--ca-text-muted);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atlas-detail__links {
+  display: grid;
+  gap: 3px;
+  margin: 0;
   padding: 0;
   list-style: none;
-  /* Tall enough for the longest real list — the hub's twelve crosswalks — so
-     the panel never cuts a row in half, which reads as a broken layout rather
-     than as more content below. */
-  max-height: 25rem;
-  overflow-y: auto;
 }
 
-.atlas-constellation__crosswalks button {
+.atlas-detail__links li > * {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--ca-space-2);
   width: 100%;
-  padding: var(--ca-space-1) var(--ca-space-2);
+  padding: 4px 6px;
   border: 0;
   border-radius: var(--radius-sm, 3px);
   background: none;
   color: var(--ca-text);
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   text-align: left;
+}
+
+.atlas-detail__links li > button {
   cursor: pointer;
 }
 
-.atlas-constellation__crosswalks button:hover {
-  background: var(--ca-surface-lifted);
+.atlas-detail__links li > button:hover {
+  background: color-mix(in srgb, var(--ca-area-color, var(--ca-accent)) 14%, transparent);
 }
 
-.atlas-constellation__dot {
-  width: 8px;
-  height: 8px;
+.atlas-detail__dot {
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: var(--ca-area-color);
+  background: var(--ca-area-color, var(--ca-accent));
 }
 
-.atlas-constellation__crosswalk-name {
+.atlas-detail__link-name {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.atlas-constellation__crosswalk-count {
+.atlas-detail__link-name em {
+  display: block;
   color: var(--ca-text-muted);
   font-family: var(--ca-font-mono, monospace);
-  font-size: 0.75rem;
+  font-size: 0.625rem;
+  font-style: normal;
+}
+
+.atlas-detail__link-count {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.6875rem;
   font-variant-numeric: tabular-nums;
 }
 
-.atlas-constellation__absence {
-  padding: var(--ca-space-2);
-  border-left: 2px solid var(--ca-border);
-}
-
-.atlas-constellation__open {
-  display: inline-flex;
+.atlas-detail__open {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: var(--ca-space-1);
-  margin-top: var(--ca-space-2);
-  min-height: 38px;
-  padding: 0 var(--ca-space-3);
-  border: 1px solid color-mix(in srgb, var(--ca-accent) 58%, var(--ca-border));
+  justify-content: space-between;
+  gap: var(--ca-space-2);
+  margin-top: var(--ca-space-1);
+  padding: var(--ca-space-2) var(--ca-space-3);
+  border: 1px solid var(--ca-area-color, var(--ca-accent));
   border-radius: var(--radius-sm, 3px);
-  background: color-mix(in srgb, var(--ca-accent) 14%, var(--ca-surface));
+  background: color-mix(in srgb, var(--ca-area-color, var(--ca-accent)) 16%, var(--ca-surface));
   color: var(--ca-text);
   font: inherit;
   font-size: 0.8125rem;
@@ -13920,69 +13409,21 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-.atlas-constellation__open:hover {
-  background: color-mix(in srgb, var(--ca-accent) 24%, var(--ca-surface));
+.atlas-detail__links li > button:focus-visible,
+.atlas-detail__open:focus-visible {
+  outline: 2px solid var(--ca-accent);
+  outline-offset: 2px;
 }
 
-/* --- Phone fallback ----------------------------------------------------- */
-.atlas-constellation__list {
-  display: grid;
-  gap: var(--ca-space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+/* Below the split, the panel follows the map rather than squeezing beside it. */
+@media (max-width: 1100px) {
+  .atlas-workbench {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-.atlas-constellation__list-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: var(--ca-space-3);
-  width: 100%;
-  padding: var(--ca-space-3);
-  border: 1px solid var(--ca-border);
-  border-left: 3px solid var(--ca-area-color);
-  border-radius: var(--radius-sm, 3px);
-  background: var(--ca-surface-raised);
-  color: var(--ca-text);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.atlas-constellation__list-identity {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-}
-
-.atlas-constellation__list-identity strong {
-  font-size: 0.9375rem;
-}
-
-.atlas-constellation__list-identity small,
-.atlas-constellation__list-meta {
-  color: var(--ca-text-muted);
-  font-size: 0.75rem;
-}
-
-.atlas-constellation__list-meta {
-  display: grid;
-  gap: 2px;
-  justify-items: end;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-.atlas-constellation__list-meta em {
-  font-style: normal;
-  font-size: 0.6875rem;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .atlas-constellation__wire,
-  .atlas-constellation__node {
-    transition: none;
+  .atlas-detail {
+    position: static;
+    max-height: none;
   }
 }
 
@@ -14040,8 +13481,47 @@ input[type="checkbox"] {
   letter-spacing: 0.08em;
 }
 
-.atlas-framework-links .atlas-constellation__crosswalks {
-  max-height: none;
+/* The crosswalk list this component used to borrow from the constellation,
+   which no longer exists. Same rules, owned here. */
+.atlas-framework-links__list {
+  display: grid;
+  gap: 2px;
+  margin: var(--ca-space-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-framework-links__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ca-area-color);
+}
+
+.atlas-framework-links__list--shared .atlas-framework-links__dot {
+  background: none;
+  border: 1px dashed var(--ca-area-color);
+}
+
+.atlas-framework-links__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.atlas-framework-links__name em {
+  display: block;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.625rem;
+  font-style: normal;
+}
+
+.atlas-framework-links__count {
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono, monospace);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .atlas-framework-links button {

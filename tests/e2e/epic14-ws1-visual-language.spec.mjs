@@ -68,52 +68,40 @@ test("WS1 decorative surfaces resolve to one teal accent", async ({ page }) => {
   expect(new Set(cardAccentColors).size).toBe(1);
 });
 
-test("WS1 Atlas exposes publisher ecosystems and authorities as named, counted rows", async ({ page }) => {
+test("WS1 Atlas exposes publisher ecosystems and authorities as named, counted cells", async ({ page }) => {
   test.setTimeout(120_000);
   await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page, { allowPartial: true });
 
-  const board = page.getByTestId("atlas-family-board");
-  await expect(board).toBeVisible({ timeout: 60_000 });
+  const map = page.getByTestId("atlas-area-map");
+  await expect(map).toBeVisible({ timeout: 60_000 });
 
-  // Ordered by how much each publisher issues, which is what the count on the
-  // card says — unlike the old landing, where position implied a dependency
-  // ranking the data could not support.
-  const publishers = await board
-    .locator(".atlas-family-board__card")
-    .evaluateAll((cards) => cards.map((card) => ({
-      label: card.querySelector(".atlas-family-board__open")?.textContent?.trim() || "",
-      facts: card.querySelector(".atlas-family-board__facts")?.textContent?.trim() || "",
-    })));
-  expect(publishers.map((entry) => entry.label)).toEqual([
-    "NIST",
-    "DISA",
-    "MITRE",
-    "FedRAMP",
-    "CDAO",
-    "DoD",
-    "DoD CIO",
-    "ISOO",
-  ]);
+  // Every publisher is a cell whose area is how many publications it issues —
+  // a count that is the same unit for all eight, unlike their record totals.
+  await expect(map.locator("button.atlas-area__cell")).toHaveCount(8);
+  const labels = await map.locator("button.atlas-area__cell").evaluateAll(
+    (cells) => cells.map((cell) => (cell.getAttribute("title") || "").trim()),
+  );
+  for (const publisher of ["NIST", "DISA", "MITRE", "FedRAMP", "CDAO", "DoD", "DoD CIO", "ISOO"]) {
+    expect(
+      labels.some((title) => title.startsWith(`${publisher} —`)),
+      `${publisher} cell`,
+    ).toBe(true);
+  }
+  // Named and counted, never hover-only.
+  for (const title of labels) expect(title).toMatch(/— \d+ publications?$/);
 
   // The authority landmarks are obligations rather than publishers and nobody
-  // crosswalks to them, so they are named and counted in a strip instead of
-  // given a card. They have never been openable, and still are not.
-  const strip = board.locator('.atlas-family-board__strip li');
-  const landmarks = await strip.evaluateAll((items) => items.map((item) => item.textContent?.trim() || ""));
+  // crosswalks to them, so they are named beneath the map instead of drawn in
+  // it. They have never been openable, and still are not.
+  const aside = page.locator(".atlas-mapcol__aside");
+  await expect(aside.first()).toContainText("Law and policy");
+  const landmarks = await aside.locator("em").allTextContents();
   for (const landmark of ["Statutes", "Regulations & clauses", "Policy & directives"]) {
     expect(landmarks.some((entry) => entry.startsWith(landmark)), landmark).toBe(true);
   }
-  await expect(board.locator(".atlas-family-board__open")).toHaveCount(8);
-  // The three authority landmarks render as text, not controls: they have
-  // never had a destination, and a button that does nothing is worse than a
-  // label. The one publication issued outside the ecosystems does open.
-  await expect(board.locator(".atlas-family-board__strip li > span")).toHaveCount(3);
-  await expect(board.locator(".atlas-family-board__strip li > button")).toHaveCount(1);
-
-  // Magnitude carries the meaning; no landmark depends on hue alone, which
-  // Orbital forbids.
-  expect(publishers.every((entry) => entry.facts.length > 0)).toBe(true);
+  await expect(aside.locator("em")).toHaveCount(4);
+  await expect(aside.locator("button")).toHaveCount(0);
 });
 
 test("WS1 no palette token lands in the purple range Orbital forbids", async ({ page }) => {

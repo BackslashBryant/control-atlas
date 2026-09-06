@@ -40,15 +40,16 @@ test("Atlas overview aggregates the ecosystem and drills directly", async ({ pag
 
   await expect(page.getByRole("heading", { name: "Atlas", level: 1 })).toBeVisible();
   await expect(page.getByText("Grouped by what each document is, who issues it, or what you're trying to get done.", { exact: true })).toBeVisible();
-  const board = page.getByTestId("atlas-family-board");
+  const board = page.getByTestId("atlas-area-map");
   await expect(board).toBeVisible();
-  await expect(board.locator(".atlas-family-board__card")).toHaveCount(8);
-  await expect(board.locator(".atlas-family-board__strip li")).toHaveCount(4);
+  await expect(board.locator("button.atlas-area__cell")).toHaveCount(8);
+  await expect(page.locator(".atlas-mapcol__aside em")).toHaveCount(4);
   await page.screenshot({ path: testInfo.outputPath("epic13-atlas-graph-first.png"), fullPage: true });
 
-  await board.getByRole("button", { name: "NIST", exact: true }).click();
-  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
-  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
+  // Opening a publisher stays on the map and shows what it publishes.
+  await board.getByRole("button", { name: /^NIST / }).click();
+  await expect(page).toHaveURL(/atlasLensFamily=ecosystem(?::|%3A)nist/);
+  await expect(board.getByRole("button", { name: /^800-53 / }).first()).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("epic13-atlas-workbench.png"), fullPage: true });
 });
 

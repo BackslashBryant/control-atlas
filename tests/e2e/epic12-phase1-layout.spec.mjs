@@ -45,15 +45,14 @@ for (const viewport of VIEWPORTS) {
         await waitForAppReady(page, { allowPartial: true });
 
         if (route === "/#/explore") {
-          const landscape = page.getByTestId("atlas-family-board");
+          const landscape = page.getByTestId("atlas-area-map");
           await expect(landscape).toBeVisible();
           // Labelled controls at every width, and no canvas or disclosure
-          // standing between the visitor and the corpus: the landing is real
-          // buttons naming real publications, and every group names its
-          // members without being opened first.
+          // standing between the visitor and the corpus: every cell is a real
+          // button naming what it is and how much it holds.
           await expect(landscape.locator("canvas")).toHaveCount(0);
           await expect(
-            landscape.getByRole("button", { name: /^800-53$/ }).first(),
+            landscape.getByRole("button", { name: /^Control catalogs/ }).first(),
           ).toBeVisible();
         }
 

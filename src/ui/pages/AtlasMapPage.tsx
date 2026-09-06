@@ -1,4 +1,5 @@
 import {
+  Fragment,
   startTransition,
   useCallback,
   useEffect,
@@ -24,8 +25,11 @@ import {
 import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from "../../shared/site-copy.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
-import { AtlasConstellationMap } from "../components/AtlasConstellationMap";
-import { AtlasFamilyBoard } from "../components/AtlasFamilyBoard";
+import { AtlasAreaMap, type AtlasAreaNode } from "../components/AtlasAreaMap";
+import {
+  AtlasDetailPanel,
+  type AtlasPanelSubject,
+} from "../components/AtlasDetailPanel";
 import {
   ATLAS_LENS_LABELS,
   jobFamiliesFor,
@@ -40,6 +44,7 @@ import { AtlasLensBar } from "../components/AtlasLensBar";
 import { AtlasPivotTrailBar } from "../components/AtlasPivotTrailBar";
 import {
   atlasProjectionRecordLabels,
+  frameworkDependencyParent,
   type AtlasProjectionDrill,
 } from "../lib/atlasGraphProjection";
 import {
@@ -73,7 +78,12 @@ import {
 import { resolveAtlasSearchTransition } from "../lib/atlasSearch";
 import { scrollElementBelowHeader } from "../lib/pagePrimitives";
 import { relationshipExplanation } from "../lib/relationshipProvenance";
-import { catalogDisplayNameFor, catalogShortNameFor } from "../lib/catalogProfiles";
+import { areaPresentationForCatalog } from "../lib/areaVisualLanguage";
+import {
+  catalogDisplayNameFor,
+  catalogProfileFor,
+  catalogShortNameFor,
+} from "../lib/catalogProfiles";
 import {
   loadAtlasNeighborhood,
   selectAtlasStructuralPath,
@@ -152,6 +162,10 @@ function focusedAtlasTitle(bundle: RuntimeBundle, record: AtlasNeighborhoodRecor
     record.center_node.id,
     record.center_node,
   ).primary || "Selected record";
+}
+
+function formatPanelCount(count: number): string {
+  return Math.max(0, count).toLocaleString("en-US");
 }
 
 export function AtlasMapPage(props: AtlasMapPageProps) {
@@ -316,6 +330,176 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     if (!blurb) return `${family.label}.`;
     return `${family.label} — ${blurb}${/[.!?]$/.test(blurb) ? "" : "."}`;
   }, [lensFamilyProjection]);
+
+  // What the framework opened inside a group holds, drawn on the same surface.
+  // Reached only from the map, so the reader never leaves the picture to find
+  // out what is inside something they clicked in it.
+  const inlineFramework = useMemo(() => {
+    if (!state.atlasLensFamily || !state.atlasFramework) return null;
+    const projection = bundle.atlasNetwork?.publications?.[state.atlasFramework];
+    if (!projection) return null;
+    const area = areaPresentationForCatalog(state.atlasFramework);
+    return {
+      projection,
+      areaToken: area?.token || "--ca-area-operations",
+      label: catalogShortNameFor(state.atlasFramework),
+    };
+  }, [state.atlasLensFamily, state.atlasFramework, bundle.atlasNetwork]);
+
+  const inlineSection = useMemo(() => {
+    if (!inlineFramework || !state.atlasFamily) return null;
+    const projection = bundle.atlasNetwork?.details?.[state.atlasFamily];
+    return projection || null;
+  }, [inlineFramework, state.atlasFamily, bundle.atlasNetwork]);
+
+  const [highlightedId, setHighlightedId] = useState("");
+
+  // The one thing the map is showing right now: groups, then the publications
+  // in a group, then the sections in a publication. Same drawing every time —
+  // only what it is a picture of changes.
+  const areaLevel = useMemo(() => {
+    const artifact = bundle.atlasNetwork;
+    const empty = {
+      depth: 0,
+      unit: "publication",
+      label: "Groups",
+      cells: [] as AtlasAreaNode[],
+      trail: [] as { id: string; label: string; current?: boolean; onOpen: () => void }[],
+      connectedIds: undefined as Set<string> | undefined,
+      selectedId: "",
+      onOpen: (_id: string) => {},
+    };
+    if (!artifact?.frameworks) return empty;
+
+    const byPublication = new Map(
+      artifact.frameworks.nodes.map((node) => [node.publicationId, node]),
+    );
+    const records = (catalogId: string) =>
+      Math.max(0, (byPublication.get(catalogId)?.canonicalRecordCount || 1) - 1);
+    const tokenFor = (catalogId: string) =>
+      areaPresentationForCatalog(catalogId)?.token || "--ca-area-operations";
+
+    const group = lensFamilies.find((entry) => entry.id === state.atlasLensFamily);
+
+    // Depth 2 — inside one publication.
+    if (group && state.atlasFramework) {
+      const projection = artifact.publications?.[state.atlasFramework];
+      const sections = (projection?.nodes || []).filter(
+        (node) => node.nodeType !== "catalog",
+      );
+      return {
+        depth: 2,
+        unit: "record",
+        label: `Inside ${catalogShortNameFor(state.atlasFramework)}`,
+        cells: sections.map((node) => ({
+          id: node.id,
+          label: node.label,
+          value: Math.max(0, node.canonicalRecordCount),
+          areaToken: tokenFor(state.atlasFramework),
+          openable: Boolean(node.drill),
+        })),
+        trail: [
+          {
+            id: group.id,
+            label: group.label,
+            onOpen: () => patchAtlas({ atlasFramework: "", atlasFamily: "" }),
+          },
+          {
+            id: state.atlasFramework,
+            label: catalogShortNameFor(state.atlasFramework),
+            current: true,
+            onOpen: () => patchAtlas({ atlasFamily: "" }),
+          },
+        ],
+        connectedIds: undefined,
+        selectedId: state.atlasFamily,
+        onOpen: (id: string) =>
+          patchAtlas({ atlasFamily: state.atlasFamily === id ? "" : id }),
+      };
+    }
+
+    // Depth 1 — the publications in one group. Selecting one lights the ones it
+    // actually crosswalks to; the layout claims nothing about which came first.
+    if (group) {
+      const present = new Set(group.catalogIds);
+      const selected = highlightedId || "";
+      let connected: Set<string> | undefined;
+      if (selected && byPublication.has(selected)) {
+        const selectedNodeId = byPublication.get(selected)!.id;
+        connected = new Set(
+          artifact.frameworks.edges
+            .filter(
+              (edge) => edge.source === selectedNodeId || edge.target === selectedNodeId,
+            )
+            .flatMap((edge) => {
+              const otherId = edge.source === selectedNodeId ? edge.target : edge.source;
+              const other = artifact.frameworks.nodes.find((n) => n.id === otherId);
+              return other && present.has(other.publicationId) ? [other.publicationId] : [];
+            }),
+        );
+      }
+      return {
+        depth: 1,
+        unit: "record",
+        label: group.label,
+        cells: group.catalogIds.map((catalogId) => ({
+          id: catalogId,
+          label: catalogShortNameFor(catalogId),
+          value: records(catalogId),
+          areaToken: tokenFor(catalogId),
+          openable: true,
+        })),
+        trail: [
+          {
+            id: group.id,
+            label: group.label,
+            current: true,
+            onOpen: () => patchAtlas({ atlasFramework: "", atlasFamily: "" }),
+          },
+        ],
+        connectedIds: connected,
+        selectedId: selected,
+        onOpen: (catalogId: string) =>
+          patchAtlas({ atlasFramework: catalogId, atlasFamily: "" }),
+      };
+    }
+
+    // Depth 0 — the groups in the chosen lens.
+    //
+    // Sized by how many publications a group holds, not by their records. A
+    // STIG rule, an 800-53 control and an ATT&CK technique are not the same
+    // unit, so adding them up and comparing the totals as area says only that
+    // DISA writes a lot of rules: Implementation took three quarters of the
+    // map on 17,375 STIG rules alone and squeezed Risk and outcome frameworks
+    // to a sliver too small for its own name. Publications are commensurable —
+    // a publication is a publication — so that is what the area means here.
+    // Records come back one level down, where they are the same kind of thing.
+    return {
+      depth: 0,
+      unit: "publication",
+      label: "Groups",
+      cells: lensFamilies.map((family) => ({
+        id: family.id,
+        label: family.label,
+        value: family.catalogIds.length,
+        areaToken: tokenFor(family.catalogIds[0] || ""),
+        openable: family.catalogIds.length > 0,
+      })),
+      trail: [],
+      connectedIds: undefined,
+      selectedId: "",
+      onOpen: (familyId: string) =>
+        patchAtlas({ atlasLensFamily: familyId, atlasFramework: "", atlasFamily: "" }),
+    };
+  }, [
+    bundle.atlasNetwork,
+    lensFamilies,
+    state.atlasLensFamily,
+    state.atlasFramework,
+    state.atlasFamily,
+    highlightedId,
+    patchAtlas,
+  ]);
 
   const pivotSteps = useMemo(
     () => describePivotTrail(state.atlasPivotTrail, bundle.atlasNetwork),
@@ -545,6 +729,171 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     });
   }
 
+  // What the detail column is about: the deepest thing the reader has opened,
+  // or whatever they are pointing at in the map. One panel, every altitude.
+  const panelSubject = useMemo<AtlasPanelSubject | null>(() => {
+    const artifact = bundle.atlasNetwork;
+    if (!artifact?.frameworks) return null;
+    const byPublication = new Map(
+      artifact.frameworks.nodes.map((node) => [node.publicationId, node]),
+    );
+    const records = (catalogId: string) =>
+      Math.max(0, (byPublication.get(catalogId)?.canonicalRecordCount || 1) - 1);
+
+    const describeFramework = (catalogId: string): AtlasPanelSubject | null => {
+      const node = byPublication.get(catalogId);
+      if (!node) return null;
+      const profile = catalogProfileFor(catalogId);
+      const area = areaPresentationForCatalog(catalogId);
+      const crosswalks = artifact.frameworks.edges
+        .filter((edge) => edge.source === node.id || edge.target === node.id)
+        .sort((a, b) => b.relationshipCount - a.relationshipCount)
+        .flatMap((edge) => {
+          const otherId = edge.source === node.id ? edge.target : edge.source;
+          const other = artifact.frameworks.nodes.find((n) => n.id === otherId);
+          if (!other) return [];
+          return [{
+            id: edge.id,
+            label: catalogShortNameFor(other.publicationId, other.label),
+            count: edge.relationshipCount,
+            areaToken:
+              areaPresentationForCatalog(other.publicationId)?.token
+              || "--ca-area-operations",
+            onOpen: () =>
+              patchAtlas({ atlasFramework: other.publicationId, atlasFamily: "" }),
+          }];
+        });
+      const builtOn = frameworkDependencyParent(catalogId);
+      const buildOn = artifact.frameworks.nodes
+        .map((other) => other.publicationId)
+        .filter((other) => frameworkDependencyParent(other) === catalogId)
+        .sort();
+      return {
+        eyebrow: node.publicationKind || profile.publicationKind,
+        title: catalogDisplayNameFor(catalogId) || node.label,
+        blurb: profile.synopsis || node.description || "",
+        areaToken: area?.token || "--ca-area-operations",
+        facts: [
+          { label: profile.recordLabel, value: formatPanelCount(records(catalogId)) },
+          { label: "Area", value: area?.label || "—" },
+        ],
+        sections: [
+          // Dependency is a claim, so it is a sentence you can read and argue
+          // with rather than the shape of the drawing. data/curated's spine is
+          // hand-written because the crosswalk data cannot supply direction.
+          ...(builtOn || buildOn.length
+            ? [{
+              heading: "Where it sits",
+              note: [
+                builtOn ? `Builds on ${catalogShortNameFor(builtOn)}.` : "",
+                buildOn.length
+                  ? `${buildOn.map((id) => catalogShortNameFor(id)).join(", ")} ${buildOn.length === 1 ? "builds" : "build"} on it.`
+                  : "",
+              ].filter(Boolean).join(" "),
+              links: [],
+            }]
+            : []),
+          crosswalks.length
+            ? { heading: "Crosswalks to", links: crosswalks }
+            : {
+              heading: "Crosswalks",
+              note: "No published mapping to another framework yet. Its records are still fully browsable.",
+              links: [],
+            },
+        ],
+        action: {
+          label: `Open ${catalogShortNameFor(catalogId)}`,
+          onOpen: () => drillAtlas({ kind: "publication", targetId: catalogId }),
+        },
+      };
+    };
+
+    // Deepest first: a section inside a framework, then the framework, then
+    // whatever is merely being pointed at, then the open group.
+    if (state.atlasFamily && inlineFramework) {
+      const section = inlineFramework.projection.nodes.find(
+        (node) => node.id === state.atlasFamily,
+      );
+      if (section) {
+        // The end of the drawing and the point of the whole thing: the records
+        // themselves. Area says nothing here — every control holds exactly one
+        // record — so they are a list, and each one opens.
+        const detail = section.drill?.kind === "detail"
+          ? bundle.atlasNetwork?.details?.[section.drill.targetId]
+          : undefined;
+        const records = (detail?.nodes || [])
+          .filter((node) => node.nodeType !== "catalog")
+          .map((node) => ({
+            id: node.id,
+            label: node.label,
+            count: Math.max(0, node.canonicalRecordCount),
+            areaToken: inlineFramework.areaToken,
+            onOpen: node.drill ? () => drillAtlas(node.drill!) : undefined,
+          }));
+        return {
+          eyebrow: `Inside ${inlineFramework.label}`,
+          title: section.label,
+          blurb: section.description || "",
+          areaToken: inlineFramework.areaToken,
+          facts: [
+            { label: "Records", value: formatPanelCount(section.canonicalRecordCount) },
+          ],
+          sections: records.length
+            ? [{ heading: `${records.length} records`, links: records }]
+            : [],
+          action: section.drill && !records.length
+            ? { label: `Open ${section.label}`, onOpen: () => drillAtlas(section.drill!) }
+            : undefined,
+        };
+      }
+    }
+    if (state.atlasFramework) return describeFramework(state.atlasFramework);
+    if (highlightedId) return describeFramework(highlightedId);
+
+    const group = lensFamilies.find((entry) => entry.id === state.atlasLensFamily);
+    if (group) {
+      return {
+        eyebrow: "Group",
+        title: group.label,
+        blurb: group.rationale || group.blurb,
+        areaToken:
+          areaPresentationForCatalog(group.catalogIds[0] || "")?.token
+          || "--ca-area-operations",
+        facts: [
+          { label: "Publications", value: String(group.catalogIds.length) },
+          {
+            label: "Records",
+            value: formatPanelCount(
+              group.catalogIds.reduce((total, id) => total + records(id), 0),
+            ),
+          },
+        ],
+        sections: [{
+          heading: "What is in it",
+          links: group.catalogIds.map((catalogId) => ({
+            id: catalogId,
+            label: catalogShortNameFor(catalogId),
+            count: records(catalogId),
+            areaToken:
+              areaPresentationForCatalog(catalogId)?.token || "--ca-area-operations",
+            onOpen: () => patchAtlas({ atlasFramework: catalogId, atlasFamily: "" }),
+          })),
+        }],
+      };
+    }
+    return null;
+  }, [
+    bundle.atlasNetwork,
+    state.atlasFamily,
+    state.atlasFramework,
+    state.atlasLensFamily,
+    highlightedId,
+    inlineFramework,
+    lensFamilies,
+    patchAtlas,
+    drillAtlas,
+  ]);
+
   const trailAtlas = useCallback((level: "root" | "ecosystem" | "area" | "publication" | "detail", id: string) => {
     if (level === "root") {
       // The breadcrumb's root is the top of the survey the reader walked down
@@ -749,9 +1098,11 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           everything — see viewState's atlasLanding for why that was a claim we
           could not support. */}
       {bundle.atlasNetwork && atlasProjection && !hierarchyRequested && !nodeId ? (
-        atlasScope.areaId
-        || atlasScope.publicationId
-        || atlasScope.detailId
+        // A group open on the board owns everything below it: the framework
+        // and section the reader opened there are drawn in place, so a scope
+        // being set is not on its own a reason to leave for the columns.
+        (!state.atlasLensFamily
+          && (atlasScope.areaId || atlasScope.publicationId || atlasScope.detailId))
         // An artifact built before the frameworks projection existed still
         // has to render something, so a cached bundle degrades to the columns
         // rather than to an empty page.
@@ -781,34 +1132,76 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
               />
             ) : null}
           </div>
-        ) : lensFamilyProjection ? (
-          <AtlasConstellationMap
-            compact={compact}
-            frameworks={lensFamilyProjection.frameworks}
-            sharedGround={lensFamilyProjection.sharedGround}
-            onDrill={drillAtlas}
-            subject={lensFamilySubject}
-          />
         ) : (
-          <AtlasFamilyBoard
-            blurb={lensBlurb}
-            families={lensFamilies}
-            frameworks={bundle.atlasNetwork.frameworks}
-            strips={lensStrips}
-            // What a group opens depends on what the grouping is about. Kind
-            // and job are about how documents relate, so they open the
-            // dependency picture over that group's frameworks. A publisher is
-            // an inventory question — "what does NIST put out?" — which the
-            // columns already answer better than a map would.
-            onOpenFamily={(familyId) =>
-              state.atlasLanding === "publishers"
-                ? patchAtlas({ atlasLimb: familyId, atlasLensFamily: "" })
-                : patchAtlas({ atlasLensFamily: familyId })
-            }
-            onOpenFramework={(publicationId) =>
-              drillAtlas({ kind: "publication", targetId: publicationId })
-            }
-          />
+          <div className="atlas-workbench">
+            <div className="atlas-mapcol">
+              {/* Where you are, and the way back up. The map itself never
+                  changes screens, so this is the only thing that has to say
+                  how deep you went. */}
+              <nav aria-label="Map depth" className="atlas-mapcol__trail">
+                <button
+                  aria-current={areaLevel.depth === 0 ? "true" : undefined}
+                  onClick={() =>
+                    patchAtlas({ atlasLensFamily: "", atlasFramework: "", atlasFamily: "" })
+                  }
+                  type="button"
+                >
+                  All groups
+                </button>
+                {areaLevel.trail.map((step) => (
+                  <Fragment key={step.id}>
+                    <span aria-hidden="true">/</span>
+                    <button
+                      aria-current={step.current ? "true" : undefined}
+                      onClick={step.onOpen}
+                      type="button"
+                    >
+                      {step.label}
+                    </button>
+                  </Fragment>
+                ))}
+              </nav>
+
+              <AtlasAreaMap
+                connectedIds={areaLevel.connectedIds}
+                label={areaLevel.label}
+                nodes={areaLevel.cells}
+                unit={areaLevel.unit}
+                onHighlight={setHighlightedId}
+                onOpen={areaLevel.onOpen}
+                selectedId={areaLevel.selectedId}
+                tall
+              />
+
+              {lensStrips
+                .filter((strip) => strip.entries.length > 0)
+                .map((strip) => (
+                  <p className="atlas-mapcol__aside" key={strip.id}>
+                    <span>{strip.heading}</span>
+                    {strip.entries.map((entry) => (
+                      <em key={entry.id}>
+                        {entry.label} {entry.count.toLocaleString("en-US")}
+                      </em>
+                    ))}
+                  </p>
+                ))}
+            </div>
+
+            {/* One panel beside one map. Every altitude reports into it, and
+                nothing in it navigates away from the picture. */}
+            <AtlasDetailPanel
+              restingBlurb="Point at anything on the map to see what it covers and what it connects to. Click to go inside it."
+              restingFacts={[
+                { label: "Frameworks", value: String(lensCatalogIds.length) },
+                {
+                  label: "Crosswalk pairings",
+                  value: String(bundle.atlasNetwork.frameworks?.edges?.length || 0),
+                },
+              ]}
+              restingTitle="Pick a framework"
+              subject={panelSubject}
+            />
+          </div>
         )
       ) : !bundle.atlasNetwork ? (
         <p className="atlas-load-inline-error" role="alert">The global Atlas network is unavailable. Reload the page to try again.</p>

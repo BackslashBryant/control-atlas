@@ -314,7 +314,7 @@ test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface lab
   await page.setViewportSize({ width: 1440, height: 900 });
   await gotoApp(page, "/#/atlas?atlasLanding=publishers");
   await waitForAppReady(page);
-  const board = page.getByTestId("atlas-family-board");
+  const board = page.getByTestId("atlas-area-map");
   await expect(board).toBeVisible();
   await expect(page.locator("body")).not.toContainText("Connected work surface");
 
@@ -322,16 +322,17 @@ test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface lab
   // disclosure beside it, and each one states what it holds without being
   // hovered: eight publishers plus three authority landmarks and the one
   // publication issued outside the federal ecosystems.
-  await expect(board.locator(".atlas-family-board__card")).toHaveCount(8);
-  await expect(board.locator(".atlas-family-board__strip li")).toHaveCount(4);
-  // Every landmark still states what it holds without being hovered: a
-  // publication and record count on a card, a record count on a strip entry.
-  // Never a bare label.
-  const cards = board.locator(".atlas-family-board__card");
+  await expect(board.locator("button.atlas-area__cell")).toHaveCount(8);
+  await expect(page.locator(".atlas-mapcol__aside em")).toHaveCount(4);
+  // Every landmark still states what it holds without being hovered, and says
+  // what the number counts. Groups are measured in publications because a STIG
+  // rule and an 800-53 control are not the same unit; records take over one
+  // level down, where they are.
+  const cards = board.locator("button.atlas-area__cell");
   for (const card of await cards.all()) {
-    await expect(card).toContainText(/\d[\d,]* records/);
+    await expect(card).toContainText(/\d[\d,]* publications?/);
   }
-  for (const entry of await board.locator(".atlas-family-board__strip li").all()) {
+  for (const entry of await page.locator(".atlas-mapcol__aside em").all()) {
     await expect(entry).toContainText(/\d[\d,]*/);
   }
   for (const ecosystem of ["NIST", "DISA", "MITRE", "FedRAMP", "DoD CIO", "CDAO", "ISOO"]) {

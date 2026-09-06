@@ -91,27 +91,21 @@ test("expanding an Atlas area uses the semantic network without monolithic graph
   await page.goto("/#/atlas");
   await waitForAppReady(page);
   await dismissOnboarding(page);
-  const landscape = page.getByTestId("atlas-family-board");
+  const landscape = page.getByTestId("atlas-area-map");
   await expect(landscape).toBeVisible();
   expect(
     requested.some((url) => url.includes("atlas-network.json")),
   ).toBeTruthy();
   expect(graphArtifactUrls(requested)).toEqual([]);
 
-  // Entering a framework from the landing, then stepping up to its publisher,
-  // both come out of the same semantic artifact — neither reaches for the
-  // monolithic node and edge JSON.
-  await landscape.getByRole("button", { name: /^800-53$/ }).first().click();
-  await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
+  // Opening a group and then a publication inside it both come out of the same
+  // semantic artifact — neither reaches for the monolithic node and edge JSON.
+  await landscape.getByRole("button", { name: /^Control catalogs/ }).click();
+  await expect(page).toHaveURL(/atlasLensFamily=control-catalogs/);
   expect(graphArtifactUrls(requested)).toEqual([]);
 
-  const atlas = page.getByTestId("atlas-map");
-  await atlas
-    .getByRole("navigation", { name: "Atlas scope" })
-    .getByRole("button", { name: /^NIST/ })
-    .click();
-  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)nist/);
-  await expect(page.getByTestId("atlas-map")).toHaveAttribute("data-scope-level", "ecosystem");
+  await landscape.getByRole("button", { name: /^800-53 / }).first().click();
+  await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
   expect(graphArtifactUrls(requested)).toEqual([]);
 });
 
@@ -120,7 +114,7 @@ test("Atlas reaches its first usable source map within the local render budget",
 }) => {
   await page.goto("/#/atlas");
   await waitForAppReady(page);
-  await expect(page.getByTestId("atlas-family-board")).toBeVisible();
+  await expect(page.getByTestId("atlas-area-map")).toBeVisible();
 
   const firstUsableMs = await page.evaluate(() =>
     Math.round(globalThis.performance.now()),

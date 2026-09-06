@@ -38,13 +38,10 @@ test("semantic Atlas hands off to explicit publisher-native navigation and prese
   const atlas = page.getByTestId("atlas-map");
   await expect(page.getByText("Grouped by what each document is, who issues it, or what you're trying to get done.", { exact: true })).toBeVisible();
   await expect(atlas).toHaveAttribute("data-scope-level", "ecosystem");
-  // Across to another publisher from inside one, via the board.
-  await page.getByRole("button", { name: "All groups" }).click();
-  await page
-    .getByTestId("atlas-family-board")
-    .getByRole("button", { name: "DISA", exact: true })
-    .click();
-  await expect(page).toHaveURL(/atlasLimb=ecosystem(?::|%3A)disa/);
+  // Across to another publisher, and on into one of its publications. The
+  // columns stay addressable by URL beneath the map.
+  await gotoApp(page, "/#/atlas?atlasLanding=publishers&atlasLimb=ecosystem%3Adisa");
+  await waitForAppReady(page);
   await expect(atlas).toHaveAttribute("data-scope-level", "ecosystem");
   await atlas
     .locator('.atlas-decomp__column[data-column="publication"]')

@@ -184,10 +184,10 @@ test('Atlas landing renders the lightweight semantic hierarchy, not the relation
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  const board = page.getByTestId('atlas-family-board');
+  const board = page.getByTestId('atlas-area-map');
   await expect(board).toBeVisible();
-  await expect(board.locator('.atlas-family-board__card')).toHaveCount(8);
-  await expect(board.locator('.atlas-family-board__strip li')).toHaveCount(4);
+  await expect(board.locator('button.atlas-area__cell')).toHaveCount(8);
+  await expect(page.locator('.atlas-mapcol__aside em')).toHaveCount(4);
   // Orientation is DOM only: no canvas renderer and no flow graph is loaded
   // before the visitor asks for one.
   await expect(board.locator('canvas')).toHaveCount(0);

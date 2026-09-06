@@ -26,10 +26,11 @@ type AtlasLensBarProps = {
  *
  * These sit above the map rather than inside it, and only once the reader is
  * inside something: from there they are the way across to another framework
- * without going home first. On the landing they were a shortcut past a survey
- * that now names every publication itself, so they were repeating what was
- * already on screen and delaying it. "All groups" appears only when there is
- * something to come back from.
+ * without going home first. On the landing they were a shortcut past a
+ * survey that already answers the same question, so they were repeating what
+ * was on screen and delaying it. "Whole Atlas" appears only when there is
+ * something to come back from, and is named apart from the map's own "All
+ * groups" so two controls on one screen never share a name.
  */
 export function AtlasLensBar(props: AtlasLensBarProps) {
   const {
@@ -43,11 +44,9 @@ export function AtlasLensBar(props: AtlasLensBarProps) {
 
   return (
     <nav aria-label="Ways into the Atlas" className="atlas-lens-bar">
-      {/* On the landing the board already names every publication in the
-          corpus, so these seven shortcuts duplicated what was on screen a few
-          hundred pixels below and pushed it further down. They earn their room
-          once the reader is inside something: from there they are the way
-          across to another framework without going home first. */}
+      {/* These earn their room once the reader is inside something: from there
+          they are the way across to another framework without going home
+          first. On the landing they duplicated the map below them. */}
       {scoped ? (
         <>
           <p className="atlas-lens-bar__lede">Start from</p>
@@ -89,7 +88,7 @@ export function AtlasLensBar(props: AtlasLensBarProps) {
           type="button"
         >
           <IconMap2 aria-hidden="true" size={15} stroke={1.9} />
-          All groups
+          Whole Atlas
         </button>
       ) : (
         // Three questions about the same 28 publications: what each document

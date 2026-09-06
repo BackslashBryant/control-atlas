@@ -94,8 +94,8 @@ export function AtlasFrameworkLinks(props: AtlasFrameworkLinksProps) {
         }
         type="button"
       >
-        <span aria-hidden="true" className="atlas-constellation__dot" />
-        <span className="atlas-constellation__crosswalk-name">
+        <span aria-hidden="true" className="atlas-framework-links__dot" />
+        <span className="atlas-framework-links__name">
           {link.label}
           {link.via ? (
             <em>
@@ -103,7 +103,7 @@ export function AtlasFrameworkLinks(props: AtlasFrameworkLinksProps) {
             </em>
           ) : null}
         </span>
-        <span className="atlas-constellation__crosswalk-count">
+        <span className="atlas-framework-links__count">
           {formatCount(link.count)}
         </span>
         <IconArrowUpRight aria-hidden="true" size={13} stroke={2} />
@@ -116,7 +116,7 @@ export function AtlasFrameworkLinks(props: AtlasFrameworkLinksProps) {
       {published.length ? (
         <>
           <h3>Crosswalks to</h3>
-          <ul className="atlas-constellation__crosswalks">{published.map(row)}</ul>
+          <ul className="atlas-framework-links__list">{published.map(row)}</ul>
         </>
       ) : null}
       {derived.length ? (
@@ -127,7 +127,7 @@ export function AtlasFrameworkLinks(props: AtlasFrameworkLinksProps) {
               derived
             </span>
           </h3>
-          <ul className="atlas-constellation__crosswalks atlas-constellation__crosswalks--shared">
+          <ul className="atlas-framework-links__list atlas-framework-links__list--shared">
             {derived.map(row)}
           </ul>
         </>
