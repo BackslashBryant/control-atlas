@@ -3,6 +3,10 @@ import test from "node:test";
 
 import dependencySpine from "../../data/curated/framework-dependency-spine.json";
 import {
+  frameworkDependencyDepth,
+  frameworkDependencyParent,
+} from "../../src/ui/lib/atlasGraphProjection";
+import {
   ATLAS_LENS_GROUPING_IDS,
   ATLAS_LENS_LABELS,
   isAtlasLensGroupingId,
@@ -136,4 +140,48 @@ test("the lens ids are the three the landing offers, and each is labelled", () =
   for (const id of ATLAS_LENS_GROUPING_IDS) {
     assert.ok(ATLAS_LENS_LABELS[id]?.blurb, `${id} has no blurb for the board`);
   }
+});
+
+// The spine is hand-written, so the file itself is the thing most likely to go
+// wrong. Resolving every catalog's depth walks each parent chain to a root and
+// throws on a cycle or a parent that is not declared anywhere, which is the
+// only check standing between a bad edit and a page that will not render.
+test("every curated dependency resolves to a root without a cycle", () => {
+  for (const catalogId of CATALOG_IDS) {
+    const depth = frameworkDependencyDepth(catalogId);
+    assert.ok(
+      Number.isInteger(depth) && depth >= -1 && depth < 10,
+      `${catalogId} resolved to depth ${depth}`,
+    );
+    const parent = frameworkDependencyParent(catalogId);
+    if (parent) {
+      assert.ok(CATALOG_IDS.includes(parent), `${catalogId}'s parent ${parent} is not a catalog`);
+      assert.equal(
+        frameworkDependencyDepth(parent),
+        depth - 1,
+        `${catalogId} does not sit one below ${parent}`,
+      );
+    }
+  }
+});
+
+// The claim the detail panel makes in words: what a publication builds on, and
+// what builds on it. Nothing else in the product depends on the spine now, so
+// this is where it is held honest.
+test("the spine says what the panel says", () => {
+  assert.equal(frameworkDependencyParent("nist-800-53a"), "nist-800-53");
+  assert.equal(frameworkDependencyParent("nist-800-53"), "");
+  const buildOn = CATALOG_IDS.filter(
+    (id) => frameworkDependencyParent(id) === "nist-800-53",
+  );
+  assert.deepEqual(buildOn, [
+    "disa-cci",
+    "dod-zt",
+    "fedramp-rev5",
+    "fips-200",
+    "nist-800-53a",
+    "nist-800-53b",
+    "nist-iot-cybersecurity",
+    "nist-zt",
+  ]);
 });

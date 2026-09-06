@@ -142,67 +142,98 @@ export function AtlasAreaMap(props: AtlasAreaMapProps) {
     });
   }, [nodes, width, height]);
 
+  // Below this there is no room for area to say anything: twenty families in a
+  // 340px column are slivers a thumb cannot hit and a name cannot fit, and the
+  // squarified rectangles round into each other. The same reading — what is
+  // here and how much of it — survives as a list in size order.
+  //
+  // The wrapper is the same element either way. Putting the ref on one branch
+  // and not the other detached the measurement the moment the width crossed
+  // the threshold, so the component measured zero and drew nothing at all.
+  const stacked = width > 0 && width < 480;
+
   return (
     <div
       aria-label={label}
-      className="atlas-area"
+      className={`atlas-area${stacked ? " atlas-area--stacked" : ""}`}
       data-testid="atlas-area-map"
       onMouseLeave={() => onHighlight?.("")}
       ref={frameRef}
       role="group"
-      style={{ height: `${height}px` }}
+      style={stacked ? undefined : { height: `${height}px` }}
     >
-      {laid.map((cell) => {
-        const showName = cell.width > 68 && cell.height > 28;
-        const showCount = cell.width > 50 && cell.height > 42;
-        // Dimmed only while something is selected and this is not part of what
-        // that thing connects to.
-        const dim = Boolean(
-          connectedIds
-            && selectedId
-            && cell.id !== selectedId
-            && !connectedIds.has(cell.id),
-        );
-        const Tag = cell.openable ? "button" : "span";
-        return (
-          <Tag
-            aria-current={cell.id === selectedId ? "true" : undefined}
-            className="atlas-area__cell"
-            data-selected={cell.id === selectedId ? "true" : undefined}
-            data-dim={dim ? "true" : undefined}
-            data-static={cell.openable ? undefined : "true"}
-            key={cell.id}
-            onClick={cell.openable ? () => onOpen(cell.id) : undefined}
-            onFocus={cell.openable ? () => onHighlight?.(cell.id) : undefined}
-            onMouseEnter={cell.openable ? () => onHighlight?.(cell.id) : undefined}
-            style={
-              {
-                "--ca-area-color": `var(${cell.areaToken})`,
-                left: `${cell.left}px`,
-                top: `${cell.top}px`,
-                width: `${cell.width}px`,
-                height: `${cell.height}px`,
-              } as CSSProperties
-            }
-            title={`${cell.label} — ${withUnit(cell.value, unit)}`}
-            type={cell.openable ? "button" : undefined}
-          >
-            <span className="visually-hidden">
-              {cell.label} — {withUnit(cell.value, unit)}
-            </span>
-            {showName ? (
-              <span aria-hidden="true" className="atlas-area__name">
-                {cell.label}
+      {stacked
+        ? [...nodes]
+          .sort((a, b) => b.value - a.value)
+          .map((node) => {
+            const Tag = node.openable ? "button" : "span";
+            return (
+              <Tag
+                aria-current={node.id === selectedId ? "true" : undefined}
+                className="atlas-area__row"
+                data-selected={node.id === selectedId ? "true" : undefined}
+                data-static={node.openable ? undefined : "true"}
+                key={node.id}
+                onClick={node.openable ? () => onOpen(node.id) : undefined}
+                style={{ "--ca-area-color": `var(${node.areaToken})` } as CSSProperties}
+                type={node.openable ? "button" : undefined}
+              >
+                <span className="atlas-area__name">{node.label}</span>
+                <span className="atlas-area__count">{withUnit(node.value, unit)}</span>
+              </Tag>
+            );
+          })
+        : laid.map((cell) => {
+          const showName = cell.width > 68 && cell.height > 28;
+          const showCount = cell.width > 50 && cell.height > 42;
+          // Dimmed only while something is selected and this is not part of
+          // what that thing connects to.
+          const dim = Boolean(
+            connectedIds
+              && selectedId
+              && cell.id !== selectedId
+              && !connectedIds.has(cell.id),
+          );
+          const Tag = cell.openable ? "button" : "span";
+          return (
+            <Tag
+              aria-current={cell.id === selectedId ? "true" : undefined}
+              className="atlas-area__cell"
+              data-dim={dim ? "true" : undefined}
+              data-selected={cell.id === selectedId ? "true" : undefined}
+              data-static={cell.openable ? undefined : "true"}
+              key={cell.id}
+              onClick={cell.openable ? () => onOpen(cell.id) : undefined}
+              onFocus={cell.openable ? () => onHighlight?.(cell.id) : undefined}
+              onMouseEnter={cell.openable ? () => onHighlight?.(cell.id) : undefined}
+              style={
+                {
+                  "--ca-area-color": `var(${cell.areaToken})`,
+                  left: `${cell.left}px`,
+                  top: `${cell.top}px`,
+                  width: `${cell.width}px`,
+                  height: `${cell.height}px`,
+                } as CSSProperties
+              }
+              title={`${cell.label} — ${withUnit(cell.value, unit)}`}
+              type={cell.openable ? "button" : undefined}
+            >
+              <span className="visually-hidden">
+                {cell.label} — {withUnit(cell.value, unit)}
               </span>
-            ) : null}
-            {showCount ? (
-              <span aria-hidden="true" className="atlas-area__count">
-                {withUnit(cell.value, unit)}
-              </span>
-            ) : null}
-          </Tag>
-        );
-      })}
+              {showName ? (
+                <span aria-hidden="true" className="atlas-area__name">
+                  {cell.label}
+                </span>
+              ) : null}
+              {showCount ? (
+                <span aria-hidden="true" className="atlas-area__count">
+                  {withUnit(cell.value, unit)}
+                </span>
+              ) : null}
+            </Tag>
+          );
+        })}
     </div>
   );
 }

@@ -21,29 +21,40 @@ Library and Resources share search, visible desktop facets, a compact responsive
 
 ## C. Adaptive Explorer
 
-Atlas is three altitudes over one route and one navigation state, all semantic
-DOM. No canvas renderer and no flow-graph bundle loads before a visitor asks
-for a relationship view.
+Atlas is one map over one route and one navigation state, all semantic DOM. No
+canvas renderer and no flow-graph bundle loads before a visitor asks for a
+relationship view.
 
-- Groups: the landing is a board of five to eight groups, never the whole
-  corpus at once. Three lenses group the same publications by what each
+The map column is roughly seventy per cent of the width and the detail panel
+thirty, stacking below 1100px. Everything is drawn the same way at every depth:
+a cell per thing, its area the quantity it holds, a trail above it for the way
+back. Opening something never leaves the page — the map goes a level deeper and
+the panel becomes about what was opened.
+
+- Groups: the landing. Three lenses group the same publications by what each
   document is (`atlasLanding=""`), who issues it (`publishers`), or what the
-  reader is trying to get done (`job`). Every group names its members at rest;
-  nothing is hover-gated, and no group is a box that must be opened to learn
-  what is in it. Anything a lens cannot file is named in a strip beneath the
-  groups rather than dropped.
-- Group contents: opening a group shows what it holds. Kind and job open the
-  dependency picture over that group's frameworks, drawn from the curated
-  spine, because those groupings are about how documents relate. A publisher
-  opens its own columns, because that is an inventory question.
-- Publisher structure: semantic DOM renders publication-native levels and
-  immediate children.
+  reader is trying to get done (`job`), five to eight groups each. Anything a
+  lens cannot file is named beneath the map rather than dropped.
+- Publications: the members of one group.
+- Sections: what one publication contains.
+- Records: where every child holds one record, area says nothing, so the panel
+  lists them and each one opens.
 
-Position must never imply a claim the data cannot support. The landing may not
-rank frameworks by dependency depth across unlike documents, and any ordering
-that does rank must be the quantity already stated on the card.
+Two rules the drawing must keep:
 
-The structural sidebar contains the current path, immediate parent, immediate children with counts, and publication-scoped search. It is open by default at 1200 pixels and wider, collapsible from 768 through 1199 pixels, and a slide-over Browse drawer below 768 pixels. Mobile shows one structural level at a time with a sticky path control. The main pane contains selected details and immediate children. A local-connections view is optional and never changes structural ancestry. It must be a visible workspace destination or immediately focused after navigation; no task-critical connection result may begin below an unexplained Atlas canvas. Do not render a permanent right inspector below publication level or a native select containing a large catalog.
+- Area may only encode a quantity whose units are the same across the cells
+  being compared. Records are not comparable across publications — a STIG rule
+  is not an 800-53 control — so groups are sized by publications and records
+  take over one level down.
+- Layout may not assert a claim the data cannot support. The curated dependency
+  spine is hand-written because crosswalks carry no direction, so it appears as
+  a sentence in the panel and never as the shape of the map. Relationship is
+  shown by selection: choosing a cell lights the ones it genuinely crosswalks
+  to and dims the rest.
+
+Publisher-native columns remain addressable by URL beneath the map
+(`atlasLimb`, `atlasFramework`, `atlasFamily` without a lens group) and render
+publication-native levels and immediate children.
 
 ## D. Record detail
 

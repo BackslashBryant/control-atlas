@@ -296,44 +296,6 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
   // the group are dropped rather than drawn to nothing — the board names those
   // connections, and the group's own page would otherwise show lines running
   // off the edge.
-  const lensFamilyProjection = useMemo(() => {
-    const projection = bundle.atlasNetwork?.frameworks;
-    const family = lensFamilies.find((entry) => entry.id === state.atlasLensFamily);
-    if (!projection || !family) return null;
-    const wanted = new Set(family.catalogIds);
-    const nodes = projection.nodes.filter((node) => wanted.has(node.publicationId));
-    if (!nodes.length) return null;
-    const keep = new Set(nodes.map((node) => node.id));
-    return {
-      family,
-      frameworks: {
-        ...projection,
-        nodes,
-        edges: projection.edges.filter(
-          (edge) => keep.has(edge.source) && keep.has(edge.target),
-        ),
-      },
-      sharedGround: (bundle.atlasNetwork?.framework_shared_ground || []).filter(
-        (edge) => keep.has(edge.source) && keep.has(edge.target),
-      ),
-    };
-  }, [bundle.atlasNetwork, lensFamilies, state.atlasLensFamily]);
-
-  // Blurbs differ in shape by lens: the kind and job ones are fragments, the
-  // publisher ones are whole sentences with their own capitals and full stop.
-  // Lower-casing them turned "Most of what the others build on" into "most",
-  // and appending a stop gave the publisher lens two.
-  const lensFamilySubject = useMemo(() => {
-    const family = lensFamilyProjection?.family;
-    if (!family) return "";
-    const blurb = family.blurb.trim();
-    if (!blurb) return `${family.label}.`;
-    return `${family.label} — ${blurb}${/[.!?]$/.test(blurb) ? "" : "."}`;
-  }, [lensFamilyProjection]);
-
-  // What the framework opened inside a group holds, drawn on the same surface.
-  // Reached only from the map, so the reader never leaves the picture to find
-  // out what is inside something they clicked in it.
   const inlineFramework = useMemo(() => {
     if (!state.atlasLensFamily || !state.atlasFramework) return null;
     const projection = bundle.atlasNetwork?.publications?.[state.atlasFramework];
@@ -346,12 +308,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     };
   }, [state.atlasLensFamily, state.atlasFramework, bundle.atlasNetwork]);
 
-  const inlineSection = useMemo(() => {
-    if (!inlineFramework || !state.atlasFamily) return null;
-    const projection = bundle.atlasNetwork?.details?.[state.atlasFamily];
-    return projection || null;
-  }, [inlineFramework, state.atlasFamily, bundle.atlasNetwork]);
-
+  // What the detail column is about: the deepest thing the reader has opened,
+  // or whatever they are pointing at in the map. One panel, every altitude.
   const [highlightedId, setHighlightedId] = useState("");
 
   // The one thing the map is showing right now: groups, then the publications

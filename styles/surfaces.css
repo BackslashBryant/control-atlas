@@ -13192,6 +13192,51 @@ input[type="checkbox"] {
   background: var(--ca-surface);
 }
 
+/* Phone width: area has nothing to say in a 340px column, so the same cells
+   become a list in size order. */
+.atlas-area--stacked {
+  position: static;
+  display: grid;
+  gap: 4px;
+  height: auto;
+  padding: var(--ca-space-2);
+}
+
+.atlas-area__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ca-space-2);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--ca-space-2);
+  border: 1px solid color-mix(in srgb, var(--ca-area-color) 50%, transparent);
+  border-left-width: 4px;
+  border-radius: var(--radius-sm, 3px);
+  background: color-mix(in srgb, var(--ca-area-color) 18%, var(--ca-surface));
+  color: var(--ca-text);
+  font: inherit;
+  text-align: left;
+}
+
+button.atlas-area__row {
+  cursor: pointer;
+}
+
+.atlas-area__row[data-static="true"] {
+  border-style: dashed;
+  background: color-mix(in srgb, var(--ca-area-color) 8%, var(--ca-surface));
+}
+
+.atlas-area__row[data-selected="true"] {
+  border-color: var(--ca-area-color);
+}
+
+.atlas-area__row:focus-visible {
+  outline: 2px solid var(--ca-accent);
+  outline-offset: 2px;
+}
+
 .atlas-area__cell {
   position: absolute;
   display: flex;
