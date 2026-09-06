@@ -36,11 +36,13 @@ type LensFile = {
   kind: {
     label: string;
     blurb: string;
+    prompt: string;
     families: { id: string; label: string; blurb: string; publicationKinds: string[] }[];
   };
   job: {
     label: string;
     blurb: string;
+    prompt: string;
     families: {
       id: string;
       label: string;
@@ -52,6 +54,7 @@ type LensFile = {
   publisher: {
     label: string;
     blurb: string;
+    prompt: string;
     ecosystems: Record<string, string>;
     strips: { id: string; heading: string; note: string; landmarkIds: string[] }[];
   };
@@ -193,8 +196,23 @@ export function publisherStrips(): {
   return LENSES.publisher.strips.map((strip) => ({ ...strip }));
 }
 
-export const ATLAS_LENS_LABELS: Record<string, { label: string; blurb: string }> = {
-  kind: { label: LENSES.kind.label, blurb: LENSES.kind.blurb },
-  publishers: { label: LENSES.publisher.label, blurb: LENSES.publisher.blurb },
-  job: { label: LENSES.job.label, blurb: LENSES.job.blurb },
+export const ATLAS_LENS_LABELS: Record<
+  string,
+  { label: string; blurb: string; prompt: string }
+> = {
+  kind: {
+    label: LENSES.kind.label,
+    blurb: LENSES.kind.blurb,
+    prompt: LENSES.kind.prompt,
+  },
+  publishers: {
+    label: LENSES.publisher.label,
+    blurb: LENSES.publisher.blurb,
+    prompt: LENSES.publisher.prompt,
+  },
+  job: {
+    label: LENSES.job.label,
+    blurb: LENSES.job.blurb,
+    prompt: LENSES.job.prompt,
+  },
 };

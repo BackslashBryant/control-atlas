@@ -31,26 +31,51 @@ a cell per thing, its area the quantity it holds, a trail above it for the way
 back. Opening something never leaves the page — the map goes a level deeper and
 the panel becomes about what was opened.
 
-- Groups: the landing. Three lenses group the same publications by what each
+- Groups: the landing. Three lenses group the same frameworks by what each
   document is (`atlasLanding=""`), who issues it (`publishers`), or what the
   reader is trying to get done (`job`), five to eight groups each. Anything a
   lens cannot file is named beneath the map rather than dropped.
-- Publications: the members of one group.
-- Sections: what one publication contains.
+- Frameworks: the members of one group.
+- Families: what one framework contains.
 - Records: where every child holds one record, area says nothing, so the panel
   lists them and each one opens.
 
-Two rules the drawing must keep:
+Three rules the drawing must keep:
 
 - Area may only encode a quantity whose units are the same across the cells
-  being compared. Records are not comparable across publications — a STIG rule
-  is not an 800-53 control — so groups are sized by publications and records
-  take over one level down.
+  being compared. What frameworks hold is not comparable between them — a STIG
+  rule is not an 800-53 control — so groups are sized by how many frameworks
+  they hold, and contents take over one level down.
 - Layout may not assert a claim the data cannot support. The curated dependency
   spine is hand-written because crosswalks carry no direction, so it appears as
   a sentence in the panel and never as the shape of the map. Relationship is
   shown by selection: choosing a cell lights the ones it genuinely crosswalks
   to and dims the rest.
+- Every count is stated in the word its publisher uses — controls in SP 800-53,
+  techniques in ATT&CK, rules in a STIG, baselines in FedRAMP — taken from
+  `catalogProfiles`' `recordLabel`. "Records" and "publications" are this
+  repository's vocabulary, not the reader's, and never reach a cell or a panel
+  heading. `tests/graph/atlasUnits` fails if a catalog arrives without a noun.
+
+The map is columns of a fixed width, never narrower than a family name, each
+cell as tall as its share. Width is constant, so height carries the quantity
+and area still reads true, without the aspect-ratio lottery a squarified
+treemap runs — that lottery dealt half the cells inside SP 800-53 narrower than
+the word "Maintenance" while giving the largest 500px of empty paint. Nothing
+is ever cut mid-word.
+
+Two consequences the drawing owns:
+
+- A cell is never shorter than its own name or than a 44px touch target. Below
+  that floor its height is a minimum, not a quantity, so those cells are drawn
+  flat with a dotted edge — the same way a dashed edge already means "nothing
+  published beneath this". Read the number on a floored cell, not its size.
+- Room the encoding buys gets spent. A cell with height to spare names what is
+  inside it, so a reader can see that "Control catalogs" means 800-53, 800-53A
+  and 800-171 without opening it.
+
+The map's height is what the viewport has left below it, so the whole picture
+is on screen rather than running past the fold.
 
 Publisher-native columns remain addressable by URL beneath the map
 (`atlasLimb`, `atlasFramework`, `atlasFamily` without a lens group) and render

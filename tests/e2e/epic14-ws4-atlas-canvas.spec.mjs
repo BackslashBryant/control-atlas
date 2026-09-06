@@ -46,7 +46,9 @@ async function openAtlas(page, viewport = { width: 1440, height: 900 }, ecosyste
 async function openPublisherFromBoard(page, label) {
   const card = page
     .getByTestId("atlas-area-map")
-    .getByRole("button", { name: new RegExp(`^${label.replace("+", "\+")} —`) });
+    // In a plain string "\+" is just "+", so this escaped nothing and a label
+    // containing one would have reached the regex as a quantifier.
+    .getByRole("button", { name: new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} —`) });
   await expect(card).toBeVisible();
   await card.click();
 }

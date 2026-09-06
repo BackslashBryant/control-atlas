@@ -38,6 +38,7 @@
   "kind": {
     "label": "By kind",
     "blurb": "What each document is",
+    "prompt": "Choose a kind of document",
     "families": [
       {
         "id": "control-catalogs",
@@ -92,6 +93,7 @@
   "job": {
     "label": "By job",
     "blurb": "What you are trying to get done",
+    "prompt": "Choose a job",
     "$comment": "Authored, not derived, and reviewed placement by placement. The corpus records no field for what a reader is trying to do, so each grouping carries its reasoning.",
     "families": [
       {
@@ -175,6 +177,7 @@
   "publisher": {
     "label": "By publisher",
     "blurb": "Who issues each document",
+    "prompt": "Choose a publisher",
     "$comment": "Membership is read from the artifact. Only the blurbs are authored.",
     "ecosystems": {
       "ecosystem:nist": "The civilian standards body. Most of what the others build on starts here.",

@@ -325,12 +325,12 @@ test("Phase 3 Atlas shows honest integer counts and no obsolete work-surface lab
   await expect(board.locator("button.atlas-area__cell")).toHaveCount(8);
   await expect(page.locator(".atlas-mapcol__aside em")).toHaveCount(4);
   // Every landmark still states what it holds without being hovered, and says
-  // what the number counts. Groups are measured in publications because a STIG
-  // rule and an 800-53 control are not the same unit; records take over one
-  // level down, where they are.
+  // what the number counts. Groups are measured in frameworks because a STIG
+  // rule and an 800-53 control are not the same unit; one level down each
+  // framework counts in its own publisher's word instead.
   const cards = board.locator("button.atlas-area__cell");
   for (const card of await cards.all()) {
-    await expect(card).toContainText(/\d[\d,]* publications?/);
+    await expect(card).toContainText(/\d[\d,]* frameworks?/);
   }
   for (const entry of await page.locator(".atlas-mapcol__aside em").all()) {
     await expect(entry).toContainText(/\d[\d,]*/);

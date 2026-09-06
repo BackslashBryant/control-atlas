@@ -5,7 +5,8 @@ import {
   useState,
   type CSSProperties,
 } from "react";
-import { hierarchy, treemap, treemapSquarify } from "d3-hierarchy";
+
+import { withUnitNoun } from "../lib/atlasUnits";
 
 /** One cell of the map: a thing, and how much of it there is. */
 export type AtlasAreaNode = {
@@ -15,11 +16,21 @@ export type AtlasAreaNode = {
   areaToken: string;
   /** False when there is nothing beneath it to open. */
   openable: boolean;
+  /**
+   * What this cell's number counts, in the publisher's own word — "Controls",
+   * "Techniques", "STIG rules". Overrides the level's unit, because a row of
+   * frameworks holds a different kind of thing in every cell.
+   */
+  unitLabel?: string;
+  /** A short line under the name: what kind of document this is. */
+  note?: string;
+  /** What is inside, named. Shown when the cell is tall enough to hold them. */
+  members?: string[];
 };
 
 type AtlasAreaMapProps = {
   nodes: AtlasAreaNode[];
-  /** What the number counts, singular — "publication", "record". */
+  /** What the numbers count when a cell does not name its own unit. */
   unit?: string;
   /** Accessible name for the region. */
   label: string;
@@ -35,49 +46,118 @@ type AtlasAreaMapProps = {
   tall?: boolean;
 };
 
-type Laid = {
-  id: string;
-  label: string;
-  value: number;
-  areaToken: string;
-  openable: boolean;
+type Laid = AtlasAreaNode & {
   left: number;
   top: number;
   width: number;
   height: number;
+  /**
+   * True when proportion asked for less height than the name and the thumb
+   * need, so this cell is drawn at its floor. Its size is then a floor rather
+   * than a quantity, and the drawing says so rather than letting the reader
+   * compare it with cells that are drawn true.
+   */
+  floored: boolean;
 };
 
-function formatCount(count: number): string {
-  return count.toLocaleString("en-US");
+const GAP = 6;
+/** Narrower than this and a family name stops fitting on one line. */
+const MIN_COLUMN = 230;
+/** The touch-target floor. No cell is ever smaller than a thumb. */
+const MIN_CELL = 44;
+/** Average advance of the 13px name face — enough to count lines, not to set them. */
+const NAME_CHAR = 6.6;
+const NAME_LINE = 17;
+/** Past this a name is long enough that the cell would swallow its column. */
+const MAX_NAME_LINES = 2;
+
+/** Room the count takes when it sits beside the name rather than under it. */
+const COUNT_WIDTH = 96;
+
+/** How many lines this name needs when it has the column to itself. */
+function nameLinesFor(label: string, columnWidth: number): number {
+  const perLine = Math.max(8, Math.floor((columnWidth - 26) / NAME_CHAR));
+  return Math.min(MAX_NAME_LINES, Math.max(1, Math.ceil(label.length / perLine)));
 }
 
-/** "1 publication", "8 publications" — the count decides, not the caller. */
-function withUnit(count: number, unit?: string): string {
-  if (!unit) return formatCount(count);
-  return `${formatCount(count)} ${unit}${count === 1 ? "" : "s"}`;
+/**
+ * Whether the name still fits with the number alongside it.
+ *
+ * Measured against the width the name actually gets, not the column's. Judging
+ * it on the full width put "Program Management" and "Supply Chain Risk
+ * Management" on a single line beside their counts, where they had about sixty
+ * per cent of the room and ended in an ellipsis.
+ */
+function fitsBesideCount(label: string, columnWidth: number): boolean {
+  const perLine = Math.max(6, Math.floor((columnWidth - 26 - COUNT_WIDTH) / NAME_CHAR));
+  return label.length <= perLine;
+}
+
+/**
+ * A cell is never shorter than its own name.
+ *
+ * Proportion sets every height above this; below it, quantity has run out of
+ * room to say anything and legibility wins. The concession is small and it is
+ * the same one the old treemap made silently, by dealing cells too small to
+ * read and then cutting the name to fit them.
+ */
+function minHeightFor(label: string, columnWidth: number): number {
+  if (fitsBesideCount(label, columnWidth)) return MIN_CELL;
+  const lines = nameLinesFor(label, columnWidth);
+  return Math.max(MIN_CELL, lines * NAME_LINE + 15 + 20);
+}
+
+type Column = { nodes: AtlasAreaNode[]; total: number };
+
+/**
+ * Longest-processing-time packing: the biggest thing goes into the emptiest
+ * column, so the column totals finish close together and the ragged bottoms
+ * stay shallow. It also puts the largest cells along the top, which is the
+ * order the eye reads them in anyway.
+ */
+function packIntoColumns(nodes: AtlasAreaNode[], count: number): Column[] {
+  const columns: Column[] = Array.from({ length: count }, () => ({
+    nodes: [],
+    total: 0,
+  }));
+  for (const node of [...nodes].sort((a, b) => b.value - a.value)) {
+    let target = columns[0];
+    for (const column of columns) {
+      if (column.total < target.total) target = column;
+    }
+    target.nodes.push(node);
+    target.total += Math.max(1, node.value);
+  }
+  return columns;
 }
 
 /**
  * The whole map, in one idiom: a cell per thing, sized by what it holds.
  *
- * This replaced three drawings that used to be stacked on one screen — tiles
- * with proportional strips, bordered cards joined by curves, and a treemap —
- * each of which asked the reader to learn a different way of seeing on the way
- * down.
+ * Columns of a fixed width, each cell as tall as its share. Width is constant,
+ * so height alone carries the quantity and area still reads true — a cell
+ * twice the size of another is twice the size wherever the two sit — but
+ * without the aspect-ratio lottery a squarified treemap runs. That lottery was
+ * the whole problem: it decided the shape, and the shapes it dealt had no room
+ * for anything. Half the cells inside SP 800-53 came out narrower than the
+ * word "Maintenance", while the biggest came out 500px wide holding a name and
+ * a four-word count over an acre of empty paint.
+ *
+ * So the floor is a column no narrower than a family name, and the space the
+ * encoding buys gets spent: a cell with room names what is inside it.
  *
  * Deliberately flat. An earlier cut nested each framework inside whatever it
  * builds on, which would have made the layout itself assert the curated
  * dependency spine — a file we wrote by hand because the crosswalk data cannot
- * supply direction, covering twenty-two of twenty-eight publications and only
+ * supply direction, covering twenty-two of twenty-eight frameworks and only
  * three levels deep. Putting an authored claim in the skeleton of the picture
  * is the same mistake as the landing that sat SP 800-53 above everything.
  * Relationship is shown instead by selection: pick a cell and the ones it
  * genuinely crosswalks to stay lit while the rest dim, which is the published
  * data talking rather than the layout.
  *
- * Squarified layout is d3-hierarchy's; the cells are absolutely positioned
- * buttons rather than SVG so every one of them is focusable and readable by a
- * screen reader.
+ * Cells are absolutely positioned buttons rather than SVG so every one of them
+ * is focusable and readable by a screen reader.
  */
 export function AtlasAreaMap(props: AtlasAreaMapProps) {
   const {
@@ -91,61 +171,115 @@ export function AtlasAreaMap(props: AtlasAreaMapProps) {
     tall,
   } = props;
   const frameRef = useRef<HTMLDivElement | null>(null);
-  const [width, setWidth] = useState(0);
+  const [frame, setFrame] = useState({ width: 0, available: 0 });
 
   useLayoutEffect(() => {
-    const frame = frameRef.current;
-    if (!frame) return undefined;
-    const measure = () => setWidth(frame.getBoundingClientRect().width);
+    const element = frameRef.current;
+    if (!element) return undefined;
+    const measure = () => {
+      const rect = element.getBoundingClientRect();
+      // Document-relative, so a resize while the reader is scrolled down does
+      // not measure the map against whatever is above the fold at that moment.
+      const documentTop = rect.top + globalThis.scrollY;
+      setFrame({
+        width: rect.width,
+        available: Math.round(globalThis.innerHeight - documentTop - 24),
+      });
+    };
     measure();
     const observer = new ResizeObserver(measure);
-    observer.observe(frame);
-    return () => observer.disconnect();
+    observer.observe(element);
+    globalThis.addEventListener("resize", measure);
+    return () => {
+      observer.disconnect();
+      globalThis.removeEventListener("resize", measure);
+    };
   }, []);
 
-  const height = Math.round(
-    tall
-      ? Math.max(320, Math.min(680, width * (width < 640 ? 1.3 : 0.56)))
-      : Math.max(220, Math.min(520, width * (width < 640 ? 1.1 : 0.42))),
+  const { width, available } = frame;
+
+  // A shape that reads well at this width...
+  const natural = tall
+    ? Math.max(320, Math.min(680, width * (width < 640 ? 1.3 : 0.56)))
+    : Math.max(220, Math.min(520, width * (width < 640 ? 1.1 : 0.42)));
+  // ...but never taller than the screen it has to fit inside. Sized from its
+  // own width alone the map ran 39px past the fold at 1440x900 and 208px past
+  // it at 1024x800, so the one thing the reader came for was the one thing
+  // they never saw whole.
+  const wanted = Math.round(
+    tall && available > 0 ? Math.max(300, Math.min(natural, available)) : natural,
   );
 
-  const laid = useMemo<Laid[]>(() => {
-    if (!width || !nodes.length) return [];
-    const root = hierarchy<{ children?: AtlasAreaNode[] } & Partial<AtlasAreaNode>>(
-      { children: nodes },
-      (node) => node.children,
-    )
-      // A cell with nothing in it still exists and still has to be clickable,
-      // so it gets a floor rather than a rectangle of zero area.
-      .sum((node) => (node.children ? 0 : Math.max(1, node.value || 0)))
-      .sort((a, b) => (b.value || 0) - (a.value || 0));
+  const { laid, height } = useMemo<{ laid: Laid[]; height: number }>(() => {
+    if (!width || !nodes.length) return { laid: [], height: wanted };
 
-    treemap<{ children?: AtlasAreaNode[] } & Partial<AtlasAreaNode>>()
-      .tile(treemapSquarify)
-      .size([width, height])
-      .paddingInner(3)(root);
+    const fitsAcross = Math.max(1, Math.floor((width + GAP) / (MIN_COLUMN + GAP)));
+    // Enough columns that every cell can clear its minimum height, so a level
+    // holding twenty-eight families does not force them all below reading size.
+    const neededForHeight = Math.ceil((nodes.length * (MIN_CELL + GAP)) / wanted);
+    const columnCount = Math.max(
+      1,
+      Math.min(
+        fitsAcross,
+        Math.max(neededForHeight, Math.ceil(Math.sqrt(nodes.length))),
+      ),
+    );
+    const columnWidth = (width - GAP * (columnCount - 1)) / columnCount;
+    const columns = packIntoColumns(nodes, columnCount);
 
-    return root.leaves().map((leaf) => {
-      const box = leaf as unknown as { x0: number; y0: number; x1: number; y1: number };
-      const data = leaf.data as AtlasAreaNode;
-      return {
-        id: data.id,
-        label: data.label,
-        value: data.value,
-        areaToken: data.areaToken,
-        openable: data.openable,
-        left: box.x0,
-        top: box.y0,
-        width: Math.max(0, box.x1 - box.x0),
-        height: Math.max(0, box.y1 - box.y0),
-      };
+    const tallestTotal = Math.max(...columns.map((column) => column.total), 1);
+    const mostCells = Math.max(...columns.map((column) => column.nodes.length), 1);
+    let unitPx = Math.max(
+      0.0001,
+      (wanted - GAP * (mostCells - 1)) / tallestTotal,
+    );
+
+    // Cells held at their minimum cannot shrink, so one pass can overshoot.
+    // Settle it by measuring and easing the scale down rather than solving it.
+    const heightsFor = (column: Column) =>
+      column.nodes.map((node) =>
+        Math.max(
+          minHeightFor(node.label, columnWidth),
+          Math.max(1, node.value) * unitPx,
+        ));
+    for (let pass = 0; pass < 8; pass += 1) {
+      const tallest = Math.max(
+        ...columns.map(
+          (column) =>
+            heightsFor(column).reduce((sum, value) => sum + value, 0)
+            + GAP * (column.nodes.length - 1),
+        ),
+      );
+      if (tallest <= wanted + 0.5) break;
+      unitPx *= (wanted / tallest) * 0.99;
+    }
+
+    const cells: Laid[] = [];
+    let tallestColumn = 0;
+    columns.forEach((column, columnIndex) => {
+      let top = 0;
+      const heights = heightsFor(column);
+      column.nodes.forEach((node, index) => {
+        const cellHeight = heights[index];
+        cells.push({
+          ...node,
+          left: columnIndex * (columnWidth + GAP),
+          top,
+          width: columnWidth,
+          height: cellHeight,
+          floored: Math.max(1, node.value) * unitPx < cellHeight - 0.5,
+        });
+        top += cellHeight + GAP;
+      });
+      tallestColumn = Math.max(tallestColumn, top - GAP);
     });
-  }, [nodes, width, height]);
 
-  // Below this there is no room for area to say anything: twenty families in a
-  // 340px column are slivers a thumb cannot hit and a name cannot fit, and the
-  // squarified rectangles round into each other. The same reading — what is
-  // here and how much of it — survives as a list in size order.
+    return { laid: cells, height: Math.round(Math.max(wanted, tallestColumn)) };
+  }, [nodes, width, wanted]);
+
+  // Below this a column cannot reach its minimum width, so the mosaic has
+  // nothing left to say with shape. The same reading — what is here and how
+  // much of it — survives as a list in size order.
   //
   // The wrapper is the same element either way. Putting the ref on one branch
   // and not the other detached the measurement the moment the width crossed
@@ -179,13 +313,22 @@ export function AtlasAreaMap(props: AtlasAreaMapProps) {
                 type={node.openable ? "button" : undefined}
               >
                 <span className="atlas-area__name">{node.label}</span>
-                <span className="atlas-area__count">{withUnit(node.value, unit)}</span>
+                <span className="atlas-area__count">
+                  {withUnitNoun(node.value, node.unitLabel || unit)}
+                </span>
               </Tag>
             );
           })
         : laid.map((cell) => {
-          const showName = cell.width > 68 && cell.height > 28;
-          const showCount = cell.width > 50 && cell.height > 42;
+          // One cell, three amounts of room. A tall cell is a plate: display
+          // type, and what is inside it named. A short one is a strip, name
+          // and number on one line — but only when the name actually fits on
+          // one line, or the number would push it off the side.
+          const band = cell.height >= 148
+            ? "plate"
+            : cell.height >= 66 || !fitsBesideCount(cell.label, cell.width)
+              ? "card"
+              : "strip";
           // Dimmed only while something is selected and this is not part of
           // what that thing connects to.
           const dim = Boolean(
@@ -194,12 +337,22 @@ export function AtlasAreaMap(props: AtlasAreaMapProps) {
               && cell.id !== selectedId
               && !connectedIds.has(cell.id),
           );
+          const reading = withUnitNoun(cell.value, cell.unitLabel || unit);
+          // Chips follow the room, not the band. Tying them to "plate" meant
+          // the two smallest groups on the landing named nothing while the
+          // three larger ones listed everything, which read as a rendering
+          // fault rather than a size.
+          const chipRows = Math.max(0, Math.floor((cell.height - 92) / 26));
+          const members = chipRows > 0 ? cell.members || [] : [];
+          const shown = members.slice(0, chipRows * 3);
           const Tag = cell.openable ? "button" : "span";
           return (
             <Tag
               aria-current={cell.id === selectedId ? "true" : undefined}
               className="atlas-area__cell"
+              data-band={band}
               data-dim={dim ? "true" : undefined}
+              data-floored={cell.floored ? "true" : undefined}
               data-selected={cell.id === selectedId ? "true" : undefined}
               data-static={cell.openable ? undefined : "true"}
               key={cell.id}
@@ -215,20 +368,27 @@ export function AtlasAreaMap(props: AtlasAreaMapProps) {
                   height: `${cell.height}px`,
                 } as CSSProperties
               }
-              title={`${cell.label} — ${withUnit(cell.value, unit)}`}
+              title={`${cell.label} — ${reading}`}
               type={cell.openable ? "button" : undefined}
             >
               <span className="visually-hidden">
-                {cell.label} — {withUnit(cell.value, unit)}
+                {cell.label} — {reading}
               </span>
-              {showName ? (
-                <span aria-hidden="true" className="atlas-area__name">
-                  {cell.label}
-                </span>
+              <span aria-hidden="true" className="atlas-area__head">
+                <span className="atlas-area__name">{cell.label}</span>
+                <span className="atlas-area__count">{reading}</span>
+              </span>
+              {band !== "strip" && cell.note ? (
+                <span aria-hidden="true" className="atlas-area__note">{cell.note}</span>
               ) : null}
-              {showCount ? (
-                <span aria-hidden="true" className="atlas-area__count">
-                  {withUnit(cell.value, unit)}
+              {shown.length ? (
+                <span aria-hidden="true" className="atlas-area__members">
+                  {shown.map((member) => (
+                    <em key={member}>{member}</em>
+                  ))}
+                  {members.length > shown.length ? (
+                    <em data-more="true">+{members.length - shown.length}</em>
+                  ) : null}
                 </span>
               ) : null}
             </Tag>

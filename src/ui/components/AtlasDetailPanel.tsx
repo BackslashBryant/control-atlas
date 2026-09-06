@@ -29,6 +29,12 @@ type AtlasDetailPanelProps = {
   restingTitle: string;
   restingBlurb: string;
   restingFacts: { label: string; value: string }[];
+  /**
+   * What the current grouping could not file, named beside the map instead of
+   * in small print beneath it. At rest this column was a 129px card in a 574px
+   * space; these are the footnotes that belong in it.
+   */
+  restingSections?: { heading: string; note?: string; links: AtlasPanelLink[] }[];
 };
 
 /**
@@ -40,12 +46,73 @@ type AtlasDetailPanelProps = {
  * were reading it from. Nothing here navigates: every link changes what the
  * panel is about, and the map stays exactly where it is.
  */
+function PanelSection(props: {
+  section: { heading: string; note?: string; links: AtlasPanelLink[] };
+}) {
+  const { section } = props;
+  return (
+    <section className="atlas-detail__section">
+      <h4>{section.heading}</h4>
+      {section.note ? <p className="atlas-detail__note">{section.note}</p> : null}
+      {section.links.length ? (
+        <ul className="atlas-detail__links">
+          {section.links.map((link) => (
+            <li key={link.id}>
+              {link.onOpen ? (
+                <button
+                  onClick={link.onOpen}
+                  style={
+                    link.areaToken
+                      ? ({ "--ca-area-color": `var(${link.areaToken})` } as CSSProperties)
+                      : undefined
+                  }
+                  type="button"
+                >
+                  <span aria-hidden="true" className="atlas-detail__dot" />
+                  <span className="atlas-detail__link-name">
+                    {link.label}
+                    {link.note ? <em>{link.note}</em> : null}
+                  </span>
+                  {link.count > 0 ? (
+                    <span className="atlas-detail__link-count">
+                      {link.count.toLocaleString("en-US")}
+                    </span>
+                  ) : null}
+                </button>
+              ) : (
+                <span>
+                  <span aria-hidden="true" className="atlas-detail__dot" />
+                  <span className="atlas-detail__link-name">
+                    {link.label}
+                    {link.note ? <em>{link.note}</em> : null}
+                  </span>
+                  {link.count > 0 ? (
+                    <span className="atlas-detail__link-count">
+                      {link.count.toLocaleString("en-US")}
+                    </span>
+                  ) : null}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </section>
+  );
+}
+
 export function AtlasDetailPanel(props: AtlasDetailPanelProps) {
-  const { subject, restingTitle, restingBlurb, restingFacts } = props;
+  const {
+    subject,
+    restingTitle,
+    restingBlurb,
+    restingFacts,
+    restingSections = [],
+  } = props;
 
   if (!subject) {
     return (
-      <aside className="atlas-detail" data-testid="atlas-detail">
+      <aside className="atlas-detail" data-resting="true" data-testid="atlas-detail">
         <div className="atlas-detail__rest">
           <h3>{restingTitle}</h3>
           <p>{restingBlurb}</p>
@@ -58,6 +125,9 @@ export function AtlasDetailPanel(props: AtlasDetailPanelProps) {
             ))}
           </dl>
         </div>
+        {restingSections.map((section) => (
+          <PanelSection key={section.heading} section={section} />
+        ))}
       </aside>
     );
   }
@@ -84,48 +154,7 @@ export function AtlasDetailPanel(props: AtlasDetailPanelProps) {
       ) : null}
 
       {subject.sections.map((section) => (
-        <section className="atlas-detail__section" key={section.heading}>
-          <h4>{section.heading}</h4>
-          {section.note ? (
-            <p className="atlas-detail__note">{section.note}</p>
-          ) : null}
-          {section.links.length ? (
-            <ul className="atlas-detail__links">
-              {section.links.map((link) => (
-                <li key={link.id}>
-                  {link.onOpen ? (
-                    <button
-                      onClick={link.onOpen}
-                      style={
-                        link.areaToken
-                          ? ({ "--ca-area-color": `var(${link.areaToken})` } as CSSProperties)
-                          : undefined
-                      }
-                      type="button"
-                    >
-                      <span aria-hidden="true" className="atlas-detail__dot" />
-                      <span className="atlas-detail__link-name">
-                        {link.label}
-                        {link.note ? <em>{link.note}</em> : null}
-                      </span>
-                      <span className="atlas-detail__link-count">
-                        {link.count.toLocaleString("en-US")}
-                      </span>
-                    </button>
-                  ) : (
-                    <span>
-                      <span aria-hidden="true" className="atlas-detail__dot" />
-                      <span className="atlas-detail__link-name">{link.label}</span>
-                      <span className="atlas-detail__link-count">
-                        {link.count.toLocaleString("en-US")}
-                      </span>
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </section>
+        <PanelSection key={section.heading} section={section} />
       ))}
 
       {subject.action ? (

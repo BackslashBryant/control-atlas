@@ -26,6 +26,7 @@ import { FIRST_PAINT_ROUTE_COPY, SITE_COPY } from "../../shared/site-copy.mjs";
 import { AcronymText } from "../components/AccessibleTerm";
 import { AtlasConnectionMap } from "../components/AtlasConnectionMap";
 import { AtlasAreaMap, type AtlasAreaNode } from "../components/AtlasAreaMap";
+import { withUnitNoun } from "../lib/atlasUnits";
 import {
   AtlasDetailPanel,
   type AtlasPanelSubject,
@@ -242,9 +243,11 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     }
     return kindFamiliesFor(lensCatalogIds);
   }, [lensCatalogIds, publisherEcosystems, state.atlasLanding]);
-  const lensBlurb =
-    ATLAS_LENS_LABELS[state.atlasLanding || "kind"]?.blurb
-    || ATLAS_LENS_LABELS.kind.blurb;
+  const lens = ATLAS_LENS_LABELS[state.atlasLanding || "kind"] || ATLAS_LENS_LABELS.kind;
+  const lensBlurb = lens.blurb;
+  // What the reader is being asked to pick right now. The panel used to say
+  // "Pick a framework" on the landing, where every cell is a group of them.
+  const lensPrompt = lens.prompt;
 
   // Landmarks the publisher grouping cannot file. The statutes, regulations
   // and directives are obligations rather than publishers and nobody
@@ -319,7 +322,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
     const artifact = bundle.atlasNetwork;
     const empty = {
       depth: 0,
-      unit: "publication",
+      unit: "Frameworks",
       label: "Groups",
       cells: [] as AtlasAreaNode[],
       trail: [] as { id: string; label: string; current?: boolean; onOpen: () => void }[],
@@ -347,7 +350,10 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       );
       return {
         depth: 2,
-        unit: "record",
+        // Every family inside one framework holds that framework's own kind of
+        // thing, so the whole level shares its word: controls in 800-53, rules
+        // in a STIG, techniques in ATT&CK.
+        unit: catalogProfileFor(state.atlasFramework).recordLabel,
         label: `Inside ${catalogShortNameFor(state.atlasFramework)}`,
         cells: sections.map((node) => ({
           id: node.id,
@@ -398,14 +404,19 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       }
       return {
         depth: 1,
-        unit: "record",
         label: group.label,
+        // No level-wide unit here: a row of frameworks holds a different kind
+        // of thing in every cell, and calling 1,216 controls and 823
+        // techniques the same "records" is the flattening that made this map
+        // read like a database rather than the field it describes.
         cells: group.catalogIds.map((catalogId) => ({
           id: catalogId,
           label: catalogShortNameFor(catalogId),
           value: records(catalogId),
           areaToken: tokenFor(catalogId),
           openable: true,
+          unitLabel: catalogProfileFor(catalogId).recordLabel,
+          note: catalogProfileFor(catalogId).publicationKind,
         })),
         trail: [
           {
@@ -424,17 +435,17 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
 
     // Depth 0 — the groups in the chosen lens.
     //
-    // Sized by how many publications a group holds, not by their records. A
-    // STIG rule, an 800-53 control and an ATT&CK technique are not the same
+    // Sized by how many frameworks a group holds, not by what is inside them.
+    // A STIG rule, an 800-53 control and an ATT&CK technique are not the same
     // unit, so adding them up and comparing the totals as area says only that
     // DISA writes a lot of rules: Implementation took three quarters of the
     // map on 17,375 STIG rules alone and squeezed Risk and outcome frameworks
-    // to a sliver too small for its own name. Publications are commensurable —
-    // a publication is a publication — so that is what the area means here.
-    // Records come back one level down, where they are the same kind of thing.
+    // to a sliver too small for its own name. Frameworks are commensurable —
+    // a framework is a framework — so that is what the area means here. The
+    // contents come back one level down, each in its publisher's own word.
     return {
       depth: 0,
-      unit: "publication",
+      unit: "Frameworks",
       label: "Groups",
       cells: lensFamilies.map((family) => ({
         id: family.id,
@@ -442,6 +453,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         value: family.catalogIds.length,
         areaToken: tokenFor(family.catalogIds[0] || ""),
         openable: family.catalogIds.length > 0,
+        note: family.blurb,
+        // The frameworks themselves, named on the group that holds them. A
+        // reader deciding whether "Control catalogs" is where they should be
+        // looking can now see that it means 800-53, 800-53A and 800-171
+        // without opening it first.
+        members: family.catalogIds.map((catalogId) => catalogShortNameFor(catalogId)),
       })),
       trail: [],
       connectedIds: undefined,
@@ -784,20 +801,35 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           .map((node) => ({
             id: node.id,
             label: node.label,
-            count: Math.max(0, node.canonicalRecordCount),
+            // These are the leaves: every one holds exactly itself. A column
+            // of 148 identical "1"s down the panel is noise, so a count of one
+            // is not worth printing.
+            count: node.canonicalRecordCount > 1 ? node.canonicalRecordCount : 0,
             areaToken: inlineFramework.areaToken,
             onOpen: node.drill ? () => drillAtlas(node.drill!) : undefined,
           }));
+        const noun = catalogProfileFor(state.atlasFramework).recordLabel;
+        // The projection generates "N publisher-native records." for groups
+        // that have no publisher description of their own. Beside a fact and a
+        // list heading both carrying the same number, that is the third
+        // restatement of one count — and in the wrong vocabulary. Real
+        // publisher descriptions still show.
+        const described = /publisher-native records\.$/.test(section.description || "")
+          ? ""
+          : section.description || "";
         return {
           eyebrow: `Inside ${inlineFramework.label}`,
           title: section.label,
-          blurb: section.description || "",
+          blurb: described,
           areaToken: inlineFramework.areaToken,
-          facts: [
-            { label: "Records", value: formatPanelCount(section.canonicalRecordCount) },
-          ],
+          // No fact row: the list heading below already states the count, and
+          // stacking "CONTROLS 148" above "148 controls" says one number
+          // twice.
+          facts: records.length
+            ? []
+            : [{ label: noun, value: formatPanelCount(section.canonicalRecordCount) }],
           sections: records.length
-            ? [{ heading: `${records.length} records`, links: records }]
+            ? [{ heading: withUnitNoun(records.length, noun), links: records }]
             : [],
           action: section.drill && !records.length
             ? { label: `Open ${section.label}`, onOpen: () => drillAtlas(section.drill!) }
@@ -817,15 +849,11 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
         areaToken:
           areaPresentationForCatalog(group.catalogIds[0] || "")?.token
           || "--ca-area-operations",
-        facts: [
-          { label: "Publications", value: String(group.catalogIds.length) },
-          {
-            label: "Records",
-            value: formatPanelCount(
-              group.catalogIds.reduce((total, id) => total + records(id), 0),
-            ),
-          },
-        ],
+        // One fact, not two. The second used to add every framework's records
+        // together, which is the sum the map itself refuses to draw: a STIG
+        // rule, an 800-53 control and an ATT&CK technique are not the same
+        // unit, so their total is a number with no meaning.
+        facts: [{ label: "Frameworks", value: String(group.catalogIds.length) }],
         sections: [{
           heading: "What is in it",
           links: group.catalogIds.map((catalogId) => ({
@@ -1148,7 +1176,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             {/* One panel beside one map. Every altitude reports into it, and
                 nothing in it navigates away from the picture. */}
             <AtlasDetailPanel
-              restingBlurb="Point at anything on the map to see what it covers and what it connects to. Click to go inside it."
+              restingBlurb={`${lensBlurb}. Point at a group to see what is in it; click to open its frameworks, then a framework to see what it holds.`}
               restingFacts={[
                 { label: "Frameworks", value: String(lensCatalogIds.length) },
                 {
@@ -1156,7 +1184,7 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
                   value: String(bundle.atlasNetwork.frameworks?.edges?.length || 0),
                 },
               ]}
-              restingTitle="Pick a framework"
+              restingTitle={lensPrompt}
               subject={panelSubject}
             />
           </div>

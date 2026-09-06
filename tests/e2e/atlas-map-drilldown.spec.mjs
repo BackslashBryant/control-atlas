@@ -191,7 +191,10 @@ test("CMMC reaches its three publisher-native levels through the map", async ({ 
   await waitForAppReady(page);
   await dismissOnboarding(page);
 
-  await open(page, "DoD ");
+  // "DoD " alone also prefixes "DoD CIO", so this matched whichever of the two
+  // the map happened to lay out first. The em dash is the boundary between a
+  // cell's name and its count, which makes the match exact.
+  await open(page, "DoD —");
   await open(page, "CMMC");
   await open(page, "CMMC 2.0 Levels");
 

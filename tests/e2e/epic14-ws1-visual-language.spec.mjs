@@ -76,7 +76,7 @@ test("WS1 Atlas exposes publisher ecosystems and authorities as named, counted c
   const map = page.getByTestId("atlas-area-map");
   await expect(map).toBeVisible({ timeout: 60_000 });
 
-  // Every publisher is a cell whose area is how many publications it issues —
+  // Every publisher is a cell whose area is how many frameworks it issues —
   // a count that is the same unit for all eight, unlike their record totals.
   await expect(map.locator("button.atlas-area__cell")).toHaveCount(8);
   const labels = await map.locator("button.atlas-area__cell").evaluateAll(
@@ -89,7 +89,7 @@ test("WS1 Atlas exposes publisher ecosystems and authorities as named, counted c
     ).toBe(true);
   }
   // Named and counted, never hover-only.
-  for (const title of labels) expect(title).toMatch(/— \d+ publications?$/);
+  for (const title of labels) expect(title).toMatch(/— \d+ frameworks?$/);
 
   // The authority landmarks are obligations rather than publishers and nobody
   // crosswalks to them, so they are named beneath the map instead of drawn in
