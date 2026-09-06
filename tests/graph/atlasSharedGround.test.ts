@@ -3,11 +3,72 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 
-import type { AtlasSemanticProjectionArtifact } from "../../src/ui/lib/atlasGraphProjection";
+import {
+  buildAtlasGraphModel,
+  type AtlasGraphSourceEdge,
+  type AtlasGraphSourceNode,
+} from "../../src/ui/lib/atlasGraphModel";
+import { buildAtlasSemanticProjections } from "../../src/ui/lib/atlasGraphProjection";
+import {
+  buildAtlasCatalogMemberships,
+  type AtlasSourceRegistry,
+} from "../../src/ui/lib/atlasPublisherHierarchy";
+import type { AtlasSpine } from "../../src/ui/lib/atlasDrilldown";
+import { buildAtlasTreeModel } from "../../src/ui/lib/atlasTreeModel";
 
-const artifact = JSON.parse(
-  readFileSync(join("data", "generated", "atlas-network.json"), "utf8"),
-) as AtlasSemanticProjectionArtifact;
+const GENERATED = join("data", "generated");
+
+type ShardedManifest = {
+  generated_at: string;
+  sharded_collection: { record_count: number; shards: Array<{ path: string }> };
+};
+
+function loadCollection<T>(manifestName: string, key: string) {
+  const manifest = JSON.parse(
+    readFileSync(join(GENERATED, manifestName), "utf8"),
+  ) as ShardedManifest;
+  const records = manifest.sharded_collection.shards.flatMap((shard) => {
+    const artifact = JSON.parse(
+      readFileSync(join(GENERATED, shard.path), "utf8"),
+    ) as Record<string, T[]>;
+    return artifact[key] || [];
+  });
+  return { generatedAt: manifest.generated_at, records };
+}
+
+/**
+ * Built here from the same inputs the ship script uses, rather than read from
+ * `data/generated/atlas-network.json`.
+ *
+ * That file is not produced by `build:data`, so no data-generation step
+ * guarantees it — and at ~31 MiB it exceeds the 20 MiB per-file budget
+ * `check:data-size` enforces, so everything that touches generated data
+ * removes it. `build:site` does, and so does `tests/framework-data.test.mjs`,
+ * which calls buildFrameworkData() at module load several suites earlier in
+ * the same `npm test` chain. Reading the file made this suite fail on ENOENT
+ * and take its seven subtests down with it, in CI's unit job as much as
+ * locally. `nodes.json`, `edges.json` and `atlas-spine.json` are generated and
+ * do survive, so this builds from those — the same composition
+ * scripts/build-atlas-network-artifact.ts performs.
+ */
+const nodeCollection = loadCollection<AtlasGraphSourceNode>("nodes.json", "nodes");
+const edgeCollection = loadCollection<AtlasGraphSourceEdge>("edges.json", "edges");
+const spineArtifact = JSON.parse(
+  readFileSync(join(GENERATED, "atlas-spine.json"), "utf8"),
+) as { atlas_spine: AtlasSpine };
+const registry = JSON.parse(
+  readFileSync(join("data", "source-registry.json"), "utf8"),
+) as AtlasSourceRegistry;
+
+const artifact = buildAtlasSemanticProjections({
+  graph: buildAtlasGraphModel({
+    nodes: nodeCollection.records,
+    edges: edgeCollection.records,
+  }),
+  model: buildAtlasTreeModel(spineArtifact.atlas_spine),
+  generatedAt: nodeCollection.generatedAt,
+  catalogMemberships: buildAtlasCatalogMemberships(registry),
+});
 
 const catalogOf = new Map(
   artifact.frameworks.nodes.map((node) => [node.id, node.publicationId]),

@@ -8,6 +8,11 @@ import {
 } from "./support.mjs";
 
 test.beforeEach(async ({ page }) => {
+  // Every test here loads the app, builds a document from the catalog, and
+  // renders or downloads a real DOCX. That fits the 30s default alone but not
+  // beside three other workers, where this file was the one test in the whole
+  // suite that timed out — on app startup, before it had done any of its work.
+  test.setTimeout(90_000);
   attachPageDiagnostics(page);
 });
 

@@ -76,6 +76,12 @@ test("WS5 Home implements Template B with one search, four destinations, and Lib
 });
 
 test("WS5 Library discovery cards open the counted canonical filter states", async ({ page }) => {
+  // Five full app loads and five Library data loads in one test. That fits the
+  // 30s default alone but not beside three other workers, and the filter chip
+  // is the first thing rendered after the Library's own data lands — so the
+  // assertion below was racing that load on a 5s default rather than testing
+  // the product.
+  test.setTimeout(120_000);
   const discoveries = [
     ["Controls & requirements", "Requirements"],
     ["Baselines & profiles", "Baselines & profiles"],
@@ -93,7 +99,9 @@ test("WS5 Library discovery cards open the counted canonical filter states", asy
     await discovery.click();
 
     await expect(page).toHaveURL(/#\/library\?kind=/);
-    await expect(page.getByLabel("Active filters").getByRole("button", { name: filterLabel })).toBeVisible();
+    await expect(
+      page.getByLabel("Active filters").getByRole("button", { name: filterLabel }),
+    ).toBeVisible({ timeout: 30_000 });
     await expect(page.getByRole("status")).toContainText(count);
     await expect(page.getByRole("list", { name: "Search results" }).getByRole("listitem").first()).toBeVisible();
   }

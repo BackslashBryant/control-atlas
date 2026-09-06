@@ -1650,10 +1650,12 @@ function FocusedAtlas(props: {
           >
             Connections
           </h2>
+          {/* Three lines of "typed context is separate from publisher-native
+              hierarchy" sat directly above the connection graph and pushed it
+              54px below the fold at 1440x900 — the one thing this route exists
+              to show. It was also our vocabulary, not the reader's. */}
           <p className="atlas-workspace-orientation">
-            Typed context is separate from publisher-native hierarchy. Choose
-            a relationship type to inspect a bounded preview or open the full
-            evidence list.
+            Pick a relationship type to preview it, or open the full list.
           </p>
         </div>
         <div className="atlas-workspace-controls">

@@ -9859,13 +9859,17 @@ input[type="checkbox"] {
   margin: 0 0 var(--ca-space-2);
 }
 
+/* No margin of its own: .atlas-focused-shell is a grid with a 16px gap and
+   spaces every other child that way. A fourth copy of this selector further
+   down the file used to add 32px on top of that gap, which put 48px of white
+   space between the record and its connection graph — and pushed the graph,
+   the thing this route exists to show, past the fold at 1440x900. */
 .atlas-focused-toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--ca-space-3);
-  margin-block-end: var(--ca-space-4);
 }
 
 .atlas-workspace-heading {
@@ -12066,10 +12070,6 @@ input[type="checkbox"] {
 .atlas-tree-node--area.is-empty .atlas-tree-node__terminal {
   background: transparent;
   box-shadow: none;
-}
-
-.atlas-focused-toolbar {
-  margin-block: var(--ca-space-8) var(--ca-space-4);
 }
 
 .atlas-workspace-orientation {
