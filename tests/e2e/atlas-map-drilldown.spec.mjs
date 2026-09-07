@@ -69,7 +69,7 @@ test("a drilled branch survives refresh and the trail steps back one level", asy
   await open(page, "NIST");
   await open(page, "800-53 ");
   await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
-  await expect(panel(page).getByRole("heading", { level: 3 })).toContainText("800-53");
+  await expect(panel(page).getByRole("heading", { level: 2 })).toContainText("800-53");
 
   await page.reload();
   await waitForAppReady(page);
@@ -98,7 +98,7 @@ test("a section shows its own records and only its own", async ({ page }) => {
   await expect(page).toHaveURL(/atlasFamily=group(?::|%3A)nist-800-53(?::|%3A)0/);
 
   // The drawing stops where every child is one record; the panel lists them.
-  await expect(panel(page).getByRole("heading", { level: 3 })).toContainText("Access Control");
+  await expect(panel(page).getByRole("heading", { level: 2 })).toContainText("Access Control");
   const records = panel(page).locator(".atlas-detail__links button");
   await expect(records).toHaveCount(148);
   await expect(records.first()).toContainText("AC-1");

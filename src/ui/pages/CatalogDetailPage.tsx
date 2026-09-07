@@ -12,6 +12,11 @@ import {
   publicationSourceForCatalog,
 } from "../lib/catalogInventory";
 import { catalogDisplayNameFor, catalogProfileFor } from "../lib/catalogProfiles";
+import {
+  officialSourceActionLabel,
+  officialSourceFor,
+  OFFICIAL_PUBLICATION_VERBS,
+} from "../lib/officialSource";
 import { PageHeader, WorkbenchControlSurface } from "../lib/pagePrimitives";
 import {
   recordIdentityPresentationFor,
@@ -82,7 +87,7 @@ export function CatalogDetailPage(props: {
   const profile = catalogProfileFor(catalog.id, catalog.name);
   const source = publicationSourceForCatalog(bundle.runtime, catalog.id)
     || (catalog.source_id ? bundle.runtime.getSource(catalog.source_id) : null);
-  const officialPublicationUrl = source?.artifact_url || source?.catalog_browse_url;
+  const officialPublication = officialSourceFor(source);
   const catalogName = catalogDisplayNameFor(catalog.id, catalog.name);
   const publicationTitle = sourcePublicationTitle(source, catalogName);
   const publisherName = sourcePublisherDisplayName(recordPublisherName(
@@ -206,15 +211,18 @@ export function CatalogDetailPage(props: {
           </span>
         </div>
         <div className="catalog-source-actions" data-route-primary-support="true">
-          {officialPublicationUrl ? (
+          {officialPublication.url ? (
             <ButtonLink
               className="catalog-source-link"
-              href={officialPublicationUrl}
+              href={officialPublication.url}
               rel="noreferrer"
               target="_blank"
               variant="primary"
             >
-              Open official publication
+              {officialSourceActionLabel(
+                officialPublication,
+                OFFICIAL_PUBLICATION_VERBS,
+              )}
               <IconExternalLink aria-hidden="true" size={16} />
             </ButtonLink>
           ) : null}

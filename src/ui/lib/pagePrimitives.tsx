@@ -11,6 +11,11 @@ import {
 import { AcronymText } from "../components/AccessibleTerm";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { Button, ButtonLink } from "../components/lsm/Button";
+import {
+  officialSourceActionLabel,
+  officialSourceFor,
+  ORIGINAL_SOURCE_VERBS,
+} from "./officialSource";
 import type { ViewState } from "./viewState";
 import { sourceIdentityPresentationFor } from "./sourceIdentity";
 
@@ -571,11 +576,14 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void; det
       <div className="card-actions">
         <ButtonLink
           variant="secondary"
-          href={source.catalog_browse_url || source.artifact_url}
+          href={officialSourceFor(source).url}
           rel="noopener noreferrer"
           target="_blank"
         >
-          Open the original source
+          {officialSourceActionLabel(
+            officialSourceFor(source),
+            ORIGINAL_SOURCE_VERBS,
+          )}
         </ButtonLink>
       </div>
     </article>
@@ -621,17 +629,24 @@ export function SelectField(props: {
   options: Array<{ value: string; label: string; disabled?: boolean }>;
   onChange: (value: string) => void;
   disabled?: boolean;
+  /** Marks the field as blocking, for assistive tech as well as sighted readers. */
+  required?: boolean;
 }) {
   const fieldId = `field-${props.label.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}`;
 
   return (
     <label className="field" htmlFor={fieldId}>
-      <span>{props.label}</span>
+      <span>
+        {props.label}
+        {props.required ? <span className="field-required"> (required)</span> : null}
+      </span>
       <select
         aria-label={props.label}
+        aria-required={props.required || undefined}
         disabled={props.disabled}
         id={fieldId}
         onChange={(event) => props.onChange(event.target.value)}
+        required={props.required}
         value={props.value}
       >
         <option value="">{props.emptyLabel || "All"}</option>
@@ -685,7 +700,13 @@ export function EmptyState(props: {
  * Standardized Staged Flow StepIndicator (T5.8).
  */
 export function StepIndicator(props: {
-  steps: Array<{ id: string; label: string; description?: string }>;
+  /**
+   * `outcome: true` marks a step that is the result rather than another thing
+   * to answer. Start here promises "answer two questions" and then showed a
+   * three-dot stepper, so the third dot read as a third question at exactly
+   * the moment the promise was being kept.
+   */
+  steps: Array<{ id: string; label: string; description?: string; outcome?: boolean }>;
   currentStep: number;
   onSelectStep?: (stepIndex: number) => void;
 }) {
@@ -699,13 +720,17 @@ export function StepIndicator(props: {
           return (
             <li
               aria-current={isActive ? "step" : undefined}
-              className={`step-item step ${isActive ? "step-active active" : isComplete ? "step-complete done" : "step-pending"}`}
+              className={`step-item step ${step.outcome ? "step-outcome " : ""}${isActive ? "step-active active" : isComplete ? "step-complete done" : "step-pending"}`}
               key={step.id}
             >
               <strong className="step-label">
-                <span aria-hidden="true" className="step-number">
-                  {String(stepNum).padStart(2, "0")} /
-                </span>{" "}
+                {step.outcome ? null : (
+                  <>
+                    <span aria-hidden="true" className="step-number">
+                      {String(stepNum).padStart(2, "0")} /
+                    </span>{" "}
+                  </>
+                )}
                 {step.label}
               </strong>
               {step.description ? (

@@ -116,7 +116,13 @@ test("record template never derives a record name from body text", () => {
 test("record identities use publisher, source-native category, and official identifier", () => {
   assert.equal(recordIdentityFor({ publisher: "NIST", catalogId: "nist-800-53", family: "Access Control", itemId: "AC-2" }), "NIST AC-2");
   assert.equal(recordIdentityFor({ publisher: "NIST", catalogId: "nist-800-171", family: "Access Control", itemId: "3.1.1" }), "NIST AC 3.1.1");
-  assert.equal(recordIdentityFor({ publisher: "MITRE", catalogId: "mitre-attack", family: "Initial Access", itemId: "T1195.002" }), "MITRE Initial Access T1195.002");
+  // ATT&CK techniques belong to every tactic MITRE lists, and `family` is only
+  // the first of them, so it must not reach the identity: T1078 would read
+  // "MITRE Stealth T1078" for a technique MITRE names "Valid Accounts" and
+  // files under four tactics. Identity stays publisher + official ID, and the
+  // full membership is a published fact on the record instead.
+  assert.equal(recordIdentityFor({ publisher: "MITRE", catalogId: "mitre-attack", family: "Initial Access", itemId: "T1195.002" }), "MITRE T1195.002");
+  assert.equal(recordIdentityFor({ publisher: "MITRE", catalogId: "mitre-attack-ics", family: "Impair Process Control", itemId: "T0806" }), "MITRE T0806");
   assert.equal(recordIdentityFor({ publisher: "MITRE", catalogId: "mitre-d3fend", family: "Harden", itemId: "D3-AA" }), "MITRE Harden D3-AA");
   assert.equal(recordIdentityFor({ publisher: "DISA", catalogId: "disa-cci", family: "Policy and Technical", itemId: "CCI-000001" }), "DISA Policy and Technical CCI-000001");
   assert.equal(recordIdentityFor({ publisher: "DISA", catalogId: "disa-stig", family: "IBM Hardware Management Console Security Technical Implementation Guide", itemId: "V-256876", metadata: { identity_category: "HMC" } }), "DISA HMC V-256876");

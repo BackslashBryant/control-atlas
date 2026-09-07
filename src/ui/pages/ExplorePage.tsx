@@ -401,8 +401,11 @@ export function ExplorePage(props: {
     destination: { view: "library-detail" as const, patch: { node: row.document.id } },
   })), [rows, state.viewMode]);
   const visibleResultCount = Math.min(visibleCount, rows.length);
+  // The cap is already stated at the foot of the list, but a reader who never
+  // scrolls 100 rows only ever sees this header. Naming the way to the rest
+  // here means the count never reads as "these are all of them".
   const resultCountLabel = resultContext.result_count > rows.length
-    ? `${resultContext.result_count.toLocaleString()} matches · showing ${visibleResultCount.toLocaleString()} of the ${rows.length.toLocaleString()} most relevant`
+    ? `${resultContext.result_count.toLocaleString()} matches · showing ${visibleResultCount.toLocaleString()} of the ${rows.length.toLocaleString()} most relevant · narrow with filters to reach the rest`
     : visibleResultCount < rows.length
       ? `${rows.length.toLocaleString()} results · showing ${visibleResultCount.toLocaleString()}`
       : `${rows.length.toLocaleString()} result${rows.length === 1 ? "" : "s"}`;
@@ -724,7 +727,11 @@ export function ExplorePage(props: {
             ))}
           </nav>
         ) : null}
-        <ul aria-busy={visibleCount > 0 && !detailsReady} aria-label="Search results" className="workspace-result-list" ref={resultsRef} tabIndex={-1}>
+        {/* Each result card titles itself with an h3. Without this heading the
+            nearest one above was the page h1, so a screen-reader user paging by
+            heading level met up to 100 cards nested under nothing. */}
+        <h2 className="visually-hidden" id="workspace-results-heading">Search results</h2>
+        <ul aria-busy={visibleCount > 0 && !detailsReady} aria-labelledby="workspace-results-heading" className="workspace-result-list" ref={resultsRef} tabIndex={-1}>
           {connectedOnly && !graphReady ? <li className="notice-inline" role="status">Loading connection data for this filter…</li> : null}
           {rows.slice(0, visibleCount).map((row: any) => {
             const recordType = displayNameFor("object_type", row.document.object_type);

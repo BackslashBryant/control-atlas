@@ -1,5 +1,6 @@
 import { humanizeSlug } from "../../app/display-names.mjs";
 import { catalogDisplayNameFor } from "./catalogProfiles";
+import { officialSourceFor, retrievedArtifactFor } from "./officialSource";
 import { sourceIdentityPresentationFor } from "./sourceIdentity";
 import {
   sourcePublicationTitle,
@@ -428,7 +429,7 @@ function resolveSourceMaterialItems(
           typeof source.relationship_count === "number"
             ? source.relationship_count
             : null,
-        url: source.artifact_url || source.catalog_browse_url || "",
+        url: retrievedArtifactFor(source).url,
         role,
         provenance: source.provenance_class || "",
         isCommunity,
@@ -461,7 +462,7 @@ function resolveConnectionEvidenceItems(
             : null,
         recordCount:
           typeof source.record_count === "number" ? source.record_count : null,
-        url: source.artifact_url || source.catalog_browse_url || "",
+        url: retrievedArtifactFor(source).url,
       };
     })
     .filter((item): item is ConnectionEvidenceItem => item !== null)
@@ -644,9 +645,8 @@ export function buildPublicationRegister(
       lifecycle: lifecycleField,
       recordCount,
       relationshipCount,
-      officialLink:
-        source.catalog_browse_url || source.artifact_url || "",
-      artifactLink: source.artifact_url || "",
+      officialLink: officialSourceFor(source).url,
+      artifactLink: retrievedArtifactFor(source).url,
       provenance: source.provenance_class || "official",
       eligibility: source.eligibility_status || "eligible",
       access: source.access_status || "public",
@@ -717,8 +717,11 @@ function buildRows(
       relationshipCount: isReference
         ? notApplicable("Reference pages do not publish imported relationships.")
         : countField(source.relationship_count, layer, "relationship"),
-      officialLink: source.catalog_browse_url || parent?.catalog_browse_url || "",
-      artifactLink: source.artifact_url || "",
+      officialLink: officialSourceFor(source, {
+        parent,
+        allowArtifactFallback: false,
+      }).url,
+      artifactLink: retrievedArtifactFor(source).url,
       provenance: source.provenance_class || "",
       eligibility: source.eligibility_status || "",
       access: source.access_status || "",

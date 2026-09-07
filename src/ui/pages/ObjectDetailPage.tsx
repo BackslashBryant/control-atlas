@@ -28,6 +28,10 @@ import {
 } from "../lib/atlasTreeModel";
 import { serializeHashUrl } from "../lib/hashRoutes";
 import {
+  officialSourceActionLabel,
+  officialSourceFor,
+} from "../lib/officialSource";
+import {
   Badge,
   copyText,
   formatRelationshipLabel,
@@ -62,6 +66,57 @@ function sentenceCaseKind(kind: string): string {
   return /[A-Z]/.test(kind.slice(1)) ? kind : kind.toLocaleLowerCase();
 }
 
+/**
+ * A record id that resolves to nothing. The page used to advise "try another
+ * identifier" while offering no field to try one in, which is a dead end at
+ * exactly the moment the reader most likely arrived from outside the product -
+ * a stale bookmark or a shared link. The search index is already in memory, so
+ * the recovery is a search box seeded with what they asked for.
+ */
+function RecordNotFound(props: {
+  attemptedId: string;
+  onNavigate: (view: ViewState["view"], patch?: Partial<ViewState>) => void;
+}) {
+  const attempted = String(props.attemptedId || "");
+  // Records are keyed "<catalog>:<item>"; the reader typed or followed the
+  // item, so search for that rather than the internal composite key.
+  const seed = attempted.includes(":") ? attempted.split(":").slice(1).join(":") : attempted;
+  const [query, setQuery] = useState(seed);
+  return (
+    <section className="notice">
+      <h1>Record not found</h1>
+      <p>
+        {seed
+          ? `Nothing in the Library matches "${seed}". Search for it, or browse from the Library.`
+          : "Search for another identifier or keyword, or browse from the Library."}
+      </p>
+      <form
+        className="record-not-found-search"
+        onSubmit={(event) => {
+          event.preventDefault();
+          props.onNavigate("search", { query: query.trim() });
+        }}
+        role="search"
+      >
+        <label htmlFor="record-not-found-query">Search Control Atlas</label>
+        <input
+          id="record-not-found-query"
+          name="q"
+          onChange={(event) => setQuery(event.target.value)}
+          type="search"
+          value={query}
+        />
+        <Button type="submit" variant="primary">
+          Search
+        </Button>
+      </form>
+      <AppLink onNavigate={props.onNavigate} variant="secondary" view="search">
+        Browse the Library
+      </AppLink>
+    </section>
+  );
+}
+
 export function ObjectDetailPage(props: {
   bundle: RuntimeBundle;
   state: Extract<ViewState, { view: "library-detail" }>;
@@ -76,28 +131,8 @@ export function ObjectDetailPage(props: {
   // Complete exploration is available via the Atlas link below.
   const RECORD_GROUP_SAMPLE = 5;
 
-  if (!node) {
-    return (
-      <section className="notice">
-        <h1>Record not found</h1>
-        <p>Try another identifier or keyword.</p>
-        <AppLink onNavigate={onNavigate} variant="primary" view="search">
-          Back to Library
-        </AppLink>
-      </section>
-    );
-  }
-
-  if (!document) {
-    return (
-      <section className="notice">
-        <h1>Record not found</h1>
-        <p>Try another identifier or keyword.</p>
-        <AppLink onNavigate={onNavigate} variant="primary" view="search">
-          Back to Library
-        </AppLink>
-      </section>
-    );
+  if (!node || !document) {
+    return <RecordNotFound attemptedId={state.node} onNavigate={onNavigate} />;
   }
 
   const source = bundle.runtime.getSource(document.source_id || node.source_id);
@@ -135,7 +170,7 @@ export function ObjectDetailPage(props: {
   const recordIdentity = identityPresentation.primary;
   const publishedName = identityPresentation.secondary;
   const kind = displayNameFor("object_type", objectType);
-  const officialSourceUrl = source?.artifact_url || source?.catalog_browse_url || "";
+  const officialSource = officialSourceFor(source);
   const claimOrigin = node.metadata?.origin || "publisher_normalized";
   const sourceIdentityLabel = claimOrigin === "atlas_editorial"
     ? "Control Atlas context"
@@ -258,14 +293,16 @@ export function ObjectDetailPage(props: {
           </p>
         ) : null}
         <div className="record-title-actions" data-route-primary-support="true">
-          {officialSourceUrl ? (
+          {officialSource.url ? (
             <ButtonLink
-              href={officialSourceUrl}
+              href={officialSource.url}
               rel="noopener noreferrer"
               target="_blank"
               variant="primary"
             >
-              {claimOrigin === "atlas_editorial" ? "View Atlas source" : "View official source"}
+              {claimOrigin === "atlas_editorial"
+                ? "View Atlas source"
+                : officialSourceActionLabel(officialSource)}
             </ButtonLink>
           ) : null}
           <AppLink

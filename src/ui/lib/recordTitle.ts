@@ -317,7 +317,13 @@ export function routeDocumentTitle(
     return `${BASE_TITLE} — Public reference for federal cyber requirements`;
   }
   if (state.view === "library-detail") {
-    const recordName = entityName || recordDisplayTitle(node) || "Record";
+    // A record id that resolves to nothing gets an honest title. It used to
+    // fall back to the literal "Record", so a dead link sat in history,
+    // bookmarks, and tab lists looking exactly like a real record - while the
+    // page itself said "Record not found". The unknown-route view already
+    // titles itself correctly; this now matches it.
+    const recordName = entityName || recordDisplayTitle(node);
+    if (!recordName) return `Record not found — ${BASE_TITLE}`;
     return `${recordName} — ${BASE_TITLE}`;
   }
   if (state.view === "commons-detail") {

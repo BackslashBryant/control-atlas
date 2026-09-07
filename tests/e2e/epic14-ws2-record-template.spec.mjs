@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { attachPageDiagnostics, dismissOnboarding, waitForAppReady } from "./support.mjs";
+import { attachPageDiagnostics, dismissOnboarding, OFFICIAL_SOURCE_ACTION, waitForAppReady } from "./support.mjs";
 
 async function openRecord(page, route) {
   attachPageDiagnostics(page);
@@ -26,7 +26,7 @@ test("WS2 record template leads with qualified identity and one source action", 
   await expect(page.locator(".record-classification-tags").locator(":scope > *"))
     .toHaveCount(4);
   await expect(page.getByRole("link", { name: "Filter the Library by Access Control", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "View official source", exact: true })).toHaveCount(1);
+  await expect(page.getByRole("link", { name: OFFICIAL_SOURCE_ACTION })).toHaveCount(1);
 
   await expect(page.getByRole("heading", { name: "Requirement", level: 2 })).toBeVisible();
   await expect(page.locator('[data-source-field="description"]')).toContainText(
@@ -358,7 +358,9 @@ test("WS6 record identities and derived category explanations stay source-truthf
     ["/#/record/disa-cci/CCI-000001", "DISA Policy CCI-000001"],
     ["/#/record/disa-cci/CCI-000015", "DISA Technical CCI-000015"],
     ["/#/record/disa-cci/CCI-000099", "DISA Policy and Technical CCI-000099"],
-    ["/#/record/mitre-attack/T1195.002", "MITRE Initial Access T1195.002"],
+    // ATT&CK techniques belong to every tactic MITRE lists, so the tactic is a
+    // published fact on the record rather than part of its identity.
+    ["/#/record/mitre-attack/T1195.002", "MITRE T1195.002"],
     ["/#/record/mitre-d3fend/D3-AA", "MITRE Harden D3-AA"],
     ["/#/record/disa-stig/V-256876", "DISA HMC V-256876"],
   ];

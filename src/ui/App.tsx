@@ -16,6 +16,7 @@ import {
   OfflineFallbackActions,
 } from "./components/LoadStatusPanel";
 import {
+  CompareSkeleton,
   DetailConnectionsSkeleton,
   LibrarySkeleton,
 } from "./components/LibrarySkeleton";
@@ -768,7 +769,14 @@ export function App() {
         </section>
       </main>
 
-      {chromeReady ? <SiteFooter onNavigate={navigate} /> : null}
+      {chromeReady ? (
+        <SiteFooter
+          onNavigate={navigate}
+          suppressSupportAsk={
+            viewState.view === "not-found" || viewState.view === "retired"
+          }
+        />
+      ) : null}
 
       {searchOverlayOpen ? (
         <RouteErrorBoundary onNavigate={navigate} resetKey={`search:${runtimeScopeKey}:${loadAttempt}`}>
@@ -869,6 +877,9 @@ function AppContent(props: {
     }
     if (state.view === "library-detail") {
       return <DetailConnectionsSkeleton />;
+    }
+    if (state.view === "matrix") {
+      return <CompareSkeleton />;
     }
     return (
       <DataPendingNotice

@@ -95,7 +95,12 @@ test("product-authored Resource collection summaries stay short and task-focused
 test("record page is contract-driven and contains no generic source or advice fallback", () => {
   const recordPage = read("src/ui/pages/ObjectDetailPage.tsx");
   assert.match(recordPage, /recordPresentationContract/);
-  assert.match(recordPage, /View official source/);
+  // The official-source action label now resolves through one shared module so
+  // a download is never labelled "View". The record page must route through it
+  // rather than hardcoding a label of its own.
+  assert.match(recordPage, /officialSourceActionLabel/);
+  assert.doesNotMatch(recordPage, /"View official source"/);
+  assert.match(read("src/ui/lib/officialSource.ts"), /View official source/);
   assert.match(recordPage, /See connections/);
   assert.match(recordPage, /About This Record/);
   assert.doesNotMatch(recordPage, />Official text</i);

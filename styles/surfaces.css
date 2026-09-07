@@ -10128,6 +10128,13 @@ input[type="checkbox"] {
   gap: var(--ca-space-3);
 }
 
+/* Seven goals in two columns left the last one alone on the fourth row, which
+   reads as a lesser option purely by position. An odd final item spans both
+   columns instead of sitting beside a hole. */
+.start-here-choice-grid > *:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
 .start-here-choice-grid > button,
 .start-here-publication {
   display: flex;
@@ -13098,12 +13105,29 @@ input[type="checkbox"] {
   overflow-wrap: anywhere;
 }
 
+/* A publisher citation is a numbered reference inside prose, not a sentence.
+   It sits raised and small so the statement still reads as the publisher wrote
+   it, and carries the full reference as its accessible name. */
 .publisher-citation {
-  display: inline-block;
-  margin-inline: 0.2em;
+  display: inline;
+  margin-inline-start: 0.1em;
   color: var(--ca-text-muted);
-  font-size: 0.9em;
+  font-size: 0.75em;
   font-style: normal;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.publisher-citation a {
+  color: inherit;
+  text-decoration: none;
+  padding-inline: 0.1em;
+}
+
+.publisher-citation a:hover,
+.publisher-citation a:focus-visible {
+  color: var(--ca-primary);
+  text-decoration: underline;
 }
 
 /* ==========================================================================
@@ -13116,9 +13140,30 @@ input[type="checkbox"] {
 .atlas-workbench {
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+  /* The depth trail is a row of the workbench, not the first thing inside the
+     map column. Left inside the column it pushed the map down 34px while the
+     detail panel stayed at the top of the grid, so the two bordered surfaces
+     sitting side by side started their borders on different lines. */
+  grid-template-rows: auto minmax(0, 1fr);
   align-items: start;
   gap: var(--ca-space-4);
   margin-top: var(--ca-space-2);
+}
+
+.atlas-workbench > .atlas-mapcol__trail {
+  grid-column: 1;
+  grid-row: 1;
+  margin-bottom: calc(var(--ca-space-4) * -1 + var(--ca-space-2));
+}
+
+.atlas-workbench > .atlas-mapcol {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.atlas-workbench > .atlas-detail {
+  grid-column: 2;
+  grid-row: 2;
 }
 
 /* With a subject the panel is a sticky column that stays put while the reader
@@ -13131,7 +13176,13 @@ input[type="checkbox"] {
 }
 
 .atlas-detail[data-resting="true"] {
-  align-content: center;
+  /* Was `center`, to stop a short prompt reading as a panel that failed to
+     load in a tall reserved column. Centering traded that for a large empty
+     band above the only content on the product's marquee surface. The panel
+     now fills on hover - pointing at a group describes it, which is what the
+     prompt already promised - so the content can start where the reader
+     looks. */
+  align-content: start;
   max-height: none;
 }
 
@@ -13439,7 +13490,12 @@ button.atlas-area__cell[data-floored="true"]:hover,
   align-content: flex-start;
   gap: 4px;
   overflow: hidden;
-  margin-top: auto;
+  /* Was `auto`, which pinned the names to the cell floor. Cell height encodes
+     quantity, so on the largest group that opened a tall empty band between
+     the description and the names it belongs to, and made the biggest group
+     look the emptiest. The names now follow the text they describe; the room
+     the encoding buys is left at the bottom, in one place. */
+  margin-top: 8px;
 }
 
 .atlas-area__members em {
@@ -13485,7 +13541,7 @@ button.atlas-area__cell[data-floored="true"]:hover,
   text-transform: uppercase;
 }
 
-.atlas-detail h3 {
+.atlas-detail h2 {
   margin: 0;
   font-size: 1.0625rem;
   line-height: 1.25;
@@ -14000,4 +14056,119 @@ button.atlas-area__cell[data-floored="true"]:hover,
 
 .atlas-lens-detail__open[data-crosses-framework="true"] {
   border-left: 2px solid color-mix(in srgb, var(--ca-lens-cross-framework) 55%, transparent);
+}
+
+/* Record-not-found recovery: the page advises trying another identifier, so it
+   has to offer somewhere to type one. Seeded with what the reader asked for. */
+.record-not-found-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.record-not-found-search label {
+  flex: 1 0 100%;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.record-not-found-search input {
+  flex: 1 1 260px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--ca-border);
+  border-radius: 3px;
+  background: var(--ca-surface);
+  color: var(--ca-text);
+  font-size: 15px;
+}
+
+/* Skeletons reserve the shape the hydrated page will take, so nothing moves
+   once the real content arrives. */
+.skeleton-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ca-space-3);
+}
+
+@media (min-width: 1024px) {
+  .skeleton-workspace {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+}
+
+.skeleton-rail {
+  display: none;
+  gap: 12px;
+}
+
+@media (min-width: 1024px) {
+  .skeleton-rail {
+    display: grid;
+    align-content: start;
+  }
+}
+
+.skeleton-compare-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: var(--ca-space-2);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ca-border);
+}
+
+.skeleton-note {
+  margin: 8px 0 16px;
+  color: var(--ca-text-muted);
+  font-size: 14px;
+}
+
+/* WCAG 2.2 AA 2.5.8 Target Size (Minimum). The visual controls stay the size
+   the design wants; the hit area is grown around them so a 16px checkbox and a
+   19px-tall inline tag link are still reachable with limited fine motor
+   control. Measured at 768x1024, where these were 16x16 and ~30x19. */
+.workspace-boolean-facet,
+.workspace-facet-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+  padding-block: 4px;
+}
+
+.workspace-boolean-facet input[type="checkbox"],
+.workspace-facet-option input[type="checkbox"] {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin: 4px;
+}
+
+.record-tag-line,
+.workspace-result-row__taxonomy a,
+.atlas-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding-block: 2px;
+}
+
+/* The chip row scrolls on narrow screens, but nothing said so: the fourth chip
+   sat fully off-screen and the third clipped at a word boundary, so the row
+   read as finished. A fade on the trailing edge shows there is more. */
+@media (width < 48rem) {
+  .workspace-result-groups {
+    position: relative;
+    /* A mask reads only the alpha channel, so `currentColor` is an opaque stop
+       without authoring a colour: the row keeps its own text colour and the
+       design tokens stay the only place a colour is written down. */
+    -webkit-mask-image: linear-gradient(to right, currentColor calc(100% - 32px), transparent 100%);
+    mask-image: linear-gradient(to right, currentColor calc(100% - 32px), transparent 100%);
+    scroll-padding-inline-end: 32px;
+  }
 }

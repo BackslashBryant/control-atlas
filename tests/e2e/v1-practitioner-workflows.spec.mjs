@@ -144,7 +144,9 @@ test("V1 workflow 07 — compare with a shareable explicit configuration", async
   await page.goBack();
   await waitForAppReady(page);
   await expect(page.locator("#compare-results")).toHaveCount(0);
-  await expect(page.getByLabel("Target publication")).toHaveValue("csf-2");
+  // The target field is a searchable publication picker like step 1, so it
+  // shows the publication's name rather than its catalog id.
+  await expect(page.getByLabel("Target publication")).toHaveValue("NIST CSF 2.0");
   await page.goForward();
   await waitForAppReady(page);
   await expect(

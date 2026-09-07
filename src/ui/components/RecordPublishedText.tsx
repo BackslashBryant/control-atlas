@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useState, type ReactNode } from "react";
+import { createContext, Fragment, useCallback, useContext, useState, type ReactNode } from "react";
 
 import { isValidSourceTextPresentation } from "../../shared/source-text-presentation.mjs";
 import { Button } from "./lsm";
@@ -34,9 +34,66 @@ const RECORD_FACT_LABELS: Record<string, string> = {
   severity: "Severity",
   severity_distribution: "Severity distribution",
   stig_id: "STIG ID",
+  tactic_memberships: "Tactics",
   tactic_title: "Tactic",
   vuln_id: "Finding / Vuln ID",
 };
+
+export type PublisherCitationEntry = { title: string; url: string };
+
+/**
+ * Publisher citations for the record currently being rendered.
+ *
+ * MITRE writes `(Citation: <key>)` into technique prose, where the key is an
+ * internal `source_name`. It used to be printed verbatim - 3,272 times across
+ * 789 of 874 ATT&CK records - producing text like "...and remote
+ * desktop.Source: volexity_0day_sophos_FW Compromised credentials...": a raw
+ * identifier in user-facing copy, no link, and a sentence broken by a missing
+ * separator.
+ *
+ * The ingestion now carries each record's own resolved references, so the
+ * marker becomes a numbered link the way ATT&CK's own site presents it. A key
+ * MITRE never published a reference for renders as nothing at all rather than
+ * as a key no reader can follow.
+ */
+const PublisherCitationContext = createContext<Record<string, PublisherCitationEntry>>({});
+
+function PublisherCitation(props: { citationKey: string }) {
+  const citations = useContext(PublisherCitationContext);
+  const resolved = citations[props.citationKey];
+  const position = Object.keys(citations).indexOf(props.citationKey) + 1;
+
+  // The publisher cited something here. Until the corpus carries the resolved
+  // reference the marker stays, unnumbered and unlinked, rather than vanishing:
+  // erasing it would quietly drop a fact the publisher wrote. What never
+  // appears either way is the internal source_name key.
+  if (!resolved) {
+    return (
+      <cite className="publisher-citation">
+        <span aria-label="Publisher cited a source here">[ref]</span>
+      </cite>
+    );
+  }
+
+  const marker = position > 0 ? `[${position}]` : "[ref]";
+  return (
+    <cite className="publisher-citation">
+      {resolved.url ? (
+        <a
+          aria-label={`Publisher reference: ${resolved.title}`}
+          href={resolved.url}
+          rel="noopener noreferrer"
+          target="_blank"
+          title={resolved.title}
+        >
+          {marker}
+        </a>
+      ) : (
+        <span title={resolved.title}>{marker}</span>
+      )}
+    </cite>
+  );
+}
 
 const ODP_PATTERN = /\[(?:Assignment|Selection)[^\]]*\]/g;
 
@@ -78,7 +135,7 @@ function renderPublisherInlineText(text: string): ReactNode {
     }
     const citation = part.match(/^\(Citation:\s*([^)]+)\)$/);
     if (citation) {
-      return <cite className="publisher-citation" key={`citation-${index}`}>Source: {citation[1]}</cite>;
+      return <PublisherCitation citationKey={citation[1].trim()} key={`citation-${index}`} />;
     }
     return <Fragment key={`text-${index}`}>{part}</Fragment>;
   });
@@ -286,6 +343,32 @@ export function SourceSectionContent(props: { kind: string; value: any; presenta
   return <SourceTextBlocks value={String(props.value)} presentation={props.presentation} />;
 }
 
+/**
+ * A published fact is rendered in the reader's language, never as a raw
+ * internal value. `String(false)` used to reach the page as the literal text
+ * "false" under a heading reading "Published facts", and a list of publisher
+ * objects came out as "0: [object Object]".
+ */
+function formatFactValue(value: unknown): string {
+  if (typeof value === "boolean") return value ? "Yes" : "No";
+  if (Array.isArray(value)) {
+    return value
+      .map((entry) => {
+        if (entry && typeof entry === "object") {
+          const record = entry as Record<string, unknown>;
+          return String(record.title || record.label || record.name || record.id || "");
+        }
+        return String(entry ?? "");
+      })
+      .filter(Boolean)
+      .join(" · ");
+  }
+  if (value && typeof value === "object") {
+    return Object.entries(value).map(([key, count]) => `${key}: ${count}`).join(" · ");
+  }
+  return String(value);
+}
+
 export function RecordNativeFacts(props: { fields: string[]; metadata: Record<string, any>; title: string }) {
   const rows = props.fields.flatMap((field) => {
     const value = props.metadata[field];
@@ -293,9 +376,8 @@ export function RecordNativeFacts(props: { fields: string[]; metadata: Record<st
     if ((value == null || value === "" || (Array.isArray(value) && value.length === 0)) && !absenceReason) return [];
     const displayValue = absenceReason
       ? `Not published — ${absenceReason}`
-      : typeof value === "object"
-      ? Object.entries(value).map(([key, count]) => `${key}: ${count}`).join(" · ")
-      : String(value);
+      : formatFactValue(value);
+    if (!displayValue) return [];
     return [{ field, displayValue }];
   });
   if (!rows.length) return null;
@@ -353,6 +435,7 @@ export function RecordPublishedText(props: {
   if (!shown.length) return null;
   const Heading = (props.headingLevel === 3 ? "h3" : "h2") as "h2" | "h3";
   return (
+    <PublisherCitationContext.Provider value={props.metadata.citations || {}}>
     <div
       className="record-official-text"
       data-claim-origin={props.claimOrigin}
@@ -370,6 +453,7 @@ export function RecordPublishedText(props: {
         </section>
       ))}
     </div>
+    </PublisherCitationContext.Provider>
   );
 }
 

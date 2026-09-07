@@ -64,7 +64,7 @@ export function StartHerePage(props: {
         steps={[
           { id: "goal", label: "Goal" },
           { id: "context", label: "Context" },
-          { id: "plan", label: "Starting plan" },
+          { id: "plan", label: "Your starting plan", outcome: true },
         ]}
       />
 
@@ -97,7 +97,7 @@ export function StartHerePage(props: {
 
           {step === 3 && plan ? (
             <div aria-labelledby="start-here-plan" className="stack start-here-plan">
-              <span className="label">03 / Starting plan</span>
+              <span className="label">Your starting plan</span>
               <h2 id="start-here-plan">Start with {publicationName(bundle, plan.startWith.catalogId)}</h2>
               <p>Based on your answers, begin with this publication.</p>
               <p className="notice-inline">{SITE_COPY.product.boundary}</p>

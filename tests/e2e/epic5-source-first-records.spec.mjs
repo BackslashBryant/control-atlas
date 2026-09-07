@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { attachPageDiagnostics, dismissOnboarding, waitForAppReady } from "./support.mjs";
+import { attachPageDiagnostics, dismissOnboarding, OFFICIAL_SOURCE_ACTION, waitForAppReady } from "./support.mjs";
 
 /** @type {Array<[string, string, string, string, string?]>} */
 const records = [
@@ -37,7 +37,7 @@ for (const [label, width, height] of viewports) {
         const sourceSection = page.locator(`[data-source-field="${sourceField}"]`);
         await expect(sourceSection.getByRole("heading", { name: sourceHeading, exact: true })).toBeVisible();
         await expect(sourceSection.locator("p")).not.toBeEmpty();
-        await expect(page.getByRole("link", { name: "View official source", exact: true })).toHaveCount(1);
+        await expect(page.getByRole("link", { name: OFFICIAL_SOURCE_ACTION })).toHaveCount(1);
         await expect(page.getByText(/What this is|What you need to do|How to satisfy it/i)).toHaveCount(0);
         await expect(page.locator("[data-record-source-error]")).toHaveCount(0);
       });
