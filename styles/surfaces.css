@@ -14164,8 +14164,11 @@ button.atlas-area__cell[data-floored="true"]:hover,
 @media (width < 48rem) {
   .workspace-result-groups {
     position: relative;
-    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent 100%);
-    mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent 100%);
+    /* A mask reads only the alpha channel, so `currentColor` is an opaque stop
+       without authoring a colour: the row keeps its own text colour and the
+       design tokens stay the only place a colour is written down. */
+    -webkit-mask-image: linear-gradient(to right, currentColor calc(100% - 32px), transparent 100%);
+    mask-image: linear-gradient(to right, currentColor calc(100% - 32px), transparent 100%);
     scroll-padding-inline-end: 32px;
   }
 }
