@@ -1654,8 +1654,15 @@ export function buildTemplateDocument(options, dataset) {
  * @param {string} extension
  * @returns {string}
  */
-export function templateFilename(templateType, extension) {
-  const date = new Date().toISOString().split("T")[0];
+export function templateFilename(templateType, extension, now = new Date()) {
+  // The viewer's calendar date, not UTC. This audience is US-based, so
+  // toISOString() stamped every document generated after 20:00 Eastern with
+  // tomorrow's date - and on a POA&M, dates are evidence.
+  const date = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0"),
+  ].join("-");
   return `${templateType.replace(/_/g, "-")}-${date}.${extension}`;
 }
 

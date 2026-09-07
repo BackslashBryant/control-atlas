@@ -1102,6 +1102,7 @@ export function TemplatesPage(props: {
                     })
                   }
                   options={catalogOptions}
+                  required
                   value={state.framework || ""}
                 />
               ) : null}
@@ -1287,21 +1288,31 @@ export function TemplatesPage(props: {
             {documentPreview?.doc && generationState?.previewAvailable ? (
               <TemplateDocumentPreview doc={documentPreview.doc} format={activeFormat} />
             ) : (
-              <p className="generation-status tone-warning" role="status">
+              <p className="generation-status tone-warning" id="document-download-reason" role="status">
                 {generationState?.status ||
-                  "Select the required inputs before previewing or downloading."}
+                  "Choose a catalog or program to enable the download."}
               </p>
             )}
             <div className="card-actions">
               <Button
                 id="document-download-action"
                 variant="primary"
+                // A disabled control has to say why. Without this a
+                // screen-reader user heard "Download, button, dimmed" and had
+                // no path to the reason, and the visible line above it was not
+                // programmatically connected to the control it blocks.
+                aria-describedby={
+                  generationState?.downloadEnabled ? undefined : "document-download-reason"
+                }
                 disabled={generating || !generationState?.downloadEnabled}
                 onClick={createTemplate}
               >
-                {generating ? "Preparing download…" : `Download ${selectedTemplate.display_name} (${FORMAT_LABELS[activeFormat] || activeFormat})`}
+                {generating ? "Preparing download…" : `Download ${selectedTemplate.display_name} (${FORMAT_SHORT[activeFormat] || activeFormat})`}
               </Button>
             </div>
+            <span aria-live="polite" className="visually-hidden">
+              {generationState?.downloadEnabled ? "Download ready." : ""}
+            </span>
             {generationStatus ? <p className={`generation-status tone-${generationTone}`} role="status">{generationStatus}</p> : null}
           </section>
         </section>

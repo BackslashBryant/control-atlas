@@ -629,17 +629,24 @@ export function SelectField(props: {
   options: Array<{ value: string; label: string; disabled?: boolean }>;
   onChange: (value: string) => void;
   disabled?: boolean;
+  /** Marks the field as blocking, for assistive tech as well as sighted readers. */
+  required?: boolean;
 }) {
   const fieldId = `field-${props.label.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}`;
 
   return (
     <label className="field" htmlFor={fieldId}>
-      <span>{props.label}</span>
+      <span>
+        {props.label}
+        {props.required ? <span className="field-required"> (required)</span> : null}
+      </span>
       <select
         aria-label={props.label}
+        aria-required={props.required || undefined}
         disabled={props.disabled}
         id={fieldId}
         onChange={(event) => props.onChange(event.target.value)}
+        required={props.required}
         value={props.value}
       >
         <option value="">{props.emptyLabel || "All"}</option>

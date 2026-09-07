@@ -710,6 +710,39 @@ function relationshipId(prefix, sourceNodeId, targetNodeId, relationshipType) {
   );
 }
 
+/**
+ * Catalogs whose publisher states the requirement instead of naming it, so the
+ * statement *is* the title.
+ *
+ * NIST CSF 2.0 subcategories have no short name, which is why
+ * `tools/importers/csf-reference-tool-adapter.mjs` asserts that NIST's own
+ * Reference Tool title equals our description. The normalized snapshot stores
+ * the identifier in `title`, so 106 of 135 CSF records rendered their id twice
+ * ("GV.OC-03 GV.OC-03") wherever a title was shown - most visibly on every row
+ * of the 800-53-to-CSF crosswalk, one of the most-used mappings in federal
+ * practice.
+ *
+ * Deliberately narrow. DISA CCI records also carry their identifier as their
+ * title, but their bare-id label is an existing decision (see the label comment
+ * below), and 5,138 long labels would also fight the Atlas rule that a cell is
+ * never narrower than its own name.
+ */
+const STATEMENT_TITLED_CATALOGS = new Set(["csf-2"]);
+
+/**
+ * The publisher's title for a record, never its identifier repeated back.
+ * Falls back to the statement only where that is what the publisher titles the
+ * record with, and only when the stored title adds nothing over the id.
+ */
+function publisherTitleFor(record, catalogId) {
+  const title = String(record.title || "").trim();
+  const id = String(record.id || "").trim();
+  if (title && title !== id) return record.title;
+  if (!STATEMENT_TITLED_CATALOGS.has(catalogId)) return record.title || "";
+  const description = String(record.description || "").trim();
+  return description || record.title || "";
+}
+
 function nodeType(defaultType, recordId) {
   return defaultType === "control" && String(recordId).includes(".")
     ? "control_enhancement"
@@ -1153,6 +1186,7 @@ function buildNodes(registry) {
         catalog_id: catalogId,
         related_categories: relatedCategories,
       });
+      const publisherTitle = publisherTitleFor(record, catalogId);
       pushEligibleNode(
         state,
         registry,
@@ -1167,9 +1201,9 @@ function buildNodes(registry) {
           // naive "<id> <title>" join printed "CCI-000015 CCI-000015" on every
           // one of them (breadcrumbs, search results, Atlas labels).
           label:
-            record.title && !String(record.title).startsWith(String(record.id))
-              ? `${record.id} ${record.title}`
-              : String(record.title || record.id),
+            publisherTitle && !String(publisherTitle).startsWith(String(record.id))
+              ? `${record.id} ${publisherTitle}`
+              : String(publisherTitle || record.id),
           source_id: sourceId,
           lifecycle_status: lifecycleStatus(record),
           metadata: {
@@ -1177,7 +1211,7 @@ function buildNodes(registry) {
             ingestion_source_id: ingestionSourceId,
             source_locator: record.source?.locator || `${filename}#${record.id}`,
             item_id: record.id,
-            title: record.title || record.id,
+            title: publisherTitle || record.id,
             // The NIST Mobile Threat Catalogue publishes a title plus
             // structured origin/examples/countermeasures. Older normalized
             // snapshots used a generated sentence when ThreatOrigin was

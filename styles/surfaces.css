@@ -13098,12 +13098,29 @@ input[type="checkbox"] {
   overflow-wrap: anywhere;
 }
 
+/* A publisher citation is a numbered reference inside prose, not a sentence.
+   It sits raised and small so the statement still reads as the publisher wrote
+   it, and carries the full reference as its accessible name. */
 .publisher-citation {
-  display: inline-block;
-  margin-inline: 0.2em;
+  display: inline;
+  margin-inline-start: 0.1em;
   color: var(--ca-text-muted);
-  font-size: 0.9em;
+  font-size: 0.75em;
   font-style: normal;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.publisher-citation a {
+  color: inherit;
+  text-decoration: none;
+  padding-inline: 0.1em;
+}
+
+.publisher-citation a:hover,
+.publisher-citation a:focus-visible {
+  color: var(--ca-primary);
+  text-decoration: underline;
 }
 
 /* ==========================================================================
@@ -14000,4 +14017,34 @@ button.atlas-area__cell[data-floored="true"]:hover,
 
 .atlas-lens-detail__open[data-crosses-framework="true"] {
   border-left: 2px solid color-mix(in srgb, var(--ca-lens-cross-framework) 55%, transparent);
+}
+
+/* Record-not-found recovery: the page advises trying another identifier, so it
+   has to offer somewhere to type one. Seeded with what the reader asked for. */
+.record-not-found-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.record-not-found-search label {
+  flex: 1 0 100%;
+  color: var(--ca-text-muted);
+  font-family: var(--ca-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.record-not-found-search input {
+  flex: 1 1 260px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--ca-border);
+  border-radius: 3px;
+  background: var(--ca-surface);
+  color: var(--ca-text);
+  font-size: 15px;
 }

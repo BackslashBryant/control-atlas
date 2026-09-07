@@ -182,7 +182,11 @@ const BASE_CONTRACTS = {
     },
   }),
   attack_technique: atomic([section("description", "Technique Description")], ["description"], [], {
-    facts: ["tactic_title", "is_subtechnique"],
+    // MITRE publishes every tactic a technique belongs to, and 195 of 874
+    // techniques carry more than one. Stating tactics[0] under a heading
+    // reading "Published facts" under-scopes threat coverage, so the panel
+    // renders the full membership list instead of the derived primary.
+    facts: ["tactic_memberships", "is_subtechnique"],
     fields: {
       tactic_id: { disposition: "rendered_secondary", origin: "publisher" },
       tactic_title: { disposition: "rendered_secondary", origin: "publisher" },
