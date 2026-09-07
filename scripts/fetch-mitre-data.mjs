@@ -286,6 +286,10 @@ export async function fetchMitreData(options = {}) {
       attackMap,
       nistMap,
       fallbackMode: mappingsFallback || null,
+      // A dead mapping endpoint does not make the other four artifacts stale.
+      // Flagging it as partial lets the hydration manifest record the fresh
+      // checksums it just produced, while a full fallback still records none.
+      partialFallback: Boolean(mappingsFallback),
     };
   } catch (error) {
     if (committedArtifactsPresent()) {
@@ -309,7 +313,13 @@ async function main() {
   writeJsonAtomically(COMMITTED.d3fend, result.d3fend);
   writeJsonAtomically(COMMITTED.attackMap, result.attackMap);
   writeJsonAtomically(COMMITTED.nistMap, result.nistMap);
-  if (!result.fallbackMode) updateHydrationManifest(result);
+  // Record the retrieval evidence whenever something was actually retrieved.
+  // Skipping this on a partial fallback left the freshly fetched D3FEND
+  // ontology's checksum unrecorded, and verify:manifests rightly rejected the
+  // disagreement between the artifact on disk and the manifest describing it.
+  if (!result.fallbackMode || result.partialFallback) {
+    updateHydrationManifest(result);
+  }
 
   if (result.fallbackMode) {
     console.log(`MITRE fetch fallback: ${result.fallbackMode}`);

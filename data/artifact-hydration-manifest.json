@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T23:11:18.444Z",
+  "generated_at": "2026-09-07T04:19:36.682Z",
   "hydrated": 4,
   "removed_orphans": [],
   "results": [
@@ -41,7 +41,7 @@
       "sha256": "sha256:fbe2a38a817899d4f3cf5f6ee5f29b332448ad6ebac0d3eee519e774778f49bc",
       "byte_length": 38961746,
       "record_count": 858,
-      "retrieved_at": "2026-08-25"
+      "retrieved_at": "2026-09-07"
     },
     {
       "id": "artifact-mitre-attack-ics",
@@ -51,17 +51,17 @@
       "sha256": "sha256:348a4e9a54dd9011329f92e0fd20ba72cae2fec76f0e2790b1e98f0de8f139bf",
       "byte_length": 2854063,
       "record_count": 106,
-      "retrieved_at": "2026-08-25"
+      "retrieved_at": "2026-09-07"
     },
     {
       "id": "artifact-mitre-d3fend-ontology",
       "status": "OK",
       "http": 200,
       "url": "https://d3fend.mitre.org/ontologies/d3fend.json",
-      "sha256": "sha256:11e6ce26ab2bef1500ca9747a74c05ec98c0c554658c09d26bfbfa752d278a45",
-      "byte_length": 3931695,
+      "sha256": "sha256:67e363c95362897199a0e29fb383dc87cd9d575f7cc03494f9a8ae5614132380",
+      "byte_length": 3869363,
       "record_count": 271,
-      "retrieved_at": "2026-08-25"
+      "retrieved_at": "2026-09-07"
     },
     {
       "id": "artifact-mitre-d3fend-mappings",
