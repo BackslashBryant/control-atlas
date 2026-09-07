@@ -140,7 +140,7 @@ test("Atlas first paint is a semantic map with drill-down and history", async ({
 
   await atlas.getByRole("button", { name: /^ATT&CK / }).first().click();
   await expect(page).toHaveURL(/atlasFramework=mitre-attack/);
-  await expect(page.getByTestId("atlas-detail").getByRole("heading", { level: 3 }))
+  await expect(page.getByTestId("atlas-detail").getByRole("heading", { level: 2 }))
     .toContainText("ATT&CK");
 
   // History still walks back out of the map one level at a time.

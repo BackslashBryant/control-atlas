@@ -13,10 +13,13 @@ test.beforeEach(async ({ page }) => {
 
 test("selected publications expose their verified official destinations", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
+  // The official destination is the publication a practitioner can cite, which
+  // is not always the register's browse field: for SP 800-53 that field is the
+  // CPRT tool home while the publication page sits in artifact_url.
   const cases = [
     {
       source: "nist-800-53",
-      href: "https://csrc.nist.gov/projects/cprt/catalog#/cprt/home",
+      href: "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
     },
     {
       source: "mitre-d3fend-ontology",

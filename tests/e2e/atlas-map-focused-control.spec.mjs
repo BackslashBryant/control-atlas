@@ -73,7 +73,9 @@ test("Hierarchy panel shows real structural substance, not just breadcrumb lines
   await expect(page.getByRole("region", { name: "Page context" })).toContainText(
     "AC-2 — Account Management",
   );
-  await expect(panel.getByRole("link", { name: "View official source" })).toBeVisible();
+  // This link goes to the in-app Sources register, not the publisher, so it no
+  // longer borrows the label the external official-source action uses.
+  await expect(panel.getByRole("link", { name: "View source details" })).toBeVisible();
 });
 
 test("focused Hierarchy badges the organizing hops, not just the direct record page", async ({ page }) => {

@@ -69,7 +69,7 @@ for (const viewport of VIEWPORTS) {
     await expect(page).toHaveURL(/atlasFramework=nist-800-53/);
     await expect(page).not.toHaveURL(/atlasBaseline=/);
     await expect(
-      page.getByTestId("atlas-detail").getByRole("heading", { level: 3 }),
+      page.getByTestId("atlas-detail").getByRole("heading", { level: 2 }),
     ).toContainText("800-53");
 
     // The group stays one step back, never a return to the top of the route.

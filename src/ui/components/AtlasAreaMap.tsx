@@ -131,6 +131,73 @@ function packIntoColumns(nodes: AtlasAreaNode[], count: number): Column[] {
   return columns;
 }
 
+/** A board small enough to partition exhaustively rather than greedily. */
+const EXHAUSTIVE_PACK_LIMIT = 8;
+
+/**
+ * The bottom of the map is a line the eye reads, and greedy packing does not
+ * always find the flush answer even when one exists. Five groups holding
+ * 8/6/6/4/4 frameworks cannot balance across three columns - the best split is
+ * 10/10/8, which leaves a notch the height of two frameworks in the corner -
+ * but across two columns 8+6 and 6+4+4 are both 14, and the mosaic ends flush.
+ *
+ * Small boards are searched exhaustively for the flattest split. Larger ones
+ * keep the greedy pack, which is close enough and stays cheap.
+ */
+export function packBalanced(nodes: AtlasAreaNode[], count: number): Column[] {
+  const ordered = [...nodes].sort((a, b) => b.value - a.value);
+  if (count < 2 || ordered.length > EXHAUSTIVE_PACK_LIMIT) {
+    return packIntoColumns(ordered, count);
+  }
+
+  const values = ordered.map((node) => Math.max(1, node.value));
+  const assignment = new Array<number>(ordered.length).fill(0);
+  let best: number[] | null = null;
+  let bestSpread = Infinity;
+
+  const walk = (index: number, totals: number[]) => {
+    if (index === ordered.length) {
+      if (totals.some((total) => total === 0)) return;
+      const spread = Math.max(...totals) - Math.min(...totals);
+      if (spread < bestSpread) {
+        bestSpread = spread;
+        best = [...assignment];
+      }
+      return;
+    }
+    // The largest item is pinned to the first column: every distinct split is
+    // still reachable, and it removes the count! duplicate relabelings.
+    const limit = index === 0 ? 1 : count;
+    for (let column = 0; column < limit; column += 1) {
+      assignment[index] = column;
+      totals[column] += values[index];
+      if (Math.max(...totals) - Math.min(...totals) < bestSpread) {
+        walk(index + 1, totals);
+      }
+      totals[column] -= values[index];
+    }
+  };
+  walk(0, new Array<number>(count).fill(0));
+
+  if (!best) return packIntoColumns(ordered, count);
+  const chosen = best as number[];
+  const columns: Column[] = Array.from({ length: count }, () => ({
+    nodes: [],
+    total: 0,
+  }));
+  ordered.forEach((node, index) => {
+    const column = columns[chosen[index]];
+    column.nodes.push(node);
+    column.total += Math.max(1, node.value);
+  });
+  return columns;
+}
+
+export function packSpread(columns: Column[]): number {
+  const totals = columns.map((column) => column.total);
+  return Math.max(...totals) - Math.min(...totals);
+}
+
 /**
  * The whole map, in one idiom: a cell per thing, sized by what it holds.
  *
@@ -217,15 +284,39 @@ export function AtlasAreaMap(props: AtlasAreaMapProps) {
     // Enough columns that every cell can clear its minimum height, so a level
     // holding twenty-eight families does not force them all below reading size.
     const neededForHeight = Math.ceil((nodes.length * (MIN_CELL + GAP)) / wanted);
-    const columnCount = Math.max(
+    const preferredCount = Math.max(
       1,
       Math.min(
         fitsAcross,
         Math.max(neededForHeight, Math.ceil(Math.sqrt(nodes.length))),
       ),
     );
+
+    // The square-ish count is the right shape almost always, but it is chosen
+    // without looking at what the cells actually hold, so it can pick a count
+    // no split can balance. Check one step either side and take the flattest
+    // bottom; ties keep the preferred shape. Bounded to a step so a board never
+    // collapses into one long column just because that is trivially flush.
+    const candidates = [preferredCount - 1, preferredCount, preferredCount + 1]
+      .filter(
+        (count) =>
+          count >= Math.max(1, neededForHeight) && count <= fitsAcross,
+      );
+    let columnCount = preferredCount;
+    let columns = packBalanced(nodes, preferredCount);
+    if (nodes.length <= EXHAUSTIVE_PACK_LIMIT) {
+      let bestSpread = packSpread(columns);
+      for (const count of candidates) {
+        if (count === preferredCount) continue;
+        const candidate = packBalanced(nodes, count);
+        if (packSpread(candidate) < bestSpread) {
+          bestSpread = packSpread(candidate);
+          columnCount = count;
+          columns = candidate;
+        }
+      }
+    }
     const columnWidth = (width - GAP * (columnCount - 1)) / columnCount;
-    const columns = packIntoColumns(nodes, columnCount);
 
     const tallestTotal = Math.max(...columns.map((column) => column.total), 1);
     const mostCells = Math.max(...columns.map((column) => column.nodes.length), 1);
@@ -254,11 +345,29 @@ export function AtlasAreaMap(props: AtlasAreaMapProps) {
       unitPx *= (wanted / tallest) * 0.99;
     }
 
+    // Every column carries the same number of gaps' worth of height regardless
+    // of how many cells it holds, so a column of two used to finish a gap short
+    // of a column of three and the mosaic ended on a ragged line. The extra is
+    // spent widening that column's own gaps, never its cells: heights still say
+    // exactly what each group holds, and the bottom reads as one edge.
+    const columnExtents = columns.map((column) => {
+      const heights = heightsFor(column);
+      return (
+        heights.reduce((sum, value) => sum + value, 0)
+        + GAP * (column.nodes.length - 1)
+      );
+    });
+    const flushTo = Math.max(...columnExtents, 0);
+
     const cells: Laid[] = [];
     let tallestColumn = 0;
     columns.forEach((column, columnIndex) => {
       let top = 0;
       const heights = heightsFor(column);
+      const seams = column.nodes.length - 1;
+      const contentHeight = heights.reduce((sum, value) => sum + value, 0);
+      const columnGap =
+        seams > 0 ? Math.max(GAP, (flushTo - contentHeight) / seams) : GAP;
       column.nodes.forEach((node, index) => {
         const cellHeight = heights[index];
         cells.push({
@@ -269,9 +378,9 @@ export function AtlasAreaMap(props: AtlasAreaMapProps) {
           height: cellHeight,
           floored: Math.max(1, node.value) * unitPx < cellHeight - 0.5,
         });
-        top += cellHeight + GAP;
+        top += cellHeight + columnGap;
       });
-      tallestColumn = Math.max(tallestColumn, top - GAP);
+      tallestColumn = Math.max(tallestColumn, top - columnGap);
     });
 
     return { laid: cells, height: Math.round(Math.max(wanted, tallestColumn)) };
