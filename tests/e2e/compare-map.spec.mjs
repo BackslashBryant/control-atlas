@@ -112,11 +112,16 @@ test("Frameworks reveals connected targets and a two-column published result", a
   await expect(support).toContainText("SP 800-53 Rev. 5");
   await expect(support).toContainText(/\d+ connected publications/);
 
+  // Both steps now pick a publication the same way: a searchable field over an
+  // open list of every connected publication, rather than a dropdown for the
+  // target and an open list for the source.
   const target = page.getByLabel("Target publication");
   await expect(target).toBeVisible();
-  await expect(target.locator('option[value="csf-2"]')).toHaveText("NIST CSF 2.0");
-  await expect(target.locator('option[value="dod-rai"]')).toHaveCount(0);
-  await target.selectOption("csf-2");
+  const targetOptions = page.locator(".compare-option-list");
+  await expect(targetOptions.getByRole("button", { name: "NIST CSF 2.0", exact: true })).toBeVisible();
+  // A publication with no published crosswalk to the source is not offered.
+  await expect(targetOptions.getByRole("button", { name: /Responsible AI/ })).toHaveCount(0);
+  await targetOptions.getByRole("button", { name: "NIST CSF 2.0", exact: true }).click();
   await page.getByRole("button", { name: "Show published mappings" }).click();
 
   await expect(page.locator("#compare-results")).toBeVisible({ timeout: 30_000 });
@@ -247,12 +252,20 @@ test("Specific item reveals only targets with a real mapping for the exact item"
 
   const target = page.getByLabel("Target publication");
   await expect(target).toBeVisible({ timeout: 30_000 });
-  await expect(target.locator('option[value="nist-800-53"]')).toHaveText(
-    "SP 800-53 Rev. 5",
-  );
-  await expect(target.locator('option[value="dod-rai"]')).toHaveCount(0);
+  await expect(
+    page.locator(".compare-option-list").getByRole("button", {
+      name: "SP 800-53 Rev. 5",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.locator(".compare-option-list").getByRole("button", { name: /Responsible AI/ }),
+  ).toHaveCount(0);
 
-  await target.selectOption("nist-800-53");
+  await page
+    .locator(".compare-option-list")
+    .getByRole("button", { name: "SP 800-53 Rev. 5", exact: true })
+    .click();
   await page.getByRole("button", { name: "Show published mappings" }).click();
   await expect(page.locator(".compare-mapping-total")).toContainText(
     "4 published mappings across",

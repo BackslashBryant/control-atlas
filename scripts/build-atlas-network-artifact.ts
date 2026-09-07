@@ -53,5 +53,20 @@ const artifact = buildAtlasSemanticProjections({
 
 const target = resolve(output);
 mkdirSync(dirname(target), { recursive: true });
-writeFileSync(target, `${JSON.stringify(artifact)}\n`, "utf8");
-console.log(`Built semantic Atlas: ${Object.keys(artifact.ecosystems).length} publisher ecosystems, ${artifact.landscape.edges.length} landscape relationships, ${Object.keys(artifact.publications).length} publication projections.`);
+
+// The Atlas landing draws five group cards, but the artifact feeding it
+// carried the whole graph: `details` and `record_locations` are 21MB of its
+// 30MB and answer only a drilldown or a record search, neither of which has
+// happened on first paint. They ship as a companion the route fetches after
+// it has drawn, so opening the Atlas costs the board rather than the corpus.
+const { details, record_locations: recordLocations, ...landing } = artifact;
+const detailsTarget = target.replace(/[.]json$/, "-details.json");
+writeFileSync(target, `${JSON.stringify(landing)}
+`, "utf8");
+writeFileSync(
+  detailsTarget,
+  `${JSON.stringify({ details, record_locations: recordLocations })}
+`,
+  "utf8",
+);
+console.log(`Built semantic Atlas: ${Object.keys(artifact.ecosystems).length} publisher ecosystems, ${artifact.landscape.edges.length} landscape relationships, ${Object.keys(artifact.publications).length} publication projections, plus ${Object.keys(details).length} deferred detail projections and ${Object.keys(recordLocations).length} record locations.`);

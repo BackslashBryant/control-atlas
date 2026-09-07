@@ -153,13 +153,26 @@ export async function fetchMitreData(options = {}) {
       enterpriseStix,
       icsStix,
       d3fendOntology,
-      d3fendMappings,
     ] = await Promise.all([
       fetchJson(REMOTE.enterpriseAttack, fetchImpl),
       fetchJson(REMOTE.icsAttack, fetchImpl),
       fetchJson(REMOTE.d3fendOntology, fetchImpl),
-      fetchJson(REMOTE.d3fendMappings, fetchImpl),
     ]);
+
+    // The ATT&CK-to-D3FEND inference endpoint is the least reliable upstream
+    // here, and it has been 404 in the field. It only feeds one of the five
+    // artifacts, so failing it separately keeps an outage on MITRE's inference
+    // API from freezing the other four at their committed snapshot. Each
+    // artifact is still all-or-nothing: this never mixes a fresh parse with
+    // stale provenance inside one document.
+    let d3fendMappings = null;
+    let mappingsFallback = "";
+    try {
+      d3fendMappings = await fetchJson(REMOTE.d3fendMappings, fetchImpl);
+    } catch (error) {
+      if (!committedArtifactsPresent()) throw error;
+      mappingsFallback = `attack-map:${error.message}`;
+    }
 
     const snapshotDate = new Date().toISOString().slice(0, 10);
     const enterpriseVersion = ATTACK_RELEASE;
@@ -169,7 +182,7 @@ export async function fetchMitreData(options = {}) {
     const enterpriseChecksum = checksum(JSON.stringify(enterpriseStix));
     const icsChecksum = checksum(JSON.stringify(icsStix));
     const d3fendChecksum = checksum(JSON.stringify(d3fendOntology));
-    const mappingsChecksum = checksum(JSON.stringify(d3fendMappings));
+    const mappingsChecksum = d3fendMappings ? checksum(JSON.stringify(d3fendMappings)) : '';
 
     const enterprise = parseEnterpriseAttackStix(enterpriseStix, {
       artifactUrl: REMOTE.enterpriseAttack,
@@ -244,14 +257,19 @@ export async function fetchMitreData(options = {}) {
       },
     );
 
-    const attackMap = buildMappingDocument(attackRelationships, {
-      artifactUrl: REMOTE.d3fendMappings,
-      version: D3FEND_RELEASE,
-      snapshotDate,
-      checksum: mappingsChecksum,
-      byteLength: Buffer.byteLength(JSON.stringify(d3fendMappings)),
-      provenance: 'MITRE D3FEND inferred ATT&CK technique to defensive technique mappings',
-    });
+    // Keep the committed mapping document verbatim when the inference endpoint
+    // is unavailable, rather than publishing an empty one that would read as
+    // "MITRE stopped mapping these".
+    const attackMap = d3fendMappings
+      ? buildMappingDocument(attackRelationships, {
+          artifactUrl: REMOTE.d3fendMappings,
+          version: D3FEND_RELEASE,
+          snapshotDate,
+          checksum: mappingsChecksum,
+          byteLength: Buffer.byteLength(JSON.stringify(d3fendMappings)),
+          provenance: 'MITRE D3FEND inferred ATT&CK technique to defensive technique mappings',
+        })
+      : readJson(COMMITTED.attackMap);
     const nistMap = buildMappingDocument(nistRelationships, {
       artifactUrl: REMOTE.d3fendOntology,
       version: String(d3fendVersion),
@@ -267,7 +285,7 @@ export async function fetchMitreData(options = {}) {
       d3fend,
       attackMap,
       nistMap,
-      fallbackMode: null,
+      fallbackMode: mappingsFallback || null,
     };
   } catch (error) {
     if (committedArtifactsPresent()) {

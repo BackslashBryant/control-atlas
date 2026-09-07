@@ -3,7 +3,7 @@
   "source_key": "mitre-attack-ics",
   "source_artifact": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/ics-attack/ics-attack-19.2.json",
   "source_version": "19.2",
-  "snapshot_date": "2026-08-25",
+  "snapshot_date": "2026-09-07",
   "checksum": "sha256:348a4e9a54dd9011329f92e0fd20ba72cae2fec76f0e2790b1e98f0de8f139bf",
   "checksum_basis": "canonical_json",
   "source_artifact_byte_length": 2854063,
@@ -35,11 +35,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--19a71d1e-6334-4233-8260-b749cae37953"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0800"
       }
@@ -70,11 +71,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--2d0d40ad-22fa-4cc8-b264-072557e1364b"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0801"
       }
@@ -105,11 +107,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--3de230d4-3e42-4041-b089-17e1128feded"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0802"
       }
@@ -140,11 +143,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          },
+          "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems March 2016": {
+            "title": "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems 2016, March 18 Analysis of the Cyber Attack on the Ukranian Power Grid: Defense Use Case Retrieved. 2018/03/27",
+            "url": "https://assets.contentstack.io/v3/assets/blt36c2e63521272fdc/blt6a77276749b76a40/607f235992f0063e5c070fff/E-ISAC_SANS_Ukraine_DUC_5%5b73%5d.pdf"
+          }
+        },
         "stix_id": "attack-pattern--008b8f56-6107-48be-aa9f-746f927dbb61"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0803"
       }
@@ -175,11 +188,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          },
+          "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems March 2016": {
+            "title": "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems 2016, March 18 Analysis of the Cyber Attack on the Ukranian Power Grid: Defense Use Case Retrieved. 2018/03/27",
+            "url": "https://assets.contentstack.io/v3/assets/blt36c2e63521272fdc/blt6a77276749b76a40/607f235992f0063e5c070fff/E-ISAC_SANS_Ukraine_DUC_5%5b73%5d.pdf"
+          }
+        },
         "stix_id": "attack-pattern--3f1f4ccb-9be2-4ff8-8f69-dd972221169b"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0804"
       }
@@ -210,11 +233,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--1c478716-71d9-46a4-9a53-fa5d576adb60"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0805"
       }
@@ -245,11 +269,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--8e7089d3-fba2-44f8-94a8-9a79c53920c4"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0806"
       }
@@ -280,11 +305,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Enterprise ATT&CK January 2018": {
+            "title": "Enterprise ATT&CK 2018, January 11 Command-Line Interface Retrieved. 2018/05/17",
+            "url": "https://attack.mitre.org/wiki/Technique/T1059"
+          }
+        },
         "stix_id": "attack-pattern--24a9253e-8948-4c98-b751-8e2aee53127c"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0807"
       }
@@ -315,11 +346,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Enterprise ATT&CK January 2018": {
+            "title": "Enterprise ATT&CK 2018, January 11 File Deletion Retrieved. 2018/05/17",
+            "url": "https://attack.mitre.org/wiki/Technique/T1107"
+          }
+        },
         "stix_id": "attack-pattern--493832d9-cea6-4b63-abe7-9a65a6473675"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0809"
       }
@@ -350,11 +387,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Cybersecurity & Infrastructure Security Agency March 2018": {
+            "title": "Cybersecurity & Infrastructure Security Agency 2018, March 15 Alert (TA18-074A) Russian Government Cyber Activity Targeting Energy and Other Critical Infrastructure Sectors Retrieved. 2019/10/11",
+            "url": "https://us-cert.cisa.gov/ncas/alerts/TA18-074A"
+          },
+          "CISA AA21-201A Pipeline Intrusion July 2021": {
+            "title": "Department of Justice (DOJ), DHS Cybersecurity & Infrastructure Security Agency (CISA) 2021, July 20 Chinese Gas Pipeline Intrusion Campaign, 2011 to 2013 Retrieved. 2021/10/08",
+            "url": "https://us-cert.cisa.gov/sites/default/files/publications/AA21-201A_Chinese_Gas_Pipeline_Intrusion_Campaign_2011_to_2013%20(1).pdf"
+          }
+        },
         "stix_id": "attack-pattern--3405891b-16aa-4bd7-bd7c-733501f9b20f"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0811"
       }
@@ -385,11 +432,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Keith Stouffer May 2015": {
+            "title": "Keith Stouffer 2015, May Guide to Industrial Control Systems (ICS) Security Retrieved. 2018/03/28",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-82r2.pdf"
+          }
+        },
         "stix_id": "attack-pattern--8bb4538f-f16f-49f0-a431-70b5444c7349"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0812"
       }
@@ -420,11 +473,29 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Corero": {
+            "title": "Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04",
+            "url": "https://www.corero.com/resources/files/whitepapers/cns_whitepaper_ics.pdf"
+          },
+          "Michael J. Assante and Robert M. Lee": {
+            "title": "Michael J. Assante and Robert M. Lee SANS Industrial Control System (ICS) Security; The Industrial Control System Cyber Kill Chain Retrieved 2024/11/25",
+            "url": "https://icscsi.org/library/Documents/White_Papers/SANS%20-%20ICS%20Cyber%20Kill%20Chain.pdf"
+          },
+          "Tyson Macaulay": {
+            "title": "Tyson Macaulay Michael J. Assante and Robert M. Lee Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04 The Industrial Control System Cyber Kill Chain Retrieved. 2019/11/04 RIoT Control: Understanding and Managing Risks and the Internet of Things Retrieved. 2019/11/04",
+            "url": "https://books.google.com/books?id=oXIYBAAAQBAJ&pg=PA249&lpg=PA249&dq=loss+denial+manipulation+of+view&source=bl&ots=dV1uQ8IUff&sig=ACfU3U2NIwGjhg051D_Ytw6npyEk9xcf4w&hl=en&sa=X&ved=2ahUKEwj2wJ7y4tDlAhVmplkKHSTaDnQQ6AEwAHoECAgQAQ#v=onepage&q=loss%20denial%20manipulation%20of%20view&f=false"
+          },
+          "Mark Loveless April 2017": {
+            "title": "Mark Loveless 2017, April 11 THE DALLAS COUNTY SIREN HACK Retrieved. 2020/11/06",
+            "url": "https://duo.com/decipher/the-dallas-county-siren-hack"
+          }
+        },
         "stix_id": "attack-pattern--e33c7ecc-5a38-497f-beb2-a9a2049a4c20"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0813"
       }
@@ -455,11 +526,29 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "ICS-CERT April 2017": {
+            "title": "ICS-CERT 2017, April 18 CS Alert (ICS-ALERT-17-102-01A) BrickerBot Permanent Denial-of-Service Attack Retrieved. 2019/10/24",
+            "url": "https://www.us-cert.gov/ics/alerts/ICS-ALERT-17-102-01A"
+          },
+          "ICS-CERT August 2018": {
+            "title": "ICS-CERT 2018, August 27 Advisory (ICSA-15-202-01) - Siemens SIPROTEC Denial-of-Service Vulnerability Retrieved. 2019/03/14",
+            "url": "https://ics-cert.us-cert.gov/advisories/ICSA-15-202-01"
+          },
+          "Common Weakness Enumeration January 2019": {
+            "title": "Common Weakness Enumeration 2019, January 03 CWE-400: Uncontrolled Resource Consumption Retrieved. 2019/03/14",
+            "url": "http://cwe.mitre.org/data/definitions/400.html"
+          },
+          "MITRE March 2018": {
+            "title": "MITRE 2018, March 22 CVE-2015-5374 Retrieved. 2019/03/14",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-5374"
+          }
+        },
         "stix_id": "attack-pattern--1b22b676-9347-4c55-9a35-ef0dc653db5b"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0814"
       }
@@ -490,11 +579,25 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Corero": {
+            "title": "Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04",
+            "url": "https://www.corero.com/resources/files/whitepapers/cns_whitepaper_ics.pdf"
+          },
+          "Michael J. Assante and Robert M. Lee": {
+            "title": "Michael J. Assante and Robert M. Lee SANS Industrial Control System (ICS) Security; The Industrial Control System Cyber Kill Chain Retrieved 2024/11/25",
+            "url": "https://icscsi.org/library/Documents/White_Papers/SANS%20-%20ICS%20Cyber%20Kill%20Chain.pdf"
+          },
+          "Tyson Macaulay": {
+            "title": "Tyson Macaulay Michael J. Assante and Robert M. Lee Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04 The Industrial Control System Cyber Kill Chain Retrieved. 2019/11/04 RIoT Control: Understanding and Managing Risks and the Internet of Things Retrieved. 2019/11/04",
+            "url": "https://books.google.com/books?id=oXIYBAAAQBAJ&pg=PA249&lpg=PA249&dq=loss+denial+manipulation+of+view&source=bl&ots=dV1uQ8IUff&sig=ACfU3U2NIwGjhg051D_Ytw6npyEk9xcf4w&hl=en&sa=X&ved=2ahUKEwj2wJ7y4tDlAhVmplkKHSTaDnQQ6AEwAHoECAgQAQ#v=onepage&q=loss%20denial%20manipulation%20of%20view&f=false"
+          }
+        },
         "stix_id": "attack-pattern--56ddc820-6cfb-407f-850b-52c035d123ac"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0815"
       }
@@ -525,11 +628,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--25dfc8ad-bd73-4dfd-84a9-3c3d383f76e9"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0816"
       }
@@ -560,11 +664,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Cybersecurity & Infrastructure Security Agency March 2018": {
+            "title": "Cybersecurity & Infrastructure Security Agency 2018, March 15 Alert (TA18-074A) Russian Government Cyber Activity Targeting Energy and Other Critical Infrastructure Sectors Retrieved. 2019/10/11",
+            "url": "https://us-cert.cisa.gov/ncas/alerts/TA18-074A"
+          }
+        },
         "stix_id": "attack-pattern--7830cfcf-b268-4ac0-a69e-73c6affbae9a"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0817"
       }
@@ -595,11 +705,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--32632a95-6856-47b9-9ab7-fea5cd7dce00"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0819"
       }
@@ -630,11 +741,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--9f947a1c-3860-48a8-8af0-a2dfa3efde03"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0820"
       }
@@ -665,11 +777,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "IEC February 2013": {
+            "title": "IEC 2013, February 20 IEC 61131-3:2013 Programmable controllers - Part 3: Programming languages Retrieved. 2019/10/22",
+            "url": "https://webstore.iec.ch/publication/4552"
+          }
+        },
         "stix_id": "attack-pattern--09a61657-46e1-439e-b3ed-3e4556a78243"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0821"
       }
@@ -700,11 +818,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Daniel Oakley, Travis Smith, Tripwire": {
+            "title": "Daniel Oakley, Travis Smith, Tripwire Retrieved. 2018/05/30",
+            "url": "https://attack.mitre.org/wiki/Technique/T1133"
+          },
+          "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems March 2016": {
+            "title": "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems 2016, March 18 Analysis of the Cyber Attack on the Ukranian Power Grid: Defense Use Case Retrieved. 2018/03/27",
+            "url": "https://assets.contentstack.io/v3/assets/blt36c2e63521272fdc/blt6a77276749b76a40/607f235992f0063e5c070fff/E-ISAC_SANS_Ukraine_DUC_5%5b73%5d.pdf"
+          }
+        },
         "stix_id": "attack-pattern--8d2f3bab-507c-4424-b58b-edc977bd215c"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0822"
       }
@@ -735,11 +863,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--b0628bfc-5376-4a38-9182-f324501cb4cf"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0823"
       }
@@ -770,11 +899,29 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Corero": {
+            "title": "Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04",
+            "url": "https://www.corero.com/resources/files/whitepapers/cns_whitepaper_ics.pdf"
+          },
+          "Michael J. Assante and Robert M. Lee": {
+            "title": "Michael J. Assante and Robert M. Lee SANS Industrial Control System (ICS) Security; The Industrial Control System Cyber Kill Chain Retrieved 2024/11/25",
+            "url": "https://icscsi.org/library/Documents/White_Papers/SANS%20-%20ICS%20Cyber%20Kill%20Chain.pdf"
+          },
+          "Tyson Macaulay": {
+            "title": "Tyson Macaulay Michael J. Assante and Robert M. Lee Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04 The Industrial Control System Cyber Kill Chain Retrieved. 2019/11/04 RIoT Control: Understanding and Managing Risks and the Internet of Things Retrieved. 2019/11/04",
+            "url": "https://books.google.com/books?id=oXIYBAAAQBAJ&pg=PA249&lpg=PA249&dq=loss+denial+manipulation+of+view&source=bl&ots=dV1uQ8IUff&sig=ACfU3U2NIwGjhg051D_Ytw6npyEk9xcf4w&hl=en&sa=X&ved=2ahUKEwj2wJ7y4tDlAhVmplkKHSTaDnQQ6AEwAHoECAgQAQ#v=onepage&q=loss%20denial%20manipulation%20of%20view&f=false"
+          },
+          "Colonial Pipeline Company May 2021": {
+            "title": "Colonial Pipeline Company 2021, May Media Statement Update: Colonial Pipeline System Disruption Retrieved. 2021/10/08",
+            "url": "https://www.colpipe.com/news/press-releases/media-statement-colonial-pipeline-system-disruption"
+          }
+        },
         "stix_id": "attack-pattern--b5b9bacb-97f2-4249-b804-47fd44de1f95"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0826"
       }
@@ -805,11 +952,29 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Corero": {
+            "title": "Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04",
+            "url": "https://www.corero.com/resources/files/whitepapers/cns_whitepaper_ics.pdf"
+          },
+          "Michael J. Assante and Robert M. Lee": {
+            "title": "Michael J. Assante and Robert M. Lee SANS Industrial Control System (ICS) Security; The Industrial Control System Cyber Kill Chain Retrieved 2024/11/25",
+            "url": "https://icscsi.org/library/Documents/White_Papers/SANS%20-%20ICS%20Cyber%20Kill%20Chain.pdf"
+          },
+          "Tyson Macaulay": {
+            "title": "Tyson Macaulay Michael J. Assante and Robert M. Lee Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04 The Industrial Control System Cyber Kill Chain Retrieved. 2019/11/04 RIoT Control: Understanding and Managing Risks and the Internet of Things Retrieved. 2019/11/04",
+            "url": "https://books.google.com/books?id=oXIYBAAAQBAJ&pg=PA249&lpg=PA249&dq=loss+denial+manipulation+of+view&source=bl&ots=dV1uQ8IUff&sig=ACfU3U2NIwGjhg051D_Ytw6npyEk9xcf4w&hl=en&sa=X&ved=2ahUKEwj2wJ7y4tDlAhVmplkKHSTaDnQQ6AEwAHoECAgQAQ#v=onepage&q=loss%20denial%20manipulation%20of%20view&f=false"
+          },
+          "BSI State of IT Security 2014": {
+            "title": "Bundesamt fr Sicherheit in der Informationstechnik (BSI) (German Federal Office for Information Security) 2014 Die Lage der IT-Sicherheit in Deutschland 2014 (The State of IT Security in Germany) Retrieved. 2019/10/30",
+            "url": "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/Securitysituation/IT-Security-Situation-in-Germany-2014.pdf?__blob=publicationFile&v=3"
+          }
+        },
         "stix_id": "attack-pattern--a81696ef-c106-482c-8f80-59c30f2569fb"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0827"
       }
@@ -840,11 +1005,25 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Paganini, Pierluigi June 2020": {
+            "title": "Paganini, Pierluigi 2020, June 14 Ransomware attack disrupts operations at Australian beverage company Lion Retrieved. 2021/10/08",
+            "url": "https://securityaffairs.co/wordpress/104749/cyber-crime/ransomware-attack-hit-lion.html"
+          },
+          "Lion Corporation June 2020": {
+            "title": "Lion Corporation 2020, June 26 Lion Cyber incident update: 26 June 2020 Retrieved. 2021/10/08",
+            "url": "https://lionco.com/2020/06/26/lion-update-re-cyber-issue/"
+          },
+          "Colonial Pipeline Company May 2021": {
+            "title": "Colonial Pipeline Company 2021, May Media Statement Update: Colonial Pipeline System Disruption Retrieved. 2021/10/08",
+            "url": "https://www.colpipe.com/news/press-releases/media-statement-colonial-pipeline-system-disruption"
+          }
+        },
         "stix_id": "attack-pattern--63b6942d-8359-4506-bfb3-cf87aa8120ee"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0828"
       }
@@ -875,11 +1054,25 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Corero": {
+            "title": "Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04",
+            "url": "https://www.corero.com/resources/files/whitepapers/cns_whitepaper_ics.pdf"
+          },
+          "Michael J. Assante and Robert M. Lee": {
+            "title": "Michael J. Assante and Robert M. Lee SANS Industrial Control System (ICS) Security; The Industrial Control System Cyber Kill Chain Retrieved 2024/11/25",
+            "url": "https://icscsi.org/library/Documents/White_Papers/SANS%20-%20ICS%20Cyber%20Kill%20Chain.pdf"
+          },
+          "Tyson Macaulay": {
+            "title": "Tyson Macaulay Michael J. Assante and Robert M. Lee Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04 The Industrial Control System Cyber Kill Chain Retrieved. 2019/11/04 RIoT Control: Understanding and Managing Risks and the Internet of Things Retrieved. 2019/11/04",
+            "url": "https://books.google.com/books?id=oXIYBAAAQBAJ&pg=PA249&lpg=PA249&dq=loss+denial+manipulation+of+view&source=bl&ots=dV1uQ8IUff&sig=ACfU3U2NIwGjhg051D_Ytw6npyEk9xcf4w&hl=en&sa=X&ved=2ahUKEwj2wJ7y4tDlAhVmplkKHSTaDnQQ6AEwAHoECAgQAQ#v=onepage&q=loss%20denial%20manipulation%20of%20view&f=false"
+          }
+        },
         "stix_id": "attack-pattern--138979ba-0430-4de6-a128-2fc0b056ba36"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0829"
       }
@@ -910,11 +1103,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Gabriel Sanchez October 2017": {
+            "title": "Gabriel Sanchez 2017, October Man-In-The-Middle Attack Against Modbus TCP Illustrated with Wireshark Retrieved. 2020/01/05",
+            "url": "https://www.sans.org/reading-room/whitepapers/ICS/man-in-the-middle-attack-modbus-tcp-illustrated-wireshark-38095"
+          },
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          }
+        },
         "stix_id": "attack-pattern--9a505987-ab05-4f46-a9a6-6441442eec3b"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0830"
       }
@@ -945,11 +1148,25 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "John Bill May 2017": {
+            "title": "John Bill 2017, May 12 Hacked Cyber Security Railways Retrieved. 2019/10/17",
+            "url": "https://www.londonreconnections.com/2017/hacked-cyber-security-railways/"
+          },
+          "Shelley Smith February 2008": {
+            "title": "Shelley Smith 2008, February 12 Teen Hacker in Poland Plays Trains and Derails City Tram System Retrieved. 2019/10/17",
+            "url": "https://inhomelandsecurity.com/teen_hacker_in_poland_plays_tr/"
+          },
+          "Bruce Schneier January 2008": {
+            "title": "Bruce Schneier 2008, January 17 Hacking Polish Trams Retrieved. 2019/10/17",
+            "url": "https://www.schneier.com/blog/archives/2008/01/hacking_the_pol.html"
+          }
+        },
         "stix_id": "attack-pattern--1af9e3fd-2bcc-414d-adbd-fe3b95c02ca1"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0831"
       }
@@ -980,11 +1197,25 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Corero": {
+            "title": "Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04",
+            "url": "https://www.corero.com/resources/files/whitepapers/cns_whitepaper_ics.pdf"
+          },
+          "Michael J. Assante and Robert M. Lee": {
+            "title": "Michael J. Assante and Robert M. Lee SANS Industrial Control System (ICS) Security; The Industrial Control System Cyber Kill Chain Retrieved 2024/11/25",
+            "url": "https://icscsi.org/library/Documents/White_Papers/SANS%20-%20ICS%20Cyber%20Kill%20Chain.pdf"
+          },
+          "Tyson Macaulay": {
+            "title": "Tyson Macaulay Michael J. Assante and Robert M. Lee Corero Industrial Control System (ICS) Security Retrieved. 2019/11/04 The Industrial Control System Cyber Kill Chain Retrieved. 2019/11/04 RIoT Control: Understanding and Managing Risks and the Internet of Things Retrieved. 2019/11/04",
+            "url": "https://books.google.com/books?id=oXIYBAAAQBAJ&pg=PA249&lpg=PA249&dq=loss+denial+manipulation+of+view&source=bl&ots=dV1uQ8IUff&sig=ACfU3U2NIwGjhg051D_Ytw6npyEk9xcf4w&hl=en&sa=X&ved=2ahUKEwj2wJ7y4tDlAhVmplkKHSTaDnQQ6AEwAHoECAgQAQ#v=onepage&q=loss%20denial%20manipulation%20of%20view&f=false"
+          }
+        },
         "stix_id": "attack-pattern--4c2e1408-9d68-4187-8e6b-a77bc52700ec"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0832"
       }
@@ -1015,11 +1246,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "The MITRE Corporation May 2017": {
+            "title": "The MITRE Corporation 2017, May 31 ATT&CK T1106: Native API Retrieved. 2021/04/26",
+            "url": "https://attack.mitre.org/techniques/T1106/"
+          }
+        },
         "stix_id": "attack-pattern--b52870cc-83f3-473c-b895-72d91751030b"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0834"
       }
@@ -1050,11 +1287,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Dr. Kelvin T. Erickson December 2010": {
+            "title": "Dr. Kelvin T. Erickson 2010, December Programmable logic controller hardware Retrieved November 17, 2024.",
+            "url": "https://www.scribd.com/document/458637574/Programmable-Logic-Controllers"
+          },
+          "Nanjundaiah, Vaidyanath": {
+            "title": "Nanjundaiah, Vaidyanath Dr. Kelvin T. Erickson 2010, December Programmable logic controller hardware Retrieved. 2018/03/29 PLC Ladder Logic Basics Retrieved. 2021/10/11",
+            "url": "https://www.ezautomation.net/industry-articles/plc-ladder-logic-basics.htm"
+          }
+        },
         "stix_id": "attack-pattern--36e9f5bc-ac13-4da4-a2f4-01f4877d9004"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0835"
       }
@@ -1085,11 +1332,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--097924ce-a9a9-4039-8591-e0deedfb8722"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0836"
       }
@@ -1120,11 +1368,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--2bb4d762-bf4a-4bc3-9318-15cc6a354163"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0837"
       }
@@ -1155,11 +1404,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Jos Wetzels, Marina Krotofil 2019": {
+            "title": "Jos Wetzels, Marina Krotofil 2019 A Diet of Poisoned Fruit: Designing Implants & OT Payloads for ICS Embedded Devices Retrieved. 2019/11/01",
+            "url": "https://troopers.de/downloads/troopers19/TROOPERS19_NGI_IoT_diet_poisoned_fruit.pdf"
+          }
+        },
         "stix_id": "attack-pattern--e5de767e-f513-41cd-aa15-33f6ce5fbf92"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0838"
       }
@@ -1196,11 +1451,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--efbf7888-f61b-4572-9c80-7e2965c60707"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0839"
       }
@@ -1231,11 +1487,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Netstat": {
+            "title": "Wikipedia. (n.d.). Netstat. Retrieved May 23, 2022.",
+            "url": "https://en.wikipedia.org/wiki/Netstat"
+          },
+          "MITRE": {
+            "title": "MITRE System Network Connections Discovery Retrieved. 2018/05/31",
+            "url": "https://attack.mitre.org/wiki/Technique/T1049"
+          }
+        },
         "stix_id": "attack-pattern--ea0c980c-5cf0-43a7-a049-59c4c207566e"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0840"
       }
@@ -1266,11 +1532,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Enterprise ATT&CK January 2018": {
+            "title": "Enterprise ATT&CK 2018, January 11 Network Sniffing Retrieved. 2018/05/17",
+            "url": "https://attack.mitre.org/wiki/Technique/T1040"
+          }
+        },
         "stix_id": "attack-pattern--38213338-1aab-479d-949b-c81b66ccca5c"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0842"
       }
@@ -1301,11 +1573,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--be69c571-d746-4b1f-bdd0-c0c9817e9068"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0843"
       }
@@ -1334,11 +1607,12 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0843",
+        "citations": {},
         "stix_id": "attack-pattern--77015a55-eef8-4f71-a071-b152f82ec1ef"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0843.001"
       }
@@ -1367,11 +1641,12 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0843",
+        "citations": {},
         "stix_id": "attack-pattern--d85a6ee9-820c-4adf-8a64-2392ee70c83c"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0843.002"
       }
@@ -1400,11 +1675,12 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0843",
+        "citations": {},
         "stix_id": "attack-pattern--574d5bfb-9a7a-4b28-ab5c-743ac704c135"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0843.003"
       }
@@ -1435,11 +1711,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--3067b85e-271e-4bc5-81ad-ab1a81d411e3"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0845"
       }
@@ -1470,11 +1747,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Enterprise ATT&CK January 2018": {
+            "title": "Enterprise ATT&CK 2018, January 11 Remote System Discovery Retrieved. 2018/05/17",
+            "url": "https://attack.mitre.org/wiki/Technique/T1018"
+          }
+        },
         "stix_id": "attack-pattern--d5a69cfb-fc2a-46cb-99eb-74b236db5061"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0846"
       }
@@ -1503,11 +1786,17 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0846",
+        "citations": {
+          "NIST SP 800-82r3": {
+            "title": "Keith Stouffer. (2023, September). Guide to Operational Technology (OT) Security. Retrieved April 22, 2026.",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-82r3.pdf"
+          }
+        },
         "stix_id": "attack-pattern--5d24bb1d-4487-4923-ae3a-8e679092ac7a"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0846.001"
       }
@@ -1536,11 +1825,21 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0846",
+        "citations": {
+          "Broadcasting BACnet": {
+            "title": "H. Michael Newman. (2010, November). Broadcasting BACnet®. Retrieved April 23, 2026.",
+            "url": "https://bacnet.org/wp-content/uploads/sites/4/2022/06/Newman_2010.pdf"
+          },
+          "Cisco Active Discovery": {
+            "title": "Cisco Systems, Inc.. (2024, March 5). Cisco Cyber Vision Active Discovery Configuration Guide, Release 4.3.0. Retrieved April 23, 2026.",
+            "url": "https://www.cisco.com/c/en/us/td/docs/security/cyber_vision/publications/Active-Discovery/Release-4-3-0/b_Cisco_Cyber_Vision_Active_Discovery_Configuration_Guide.pdf"
+          }
+        },
         "stix_id": "attack-pattern--c55f0be5-044e-4577-8095-65b37680d28c"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0846.002"
       }
@@ -1569,11 +1868,17 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0846",
+        "citations": {
+          "Cisco Active Discovery": {
+            "title": "Cisco Systems, Inc.. (2024, March 5). Cisco Cyber Vision Active Discovery Configuration Guide, Release 4.3.0. Retrieved April 23, 2026.",
+            "url": "https://www.cisco.com/c/en/us/td/docs/security/cyber_vision/publications/Active-Discovery/Release-4-3-0/b_Cisco_Cyber_Vision_Active_Discovery_Configuration_Guide.pdf"
+          }
+        },
         "stix_id": "attack-pattern--64bbc1b2-101f-4322-af1d-0c9cc25cef91"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0846.003"
       }
@@ -1604,11 +1909,53 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Kernkraftwerk Gundremmingen April 2016": {
+            "title": "Kernkraftwerk Gundremmingen 2016, April 25 Detektion von Bro-Schadsoftware an mehreren Rechnern Retrieved. 2019/10/14",
+            "url": "https://www.kkw-gundremmingen.de/presse.php?id=571"
+          },
+          "Trend Micro April 2016": {
+            "title": "Trend Micro 2016, April 27 Malware Discovered in German Nuclear Power Plant Retrieved. 2019/10/14",
+            "url": "https://www.trendmicro.com/vinfo/us/security/news/cyber-attacks/malware-discovered-in-german-nuclear-power-plant"
+          },
+          "Christoph Steitz, Eric Auchard April 2016": {
+            "title": "Christoph Steitz, Eric Auchard 2016, April 26 German nuclear plant infected with computer viruses, operator says Retrieved. 2019/10/14",
+            "url": "https://www.reuters.com/article/us-nuclearpower-cyber-germany/german-nuclear-plant-infected-with-computer-viruses-operator-says-idUSKCN0XN2OS"
+          },
+          "Catalin Cimpanu April 2016": {
+            "title": "Catalin Cimpanu 2016, April 26 Malware Shuts Down German Nuclear Power Plant on Chernobyl's 30th Anniversary Retrieved. 2019/10/14",
+            "url": "https://news.softpedia.com/news/on-chernobyl-s-30th-anniversary-malware-shuts-down-german-nuclear-power-plant-503429.shtml"
+          },
+          "Peter Dockrill April 2016": {
+            "title": "Peter Dockrill 2016, April 28 Multiple Computer Viruses Have Been Discovered in This German Nuclear Plant Retrieved. 2019/10/14",
+            "url": "https://www.sciencealert.com/multiple-computer-viruses-have-been-discovered-in-this-german-nuclear-plant"
+          },
+          "Lee Mathews April 2016": {
+            "title": "Lee Mathews 2016, April 27 German nuclear plant found riddled with Conficker, other viruses. Retrieved November 17, 2024.",
+            "url": "https://web.archive.org/web/20160430041256/https://www.geek.com/apps/german-nuclear-plant-found-riddled-with-conficker-other-viruses-1653415/"
+          },
+          "Sean Gallagher April 2016": {
+            "title": "Sean Gallagher 2016, April 27 German nuclear plants fuel rod system swarming with old malware Retrieved. 2019/10/14",
+            "url": "https://arstechnica.com/information-technology/2016/04/german-nuclear-plants-fuel-rod-system-swarming-with-old-malware/"
+          },
+          "Dark Reading Staff April 2016": {
+            "title": "Dark Reading Staff 2016, April 28 German Nuclear Power Plant Infected With Malware Retrieved. 2019/10/14",
+            "url": "https://www.darkreading.com/endpoint/german-nuclear-power-plant-infected-with-malware/d/d-id/1325298"
+          },
+          "BBC April 2016": {
+            "title": "BBC 2016, April 28 German nuclear plant hit by computer viruses Retrieved. 2019/10/14",
+            "url": "https://www.bbc.com/news/technology-36158606"
+          },
+          "ESET April 2016": {
+            "title": "ESET 2016, April 28 Malware found at a German nuclear power plant Retrieved. 2019/10/14",
+            "url": "https://www.welivesecurity.com/2016/04/28/malware-found-german-nuclear-power-plant/"
+          }
+        },
         "stix_id": "attack-pattern--c267bbee-bb59-47fe-85e0-3ed210337c21"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0847"
       }
@@ -1639,11 +1986,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Bastille April 2017": {
+            "title": "Bastille 2017, April 17 Dallas Siren Attack Retrieved. 2020/11/06",
+            "url": "https://www.bastille.net/blogs/2017/4/17/dallas-siren-attack"
+          },
+          "Zack Whittaker April 2017": {
+            "title": "Zack Whittaker 2017, April 12 Dallas' emergency sirens were hacked with a rogue radio signal Retrieved. 2020/11/06",
+            "url": "https://www.zdnet.com/article/experts-think-they-know-how-dallas-emergency-sirens-were-hacked/"
+          }
+        },
         "stix_id": "attack-pattern--b14395bd-5419-4ef4-9bd8-696936f509bb"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0848"
       }
@@ -1674,11 +2031,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--ba203963-3182-41ac-af14-7e7ebc83cd61"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0849"
       }
@@ -1715,11 +2073,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Enterprise ATT&CK January 2018": {
+            "title": "Enterprise ATT&CK 2018, January 11 Rootkit Retrieved. 2018/05/16",
+            "url": "https://attack.mitre.org/wiki/Technique/T1014"
+          }
+        },
         "stix_id": "attack-pattern--3b6b9246-43f8-4c69-ad7a-2b11cfe0a0d9"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0851"
       }
@@ -1750,11 +2114,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "ICS-CERT October 2017": {
+            "title": "ICS-CERT 2017, October 21 Advanced Persistent Threat Activity Targeting Energy and Other Critical Infrastructure Sectors Retrieved. 2017/10/23",
+            "url": "https://www.us-cert.gov/ncas/alerts/TA17-293A"
+          }
+        },
         "stix_id": "attack-pattern--c5e3cdbc-0387-4be9-8f83-ff5c0865f377"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0852"
       }
@@ -1785,11 +2155,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--2dc2b567-8821-49f9-9045-8740f3d0b958"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0853"
       }
@@ -1820,11 +2191,25 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          },
+          "Zack Whittaker April 2017": {
+            "title": "Zack Whittaker 2017, April 12 Dallas' emergency sirens were hacked with a rogue radio signal Retrieved. 2020/11/06",
+            "url": "https://www.zdnet.com/article/experts-think-they-know-how-dallas-emergency-sirens-were-hacked/"
+          },
+          "Benjamin Freed March 2019": {
+            "title": "Benjamin Freed 2019, March 13 Tornado sirens in Dallas suburbs deactivated after being hacked and set off Retrieved. 2020/11/06",
+            "url": "https://statescoop.com/tornado-sirens-in-dallas-suburbs-deactivated-after-being-hacked-and-set-off/"
+          }
+        },
         "stix_id": "attack-pattern--40b300ba-f553-48bf-862e-9471b220d455"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0855"
       }
@@ -1861,11 +2246,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          }
+        },
         "stix_id": "attack-pattern--8535b71e-3c12-4258-a4ab-40257a1becc4"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0856"
       }
@@ -1902,11 +2293,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Basnight, Zachry, et al.": {
+            "title": "Basnight, Zachry, et al. 2013 Retrieved. 2017/10/17",
+            "url": "http://www.sciencedirect.com/science/article/pii/S1874548213000231"
+          }
+        },
         "stix_id": "attack-pattern--b9160e77-ea9e-4ba9-b1c8-53a3c466b13d"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0857"
       }
@@ -1943,11 +2340,29 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "N.A. October 2017": {
+            "title": "N.A. 2017, October What are the different operating modes in PLC? Retrieved. 2021/01/28",
+            "url": "https://forumautomation.com/t/what-are-the-different-operating-modes-in-plc/2489"
+          },
+          "Omron": {
+            "title": "Omron Machine Information Systems 2007 How PLCs Work Retrieved. 2021/01/28 PLC Different Operating Modes Retrieved. 2021/01/28",
+            "url": "https://www.omron-ap.com/service_support/FAQ/FAQ00002/index.asp#:~:text=In%20PROGRAM%20mode%2C%20the%20CPU,can%20be%20created%20or%20modified."
+          },
+          "Machine Information Systems 2007": {
+            "title": "Machine Information Systems 2007 How PLCs Work Retrieved. 2021/01/28",
+            "url": "http://www.machine-information-systems.com/How_PLCs_Work.html"
+          },
+          "PLCgurus 2021": {
+            "title": "PLCgurus 2021 PLC Basics Modes Of Operation Retrieved. 2021/01/28",
+            "url": "https://www.plcgurus.net/plc-basics/"
+          }
+        },
         "stix_id": "attack-pattern--2883c520-7957-46ca-89bd-dab1ad53b601"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0858"
       }
@@ -1984,11 +2399,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Booz Allen Hamilton": {
+            "title": "Booz Allen Hamilton. (2016). When The Lights Went Out. Retrieved December 18, 2024.",
+            "url": "https://www.boozallen.com/content/dam/boozallen/documents/2016/09/ukraine-report-when-the-lights-went-out.pdf"
+          }
+        },
         "stix_id": "attack-pattern--cd2c76a4-5e23-4ca5-9c40-d5e0604f7101"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0859"
       }
@@ -2019,11 +2440,33 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Alexander Bolshev, Gleb Cherbov July 2014": {
+            "title": "Alexander Bolshev, Gleb Cherbov 2014, July 08 ICSCorsair: How I will PWN your ERP through 4-20 mA current loop Retrieved. 2020/01/05",
+            "url": "https://www.blackhat.com/docs/us-14/materials/us-14-Bolshev-ICSCorsair-How-I-Will-PWN-Your-ERP-Through-4-20mA-Current-Loop-WP.pdf"
+          },
+          "Alexander Bolshev March 2014": {
+            "title": "Alexander Bolshev 2014, March 11 S4x14: HART As An Attack Vector Retrieved November 17, 2024.",
+            "url": "https://www.slideshare.net/slideshow/17-bolshev-1-13/32178888"
+          },
+          "John Bill May 2017": {
+            "title": "John Bill 2017, May 12 Hacked Cyber Security Railways Retrieved. 2019/10/17",
+            "url": "https://www.londonreconnections.com/2017/hacked-cyber-security-railways/"
+          },
+          "Shelley Smith February 2008": {
+            "title": "Shelley Smith 2008, February 12 Teen Hacker in Poland Plays Trains and Derails City Tram System Retrieved. 2019/10/17",
+            "url": "https://inhomelandsecurity.com/teen_hacker_in_poland_plays_tr/"
+          },
+          "Bruce Schneier January 2008": {
+            "title": "Bruce Schneier 2008, January 17 Hacking Polish Trams Retrieved. 2019/10/17",
+            "url": "https://www.schneier.com/blog/archives/2008/01/hacking_the_pol.html"
+          }
+        },
         "stix_id": "attack-pattern--2877063e-1851-48d2-bcc6-bc1d2733157e"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0860"
       }
@@ -2054,11 +2497,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Dennis L. Sloatman September 2016": {
+            "title": "Dennis L. Sloatman 2016, September 16 Understanding PLC Programming Methods and the Tag Database System Retrieved. 2017/12/19",
+            "url": "https://www.radioworld.com/industry/understanding-plc-programming-methods-and-the-tag-database-system"
+          }
+        },
         "stix_id": "attack-pattern--25852363-5968-4673-b81d-341d5ed90bd1"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0861"
       }
@@ -2089,11 +2538,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Control Global May 2019": {
+            "title": "Control Global 2019, May 29 Yokogawa announcement warns of counterfeit transmitters Retrieved. 2021/04/09",
+            "url": "https://www.controlglobal.com/industrynews/2019/yokogawa-announcement-warns-of-counterfeit-transmitters/"
+          },
+          "Daavid Hentunen, Antti Tikkanen June 2014": {
+            "title": "Daavid Hentunen, Antti Tikkanen 2014, June 23 Havex Hunts For ICS/SCADA Systems Retrieved. 2019/04/01",
+            "url": "https://www.f-secure.com/weblog/archives/00002718.html"
+          }
+        },
         "stix_id": "attack-pattern--5e0f75da-e108-4688-a6de-a4f07cc2cbe3"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0862"
       }
@@ -2124,11 +2583,25 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Booz Allen Hamilton": {
+            "title": "Booz Allen Hamilton. (2016). When The Lights Went Out. Retrieved December 18, 2024.",
+            "url": "https://www.boozallen.com/content/dam/boozallen/documents/2016/09/ukraine-report-when-the-lights-went-out.pdf"
+          },
+          "Daavid Hentunen, Antti Tikkanen June 2014": {
+            "title": "Daavid Hentunen, Antti Tikkanen 2014, June 23 Havex Hunts For ICS/SCADA Systems Retrieved. 2019/04/01",
+            "url": "https://www.f-secure.com/weblog/archives/00002718.html"
+          },
+          "CISA AA21-201A Pipeline Intrusion July 2021": {
+            "title": "Department of Justice (DOJ), DHS Cybersecurity & Infrastructure Security Agency (CISA) 2021, July 20 Chinese Gas Pipeline Intrusion Campaign, 2011 to 2013 Retrieved. 2021/10/08",
+            "url": "https://us-cert.cisa.gov/sites/default/files/publications/AA21-201A_Chinese_Gas_Pipeline_Intrusion_Campaign_2011_to_2013%20(1).pdf"
+          }
+        },
         "stix_id": "attack-pattern--2736b752-4ec5-4421-a230-8977dea7649c"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0863"
       }
@@ -2159,11 +2632,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "North American Electric Reliability Corporation June 2021": {
+            "title": "North American Electric Reliability Corporation 2021, June 28 Glossary of Terms Used in NERC Reliability Standards Retrieved. 2021/10/11",
+            "url": "https://www.nerc.com/pa/Stand/Glossary%20of%20Terms/Glossary_of_Terms.pdf"
+          }
+        },
         "stix_id": "attack-pattern--35392fb4-a31d-4c6a-b9f2-1c65b7f5e6b9"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0864"
       }
@@ -2194,11 +2673,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Enterprise ATT&CK October 2019": {
+            "title": "Enterprise ATT&CK 2019, October 25 Spearphishing Attachment Retrieved. 2019/10/25",
+            "url": "https://attack.mitre.org/techniques/T1193/"
+          },
+          "CISA AA21-201A Pipeline Intrusion July 2021": {
+            "title": "Department of Justice (DOJ), DHS Cybersecurity & Infrastructure Security Agency (CISA) 2021, July 20 Chinese Gas Pipeline Intrusion Campaign, 2011 to 2013 Retrieved. 2021/10/08",
+            "url": "https://us-cert.cisa.gov/sites/default/files/publications/AA21-201A_Chinese_Gas_Pipeline_Intrusion_Campaign_2011_to_2013%20(1).pdf"
+          }
+        },
         "stix_id": "attack-pattern--648f995e-9c3a-41e4-aeee-98bb41037426"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0865"
       }
@@ -2235,11 +2724,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Enterprise ATT&CK": {
+            "title": "Enterprise ATT&CK Exploitation of Remote Services Retrieved. 2019/10/27",
+            "url": "https://attack.mitre.org/techniques/T1210/"
+          },
+          "Joe Slowik April 2019": {
+            "title": "Joe Slowik 2019, April 10 Implications of IT Ransomware for ICS Environments Retrieved. 2019/10/27",
+            "url": "https://dragos.com/blog/industry-news/implications-of-it-ransomware-for-ics-environments/"
+          }
+        },
         "stix_id": "attack-pattern--85a45294-08f1-4539-bf00-7da08aa7b0ee"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0866"
       }
@@ -2270,11 +2769,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Enterprise ATT&CK": {
+            "title": "Enterprise ATT&CK Enterprise ATT&CK Lateral Tool Transfer Retrieved. 2019/10/27 Lateral Tool Transfer Retrieved. 2019/10/27",
+            "url": "https://attack.mitre.org/techniques/T1570/"
+          }
+        },
         "stix_id": "attack-pattern--ead7bd34-186e-4c79-9a4d-b65bcce6ed9d"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0867"
       }
@@ -2305,11 +2810,29 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "N.A. October 2017": {
+            "title": "N.A. 2017, October What are the different operating modes in PLC? Retrieved. 2021/01/28",
+            "url": "https://forumautomation.com/t/what-are-the-different-operating-modes-in-plc/2489"
+          },
+          "Omron": {
+            "title": "Omron Machine Information Systems 2007 How PLCs Work Retrieved. 2021/01/28 PLC Different Operating Modes Retrieved. 2021/01/28",
+            "url": "https://www.omron-ap.com/service_support/FAQ/FAQ00002/index.asp#:~:text=In%20PROGRAM%20mode%2C%20the%20CPU,can%20be%20created%20or%20modified."
+          },
+          "Machine Information Systems 2007": {
+            "title": "Machine Information Systems 2007 How PLCs Work Retrieved. 2021/01/28",
+            "url": "http://www.machine-information-systems.com/How_PLCs_Work.html"
+          },
+          "PLCgurus 2021": {
+            "title": "PLCgurus 2021 PLC Basics Modes Of Operation Retrieved. 2021/01/28",
+            "url": "https://www.plcgurus.net/plc-basics/"
+          }
+        },
         "stix_id": "attack-pattern--2aa406ed-81c3-4c1d-ba83-cfbee5a2847a"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0868"
       }
@@ -2340,11 +2863,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--e076cca8-2f08-45c9-aff7-ea5ac798b387"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0869"
       }
@@ -2375,11 +2899,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--5a2610f6-9fff-41e1-bc27-575ca20383d4"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0871"
       }
@@ -2410,11 +2935,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--53a26eee-1080-4d17-9762-2027d5a1b805"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0872"
       }
@@ -2445,11 +2971,25 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Beckhoff": {
+            "title": "Beckhoff TwinCAT 3 Source Control: Project Files Retrieved. 2019/11/21",
+            "url": "https://infosys.beckhoff.com/english.php?content=../content/1033/tc3_sourcecontrol/18014398915785483.html&id="
+          },
+          "PLCdev": {
+            "title": "PLCdev Nicolas Falliere, Liam O Murchu, Eric Chien 2011, February W32.Stuxnet Dossier (Version 1.4) Retrieved. 2017/09/22 Siemens SIMATIC Step 7 Programmer's Handbook Retrieved. 2019/11/21",
+            "url": "http://www.plcdev.com/book/export/html/373"
+          },
+          "Nicolas Falliere, Liam O Murchu, Eric Chien February 2011": {
+            "title": "Nicolas Falliere, Liam O Murchu, Eric Chien 2011, February W32.Stuxnet Dossier (Version 1.4) Retrieved November 17, 2024.",
+            "url": "https://docs.broadcom.com/doc/security-response-w32-stuxnet-dossier-11-en"
+          }
+        },
         "stix_id": "attack-pattern--e72425f8-9ae6-41d3-bfdb-e1b865e60722"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0873"
       }
@@ -2478,11 +3018,17 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T0873",
+        "citations": {
+          "Nicolas Falliere, Liam O Murchu, Eric Chien February 2011": {
+            "title": "Nicolas Falliere, Liam O Murchu, Eric Chien 2011, February W32.Stuxnet Dossier (Version 1.4) Retrieved November 17, 2024.",
+            "url": "https://docs.broadcom.com/doc/security-response-w32-stuxnet-dossier-11-en"
+          }
+        },
         "stix_id": "attack-pattern--354ca909-b54d-4c41-b597-9c296b344a43"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0873.001"
       }
@@ -2519,11 +3065,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Enterprise ATT&CK": {
+            "title": "Enterprise ATT&CK Hooking Retrieved. 2019/10/27",
+            "url": "https://attack.mitre.org/techniques/T1179/"
+          },
+          "Nicolas Falliere, Liam O Murchu, Eric Chien February 2011": {
+            "title": "Nicolas Falliere, Liam O Murchu, Eric Chien 2011, February W32.Stuxnet Dossier (Version 1.4) Retrieved November 17, 2024.",
+            "url": "https://docs.broadcom.com/doc/security-response-w32-stuxnet-dossier-11-en"
+          }
+        },
         "stix_id": "attack-pattern--ab390887-afc0-4715-826d-b1b167d522ae"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0874"
       }
@@ -2554,11 +3110,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Nanjundaiah, Vaidyanath": {
+            "title": "Nanjundaiah, Vaidyanath PLC Ladder Logic Basics Retrieved. 2021/10/11",
+            "url": "https://www.ezautomation.net/industry-articles/plc-ladder-logic-basics.htm"
+          },
+          "Spenneberg, Ralf 2016": {
+            "title": "Spenneberg, Ralf 2016 PLC-Blaster Retrieved. 2019/06/06",
+            "url": "https://www.blackhat.com/docs/asia-16/materials/asia-16-Spenneberg-PLC-Blaster-A-Worm-Living-Solely-In-The-PLC.pdf"
+          }
+        },
         "stix_id": "attack-pattern--53a48c74-0025-45f4-b04a-baa853df8204"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0877"
       }
@@ -2589,11 +3155,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Jos Wetzels, Marina Krotofil 2019": {
+            "title": "Jos Wetzels, Marina Krotofil 2019 A Diet of Poisoned Fruit: Designing Implants & OT Payloads for ICS Embedded Devices Retrieved. 2019/11/01",
+            "url": "https://troopers.de/downloads/troopers19/TROOPERS19_NGI_IoT_diet_poisoned_fruit.pdf"
+          }
+        },
         "stix_id": "attack-pattern--2900bbd8-308a-4274-b074-5b8bde8347bc"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0878"
       }
@@ -2624,11 +3196,29 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "BSI State of IT Security 2014": {
+            "title": "Bundesamt fr Sicherheit in der Informationstechnik (BSI) (German Federal Office for Information Security) 2014 Die Lage der IT-Sicherheit in Deutschland 2014 (The State of IT Security in Germany) Retrieved. 2019/10/30",
+            "url": "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/Securitysituation/IT-Security-Situation-in-Germany-2014.pdf?__blob=publicationFile&v=3"
+          },
+          "John Bill May 2017": {
+            "title": "John Bill 2017, May 12 Hacked Cyber Security Railways Retrieved. 2019/10/17",
+            "url": "https://www.londonreconnections.com/2017/hacked-cyber-security-railways/"
+          },
+          "Shelley Smith February 2008": {
+            "title": "Shelley Smith 2008, February 12 Teen Hacker in Poland Plays Trains and Derails City Tram System Retrieved. 2019/10/17",
+            "url": "https://inhomelandsecurity.com/teen_hacker_in_poland_plays_tr/"
+          },
+          "Bruce Schneier January 2008": {
+            "title": "Bruce Schneier 2008, January 17 Hacking Polish Trams Retrieved. 2019/10/17",
+            "url": "https://www.schneier.com/blog/archives/2008/01/hacking_the_pol.html"
+          }
+        },
         "stix_id": "attack-pattern--83ebd22f-b401-4d59-8219-2294172cf916"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0879"
       }
@@ -2659,11 +3249,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--5fa00fdd-4a55-4191-94a0-564181d7fec2"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0880"
       }
@@ -2694,11 +3285,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Enterprise ATT&CK": {
+            "title": "Enterprise ATT&CK Enterprise ATT&CK Service Stop Retrieved. 2019/10/29 Service Stop Retrieved. 2019/10/29",
+            "url": "https://attack.mitre.org/techniques/T1489/"
+          }
+        },
         "stix_id": "attack-pattern--063b5b92-5361-481a-9c3f-95492ed9a2d8"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0881"
       }
@@ -2729,11 +3326,21 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Mark Thompson March 2016": {
+            "title": "Mark Thompson 2016, March 24 Iranian Cyber Attack on New York Dam Shows Future of War Retrieved. 2019/11/07",
+            "url": "https://time.com/4270728/iran-cyber-attack-dam-fbi/"
+          },
+          "Danny Yadron December 2015": {
+            "title": "Danny Yadron 2015, December 20 Iranian Hackers Infiltrated New York Dam in 2013 Retrieved. 2019/11/07",
+            "url": "https://www.wsj.com/articles/iranian-hackers-infiltrated-new-york-dam-in-2013-1450662559"
+          }
+        },
         "stix_id": "attack-pattern--b7e13ee8-182c-4f19-92a4-a88d7d855d54"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0882"
       }
@@ -2764,11 +3371,29 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "NCCIC January 2014": {
+            "title": "NCCIC 2014, January 1 Internet Accessible Control Systems At Risk Retrieved. 2019/11/07",
+            "url": "https://www.us-cert.gov/sites/default/files/Monitors/ICS-CERT_Monitor_Jan-April2014.pdf"
+          },
+          "Danny Yadron December 2015": {
+            "title": "Danny Yadron 2015, December 20 Iranian Hackers Infiltrated New York Dam in 2013 Retrieved. 2019/11/07",
+            "url": "https://www.wsj.com/articles/iranian-hackers-infiltrated-new-york-dam-in-2013-1450662559"
+          },
+          "Mark Thompson March 2016": {
+            "title": "Mark Thompson 2016, March 24 Iranian Cyber Attack on New York Dam Shows Future of War Retrieved. 2019/11/07",
+            "url": "https://time.com/4270728/iran-cyber-attack-dam-fbi/"
+          },
+          "Stephen Hilt, Federico Maggi, Charles Perine, Lord Remorin, Martin Rsler, and Rainer Vosseler": {
+            "title": "Stephen Hilt, Federico Maggi, Charles Perine, Lord Remorin, Martin Rsler, and Rainer Vosseler Mark Thompson 2016, March 24 Iranian Cyber Attack on New York Dam Shows Future of War Retrieved. 2019/11/07 Caught in the Act: Running a Realistic Factory Honeypot to Capture Real Threats Retrieved. 2021/04/12",
+            "url": "https://documents.trendmicro.com/assets/white_papers/wp-caught-in-the-act-running-a-realistic-factory-honeypot-to-capture-real-threats.pdf"
+          }
+        },
         "stix_id": "attack-pattern--f8df6b57-14bc-425f-9a91-6f59f6799307"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0883"
       }
@@ -2799,11 +3424,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Enterprise ATT&CK January 2018": {
+            "title": "Enterprise ATT&CK 2018, January 11 Connection Proxy Retrieved. 2018/05/17",
+            "url": "https://attack.mitre.org/wiki/Technique/T1090"
+          }
+        },
         "stix_id": "attack-pattern--d67adac8-e3b9-44f9-9e6d-6c2a7d69dbe4"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0884"
       }
@@ -2834,11 +3465,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--e6c31185-8040-4267-83d3-b217b8a92f07"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0885"
       }
@@ -2875,11 +3507,29 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Blake Johnson, Dan Caban, Marina Krotofil, Dan Scali, Nathan Brubaker, Christopher Glyer December 2017": {
+            "title": "Blake Johnson, Dan Caban, Marina Krotofil, Dan Scali, Nathan Brubaker, Christopher Glyer 2017, December 14 Attackers Deploy New ICS Attack Framework TRITON and Cause Operational Disruption to Critical Infrastructure Retrieved. 2018/01/12",
+            "url": "https://www.fireeye.com/blog/threat-research/2017/12/attackers-deploy-new-ics-attack-framework-triton.html"
+          },
+          "Dragos December 2017": {
+            "title": "Dragos 2017, December 13 TRISIS Malware Analysis of Safety System Targeted Malware Retrieved. 2018/01/12",
+            "url": "https://dragos.com/blog/trisis/TRISIS-01.pdf"
+          },
+          "Joe Slowik April 2019": {
+            "title": "Joe Slowik 2019, April 10 Implications of IT Ransomware for ICS Environments Retrieved. 2019/10/27",
+            "url": "https://dragos.com/blog/industry-news/implications-of-it-ransomware-for-ics-environments/"
+          },
+          "CISA AA21-201A Pipeline Intrusion July 2021": {
+            "title": "Department of Justice (DOJ), DHS Cybersecurity & Infrastructure Security Agency (CISA) 2021, July 20 Chinese Gas Pipeline Intrusion Campaign, 2011 to 2013 Retrieved. 2021/10/08",
+            "url": "https://us-cert.cisa.gov/sites/default/files/publications/AA21-201A_Chinese_Gas_Pipeline_Intrusion_Campaign_2011_to_2013%20(1).pdf"
+          }
+        },
         "stix_id": "attack-pattern--e1f9cdd2-9511-4fca-90d7-f3e92cfdd0bf"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0886"
       }
@@ -2916,11 +3566,25 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Candell, R., Hany, M., Lee, K. B., Liu,Y., Quimby, J., Remley, K. April 2018": {
+            "title": "Candell, R., Hany, M., Lee, K. B., Liu,Y., Quimby, J., Remley, K. 2018, April Guide to Industrial Wireless Systems Deployments Retrieved. 2020/12/01",
+            "url": "https://nvlpubs.nist.gov/nistpubs/ams/NIST.AMS.300-4.pdf"
+          },
+          "Bastille April 2017": {
+            "title": "Bastille 2017, April 17 Dallas Siren Attack Retrieved. 2020/11/06",
+            "url": "https://www.bastille.net/blogs/2017/4/17/dallas-siren-attack"
+          },
+          "Gallagher, S. April 2017": {
+            "title": "Gallagher, S. 2017, April 12 Pirate radio: Signal spoof set off Dallas emergency sirens, not network hack Retrieved. 2020/12/01",
+            "url": "https://arstechnica.com/information-technology/2017/04/dallas-siren-hack-used-radio-signals-to-spoof-alarm-says-city-manager/"
+          }
+        },
         "stix_id": "attack-pattern--0fe075d5-beac-4d02-b93e-0f874997db72"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0887"
       }
@@ -2951,11 +3615,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--2fedbe69-581f-447d-8a78-32ee7db939a9"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0888"
       }
@@ -2986,11 +3651,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "IEC February 2013": {
+            "title": "IEC 2013, February 20 IEC 61131-3:2013 Programmable controllers - Part 3: Programming languages Retrieved. 2019/10/22",
+            "url": "https://webstore.iec.ch/publication/4552"
+          }
+        },
         "stix_id": "attack-pattern--fc5fda7e-6b2c-4457-b036-759896a2efa2"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0889"
       }
@@ -3021,11 +3692,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "The MITRE Corporation": {
+            "title": "The MITRE Corporation The MITRE Corporation ATT&CK T1068: Exploitation for Privilege Escalation Retrieved. 2021/04/12 ATT&CK T1068: Exploitation for Privilege Escalation Retrieved. 2021/04/12",
+            "url": "https://attack.mitre.org/techniques/T1068/"
+          }
+        },
         "stix_id": "attack-pattern--cfe68e93-ce94-4c0f-a57d-3aa72cedd618"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0890"
       }
@@ -3062,11 +3739,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--c9a8d958-fcdb-40d2-af4c-461c8031651a"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0891"
       }
@@ -3097,11 +3775,17 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "German BAS Lockout Dec 2021": {
+            "title": "Kelly Jackson Higgins. (2021, December 20). Lights Out: Cyberattacks Shut Down Building Automation Systems. Retrieved March 30, 2023.",
+            "url": "https://www.darkreading.com/attacks-breaches/lights-out-cyberattacks-shut-down-building-automation-systems"
+          }
+        },
         "stix_id": "attack-pattern--fab8fc7d-f27f-4fbb-9de6-44740aade05f"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0892"
       }
@@ -3132,11 +3816,12 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--fa3aa267-da22-4bdd-961f-03223322a8d5"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0893"
       }
@@ -3167,11 +3852,25 @@
         ],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "LOLBAS Project": {
+            "title": "Oddvar Moe et al. (2022, February). Living Off The Land Binaries, Scripts and Libraries. Retrieved March 7, 2022.",
+            "url": "https://github.com/LOLBAS-Project/LOLBAS#criteria"
+          },
+          "split man page": {
+            "title": "Torbjorn Granlund, Richard M. Stallman. (2020, March null). split(1) — Linux manual page. Retrieved March 25, 2022.",
+            "url": "https://man7.org/linux/man-pages/man1/split.1.html"
+          },
+          "GTFO split": {
+            "title": "GTFOBins. (2020, November 13). split. Retrieved April 18, 2022.",
+            "url": "https://gtfobins.github.io/gtfobins/split/"
+          }
+        },
         "stix_id": "attack-pattern--1c5cf58c-a34a-40d7-82f4-f987cdfc2b91"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0894"
       }
@@ -3200,11 +3899,12 @@
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {},
         "stix_id": "attack-pattern--77d9c726-b53e-481d-8bcc-1068aebfbb9d"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T0895"
       }
@@ -3233,11 +3933,21 @@
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          },
+          "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems March 2016": {
+            "title": "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems 2016, March 18 Analysis of the Cyber Attack on the Ukranian Power Grid: Defense Use Case Retrieved. 2018/03/27",
+            "url": "https://assets.contentstack.io/v3/assets/blt36c2e63521272fdc/blt6a77276749b76a40/607f235992f0063e5c070fff/E-ISAC_SANS_Ukraine_DUC_5%5b73%5d.pdf"
+          }
+        },
         "stix_id": "attack-pattern--338f4364-2269-4f70-9079-b20384b16628"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1691"
       }
@@ -3266,11 +3976,21 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1691",
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          },
+          "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems March 2016": {
+            "title": "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems 2016, March 18 Analysis of the Cyber Attack on the Ukranian Power Grid: Defense Use Case Retrieved. 2018/03/27",
+            "url": "https://assets.contentstack.io/v3/assets/blt36c2e63521272fdc/blt6a77276749b76a40/607f235992f0063e5c070fff/E-ISAC_SANS_Ukraine_DUC_5%5b73%5d.pdf"
+          }
+        },
         "stix_id": "attack-pattern--15ca2a99-2d3e-457f-b1d7-c52a1d5849c9"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1691.001"
       }
@@ -3299,11 +4019,21 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1691",
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          },
+          "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems March 2016": {
+            "title": "Electricity Information Sharing and Analysis Center; SANS Industrial Control Systems 2016, March 18 Analysis of the Cyber Attack on the Ukranian Power Grid: Defense Use Case Retrieved. 2018/03/27",
+            "url": "https://assets.contentstack.io/v3/assets/blt36c2e63521272fdc/blt6a77276749b76a40/607f235992f0063e5c070fff/E-ISAC_SANS_Ukraine_DUC_5%5b73%5d.pdf"
+          }
+        },
         "stix_id": "attack-pattern--7866bb5f-98ee-45c2-984c-8a328c5176b2"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1691.002"
       }
@@ -3338,11 +4068,17 @@
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          }
+        },
         "stix_id": "attack-pattern--e17cdc00-8b58-4e5f-9d50-4cad1592c4c3"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1692"
       }
@@ -3377,11 +4113,25 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1692",
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          },
+          "Zack Whittaker April 2017": {
+            "title": "Zack Whittaker 2017, April 12 Dallas' emergency sirens were hacked with a rogue radio signal Retrieved. 2020/11/06",
+            "url": "https://www.zdnet.com/article/experts-think-they-know-how-dallas-emergency-sirens-were-hacked/"
+          },
+          "Benjamin Freed March 2019": {
+            "title": "Benjamin Freed 2019, March 13 Tornado sirens in Dallas suburbs deactivated after being hacked and set off Retrieved. 2020/11/06",
+            "url": "https://statescoop.com/tornado-sirens-in-dallas-suburbs-deactivated-after-being-hacked-and-set-off/"
+          }
+        },
         "stix_id": "attack-pattern--4344d1b8-968b-4697-9ab9-f9abe5f52265"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1692.001"
       }
@@ -3416,11 +4166,17 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1692",
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          }
+        },
         "stix_id": "attack-pattern--527106b3-95a2-4ed2-bf89-db7f0e4d0da0"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1692.002"
       }
@@ -3461,11 +4217,17 @@
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Basnight, Zachry, et al.": {
+            "title": "Basnight, Zachry, et al. 2013 Retrieved. 2017/10/17",
+            "url": "http://www.sciencedirect.com/science/article/pii/S1874548213000231"
+          }
+        },
         "stix_id": "attack-pattern--7b4c0e19-a9b0-4a74-a196-b38c07b79f20"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1693"
       }
@@ -3506,11 +4268,17 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1693",
+        "citations": {
+          "Basnight, Zachry, et al.": {
+            "title": "Basnight, Zachry, et al. 2013 Retrieved. 2017/10/17",
+            "url": "http://www.sciencedirect.com/science/article/pii/S1874548213000231"
+          }
+        },
         "stix_id": "attack-pattern--68a9324d-a524-4766-a899-a026f68a33df"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1693.001"
       }
@@ -3551,11 +4319,12 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1693",
+        "citations": {},
         "stix_id": "attack-pattern--75587e49-ab7e-44df-9549-faeb1da57f39"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1693.002"
       }
@@ -3590,11 +4359,25 @@
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "NIST SP 800-82r3": {
+            "title": "Keith Stouffer. (2023, September). Guide to Operational Technology (OT) Security. Retrieved April 22, 2026.",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-82r3.pdf"
+          },
+          "ICS-ALERT-13-164-01": {
+            "title": "Cybersecurity and Infrastructure Security Agency (CISA). (2013, October 29). Medical Devices Hard-Coded Passwords. Retrieved April 23, 2026.",
+            "url": "https://www.cisa.gov/news-events/ics-alerts/ics-alert-13-164-01"
+          },
+          "OT IceFall": {
+            "title": "Forescout Vedere Labs. (2022, June). OT: IceFall Report. Retrieved April 23, 2026.",
+            "url": "https://www.forescout.com/resources/ot-icefall-report/"
+          }
+        },
         "stix_id": "attack-pattern--3e9b182e-e493-49e1-9a9b-bd0dfcd34a7c"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1694"
       }
@@ -3629,11 +4412,17 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1694",
+        "citations": {
+          "Keith Stouffer May 2015": {
+            "title": "Keith Stouffer 2015, May Guide to Industrial Control Systems (ICS) Security Retrieved. 2018/03/28",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-82r2.pdf"
+          }
+        },
         "stix_id": "attack-pattern--5658ad88-7510-490e-a351-95d50b1bcd91"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1694.001"
       }
@@ -3668,11 +4457,21 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1694",
+        "citations": {
+          "ICS-ALERT-13-164-01": {
+            "title": "Cybersecurity and Infrastructure Security Agency (CISA). (2013, October 29). Medical Devices Hard-Coded Passwords. Retrieved April 23, 2026.",
+            "url": "https://www.cisa.gov/news-events/ics-alerts/ics-alert-13-164-01"
+          },
+          "OT IceFall": {
+            "title": "Forescout Vedere Labs. (2022, June). OT: IceFall Report. Retrieved April 23, 2026.",
+            "url": "https://www.forescout.com/resources/ot-icefall-report/"
+          }
+        },
         "stix_id": "attack-pattern--6b335943-c3af-430e-a135-ab09623bdc20"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1694.002"
       }
@@ -3701,11 +4500,17 @@
         "platforms": [],
         "is_subtechnique": false,
         "parent_technique_id": null,
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          }
+        },
         "stix_id": "attack-pattern--fbb67c2d-37c3-49ee-86e3-bf234cc48ca9"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1695"
       }
@@ -3734,11 +4539,12 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1695",
+        "citations": {},
         "stix_id": "attack-pattern--55e7e5c1-3760-4451-bae0-e79b29f452c5"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1695.001"
       }
@@ -3767,11 +4573,17 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1695",
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          }
+        },
         "stix_id": "attack-pattern--6008c1f0-1b68-4614-8f5b-a547436b8855"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1695.002"
       }
@@ -3800,11 +4612,17 @@
         "platforms": [],
         "is_subtechnique": true,
         "parent_technique_id": "T1695",
+        "citations": {
+          "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011": {
+            "title": "Bonnie Zhu, Anthony Joseph, Shankar Sastry 2011 A Taxonomy of Cyber Attacks on SCADA Systems Retrieved. 2018/01/12",
+            "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6142258"
+          }
+        },
         "stix_id": "attack-pattern--71f2d49e-65dd-4fb6-a4cc-0d2b19d427fa"
       },
       "source": {
         "key": "mitre-attack-ics",
-        "snapshot_date": "2026-08-25",
+        "snapshot_date": "2026-09-07",
         "version": "19.2",
         "locator": "ics-attack.json#T1695.003"
       }

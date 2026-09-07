@@ -3,10 +3,10 @@
   "source_key": "mitre-d3fend-mappings",
   "source_artifact": "https://d3fend.mitre.org/ontologies/d3fend.json",
   "source_version": "1.5.0",
-  "snapshot_date": "2026-08-25",
-  "checksum": "sha256:11e6ce26ab2bef1500ca9747a74c05ec98c0c554658c09d26bfbfa752d278a45",
+  "snapshot_date": "2026-09-07",
+  "checksum": "sha256:67e363c95362897199a0e29fb383dc87cd9d575f7cc03494f9a8ae5614132380",
   "checksum_basis": "canonical_json",
-  "source_artifact_byte_length": 3931695,
+  "source_artifact_byte_length": 3869363,
   "provenance": "MITRE D3FEND NIST SP 800-53 Rev. 5 control to defensive technique mappings",
   "relationships": [
     {

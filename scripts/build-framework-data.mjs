@@ -1290,6 +1290,9 @@ function buildNodes(registry) {
             tactic_title: record.metadata?.tactic_title || null,
             tactic_memberships: record.metadata?.tactic_memberships || null,
             is_subtechnique: record.metadata?.is_subtechnique || false,
+            // Resolved "(Citation: <key>)" references, so the record can render
+            // the publisher's own source instead of MITRE's internal key.
+            citations: record.metadata?.citations || null,
             parent_technique_id: record.metadata?.parent_technique_id || null,
             implementation_examples: record.metadata?.implementation_examples || null,
             informative_references: record.metadata?.informative_references || null,

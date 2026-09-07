@@ -645,6 +645,40 @@ function artifactPath(name: string) {
   return `./data/generated/${name}?v=${CACHE_VERSION}`;
 }
 
+/**
+ * The half of the Atlas projection the landing does not need.
+ *
+ * `details` and `record_locations` are 21MB of the artifact's 30MB and answer
+ * only a drilldown or an exact record search. Fetching them with the board put
+ * 3.4MB on the wire to draw five cards, on the route the product now opens on.
+ * The board loads without them and this fills them in behind it.
+ */
+export type AtlasNetworkDetails = Pick<
+  AtlasNetworkArtifact,
+  "details" | "record_locations"
+>;
+
+let atlasNetworkDetailsRequest: Promise<AtlasNetworkDetails> | null = null;
+
+export function loadAtlasNetworkDetails(): Promise<AtlasNetworkDetails> {
+  if (!atlasNetworkDetailsRequest) {
+    atlasNetworkDetailsRequest = fetchArtifact(
+      artifactPath("atlas-network-details.json"),
+    ).then((artifact) => {
+      const loaded = artifact as Partial<AtlasNetworkDetails> | null;
+      return {
+        details: loaded?.details || {},
+        record_locations: loaded?.record_locations || {},
+      } as AtlasNetworkDetails;
+    }).catch((error) => {
+      // Let a later drilldown ask again rather than caching the failure.
+      atlasNetworkDetailsRequest = null;
+      throw error;
+    });
+  }
+  return atlasNetworkDetailsRequest;
+}
+
 export async function loadAtlasNeighborhood(
   nodeId: string,
 ): Promise<AtlasNeighborhoodRecord | null> {

@@ -91,8 +91,10 @@ import {
 } from "../lib/officialSource";
 import {
   loadAtlasNeighborhood,
+  loadAtlasNetworkDetails,
   selectAtlasStructuralPath,
   type AtlasNeighborhoodRecord,
+  type AtlasNetworkDetails,
   type RuntimeBundle,
 } from "../lib/runtimeLoader";
 import { runtimeRecordIdentityFor } from "../lib/runtimeRecordIdentity";
@@ -175,11 +177,82 @@ function formatPanelCount(count: number): string {
 
 export function AtlasMapPage(props: AtlasMapPageProps) {
   const {
-    bundle,
+    bundle: loadedBundle,
     state,
     onNavigate,
     onOpenNode,
   } = props;
+
+  // The board draws from the landing projection; the drilldown half arrives
+  // behind it. Until it does, `details` and `record_locations` read as empty,
+  // which every consumer already guards for. Merging here means nothing below
+  // has to know the artifact came in two pieces.
+  const [atlasDetails, setAtlasDetails] = useState<AtlasNetworkDetails | null>(null);
+  useEffect(() => {
+    if (!loadedBundle.atlasNetwork || atlasDetails) return;
+    let cancelled = false;
+    const start = () => {
+      void loadAtlasNetworkDetails()
+        .then((loaded) => {
+          if (!cancelled) setAtlasDetails(loaded);
+        })
+        .catch(() => {
+          // A drilldown retries; the board itself stays usable without this.
+        });
+    };
+    // A link that already names a group, framework or record is a request for
+    // the drilldown, so it is fetched at once. Only the bare landing defers:
+    // there, starting this beside the board's own fetches would put the
+    // drilldown corpus in front of the five cards the reader actually asked
+    // for, which on a constrained connection is the whole difference.
+    const drilled = Boolean(
+      state.node
+        || state.atlasFamily
+        || state.atlasFramework
+        || state.atlasBenchmark
+        || state.atlasLimb
+        || state.atlasPivotTrail,
+    );
+    if (drilled) {
+      start();
+      return () => {
+        cancelled = true;
+      };
+    }
+    const idle = window.requestIdleCallback;
+    const handle = idle
+      ? idle(start, { timeout: 2000 })
+      : window.setTimeout(start, 300);
+    return () => {
+      cancelled = true;
+      if (idle && window.cancelIdleCallback) window.cancelIdleCallback(handle as number);
+      else window.clearTimeout(handle as number);
+    };
+  }, [
+    loadedBundle.atlasNetwork,
+    atlasDetails,
+    state.node,
+    state.atlasFamily,
+    state.atlasFramework,
+    state.atlasBenchmark,
+    state.atlasLimb,
+    state.atlasPivotTrail,
+  ]);
+
+  const bundle = useMemo(() => {
+    if (!loadedBundle.atlasNetwork) return loadedBundle;
+    // Always present, even before the fetch lands: several readers index these
+    // directly, and an absent map is a render crash rather than an empty one.
+    return {
+      ...loadedBundle,
+      atlasNetwork: {
+        ...loadedBundle.atlasNetwork,
+        details: atlasDetails?.details || {},
+        record_locations: atlasDetails?.record_locations || {},
+      },
+    };
+  }, [loadedBundle, atlasDetails]);
+
   const compact = useCompactAtlas();
   const nodeId = useMemo(
     () => requestedNodeId(bundle, state.node),

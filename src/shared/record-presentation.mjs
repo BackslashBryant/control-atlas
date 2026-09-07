@@ -192,6 +192,9 @@ const BASE_CONTRACTS = {
       tactic_title: { disposition: "rendered_secondary", origin: "publisher" },
       tactic_memberships: { disposition: "rendered_secondary", origin: "publisher" },
       is_subtechnique: { disposition: "source_metadata", origin: "publisher" },
+      // Resolved publisher references, consumed inline by the description
+      // renderer rather than shown as a fact of their own.
+      citations: { disposition: "source_metadata", origin: "publisher" },
       parent_technique_id: { disposition: "rendered_secondary", origin: "publisher" },
     },
   }),
