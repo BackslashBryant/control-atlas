@@ -65,15 +65,17 @@ test("WS3 Library communicates visible, loaded, and total search scope", async (
   await gotoApp(page, "/#/library?q=supply%20chain");
   await waitForAppReady(page, { allowPartial: true });
 
+  // The header names the way to the matches past the cap, so a reader who never
+  // scrolls 100 rows still learns the list is not all of them.
   await expect(page.locator(".workspace-result-count")).toHaveText(
-    "206 matches · showing 25 of the 100 most relevant",
+    "206 matches · showing 25 of the 100 most relevant · narrow with filters to reach the rest",
   );
   const rows = page.locator('[data-result-class="published-record"]');
   await expect(rows).toHaveCount(25);
   await page.getByRole("button", { name: "Show 25 more" }).click();
   await expect(rows).toHaveCount(50);
   await expect(page.locator(".workspace-result-count")).toHaveText(
-    "206 matches · showing 50 of the 100 most relevant",
+    "206 matches · showing 50 of the 100 most relevant · narrow with filters to reach the rest",
   );
 
   await page.getByRole("button", { name: "Map", exact: true }).click();

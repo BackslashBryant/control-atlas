@@ -358,7 +358,9 @@ test("WS6 record identities and derived category explanations stay source-truthf
     ["/#/record/disa-cci/CCI-000001", "DISA Policy CCI-000001"],
     ["/#/record/disa-cci/CCI-000015", "DISA Technical CCI-000015"],
     ["/#/record/disa-cci/CCI-000099", "DISA Policy and Technical CCI-000099"],
-    ["/#/record/mitre-attack/T1195.002", "MITRE Initial Access T1195.002"],
+    // ATT&CK techniques belong to every tactic MITRE lists, so the tactic is a
+    // published fact on the record rather than part of its identity.
+    ["/#/record/mitre-attack/T1195.002", "MITRE T1195.002"],
     ["/#/record/mitre-d3fend/D3-AA", "MITRE Harden D3-AA"],
     ["/#/record/disa-stig/V-256876", "DISA HMC V-256876"],
   ];

@@ -675,13 +675,14 @@ export function ComparePage(props: {
                 <strong>{sourceLabel}</strong>
                 {mode === "item-mapping" ? <code>{state.items}</code> : null}
               </p>
-              {/* Step 1 shows every connected publication openly; this step
-                  used to collapse the answer to "which frameworks connect to
-                  mine" into a dropdown, one step later, for the same kind of
-                  choice. Same control, so the reader does not have to unlearn
-                  the one they just used. */}
-              <SearchablePublicationField
-                hint={`${targetOptions.length.toLocaleString()} ${targetOptions.length === 1 ? "publication has" : "publications have"} a published crosswalk with ${sourceLabel}.`}
+              {/* Step 1 picks a publication with an open searchable field and
+                  this step uses a dropdown for the same kind of choice, one
+                  step later. Unifying them is held for NAV-CONCEPT-002 in
+                  docs/BACKLOG.md: the target control is also driven from the
+                  Library compare tray, so the two surfaces should change
+                  together rather than this one drifting ahead. */}
+              <SelectField
+                emptyLabel="Choose a connected publication"
                 label="Target publication"
                 onChange={(target) =>
                   patchCompare({
@@ -692,7 +693,6 @@ export function ComparePage(props: {
                   })
                 }
                 options={targetOptions}
-                placeholder="Search connected publications"
                 value={targetIsValid ? state.target : ""}
               />
               {mode === "item-mapping" && !targetOptions.length ? (

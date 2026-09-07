@@ -61,9 +61,20 @@ const PublisherCitationContext = createContext<Record<string, PublisherCitationE
 function PublisherCitation(props: { citationKey: string }) {
   const citations = useContext(PublisherCitationContext);
   const resolved = citations[props.citationKey];
-  if (!resolved) return null;
-  const keys = Object.keys(citations);
-  const position = keys.indexOf(props.citationKey) + 1;
+  const position = Object.keys(citations).indexOf(props.citationKey) + 1;
+
+  // The publisher cited something here. Until the corpus carries the resolved
+  // reference the marker stays, unnumbered and unlinked, rather than vanishing:
+  // erasing it would quietly drop a fact the publisher wrote. What never
+  // appears either way is the internal source_name key.
+  if (!resolved) {
+    return (
+      <cite className="publisher-citation">
+        <span aria-label="Publisher cited a source here">[ref]</span>
+      </cite>
+    );
+  }
+
   const marker = position > 0 ? `[${position}]` : "[ref]";
   return (
     <cite className="publisher-citation">
