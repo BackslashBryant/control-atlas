@@ -675,8 +675,13 @@ export function ComparePage(props: {
                 <strong>{sourceLabel}</strong>
                 {mode === "item-mapping" ? <code>{state.items}</code> : null}
               </p>
-              <SelectField
-                emptyLabel="Choose a connected publication"
+              {/* Step 1 shows every connected publication openly; this step
+                  used to collapse the answer to "which frameworks connect to
+                  mine" into a dropdown, one step later, for the same kind of
+                  choice. Same control, so the reader does not have to unlearn
+                  the one they just used. */}
+              <SearchablePublicationField
+                hint={`${targetOptions.length.toLocaleString()} ${targetOptions.length === 1 ? "publication has" : "publications have"} a published crosswalk with ${sourceLabel}.`}
                 label="Target publication"
                 onChange={(target) =>
                   patchCompare({
@@ -687,6 +692,7 @@ export function ComparePage(props: {
                   })
                 }
                 options={targetOptions}
+                placeholder="Search connected publications"
                 value={targetIsValid ? state.target : ""}
               />
               {mode === "item-mapping" && !targetOptions.length ? (

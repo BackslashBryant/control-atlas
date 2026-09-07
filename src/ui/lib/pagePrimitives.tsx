@@ -700,7 +700,13 @@ export function EmptyState(props: {
  * Standardized Staged Flow StepIndicator (T5.8).
  */
 export function StepIndicator(props: {
-  steps: Array<{ id: string; label: string; description?: string }>;
+  /**
+   * `outcome: true` marks a step that is the result rather than another thing
+   * to answer. Start here promises "answer two questions" and then showed a
+   * three-dot stepper, so the third dot read as a third question at exactly
+   * the moment the promise was being kept.
+   */
+  steps: Array<{ id: string; label: string; description?: string; outcome?: boolean }>;
   currentStep: number;
   onSelectStep?: (stepIndex: number) => void;
 }) {
@@ -714,13 +720,17 @@ export function StepIndicator(props: {
           return (
             <li
               aria-current={isActive ? "step" : undefined}
-              className={`step-item step ${isActive ? "step-active active" : isComplete ? "step-complete done" : "step-pending"}`}
+              className={`step-item step ${step.outcome ? "step-outcome " : ""}${isActive ? "step-active active" : isComplete ? "step-complete done" : "step-pending"}`}
               key={step.id}
             >
               <strong className="step-label">
-                <span aria-hidden="true" className="step-number">
-                  {String(stepNum).padStart(2, "0")} /
-                </span>{" "}
+                {step.outcome ? null : (
+                  <>
+                    <span aria-hidden="true" className="step-number">
+                      {String(stepNum).padStart(2, "0")} /
+                    </span>{" "}
+                  </>
+                )}
                 {step.label}
               </strong>
               {step.description ? (

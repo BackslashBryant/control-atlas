@@ -52,7 +52,7 @@ function PanelSection(props: {
   const { section } = props;
   return (
     <section className="atlas-detail__section">
-      <h4>{section.heading}</h4>
+      <h3>{section.heading}</h3>
       {section.note ? <p className="atlas-detail__note">{section.note}</p> : null}
       {section.links.length ? (
         <ul className="atlas-detail__links">
@@ -114,7 +114,7 @@ export function AtlasDetailPanel(props: AtlasDetailPanelProps) {
     return (
       <aside className="atlas-detail" data-resting="true" data-testid="atlas-detail">
         <div className="atlas-detail__rest">
-          <h3>{restingTitle}</h3>
+          <h2>{restingTitle}</h2>
           <p>{restingBlurb}</p>
           <dl className="atlas-detail__facts">
             {restingFacts.map((fact) => (
@@ -139,7 +139,7 @@ export function AtlasDetailPanel(props: AtlasDetailPanelProps) {
       style={{ "--ca-area-color": `var(${subject.areaToken})` } as CSSProperties}
     >
       <p className="atlas-detail__eyebrow">{subject.eyebrow}</p>
-      <h3>{subject.title}</h3>
+      <h2>{subject.title}</h2>
       {subject.blurb ? <p className="atlas-detail__blurb">{subject.blurb}</p> : null}
 
       {subject.facts.length ? (

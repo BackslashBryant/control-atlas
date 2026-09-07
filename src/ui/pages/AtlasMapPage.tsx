@@ -842,11 +842,8 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
       }
     }
     if (state.atlasFramework) return describeFramework(state.atlasFramework);
-    if (highlightedId) return describeFramework(highlightedId);
 
-    const group = lensFamilies.find((entry) => entry.id === state.atlasLensFamily);
-    if (group) {
-      return {
+    const describeGroup = (group: (typeof lensFamilies)[number]) => ({
         eyebrow: "Group",
         title: group.label,
         blurb: group.rationale || group.blurb,
@@ -869,8 +866,20 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
             onOpen: () => patchAtlas({ atlasFramework: catalogId, atlasFamily: "" }),
           })),
         }],
-      };
-    }
+    });
+
+    // The panel promises "Point at a group to see what is in it", and on the
+    // landing that promise had no implementation: highlightedId was only ever
+    // resolved as a framework, so hovering a group left the rail at rest. It
+    // can be either depending on depth, so resolve a group first.
+    const highlightedGroup = highlightedId
+      ? lensFamilies.find((entry) => entry.id === highlightedId)
+      : undefined;
+    if (highlightedGroup) return describeGroup(highlightedGroup);
+    if (highlightedId) return describeFramework(highlightedId);
+
+    const group = lensFamilies.find((entry) => entry.id === state.atlasLensFamily);
+    if (group) return describeGroup(group);
     return null;
   }, [
     bundle.atlasNetwork,
@@ -1124,11 +1133,12 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
           </div>
         ) : (
           <div className="atlas-workbench">
-            <div className="atlas-mapcol">
-              {/* Where you are, and the way back up. The map itself never
-                  changes screens, so this is the only thing that has to say
-                  how deep you went. */}
-              <nav aria-label="Map depth" className="atlas-mapcol__trail">
+            {/* Where you are, and the way back up. The map itself never
+                changes screens, so this is the only thing that has to say
+                how deep you went. It is a row of the workbench rather than the
+                first thing inside the map column, so the map surface and the
+                detail panel start their borders on the same line. */}
+            <nav aria-label="Map depth" className="atlas-mapcol__trail">
                 <button
                   aria-current={areaLevel.depth === 0 ? "true" : undefined}
                   onClick={() =>
@@ -1150,8 +1160,9 @@ export function AtlasMapPage(props: AtlasMapPageProps) {
                     </button>
                   </Fragment>
                 ))}
-              </nav>
+            </nav>
 
+            <div className="atlas-mapcol">
               <AtlasAreaMap
                 connectedIds={areaLevel.connectedIds}
                 label={areaLevel.label}

@@ -727,7 +727,11 @@ export function ExplorePage(props: {
             ))}
           </nav>
         ) : null}
-        <ul aria-busy={visibleCount > 0 && !detailsReady} aria-label="Search results" className="workspace-result-list" ref={resultsRef} tabIndex={-1}>
+        {/* Each result card titles itself with an h3. Without this heading the
+            nearest one above was the page h1, so a screen-reader user paging by
+            heading level met up to 100 cards nested under nothing. */}
+        <h2 className="visually-hidden" id="workspace-results-heading">Search results</h2>
+        <ul aria-busy={visibleCount > 0 && !detailsReady} aria-labelledby="workspace-results-heading" className="workspace-result-list" ref={resultsRef} tabIndex={-1}>
           {connectedOnly && !graphReady ? <li className="notice-inline" role="status">Loading connection data for this filter…</li> : null}
           {rows.slice(0, visibleCount).map((row: any) => {
             const recordType = displayNameFor("object_type", row.document.object_type);
