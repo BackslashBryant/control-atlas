@@ -86,6 +86,10 @@ import {
   catalogShortNameFor,
 } from "../lib/catalogProfiles";
 import {
+  officialSourceActionLabel,
+  officialSourceFor,
+} from "../lib/officialSource";
+import {
   loadAtlasNeighborhood,
   selectAtlasStructuralPath,
   type AtlasNeighborhoodRecord,
@@ -1382,8 +1386,7 @@ function FocusedAtlas(props: {
   const centerSource = bundle.runtime.getSource(
     centerDocument?.source_id || record.center_node.source_id,
   );
-  const centerSourceUrl =
-    centerSource?.artifact_url || centerSource?.catalog_browse_url || "";
+  const centerOfficialSource = officialSourceFor(centerSource);
   const centerClaimOrigin =
     (record.center_node.metadata as { origin?: string } | undefined)?.origin ||
     "publisher_normalized";
@@ -1622,16 +1625,16 @@ function FocusedAtlas(props: {
               ? "Read the full record"
               : "Open the full record"}
           </AppLink>
-          {centerSourceUrl ? (
+          {centerOfficialSource.url ? (
             <ButtonLink
-              href={centerSourceUrl}
+              href={centerOfficialSource.url}
               rel="noopener noreferrer"
               target="_blank"
               variant="secondary"
             >
               {centerClaimOrigin === "atlas_editorial"
                 ? "View Atlas source"
-                : "View official source"}
+                : officialSourceActionLabel(centerOfficialSource)}
             </ButtonLink>
           ) : null}
         </div>
@@ -1782,7 +1785,7 @@ function FocusedAtlas(props: {
                     See connections
                   </Button>
                   <AppLink onNavigate={onNavigate} patch={{ source: record.center_node.source_id }} variant="secondary" view="sources">
-                    View official source
+                    View source details
                   </AppLink>
                 </div>
               </section>
@@ -1959,7 +1962,7 @@ function FocusedAtlas(props: {
                     view="sources"
                   >
                     <IconFolderOpen aria-hidden="true" size={18} />
-                    View official source
+                    View source details
                   </AppLink>
                 ) : null}
               </div>

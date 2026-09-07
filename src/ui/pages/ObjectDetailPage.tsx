@@ -28,6 +28,10 @@ import {
 } from "../lib/atlasTreeModel";
 import { serializeHashUrl } from "../lib/hashRoutes";
 import {
+  officialSourceActionLabel,
+  officialSourceFor,
+} from "../lib/officialSource";
+import {
   Badge,
   copyText,
   formatRelationshipLabel,
@@ -135,7 +139,7 @@ export function ObjectDetailPage(props: {
   const recordIdentity = identityPresentation.primary;
   const publishedName = identityPresentation.secondary;
   const kind = displayNameFor("object_type", objectType);
-  const officialSourceUrl = source?.artifact_url || source?.catalog_browse_url || "";
+  const officialSource = officialSourceFor(source);
   const claimOrigin = node.metadata?.origin || "publisher_normalized";
   const sourceIdentityLabel = claimOrigin === "atlas_editorial"
     ? "Control Atlas context"
@@ -258,14 +262,16 @@ export function ObjectDetailPage(props: {
           </p>
         ) : null}
         <div className="record-title-actions" data-route-primary-support="true">
-          {officialSourceUrl ? (
+          {officialSource.url ? (
             <ButtonLink
-              href={officialSourceUrl}
+              href={officialSource.url}
               rel="noopener noreferrer"
               target="_blank"
               variant="primary"
             >
-              {claimOrigin === "atlas_editorial" ? "View Atlas source" : "View official source"}
+              {claimOrigin === "atlas_editorial"
+                ? "View Atlas source"
+                : officialSourceActionLabel(officialSource)}
             </ButtonLink>
           ) : null}
           <AppLink

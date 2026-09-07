@@ -1,3 +1,5 @@
+import { officialSourceFor } from "./officialSource";
+
 export const CROSSWALK_COLUMNS = [
   "Source Publication",
   "Source Version",
@@ -99,7 +101,7 @@ function unique(values: string[]) {
 }
 
 function officialUrl(source?: Source | null) {
-  return source?.catalog_browse_url || source?.artifact_url || "";
+  return officialSourceFor(source).url;
 }
 
 function sourceName(sourceId: string, source?: Source | null, ref?: SourceRef) {

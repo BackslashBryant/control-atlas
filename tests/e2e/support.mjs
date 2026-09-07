@@ -90,3 +90,11 @@ export async function waitForAppReady(page, options = {}) {
     throw error;
   }
 }
+
+/**
+ * The record page offers exactly one official-source action, but its label
+ * states what the link actually does: a publisher page opens, a raw artifact
+ * downloads. Matching the verb pair keeps the "exactly one" guarantee without
+ * re-asserting the promise that a .zip is something you can view.
+ */
+export const OFFICIAL_SOURCE_ACTION = /^(?:View|Download) official source(?: \([A-Z0-9]+\))?$/;

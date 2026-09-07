@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { attachPageDiagnostics, dismissOnboarding, waitForAppReady } from "./support.mjs";
+import { attachPageDiagnostics, dismissOnboarding, OFFICIAL_SOURCE_ACTION, waitForAppReady } from "./support.mjs";
 
 async function openRecord(page, route) {
   attachPageDiagnostics(page);
@@ -28,7 +28,7 @@ test("all six semantic roles use the governed universal record shell", async ({ 
     } else {
       await expect(page.locator('[data-record-section="official-text"]')).toBeVisible();
     }
-    await expect(page.getByRole("link", { name: "View official source", exact: true })).toHaveCount(1);
+    await expect(page.getByRole("link", { name: OFFICIAL_SOURCE_ACTION })).toHaveCount(1);
   }
 });
 

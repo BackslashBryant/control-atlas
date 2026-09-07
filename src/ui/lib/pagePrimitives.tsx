@@ -11,6 +11,11 @@ import {
 import { AcronymText } from "../components/AccessibleTerm";
 import { ProvenanceTerm } from "../components/ProvenanceTerm";
 import { Button, ButtonLink } from "../components/lsm/Button";
+import {
+  officialSourceActionLabel,
+  officialSourceFor,
+  ORIGINAL_SOURCE_VERBS,
+} from "./officialSource";
 import type { ViewState } from "./viewState";
 import { sourceIdentityPresentationFor } from "./sourceIdentity";
 
@@ -571,11 +576,14 @@ export function SourceSummaryCard(props: { source: any; onOpen?: () => void; det
       <div className="card-actions">
         <ButtonLink
           variant="secondary"
-          href={source.catalog_browse_url || source.artifact_url}
+          href={officialSourceFor(source).url}
           rel="noopener noreferrer"
           target="_blank"
         >
-          Open the original source
+          {officialSourceActionLabel(
+            officialSourceFor(source),
+            ORIGINAL_SOURCE_VERBS,
+          )}
         </ButtonLink>
       </div>
     </article>
